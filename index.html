@@ -85,7 +85,7 @@ small{display:block;color:#87878B;margin-top:14px;font-size:12.5px}
    1) Abre tu app de Google (la dirección /exec de abajo) a pantalla completa, sin el aviso
       "Esta aplicación la ha creado un usuario de Google Apps Script", con su icono y su nombre.
    2) Es también la grabadora de notas de voz del chat: la app la abre con #u=…&t=… (pase temporal). */
-var APP = 'https://script.google.com/macros/s/AKfycbzEdBDEqqIGkL_Lgr-om1JC_VdeVTqPR1ZYUb35Tzp2Hbb1_dJ8F9mFBsi7aKikGfSNig/exec';
+var APP = './app.html';
 
 if (/(^|[#&])t=/.test(location.hash)) {
   /* grabadora de notas de voz */
@@ -98,7 +98,7 @@ if (/(^|[#&])t=/.test(location.hash)) {
   var q={}; String(location.hash||'').replace(/^#/,'').split('&').forEach(function(x){ var i=x.indexOf('='); if(i>0) q[x.slice(0,i)]=decodeURIComponent(x.slice(i+1)); });
   if(q.t) try{ history.replaceState(null,'',location.pathname); }catch(e){}
   var U=q.u||'', T=q.t||'', P=q.p||'tu coach';
-  var okU=/^https:\/\/script\.google\.com\/(a\/macros\/[\w.-]+|macros)\/s\/[\w-]+\/exec$/.test(U)||/^http:\/\/localhost:\d+\/exec$/.test(U);
+  var okU=/^https:\/\/script\.google\.com\/(a\/macros\/[\w.-]+|macros)\/s\/[\w-]+\/exec$/.test(U)||/^http:\/\/localhost:\d+\/exec$/.test(U)||/^https:\/\/[a-z0-9]+\.supabase\.co\/functions\/v1\/api$/.test(U)||/^http:\/\/localhost:\d+\/api$/.test(U);
   function $(i){ return document.getElementById(i); }
   function ver(i,v){ $(i).classList.toggle('h',!v); }
   function msg(t,c){ var m=$('m'); m.textContent=t; m.className=c||''; }
@@ -169,7 +169,7 @@ if (/(^|[#&])t=/.test(location.hash)) {
   var esCoach = /[?&]coach(=|&|$)/.test(q);
   window.addEventListener('message', function (e) {
     var o = String(e.origin || '');
-    if (!/^https:\/\/([a-z0-9-]+\.)*(googleusercontent\.com|google\.com)$/.test(o) && !/^http:\/\/localhost(:\d+)?$/.test(o)) return;
+    if (o !== location.origin && !/^https:\/\/([a-z0-9-]+\.)*(googleusercontent\.com|google\.com)$/.test(o) && !/^http:\/\/localhost(:\d+)?$/.test(o)) return;
     var d = e.data; if (!d || !d.chadinfit) return;
     if (d.listo) listo();
     /* v28: la sesión se recuerda aquí (en el iPhone, lo que guarda el marco de Google se borra al cerrar Safari).
