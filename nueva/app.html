@@ -2341,7 +2341,25 @@ body.cq .cq-lead{font-weight:600}
   }
   window.google = { script: { run: hacer(null, null) } };
   var p = {}; try { new URLSearchParams(location.search).forEach(function (v, k) { p[k] = v; }); } catch (e) { }
-  window.__moodonBoot = llamar({ fn: '__boot', p: p });
+  // sin conexión al abrir: la app arranca igual (como hacía con Google) con lo que dice la dirección y lo de la última vez,
+  // y es ella la que enseña «Sin conexión» y lo guardado en el móvil
+  function local() {
+    var b = { mode: 'login' };
+    if (p.alta || p.reset) b = { mode: 'alta', token: String(p.alta || p.reset).slice(0, 60) };
+    else if (p.prueba) b = { mode: 'prueba', token: String(p.prueba).slice(0, 60) };
+    else if (p.clienta) b = { mode: 'clienta', token: String(p.clienta).slice(0, 40) };
+    else if (p.cuestionario) b = { mode: 'cuest', token: String(p.cuestionario).slice(0, 40) };
+    else if ('coach' in p) b = { mode: 'coach' };
+    if (p.pago) b.pago = String(p.pago).replace(/[^A-Za-z0-9_]/g, '').slice(0, 90);
+    try { var u = JSON.parse(localStorage.getItem('moodon_boot') || '{}'); ['top', 'inicio', 'url'].forEach(function (k) { if (u[k]) b[k] = u[k]; }); } catch (e) { }
+    if (!b.url) b.url = API;
+    return b;
+  }
+  window.__moodonBoot = llamar({ fn: '__boot', p: p }).then(function (j) {
+    if (!j || !j.ok) throw new Error((j && j.error) || 'sin respuesta');
+    try { localStorage.setItem('moodon_boot', JSON.stringify({ top: j.result.top || '', inicio: j.result.inicio || '', url: j.result.url || '' })); } catch (e) { }
+    return j.result;
+  }, function () { return local(); });
 })();
 </script>
 <script type="text/plain" id="moodon-app">
@@ -14138,9 +14156,8 @@ else { BOOT.mode='login'; arrancarLogin(); }
 </script>
 <script>
 /* cuando llega el arranque del servidor, se pone en marcha la app (el código de siempre, guardado arriba) */
-window.__moodonBoot.then(function (j) {
-  if (!j || !j.ok) throw new Error((j && j.error) || 'sin respuesta');
-  window.BOOT = j.result;
+window.__moodonBoot.then(function (boot) {
+  window.BOOT = boot;
   var s = document.createElement('script');
   s.textContent = document.getElementById('moodon-app').textContent;
   document.body.appendChild(s);
