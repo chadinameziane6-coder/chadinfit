@@ -2389,6 +2389,10 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .ck-cab.ck-f{background:#FDF0F4}.ck-cab.ck-f>.ic{color:#E5484D}
 .ck-cab.ck-m{background:#E8EEF7}.ck-cab.ck-m>.ic{color:#1F3B63}.ck-cab.ck-m small{color:#4A5A70}
 .ck-min .ck-q{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--mu);margin:0 0 1px;letter-spacing:.01em}.ck-min .ck-q .ic{width:13px;height:13px;margin:0}.ck-min .ck-q.ck-f .ic{color:#E5484D}.ck-min .ck-q.ck-m .ic{color:#1F3B63}
+/* ===== v52.6 · avisos del descanso: altavoz en la barra (silenciar) y «Avisos del descanso» en Perfil ===== */
+.rest-b .rest-son{display:flex;align-items:center;justify-content:center;padding:10px;min-width:40px}.rest-son .ic{width:18px;height:18px;margin:0}.rest-son.off{opacity:.75}
+.dsc-f{gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line2)}.card-t+.dsc-f{border-top:0;padding-top:4px}.dsc-f>span:nth-child(2){flex:1;min-width:0}.dsc-i{flex:none;width:34px;height:34px;border-radius:10px;background:#F2F2F5;display:flex;align-items:center;justify-content:center;color:#111}.dsc-i .ic{width:18px;height:18px;margin:0}.dsc-f.no .dsc-i{opacity:.55}
+.dsc-pr{width:auto;margin-top:10px}.dsc-n{margin:10px 0 0;line-height:1.45}
 /* ===== v52.5 · foto de perfil: «Ajusta tu foto» (mover, acercar y ver cómo queda en su círculo) ===== */
 .fc-st{position:relative;width:min(100%,300px);aspect-ratio:1/1;margin:14px auto 10px;overflow:hidden;border-radius:18px;background:#111;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;outline:0}.fc-st.mv{cursor:grabbing}.fc-st:focus-visible{box-shadow:0 0 0 3px #111}
 .fc-st img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;pointer-events:none;-webkit-user-drag:none}
@@ -2464,7 +2468,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.5';
+var APP_V = 'v52.6';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -2539,6 +2543,10 @@ var ICONS={
   candado:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
   corazon:'<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/>',
   pulso:'<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
+  son:'<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M15.5 9.5a3.5 3.5 0 0 1 0 5M18 7a7 7 0 0 1 0 10"/>',
+  mudo:'<path d="M4 9.5h3.5L12 6v12l-4.5-3.5H4z"/><path d="M16 10l4 4M20 10l-4 4"/>',
+  vibra:'<rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4.5 9v6M19.5 9v6"/>',
+  pantalla:'<rect x="6.5" y="3" width="11" height="18" rx="2.2"/><path d="M10.5 18h3"/>',
   lista:'<path d="M8.5 6.5h11.5M8.5 12h11.5M8.5 17.5h11.5M4 6.5h.1M4 12h.1M4 17.5h.1"/>',
   mas:'<path d="M12 5v14M5 12h14"/>',
   flecha:'<path d="M9.5 6l6 6-6 6"/>',
@@ -4946,7 +4954,7 @@ function pintarEntreno(){
   }
   app.innerHTML='<header class="top wk-top"><button class="ico" data-a="salirEntreno" aria-label="Salir">←</button><div class="wk-c"><div class="wk-t">'+esc(dr.rutina)+'</div><div class="wk-s">'+(dr.edit?'Editando el entreno del '+fCorta(dr.fecha):'<span class="reloj-w"><button class="reloj-b'+(dr.pausaIni?' pausado':'')+'" id="reloj-b" data-a="pausaToggle" aria-label="'+(dr.pausaIni?'Reanudar el reloj':'Pausar el reloj')+'">'+ic(dr.pausaIni?'play':'pausa')+'<span id="reloj">0:00</span></button><button class="reloj-r" data-a="relojCero" aria-label="Empezar a contar de nuevo">'+ic('reinicio')+'</button></span>')+' · <span id="wk-prog"></span> · <button class="sync" id="sync" data-a="infoSync" aria-label="Estado del guardado"></button></div></div><button class="ico" data-a="ordenar" aria-label="Cambiar el orden de los ejercicios">'+ic('orden')+'</button><div class="wk-bar" aria-hidden="true"><i id="wk-bar"></i></div></header>'+
     '<main class="wrap ses">'+(dr.pausaIni&&!dr.edit?'<div class="pausa-b" id="pausa-b">'+ic('pausa')+'<span><b>Reloj en pausa</b><small>Puedes seguir apuntando series</small></span><button class="btn sm" data-a="reanudarEntreno">'+ic('play')+'Reanudar</button></div>':'')+(dr.edit?'<div class="hecho" style="margin-top:12px">Estás editando un entreno ya guardado. Corrige lo que necesites y pulsa Guardar cambios.</div>':'')+videoSesCard()+h+'<button class="btn big mt" data-a="finalizar">'+(dr.edit?'Guardar cambios':'Finalizar entreno')+'</button><button class="link danger" data-a="cancelarEntreno" style="display:block;margin:16px auto 0;text-align:center">'+(dr.edit?'Salir sin guardar cambios':'Cancelar entreno (no se guarda)')+'</button><div style="height:80px"></div></main>'+
-    '<div id="rest" class="rest hidden"><div><div class="rest-l" id="rest-l">Descanso</div><div class="rest-t" id="rest-t">1:30</div></div><div class="rest-b"><button data-a="restMas" data-v="-15">−15</button><button data-a="restMas" data-v="15">+15</button><button data-a="restFin">Saltar</button></div></div>';
+    '<div id="rest" class="rest hidden"><div><div class="rest-l" id="rest-l">Descanso</div><div class="rest-t" id="rest-t">1:30</div></div><div class="rest-b"><button data-a="restMas" data-v="-15">−15</button><button data-a="restMas" data-v="15">+15</button><button data-a="restFin">Saltar</button><button class="rest-son" id="rest-son" data-a="restSon" aria-label="Silenciar el aviso del descanso">'+ic(descCfg().son?'son':'mudo')+'</button></div></div>';
   progresoEntreno(); arrancarReloj(); pintarSync();
   if(CL.restFin&&CL.restFin>Date.now()) mostrarRest();
 }
@@ -5362,39 +5370,65 @@ function actualizarBloques(){
   dr.blqH=ahora;
 }
 var relojI=null;
-function arrancarReloj(){ pararReloj(); function tick(){ var r=document.getElementById('reloj'); if(!r||!CL.dr){ pararReloj(); return; } r.textContent=(CL.dr.pausaIni?'En pausa · ':'')+hms(relojMs(CL.dr)); } tick(); relojI=setInterval(tick,1000); }
+function arrancarReloj(){ clearInterval(relojI); relojI=null; wlPedir(); function tick(){ var r=document.getElementById('reloj'); if(!r||!CL.dr){ pararReloj(); return; } r.textContent=(CL.dr.pausaIni?'En pausa · ':'')+hms(relojMs(CL.dr)); } tick(); relojI=setInterval(tick,1000); }
 /* v22: el reloj del entreno. Un toque lo pausa o lo reanuda; ↺ empieza a contar de nuevo. Los minutos se corrigen al terminar. */
 function relojCambio(txt){ guardarBorrador(true); cerrarModal(); CL.keep=true; pintarCl(); if(txt) toast(txt,'ok'); }
 A.pausaToggle=function(){ if(CL.dr&&CL.dr.pausaIni) A.reanudarEntreno(); else A.pausarEntreno(); };
 A.pausarEntreno=function(){ var dr=CL.dr; if(!dr||dr.pausaIni) return; dr.pausaIni=Date.now(); relojCambio('Reloj en pausa'); };
 A.reanudarEntreno=function(){ var dr=CL.dr; if(!dr||!dr.pausaIni) return; var n=Date.now(); dr.pausa=(num(dr.pausa)||0)+(n-dr.pausaIni); dr.pausaIni=null; dr.upd=n; relojCambio('El reloj vuelve a contar'); };
 A.relojCero=function(){ confirmar('¿Empezar a contar desde cero? El reloj vuelve a 0:00 y lo que llevas apuntado se queda igual.','Empezar de cero',function(){ var dr=CL.dr; if(!dr) return; var n=Date.now(); dr.t0=n; dr.pausa=0; dr.pausaIni=null; dr.upd=n; relojCambio('Reloj a cero'); }); };
-function pararReloj(){ clearInterval(relojI); relojI=null; }
+function pararReloj(){ clearInterval(relojI); relojI=null; wlSoltar(); }
 /* descanso */
 var restI=null;
 function descanso(seg,lab){ CL.restFin=Date.now()+seg*1000; CL.restAv=false; CL.restLab=lab||'Descanso'; prepararAudio(); mostrarRest(); }
+/* v52.6 · avisos del descanso: sonido (se puede silenciar), vibración (donde el móvil lo deja) y la pantalla encendida durante el entreno.
+   Sus ajustes van en este móvil (chadin_desc). Los pitidos se dejan programados en el reloj del sonido (restProg) para que suenen a su hora aunque el navegador frene la página. */
+function descCfg(){ var c=LS.get('chadin_desc')||{}; return {son:c.son!==false,vib:c.vib!==false,pant:c.pant!==false}; }
+function descGuardar(k,v){ var c=descCfg(); c[k]=v; LS.set('chadin_desc',c); }
+function vibraOk(){ return typeof navigator!=='undefined'&&typeof navigator.vibrate==='function'; }
+function vibrar(p){ if(!descCfg().vib||!vibraOk()) return; try{ navigator.vibrate(p); }catch(e){} }
+function restCancelar(){ (CL.restNodos||[]).forEach(function(o){ try{ o.stop(); }catch(e){} }); CL.restNodos=[]; CL.restProg=0; CL.restAcFin=0; }
+function pitidoEn(t0,fr,ms,vol){ var ac=CL.ac, o=ac.createOscillator(), g=ac.createGain(); o.type='triangle'; o.frequency.value=fr; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(vol||0.3,t0+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t0+ms/1000); o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0+ms/1000+0.02); (CL.restNodos=CL.restNodos||[]).push(o); }
+function restProgramar(){
+  restCancelar(); var ac=CL.ac; if(!ac||ac.state!=='running'||!descCfg().son||!CL.restFin) return;
+  var falta=(CL.restFin-Date.now())/1000; if(falta<=0.2) return;
+  try{ var fin=ac.currentTime+falta; [3,2,1].forEach(function(k){ if(falta>k+0.15) pitidoEn(fin-k,660,90,0.45); }); pitidoEn(fin,880,220,0.9); pitidoEn(fin+0.3,880,220,0.9); pitidoEn(fin+0.6,1320,450,0.9); CL.restProg=CL.restFin; CL.restAcFin=fin; }catch(e){ restCancelar(); }
+}
+function restProgOk(){ return !!(CL.restProg&&CL.restProg===CL.restFin&&CL.ac&&CL.ac.state==='running'); }      // los pitidos ya están puestos en el reloj del sonido (suenan solos)
+function restYaSono(){ return !!(CL.restProg&&CL.restProg===CL.restFin&&CL.ac&&CL.ac.state==='running'&&CL.ac.currentTime>=CL.restAcFin-0.05); }
+/* la pantalla encendida mientras entrena (si lo deja el navegador) */
+function wlPedir(){ if(!descCfg().pant||CL.wl||!navigator.wakeLock||document.visibilityState!=='visible') return; try{ navigator.wakeLock.request('screen').then(function(w){ CL.wl=w; try{ w.addEventListener('release',function(){ if(CL.wl===w) CL.wl=null; }); }catch(e){} },function(){}); }catch(e){} }
+function wlSoltar(){ try{ if(CL.wl) CL.wl.release(); }catch(e){} CL.wl=null; }
+document.addEventListener('visibilitychange',function(){
+  if(document.visibilityState!=='visible'||BOOT.mode!=='clienta') return;
+  if(CL.dr&&document.getElementById('reloj')) wlPedir();
+  if(CL.restFin){ if(restYaSono()) CL.restAv=true; else if(CL.restFin>Date.now()){ prepararAudio(); restProgramar(); } else restCancelar(); mostrarRest(); }      // al volver: si ya sonó, no lo repite; si no, lo vuelve a poner en hora
+});
 function mostrarRest(){
   var r=document.getElementById('rest'); if(!r) return;
   r.classList.remove('hidden','fin'); clearInterval(restI);
+  if(CL.restProg!==CL.restFin) restProgramar(); restSonBtn();
   var rl=document.getElementById('rest-l'); if(rl) rl.textContent=CL.restLab||'Descanso'; r.classList.toggle('mini',!!CL.restLab&&CL.restLab!=='Descanso');
   function tick(){
     var t=document.getElementById('rest-t'); if(!t){ clearInterval(restI); return; }
     var s=Math.ceil((CL.restFin-Date.now())/1000);
-    if(s<=0){ t.textContent='¡Vamos!'; r.classList.add('fin'); if(!CL.restAv){ CL.restAv=true; avisar(); setTimeout(function(){ if(CL.restFin<=Date.now()) ocultarRest(); },2500); } return; }
-    if(s<=3&&CL.restTic!==s+'|'+CL.restFin){ CL.restTic=s+'|'+CL.restFin; pitido(660,90,0.45); }      // v44: 3, 2, 1…
+    if(s<=0){ t.textContent='¡Vamos!'; r.classList.add('fin'); if(!CL.restAv){ CL.restAv=true; if(restProgOk()){ vibrar([300,120,300,120,500]); CL.nPit=(CL.nPit||0)+1; } else avisar(); setTimeout(function(){ if(CL.restFin<=Date.now()) ocultarRest(); },2500); } return; }
+    if(s<=3&&CL.restTic!==s+'|'+CL.restFin){ CL.restTic=s+'|'+CL.restFin; if(CL.restProg!==CL.restFin) pitido(660,90,0.45); }      // v44: 3, 2, 1… (v52.6: si no estaban ya programados)
     r.classList.remove('fin'); t.textContent=Math.floor(s/60)+':'+pad(s%60);
   }
   tick(); restI=setInterval(tick,250);
 }
-function ocultarRest(){ clearInterval(restI); CL.restFin=0; var r=document.getElementById('rest'); if(r) r.classList.add('hidden'); }
+function ocultarRest(){ clearInterval(restI); if(CL.restFin>Date.now()) restCancelar(); CL.restFin=0; CL.restProg=0; var r=document.getElementById('rest'); if(r) r.classList.add('hidden'); }
+function restSonBtn(){ var b=document.getElementById('rest-son'); if(!b) return; var on=descCfg().son; b.innerHTML=ic(on?'son':'mudo'); b.setAttribute('aria-label',on?'Silenciar el aviso del descanso':'Activar el sonido del descanso'); b.setAttribute('aria-pressed',String(!on)); b.classList.toggle('off',!on); }
+A.restSon=function(){ var on=!descCfg().son; descGuardar('son',on); if(on){ prepararAudio(); restProgramar(); } else restCancelar(); restSonBtn(); toast(on?'Con sonido al terminar el descanso':'Descanso en silencio'+(descCfg().vib&&vibraOk()?' (solo vibra)':''),'ok'); };
 document.addEventListener('pointerdown',function(){ if(BOOT.mode==='clienta'&&CL.dr) prepararAudio(); },true);
-A.restMas=function(el){ CL.restFin=Math.max(Date.now(),CL.restFin)+(+el.dataset.v)*1000; CL.restAv=false; mostrarRest(); };
+A.restMas=function(el){ CL.restFin=Math.max(Date.now(),CL.restFin)+(+el.dataset.v)*1000; CL.restAv=false; restCancelar(); mostrarRest(); };
 A.restFin=function(){ ocultarRest(); };
-function prepararAudio(){ try{ if(!CL.ac){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) CL.ac=new AC(); } if(CL.ac&&CL.ac.state==='suspended') CL.ac.resume();
+function prepararAudio(){ try{ if(!CL.ac){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) CL.ac=new AC(); } if(CL.ac&&CL.ac.state==='suspended'){ var pr=CL.ac.resume(); if(pr&&pr.then) pr.then(function(){ if(CL.restFin>Date.now()&&CL.restProg!==CL.restFin) restProgramar(); },function(){}); }
   if(CL.ac&&!CL.acOk){ var b=CL.ac.createBuffer(1,1,22050), x=CL.ac.createBufferSource(); x.buffer=b; x.connect(CL.ac.destination); x.start(0); CL.acOk=1; } }catch(e){} }      // v44: un sonido mudo al tocar para que el móvil deje sonar el aviso
-function pitido(fr,ms,vol){ try{ var ac=CL.ac; if(!ac) return; if(ac.state==='suspended') ac.resume(); var o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime; o.type='triangle'; o.frequency.value=fr; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.3,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+ms/1000+0.02); }catch(e){} }
+function pitido(fr,ms,vol){ if(!descCfg().son) return; try{ var ac=CL.ac; if(!ac) return; if(ac.state==='suspended') ac.resume(); var o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime; o.type='triangle'; o.frequency.value=fr; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.3,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+ms/1000+0.02); }catch(e){} }
 function avisar(){
-  try{ if(navigator.vibrate) navigator.vibrate([300,120,300,120,500]); }catch(e){}
+  vibrar([300,120,300,120,500]);
   pitido(880,220,0.9); setTimeout(function(){ pitido(880,220,0.9); },300); setTimeout(function(){ pitido(1320,450,0.9); },600);      // v44: tres pitidos más fuertes
   CL.nPit=(CL.nPit||0)+1;
 }
@@ -5454,7 +5488,7 @@ function tickTm(){
     var acu=0, idx=-1; for(var i=0;i<TM.fases.length;i++){ if(x<acu+TM.fases[i].dur){ idx=i; break; } acu+=TM.fases[i].dur; }
     if(idx<0) return finTm();
     var F=TM.fases[idx], rest=acu+F.dur-x;
-    if(TM.fi!==idx){ TM.fi=idx; TM.bip=-1; pitido(F.k==='descanso'?520:990,F.k==='descanso'?250:400,0.35); try{ if(navigator.vibrate) navigator.vibrate(F.k==='descanso'?120:[120,60,120]); }catch(err){} }
+    if(TM.fi!==idx){ TM.fi=idx; TM.bip=-1; pitido(F.k==='descanso'?520:990,F.k==='descanso'?250:400,0.35); vibrar(F.k==='descanso'?120:[120,60,120]); }
     claseTm(F.k==='descanso'?'descanso':'trabajo');
     setTm('tm-fase',F.k==='descanso'?'Descanso':F.k==='minuto'?'Minuto '+F.r+' de '+F.R:'¡Trabajo! · '+(f==='tabata'?'intervalo ':'ronda ')+F.r+' de '+F.R);
     setTm('tm-num',mmss(rest)); setTm('tm-ej',F.k==='descanso'?'':txtEj(F.ej)); setTm('tm-sig',F.sig?'Siguiente: '+txtEj(F.sig):(F.k==='descanso'?'':'')); bipTm(rest);
@@ -12999,6 +13033,18 @@ A.plRenovarOk=function(el){
   },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
+/* v52.6 · Perfil: «Avisos del descanso» (en este móvil) */
+function descClCard(){ var c=descCfg(), v=vibraOk(), w=!!navigator.wakeLock;
+  var fila=function(k,ico,t,sub,on,ok){ return '<div class="fila dsc-f'+(ok?'':' no')+'"><span class="dsc-i">'+ic(ico)+'</span><span>'+t+'<small class="fila-s">'+sub+'</small></span>'+(ok?'<button class="sw'+(on?' on':'')+'" data-a="descTog" data-k="'+k+'" aria-label="'+esc(t)+'" aria-pressed="'+on+'"><i></i></button>':'')+'</div>'; };
+  return '<div class="card dsc-pf"><div class="card-t">'+ic('reloj')+'Avisos del descanso</div>'+
+    fila('son','son','Sonido al terminar','Tres pitidos al acabar y una cuenta atrás 3, 2, 1. También lo silencias con el altavoz de la barra del descanso.',c.son,true)+
+    fila('vib','vibra','Vibración',v?'Vibra al acabar el descanso (y en los bloques con temporizador).':'Tu móvil no deja vibrar desde una web (pasa en iPhone): te avisa el sonido.',c.vib,v)+
+    fila('pant','pantalla','Pantalla encendida durante el entreno',w?'Para que la cuenta atrás y el aviso sigan aunque no toques el móvil. Al terminar el entreno, vuelve a apagarse sola.':'Tu navegador no lo permite: sube el tiempo de bloqueo del móvil mientras entrenas.',c.pant,w)+
+    '<button class="btn sm sec dsc-pr" data-a="descProbar">'+ic('son')+'Probar el aviso</button>'+
+    '<p class="muted sm dsc-n">Con la pantalla bloqueada o con otra app delante, el móvil para la app y el aviso no puede sonar a su hora: suena en cuanto vuelves. En iPhone, con el móvil en silencio puede que no se oiga.</p></div>'; }
+A.descTog=function(el){ var k=el.dataset.k, on=!descCfg()[k]; descGuardar(k,on); if(k==='pant'){ if(on&&CL.dr) wlPedir(); if(!on) wlSoltar(); } CL.keep=true; pintarCl();
+  toast({son:on?'Con sonido al terminar el descanso':'Descanso en silencio',vib:on?'Vibrará al terminar el descanso':'Sin vibración',pant:on?'La pantalla seguirá encendida mientras entrenas':'La pantalla se apagará como siempre'}[k],'ok'); };
+A.descProbar=function(){ prepararAudio(); var c=descCfg(); if(!c.son&&!(c.vib&&vibraOk())) return toast('Tienes el sonido y la vibración apagados','err'); setTimeout(function(){ avisar(); },120); toast(c.son?'¿Lo oyes? Si no, sube el volumen'+(/iPhone|iPad/.test(navigator.userAgent)?' y quita el modo silencio':''):'Solo vibración','ok'); };
 /* v29.1: su plan, sus pagos, su cuenta y su privacidad, en su propia pestaña «Perfil» */
 function vPerfil(){
   var c=CL.d.clienta||{}, nom=String(c.nombre||'').trim();
@@ -13006,6 +13052,7 @@ function vPerfil(){
   return '<div class="saludo pf-cab"><div class="pf-avw"><button class="pf-av'+(ft?' ft':'')+'" data-a="'+(ft?'pfVer':'pfFoto')+'" aria-label="'+(ft?'Ver tu foto en grande':'Tu foto de perfil')+'">'+(ft?'<img src="'+esc(ft)+'" alt="">':esc(iniciales(nom)||'·'))+'</button><button class="pf-avb" data-a="pfFoto" aria-label="Cambiar tu foto">'+ic('foto')+'</button></div><div><h1>'+esc(nom||'Tu perfil')+'</h1><div class="muted">Tu plan, tus sugerencias y tu privacidad</div></div></div>'+
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
     sugClCard()+
+    descClCard()+
     (!hombreCl()&&!cicloOn()?'<div class="card cyc-pf"><div class="fila"><span>Ver «Tu ciclo» en Hoy<small class="fila-s">Tu fase, tu próximo periodo y una idea para cada fase</small></span><button class="sw" data-a="cycOn" aria-label="Ver tu ciclo en Hoy"><i></i></button></div></div>':'')+      // v52
     (miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button>'+salirBtn()+'</div>')+
     '<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
