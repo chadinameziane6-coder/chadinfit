@@ -1115,6 +1115,11 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .ej-rt{flex:1;min-width:0;display:flex;flex-direction:column}.ej-rt small{font-size:12px;color:var(--mu);font-weight:500}
 /* v52.8 · banco: seleccionar varios y cambiar sus datos de una vez */
 .bk-her{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+/* v52.10 · ciclo y privacidad */
+.cy-priv{display:flex;gap:10px;align-items:flex-start;margin:0;background:#F5F5F7;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
+.cy-priv .ic{flex:none;width:18px;height:18px;margin-top:1px}
+.cy-ok{display:flex;align-items:center;gap:6px;margin:-4px 0 10px}.cy-ok .ic{width:15px;height:15px;color:#15803D}
+.cq-cic{background:#FDF0F4;border-radius:12px;padding:10px 12px}
 .bk-ck{flex:none;width:24px;height:24px;border:2px solid #C7C7CC;border-radius:7px;display:flex;align-items:center;justify-content:center;background:#fff;color:transparent}
 .bk-ck svg{width:15px;height:15px}
 .ej-row.bk-on{border-color:#111;background:#F5F5F7}.ej-row.bk-on .bk-ck{background:#111;border-color:#111;color:#fff}
@@ -2363,7 +2368,14 @@ body.cq .cq-lead{font-weight:600}
 .cyc-0 .cyc-h{display:flex;gap:12px;align-items:flex-start}.cyc-ic{width:40px;height:40px;border-radius:50%;background:#FDF0F4;display:flex;align-items:center;justify-content:center;flex:none}.cyc-ic .ic{width:20px;height:20px;color:#E5484D;margin:0}.cyc-0 b{display:block;font:800 16px Plus Jakarta Sans,sans-serif}.cyc-0 small{display:block;color:var(--mu);font-size:13px;margin-top:2px;line-height:1.4}.cyc-0 .row{align-items:center}.cyc-0 .btn{width:auto}
 .cyl{display:flex;flex-direction:column;gap:16px;margin:10px 0}.cyl-m>b{display:block;font:800 15px Plus Jakarta Sans,sans-serif;margin-bottom:6px}
 .cyl-g{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center}.cyl-g i{font:700 11px Plus Jakarta Sans,sans-serif;color:var(--mu);font-style:normal;padding:2px 0}
-.cyl-g span{font:600 13px/34px Plus Jakarta Sans,sans-serif;height:34px;border-radius:50%;color:#111}
+.cyl-g span,.cyl-g button{font:600 13px/34px Plus Jakarta Sans,sans-serif;height:34px;border-radius:50%;color:#111}
+.cyl-g span,.cyl-g button{width:34px;margin:0 auto;display:block}.cyl-g button{border:0;background:none;padding:0;cursor:pointer}.cyl-g button:not(.rg):not(.ov):hover{background:#F2F2F5}
+.cyl-st{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:8px 0 6px}.cyl-st>div{background:#F7F7F9;border-radius:14px;padding:10px 10px 9px}.cyl-st span{display:block;font-size:12px;color:var(--mu);font-weight:600}.cyl-st b{display:block;font-size:16px;margin-top:2px}.cyl-st small{display:block;font-size:11.5px;color:var(--mu);margin-top:1px}
+.cyl-ay{margin:6px 0 0}
+.ck-sin{margin-top:12px}.ck-sin summary{display:flex;align-items:center;gap:6px;cursor:pointer;font-weight:600;font-size:14px;list-style:none}.ck-sin summary::-webkit-details-marker{display:none}.ck-sin summary .ic{width:16px;height:16px}.ck-sin[open] summary .ic{transform:rotate(45deg)}
+.ck-sl{margin-top:8px}.ck-sl button .ic{width:14px;height:14px}
+.cy-fl{display:flex;flex-direction:column;gap:6px;margin:12px 0 4px}.cy-fr{display:grid;grid-template-columns:1.3fr 1.2fr 1.2fr .6fr;gap:8px;align-items:center;font-size:13px;background:#F7F7F9;border-radius:12px;padding:8px 10px}
+.cy-cl-s{margin:-4px 0 10px}
 .cyl-g .rg{background:#E5484D;color:#fff}.cyl-g .pr{box-shadow:inset 0 0 0 2px #E5484D;color:#C02F36}.cyl-g .fe{background:#DDF4F1;color:#0E6E64}.cyl-g .ov{background:#12857A;color:#fff}.cyl-g .pm{background:#FEF1DD;color:#8A5A00}.cyl-g .hy{outline:2px solid #111;outline-offset:1px}
 .cyl-ley{display:flex;flex-wrap:wrap;gap:6px 14px;font:600 12px Plus Jakarta Sans,sans-serif;color:#3A3A3C;margin:4px 0 10px}.cyl-ley span{display:inline-flex;align-items:center;gap:6px}.cyl-ley i{width:12px;height:12px;border-radius:50%}
 .cyl-ley .rg{background:#E5484D}.cyl-ley .pr{box-shadow:inset 0 0 0 2px #E5484D}.cyl-ley .fe{background:#DDF4F1}.cyl-ley .ov{background:#12857A}.cyl-ley .pm{background:#FEF1DD}
@@ -2477,7 +2489,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.9';
+var APP_V = 'v52.10';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -2643,7 +2655,7 @@ function cicloPerfil(diario,hoy){
   });
   var ult=ini[ini.length-1], uFin=ult?fin[ult]:null;
   var dM=medianaN(dur), lM=medianaN(Ls);
-  return {ini:ini,fin:fin,hay:hay,usa:ini.length>0,dur:dM?Math.round(dM):5,L:lM?Math.round(lM):28,
+  return {ini:ini,fin:fin,hay:hay,usa:ini.length>0,dur:dM?Math.round(dM):5,L:lM?Math.round(lM):28,Ls:Ls,durs:dur,      // v52.10: Ls y durs, para la regularidad
     // ¿puede seguir con la regla hoy? (el último día con regla fue ayer y aún no ha dicho que no)
     abierta:!!(uFin&&diff(uFin,hoy)<=1&&!D.some(function(x){ return x.fecha>uFin&&!x.regla; }))};
 }
@@ -3547,8 +3559,10 @@ function cmpSesiones(st,d,M,coach){
 /* =====================================================================
    v18 · CICLO: fase de cada día y patrones (energía, síntomas, rendimiento)
    ===================================================================== */
-var SINT={cansancio:'Cansancio',dolor:'Dolor o cólicos',cabeza:'Dolor de cabeza',hinchazon:'Hinchazón',animo:'Ánimo bajo o irritable',antojos:'Más hambre o antojos',pecho:'Pecho sensible',agujetas:'Agujetas fuertes',sueno:'Dormí mal'};
-var SINT_ORDEN=['cansancio','dolor','cabeza','hinchazon','animo','antojos','pecho','agujetas','sueno'];
+var SINT={cansancio:'Cansancio',dolor:'Dolor o cólicos',cabeza:'Dolor de cabeza',hinchazon:'Hinchazón',animo:'Ánimo bajo o irritable',antojos:'Mucha hambre, antojos dulces',pecho:'Pecho sensible',agujetas:'Agujetas fuertes',sueno:'Dormí mal'};
+var SINT_ORDEN=['cansancio','dolor','cabeza','hinchazon','animo','antojos','agujetas','sueno'];      // v52.10: sin «Pecho sensible» para marcar (Javier); se queda para leer lo de antes
+var SINT_F={antojos:'mucha hambre o antojos dulces'};      // v52.10: en una frase (sin la coma)
+function sintF(k){ return SINT_F[k]||String(SINT[k]||k).toLowerCase(); }
 /* v21: la clienta ya no marca síntomas: escribe cómo se siente. Para ver patrones del ciclo se leen sus notas. */
 var SINT_RE={cansancio:/cansad|cansancio|agotad|fatiga|sin fuerza|sin energ/,dolor:/c[oó]lico|dolor de (tripa|barriga|ovario|regla|vientre)|dolor menstrual|me duele (la )?(tripa|barriga|vientre)|dolores de regla/,cabeza:/dolor de cabeza|me duele la cabeza|migra[nñ]a|jaqueca/,
   hinchazon:/hinchad|hinchaz|retenci|retengo/,animo:/triste|irritab|bajo[nó]n|baj[oó]n|de mal humor|[aá]nimo bajo|sensible|ansios|llorona|lloro/,antojos:/antojo|mucha hambre|m[aá]s hambre|hambre|ganas de dulce/,pecho:/pecho|senos|mamas/,agujeta:/agujeta/,
@@ -3588,44 +3602,86 @@ function rendimientos(d){
   Object.keys(ses).forEach(function(s){ out[s]=100*media(ses[s]); });
   return out;
 }
-function cicloCard(d){
-  var C=cicloDe(d.diario), h='<div class="card cy" id="ciclo"><div class="card-t">'+ic('gota')+'Ciclo, energía y rendimiento</div>';
-  var E=cicloEstadoDe(d.diario,CO.hoy||hoyStr());      // v52: hoy, como lo ve ella en su anillo
-  if(E) h+='<div class="cy-hoy-co" style="--cf:'+CIC_C[E.f==='largo'?'premenstrual':E.f]+'"><i></i><span><b>Hoy: '+(E.f==='menstrual'?'día '+E.d+' de su regla':'día '+E.d+' · '+esc(CIC_N[E.f].toLowerCase()))+'</b><small>'+(E.retraso?'La regla se retrasa '+E.retraso+(E.retraso>1?' días':' día'):'Próxima regla: '+esc(fCorta(E.f==='menstrual'?sumar(E.ult,E.L):E.prox)))+' · ciclo de '+E.L+' días (aprox.)</small></span></div>';
-  var con=d.diario.filter(function(x){ return C.info(x.fecha); });
-  if(C.inicios.length<2||con.length<15) return h+'<p class="muted" style="margin:0">Para ver patrones hacen falta al menos dos reglas apuntadas y unas semanas de check-ins. Lleva '+C.inicios.length+(C.inicios.length===1?' regla':' reglas')+' y '+con.length+' check-ins con el ciclo.</p></div>';
-  var Rn=rendimientos(d), F={}, todosE=[], todosS=[], todosR=[], todosP=[];
-  FASES_C.forEach(function(f){ F[f[0]]={e:[],s:[],sin:{},n:0,rpe:[],ren:[],ses:0}; });
+/* v52.10 · lo que se ve de su ciclo junto a sus entrenos, con SUS datos (tendencias suyas, no reglas para todas). yo = su app (tú), si no el panel (ella) */
+function progDia(d,f){ var ds=diaSem(f); return (d.rutinas||[]).some(function(r){ return (r.dias||[]).indexOf(ds)>=0&&vigenteEn(r,f,d.rutinas); }); }
+function cicloPat(d,yo,hoy){
+  hoy=hoy||hoyStr();
+  var C=cicloDe(d.diario), con=d.diario.filter(function(x){ return C.info(x.fecha); });
+  var T=function(a,b){ return yo?b:a; }, lo=T('lo normal en '+cG('ella','él'),'lo normal en ti');
+  var R={ok:false,C:C,con:con.length,ini:C.inicios.length,P:[],F:{},porDia:{},mE:null,yo:yo};
+  if(C.inicios.length<2||con.length<15) return R;
+  var Rn=rendimientos(d), F=R.F, todosE=[], todosS=[], todosR=[], hechoF={};
+  FASES_C.forEach(function(f){ F[f[0]]={e:[],s:[],sin:{},n:0,rpe:[],ren:[],ses:0,prog:0,hech:0}; });
   d.diario.forEach(function(x){ var i=C.info(x.fecha); var en=num(x.energia), su=num(x.sueno); if(en!=null) todosE.push(en); if(su!=null) todosS.push(su); if(!i) return; var o=F[i.fase]; o.n++; if(en!=null) o.e.push(en); if(su!=null) o.s.push(su); sintDe(x).forEach(function(k){ o.sin[k]=(o.sin[k]||0)+1; }); });
-  d.sesiones.forEach(function(s){ var r=num(s.rpe), rn=Rn[s.id]; if(r!=null) todosR.push(r); if(rn!=null) todosP.push(rn); var i=C.info(s.fecha); if(!i) return; var o=F[i.fase]; o.ses++; if(r!=null) o.rpe.push(r); if(rn!=null) o.ren.push(rn); });
-  var mE=media(todosE), mS=media(todosS), mR=media(todosR), P=[];
+  d.sesiones.forEach(function(s){ hechoF[s.fecha]=1; var r=num(s.rpe), rn=Rn[s.id]; if(r!=null) todosR.push(r); var i=C.info(s.fecha); if(!i) return; var o=F[i.fase]; o.ses++; if(r!=null) o.rpe.push(r); if(rn!=null) o.ren.push(rn); });
+  // adherencia: de los días con entreno programado (últimos 4 meses), cuántos entrenó
+  var desde=C.inicios[0]>sumar(hoy,-120)?C.inicios[0]:sumar(hoy,-120), tp=0, th=0;
+  for(var f=desde;f<=hoy;f=sumar(f,1)){ if(!progDia(d,f)) continue; var i=C.info(f); if(!i) continue; var o=F[i.fase]; o.prog++; tp++; if(hechoF[f]){ o.hech++; th++; } }
+  var mE=media(todosE), mS=media(todosS), mR=media(todosR), mA=tp>=8?100*th/tp:null, P=R.P;
+  R.mE=mE;
   function fn(k){ return FASES_C.filter(function(f){ return f[0]===k; })[0][1].toLowerCase(); }
-  FASES_C.forEach(function(f){ var o=F[f[0]], e=media(o.e), r=media(o.rpe), rn=media(o.ren), s=media(o.s);
-    if(e!=null&&o.e.length>=3&&mE!=null&&e<=mE-1) P.push({ic:'baja',t:'En fase '+fn(f[0])+' su energía baja: '+fN(e)+'/10 de media (lo normal en '+cG('ella','él')+', '+fN(mE)+'/10).'});
-    if(e!=null&&o.e.length>=3&&mE!=null&&e>=mE+1.2) P.push({ic:'sube',t:'En fase '+fn(f[0])+' tiene más energía: '+fN(e)+'/10 de media.'});
-    if(rn!=null&&o.ren.length>=3&&rn<=97) P.push({ic:'baja',t:'En fase '+fn(f[0])+' rinde algo menos: un '+fN(100-rn,0)+' % por debajo de su nivel habitual.'});
-    if(rn!=null&&o.ren.length>=3&&rn>=103) P.push({ic:'sube',t:'En fase '+fn(f[0])+' rinde más: un '+fN(rn-100,0)+' % por encima de su nivel habitual.'});
-    if(r!=null&&o.rpe.length>=3&&mR!=null&&r>=mR+0.7) P.push({ic:'alerta',t:'En fase '+fn(f[0])+' los entrenos le cuestan más: RPE '+fN(r)+' de media (lo normal, '+fN(mR)+').'});
-    if(s!=null&&o.s.length>=3&&mS!=null&&s<=mS-0.6) P.push({ic:'reloj',t:'En fase '+fn(f[0])+' duerme menos: '+fN(s)+' h de media.'});
-    var top=Object.keys(o.sin).filter(function(k){ return o.n>=3&&o.sin[k]/o.n>=0.5; }).sort(function(a,b){ return o.sin[b]-o.sin[a]; });
-    if(top.length) P.push({ic:'nota',t:'En fase '+fn(f[0])+' suele notar '+listaY(top.map(function(k){ return SINT[k].toLowerCase(); }))+' ('+Math.round(100*o.sin[top[0]]/o.n)+' % de los días).'});
+  function en(k){ return T('En fase '+fn(k)+' ','En tu fase '+fn(k)+' '); }
+  FASES_C.forEach(function(f){ var k=f[0], o=F[k], e=media(o.e), r=media(o.rpe), rn=media(o.ren), s2=media(o.s), a=o.prog>=4?100*o.hech/o.prog:null;
+    if(e!=null&&o.e.length>=3&&mE!=null&&e<=mE-1) P.push({ic:'baja',fase:k,t:en(k)+T('su energía baja: ','tu energía baja: ')+fN(e)+'/10 de media ('+lo+', '+fN(mE)+'/10).'});
+    if(e!=null&&o.e.length>=3&&mE!=null&&e>=mE+1.2) P.push({ic:'sube',fase:k,t:en(k)+T('tiene más energía: ','tienes más energía: ')+fN(e)+'/10 de media ('+lo+', '+fN(mE)+'/10).'});
+    if(rn!=null&&o.ren.length>=3&&rn<=97) P.push({ic:'baja',fase:k,t:en(k)+T('rinde algo menos: un ','rindes algo menos: un ')+fN(100-rn,0)+' % por debajo de '+T('su','tu')+' nivel habitual.'});
+    if(rn!=null&&o.ren.length>=3&&rn>=103) P.push({ic:'sube',fase:k,t:en(k)+T('rinde más: un ','rindes más: un ')+fN(rn-100,0)+' % por encima de '+T('su','tu')+' nivel habitual.'});
+    if(r!=null&&o.rpe.length>=3&&mR!=null&&r>=mR+0.7) P.push({ic:'alerta',fase:k,t:en(k)+T('los entrenos le cuestan más: RPE ','los entrenos te cuestan más: esfuerzo ')+fN(r)+' de media (lo normal, '+fN(mR)+').'});
+    if(s2!=null&&o.s.length>=3&&mS!=null&&s2<=mS-0.6) P.push({ic:'reloj',fase:k,t:en(k)+T('duerme menos: ','duermes menos: ')+fN(s2)+' h de media.'});
+    if(a!=null&&mA!=null&&a<=mA-20) P.push({ic:'cal',fase:k,t:en(k)+T('hace menos entrenos de los programados: ','haces menos entrenos de los programados: ')+fN(a,0)+' % ('+lo+', '+fN(mA,0)+' %).'});
+    var top=Object.keys(o.sin).filter(function(x){ return o.n>=3&&o.sin[x]/o.n>=0.5; }).sort(function(a2,b2){ return o.sin[b2]-o.sin[a2]; });
+    if(top.length) P.push({ic:'nota',fase:k,t:en(k)+T('suele notar ','sueles notar ')+listaY(top.map(function(x){ return sintF(x); }))+' ('+Math.round(100*o.sin[top[0]]/o.n)+' % de los días).'});
   });
   // días concretos del ciclo con la energía muy baja
-  var porDia={}; d.diario.forEach(function(x){ var i=C.info(x.fecha), en=num(x.energia); if(!i||i.dia==null||en==null) return; (porDia[i.dia]=porDia[i.dia]||[]).push(en); });
-  var bajos=Object.keys(porDia).map(Number).filter(function(k){ return porDia[k].length>=2&&mE!=null&&media(porDia[k])<=Math.min(mE-1.8,5); }).sort(function(a,b){ return a-b; });
+  var porDia=R.porDia; d.diario.forEach(function(x){ var i=C.info(x.fecha), e2=num(x.energia); if(!i||i.dia==null||e2==null) return; (porDia[i.dia]=porDia[i.dia]||[]).push(e2); });
+  var bajos=Object.keys(porDia).map(Number).filter(function(k){ return porDia[k].length>=2&&mE!=null&&media(porDia[k])<=Math.min(mE-1.8,5); }).sort(function(a2,b2){ return a2-b2; });
   if(bajos.length){ var g=[], ini=bajos[0], prev=bajos[0]; bajos.slice(1).concat([null]).forEach(function(k){ if(k===prev+1){ prev=k; return; } g.push(ini===prev?'el día '+ini:'los días '+ini+' a '+prev); ini=prev=k; });
     var vals=[]; bajos.forEach(function(k){ vals=vals.concat(porDia[k]); });
-    P.unshift({ic:'alerta',t:'Patrón: '+listaY(g)+' del ciclo suele estar muy cansada ('+fN(media(vals))+'/10 de media; lo normal en '+cG('ella','él')+', '+fN(mE)+'/10). Tenlo en cuenta al programar.'}); }
-  h+=P.length?'<div class="cy-p">'+P.map(function(p){ return '<div class="cy-i">'+ic(p.ic)+'<span>'+esc(p.t)+'</span></div>'; }).join('')+'</div>':'<p class="muted">Por ahora no se ve un patrón claro entre su ciclo, su energía y cómo rinde.</p>';
-  h+='<div class="tbl-w"><table class="tbl cy-t"><tr><th>Fase</th><th>Días</th><th>Energía</th><th>Sueño</th><th>Entrenos</th><th>RPE</th><th>Rendimiento</th><th>Síntomas más repetidos</th></tr>'+FASES_C.map(function(f){ var o=F[f[0]], e=media(o.e), rn=media(o.ren);
-    var top=Object.keys(o.sin).sort(function(a,b){ return o.sin[b]-o.sin[a]; }).slice(0,2);
-    return '<tr><td><span class="cy-f">'+ic(f[2])+f[1]+'</span></td><td>'+o.n+'</td><td>'+(e==null?'–':'<span class="cy-bar"><i style="width:'+Math.round(e*10)+'%"></i></span>'+fN(e)+'/10')+'</td><td>'+(o.s.length?fN(media(o.s))+' h':'–')+'</td><td>'+o.ses+'</td><td>'+(o.rpe.length?fN(media(o.rpe)):'–')+'</td><td>'+(rn==null?'–':fN(rn,0)+' %')+'</td><td class="sm">'+(top.length?top.map(function(k){ return esc(SINT[k])+' ('+Math.round(100*o.sin[k]/Math.max(1,o.n))+' %)'; }).join(', '):'–')+'</td></tr>'; }).join('')+'</table></div>';
-  // energía media por día del ciclo
-  var maxD=Math.min(35,Math.max.apply(null,Object.keys(porDia).map(Number).concat([28])));
-  h+='<div class="lab">Energía media por día del ciclo</div><div class="cy-d">';
+    P.unshift({ic:'alerta',dias:bajos,t:T('Patrón: '+listaY(g)+' del ciclo suele estar muy cansada ('+fN(media(vals))+'/10 de media; '+lo+', '+fN(mE)+'/10). Tenlo en cuenta al programar.',
+      listaY(g).charAt(0).toUpperCase()+listaY(g).slice(1)+' de tu ciclo sueles estar muy cansada ('+fN(media(vals))+'/10 de media; '+lo+', '+fN(mE)+'/10).')}); }
+  R.ok=true; R.Rn=Rn; return R;
+}
+function cicloTiraDias(A){
+  var porDia=A.porDia, maxD=Math.min(35,Math.max.apply(null,Object.keys(porDia).map(Number).concat([28]))), h='<div class="lab">Energía media por día del ciclo</div><div class="cy-d">';
   for(var k=1;k<=maxD;k++){ var v=porDia[k]?media(porDia[k]):null; h+='<span class="cy-c'+(v==null?' v':v<5.5?' lt':'')+'" style="'+(v==null?'':'--a:'+(0.12+0.88*(v-1)/9).toFixed(2))+'" title="Día '+k+(v==null?'':': '+fN(v)+'/10')+'"><small>'+k+'</small><b>'+(v==null?'':fN(v,0))+'</b></span>'; }
-  h+='</div><p class="muted sm">Rendimiento: su 1RM estimado en cada ejercicio frente a sus entrenos de las 3 semanas de alrededor (100 % = lo normal en '+cG('ella','él')+'), para que no cuente la progresión. Fases aproximadas con su ciclo ('+C.P.L+' días de media) y su regla ('+C.P.dur+' días): menstrual (los días con la regla), folicular (hasta el día '+(Math.max(C.P.dur+2,C.P.L-14)-1)+'), ovulatoria ('+Math.max(C.P.dur+2,C.P.L-14)+'-'+(Math.max(C.P.dur+2,C.P.L-14)+2)+'), lútea y premenstrual (los 5 días antes de la regla o cuando lo marca). Los síntomas salen de lo que escribe en su check-in (cansancio, cólicos, hinchazón, ánimo, hambre…).</p>';
   return h+'</div>';
+}
+function cicloCard(d){
+  var cc=d.clienta&&d.clienta.cicloCoach, h0='<div class="card cy" id="ciclo"><div class="card-t">'+ic('gota')+'Ciclo, energía y rendimiento</div>';
+  if(cc&&!cc.si) return h0+'<p class="cy-priv">'+ic('candado')+'<span><b>Su ciclo es privado.</b> No lo comparte contigo. Si quiere, puede activarlo en su app: Perfil → «¿Quieres que tu coach vea tu ciclo?».'+(cc.f?' Lo quitó el '+esc(fMedia(String(cc.f).slice(0,10)))+'.':'')+'</span></p></div>';      // v52.10: sin su permiso, el servidor ni lo manda
+  var h=h0+(cc&&cc.f&&cc.por!=='ejemplo'?'<p class="muted sm cy-ok">'+ic('okc')+'Lo comparte contigo desde el '+esc(fMedia(String(cc.f).slice(0,10)))+(cc.por==='cuestionario'?' (en el cuestionario)':' (desde su Perfil)')+'.</p>':'');
+  var E=cicloEstadoDe(d.diario,CO.hoy||hoyStr());      // v52: hoy, como lo ve ella en su anillo
+  if(E) h+='<div class="cy-hoy-co" style="--cf:'+CIC_C[E.f==='largo'?'premenstrual':E.f]+'"><i></i><span><b>Hoy: '+(E.f==='menstrual'?'día '+E.d+' de su periodo':'día '+E.d+' · '+esc(CIC_N[E.f].toLowerCase()))+'</b><small>'+(E.retraso?'El periodo se retrasa '+E.retraso+(E.retraso>1?' días':' día'):'Próximo periodo: '+esc(fCorta(E.f==='menstrual'?sumar(E.ult,E.L):E.prox)))+' · ciclo de '+E.L+' días (aprox.)</small></span></div>';
+  var A=cicloPat(d,false,CO.hoy||hoyStr()), C=A.C;
+  if(!A.ok) return h+'<p class="muted" style="margin:0">Para ver patrones hacen falta al menos dos periodos apuntados y unas semanas de check-ins. Lleva '+A.ini+(A.ini===1?' periodo':' periodos')+' y '+A.con+' check-ins con el ciclo.</p></div>';
+  var P=A.P, F=A.F;
+  h+=P.length?'<div class="cy-p">'+P.map(function(p){ return '<div class="cy-i">'+ic(p.ic)+'<span>'+esc(p.t)+'</span></div>'; }).join('')+'</div>':'<p class="muted">Por ahora no se ve un patrón claro entre su ciclo, su energía y cómo rinde.</p>';
+  h+='<div class="tbl-w"><table class="tbl cy-t"><tr><th>Fase</th><th>Días</th><th>Energía</th><th>Sueño</th><th>Entrenos</th><th>Hechos / programados</th><th>RPE</th><th>Rendimiento</th><th>Síntomas más repetidos</th></tr>'+FASES_C.map(function(f){ var o=F[f[0]], e=media(o.e), rn=media(o.ren);
+    var top=Object.keys(o.sin).sort(function(a,b){ return o.sin[b]-o.sin[a]; }).slice(0,2);
+    return '<tr><td><span class="cy-f">'+ic(f[2])+f[1]+'</span></td><td>'+o.n+'</td><td>'+(e==null?'–':'<span class="cy-bar"><i style="width:'+Math.round(e*10)+'%"></i></span>'+fN(e)+'/10')+'</td><td>'+(o.s.length?fN(media(o.s))+' h':'–')+'</td><td>'+o.ses+'</td><td>'+(o.prog?o.hech+' de '+o.prog+' ('+fN(100*o.hech/o.prog,0)+' %)':'–')+'</td><td>'+(o.rpe.length?fN(media(o.rpe)):'–')+'</td><td>'+(rn==null?'–':fN(rn,0)+' %')+'</td><td class="sm">'+(top.length?top.map(function(k){ var t=sintF(k); return esc(t.charAt(0).toUpperCase()+t.slice(1))+' ('+Math.round(100*o.sin[k]/Math.max(1,o.n))+' %)'; }).join(', '):'–')+'</td></tr>'; }).join('')+'</table></div>';
+  h+=cicloTiraDias(A);
+  h+='<p class="muted sm">Rendimiento: su 1RM estimado en cada ejercicio frente a sus entrenos de las 3 semanas de alrededor (100 % = lo normal en '+cG('ella','él')+'), para que no cuente la progresión. Hechos / programados: de los días con entreno en su rutina (últimos 4 meses), los que entrenó. Fases aproximadas con su ciclo ('+C.P.L+' días de media) y su periodo ('+C.P.dur+' días): menstrual (los días con el periodo), folicular (hasta el día '+(Math.max(C.P.dur+2,C.P.L-14)-1)+'), ovulatoria ('+Math.max(C.P.dur+2,C.P.L-14)+'-'+(Math.max(C.P.dur+2,C.P.L-14)+2)+'), lútea y premenstrual (los 5 días antes del periodo o cuando lo marca). Los síntomas salen de lo que marca o escribe en su check-in. Son tendencias suyas: no reglas para todas.</p>';
+  return h+'</div>';
+}
+/* v52.10 · su app: «Tu ciclo y tus entrenos», en Progreso (lo mismo que ve su coach, con sus palabras) */
+function cicloPatCl(){ var k=CL.d.diario.length+'|'+CL.d.sesiones.length+'|'+CL.d.series.length+'|'+hoyStr()+'|'+CL.d.diario.filter(function(x){ return x.regla; }).length; if(!CL._cpa||CL._cpa.k!==k) CL._cpa={k:k,a:cicloPat(CL.d,true)}; return CL._cpa.a; }
+function cicloClCard(){
+  if(hombreCl()||!cicloOn()) return '';
+  var A=cicloPatCl(), h='<div class="card cy cy-cl" id="cy-cl"><div class="card-t">'+ic('gota')+'Tu ciclo y tus entrenos</div><p class="muted sm cy-cl-s">Con tus propios registros: lo que te pasa a ti, no reglas para todas.</p>';
+  if(!A.ok) return h+'<p class="muted" style="margin:0">Cuando lleves al menos dos periodos apuntados y unas semanas de check-ins, aquí verás cómo te sienta cada fase: tu energía, tu sueño y cómo rindes en tus entrenos. Llevas '+A.ini+(A.ini===1?' periodo':' periodos')+' y '+A.con+' check-ins.</p></div>';
+  h+=A.P.length?'<div class="cy-p">'+A.P.map(function(p){ return '<div class="cy-i">'+ic(p.ic)+'<span>'+esc(p.t)+'</span></div>'; }).join('')+'</div>':'<p class="muted">Por ahora no se ve un patrón claro entre tu ciclo, tu energía y cómo rindes.</p>';
+  h+='<div class="cy-fl">'+FASES_C.map(function(f){ var o=A.F[f[0]], e=media(o.e), rn=media(o.ren); if(!o.n&&!o.prog) return '';
+    return '<div class="cy-fr"><span class="cy-f">'+ic(f[2])+f[1]+'</span><span>'+(e==null?'–':'<span class="cy-bar"><i style="width:'+Math.round(e*10)+'%"></i></span>'+fN(e)+'/10')+'</span><span>'+(o.prog?o.hech+' de '+o.prog+' entrenos':o.ses+' entrenos')+'</span><span>'+(rn==null?'':fN(rn,0)+' %')+'</span></div>'; }).join('')+'</div>';
+  h+='<p class="muted sm">Energía media · entrenos hechos de los programados · rendimiento frente a tu nivel habitual (100 %).</p>'+cicloTiraDias(A);
+  return h+'</div>';
+}
+/* v52.10 · la idea del anillo: lo que dicen sus datos de la fase en la que está (sin consejos generales por fase) */
+function cicloTipHoy(E){
+  if(E.f==='largo') return CIC_T.largo;
+  var A=cicloPatCl(); if(!A.ok) return 'Con tus check-ins iré viendo cómo te sienta cada fase a ti.';
+  var i=A.C.info(hoyStr()), f=i&&i.fase; if(!f) return '';
+  var L=A.P.filter(function(p){ return p.fase===f||(p.dias&&E.d&&p.dias.indexOf(E.d)>=0); });
+  return L.length?L[0].t:'En esta fase te sueles encontrar como siempre: sin cambios claros en tu energía ni en tus entrenos.';
 }
 /* check-ins recientes, claros */
 function checkinsCard(dia){
@@ -3634,12 +3690,12 @@ function checkinsCard(dia){
   if(!a.length) return h+'<p class="muted" style="margin:0">Aún no hay check-ins.</p></div>';
   h+=a.map(function(x){ var i=C.info(x.fecha), en=num(x.energia);
     var chips=[];
-    if(x.regla) chips.push('<span class="ckc rg">'+ic('gota')+'Con la regla</span>');
+    if(x.regla) chips.push('<span class="ckc rg">'+ic('gota')+'Con el periodo</span>');
     else if(x.premenstrual) chips.push('<span class="ckc pm">'+ic('nube')+'Premenstrual</span>');
     if(i&&i.dia!=null) chips.push('<span class="ckc">Día '+i.dia+' · '+esc(FASES_C.filter(function(f){ return f[0]===i.fase; })[0][1].toLowerCase())+'</span>');
     if(en!=null) chips.push('<span class="ckc'+(en<=4?' bj':'')+'">'+(en<=4?ic('alerta'):'')+'Energía '+fN(en,0)+'/10</span>');
     if(num(x.sueno)!=null) chips.push('<span class="ckc">'+ic('reloj')+fN(x.sueno)+' h</span>');
-    return '<div class="ck-i"><b class="ck-f">'+esc(fMedia(x.fecha))+'</b><div class="ck-ch">'+chips.join('')+'</div>'+((x.sintomas||[]).length?'<div class="ck-s">Síntomas: '+esc(x.sintomas.map(function(k){ return (SINT[k]||k).toLowerCase(); }).join(', '))+'</div>':'')+(x.notas?'<div class="sx-c">'+ic('nota')+'<span>'+esc(x.notas)+'</span></div>':'')+'</div>';
+    return '<div class="ck-i"><b class="ck-f">'+esc(fMedia(x.fecha))+'</b><div class="ck-ch">'+chips.join('')+'</div>'+((x.sintomas||[]).length?'<div class="ck-s">Síntomas: '+esc(listaY(x.sintomas.map(sintF)))+'</div>':'')+(x.notas?'<div class="sx-c">'+ic('nota')+'<span>'+esc(x.notas)+'</span></div>':'')+'</div>';
   }).join('');
   if(!CO.ckTodo&&dia.length>14) h+='<button class="link" data-a="ckTodo">Ver todos</button>';
   return h+'</div>';
@@ -4619,7 +4675,7 @@ function checkinPasado(f){
   var hay=e&&(num(e.energia)!=null||!vacio(e.sueno)||!vacio(e.dia_ciclo)||e.notas||e.regla||e.premenstrual);
   if(!hay) return h+'<p class="muted" style="margin:0">Ese día no hiciste check-in.</p>'+(diff(f,hoyStr())<=3?'<button class="btn sm mt6" data-a="ckDia" data-f="'+f+'">Hacerlo ahora</button>':'')+'</div>';
   var en=num(e.energia), dc=num(e.dia_ciclo), L=[];
-  if(e.regla) L.push('<span class="ckc rg">'+ic('gota')+'Con la regla</span>'); else if(e.premenstrual) L.push('<span class="ckc pm">'+ic('nube')+'Premenstrual</span>');
+  if(e.regla) L.push('<span class="ckc rg">'+ic('gota')+'Con el periodo</span>'); else if(e.premenstrual) L.push('<span class="ckc pm">'+ic('nube')+'Premenstrual</span>');
   if(dc) L.push('<span class="ckc">'+esc(faseTxt(dc,e.regla,cicloP()))+'</span>');
   if(en!=null) L.push('<span class="ckc">Energía '+fN(en,0)+'/10'+(ENE()[Math.round(en)]?' · '+esc(ENE()[Math.round(en)].split(':')[0].toLowerCase()):'')+'</span>');
   if(num(e.sueno)!=null) L.push('<span class="ckc">'+ic('reloj')+fN(e.sueno)+' h de sueño</span>');
@@ -4632,7 +4688,7 @@ function checkinCard(hoy){
   var hecho=num(e.energia)!=null||!vacio(e.sueno)||!vacio(e.dia_ciclo)||!!e.notas||CL.ck.sin.length>0||CL.ck.pm;
   var esH=hoy===hoyStr();
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
-    var res=[e.regla?'Con el periodo':'',!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',e.premenstrual?'Síntomas premenstruales':''].filter(String).join(' · ');
+    var res=[e.regla?'Con el periodo':'',!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
     return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
   }
   return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div></div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
@@ -4642,7 +4698,8 @@ function checkinCard(hoy){
     '<div class="muted sm mt6">Márcalo cada día que lo tengas. El día del ciclo se calcula solo y puedes corregirlo.</div>'+
     '<div class="grid2"><label class="f">Día del ciclo<input id="ck-dia" data-k="ckdia" inputmode="numeric" value="'+esc(dia)+'" placeholder="–"></label>'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>'+'</div>'+
     '<div class="fase" id="ck-fase">'+faseTxt(dia,CL.ck.regla,cicloP())+'</div>'+
-    '<div class="fila mt"><span>¿Notas síntomas premenstruales?<small class="fila-s">Los días antes de la regla: cansancio, hinchazón, ánimo…</small></span><button class="sw'+(CL.ck.pm?' on':'')+'" data-a="ckPm" aria-label="Síntomas premenstruales"><i></i></button></div>')+
+    '<div class="fila mt"><span>¿Notas síntomas premenstruales?<small class="fila-s">Los días antes del periodo: cansancio, hinchazón, ánimo…</small></span><button class="sw'+(CL.ck.pm?' on':'')+'" data-a="ckPm" aria-label="Síntomas premenstruales"><i></i></button></div>'+
+    '<details class="ck-sin"'+(CL.ck.sin.length?' open':'')+'><summary>'+ic('mas')+'Síntomas de hoy <span class="muted">(opcional)</span></summary><div class="tipos ck-sl">'+SINT_ORDEN.map(function(k){ var on=CL.ck.sin.indexOf(k)>=0; return '<button class="'+(on?'on':'')+'" data-a="ckSin" data-k="'+k+'" aria-pressed="'+on+'">'+ic(on?'ok':'mas')+esc(SINT[k])+'</button>'; }).join('')+'</div></details>')+      // v52.10
     '<div class="lab lab-i">Energía hoy, del 1 al 10 <button class="i-btn" data-a="ckInfo" aria-label="Qué significa cada número">'+ic('info')+'</button></div><div class="escala e10" id="ck-en">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){ return '<button class="'+(CL.ck.energia===v?'on':'')+'" data-a="ckEn" data-v="'+v+'">'+v+'</button>'; }).join('')+'</div><div class="escala-l"><span>1 · '+gCl('Agotada','Agotado')+'</span><span>10 · A tope</span></div><div class="ck-en-t" id="ck-en-t">'+(CL.ck.energia?esc(CL.ck.energia+' · '+ENE()[CL.ck.energia]):'')+'</div>'+
     '<label class="f">Notas para tu coach <span class="muted">(opcional)</span><textarea id="ck-notas" rows="3" placeholder="'+(hombreCl()?'Cuéntale a tu coach cómo estás: cansancio, dolores, ánimo, hambre, cómo has dormido…':'Cuéntale a tu coach cómo estás: cansancio, dolores, hinchazón, ánimo, hambre, cómo has dormido…')+'">'+esc(e.notas||'')+'</textarea></label>'+
     '<button class="btn mt" data-a="ckGuardar">Guardar check-in</button>'+(esH?'':'<button class="btn sec mt" data-a="ckCerrar">Ahora no</button>')+'</div>';
@@ -4676,15 +4733,9 @@ A.ckGuardar=function(){
    «¿Cómo te sientes hoy?» lleva a su check-in. Se puede ocultar (dieta_pref.cic.off) y volver a poner en Perfil.
    ===================================================================== */
 var CIC_C={menstrual:'#E5484D',folicular:'#F7B6C8',fertil:'#2BB3A3',ovulacion:'#12857A',lutea:'#B9A8EC',premenstrual:'#F0A020'};
-var CIC_N={menstrual:'Con la regla',folicular:'Fase folicular',fertil:'Ventana fértil',ovulacion:'Día de ovulación (aprox.)',lutea:'Fase lútea',premenstrual:'Fase premenstrual',largo:'Ciclo más largo de lo normal'};
-var CIC_T={      // una idea para cada fase (orientativo)
-  menstrual:'Escucha a tu cuerpo: si te encuentras bien, entrena normal; si no, baja un poco la intensidad. Hidrátate y no te olvides del hierro (legumbres, carne, verdura de hoja).',
-  folicular:'Suele subir la energía: buen momento para progresar en cargas y probar marcas.',
-  fertil:'Tu energía suele estar en lo más alto. Aprovecha para tus mejores series, calentando bien.',
-  ovulacion:'Energía alta. Calienta bien las articulaciones: en estos días se notan algo más laxas.',
-  lutea:'Puede subir el hambre y bajar algo la energía. Prioriza proteína y fibra, y descansa bien.',
-  premenstrual:'Es normal notarte más cansada, hinchada o con antojos. Baja la exigencia si lo necesitas: lo importante es no parar.',
-  largo:'Tu ciclo va más largo de lo normal. Si te pasa a menudo, coméntalo con tu coach o tu médico.'
+var CIC_N={menstrual:'Con el periodo',folicular:'Fase folicular',fertil:'Ventana fértil',ovulacion:'Día de ovulación (aprox.)',lutea:'Fase lútea',premenstrual:'Fase premenstrual',largo:'Ciclo más largo de lo normal'};
+var CIC_T={      // v52.10: sin consejos generales por fase (cada una es distinta): lo que dicen sus registros, en cicloTipHoy
+  largo:'Tu ciclo va más largo de lo normal en ti. Si te pasa a menudo, coméntalo con tu coach o tu médico.'
 };
 function cicloOn(){ return !hombreCl()&&!(prefCl().cic&&prefCl().cic.off); }
 function cicloEstado(){ return cicloEstadoDe(CL.d.diario,hoyStr()); }
@@ -4706,14 +4757,14 @@ function cicloAnillo(C){
   return h+'</svg>';
 }
 function cicloCentro(C){
-  if(C.f==='menstrual') return '<small>Periodo</small><b>Día '+C.d+'</b><span>de tu regla</span>';
+  if(C.f==='menstrual') return '<small>Periodo</small><b>Día '+C.d+'</b><span>de tu periodo</span>';
   if(C.retraso) return '<small>Día '+C.d+' del ciclo</small><b>'+C.retraso+(C.retraso>1?' días':' día')+'</b><span>de retraso</span>';
-  var q=diff(hoyStr(),C.prox); return '<small>Día '+C.d+' del ciclo</small><b>'+(q<=0?'Hoy':q)+'</b><span>'+(q<=0?'podría venirte':q===1?'día para tu regla':'días para tu regla')+'</span>';
+  var q=diff(hoyStr(),C.prox); return '<small>Día '+C.d+' del ciclo</small><b>'+(q<=0?'Hoy':q)+'</b><span>'+(q<=0?'podría venirte':q===1?'día para tu periodo':'días para tu periodo')+'</span>';
 }
 function cicloHoyCard(){
   var C=cicloEstado(), e=diarioDe(hoyStr())||{}, hecho=ckHecho(e);
-  if(!C) return '<div class="card cyc cyc-0" id="cyc"><div class="cyc-h"><span class="cyc-ic">'+ic('gota')+'</span><div><b>Tu ciclo</b><small>Te digo en qué fase estás, cuándo te toca la regla y cómo te puede afectar al entreno.</small></div></div>'+
-    '<label class="f">¿Cuándo empezó tu última regla?<input type="date" id="cyc-f" max="'+hoyStr()+'" min="'+sumar(hoyStr(),-60)+'"></label>'+
+  if(!C) return '<div class="card cyc cyc-0" id="cyc"><div class="cyc-h"><span class="cyc-ic">'+ic('gota')+'</span><div><b>Tu ciclo</b><small>Te digo en qué fase estás, cuándo te toca el periodo y, con tus registros, cómo te sienta cada fase.</small></div></div>'+
+    '<label class="f">¿Cuándo empezó tu último periodo?<input type="date" id="cyc-f" max="'+hoyStr()+'" min="'+sumar(hoyStr(),-60)+'"></label>'+
     '<div class="row mt6"><button class="btn sm" data-a="cycPrimera">'+ic('ok')+'Empezar</button><button class="link" data-a="cycOff">No quiero verlo</button></div></div>';
   var fx=C.f==='largo'?'premenstrual':C.f, q=diff(hoyStr(),C.prox), cerca=!C.reglaHoy&&(C.retraso||q<=3);
   var h='<div class="card cyc" id="cyc"><div class="cyc-t"><b>Tu ciclo</b><button class="link" data-a="cycCal">'+ic('cal')+'Calendario</button></div>'+
@@ -4724,19 +4775,24 @@ function cicloHoyCard(){
       (C.d<=C.ov+1&&!C.retraso?'<div><span>Ventana fértil</span><b>'+esc(fCorta(C.fIni))+' – '+esc(fCorta(C.fFin))+'</b></div>':'')+
       (C.d<C.L-4&&!C.retraso?'<div><span>Fase premenstrual</span><b>desde el '+esc(fCorta(C.pm))+'</b></div>':'')+
     '</div>'+
-    '<p class="cyc-tip">'+ic('idea')+'<span>'+esc(CIC_T[C.f])+'</span></p>'+
+    (function(t){ return t?'<p class="cyc-tip">'+ic('idea')+'<span>'+esc(t)+'</span></p>':''; })(cicloTipHoy(C))+      // v52.10: según sus datos
     (cerca?'<button class="btn sm sec cyc-ya" data-a="cycYa">'+ic('gota')+'Me ha venido hoy</button>':'')+
     '' /* v52.3: sin el botón «¿Cómo te sientes hoy?»: el check-in va justo debajo, con ese título */+
-    '<p class="muted cyc-av">Aproximado, con tus check-ins'+(C.P.ini.length<2?' (con más reglas apuntadas, más preciso)':'')+'. No sirve como método anticonceptivo.</p></div>';
+    '<p class="muted cyc-av">Aproximado, con tus check-ins'+(C.P.ini.length<2?' (con más periodos apuntados, más preciso)':'')+'. No sirve como método anticonceptivo.</p></div>';
   return h;
 }
 A.cycSiento=function(){ var c=document.getElementById('ck-card'); if(!c) return; c.scrollIntoView({block:'start',behavior:'smooth'}); setTimeout(function(){ var t=document.getElementById('ck-notas'); if(t) t.focus({preventScroll:true}); },450); };
 function cycGuardarRegla(f,txt){ return cargando(colaDiario({fecha:f,regla:true})).then(function(){ var e=diarioDe(f,true); e.regla=true; CL._cp=null; CL.keep=true; pintarCl(); toast(txt,'ok'); },function(e){ toast('No se ha podido guardar: '+limpiaErr(e),'err'); }); }
 A.cycYa=function(){ cycGuardarRegla(hoyStr(),'Apuntado: hoy es el día 1 de tu periodo. Márcalo en tu check-in los días que lo tengas'); };
-A.cycPrimera=function(){ var f=val('cyc-f'); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)||f>hoyStr()) return toast('Elige el día que empezó tu última regla'); if(f<sumar(hoyStr(),-60)) return toast('Pon una fecha de los últimos 2 meses');
+A.cycPrimera=function(){ var f=val('cyc-f'); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)||f>hoyStr()) return toast('Elige el día que empezó tu último periodo'); if(f<sumar(hoyStr(),-60)) return toast('Pon una fecha de los últimos 2 meses');
   cycGuardarRegla(f,'¡Listo! Con tus check-ins se irá afinando'); };
 A.cycOff=function(){ confirmar('¿Quitar «Tu ciclo» de Hoy? Puedes volver a ponerlo en Perfil. El check-in sigue igual.','Quitarlo',function(){ var pf=prefCl(); pf.cic={off:1}; guardarPref(); CL.keep=true; pintarCl(); }); };
 A.cycOn=function(){ var pf=prefCl(); delete pf.cic; guardarPref(); CL.keep=true; pintarCl(); toast('«Tu ciclo» vuelve a salir en Hoy','ok'); };
+A.cycDia=function(el){      // v52.10: apuntar o quitar el periodo de un día desde el calendario
+  var f=el.dataset.f, e=diarioDe(f)||{}, si=!e.regla;
+  cargando(colaDiario({fecha:f,regla:si})).then(function(){ var x=diarioDe(f,true); x.regla=si; CL._cp=null; CL._cpa=null; CL.keep=true; pintarCl(); A.cycCal();
+    toast(si?'Apuntado: el '+fLarga(f).toLowerCase()+', con el periodo':'Quitado el periodo del '+fLarga(f).toLowerCase(),'ok'); },function(er){ toast('No se ha podido guardar: '+limpiaErr(er),'err'); });
+};
 A.cycCal=function(){
   var C=cicloEstado(); if(!C) return; var hoy=hoyStr(), regla={}, pred={}, fert={}, pm={};
   CL.d.diario.forEach(function(x){ if(x.regla) regla[x.fecha]=1; });
@@ -4746,13 +4802,18 @@ A.cycCal=function(){
   if(C.d<C.L-4) for(var m2=0;m2<5;m2++) pm[sumar(C.pm,m2)]=1;
   var mes=function(y,mo){ var d1=new Date(y,mo,1), n=new Date(y,mo+1,0).getDate(), off=(d1.getDay()+6)%7, h='<div class="cyl-m"><b>'+MESES_L[mo].charAt(0).toUpperCase()+MESES_L[mo].slice(1)+' '+y+'</b><div class="cyl-g">'+['L','M','X','J','V','S','D'].map(function(x){ return '<i>'+x+'</i>'; }).join('');
     for(var i=0;i<off;i++) h+='<span></span>';
-    for(var dd=1;dd<=n;dd++){ var f=y+'-'+pad(mo+1)+'-'+pad(dd), c=regla[f]?'rg':f>hoy&&pred[f]?'pr':fert[f]===2?'ov':fert[f]?'fe':pm[f]&&f>=hoy?'pm':''; h+='<span class="'+c+(f===hoy?' hy':'')+'">'+dd+'</span>'; }
+    for(var dd=1;dd<=n;dd++){ var f=y+'-'+pad(mo+1)+'-'+pad(dd), c=regla[f]?'rg':f>hoy&&pred[f]?'pr':fert[f]===2?'ov':fert[f]?'fe':pm[f]&&f>=hoy?'pm':'';
+      h+=f<=hoy&&f>=sumar(hoy,-120)?'<button class="'+c+(f===hoy?' hy':'')+'" data-a="cycDia" data-f="'+f+'" aria-label="'+esc(fLarga(f))+(regla[f]?': con el periodo. Tocar para quitarlo':': tocar para apuntar el periodo')+'">'+dd+'</button>':'<span class="'+c+(f===hoy?' hy':'')+'">'+dd+'</span>'; }      // v52.10: se toca para apuntarlo o quitarlo
     return h+'</div></div>'; };
-  var ini0=C.ult>=sumar(hoy,-62)?C.ult:hoy, d0=aDate(ini0.slice(0,8)+'01'), M=[], fin=sumar(C.prox,C.L);
-  for(var q=0;q<3;q++){ var dq=new Date(d0.getFullYear(),d0.getMonth()+q,1); if(q>0&&fechaDe(dq)>fin) break; M.push(mes(dq.getFullYear(),dq.getMonth())); }      // desde el mes de su última regla
-  modal('<h2>'+ic('cal')+'Calendario de tu ciclo</h2><div class="cyl">'+M.join('')+'</div>'+
-    '<div class="cyl-ley"><span><i class="rg"></i>Regla apuntada</span><span><i class="pr"></i>Regla prevista</span><span><i class="fe"></i>Ventana fértil</span><span><i class="ov"></i>Ovulación</span><span><i class="pm"></i>Premenstrual</span></div>'+
-    '<p class="muted sm">Ciclo de '+C.L+' días y regla de '+C.dur+' días'+(C.P.ini.length<2?' (lo normal, hasta que apuntes más reglas)':' (tu media)')+'. Aproximado: no sirve como método anticonceptivo.</p><button class="btn mt" data-a="cerrarModal">Cerrar</button>');
+  var pI=C.P.ini, ini0=pI.length>=2&&pI[pI.length-2]>=sumar(hoy,-100)?pI[pI.length-2]:C.ult>=sumar(hoy,-62)?C.ult:hoy, d0=aDate(ini0.slice(0,8)+'01'), M=[], fin=sumar(C.prox,C.L);      // v52.10: desde el periodo anterior (para poder corregirlo)
+  for(var q=0;q<4;q++){ var dq=new Date(d0.getFullYear(),d0.getMonth()+q,1); if(q>0&&fechaDe(dq)>fin) break; M.push(mes(dq.getFullYear(),dq.getMonth())); }
+  var Ls=C.P.Ls||[], va=Ls.length>=2?Math.max.apply(null,Ls)-Math.min.apply(null,Ls):null;      // v52.10: duración y regularidad
+  var st='<div class="cyl-st"><div><span>Tu ciclo</span><b>'+C.L+' días</b><small>'+(Ls.length>=2?'de '+Math.min.apply(null,Ls)+' a '+Math.max.apply(null,Ls)+' días':Ls.length?'1 ciclo completo':'lo normal, de momento')+'</small></div>'+
+    '<div><span>Tu periodo</span><b>'+C.dur+' días</b><small>'+((C.P.durs||[]).length?'tu media':'lo normal, de momento')+'</small></div>'+
+    '<div><span>Regularidad</span><b>'+(va==null?'–':va<=7?'Regular':'Irregular')+'</b><small>'+(va==null?'con 3 periodos apuntados':'varía '+va+(va===1?' día':' días'))+'</small></div></div>';
+  modal('<h2>'+ic('cal')+'Calendario de tu ciclo</h2>'+st+'<p class="muted sm cyl-ay">Toca un día para apuntar o quitar el periodo.</p><div class="cyl">'+M.join('')+'</div>'+
+    '<div class="cyl-ley"><span><i class="rg"></i>Periodo apuntado</span><span><i class="pr"></i>Periodo previsto</span><span><i class="fe"></i>Ventana fértil</span><span><i class="ov"></i>Ovulación</span><span><i class="pm"></i>Premenstrual</span></div>'+
+    '<p class="muted sm">Ciclo de '+C.L+' días y periodo de '+C.dur+' días'+(C.P.ini.length<2?' (lo normal, hasta que apuntes más periodos)':' (tu media)')+'. Aproximado: no sirve como método anticonceptivo.</p><button class="btn mt" data-a="cerrarModal">Cerrar</button>');
 };
 
 /* ---------- dieta de hoy ---------- */
@@ -6647,7 +6708,7 @@ function vProgreso(){
   var vol=d.sesiones.reduce(function(a,s){ return a+(num(s.volumen)||0); },0);
   var recs=contarRecords(calcMarcas(d.series),d.sesiones);
   return '<h1 class="tit">Tu progreso</h1>'+revLinea(hoy)+'<div class="kpis">'+kpi(d.sesiones.length,'Entrenos totales',s30+' en los últimos 30 días')+kpi(recs,'Récords conseguidos')+'</div>'+(d.logros?logrosCard():'')+
-    (regCl().peso||regCl().medidas?pesoCard(d.medidas,true,d.registra):'')+(regCl().fotos?fotosCard(CL,true):'')+histCard(CL,false)+ejercicioCard(d.series,CL,false)+
+    (regCl().peso||regCl().medidas?pesoCard(d.medidas,true,d.registra):'')+(regCl().fotos?fotosCard(CL,true):'')+histCard(CL,false)+cicloClCard()+ejercicioCard(d.series,CL,false)+
     (vol?'<p class="muted sm center">Has movido '+fN(vol,0)+' kg en total. ¡Sigue así!</p>':'')+'<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
 }
 A.medidas=function(){
@@ -7865,7 +7926,7 @@ function ultEntrenosCard(d){
   h+=S.length?'<p class="muted sm ue-exp">Toca un entreno para ver sus notas y todo lo que hizo, ejercicio a ejercicio.</p>'+S.map(function(x){ return sesFila(x,d,M,true,false); }).join(''):(ec?'':'<p class="muted" style="margin:0">No ha registrado entrenos en los últimos 14 días.</p>');
   var C=d.diario.filter(function(x){ return x.fecha>=desde&&(x.notas||(x.sintomas||[]).length); }).sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
   if(C.length) h+='<details class="ue-ck"><summary>'+icCkCo()+'<span>Sus check-ins con notas <span class="muted">· '+C.length+'</span></span>'+ic('flecha','sxf-ch')+'</summary>'+C.slice(0,10).map(function(x){ var en=num(x.energia);
-    return '<div class="sx-c">'+ic(x.regla?'gota':x.premenstrual?'nube':'nota')+'<span><b>'+esc(fMedia(x.fecha))+'</b>'+(en!=null?' · energía '+fN(en,0)+'/10':'')+(x.regla?' · con la regla':x.premenstrual?' · premenstrual':'')+((x.sintomas||[]).length?' · '+esc(x.sintomas.map(function(k){ return (SINT[k]||k).toLowerCase(); }).join(', ')):'')+(x.notas?'<br>'+esc(x.notas):'')+'</span></div>'; }).join('')+'</details>';
+    return '<div class="sx-c">'+ic(x.regla?'gota':x.premenstrual?'nube':'nota')+'<span><b>'+esc(fMedia(x.fecha))+'</b>'+(en!=null?' · energía '+fN(en,0)+'/10':'')+(x.regla?' · con el periodo':x.premenstrual?' · premenstrual':'')+((x.sintomas||[]).length?' · '+esc(listaY(x.sintomas.map(sintF))):'')+(x.notas?'<br>'+esc(x.notas):'')+'</span></div>'; }).join('')+'</details>';
   return h+'<button class="link mt6" data-a="sub" data-t="evolucion">'+ic('lista')+'Ver todos sus entrenos, filtrar y comparar</button></div>';
 }
 /* lo que ha dejado la clienta: entreno sin terminar, notas, lo no hecho (14 días) */
@@ -9360,7 +9421,7 @@ function vDietaPlan(){
     '<div class="muted sm mt" id="kcal-calc">'+kcalTxt()+'</div>'+
     '<div class="gen-b"><button class="btn sm" data-a="genDieta">'+ic('ajuste')+'Generar con sus macros</button><span class="muted sm">'+(alimResumen(alimCl())?esc(alimResumen(alimCl())):'Come de todo')+' · <button class="link" data-a="irFichaAlim" style="padding:0">cambiar</button></span></div></div>';
   var cms=p.comidas.map(function(c,mi){ return cmEdHtml(p,c,mi); }).join('')+'<button class="btn sec sm" data-a="addCm">+ Comida</button>';
-  var pie='<div class="card"><div class="card-t">Indicaciones generales (para todos los planes)</div><textarea data-dk="notas" rows="4" placeholder="Hidratación, suplementación, comidas libres, qué hacer en días de regla…">'+esc(CO.die.notas)+'</textarea></div>'+
+  var pie='<div class="card"><div class="card-t">Indicaciones generales (para todos los planes)</div><textarea data-dk="notas" rows="4" placeholder="Hidratación, suplementación, comidas libres, qué hacer en días de periodo…">'+esc(CO.die.notas)+'</textarea></div>'+
     '<button class="btn" data-a="guardarDieta">Guardar y publicar dieta</button>'+otras+dietasAntCard();
   if(vistaAncha()) return '<div class="die-dk"><div class="die-main">'+cab+obj+cms+pie+'</div><aside class="die-side">'+resDiaHtml()+ve+'</aside></div>';
   return cab+ve+obj+resDiaHtml()+cms+resDiaHtml()+pie;
@@ -10026,7 +10087,8 @@ function cqPrivHtml(n){
   var pv=CQ.r._priv||{};
   return '<section class="cq-s" id="cq-_priv"><div class="cq-h"><span class="cq-n">'+n+'</span><h2>Tu privacidad</h2></div><p class="cq-p">Para preparar tu plan necesito algunos datos de salud. Solo los vemos tu coach y tú, y puedes pedir que se borren cuando quieras.</p>'+
     '<label class="chk-l"><input type="checkbox" data-cqp="acepta"'+(pv.acepta?' checked':'')+'><span>He leído y acepto la <button class="link" data-a="cqPol">política de privacidad</button>.</span></label>'+
-    '<label class="chk-l"><input type="checkbox" data-cqp="salud"'+(pv.salud?' checked':'')+'><span>Doy mi consentimiento para que se usen mis datos de salud (lesiones, ciclo menstrual, alimentación, medidas y fotos) solo para preparar y seguir mi plan.</span></label></section>';
+    '<label class="chk-l"><input type="checkbox" data-cqp="salud"'+(pv.salud?' checked':'')+'><span>Doy mi consentimiento para que se usen mis datos de salud (lesiones, alimentación, medidas, fotos y lo que cuento aquí sobre mi ciclo) solo para preparar y seguir mi plan.</span></label>'+
+    (cqSexo()!=='Hombre'?'<label class="chk-l cq-cic"><input type="checkbox" data-cqp="ciclo"'+(pv.ciclo?' checked':'')+'><span><b>Opcional:</b> quiero que mi coach vea también el seguimiento de mi ciclo en la app (días de periodo, fase y síntomas) para adaptar mi entreno. Puedo quitarlo cuando quiera en mi Perfil.</span></label>':'')+'</section>';      // v52.10: aparte y sin marcar (RGPD)
 }
 function inCqp(t){ CQ.r._priv=CQ.r._priv||{}; CQ.r._priv[t.dataset.cqp]=!!t.checked; cqGuardaLocal(); }
 A.cqPol=function(el,ev){ if(ev) ev.preventDefault(); var p=CQ.d&&CQ.d.privacidad; if(p) modal(politicaHtml(p)); else A.verPriv(); };
@@ -10143,7 +10205,7 @@ function cqRespuestasHtml(q){
   var res=[d.edad?esc(d.edad)+cqUnidad(['edad','','años'],d.edad):'',d.altura?esc(d.altura)+cqUnidad(['altura','','cm'],d.altura):'',d.peso?esc(d.peso)+cqUnidad(['peso','','kg'],d.peso):'',d.trabajo?esc(d.trabajo):''].filter(String).join(' · ');
   var h='<div class="card hl"><div class="card-t">Respuestas <span class="pill ok">Respondido el '+fCorta(String(q.respondido).slice(0,10))+'</span></div>'+
     (res?'<p class="cq-res">'+res+'</p>':'')+(fo&&fr.op?'<p class="sm">'+ic('foto')+'Fotos de progreso: <b>'+esc(fr.op)+'</b></p>':'')+
-    (R._privacidad?'<p class="sm cq-pv">'+ic('candado')+'Aceptó la política de privacidad y el uso de sus datos de salud '+esc(fechaHoraTxt(R._privacidad.fecha))+' (versión '+esc(R._privacidad.version||'')+').</p>':'<p class="sm cq-pv">'+ic('candado')+'Sin consentimiento registrado: lo respondió antes de que el cuestionario lo pidiera.</p>')+
+    (R._privacidad?'<p class="sm cq-pv">'+ic('candado')+'Aceptó la política de privacidad y el uso de sus datos de salud '+esc(fechaHoraTxt(R._privacidad.fecha))+' (versión '+esc(R._privacidad.version||'')+')'+(R._privacidad.ciclo?' y que veas el seguimiento de su ciclo':'')+'.</p>':'<p class="sm cq-pv">'+ic('candado')+'Sin consentimiento registrado: lo respondió antes de que el cuestionario lo pidiera.</p>')+
     '<div class="row mt"><button class="btn sm sec" data-a="cqCopiar">Copiar respuestas</button><button class="link" data-a="cqReabrir">Reabrir para que lo corrija</button></div></div>';
   S.forEach(function(s){
     var v=R[s.id]; k++;
@@ -13104,6 +13166,19 @@ A.descTog=function(el){ var k=el.dataset.k, on=!descCfg()[k]; descGuardar(k,on);
 A.descProbar=function(){ prepararAudio(); var c=descCfg(); if(!c.son) return toast('Tienes el aviso quitado: actívalo para probarlo','err');
   var t=0; if(c.cta){ [0,1,2].forEach(function(k){ setTimeout(function(){ pitido(660,90,0.45); },150+k*1000); }); t=3150; }
   setTimeout(function(){ avisar(); },t||150); toast('¿Lo oyes? Si no, sube el volumen del móvil','ok'); };
+/* v52.10 · «Tu ciclo» en Perfil (solo mujeres): dos preguntas de sí o no. Que su coach lo vea es su consentimiento (RGPD, dato de salud):
+   se guarda en el servidor con la fecha (cicloCompartir) y lo puede quitar igual de fácil. */
+function cicloPfCard(){
+  if(hombreCl()) return '';
+  var on=cicloOn(), co=!!(CL.d.clienta&&CL.d.clienta.cicloCoach);
+  var fila=function(a,t,sub,v){ return '<div class="fila dsc-f"><span>'+t+'<small class="fila-s">'+sub+'</small></span><button class="sw'+(v?' on':'')+'" data-a="'+a+'" aria-label="'+esc(t)+'" aria-pressed="'+v+'"><i></i></button></div>'; };
+  return '<div class="card cyc-pf"><div class="card-t">'+ic('gota')+'Tu ciclo</div>'+
+    fila('cycTog','¿Quieres ver tu ciclo en Hoy?','Tu fase, tu próximo periodo y cómo te sienta cada fase según tus registros.',on)+
+    fila('cycCoTog','¿Quieres que tu coach vea tu ciclo?','Verá los días de tu periodo, la fase y los síntomas del ciclo para adaptar tu entreno. Puedes quitarlo cuando quieras.',co)+'</div>';
+}
+A.cycTog=function(){ if(!cicloOn()) return A.cycOn(); var pf=prefCl(); pf.cic={off:1}; guardarPref(); CL.keep=true; pintarCl(); toast('«Tu ciclo» ya no sale en Hoy','ok'); };
+A.cycCoTog=function(){ var si=!(CL.d.clienta&&CL.d.clienta.cicloCoach);
+  cargando(api('cicloCompartir',BOOT.token,si)).then(function(r){ CL.d.clienta.cicloCoach=!!(r&&r.si); CL.keep=true; pintarCl(); toast(CL.d.clienta.cicloCoach?'Tu coach ya puede ver tu ciclo':'Tu coach ya no ve tu ciclo','ok'); },function(e){ toast(limpiaErr(e),'err'); }); };
 /* v29.1: su plan, sus pagos, su cuenta y su privacidad, en su propia pestaña «Perfil» */
 function vPerfil(){
   var c=CL.d.clienta||{}, nom=String(c.nombre||'').trim();
@@ -13112,7 +13187,7 @@ function vPerfil(){
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
     sugClCard()+
     descClCard()+
-    (!hombreCl()&&!cicloOn()?'<div class="card cyc-pf"><div class="fila"><span>Ver «Tu ciclo» en Hoy<small class="fila-s">Tu fase, tu próximo periodo y una idea para cada fase</small></span><button class="sw" data-a="cycOn" aria-label="Ver tu ciclo en Hoy"><i></i></button></div></div>':'')+      // v52
+    cicloPfCard()+      // v52.10: «Tu ciclo» con dos preguntas (verlo en Hoy y que tu coach lo vea)      // v52
     (miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button>'+salirBtn()+'</div>')+
     '<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
 }
