@@ -2383,6 +2383,11 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .dl-st{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px;color:#56565B;font:600 12.5px Plus Jakarta Sans,sans-serif}.dl-st b{color:#111;font-weight:800;font-size:14px}
 #su-box .dl-sc{background:none;border:0;box-shadow:none;padding:0;margin:4px 0 0}#su-box .dl-sc>.card-t{display:none}
 #su-box .dl-sbs{margin-top:6px}
+/* ===== v52.2 · meses pagados: verde con ✓ (pagado), rojo con ✕ (sin pagar) y discontinuo (todavía no); el estado también escrito ===== */
+.pgc-m i{display:flex;align-items:center;justify-content:center;color:#fff}.pgc-m i .ic{width:15px;height:15px;margin:0;stroke-width:2.6}
+.pgc-m .p i{background:#15803D}.pgc-m .g i{background:#D92D20}
+.pgc-ley i{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;color:#fff;vertical-align:-3px}.pgc-ley i .ic{width:10px;height:10px;margin:0;stroke-width:3}
+.pgc-ley .p{background:#15803D}.pgc-ley .g{background:#D92D20}
 </style>
 </head>
 <body>
@@ -2443,7 +2448,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.1';
+var APP_V = 'v52.2';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -13303,8 +13308,9 @@ function vPagosCl(){
     var cub=function(a,b){ var t=0; iv.forEach(function(x){ var i=x[0]>a?x[0]:a, f=x[1]<b?x[1]:b; if(i<=f) t+=diff(i,f)+1; }); return t; };
     h+='<section class="card"><div class="pgc-t">Meses pagados <span>'+(hue.length?'Sin plan: '+hue.slice(-2).map(function(x){ return 'del '+fCorta(x[0])+' al '+fCorta(x[1]); }).join(' · '):'sin huecos')+'</span></div><div class="pgc-m">'+
       M.map(function(mm){ var a=mm+'-01', b=sumar(sumarMeses(a,1),-1), pg=Math.min(cub(a,b),diff(a,b)+1)*2>=diff(a,b)+1, k=pg?'p':(mm<=mHoy?'g':'f');
-        return '<div class="'+k+(mm===mHoy?' hoy':'')+'" title="'+esc(mesCorto(mm)+' '+mm.slice(0,4))+'"><i></i><span>'+esc(mesCorto(mm)+(mm.slice(5)==='01'&&M[0].slice(0,4)!==M[M.length-1].slice(0,4)?' '+mm.slice(2,4):''))+'</span></div>'; }).join('')+'</div>'+
-      '<div class="pgc-ley"><span><i class="p"></i>Pagado</span><span><i class="g"></i>Sin pagar</span><span><i class="f"></i>Todavía no</span></div></section>';
+        var est={p:'Pagado',g:'Sin pagar',f:'Todavía no'}[k];      // v52.2: verde con ✓, rojo con ✕ y el estado escrito (no solo el color)
+        return '<div class="'+k+(mm===mHoy?' hoy':'')+'" title="'+esc(mesCorto(mm)+' '+mm.slice(0,4)+' · '+est)+'" role="img" aria-label="'+esc(mesTxt(mm)+': '+est.toLowerCase())+'"><i>'+(k==='p'?ic('ok'):k==='g'?ic('x'):'')+'</i><span>'+esc(mesCorto(mm)+(mm.slice(5)==='01'&&M[0].slice(0,4)!==M[M.length-1].slice(0,4)?' '+mm.slice(2,4):''))+'</span></div>'; }).join('')+'</div>'+
+      '<div class="pgc-ley"><span><i class="p">'+ic('ok')+'</i>Pagado</span><span><i class="g">'+ic('x')+'</i>Sin pagar</span><span><i class="f"></i>Todavía no</span></div></section>';
   }
   h+='<section class="card"><div class="pgc-t">Historial de cobros <span>'+L.length+(L.length===1?' pago':' pagos')+' · '+eur(tot)+'</span></div>'+
     (L.length?'<div class="pgc-tw"><table class="pgc-tb"><thead><tr><th>Fecha</th><th>Plan</th><th>Periodo</th><th>Forma de pago</th><th class="r">Importe</th><th></th></tr></thead><tbody>'+
