@@ -2383,6 +2383,10 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .dl-st{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px;color:#56565B;font:600 12.5px Plus Jakarta Sans,sans-serif}.dl-st b{color:#111;font-weight:800;font-size:14px}
 #su-box .dl-sc{background:none;border:0;box-shadow:none;padding:0;margin:4px 0 0}#su-box .dl-sc>.card-t{display:none}
 #su-box .dl-sbs{margin-top:6px}
+/* ===== v52.3 · check-in: «¿Cómo te sientes hoy?» como título fijo encima del formulario; iconos neutros o con corazones ===== */
+.ck-cab{margin:0 0 12px}.ck-cab h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.2}.ck-cab small{display:block;margin-top:3px;font-size:12.5px;color:var(--mu);font-weight:600}.ck-cab .pill{vertical-align:1px}
+.ck-min .ck-q{display:block;font-size:11.5px;font-weight:700;color:var(--mu);margin:0 0 1px;letter-spacing:.01em}
+.est-op{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.est-op button{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 10px;border-radius:12px;border:1px solid var(--line);background:#fff;font:700 13.5px Plus Jakarta Sans,sans-serif;color:var(--tx);cursor:pointer}.est-op button .ic{width:17px;height:17px;margin:0}.est-op button.on{background:#111;border-color:#111;color:#fff}
 /* ===== v52.2 · meses pagados: verde con ✓ (pagado), rojo con ✕ (sin pagar) y discontinuo (todavía no); el estado también escrito ===== */
 .pgc-m i{display:flex;align-items:center;justify-content:center;color:#fff}.pgc-m i .ic{width:15px;height:15px;margin:0;stroke-width:2.6}
 .pgc-m .p i{background:#15803D}.pgc-m .g i{background:#D92D20}
@@ -2448,7 +2452,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.2';
+var APP_V = 'v52.3';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -2522,6 +2526,7 @@ var ICONS={
   separar:'<circle cx="6" cy="7" r="2.5"/><circle cx="6" cy="17" r="2.5"/><path d="M8.2 8.3 20 16M8.2 15.7 20 8"/>',
   candado:'<rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/>',
   corazon:'<path d="M12 20s-7.5-4.6-7.5-10.2A4.3 4.3 0 0 1 12 7.3a4.3 4.3 0 0 1 7.5 2.5C19.5 15.4 12 20 12 20z"/>',
+  pulso:'<path d="M3 12h4l2.5-6 4 12 2.5-6H21"/>',
   lista:'<path d="M8.5 6.5h11.5M8.5 12h11.5M8.5 17.5h11.5M4 6.5h.1M4 12h.1M4 17.5h.1"/>',
   mas:'<path d="M12 5v14M5 12h14"/>',
   flecha:'<path d="M9.5 6l6 6-6 6"/>',
@@ -3595,7 +3600,7 @@ function cicloCard(d){
 /* check-ins recientes, claros */
 function checkinsCard(dia){
   var a=dia.slice().sort(function(x,y){ return x.fecha<y.fecha?1:-1; }).slice(0,CO.ckTodo?120:14), C=cicloDe(dia);
-  var h='<div class="card ckl"><div class="card-t">'+ic('corazon')+'Check-ins</div>';
+  var h='<div class="card ckl"><div class="card-t">'+icCkCo()+'Check-ins</div>';
   if(!a.length) return h+'<p class="muted" style="margin:0">Aún no hay check-ins.</p></div>';
   h+=a.map(function(x){ var i=C.info(x.fecha), en=num(x.energia);
     var chips=[];
@@ -4421,8 +4426,9 @@ function vHoy(){
   if(esHoy&&pasosOn()) h+=pasosCard(hoy);                 // v47
   // v21: el check-in de hoy solo hoy; en un día pasado, el que hizo ese día; en uno futuro, nada. Sin "dieta de hoy".
   if(CL.ckF&&CL.ckF>=hoy) CL.ckF=null;
+  if(esHoy&&!CL.ckF) h+=ckAyerHtml();      // v52.3: «¿Se te olvidó el de ayer?» antes del anillo, para que el check-in de hoy vaya justo debajo
   if(esHoy&&!CL.ckF&&cicloOn()) h+=cicloHoyCard();      // v52: el anillo del ciclo, justo antes de su check-in
-  return h+(esHoy?(CL.ckF?checkinCard(CL.ckF):ckAyerHtml()+checkinCard(hoy)):sel<hoy?(CL.ckF===sel?checkinCard(sel):checkinPasado(sel)):'');
+  return h+(esHoy?(CL.ckF?checkinCard(CL.ckF):checkinCard(hoy)):sel<hoy?(CL.ckF===sel?checkinCard(sel):checkinPasado(sel)):'');
 }
 function rutinaBloque(r,principal,txt,f){
   var O=ordenMov(r.ejercicios), lista=O.map(function(x){ return x.e; }), L=etiquetasEj(lista), G=gruposDe(lista), series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), nMov=O.filter(function(x){ return x.mov; }).length;
@@ -4579,7 +4585,7 @@ function estimarCiclo(hoy){
 function diaPeriodo(est){ return (est&&est<=8)?est:1; }
 /* v21: el check-in de un día pasado, para consultarlo */
 function checkinPasado(f){
-  var e=diarioDe(f), h='<div class="card ckp"><div class="card-t">'+ic('corazon')+'Check-in de ese día</div>';
+  var e=diarioDe(f), h='<div class="card ckp"><div class="card-t">'+icCk()+'Check-in de ese día</div>';
   var hay=e&&(num(e.energia)!=null||!vacio(e.sueno)||!vacio(e.dia_ciclo)||e.notas||e.regla||e.premenstrual);
   if(!hay) return h+'<p class="muted" style="margin:0">Ese día no hiciste check-in.</p>'+(diff(f,hoyStr())<=3?'<button class="btn sm mt6" data-a="ckDia" data-f="'+f+'">Hacerlo ahora</button>':'')+'</div>';
   var en=num(e.energia), dc=num(e.dia_ciclo), L=[];
@@ -4597,9 +4603,10 @@ function checkinCard(hoy){
   var esH=hoy===hoyStr();
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var res=[e.regla?'Con el periodo':'',!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',e.premenstrual?'Síntomas premenstruales':''].filter(String).join(' · ');
-    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
+    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q">¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
   }
-  return '<div class="card'+(esH?'':' ck-pasado')+'" id="ck-card"><div class="card-t">'+(esH?'Check-in de hoy ':'Check-in del '+esc(fLarga(hoy).toLowerCase())+' ')+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>'+
+  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab"><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
+
     (hombreCl()?'<input type="hidden" id="ck-dia" value="">'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>':
     '<div class="fila"><span>¿Estás con el periodo?</span><button class="sw'+(CL.ck.regla?' on':'')+'" data-a="ckRegla" aria-label="Estás con el periodo"><i></i></button></div>'+
     '<div class="muted sm mt6">Márcalo cada día que lo tengas. El día del ciclo se calcula solo y puedes corregirlo.</div>'+
@@ -4607,7 +4614,7 @@ function checkinCard(hoy){
     '<div class="fase" id="ck-fase">'+faseTxt(dia,CL.ck.regla,cicloP())+'</div>'+
     '<div class="fila mt"><span>¿Notas síntomas premenstruales?<small class="fila-s">Los días antes de la regla: cansancio, hinchazón, ánimo…</small></span><button class="sw'+(CL.ck.pm?' on':'')+'" data-a="ckPm" aria-label="Síntomas premenstruales"><i></i></button></div>')+
     '<div class="lab lab-i">Energía hoy, del 1 al 10 <button class="i-btn" data-a="ckInfo" aria-label="Qué significa cada número">'+ic('info')+'</button></div><div class="escala e10" id="ck-en">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){ return '<button class="'+(CL.ck.energia===v?'on':'')+'" data-a="ckEn" data-v="'+v+'">'+v+'</button>'; }).join('')+'</div><div class="escala-l"><span>1 · '+gCl('Agotada','Agotado')+'</span><span>10 · A tope</span></div><div class="ck-en-t" id="ck-en-t">'+(CL.ck.energia?esc(CL.ck.energia+' · '+ENE()[CL.ck.energia]):'')+'</div>'+
-    '<label class="f">¿Cómo te sientes hoy? <span class="muted">(opcional)</span><textarea id="ck-notas" rows="3" placeholder="Cuéntale a tu coach cómo estás: cansancio, dolores, hinchazón, ánimo, hambre, cómo has dormido…">'+esc(e.notas||'')+'</textarea></label>'+
+    '<label class="f">Notas para tu coach <span class="muted">(opcional)</span><textarea id="ck-notas" rows="3" placeholder="'+(hombreCl()?'Cuéntale a tu coach cómo estás: cansancio, dolores, ánimo, hambre, cómo has dormido…':'Cuéntale a tu coach cómo estás: cansancio, dolores, hinchazón, ánimo, hambre, cómo has dormido…')+'">'+esc(e.notas||'')+'</textarea></label>'+
     '<button class="btn mt" data-a="ckGuardar">Guardar check-in</button>'+(esH?'':'<button class="btn sec mt" data-a="ckCerrar">Ahora no</button>')+'</div>';
 }
 A.ckEditar=function(){ CL.ckEd=true; CL.keep=true; pintarCl(); setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); },60); };
@@ -4689,8 +4696,7 @@ function cicloHoyCard(){
     '</div>'+
     '<p class="cyc-tip">'+ic('idea')+'<span>'+esc(CIC_T[C.f])+'</span></p>'+
     (cerca?'<button class="btn sm sec cyc-ya" data-a="cycYa">'+ic('gota')+'Me ha venido hoy</button>':'')+
-    (hecho?'<button class="cyc-ck ok" data-a="ckEditar">'+ic('okc')+'<span><b>Check-in de hoy hecho</b><small>'+esc([num(e.energia)!=null?'Energía '+e.energia+'/10':'',e.notas?'«'+String(e.notas).slice(0,40)+(String(e.notas).length>40?'…':'')+'»':''].filter(Boolean).join(' · ')||'Toca para cambiarlo')+'</small></span></button>'
-      :'<button class="cyc-ck" data-a="cycSiento">'+ic('corazon')+'<span><b>¿Cómo te sientes hoy?</b><small>Cuéntaselo a tu coach en tu check-in</small></span>'+ic('flecha')+'</button>')+
+    '' /* v52.3: sin el botón «¿Cómo te sientes hoy?»: el check-in va justo debajo, con ese título */+
     '<p class="muted cyc-av">Aproximado, con tus check-ins'+(C.P.ini.length<2?' (con más reglas apuntadas, más preciso)':'')+'. No sirve como método anticonceptivo.</p></div>';
   return h;
 }
@@ -7801,7 +7807,7 @@ function ultEntrenosCard(d){
   // v21: cada entreno plegado (fecha, rutina y cifras); las notas y lo que no hizo, al abrirlo
   h+=S.length?'<p class="muted sm ue-exp">Toca un entreno para ver sus notas y todo lo que hizo, ejercicio a ejercicio.</p>'+S.map(function(x){ return sesFila(x,d,M,true,false); }).join(''):(ec?'':'<p class="muted" style="margin:0">No ha registrado entrenos en los últimos 14 días.</p>');
   var C=d.diario.filter(function(x){ return x.fecha>=desde&&(x.notas||(x.sintomas||[]).length); }).sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
-  if(C.length) h+='<details class="ue-ck"><summary>'+ic('corazon')+'<span>Sus check-ins con notas <span class="muted">· '+C.length+'</span></span>'+ic('flecha','sxf-ch')+'</summary>'+C.slice(0,10).map(function(x){ var en=num(x.energia);
+  if(C.length) h+='<details class="ue-ck"><summary>'+icCkCo()+'<span>Sus check-ins con notas <span class="muted">· '+C.length+'</span></span>'+ic('flecha','sxf-ch')+'</summary>'+C.slice(0,10).map(function(x){ var en=num(x.energia);
     return '<div class="sx-c">'+ic(x.regla?'gota':x.premenstrual?'nube':'nota')+'<span><b>'+esc(fMedia(x.fecha))+'</b>'+(en!=null?' · energía '+fN(en,0)+'/10':'')+(x.regla?' · con la regla':x.premenstrual?' · premenstrual':'')+((x.sintomas||[]).length?' · '+esc(x.sintomas.map(function(k){ return (SINT[k]||k).toLowerCase(); }).join(', ')):'')+(x.notas?'<br>'+esc(x.notas):'')+'</span></div>'; }).join('')+'</details>';
   return h+'<button class="link mt6" data-a="sub" data-t="evolucion">'+ic('lista')+'Ver todos sus entrenos, filtrar y comparar</button></div>';
 }
@@ -9969,9 +9975,10 @@ A.cqEnviar=function(el){
   if(faltan.length) return confirmar('Te falta'+(faltan.length>1?'n '+faltan.length+' preguntas':' 1 pregunta')+' por responder: '+faltan.map(function(s){ return s.t; }).join(', ')+'. ¿Lo envías igualmente?','Enviar igualmente',enviar,'Seguir respondiendo');
   confirmar('¿Enviar tus respuestas? Después ya no podrás cambiarlas desde aquí.','Enviar',enviar,'Revisar');
 };
+function cqHombreFin(){ try{ return CQ.d.preguntas&&CQ.d.preguntas.secciones?cqSexo()==='Hombre':CQ.d.sexo==='hombre'; }catch(e){ return false; } }      // v52.3: sin corazón para ellos
 function pintarGraciasCq(ya){
   var f=(CQ.d.preguntas&&CQ.d.preguntas.fin)||CQ.d.fin||{};
-  app.innerHTML=cqCab()+'<main class="wrap cqw"><div class="card center cq-fin"><div class="big-ok">'+ic('corazon')+'</div><h1>'+esc(f.t||'¡Muchas gracias!')+'</h1>'+
+  app.innerHTML=cqCab()+'<main class="wrap cqw"><div class="card center cq-fin"><div class="big-ok">'+(cqHombreFin()?ic('ok'):ic('corazon'))+'</div><h1>'+esc(f.t||'¡Muchas gracias!')+'</h1>'+
     (ya?'<p><b>Ya hemos recibido tus respuestas.</b> Si quieres cambiar algo, díselo a tu coach.</p>':'')+
     (CQ.acceso?'<p class="cq-acc">Te hemos enviado un email a <b>'+esc(CQ.acceso)+'</b> para que crees tu contraseña y entres en tu app. Míralo también en Spam.</p>':'')+(f.p?'<p>'+esc(f.p)+'</p>':'')+(f.firma?'<p class="cq-firma">'+esc(f.firma)+'</p>':'')+'</div></main>';
 }
@@ -10130,6 +10137,10 @@ function iniciales(n){ var p=String(n||'').trim().split(/\s+/); return ((p[0]||'
 function cG(f,m,c){ c=c||(CO.d&&CO.d.clienta)||{}; return c.sexo==='hombre'?m:f; }
 function hombreCl(){ return !!(CL.d&&CL.d.clienta&&CL.d.clienta.sexo==='hombre'); }
 function gCl(f,m){ return hombreCl()?m:f; }
+/* v52.3 · iconos de su app: neutros (n) o con corazones (c). Lo elige en Perfil; sin elegir, a los hombres neutros y a las mujeres con corazones */
+function estCl(){ var e=CL.d?prefCl().est:''; return e==='n'||e==='c'?e:(hombreCl()?'n':'c'); }
+function icCk(){ return ic(estCl()==='n'?'pulso':'corazon'); }
+function icCkCo(c){ return ic(cG('c','n',c)==='n'?'pulso':'corazon'); }
 /* v50 · fotos de perfil: tu panel las guarda en este dispositivo (y solo pide las que han cambiado) */
 var FOTOS=null;
 function fotosCo(){ if(!FOTOS){ FOTOS=LS.get('chadin_fotos')||{}; } return FOTOS; }
@@ -12679,7 +12690,7 @@ function ckAyerHtml(){
   var hoy=hoyStr(), ay=sumar(hoy,-1), d=CL.d;
   if(ckHecho(diarioDe(ay))) return '';
   if(!(d.diario||[]).some(function(x){ return x.fecha<ay&&ckHecho(x); })&&!(d.sesiones||[]).some(function(s){ return s.fecha<=ay; })) return '';      // aún no ha empezado
-  return '<button class="card ck-ayer" data-a="ckDia" data-f="'+ay+'"><span class="ck-ay-i">'+ic('corazon')+'</span><span class="ck-ay-t"><b>¿Se te olvidó el check-in de ayer?</b><small>'+esc(cap(fLarga(ay)))+' · Hazlo ahora: tu coach lo verá en su día</small></span><span class="btn sm">Hacerlo</span></button>';
+  return '<button class="card ck-ayer" data-a="ckDia" data-f="'+ay+'"><span class="ck-ay-i">'+icCk()+'</span><span class="ck-ay-t"><b>¿Se te olvidó el check-in de ayer?</b><small>'+esc(cap(fLarga(ay)))+' · Hazlo ahora: tu coach lo verá en su día</small></span><span class="btn sm">Hacerlo</span></button>';
 }
 A.ckDia=function(el){ CL.ckF=el.dataset.f; CL.keep=true; pintarCl(); setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({behavior:'smooth',block:'start'}); },60); };
 A.ckCerrar=function(){ CL.ckF=null; CL.keep=true; pintarCl(); };
@@ -12976,6 +12987,11 @@ A.plRenovarOk=function(el){
   },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
+/* v52.3 · Perfil: «Iconos de tu app» (neutros o con corazones), para cualquier persona */
+function estClCard(){ var e=estCl();
+  return '<div class="card est-pf"><div class="card-t">Iconos de tu app</div><p class="muted sm">Cómo se ven tu check-in y sus avisos.</p><div class="est-op">'+
+    [['n','pulso','Neutros'],['c','corazon','Con corazones']].map(function(x){ return '<button class="'+(e===x[0]?'on':'')+'" data-a="estCl" data-v="'+x[0]+'" aria-pressed="'+(e===x[0])+'">'+ic(x[1])+'<span>'+x[2]+'</span></button>'; }).join('')+'</div></div>'; }
+A.estCl=function(el){ var pf=prefCl(); pf.est=el.dataset.v; guardarPref(); CL.keep=true; pintarCl(); toast(pf.est==='n'?'Iconos neutros':'Iconos con corazones','ok'); };
 /* v29.1: su plan, sus pagos, su cuenta y su privacidad, en su propia pestaña «Perfil» */
 function vPerfil(){
   var c=CL.d.clienta||{}, nom=String(c.nombre||'').trim();
@@ -12983,6 +12999,7 @@ function vPerfil(){
   return '<div class="saludo pf-cab"><div class="pf-avw"><button class="pf-av'+(ft?' ft':'')+'" data-a="'+(ft?'pfVer':'pfFoto')+'" aria-label="'+(ft?'Ver tu foto en grande':'Tu foto de perfil')+'">'+(ft?'<img src="'+esc(ft)+'" alt="">':esc(iniciales(nom)||'·'))+'</button><button class="pf-avb" data-a="pfFoto" aria-label="Cambiar tu foto">'+ic('foto')+'</button></div><div><h1>'+esc(nom||'Tu perfil')+'</h1><div class="muted">Tu plan, tus sugerencias y tu privacidad</div></div></div>'+
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
     sugClCard()+
+    estClCard()+
     (!hombreCl()&&!cicloOn()?'<div class="card cyc-pf"><div class="fila"><span>Ver «Tu ciclo» en Hoy<small class="fila-s">Tu fase, tu próximo periodo y una idea para cada fase</small></span><button class="sw" data-a="cycOn" aria-label="Ver tu ciclo en Hoy"><i></i></button></div></div>':'')+      // v52
     (miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button>'+salirBtn()+'</div>')+
     '<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
