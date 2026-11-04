@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Conectar Google · MOOD ON</title>
+<meta name="theme-color" content="#F5F5F7">
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#F5F5F7;color:#141414;font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+main{background:#fff;border-radius:22px;padding:28px 22px;max-width:440px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.marca{font:300 15px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;letter-spacing:.42em;color:#111;margin-bottom:16px}
+h1{font-size:22px;line-height:1.25;margin:0 0 8px}
+p{margin:8px 0;color:#4A4A4E}
+.estado{margin:16px 0 6px;padding:12px 14px;border-radius:14px;background:#F2F2F5;font-size:15px}
+.estado.ok{background:#E8F6EE;color:#0E5A33}
+.estado.err{background:#FDECEE;color:#8A0F1E}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font:600 16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;margin-top:14px;cursor:pointer;background:#111;color:#fff;text-align:center;text-decoration:none}
+.btn:disabled{opacity:.5;cursor:default}
+.sec{background:#EDEDF0;color:#141414}
+small{display:block;color:#87878B;margin-top:16px;font-size:13px;line-height:1.45}
+.h{display:none}
+</style>
+</head>
+<body>
+<main>
+  <div class="marca">MOOD ON</div>
+  <h1>Conectar con Google</h1>
+  <p>Para que las videollamadas se creen solas con Meet en tu calendario y para leer las etiquetas de los alimentos con una foto.</p>
+  <div class="estado" id="estado">Comprobando…</div>
+  <button class="btn" id="ir" disabled>Conectar con Google</button>
+  <a class="btn sec h" id="panel" href="https://moodonapp.com/?coach=1">Abrir mi panel</a>
+  <small>Elige tu cuenta de Google de coach. Saldrá «Google no ha verificado esta aplicación»: es normal (solo la usas tú). Pulsa «Configuración avanzada» → «Ir a MOOD ON», marca las casillas y «Continuar». La llave se guarda cifrada en el servidor de MOOD ON: no la ve nadie.</small>
+</main>
+<script>
+/* Usa la sesión de tu panel guardada en este navegador (la misma dirección, moodonapp.com) para pedir un enlace de un solo uso */
+(function(){
+  var API='https://spmibfqbhgbcomfqlvlc.supabase.co/functions/v1/api', url='';
+  var est=document.getElementById('estado'), ir=document.getElementById('ir'), panel=document.getElementById('panel');
+  function pon(t,c){ est.textContent=t; est.className='estado'+(c?' '+c:''); }
+  function sesion(){
+    var k=['mo_ses_co','chadin_co'];
+    for(var i=0;i<k.length;i++){
+      var v=null; try{ v=JSON.parse(localStorage.getItem(k[i])||'null'); }catch(e){}
+      if(!v){ try{ v=JSON.parse(sessionStorage.getItem(k[i])||'null'); }catch(e){} }
+      if(typeof v==='string'&&/^C[0-9a-f]{48}$/.test(v)) return v;
+    }
+    return '';
+  }
+  function sinSesion(m){ pon(m||'Primero entra en tu panel en este navegador y luego vuelve a abrir esta página.','err'); ir.classList.add('h'); panel.classList.remove('h'); }
+  var s=sesion();
+  if(!s){ sinSesion(); return; }
+  fetch(API,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({fn:'coachGoogleEnlace',args:[s]})})
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      if(!d||!d.ok){ var m=String(d&&d.error||'No se ha podido comprobar.').replace(/^Error: /,''); if(/sesi[oó]n/i.test(m)) sinSesion(m+' Entra en tu panel y vuelve a abrir esta página.'); else pon(m,'err'); return; }
+      var r=d.result||{}; url=r.url||'';
+      if(r.conectado){ pon('Ya está conectado'+(r.cuenta?' con el calendario de '+r.cuenta:'')+'. Si quieres cambiar de cuenta, vuelve a conectar.','ok'); ir.textContent='Volver a conectar'; }
+      else pon('Ahora mismo no está conectado.');
+      ir.disabled=!url;
+    })
+    .catch(function(){ pon('No hay conexión con el servidor. Inténtalo otra vez en un momento.','err'); });
+  ir.onclick=function(){ if(url) location.href=url; };
+})();
+</script>
+</body>
+</html>
