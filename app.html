@@ -1113,7 +1113,7 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .ff-x{display:inline-flex;align-items:center;gap:4px;margin:4px 0}.ff-x .ic{margin:0;width:14px;height:14px}
 .tipos.zona button{font-size:12.5px;padding:6px 11px}
 .ej-rt{flex:1;min-width:0;display:flex;flex-direction:column}.ej-rt small{font-size:12px;color:var(--mu);font-weight:500}
-/* v52.8 · banco: seleccionar varios, cambiar sus datos de una vez, exportar e importar CSV */
+/* v52.8 · banco: seleccionar varios y cambiar sus datos de una vez */
 .bk-her{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
 .bk-ck{flex:none;width:24px;height:24px;border:2px solid #C7C7CC;border-radius:7px;display:flex;align-items:center;justify-content:center;background:#fff;color:transparent}
 .bk-ck svg{width:15px;height:15px}
@@ -1122,15 +1122,6 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .bk-bar b{flex:1 1 auto;font-size:15px}
 .bk-bar .btn{width:auto;margin:0;background:#fff;color:#111}.bk-bar .btn.sec{background:#2C2C2E;color:#fff}.bk-bar .btn:disabled{opacity:.45}
 .bk-ed .grid2 label.f.cam select{border-color:#111;font-weight:600}
-.csv-res{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
-.csv-res span{border-radius:999px;padding:6px 11px;font-size:13px;font-weight:600;background:#F2F2F5}
-.csv-res .n{background:#E7F6EC;color:#0E6B3A}.csv-res .c{background:#E8EEF7;color:#1F3B63}.csv-res .e{background:#FDECEC;color:#B42318}
-.csv-s{margin-top:10px;border:1px solid var(--line);border-radius:12px;padding:8px 12px}
-.csv-s summary{font-weight:600;cursor:pointer;padding:4px 0}
-.csv-s ul{margin:6px 0 4px;padding-left:18px;font-size:13.5px;line-height:1.45}
-.csv-s li+li{margin-top:4px}
-.csv-s del{color:var(--mu)}.csv-s .csv-err{color:#B42318}
-.csv-ay{font-size:13px;line-height:1.45}.csv-ay code{background:#F2F2F5;border-radius:5px;padding:1px 5px;font-size:12.5px}
 .bsub h4{margin:12px 0 2px;font-size:13px;color:var(--mg);text-transform:none;letter-spacing:0}
 .pick-m{font-size:12px;color:var(--mu);margin-top:2px}
 .pick-n{margin:6px 0 2px}
@@ -2486,7 +2477,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.8';
+var APP_V = 'v52.9';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -8986,7 +8977,7 @@ function pintarBanco(arriba){
   if(f.g&&gs.indexOf(f.g)<0) f.g='';
   var h='<div class="tit-row"><h1 class="tit">Ejercicios <span class="muted">'+B.length+'</span></h1><span class="tit-bt"><button class="btn sm sec" data-a="grAbrir">Grupos</button><button class="btn sm" data-a="nuevoEj">+ Nuevo</button></span></div>'+
     '<p class="muted sm">Pon el vídeo de cada ejercicio una sola vez. Tus clientes lo verán en su rutina con el botón <b>Cómo se hace</b>. '+(B.length?conV+' de '+B.length+' tienen vídeo.':'')+'</p>'+
-    (B.length?'<div class="bk-her">'+(CO.bsel?'':'<button class="btn sm sec" data-a="bkSel">'+ic('ok')+'Seleccionar varios</button>')+'<button class="btn sm sec" data-a="csvExportar">'+ic('descargar')+'Exportar CSV</button>':'<div class="bk-her">')+'<button class="btn sm sec" data-a="csvImportar">Importar CSV</button></div>';      // v52.8
+    (B.length&&!CO.bsel?'<div class="bk-her"><button class="btn sm sec" data-a="bkSel">'+ic('ok')+'Seleccionar varios</button></div>':'');      // v52.8 (v52.9: sin CSV)
   var sinV=B.filter(function(b){ return !b.video; }).length;      // v38
   if(CO.sinBanco.length) h+='<div class="card hl"><div class="card-t">De tus rutinas</div><p class="sm">'+CO.sinBanco.length+' ejercicio'+(CO.sinBanco.length>1?'s':'')+' de tus rutinas no está'+(CO.sinBanco.length>1?'n':'')+' en el banco: '+CO.sinBanco.slice(0,6).map(function(x){ return esc(x.nombre); }).join(', ')+(CO.sinBanco.length>6?'…':'')+'</p><button class="btn sm" data-a="importarRutinas">Añadirlos al banco</button></div>';
   if(!B.length) h+='<div class="card"><h3>Empieza con los básicos</h3><p class="muted sm">Cargo '+BASICOS.length+' ejercicios habituales con su grupo muscular, sin vídeo. Luego entras en cada uno y le pegas el enlace de tu vídeo. Puedes borrar o renombrar los que quieras.</p><button class="btn mt" data-a="cargarBasicos">Cargar ejercicios básicos</button></div>';
@@ -9059,98 +9050,6 @@ A.bkGuardar=function(){
   },function(e){ toast(limpiaErr(e),'err'); });
 };
 function bkLista(L){ CO.banco=L; if(CO.bancoR) CO.bancoR.lista=L; var k={}; L.forEach(function(b){ k[clave(b.nombre)]=1; }); CO.sinBanco=(CO.sinBanco||[]).filter(function(x){ return !k[clave(x.nombre)]; }); }
-/* ---------- v52.8 · exportar e importar el banco en CSV (se abre con Excel o Google Sheets) ---------- */
-var CSV_COL=[['nombre','Nombre'],['grupo','Grupo'],['equipamiento','Equipamiento','equipo','eq'],['que_apunta','Qué apunta','registro','reg'],['patron','Patrón','patron','pat'],['nivel','Nivel','nivel','niv'],['modalidad','Modalidad','modalidad','mod'],['funcion','Función','funcion','fn'],['zona_movilidad','Movilidad: qué trabaja','zona','zona'],['mancuernas','Con mancuernas'],['unilateral','Unilateral'],['video','Vídeo'],['indicaciones','Indicaciones']];
-function csvCelda(v){ v=String(v==null?'':v); return /[";\r\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v; }
-function csvFila(b){      // lo que tiene guardado (vacío = la app lo deduce del nombre)
-  return [b.nombre,b.grupo||'',metaTxt('eq',b.eq),metaTxt('reg',b.reg),metaTxt('pat',b.pat),metaTxt('niv',b.niv),metaTxt('mod',b.mod),metaTxt('fn',b.fn),metaTxt('zona',b.zona),b.mc?'sí':'no',b.ld?'sí':'no',b.video||'',b.indicaciones||''];
-}
-A.csvExportar=function(){
-  var L=[CSV_COL.map(function(c){ return c[0]; }).join(';')].concat(CO.banco.map(function(b){ return csvFila(b).map(csvCelda).join(';'); }));
-  var a=document.createElement('a'); a.href=URL.createObjectURL(new Blob(['\uFEFF'+L.join('\r\n')+'\r\n'],{type:'text/csv;charset=utf-8'})); a.download='ejercicios_MOOD_ON_'+hoyStr()+'.csv'; a.target='_blank';
-  document.body.appendChild(a); a.click(); setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); },1500);
-  toast('Descargado: '+CO.banco.length+' ejercicios','ok');
-};
-A.csvImportar=function(){
-  modal('<h2>Importar ejercicios (CSV)</h2><div class="csv-ay"><p>Sirve para añadir ejercicios o cambiar sus datos de muchos a la vez. Lo más fácil: <b>Exportar CSV</b>, cambiarlo en Excel o Google Sheets y guardarlo como <b>CSV</b>.</p>'+
-    '<ul><li>Cada fila se busca por su <b>nombre</b>. Si no está en el banco, se añade como ejercicio nuevo. El nombre no se cambia nunca (así no se pierde el historial).</li><li>Una celda vacía no cambia nada.</li><li>Antes de guardar verás qué se añade, qué cambia y las filas con errores.</li></ul>'+
-    '<details class="csv-s"><summary>Columnas y valores que entiende</summary><ul>'+CSV_COL.slice(1).map(function(c){ var o=c[3]?META_L[c[3]].o.map(function(x){ return x[1]; }).join(' · '):c[0]==='grupo'?gruposTodos().join(' · '):c[0]==='mancuernas'||c[0]==='unilateral'?'sí · no':c[0]==='video'?'un enlace que empiece por https://':'texto (máx. 1500)'; return '<li><code>'+c[0]+'</code>: '+esc(o)+'</li>'; }).join('')+'</ul></details></div>'+
-    '<label class="btn mt">Elegir archivo CSV<input type="file" accept=".csv,text/csv,text/plain" data-c="csvArchivo" hidden></label><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
-};
-CH.csvArchivo=function(t){
-  var f=t.files&&t.files[0]; t.value=''; if(!f) return;
-  if(f.size>2e6) return toast('El archivo es demasiado grande (máx. 2 MB)','err');
-  var leer=function(cod){ return new Promise(function(ok,ko){ var r=new FileReader(); r.onload=function(){ ok(String(r.result||'')); }; r.onerror=ko; r.readAsText(f,cod); }); };
-  leer('utf-8').then(function(tx){ return tx.indexOf('\uFFFD')>=0?leer('windows-1252'):tx; }).then(function(tx){ csvPrevia(csvLeer(tx)); },function(){ toast('No se ha podido leer el archivo','err'); });
-};
-function csvLeer(tx){      // CSV con ; , o tabulador, comillas y saltos de línea dentro de las celdas
-  tx=String(tx||'').replace(/^\uFEFF/,'');
-  var pl=tx.split(/\r?\n/)[0]||'', sep=[';',',','\t'].sort(function(a,b){ return pl.split(b).length-pl.split(a).length; })[0];
-  var F=[], fila=[], c='', q=false;
-  for(var i=0;i<tx.length;i++){ var ch=tx[i];
-    if(q){ if(ch==='"'){ if(tx[i+1]==='"'){ c+='"'; i++; } else q=false; } else c+=ch; }
-    else if(ch==='"') q=true;
-    else if(ch===sep){ fila.push(c); c=''; }
-    else if(ch==='\n'||ch==='\r'){ if(ch==='\r'&&tx[i+1]==='\n') i++; fila.push(c); F.push(fila); fila=[]; c=''; }
-    else c+=ch; }
-  if(c!==''||fila.length){ fila.push(c); F.push(fila); }
-  return F.filter(function(r){ return r.some(function(x){ return String(x).trim(); }); });
-}
-var CSV_ALIAS={nombre:'nombre',ejercicio:'nombre',grupo:'grupo','grupo principal':'grupo',equipamiento:'equipamiento',equipo:'equipamiento',material:'equipamiento','que apunta':'que_apunta',que_apunta:'que_apunta',registro:'que_apunta',patron:'patron',nivel:'nivel',modalidad:'modalidad',funcion:'funcion',zona:'zona_movilidad',zona_movilidad:'zona_movilidad','movilidad: que trabaja':'zona_movilidad','que trabaja':'zona_movilidad',mancuernas:'mancuernas','con mancuernas':'mancuernas',unilateral:'unilateral',video:'video',indicaciones:'indicaciones'};
-function csvValor(k,v){      // código guardado, '' (vacío) o null (no válido); entiende el código o el texto que se ve en la app
-  v=String(v==null?'':v).trim(); if(!v) return '';
-  var c=clave(v);
-  if(k==='grupo'){ var g=gruposTodos().filter(function(x){ return clave(x)===c; })[0]; return g||null; }
-  if(k==='mancuernas'||k==='unilateral') return /^(si|s|x|1|true|yes)$/.test(c)?'sí':/^(no|n|0|false)$/.test(c)?'no':null;
-  var col=CSV_COL.filter(function(x){ return x[2]===k; })[0], L=META_L[col[3]].o;
-  var o=L.filter(function(x){ return clave(x[0])===c||clave(x[1])===c||clave(x[1].replace(/\s*\(.*$/,''))===c; })[0];
-  if(!o&&k==='registro') o=/kilo|kg|peso y rep/.test(c)?L[0]:/lastre/.test(c)?L[2]:/solo rep|corporal|reps/.test(c)?L[1]:null;
-  return o?o[0]:null;
-}
-function csvPrevia(F){
-  if(F.length<2) return toast('El archivo está vacío o no tiene filas debajo de los títulos','err');
-  var cab=F[0].map(function(h){ return CSV_ALIAS[clave(h).replace(/\s+/g,' ')]||CSV_ALIAS[clave(h).replace(/[\s_]+/g,'_')]||''; });
-  if(cab.indexOf('nombre')<0) return toast('Falta la columna «nombre» en la primera fila','err');
-  var porN={}; CO.banco.forEach(function(b){ porN[clave(b.nombre)]=b; });
-  var R={nuevos:[],cambios:[],iguales:0,errores:[],filas:[]}, vistos={};
-  F.slice(1,501).forEach(function(r,i){
-    var o={}, err=[], nf=i+2; cab.forEach(function(k,j){ if(k) o[k]=r[j]==null?'':String(r[j]); });
-    var n=String(o.nombre||'').trim().replace(/\s+/g,' ');
-    if(!n){ R.errores.push('Fila '+nf+': sin nombre'); return; }
-    if(n.length>80){ R.errores.push('Fila '+nf+' («'+n.slice(0,30)+'…»): el nombre es demasiado largo (máx. 80)'); return; }
-    if(vistos[clave(n)]){ R.errores.push('Fila '+nf+' («'+n+'»): repetida (ya está en la fila '+vistos[clave(n)]+')'); return; }
-    vistos[clave(n)]=nf;
-    var b=porN[clave(n)], e={nombre:b?b.nombre:n}, dif=[];
-    CSV_COL.forEach(function(c){ if(!c[2]&&c[0]!=='grupo'&&c[0]!=='mancuernas'&&c[0]!=='unilateral') return; var k=c[2]||c[0], raw=o[c[0]]; if(raw==null||!String(raw).trim()) return;
-      var v=csvValor(k,raw); if(v===null){ err.push('«'+c[1]+'» no reconocido: «'+String(raw).trim().slice(0,40)+'»'); return; }
-      var ant=!b?'':k==='mancuernas'?(b.mc?'sí':'no'):k==='unilateral'?(b.ld?'sí':'no'):k==='grupo'?(b.grupo||''):(b[c[3]]||'');
-      if(v!==ant){ e[k]=v; dif.push([c[1],k==='grupo'||k==='mancuernas'||k==='unilateral'?ant:metaTxt(c[3],ant),k==='grupo'||k==='mancuernas'||k==='unilateral'?v:metaTxt(c[3],v)]); } });
-    var vid=String(o.video||'').trim(); if(vid){ if(!/^https:\/\/\S+$/i.test(vid)) err.push('el vídeo tiene que ser un enlace que empiece por https://'); else if(!b||b.video!==vid.slice(0,400)){ e.video=vid; dif.push(['Vídeo',b&&b.video?'otro':'',b&&b.video?'nuevo enlace':'con vídeo']); } }
-    var ind=String(o.indicaciones||'').trim(); if(ind){ if(ind.length>1500) err.push('las indicaciones pasan de 1500 letras'); else if(!b||String(b.indicaciones||'').trim()!==ind){ e.indicaciones=ind; dif.push(['Indicaciones',b&&b.indicaciones?'otras':'','nuevas']); } }
-    if(err.length){ R.errores.push('Fila '+nf+' («'+n+'»): '+err.join('; ')); return; }
-    if(!b){ R.nuevos.push({n:n,g:e.grupo||''}); R.filas.push(e); }
-    else if(dif.length){ R.cambios.push({n:b.nombre,d:dif}); R.filas.push(e); }
-    else R.iguales++;
-  });
-  CO.csv=R; csvPintar(F.length-1>500);
-}
-function csvPintar(corto){
-  var R=CO.csv, n=R.nuevos.length, c=R.cambios.length, li=function(L,f){ return '<ul>'+L.slice(0,200).map(f).join('')+(L.length>200?'<li>… y '+(L.length-200)+' más</li>':'')+'</ul>'; };
-  var h='<h2>Revisa antes de guardar</h2><div class="csv-res"><span class="n">'+n+' nuevo'+(n===1?'':'s')+'</span><span class="c">'+c+' con cambios</span><span>'+R.iguales+' sin cambios</span>'+(R.errores.length?'<span class="e">'+R.errores.length+' con errores</span>':'')+'</div>';
-  if(corto) h+='<p class="muted sm">Solo se leen las primeras 500 filas.</p>';
-  if(R.errores.length) h+='<details class="csv-s" open><summary>Filas con errores (no se guardan)</summary>'+li(R.errores,function(x){ return '<li class="csv-err">'+esc(x)+'</li>'; })+'</details>';
-  if(n) h+='<details class="csv-s"'+(n<=12?' open':'')+'><summary>Se añaden al banco</summary><p class="muted sm">Si alguno es el mismo que ya tienes con otro nombre, corrige el nombre en el archivo y vuelve a importarlo.</p>'+li(R.nuevos,function(x){ return '<li><b>'+esc(x.n)+'</b>'+(x.g?' · '+esc(x.g):' · <span class="muted">sin grupo</span>')+'</li>'; })+'</details>';
-  if(c) h+='<details class="csv-s"'+(c<=12?' open':'')+'><summary>Cambian</summary>'+li(R.cambios,function(x){ return '<li><b>'+esc(x.n)+'</b>: '+x.d.map(function(d){ return esc(d[0])+' '+(d[1]?'<del>'+esc(d[1])+'</del> → ':'')+esc(d[2]||'(según el nombre)'); }).join(' · ')+'</li>'; })+'</details>';
-  h+=(n+c?'<button class="btn mt" data-a="csvGuardar">Guardar '+[n?n+' nuevo'+(n>1?'s':''):'',c?c+' cambio'+(c>1?'s':''):''].filter(String).join(' y ')+'</button>':'<p class="muted mt">No hay nada que guardar.</p>')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
-  modal(h);
-}
-A.csvGuardar=function(){
-  var R=CO.csv; if(!R||!R.filas.length) return;
-  cargando(api('coachImportarCsv',CO.pin,R.filas)).then(function(r){
-    bkLista(r.lista); CO.csv=null; cerrarModal(); if(CO.vista==='banco') pintarBanco(false);
-    toast('Guardado: '+[r.nuevos?r.nuevos+' nuevo'+(r.nuevos>1?'s':''):'',r.cambiados?r.cambiados+' cambiado'+(r.cambiados>1?'s':''):''].filter(String).join(' y ')+(r.malas?' · '+r.malas+' fila'+(r.malas>1?'s':'')+' no válida'+(r.malas>1?'s':''):'')||'Sin cambios','ok');
-  },function(e){ toast(limpiaErr(e),'err'); });
-};
 A.alBanco=function(el){ var e=CO.rut[+el.dataset.r].ejercicios[+el.dataset.e]; modalEjBanco({nombre:e.n,video:okUrl(e.video)?e.video:'',indicaciones:e.nota||''}); };
 function modalEjBanco(x){
   x=x||{}; CO.ejEd=x; x.gs={p:x.grupo||'',s:(x.g2||[]).slice(),nuevo:false};
