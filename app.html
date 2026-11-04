@@ -2389,6 +2389,16 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .ck-cab.ck-f{background:#FDF0F4}.ck-cab.ck-f>.ic{color:#E5484D}
 .ck-cab.ck-m{background:#E8EEF7}.ck-cab.ck-m>.ic{color:#1F3B63}.ck-cab.ck-m small{color:#4A5A70}
 .ck-min .ck-q{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--mu);margin:0 0 1px;letter-spacing:.01em}.ck-min .ck-q .ic{width:13px;height:13px;margin:0}.ck-min .ck-q.ck-f .ic{color:#E5484D}.ck-min .ck-q.ck-m .ic{color:#1F3B63}
+/* ===== v52.5 · foto de perfil: «Ajusta tu foto» (mover, acercar y ver cómo queda en su círculo) ===== */
+.fc-st{position:relative;width:min(100%,300px);aspect-ratio:1/1;margin:14px auto 10px;overflow:hidden;border-radius:18px;background:#111;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;outline:0}.fc-st.mv{cursor:grabbing}.fc-st:focus-visible{box-shadow:0 0 0 3px #111}
+.fc-st img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;pointer-events:none;-webkit-user-drag:none}
+.fc-ma{position:absolute;inset:0;border-radius:50%;box-shadow:0 0 0 999px rgba(0,0,0,.52);outline:2px solid rgba(255,255,255,.92);outline-offset:-2px;pointer-events:none}
+.fc-z{display:flex;align-items:center;gap:12px;max-width:300px;margin:0 auto}.fc-z .ico{flex:none;font-size:18px;font-weight:700}
+.fc-z input[type=range]{flex:1;width:auto;height:28px;padding:0;margin:0;border:0;border-radius:0;background:transparent;-webkit-appearance:none;appearance:none;cursor:pointer}
+.fc-z input[type=range]::-webkit-slider-runnable-track{height:4px;border-radius:2px;background:#D9D9DF}.fc-z input[type=range]::-moz-range-track{height:4px;border-radius:2px;background:#D9D9DF}
+.fc-z input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:24px;height:24px;margin-top:-10px;border-radius:50%;background:#111;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}.fc-z input[type=range]::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#111;border:3px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.fc-pv{display:flex;align-items:center;justify-content:center;gap:14px;margin:12px 0 2px}.fc-l{font-size:12px;font-weight:600;color:var(--mu)}.fc-pv canvas{border-radius:50%;background:#EDEDF0;box-shadow:0 0 0 1px var(--line)}#fc-p1{width:92px;height:92px}#fc-p2{width:40px;height:40px}
+.fc-bs{display:flex;gap:8px;margin-top:8px}.fc-bs .btn{flex:1;margin:0}
 /* ===== v52.2 · meses pagados: verde con ✓ (pagado), rojo con ✕ (sin pagar) y discontinuo (todavía no); el estado también escrito ===== */
 .pgc-m i{display:flex;align-items:center;justify-content:center;color:#fff}.pgc-m i .ic{width:15px;height:15px;margin:0;stroke-width:2.6}
 .pgc-m .p i{background:#15803D}.pgc-m .g i{background:#D92D20}
@@ -2454,7 +2464,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.4';
+var APP_V = 'v52.5';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -14006,9 +14016,62 @@ A.pfFoto=function(){
   modal('<h2>Tu foto de perfil</h2><p class="muted sm">Solo la ve tu coach, junto a tu nombre.</p><div class="pf-fo"><label class="btn">'+ic('foto')+(ft?'Cambiar foto':'Elegir foto')+'<input type="file" accept="image/*" data-c="pfFotoF" hidden></label>'+(ft?'<button class="btn sec" data-a="pfFotoQuitar">Quitar foto</button>':'')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 function fotoCuadrada(f,lado,max){ max=max||46000; return new Promise(function(ok,ko){ var u=URL.createObjectURL(f), im=new Image(); im.onload=function(){ var w=im.naturalWidth, h=im.naturalHeight, m=Math.min(w,h), c=document.createElement('canvas'); c.width=c.height=lado; var x=c.getContext('2d'); x.drawImage(im,(w-m)/2,(h-m)/2,m,m,0,0,lado,lado); URL.revokeObjectURL(u); var q=0.82, d=c.toDataURL('image/jpeg',q); while(d.length>max&&q>0.4){ q-=0.12; d=c.toDataURL('image/jpeg',q); } ok(d); }; im.onerror=function(){ ko(new Error('No se ha podido abrir esa foto. Prueba con otra (JPG o PNG).')); }; im.src=u; }); }
+/* v52.5 · antes de guardarla, «Ajusta tu foto»: moverla con el dedo, acercarla o alejarla (dos dedos, la barra, + y − o la rueda) y verla ya en su círculo, en grande y en pequeño */
+var FC=null;
 CH.pfFotoF=function(t){
   var f=t.files&&t.files[0]; if(!f) return; t.value='';
-  Promise.all([fotoCuadrada(f,240),fotoCuadrada(f,720,150000)]).then(function(L){ var d=L[0], g=L[1]; return cargando(api('guardarMiFoto',BOOT.token,d,g)).then(function(r){ CL.d.clienta.foto=r.v; CL.foto={v:r.v,img:d}; CL.fotoG={v:r.v,img:g}; LS.set('chadin_mifoto_'+(BOOT.lk||BOOT.token),CL.foto); cerrarModal(); fvCerrar(); CL.keep=true; pintarCl(); toast('Foto puesta','ok'); }); }).catch(function(e){ toast(limpiaErr(e),'err'); });      // v52: también la grande, para verla a pantalla completa
+  var u=URL.createObjectURL(f), im=new Image();
+  im.onload=function(){ fcAbrir(im,u); };
+  im.onerror=function(){ URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto. Prueba con otra (JPG o PNG).','err'); };
+  im.src=u;
+};
+function fcAbrir(im,u){
+  if(FC&&FC.u&&FC.u!==u) URL.revokeObjectURL(FC.u);
+  FC={im:im,u:u,w:im.naturalWidth,h:im.naturalHeight,z:1,tx:0,ty:0,S:0,p:{},ini:true};
+  modal('<h2>Ajusta tu foto</h2><p class="muted sm">Muévela con el dedo y acércala o aléjala hasta que tu cara quede bien dentro del círculo.</p>'+
+    '<div class="fc-st" id="fc-st" tabindex="0" role="application" aria-label="Tu foto: arrástrala para moverla; acércala o aléjala con dos dedos, la barra o las teclas + y −"><img id="fc-im" src="'+esc(u)+'" alt="" draggable="false"><div class="fc-ma"></div></div>'+
+    '<div class="fc-z"><button class="ico sm" data-a="fcZ" data-v="-1" aria-label="Alejar">−</button><input type="range" id="fc-r" data-v29="fcZoom" min="1" max="4" step="0.01" value="1" aria-label="Acercar o alejar"><button class="ico sm" data-a="fcZ" data-v="1" aria-label="Acercar">+</button></div>'+
+    '<div class="fc-pv"><span class="fc-l">Así se verá</span><canvas id="fc-p1" width="184" height="184" role="img" aria-label="Vista previa en tu perfil"></canvas><canvas id="fc-p2" width="80" height="80" role="img" aria-label="Vista previa en pequeño, como en la lista de tu coach"></canvas></div>'+
+    '<button class="btn mt" data-a="fcOk">'+ic('ok')+'Guardar foto</button>'+
+    '<div class="fc-bs"><label class="btn sec">'+ic('foto')+'Elegir otra<input type="file" accept="image/*" data-c="pfFotoF" hidden></label><button class="btn sec" data-a="fcCancelar">Cancelar</button></div>');
+  var st=document.getElementById('fc-st'); if(!st) return; fcEventos(st); fcPintar();
+}
+function fcEsc(){ return (FC.S||280)/Math.min(FC.w,FC.h)*FC.z; }
+function fcPintar(){
+  var st=document.getElementById('fc-st'), im=document.getElementById('fc-im'); if(!FC||!st||!im) return;
+  FC.S=st.clientWidth||FC.S||280; var s=fcEsc(), mx=Math.max(0,(FC.w*s-FC.S)/2), my=Math.max(0,(FC.h*s-FC.S)/2);
+  if(FC.ini){ FC.ini=false; if(FC.h>FC.w*1.15) FC.ty=my*0.6; }      // foto vertical: de partida un poco más arriba (suele estar la cara)
+  FC.tx=Math.max(-mx,Math.min(mx,FC.tx)); FC.ty=Math.max(-my,Math.min(my,FC.ty));
+  im.style.width=(FC.w*s)+'px'; im.style.height=(FC.h*s)+'px'; im.style.transform='translate(-50%,-50%) translate('+FC.tx+'px,'+FC.ty+'px)';
+  var r=document.getElementById('fc-r'); if(r&&Math.abs(+r.value-FC.z)>0.001) r.value=FC.z;
+  if(!FC.raf) FC.raf=requestAnimationFrame(function(){ if(!FC) return; FC.raf=0; var c=fcCorte(); ['fc-p1','fc-p2'].forEach(function(id){ var cv=document.getElementById(id); if(!cv) return; var x=cv.getContext('2d'); x.clearRect(0,0,cv.width,cv.height); x.drawImage(FC.im,c.x,c.y,c.l,c.l,0,0,cv.width,cv.height); }); });
+}
+/* lo que se ve dentro del cuadro, en píxeles de la foto */
+function fcCorte(){ var s=fcEsc(), l=FC.S/s, cx=FC.w/2-FC.tx/s, cy=FC.h/2-FC.ty/s; return {x:Math.max(0,cx-l/2),y:Math.max(0,cy-l/2),l:Math.min(l,FC.w,FC.h)}; }
+function fcZoomEn(z2,g){
+  if(!FC) return; z2=Math.max(1,Math.min(4,z2)); var fx=0, fy=0, st=document.getElementById('fc-st');
+  if(g&&st){ var r=st.getBoundingClientRect(); fx=g.cx-(r.left+r.width/2); fy=g.cy-(r.top+r.height/2); }      // el punto bajo los dedos se queda donde está
+  FC.tx=fx-(fx-FC.tx)*z2/FC.z; FC.ty=fy-(fy-FC.ty)*z2/FC.z; FC.z=z2;
+}
+function fcGesto(){ var L=Object.keys(FC.p).map(function(k){ return FC.p[k]; }); if(!L.length) return null; if(L.length===1) return {cx:L[0].x,cy:L[0].y,d:0}; var a=L[0], b=L[1]; return {cx:(a.x+b.x)/2,cy:(a.y+b.y)/2,d:Math.hypot(a.x-b.x,a.y-b.y)}; }
+function fcEventos(st){
+  st.addEventListener('pointerdown',function(e){ if(!FC) return; try{ st.setPointerCapture(e.pointerId); }catch(x){} FC.p[e.pointerId]={x:e.clientX,y:e.clientY}; st.classList.add('mv'); e.preventDefault(); });
+  st.addEventListener('pointermove',function(e){ if(!FC||!FC.p[e.pointerId]) return; var a=fcGesto(); FC.p[e.pointerId]={x:e.clientX,y:e.clientY}; var g=fcGesto();
+    if(a&&g){ FC.tx+=g.cx-a.cx; FC.ty+=g.cy-a.cy; if(a.d&&g.d) fcZoomEn(FC.z*g.d/a.d,g); fcPintar(); } e.preventDefault(); });
+  var fin=function(e){ if(!FC) return; delete FC.p[e.pointerId]; if(!Object.keys(FC.p).length) st.classList.remove('mv'); };
+  st.addEventListener('pointerup',fin); st.addEventListener('pointercancel',fin);
+  st.addEventListener('wheel',function(e){ if(!FC) return; e.preventDefault(); fcZoomEn(FC.z*Math.exp(-e.deltaY/400),{cx:e.clientX,cy:e.clientY}); fcPintar(); },{passive:false});
+  st.addEventListener('keydown',function(e){ if(!FC) return; var k=e.key, p=12;
+    if(k==='ArrowLeft') FC.tx-=p; else if(k==='ArrowRight') FC.tx+=p; else if(k==='ArrowUp') FC.ty-=p; else if(k==='ArrowDown') FC.ty+=p; else if(k==='+'||k==='=') fcZoomEn(FC.z*1.1); else if(k==='-') fcZoomEn(FC.z/1.1); else return;
+    e.preventDefault(); fcPintar(); });
+}
+IN29.fcZoom=function(t){ fcZoomEn(+t.value); fcPintar(); };
+A.fcZ=function(el){ fcZoomEn(FC.z*(+el.dataset.v>0?1.15:1/1.15)); fcPintar(); };
+function fcRecorte(c,lado,max){ var cv=document.createElement('canvas'); cv.width=cv.height=lado; var x=cv.getContext('2d'); x.imageSmoothingQuality='high'; x.fillStyle='#fff'; x.fillRect(0,0,lado,lado); x.drawImage(FC.im,c.x,c.y,c.l,c.l,0,0,lado,lado); var q=0.85, d=cv.toDataURL('image/jpeg',q); while(d.length>max&&q>0.4){ q-=0.1; d=cv.toDataURL('image/jpeg',q); } return d; }
+A.fcCancelar=function(){ if(FC&&FC.u) URL.revokeObjectURL(FC.u); FC=null; cerrarModal(); };
+A.fcOk=function(){
+  if(!FC) return; var c=fcCorte(), d=fcRecorte(c,240,46000), g=fcRecorte(c,720,150000), u=FC.u;
+  cargando(api('guardarMiFoto',BOOT.token,d,g)).then(function(r){ URL.revokeObjectURL(u); FC=null; CL.d.clienta.foto=r.v; CL.foto={v:r.v,img:d}; CL.fotoG={v:r.v,img:g}; LS.set('chadin_mifoto_'+(BOOT.lk||BOOT.token),CL.foto); cerrarModal(); fvCerrar(); CL.keep=true; pintarCl(); toast('Foto puesta','ok'); },function(e){ toast(limpiaErr(e),'err'); });      // v52: también la grande, para verla a pantalla completa
 };
 /* v52 · su foto de perfil a pantalla completa (ella en Hoy y en Perfil; su coach en su ficha) */
 function fotoVisor(cfg){
