@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MOOD ON · La app para entrenadores personales</title>
+<meta name="description" content="Entrenos, dietas, seguimiento, chat, videollamadas y cobros para tus clientes, en una sola app. Hecha por una entrenadora para entrenadores.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#FFFFFF">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="MOOD ON">
+<meta property="og:title" content="MOOD ON · La app para entrenadores personales">
+<meta property="og:description" content="Entrenos, dietas, seguimiento, chat, videollamadas y cobros para tus clientes, en una sola app.">
+<meta property="og:image" content="https://moodonapp.com/vista-previa.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://moodonapp.com/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23111111'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--tinta:#111111;--fondo:#F5F5F7;--blanco:#FFFFFF;--gris:#6E6E73;--linea:#E8E8EC;--hecho:#13915A;--ancho:1140px}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--blanco);color:var(--tinta);font:500 17px/1.55 'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--tinta);outline-offset:3px;border-radius:6px}
+.cont{max-width:var(--ancho);margin:0 auto;padding:0 24px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* cabecera */
+.cab{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(180%) blur(14px);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
+.cab.baja{border-bottom-color:var(--linea)}
+.cab .cont{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:block;width:132px;color:var(--tinta)}
+.logo svg{display:block;width:100%;height:auto}
+.cab nav{display:flex;align-items:center;gap:6px}
+.cab nav a{font-weight:600;font-size:15px;text-decoration:none;padding:9px 14px;border-radius:999px}
+.cab nav a.ent{background:var(--fondo)}
+.cab nav a.ent:hover{background:var(--linea)}
+@media (max-width:560px){.cab nav .ver{display:none}}
+
+/* botones */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:999px;padding:16px 26px;font:700 16px/1 'Plus Jakarta Sans',sans-serif;cursor:pointer;text-decoration:none;background:var(--tinta);color:#fff;transition:transform .15s}
+.btn:hover{transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn.sec{background:var(--fondo);color:var(--tinta)}
+.btn.sec:hover{background:var(--linea)}
+
+/* portada */
+.portada{padding:56px 0 72px;overflow:hidden}
+.portada .cont{display:grid;grid-template-columns:1.08fr .92fr;gap:40px;align-items:center}
+.portada h1{font-weight:800;font-size:clamp(44px,7.2vw,92px);line-height:.98;letter-spacing:-.035em;margin:0 0 26px;max-width:9.5em}
+.portada .ent{font-size:clamp(18px,1.6vw,20px);color:#3A3A3C;max-width:30em;margin:0 0 32px}
+.acciones{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.portada .para{margin:28px 0 0;font-size:15px;color:var(--gris)}
+.dos{position:relative;height:min(700px,62vw);min-height:470px}
+.tel{position:absolute;width:min(340px,50%);border-radius:44px;background:var(--tinta);padding:9px;box-shadow:0 40px 80px -30px rgba(17,17,17,.45),0 8px 20px -8px rgba(17,17,17,.25)}
+.tel img{border-radius:36px;width:100%}
+.dos .t1{right:0;top:0}
+.dos .t2{right:42%;top:80px}
+@media (prefers-reduced-motion:no-preference){
+  .dos .t1{animation:sube .9s cubic-bezier(.2,.7,.2,1) .15s both}
+  .dos .t2{animation:sube .9s cubic-bezier(.2,.7,.2,1) both}
+  @keyframes sube{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:none}}
+}
+@media (max-width:900px){
+  .portada{padding:36px 0 48px}
+  .portada .cont{grid-template-columns:1fr;gap:28px}
+  .dos{height:auto;min-height:0;display:flex;justify-content:center;gap:14px}
+  .dos .tel{position:relative;inset:auto;width:min(46%,250px)}
+  .dos .t2{margin-top:44px}
+}
+
+/* frase */
+.frase{background:var(--fondo);padding:64px 0}
+.frase p{font-weight:700;font-size:clamp(24px,3.2vw,38px);line-height:1.22;letter-spacing:-.02em;margin:0;max-width:26em}
+.frase p span{color:var(--gris)}
+
+/* secciones */
+.sec-t{font-weight:800;font-size:clamp(32px,4.6vw,56px);line-height:1.04;letter-spacing:-.028em;margin:0 0 14px;max-width:14em}
+.sec-e{color:#3A3A3C;font-size:18px;margin:0 0 36px;max-width:36em}
+.bloque{padding:96px 0}
+@media (max-width:700px){.bloque{padding:64px 0}}
+
+/* panel */
+.pest{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 18px}
+.pest button{border:1px solid var(--linea);background:var(--blanco);border-radius:999px;padding:10px 16px;font:600 15px 'Plus Jakarta Sans',sans-serif;cursor:pointer;color:var(--tinta)}
+.pest button[aria-pressed=true]{background:var(--tinta);border-color:var(--tinta);color:#fff}
+.ventana{border:1px solid var(--linea);border-radius:18px;overflow:hidden;background:var(--fondo);box-shadow:0 30px 60px -36px rgba(17,17,17,.35)}
+.ventana .barra{height:40px;display:flex;align-items:center;justify-content:center;border-bottom:1px solid var(--linea);background:var(--blanco)}
+.ventana .barra span{font-size:13px;color:var(--gris);background:var(--fondo);border-radius:999px;padding:4px 14px}
+.ventana img{width:100%;aspect-ratio:1600/1000;object-fit:cover;object-position:top left}
+.funciones{display:grid;grid-template-columns:repeat(3,1fr);gap:36px 40px;margin:48px 0 0;padding:0;list-style:none}
+.funciones h3{font-weight:700;font-size:19px;letter-spacing:-.01em;margin:0 0 6px}
+.funciones p{margin:0;color:var(--gris);font-size:16px}
+.funciones li{border-top:2px solid var(--tinta);padding-top:16px}
+@media (max-width:900px){.funciones{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.funciones{grid-template-columns:1fr;gap:28px}}
+
+/* la app del cliente: se desliza, como en la app */
+.cliente{background:var(--fondo)}
+.cliente .arriba{display:flex;justify-content:space-between;align-items:flex-end;gap:20px}
+.flechas{display:flex;gap:8px;margin-bottom:36px}
+.flechas button{width:48px;height:48px;border-radius:50%;border:1px solid var(--linea);background:var(--blanco);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--tinta)}
+.flechas button:disabled{opacity:.35;cursor:default}
+@media (max-width:700px){.flechas{display:none}}
+.tira{--borde:max(24px,calc((100vw - var(--ancho))/2 + 24px));display:flex;gap:28px;overflow-x:auto;scroll-snap-type:x mandatory;padding:6px var(--borde) 30px;scroll-padding-inline:var(--borde);scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tira::-webkit-scrollbar{display:none}
+.tira figure{flex:0 0 auto;width:min(270px,70vw);margin:0;scroll-snap-align:start}
+.tira .tel{position:relative;width:100%;box-shadow:0 26px 50px -28px rgba(17,17,17,.5)}
+.tira figcaption{margin-top:18px;font-size:16px;color:#3A3A3C}
+.tira figcaption b{display:block;color:var(--tinta);font-size:17px;margin-bottom:2px}
+
+/* cómo empiezas: es una secuencia, por eso va numerada */
+.pasos{counter-reset:p;list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+.pasos li{counter-increment:p}
+.pasos li::before{content:counter(p);display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;background:var(--tinta);color:#fff;font-weight:800;font-size:18px;margin-bottom:18px}
+.pasos h3{font-weight:700;font-size:21px;letter-spacing:-.01em;margin:0 0 6px}
+.pasos p{margin:0;color:var(--gris)}
+@media (max-width:800px){.pasos{grid-template-columns:1fr;gap:30px}}
+
+/* datos */
+.datos{background:var(--tinta);color:#fff}
+.datos .sec-e{color:#C7C7CC}
+.datos ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:22px 48px;max-width:900px}
+.datos li{display:flex;gap:14px;align-items:flex-start;font-size:17px;color:#E5E5EA}
+.datos li svg{flex:0 0 22px;margin-top:2px}
+@media (max-width:700px){.datos ul{grid-template-columns:1fr}}
+
+/* formulario */
+.probar .cont{display:grid;grid-template-columns:.9fr 1.1fr;gap:56px;align-items:start}
+@media (max-width:900px){.probar .cont{grid-template-columns:1fr;gap:8px}}
+form{background:var(--fondo);border-radius:28px;padding:32px}
+@media (max-width:560px){form{padding:22px;border-radius:22px}}
+.campo{margin:0 0 18px}
+.campo label{display:block;font-weight:700;font-size:15px;margin:0 0 7px}
+.campo label small{font-weight:500;color:var(--gris)}
+.campo input,.campo select,.campo textarea{width:100%;font:500 17px 'Plus Jakarta Sans',sans-serif;color:var(--tinta);background:var(--blanco);border:1.5px solid var(--linea);border-radius:14px;padding:14px 15px;appearance:none;-webkit-appearance:none}
+.campo select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9'%3E%3Cpath d='M1 1l6 6 6-6' fill='none' stroke='%23111' stroke-width='2'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+.campo textarea{min-height:96px;resize:vertical}
+.campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--tinta)}
+.fila{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:560px){.fila{grid-template-columns:1fr;gap:0}}
+.trampa{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.acepto{display:flex;gap:12px;align-items:flex-start;font-size:15px;line-height:1.45;margin:6px 0 10px;cursor:pointer}
+.acepto input{flex:0 0 22px;width:22px;height:22px;margin:1px 0 0;accent-color:var(--tinta)}
+.info{font-size:13.5px;line-height:1.5;color:var(--gris);margin:0 0 22px}
+.info a{color:var(--tinta)}
+form .btn{width:100%;padding:18px}
+form .btn[disabled]{opacity:.55;cursor:default;transform:none}
+.aviso{margin:14px 0 0;font-weight:600;font-size:15px;color:#B3261E;min-height:1px}
+.hecho{display:none;background:var(--fondo);border-radius:28px;padding:40px 32px}
+.hecho svg{margin-bottom:16px}
+.hecho h3{font-weight:800;font-size:30px;letter-spacing:-.025em;margin:0 0 8px}
+.hecho p{margin:0;color:#3A3A3C}
+.probar.listo form{display:none}
+.probar.listo .hecho{display:block}
+
+/* pie */
+footer{border-top:1px solid var(--linea);padding:34px 0 calc(34px + env(safe-area-inset-bottom))}
+footer .cont{display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap}
+footer .logo{width:96px}
+footer nav{display:flex;gap:22px;flex-wrap:wrap;font-size:15px}
+footer nav a{text-decoration:none;color:var(--gris)}
+footer nav a:hover{color:var(--tinta)}
+</style>
+</head>
+<body>
+<div style="position:fixed;left:12px;bottom:12px;z-index:9;background:#111;color:#fff;font:700 12px 'Plus Jakarta Sans',sans-serif;padding:7px 12px;border-radius:999px;pointer-events:none">Borrador</div>
+<header class="cab" id="cab">
+  <div class="cont">
+    <a class="logo" href="#" aria-label="MOOD ON"><svg viewBox="0 0 1600 222" role="img" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M392 221.3C349.1 216.7 314.3 192.6 296.9 155.5C292.8 146.9 288 130.2 288 124.9L288 122L306.4 122L324.8 122L326.4 128.5C329.8 142.2 336.2 154.3 345.2 164.2C353.9 173.7 367 181.7 381 186.2C387.4 188.1 390.6 188.5 402.5 188.5C418.5 188.5 425.7 186.8 439 179.9C458.3 169.9 473.4 150.7 478.7 129.5C481.3 119 481 100.8 478.1 90.6C470.4 63.1 448.9 42 421.6 35C410.8 32.3 394.2 32.3 383.5 35C367.7 39 352 48.9 341.9 61.3C335.7 68.9 328.7 83.1 326.4 92.8L324.7 100L306.4 100L288 100L288 97.1C288 89.3 293 73.8 299.4 61.3C330.3 1.9 409.3 -18.2 466.7 18.9C487.8 32.5 503.6 52.1 511.6 74.5C530.5 127.5 506.6 184.1 454.6 209.5C435.1 219 411.8 223.4 392 221.3ZM650.5 221.4C629.9 218.6 621.3 216.2 607.2 209.3C574.4 193.4 550.9 161.7 545.5 126.2L544.8 122L563.8 122L582.8 122L583.5 126.7C584.5 133.6 589.4 145.8 594.1 153C625.1 201 694.9 201 725.9 153C734.8 139.3 738.6 124.4 737.7 106.6C736.8 86 729.7 70.5 714.6 55.4C706.9 47.8 703.9 45.5 696 41.6C683.2 35.3 673.4 33 660 33C646.6 33 636.8 35.3 624 41.6C616 45.6 613.2 47.7 605.5 55.4C593.3 67.7 586.3 80.1 583.6 94.2L582.5 100L563.7 100L544.8 100L545.5 95.4C549.2 70.6 563.2 45.1 581.8 29.4C600.2 13.7 619 5.2 643 1.5C683.1 -4.7 726 11.6 750.9 42.5C778.1 76.4 783.2 119.2 764.6 157.5C745.8 195.9 708.6 219.6 664.2 221.4C658.3 221.6 652.1 221.6 650.5 221.4ZM1218.1 221C1191.6 217.6 1164.7 204.1 1146.8 185.1C1131.9 169.3 1121.2 147.9 1118.2 127.8L1117.3 122L1136 122L1154.6 122L1156.3 129.2C1161.5 151 1177 170.4 1197 180.5C1209.7 186.9 1216.9 188.5 1232.5 188.5C1244.4 188.5 1247.6 188.1 1254 186.2C1285.3 176.3 1306.2 151.4 1310.1 119.3C1314.5 83.5 1291.9 48.3 1256.8 36.5C1244.9 32.5 1226.2 31.8 1214 34.9C1197.5 39.1 1181.4 49.2 1171.5 61.8C1165.3 69.6 1158.6 83.2 1156.4 92.4L1154.6 100L1135.8 100L1117 100L1117.6 96.8C1122.2 71.1 1131 53.3 1148 35.6C1192 -10.2 1267.3 -11.8 1313.5 32.1C1317.7 36.1 1323.4 42.3 1326.1 45.9C1333.2 55.3 1341.6 72.7 1344.7 84.5C1347.1 93.4 1347.4 96.3 1347.4 111C1347.4 125.7 1347.1 128.6 1344.7 137.5C1333.4 179.4 1298.6 211.1 1254.8 219.5C1244.3 221.5 1227.7 222.1 1218.1 221ZM0 110.9C0 28 0.3 4 1.2 4.6C1.9 5 31.2 27.1 66.4 53.7C105.6 83.3 130.8 101.6 131.4 101.1C146.5 89.6 258.9 5.2 259.8 4.6C260.7 4 261 25.6 261 110.9L261 218L242 218L223 218L222.8 147.5L222.5 77.1L177 111.5C152 130.4 131.1 145.9 130.5 145.9C129.9 146 109 130.5 84 111.5C59 92.6 38.2 77.1 37.8 77C37.3 77 37 108.7 37 147.5L37 218L18.5 218L0 218L0 110.9ZM802 202.1L802 186.1L878.2 185.8L954.5 185.5L961.5 183.1C994.5 172.1 1014.5 142.5 1012.7 107.1C1012.1 94.1 1010.3 87.2 1004.5 75.4C996.3 58.7 981.5 45.6 963.5 39.3L955.5 36.5L878.8 36.2L802 35.9L802 20L802 4L878.4 4C960.7 4 962.1 4.1 977.6 9.4C1024.7 25.4 1055 72.1 1050 121C1045.3 166 1014.1 202.8 970.1 214.8L960.5 217.5L881.2 217.8L802 218.1L802 202.1ZM1375 110.9C1375 25.3 1375.3 4 1376.2 4.8C1381.6 9 1562.2 145 1562.5 145C1562.8 145 1563 113.3 1563 74.5L1563 4L1581.5 4L1600 4L1600 111.1C1600 196.7 1599.7 218 1598.8 217.2C1593.1 212.7 1412.8 77 1412.4 77C1412.2 77 1412 108.7 1412 147.5L1412 218L1393.5 218L1375 218L1375 110.9ZM681.6 309.5C677.2 308 672.5 303.8 670.2 299.5C667.7 294.6 668.2 286.1 671.3 280.7C677 271 692.6 267.9 701.2 275C703.3 276.7 703.4 277 701.9 278.5C700.4 280 700 280 696.4 278.1C686.4 272.7 674 279.4 674 290.2C674 302 684.3 308.8 695.4 304.1C699.9 302.2 700.6 302.1 702 303.5C703.3 304.9 703.3 305.3 701 307C698.3 309 691.6 311 687.8 311C686.5 310.9 683.8 310.3 681.6 309.5ZM431 291.1L431 272L442.5 272C451 272 454.9 272.4 457.1 273.5C462.1 276.1 463.5 282.8 460 287.3L458 289.8L461 292.8C465.1 296.9 465.1 301.7 461.1 306.2L458.2 309.5L444.6 309.8L431 310.2L431 291.1ZM543 303.8C543 297.8 542.7 297.1 535.5 285.3C531.4 278.5 528 272.7 528 272.5C528 272.2 529.2 272 530.8 272C533.1 272 534.2 273.3 539 281.2C542 286.2 544.9 290.3 545.4 290.4C546.1 290.5 556.2 275.4 557.2 272.7C557.4 272.2 558.8 272 560.2 272.2L562.9 272.5L555.5 284.5C548.2 296.3 548.1 296.6 548 303.2C548 309.8 547.9 310 545.5 310C543.1 310 543 309.7 543 303.8ZM767 291L767 272L769.5 272C772 272 772 272.1 772 280L772 288L783.2 288L794.5 288L794.3 280L794.2 272L797.1 272L800 272L800 291L800 310L796.9 310L793.9 310L794.1 301.8L794.3 293.5L783.2 293.2L772 292.9L772 301.5C772 309.9 772 310 769.5 310L767 310L767 291ZM871.9 291C880.3 272.4 880.5 272 883.5 272C886.4 272 886.7 272.5 894.8 290.3C899.3 300.3 903 308.8 903 309.2C903 309.7 901.8 310 900.4 310C898.4 310 897.5 309.1 895.9 305.5L893.9 301L883.4 301L872.9 301L871 305.5C869.3 309.4 868.7 310 866.2 310L863.3 310L871.9 291ZM967 291.1L967 272L978.2 272C993.7 272.1 998.8 274.4 1002.5 283.3C1006 291.7 1003.2 301.9 995.9 306.7C991.9 309.3 990.9 309.5 979.3 309.8L967 310.2L967 291.1ZM1067 291L1067 272L1070 272L1073 272L1073 291L1073 310L1070 310L1067 310L1067 291ZM1136 291L1136 272L1138.5 272C1140.5 272 1143.2 274.8 1152.2 286.1L1163.5 300.2L1163.8 286.1L1164.1 272L1166.5 272L1169 272L1169 291L1169 310L1166.8 310C1165.1 310 1161.7 306.6 1153.6 296.5C1147.6 289 1142.5 282.8 1142.1 282.6C1141.8 282.4 1141.6 288.4 1141.8 296.1L1142.1 310L1139.1 310L1136 310L1136 291ZM456.4 304.1C457.3 303.4 458 301.3 458 299.4C458 294.3 455.3 293 444.8 293L436 293L436 299.6L436 306.2L445.4 305.8C451.2 305.6 455.4 304.9 456.4 304.1ZM991.7 303C996.4 300.2 998.4 296.5 998.4 290.9C998.4 285.6 996.5 282.2 991.8 278.7C989.7 277.1 987.4 276.7 980.8 276.6L972.5 276.5L972.2 290.8L971.9 305L980.2 305C986.7 305 989.2 304.6 991.7 303ZM891 295.1C891 293.4 883.7 278 883.2 278.5C882.9 278.8 881 282.8 878.9 287.5L875.1 296L883.1 296C887.4 296 891 295.6 891 295.1ZM454.4 286.4C455.3 285.6 456 283.6 456 282C456 277.5 452.9 276 443.8 276L436 276L436 282L436 288L444.4 288C450.8 288 453.2 287.6 454.4 286.4Z"/></svg></a>
+    <nav aria-label="Principal">
+      <a class="ver" href="#panel">Cómo funciona</a>
+      <a class="ver" href="#probar">Quiero probarlo</a>
+      <a class="ent" href="/?entrar=1">Entrar</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="portada">
+  <div class="cont">
+    <div>
+      <h1>Tu coaching entero, en una sola app</h1>
+      <p class="ent">Entrenos, dietas, seguimiento, chat, videollamadas y cobros para tus clientes. La hizo una entrenadora para su día a día, y ahora la abrimos a otros entrenadores.</p>
+      <div class="acciones">
+        <a class="btn" href="#probar">Quiero probarlo</a>
+        <a class="btn sec" href="#panel">Ver cómo funciona</a>
+      </div>
+      <p class="para">Para entrenadores personales, online o en persona.</p>
+    </div>
+    <div class="dos" aria-hidden="true">
+      <div class="tel t2"><img src="img/entreno.webp" alt="" width="780" height="1328"></div>
+      <div class="tel t1"><img src="img/hoy.webp" alt="" width="780" height="1328"></div>
+    </div>
+  </div>
+</section>
+
+<section class="frase">
+  <div class="cont">
+    <p>Si hoy llevas a tus clientes entre WhatsApp, hojas de cálculo y PDF, <span>MOOD ON lo junta todo en un sitio: tú lo programas en tu panel y ellos lo hacen en su app.</span></p>
+  </div>
+</section>
+
+<section class="bloque" id="panel">
+  <div class="cont">
+    <h2 class="sec-t">Tu panel: cada cliente, en una pantalla</h2>
+    <p class="sec-e">Lo que ha entrenado, cómo duerme, qué come y cuándo te paga. En el ordenador o en el móvil.</p>
+    <div class="pest" role="group" aria-label="Pantallas del panel">
+      <button type="button" aria-pressed="true" data-img="img/panel_evolucion.webp" data-alt="Evolución de una clienta: entrenos, sueño, energía, peso y medidas">Evolución</button>
+      <button type="button" aria-pressed="false" data-img="img/panel_seguimiento.webp" data-alt="Seguimiento: próximas fechas y sus últimos entrenos con sus récords">Seguimiento</button>
+      <button type="button" aria-pressed="false" data-img="img/panel_entrenos.webp" data-alt="Programar el entreno: rutinas por días, series y vídeos">Entrenos</button>
+      <button type="button" aria-pressed="false" data-img="img/panel_dieta.webp" data-alt="Dieta: plan con kcal y macros, objetivo del día y lo que ve la clienta">Dieta</button>
+    </div>
+    <div class="ventana">
+      <div class="barra"><span>moodonapp.com</span></div>
+      <img id="pantalla" src="img/panel_evolucion.webp" alt="Evolución de una clienta: entrenos, sueño, energía, peso y medidas" width="1600" height="1000" loading="lazy">
+    </div>
+    <ul class="funciones">
+      <li><h3>Entrenos serie a serie</h3><p>18 tipos de serie, superseries, vídeos de cada ejercicio y copiar la rutina a otra fecha u otro cliente.</p></li>
+      <li><h3>Dietas con macros al momento</h3><p>Platos con sus gramos, equivalencias, unas 200 recetas y alergias que se descartan solas.</p></li>
+      <li><h3>Seguimiento de verdad</h3><p>Check-ins con sueño, energía y ciclo menstrual, peso y medidas con gráficas, y la revisión de cada semana.</p></li>
+      <li><h3>Chat y videollamadas</h3><p>Notas de voz, fotos y vídeos. La videollamada crea el Meet en tu calendario y le avisa antes.</p></li>
+      <li><h3>Planes y cobros</h3><p>Quién ha pagado, avisos antes de que venza y pago online con tarjeta, Bizum, Apple Pay o Google Pay.</p></li>
+      <li><h3>Tus clientes, por su cuenta</h3><p>Cada uno entra con su email y su contraseña. Les llega su invitación sola al rellenar el cuestionario.</p></li>
+    </ul>
+  </div>
+</section>
+
+<section class="bloque cliente" aria-labelledby="t-cliente">
+  <div class="cont arriba">
+    <div>
+      <h2 class="sec-t" id="t-cliente">Y así lo vive tu cliente</h2>
+      <p class="sec-e">Su app, en el móvil. Desliza para verla.</p>
+    </div>
+    <div class="flechas">
+      <button type="button" id="ant" aria-label="Anterior" disabled><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M11 3L5 9l6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button type="button" id="sig" aria-label="Siguiente"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M7 3l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+    </div>
+  </div>
+  <div class="tira" id="tira" tabindex="0" aria-label="Pantallas de la app del cliente">
+    <figure><div class="tel"><img src="img/hoy.webp" alt="Pantalla Hoy: la semana y el entreno que le toca" width="780" height="1328" loading="lazy"></div><figcaption><b>Hoy</b>Lo que le toca hoy, de un vistazo.</figcaption></figure>
+    <figure><div class="tel"><img src="img/entreno.webp" alt="Entreno: un ejercicio con su objetivo de hoy y su récord" width="780" height="1328" loading="lazy"></div><figcaption><b>Entreno</b>Cada ejercicio con su objetivo y lo que hizo la última vez.</figcaption></figure>
+    <figure><div class="tel"><img src="img/dieta.webp" alt="Dieta: lo que lleva comido, lo que le queda y sus macros" width="780" height="1328" loading="lazy"></div><figcaption><b>Dieta</b>Lo que lleva comido y lo que le queda.</figcaption></figure>
+    <figure><div class="tel"><img src="img/fin.webp" alt="Fin del entreno: series, kilos levantados y récords" width="780" height="1328" loading="lazy"></div><figcaption><b>Al terminar</b>Su resumen, con los récords del día.</figcaption></figure>
+    <figure><div class="tel"><img src="img/medallas.webp" alt="Sus medallas: semanas seguidas, récords y pasos" width="780" height="1328" loading="lazy"></div><figcaption><b>Medallas</b>Se las gana entrenando, semana a semana.</figcaption></figure>
+    <figure><div class="tel"><img src="img/compartir.webp" alt="Una medalla lista para compartir en Instagram" width="780" height="1328" loading="lazy"></div><figcaption><b>Para Instagram</b>Su logro, listo para compartir.</figcaption></figure>
+  </div>
+</section>
+
+<section class="bloque" aria-labelledby="t-pasos">
+  <div class="cont">
+    <h2 class="sec-t" id="t-pasos">Empezar es fácil</h2>
+    <p class="sec-e">Sin instalar nada: se abre en el navegador y se queda en la pantalla de inicio del móvil como una app.</p>
+    <ol class="pasos">
+      <li><h3>Te apuntas</h3><p>Rellenas el formulario de abajo y te escribimos para darte tu acceso.</p></li>
+      <li><h3>Invitas a tus clientes</h3><p>Cada uno recibe su enlace, rellena su cuestionario y crea su contraseña.</p></li>
+      <li><h3>Programas y sigues</h3><p>Rutinas, dietas y seguimiento desde tu panel. Ellos lo ven al momento.</p></li>
+    </ol>
+  </div>
+</section>
+
+<section class="bloque datos" aria-labelledby="t-datos">
+  <div class="cont">
+    <h2 class="sec-t" id="t-datos">Los datos de tus clientes, a salvo</h2>
+    <p class="sec-e">Son datos de salud y los tratamos como tal.</p>
+    <ul>
+      <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Guardados en servidores de la Unión Europea, en Fráncfort.</span></li>
+      <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Cada cliente entra con su contraseña y, si quiere, con un código por email.</span></li>
+      <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Solo tú y tu cliente veis sus datos y sus fotos de progreso.</span></li>
+      <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Firmamos contigo el contrato de protección de datos que pide la ley.</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="bloque probar" id="probar" aria-labelledby="t-probar">
+  <div class="cont">
+    <div>
+      <h2 class="sec-t" id="t-probar">Quiero probarlo</h2>
+      <p class="sec-e">Estamos abriendo MOOD ON a los primeros entrenadores. Déjanos tus datos y te escribimos.</p>
+    </div>
+    <div>
+      <form id="form" novalidate>
+        <div class="fila">
+          <div class="campo"><label for="f-nombre">Nombre</label><input id="f-nombre" name="nombre" autocomplete="name" maxlength="100" required></div>
+          <div class="campo"><label for="f-email">Email</label><input id="f-email" name="email" type="email" autocomplete="email" inputmode="email" maxlength="160" required></div>
+        </div>
+        <div class="fila">
+          <div class="campo"><label for="f-movil">Móvil <small>(si quieres)</small></label><input id="f-movil" name="movil" type="tel" autocomplete="tel" inputmode="tel" maxlength="30"></div>
+          <div class="campo"><label for="f-clientes">¿Cuántos clientes llevas?</label>
+            <select id="f-clientes" name="clientes"><option value="">Elige</option><option>1 a 5</option><option>6 a 15</option><option>16 a 30</option><option>31 a 60</option><option>Más de 60</option></select></div>
+        </div>
+        <div class="campo"><label for="f-mensaje">¿Algo que quieras contarnos? <small>(si quieres)</small></label><textarea id="f-mensaje" name="mensaje" maxlength="1000" placeholder="Por ejemplo, qué usas ahora o qué te gustaría tener"></textarea></div>
+        <div class="trampa" aria-hidden="true"><label for="f-web">No rellenes este campo</label><input id="f-web" name="web" tabindex="-1" autocomplete="off"></div>
+        <label class="acepto"><input type="checkbox" id="f-acepta" required><span>He leído la información de privacidad de abajo y acepto que me escribáis sobre MOOD ON.</span></label>
+        <p class="info">Información básica: los datos de este formulario los trata Javier Sánchez Álvarez (MOOD ON) solo para escribirte sobre la app. No se ceden a nadie, se guardan en servidores de la Unión Europea y se borran a los 12 meses si no empiezas a usarla. Puedes pedir verlos o borrarlos en <a href="mailto:hola@moodonapp.com">hola@moodonapp.com</a>. Más en la <a href="/privacidad.html">política de privacidad</a>.</p>
+        <button class="btn" type="submit" id="f-enviar">Quiero probarlo</button>
+        <p class="aviso" id="f-aviso" role="alert"></p>
+      </form>
+      <div class="hecho" id="hecho" tabindex="-1">
+        <svg width="48" height="48" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h3>Apuntado</h3>
+        <p id="hecho-t">Te escribimos en unos días.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="cont">
+    <span class="logo" aria-label="MOOD ON"><svg viewBox="0 0 1600 222" role="img" aria-hidden="true" focusable="false"><path fill="currentColor" fill-rule="evenodd" d="M392 221.3C349.1 216.7 314.3 192.6 296.9 155.5C292.8 146.9 288 130.2 288 124.9L288 122L306.4 122L324.8 122L326.4 128.5C329.8 142.2 336.2 154.3 345.2 164.2C353.9 173.7 367 181.7 381 186.2C387.4 188.1 390.6 188.5 402.5 188.5C418.5 188.5 425.7 186.8 439 179.9C458.3 169.9 473.4 150.7 478.7 129.5C481.3 119 481 100.8 478.1 90.6C470.4 63.1 448.9 42 421.6 35C410.8 32.3 394.2 32.3 383.5 35C367.7 39 352 48.9 341.9 61.3C335.7 68.9 328.7 83.1 326.4 92.8L324.7 100L306.4 100L288 100L288 97.1C288 89.3 293 73.8 299.4 61.3C330.3 1.9 409.3 -18.2 466.7 18.9C487.8 32.5 503.6 52.1 511.6 74.5C530.5 127.5 506.6 184.1 454.6 209.5C435.1 219 411.8 223.4 392 221.3ZM650.5 221.4C629.9 218.6 621.3 216.2 607.2 209.3C574.4 193.4 550.9 161.7 545.5 126.2L544.8 122L563.8 122L582.8 122L583.5 126.7C584.5 133.6 589.4 145.8 594.1 153C625.1 201 694.9 201 725.9 153C734.8 139.3 738.6 124.4 737.7 106.6C736.8 86 729.7 70.5 714.6 55.4C706.9 47.8 703.9 45.5 696 41.6C683.2 35.3 673.4 33 660 33C646.6 33 636.8 35.3 624 41.6C616 45.6 613.2 47.7 605.5 55.4C593.3 67.7 586.3 80.1 583.6 94.2L582.5 100L563.7 100L544.8 100L545.5 95.4C549.2 70.6 563.2 45.1 581.8 29.4C600.2 13.7 619 5.2 643 1.5C683.1 -4.7 726 11.6 750.9 42.5C778.1 76.4 783.2 119.2 764.6 157.5C745.8 195.9 708.6 219.6 664.2 221.4C658.3 221.6 652.1 221.6 650.5 221.4ZM1218.1 221C1191.6 217.6 1164.7 204.1 1146.8 185.1C1131.9 169.3 1121.2 147.9 1118.2 127.8L1117.3 122L1136 122L1154.6 122L1156.3 129.2C1161.5 151 1177 170.4 1197 180.5C1209.7 186.9 1216.9 188.5 1232.5 188.5C1244.4 188.5 1247.6 188.1 1254 186.2C1285.3 176.3 1306.2 151.4 1310.1 119.3C1314.5 83.5 1291.9 48.3 1256.8 36.5C1244.9 32.5 1226.2 31.8 1214 34.9C1197.5 39.1 1181.4 49.2 1171.5 61.8C1165.3 69.6 1158.6 83.2 1156.4 92.4L1154.6 100L1135.8 100L1117 100L1117.6 96.8C1122.2 71.1 1131 53.3 1148 35.6C1192 -10.2 1267.3 -11.8 1313.5 32.1C1317.7 36.1 1323.4 42.3 1326.1 45.9C1333.2 55.3 1341.6 72.7 1344.7 84.5C1347.1 93.4 1347.4 96.3 1347.4 111C1347.4 125.7 1347.1 128.6 1344.7 137.5C1333.4 179.4 1298.6 211.1 1254.8 219.5C1244.3 221.5 1227.7 222.1 1218.1 221ZM0 110.9C0 28 0.3 4 1.2 4.6C1.9 5 31.2 27.1 66.4 53.7C105.6 83.3 130.8 101.6 131.4 101.1C146.5 89.6 258.9 5.2 259.8 4.6C260.7 4 261 25.6 261 110.9L261 218L242 218L223 218L222.8 147.5L222.5 77.1L177 111.5C152 130.4 131.1 145.9 130.5 145.9C129.9 146 109 130.5 84 111.5C59 92.6 38.2 77.1 37.8 77C37.3 77 37 108.7 37 147.5L37 218L18.5 218L0 218L0 110.9ZM802 202.1L802 186.1L878.2 185.8L954.5 185.5L961.5 183.1C994.5 172.1 1014.5 142.5 1012.7 107.1C1012.1 94.1 1010.3 87.2 1004.5 75.4C996.3 58.7 981.5 45.6 963.5 39.3L955.5 36.5L878.8 36.2L802 35.9L802 20L802 4L878.4 4C960.7 4 962.1 4.1 977.6 9.4C1024.7 25.4 1055 72.1 1050 121C1045.3 166 1014.1 202.8 970.1 214.8L960.5 217.5L881.2 217.8L802 218.1L802 202.1ZM1375 110.9C1375 25.3 1375.3 4 1376.2 4.8C1381.6 9 1562.2 145 1562.5 145C1562.8 145 1563 113.3 1563 74.5L1563 4L1581.5 4L1600 4L1600 111.1C1600 196.7 1599.7 218 1598.8 217.2C1593.1 212.7 1412.8 77 1412.4 77C1412.2 77 1412 108.7 1412 147.5L1412 218L1393.5 218L1375 218L1375 110.9ZM681.6 309.5C677.2 308 672.5 303.8 670.2 299.5C667.7 294.6 668.2 286.1 671.3 280.7C677 271 692.6 267.9 701.2 275C703.3 276.7 703.4 277 701.9 278.5C700.4 280 700 280 696.4 278.1C686.4 272.7 674 279.4 674 290.2C674 302 684.3 308.8 695.4 304.1C699.9 302.2 700.6 302.1 702 303.5C703.3 304.9 703.3 305.3 701 307C698.3 309 691.6 311 687.8 311C686.5 310.9 683.8 310.3 681.6 309.5ZM431 291.1L431 272L442.5 272C451 272 454.9 272.4 457.1 273.5C462.1 276.1 463.5 282.8 460 287.3L458 289.8L461 292.8C465.1 296.9 465.1 301.7 461.1 306.2L458.2 309.5L444.6 309.8L431 310.2L431 291.1ZM543 303.8C543 297.8 542.7 297.1 535.5 285.3C531.4 278.5 528 272.7 528 272.5C528 272.2 529.2 272 530.8 272C533.1 272 534.2 273.3 539 281.2C542 286.2 544.9 290.3 545.4 290.4C546.1 290.5 556.2 275.4 557.2 272.7C557.4 272.2 558.8 272 560.2 272.2L562.9 272.5L555.5 284.5C548.2 296.3 548.1 296.6 548 303.2C548 309.8 547.9 310 545.5 310C543.1 310 543 309.7 543 303.8ZM767 291L767 272L769.5 272C772 272 772 272.1 772 280L772 288L783.2 288L794.5 288L794.3 280L794.2 272L797.1 272L800 272L800 291L800 310L796.9 310L793.9 310L794.1 301.8L794.3 293.5L783.2 293.2L772 292.9L772 301.5C772 309.9 772 310 769.5 310L767 310L767 291ZM871.9 291C880.3 272.4 880.5 272 883.5 272C886.4 272 886.7 272.5 894.8 290.3C899.3 300.3 903 308.8 903 309.2C903 309.7 901.8 310 900.4 310C898.4 310 897.5 309.1 895.9 305.5L893.9 301L883.4 301L872.9 301L871 305.5C869.3 309.4 868.7 310 866.2 310L863.3 310L871.9 291ZM967 291.1L967 272L978.2 272C993.7 272.1 998.8 274.4 1002.5 283.3C1006 291.7 1003.2 301.9 995.9 306.7C991.9 309.3 990.9 309.5 979.3 309.8L967 310.2L967 291.1ZM1067 291L1067 272L1070 272L1073 272L1073 291L1073 310L1070 310L1067 310L1067 291ZM1136 291L1136 272L1138.5 272C1140.5 272 1143.2 274.8 1152.2 286.1L1163.5 300.2L1163.8 286.1L1164.1 272L1166.5 272L1169 272L1169 291L1169 310L1166.8 310C1165.1 310 1161.7 306.6 1153.6 296.5C1147.6 289 1142.5 282.8 1142.1 282.6C1141.8 282.4 1141.6 288.4 1141.8 296.1L1142.1 310L1139.1 310L1136 310L1136 291ZM456.4 304.1C457.3 303.4 458 301.3 458 299.4C458 294.3 455.3 293 444.8 293L436 293L436 299.6L436 306.2L445.4 305.8C451.2 305.6 455.4 304.9 456.4 304.1ZM991.7 303C996.4 300.2 998.4 296.5 998.4 290.9C998.4 285.6 996.5 282.2 991.8 278.7C989.7 277.1 987.4 276.7 980.8 276.6L972.5 276.5L972.2 290.8L971.9 305L980.2 305C986.7 305 989.2 304.6 991.7 303ZM891 295.1C891 293.4 883.7 278 883.2 278.5C882.9 278.8 881 282.8 878.9 287.5L875.1 296L883.1 296C887.4 296 891 295.6 891 295.1ZM454.4 286.4C455.3 285.6 456 283.6 456 282C456 277.5 452.9 276 443.8 276L436 276L436 282L436 288L444.4 288C450.8 288 453.2 287.6 454.4 286.4Z"/></svg></span>
+    <nav aria-label="Pie">
+      <a href="mailto:hola@moodonapp.com">hola@moodonapp.com</a>
+      <a href="/privacidad.html">Privacidad</a>
+      <a href="/?entrar=1">Entrar</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var API = 'https://spmibfqbhgbcomfqlvlc.supabase.co/functions/v1/api/interes';
+  // la cabecera marca su borde al bajar
+  var cab = document.getElementById('cab');
+  addEventListener('scroll', function(){ cab.classList.toggle('baja', scrollY > 8); }, { passive: true });
+  // pantallas del panel
+  var pant = document.getElementById('pantalla'), bs = document.querySelectorAll('.pest button');
+  bs.forEach(function(b){ b.addEventListener('click', function(){ bs.forEach(function(x){ x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); }); pant.src = b.dataset.img; pant.alt = b.dataset.alt; }); });
+  // la tira de la app del cliente
+  var tira = document.getElementById('tira'), ant = document.getElementById('ant'), sig = document.getElementById('sig');
+  function paso(){ var f = tira.querySelector('figure'); return f ? f.getBoundingClientRect().width + 28 : 300; }
+  function flechas(){ ant.disabled = tira.scrollLeft < 8; sig.disabled = tira.scrollLeft + tira.clientWidth > tira.scrollWidth - 8; }
+  ant.addEventListener('click', function(){ tira.scrollBy({ left: -paso(), behavior: 'smooth' }); });
+  sig.addEventListener('click', function(){ tira.scrollBy({ left: paso(), behavior: 'smooth' }); });
+  tira.addEventListener('scroll', flechas, { passive: true }); addEventListener('resize', flechas); flechas();
+  // formulario
+  var form = document.getElementById('form'), aviso = document.getElementById('f-aviso'), env = document.getElementById('f-enviar');
+  function v(id){ return document.getElementById(id).value.trim(); }
+  form.addEventListener('submit', function(e){
+    e.preventDefault(); aviso.textContent = '';
+    var d = { nombre: v('f-nombre'), email: v('f-email'), movil: v('f-movil'), clientes: v('f-clientes'), mensaje: v('f-mensaje'), web: v('f-web'), acepta: document.getElementById('f-acepta').checked };
+    if (d.nombre.length < 2) { aviso.textContent = 'Escribe tu nombre.'; document.getElementById('f-nombre').focus(); return; }
+    if (!/^[^@\s]+@[^@\s]+\.[a-z]{2,}$/i.test(d.email)) { aviso.textContent = 'Revisa tu email: parece que falta algo.'; document.getElementById('f-email').focus(); return; }
+    if (!d.acepta) { aviso.textContent = 'Marca la casilla de privacidad para enviarlo.'; document.getElementById('f-acepta').focus(); return; }
+    env.disabled = true; env.textContent = 'Enviando…';
+    fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d) })
+      .then(function(r){ return r.json(); })
+      .then(function(j){
+        if (j && j.ok) { document.getElementById('hecho-t').textContent = 'Te escribimos a ' + d.email + ' en unos días.'; document.getElementById('probar').classList.add('listo'); document.getElementById('hecho').focus(); return; }
+        aviso.textContent = (j && j.error) || 'No se ha podido enviar. Inténtalo otra vez o escríbenos a hola@moodonapp.com.';
+      })
+      .catch(function(){ aviso.textContent = 'No hay conexión. Inténtalo otra vez en un momento.'; })
+      .then(function(){ env.disabled = false; env.textContent = 'Quiero probarlo'; });
+  });
+})();
+</script>
+</body>
+</html>
