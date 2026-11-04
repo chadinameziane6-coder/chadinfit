@@ -2383,10 +2383,12 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .dl-st{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px;color:#56565B;font:600 12.5px Plus Jakarta Sans,sans-serif}.dl-st b{color:#111;font-weight:800;font-size:14px}
 #su-box .dl-sc{background:none;border:0;box-shadow:none;padding:0;margin:4px 0 0}#su-box .dl-sc>.card-t{display:none}
 #su-box .dl-sbs{margin-top:6px}
-/* ===== v52.3 · check-in: «¿Cómo te sientes hoy?» como título fijo encima del formulario; iconos neutros o con corazones ===== */
-.ck-cab{margin:0 0 12px}.ck-cab h2{margin:0;font-size:20px;font-weight:800;letter-spacing:-.02em;line-height:1.2}.ck-cab small{display:block;margin-top:3px;font-size:12.5px;color:var(--mu);font-weight:600}.ck-cab .pill{vertical-align:1px}
-.ck-min .ck-q{display:block;font-size:11.5px;font-weight:700;color:var(--mu);margin:0 0 1px;letter-spacing:.01em}
-.est-op{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.est-op button{display:flex;align-items:center;justify-content:center;gap:8px;padding:11px 10px;border-radius:12px;border:1px solid var(--line);background:#fff;font:700 13.5px Plus Jakarta Sans,sans-serif;color:var(--tx);cursor:pointer}.est-op button .ic{width:17px;height:17px;margin:0}.est-op button.on{background:#111;border-color:#111;color:#fff}
+/* ===== v52.3 · check-in: «¿Cómo te sientes hoy?» de título, encima del formulario. v52.4: en su tarjetita, rosa con el corazón (mujeres) o azul marino con el icono neutro (hombres) ===== */
+.ck-cab{display:flex;align-items:center;gap:12px;margin:0 0 14px;padding:13px 15px;border-radius:16px}.ck-cab>.ic{width:22px;height:22px;flex:none;margin:0}.ck-cab>div{min-width:0}
+.ck-cab h2{margin:0;font-size:17px;font-weight:800;letter-spacing:-.015em;line-height:1.2;color:#111}.ck-cab small{display:block;margin-top:2px;font-size:12px;color:var(--mu);font-weight:600}.ck-cab .pill{vertical-align:1px}
+.ck-cab.ck-f{background:#FDF0F4}.ck-cab.ck-f>.ic{color:#E5484D}
+.ck-cab.ck-m{background:#E8EEF7}.ck-cab.ck-m>.ic{color:#1F3B63}.ck-cab.ck-m small{color:#4A5A70}
+.ck-min .ck-q{display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;color:var(--mu);margin:0 0 1px;letter-spacing:.01em}.ck-min .ck-q .ic{width:13px;height:13px;margin:0}.ck-min .ck-q.ck-f .ic{color:#E5484D}.ck-min .ck-q.ck-m .ic{color:#1F3B63}
 /* ===== v52.2 · meses pagados: verde con ✓ (pagado), rojo con ✕ (sin pagar) y discontinuo (todavía no); el estado también escrito ===== */
 .pgc-m i{display:flex;align-items:center;justify-content:center;color:#fff}.pgc-m i .ic{width:15px;height:15px;margin:0;stroke-width:2.6}
 .pgc-m .p i{background:#15803D}.pgc-m .g i{background:#D92D20}
@@ -2452,7 +2454,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.3';
+var APP_V = 'v52.4';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4603,9 +4605,9 @@ function checkinCard(hoy){
   var esH=hoy===hoyStr();
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var res=[e.regla?'Con el periodo':'',!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',e.premenstrual?'Síntomas premenstruales':''].filter(String).join(' · ');
-    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q">¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
+    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
   }
-  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab"><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
+  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div></div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
 
     (hombreCl()?'<input type="hidden" id="ck-dia" value="">'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>':
     '<div class="fila"><span>¿Estás con el periodo?</span><button class="sw'+(CL.ck.regla?' on':'')+'" data-a="ckRegla" aria-label="Estás con el periodo"><i></i></button></div>'+
@@ -10137,8 +10139,8 @@ function iniciales(n){ var p=String(n||'').trim().split(/\s+/); return ((p[0]||'
 function cG(f,m,c){ c=c||(CO.d&&CO.d.clienta)||{}; return c.sexo==='hombre'?m:f; }
 function hombreCl(){ return !!(CL.d&&CL.d.clienta&&CL.d.clienta.sexo==='hombre'); }
 function gCl(f,m){ return hombreCl()?m:f; }
-/* v52.3 · iconos de su app: neutros (n) o con corazones (c). Lo elige en Perfil; sin elegir, a los hombres neutros y a las mujeres con corazones */
-function estCl(){ var e=CL.d?prefCl().est:''; return e==='n'||e==='c'?e:(hombreCl()?'n':'c'); }
+/* v52.3 · iconos: a las mujeres con corazones (y rosa), a los hombres neutros (y azul marino). v52.4: según su ficha, sin opción en Perfil */
+function estCl(){ return hombreCl()?'n':'c'; }
 function icCk(){ return ic(estCl()==='n'?'pulso':'corazon'); }
 function icCkCo(c){ return ic(cG('c','n',c)==='n'?'pulso':'corazon'); }
 /* v50 · fotos de perfil: tu panel las guarda en este dispositivo (y solo pide las que han cambiado) */
@@ -12987,11 +12989,6 @@ A.plRenovarOk=function(el){
   },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
-/* v52.3 · Perfil: «Iconos de tu app» (neutros o con corazones), para cualquier persona */
-function estClCard(){ var e=estCl();
-  return '<div class="card est-pf"><div class="card-t">Iconos de tu app</div><p class="muted sm">Cómo se ven tu check-in y sus avisos.</p><div class="est-op">'+
-    [['n','pulso','Neutros'],['c','corazon','Con corazones']].map(function(x){ return '<button class="'+(e===x[0]?'on':'')+'" data-a="estCl" data-v="'+x[0]+'" aria-pressed="'+(e===x[0])+'">'+ic(x[1])+'<span>'+x[2]+'</span></button>'; }).join('')+'</div></div>'; }
-A.estCl=function(el){ var pf=prefCl(); pf.est=el.dataset.v; guardarPref(); CL.keep=true; pintarCl(); toast(pf.est==='n'?'Iconos neutros':'Iconos con corazones','ok'); };
 /* v29.1: su plan, sus pagos, su cuenta y su privacidad, en su propia pestaña «Perfil» */
 function vPerfil(){
   var c=CL.d.clienta||{}, nom=String(c.nombre||'').trim();
@@ -12999,7 +12996,6 @@ function vPerfil(){
   return '<div class="saludo pf-cab"><div class="pf-avw"><button class="pf-av'+(ft?' ft':'')+'" data-a="'+(ft?'pfVer':'pfFoto')+'" aria-label="'+(ft?'Ver tu foto en grande':'Tu foto de perfil')+'">'+(ft?'<img src="'+esc(ft)+'" alt="">':esc(iniciales(nom)||'·'))+'</button><button class="pf-avb" data-a="pfFoto" aria-label="Cambiar tu foto">'+ic('foto')+'</button></div><div><h1>'+esc(nom||'Tu perfil')+'</h1><div class="muted">Tu plan, tus sugerencias y tu privacidad</div></div></div>'+
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
     sugClCard()+
-    estClCard()+
     (!hombreCl()&&!cicloOn()?'<div class="card cyc-pf"><div class="fila"><span>Ver «Tu ciclo» en Hoy<small class="fila-s">Tu fase, tu próximo periodo y una idea para cada fase</small></span><button class="sw" data-a="cycOn" aria-label="Ver tu ciclo en Hoy"><i></i></button></div></div>':'')+      // v52
     (miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button>'+salirBtn()+'</div>')+
     '<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
