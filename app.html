@@ -1131,6 +1131,16 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .ev-hoy.ev-pend{cursor:default}
 .ev-fz{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:12.5px;font-weight:600;color:#C2410C}.ev-fz .ic{width:13px;height:13px;flex:none}
 .ev-cu{font:800 22px Plus Jakarta Sans,sans-serif;margin:4px 0}
+.cal-d.evd{background:#111!important;color:#F5C242;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.cal-d.evd.hoy{box-shadow:0 0 0 2px #F5C242}
+.cal-d.evd>.ic{width:68%;height:68%;max-width:16px;max-height:16px;margin:0}
+.cal-tr{width:16px;height:16px;border-radius:4px;background:#111;color:#F5C242;display:inline-flex;align-items:center;justify-content:center}
+.cal-tr .ic{width:11px;height:11px;margin:0}
+.ley-ev{display:inline-flex;align-items:center;gap:6px}
+.semana .dia{position:relative}
+.dia-tr{position:absolute;right:-5px;top:-6px;width:20px;height:20px;border-radius:50%;background:#111;color:#F5C242;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--bg)}
+.dia-tr .ic{width:11px;height:11px;margin:0}
+.ev-dia .ev-ic.pri{background:#111;color:#F5C242}
 /* v52.10 · ciclo y privacidad */
 .cy-priv{display:flex;gap:10px;align-items:flex-start;margin:0;background:#F5F5F7;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
 .cy-priv .ic{flex:none;width:18px;height:18px;margin-top:1px}
@@ -2505,7 +2515,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.11';
+var APP_V = 'v52.12';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4501,6 +4511,7 @@ function vHoy(){
   var h='<div class="saludo'+(ft?' sal-ft':'')+'"><div><h1>Hola, '+esc(nombre)+'</h1><div class="muted">'+fLarga(hoy)+'</div></div>'+(ft?'<button class="hoy-av" data-a="pfVer" aria-label="Ver tu foto en grande"><img src="'+esc(ft)+'" alt=""></button>':'')+'</div>'+(esHoy?avisoSesHtml(false)+llamadaClHtml()+planAvisoHoy()+(d.logros?logroAvisoHtml():''):'')+semanaStrip(hoy,sel)+
     (d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'');
   if(esHoy) h+=eventoHoyCard();      // v52.11: su próxima competición, con la cuenta atrás
+  else h+=eventoDiaCard(sel);
   if(CL.dr&&CL.dr.envio){
     var en=CL.dr.envio, er=en.r||{};
     h+='<div class="card hl pend"><div class="card-t">'+ic('sinred')+(CL.dr.edit?'Cambios pendientes de enviar':'Entreno terminado · pendiente de enviar')+'</div><h2>'+esc(CL.dr.rutina)+'</h2><div class="muted">'+(CL.dr.edit?'':(er.efectivas||0)+' series · '+(er.min||0)+' min · ')+'Está guardado en este móvil y se enviará solo en cuanto haya conexión.</div><div class="gap"></div><button class="btn" data-a="enviarPend">Enviar ahora</button><button class="btn sec mt" data-a="volverPend">'+(CL.dr.edit?'Volver a los cambios':'Volver al entreno')+'</button></div>';
@@ -4549,7 +4560,8 @@ function semanaStrip(hoy,sel){
     var f=sumar(l,i), k=DIAS[i];
     var hecho=d.sesiones.some(function(s){ return s.fecha===f; });
     var plan=d.rutinas.some(function(r){ return r.dias.indexOf(k)>=0&&vigenteEn(r,f,d.rutinas); });
-    h+='<button class="dia'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(hecho?' hc':'')+(plan?' plan':'')+'" data-a="verDia" data-f="'+f+'" aria-label="'+esc(fLarga(f))+'">'+DL[k]+'<small>'+aDate(f).getDate()+'</small><i></i></button>';
+    var ev=(d.eventos||[]).filter(function(e){ return e.fecha===f; });      // v52.11
+    h+='<button class="dia'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(hecho?' hc':'')+(plan?' plan':'')+(ev.length?' ev':'')+'" data-a="verDia" data-f="'+f+'" aria-label="'+esc(fLarga(f)+ev.map(function(e){ return ' · Competición: '+e.nombre; }).join(''))+'">'+DL[k]+'<small>'+aDate(f).getDate()+'</small><i></i>'+(ev.length?'<b class="dia-tr">'+ic('trofeo')+'</b>':'')+'</button>';
   }
   return h+'</div>';
 }
@@ -7397,18 +7409,19 @@ function vCalendario(){
   return h+eventosCoCard(d)+calTipo(d,'nutricion',Y)+calTipo(d,'entreno',Y);      // v52.11: sus competiciones
 }
 function calTipo(d,tipo,Y){
-  var F=(d.fases||[]).filter(function(f){ return f.tipo===tipo; }), hoy=CO.hoy||hoyStr(), KT=tipo==='nutricion'?['dieta']:['rutina','revision','plan','tarea','evento'], EVY=CO._evY||{}, vistos={};
+  var F=(d.fases||[]).filter(function(f){ return f.tipo===tipo; }), hoy=CO.hoy||hoyStr(), KT=tipo==='nutricion'?['dieta']:['rutina','revision','plan','tarea'], EVY=CO._evY||{}, vistos={}, EVD={};
+  (d.eventos||[]).forEach(function(e){ (EVD[e.fecha]=EVD[e.fecha]||[]).push(e); });      // v52.11: el día de cada competición, con su trofeo
   Object.keys(EVY).forEach(function(f){ EVY[f].forEach(function(e){ if(KT.indexOf(e.tipo)>=0) vistos[e.tipo]=1; }); });
-  var LEY={dieta:'fin o cambio de dieta',rutina:'rutinas',revision:'revisión',plan:'plan',tarea:'tarea',evento:'competición'};
-  var h='<div class="card"><div class="card-t">'+(tipo==='nutricion'?'Nutrición':'Entrenamiento')+'</div><div class="ley">'+FASES_T[tipo].map(function(k){ return '<span><i style="background:'+FASE_C[k]+'"></i>'+FASE_L[k]+'</span>'; }).join('')+(tipo==='entreno'?'<span><i style="background:#8A8A8E"></i>Solo prioridad</span>':'')+KT.filter(function(k){ return vistos[k]; }).map(function(k){ return '<span><b class="cal-mkl" data-mk="'+k+'">'+MK_L[k]+'</b>'+LEY[k]+'</span>'; }).join('')+'</div><div class="cal-anio">';
+  var LEY={dieta:'fin o cambio de dieta',rutina:'rutinas',revision:'revisión',plan:'plan',tarea:'tarea'};
+  var h='<div class="card"><div class="card-t">'+(tipo==='nutricion'?'Nutrición':'Entrenamiento')+'</div><div class="ley">'+FASES_T[tipo].map(function(k){ return '<span><i style="background:'+FASE_C[k]+'"></i>'+FASE_L[k]+'</span>'; }).join('')+(tipo==='entreno'?'<span><i style="background:#8A8A8E"></i>Solo prioridad</span>':'')+KT.filter(function(k){ return vistos[k]; }).map(function(k){ return '<span><b class="cal-mkl" data-mk="'+k+'">'+MK_L[k]+'</b>'+LEY[k]+'</span>'; }).join('')+(Object.keys(EVD).some(function(f){ return f.slice(0,4)===String(Y); })?'<span class="ley-ev"><b class="cal-tr">'+ic('trofeo')+'</b>competición</span>':'')+'</div><div class="cal-anio">';
   for(var m=0;m<12;m++){
     var p1=fechaDe(new Date(Y,m,1)), nd=new Date(Y,m+1,0).getDate(), off=DIAS.indexOf(diaSem(p1));
     h+='<div class="cal-mes"><div class="cal-mt">'+nombreMes(Y,m)+'</div><div class="cal-g">'+['L','M','X','J','V','S','D'].map(function(x){ return '<span class="cal-dh">'+x+'</span>'; }).join('')+(off?'<span style="grid-column:span '+off+'"></span>':'');
     for(var dd=1;dd<=nd;dd++){
       var f=fechaDe(new Date(Y,m,dd)), EN=F.filter(function(z){ return z.desde<=f&&z.hasta>=f; }), en=EN[0]||null;
-      var sel=CO.calSel&&CO.calSel.tipo===tipo&&CO.calSel.a===f, mk=(EVY[f]||[]).filter(function(e){ return KT.indexOf(e.tipo)>=0; });
+      var sel=CO.calSel&&CO.calSel.tipo===tipo&&CO.calSel.a===f, mk=(EVY[f]||[]).filter(function(e){ return KT.indexOf(e.tipo)>=0; }), ev=EVD[f]||[];
       var bg=EN.length>1?'linear-gradient(135deg,'+colFase(EN[0])+' 50%,'+colFase(EN[1])+' 50%)':en?fondoFases(en.fases):'';
-      h+='<button class="cal-d'+(f===hoy?' hoy':'')+(en?' con':'')+(EN.length>1?' dos':'')+(sel?' sel':'')+(mk.length?' mk':'')+'" data-a="calDia" data-t="'+tipo+'" data-f="'+f+'"'+(mk.length?' data-mk="'+mk[0].tipo+'" data-mkl="'+(MK_L[mk[0].tipo]||'•')+(mk.length>1?'+':'')+'" title="'+esc(mk.map(function(e){ return e.tit; }).join(' · '))+'"':'')+(en?' data-id="'+esc(EN.map(function(z){ return z.id; }).join(','))+'" style="background:'+bg+'"':'')+' aria-label="'+esc(fLarga(f)+(EN.length?' · '+EN.map(nombreFase).join(' y '):'')+(mk.length?' · '+mk.map(function(e){ return e.tit; }).join(' · '):''))+'">'+dd+'</button>';
+      h+='<button class="cal-d'+(f===hoy?' hoy':'')+(en?' con':'')+(EN.length>1?' dos':'')+(sel?' sel':'')+(mk.length?' mk':'')+(ev.length?' evd':'')+'" data-a="calDia" data-t="'+tipo+'" data-f="'+f+'"'+(mk.length?' data-mk="'+mk[0].tipo+'" data-mkl="'+(MK_L[mk[0].tipo]||'•')+(mk.length>1?'+':'')+'"':'')+(mk.length||ev.length?' title="'+esc(ev.map(function(e){ return 'Competición: '+e.nombre; }).concat(mk.map(function(e){ return e.tit; })).join(' · '))+'"':'')+(en?' data-id="'+esc(EN.map(function(z){ return z.id; }).join(','))+'" style="background:'+bg+'"':'')+' aria-label="'+esc(fLarga(f)+(EN.length?' · '+EN.map(nombreFase).join(' y '):'')+ev.map(function(e){ return ' · Competición: '+e.nombre; }).join('')+(mk.length?' · '+mk.map(function(e){ return e.tit; }).join(' · '):''))+'">'+(ev.length?ic('trofeo'):dd)+'</button>';
     }
     h+='</div></div>';
   }
@@ -7434,7 +7447,7 @@ A.calDia=function(el){
   CO.calSel={tipo:t,a:f}; pintarClienta(false);
 };
 A.calDesde=function(){ var x=CO.calDiaSel; if(!x) return cerrarModal(); cerrarModal(); CO.calSel={tipo:x.tipo,a:x.f}; pintarClienta(false); var b=document.querySelector('.cal-sel'); if(b) b.scrollIntoView({block:'center',behavior:'smooth'}); };
-var MK_L={revision:'R',dieta:'D',rutina:'E',plan:'€',tarea:'T',evento:'C'};      // v52.11: C = competición
+var MK_L={revision:'R',dieta:'D',rutina:'E',plan:'€',tarea:'T'};      // v52.11: las competiciones van con su trofeo (cal-tr), no con letra
 function colFase(z){ return FASE_C[(z.fases||[])[0]]||'#8A8A8E'; }
 A.calSelUno=function(){ var c=CO.calSel; if(!c) return; CO.calSel=null; pintarClienta(false); faseModal({tipo:c.tipo,fases:[],prioridad:[],desde:c.a,hasta:c.a,nota:''}); };
 A.calSelNo=function(){ CO.calSel=null; pintarClienta(false); };
@@ -7594,6 +7607,8 @@ function eventosCoCard(d){
     (P.length?'<div class="ev-l">'+P.map(function(e){ return evFila(e,'evAbrir',hoy); }).join('')+'</div>':'<p class="muted sm" style="margin:0">Sin competiciones. Apunta sus carreras, pruebas o retos con su fecha: '+cG('ella','él')+' verá la cuenta atrás en su app.</p>')+
     (H.length?'<details class="ev-h"><summary>Ya hechas ('+H.length+')</summary><div class="ev-l">'+H.map(function(e){ return evFila(e,'evAbrir',hoy); }).join('')+'</div></details>':'')+'</div>';
 }
+/* la ficha de la lista (Agenda, inicio) con sus 3 próximas, como las manda coachResumen */
+function evLista(){ var hoy=CO.hoy||hoyStr(), c=(CO.lista||[]).filter(function(x){ return x.id===CO.cid; })[0]; if(c) c.eventos=(CO.d.eventos||[]).filter(function(e){ return e.fecha>=hoy; }).slice(0,3).map(function(e){ return {id:e.id,nombre:e.nombre,fecha:e.fecha,modalidad:e.modalidad,prioridad:e.prioridad}; }); }
 A.evNuevo=function(){ evModal({prioridad:'principal',modalidad:'',fecha:''}); };
 A.evAbrir=function(el){ var e=(CO.d.eventos||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(e) evModal(e); };
 function evModal(e){
@@ -7615,9 +7630,9 @@ A.evGuardar=function(){
   if(document.getElementById('ev-r')) e.resultado=val('ev-r');
   if(!e.nombre) return toast('Ponle nombre a la competición');
   if(!e.fecha) return toast('Pon la fecha de la competición');
-  cargando(api('coachGuardarEvento',CO.pin,CO.cid,e)).then(function(r){ CO.d.eventos=r.eventos; cerrarModal(); toast('Competición guardada','ok'); pintarClienta(false); },function(er){ toast(limpiaErr(er),'err'); });
+  cargando(api('coachGuardarEvento',CO.pin,CO.cid,e)).then(function(r){ CO.d.eventos=r.eventos; evLista(); cerrarModal(); toast('Competición guardada','ok'); pintarClienta(false); },function(er){ toast(limpiaErr(er),'err'); });
 };
-A.evBorrar=function(){ var x=CO.evEd; confirmar('¿Borrar «'+x.nombre+'»?','Borrar',function(){ cargando(api('coachBorrarEvento',CO.pin,CO.cid,x.id)).then(function(r){ CO.d.eventos=r.eventos; toast('Competición borrada','ok'); pintarClienta(false); },function(er){ toast(limpiaErr(er),'err'); }); }); };
+A.evBorrar=function(){ var x=CO.evEd; confirmar('¿Borrar «'+x.nombre+'»?','Borrar',function(){ cargando(api('coachBorrarEvento',CO.pin,CO.cid,x.id)).then(function(r){ CO.d.eventos=r.eventos; evLista(); toast('Competición borrada','ok'); pintarClienta(false); },function(er){ toast(limpiaErr(er),'err'); }); }); };
 
 /* ---------- inicio de la coach: Agenda | Clientas ---------- */
 CH.agCli=function(t){ CO.agC=t.value; pintarLista(); };
@@ -13239,6 +13254,14 @@ function eventoHoyCard(){
   return h+'<button class="card ev-hoy" data-a="evClLista"><span class="ev-ic'+(sig.prioridad==='principal'?' pri':'')+'">'+ic('trofeo')+'</span><span class="ev-tx"><small class="ev-k">'+(P.length>1?'Tu próxima competición':'Tu competición')+'</small><b>'+esc(sig.nombre)+'</b><small>'+esc([sig.modalidad,fLarga(sig.fecha),sig.lugar].filter(String).join(' · '))+'</small>'+
     (pri&&pri!==sig?'<small class="ev-ob">Tu objetivo principal: '+esc(pri.nombre)+' · '+esc(faltanTxt(pri.fecha,hoy).toLowerCase())+'</small>':'')+'</span>'+
     (n>0?'<span class="ev-n"><b>'+n+'</b> <small>'+(n===1?'día':'días')+'</small></span>':'<span class="ev-n hoy"><b>¡Hoy!</b></span>')+'</button>';
+}
+/* otro día de su semana con competición: arriba, qué es y cuánto falta (o «¿Cómo te fue?» si ya pasó) */
+function eventoDiaCard(f){
+  var hoy=hoyStr();
+  return (CL.d.eventos||[]).filter(function(e){ return e.fecha===f; }).map(function(e){ var pas=f<hoy;
+    return '<button class="card ev-hoy ev-dia" data-a="'+(pas?'evClRes':'evClVer')+'" data-id="'+esc(e.id)+'"><span class="ev-ic pri">'+ic('trofeo')+'</span><span class="ev-tx"><small class="ev-k">'+(pas?'Ese día competiste':'Ese día compites')+'</small><b>'+esc(e.nombre)+'</b><small>'+esc([e.modalidad,e.lugar].filter(String).join(' · '))+'</small>'+
+      (e.objetivo?'<small class="ev-ob">Tu objetivo: '+esc(e.objetivo)+'</small>':'')+(pas&&e.resultado?'<small class="ev-rs">'+ic('nota')+'«'+esc(e.resultado)+'»</small>':'')+'</span>'+
+      (pas?'<span class="ev-n hecha">'+ic('okc')+'<small>'+(e.resultado?'Hecha':'Contarlo')+'</small></span>':'<span class="ev-n"><b>'+diff(hoy,f)+'</b> <small>'+(diff(hoy,f)===1?'día':'días')+'</small></span>')+'</button>'; }).join('');
 }
 A.evClLista=function(){
   var E=CL.d.eventos||[], hoy=hoyStr(), P=E.filter(function(e){ return e.fecha>=hoy; }), H=E.filter(function(e){ return e.fecha<hoy; }).reverse();
