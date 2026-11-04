@@ -2375,6 +2375,14 @@ body.cq .cq-lead{font-weight:600}
 .esc-n{position:absolute;left:16px;right:16px;bottom:calc(112px + env(safe-area-inset-bottom));display:flex;gap:8px;background:#fff;border-radius:16px;padding:8px}.esc-n input{flex:1;min-width:0;border:0;font:700 17px Plus Jakarta Sans,sans-serif;letter-spacing:.04em;padding:6px 8px}.esc-n .btn{width:auto;margin:0}
 button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 #esc [hidden]{display:none!important}
+/* ===== v52.1 · alimentos sueltos: cada alimento en su tarjeta, más oscura que el blanco de la hoja ===== */
+.ing.dl-si,.card-t+.ing.dl-si{background:#EEEEF2;border:0;border-radius:14px;padding:12px 12px 12px 14px;margin:0 0 8px}
+.dl-si .ing-n b{color:#111}.dl-si .ing-k{color:#56565B}
+.dl-si .ing-g{border-color:#D9D9DF}.dl-si .ing-x{border-color:#D9D9DF;background:#fff}
+.dl-si .ck-b{background:#fff}
+.dl-st{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 2px 10px;color:#56565B;font:600 12.5px Plus Jakarta Sans,sans-serif}.dl-st b{color:#111;font-weight:800;font-size:14px}
+#su-box .dl-sc{background:none;border:0;box-shadow:none;padding:0;margin:4px 0 0}#su-box .dl-sc>.card-t{display:none}
+#su-box .dl-sbs{margin-top:6px}
 </style>
 </head>
 <body>
@@ -2435,7 +2443,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52';
+var APP_V = 'v52.1';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -5924,7 +5932,9 @@ function irCmSec(){ setTimeout(function(){ var e=document.getElementById('cm-sec
 function sueltoCk(z){ var A=CL.bancoM&&CL.bancoM[z.a]; return {a:z.a,e:z.e||(A&&A.e)||''}; }
 function sueltosCardHtml(p,mi){
   var S=sueltosDe(p,mi), c=p.comidas[mi];
+  var T=S.length?sumMac(S.map(macS)):null;      // v52.1: el total arriba y cada alimento en su tarjeta
   return '<div class="card dl-sc" id="dl-sc"><div class="card-t">Alimentos sueltos <span class="muted sm">hoy</span></div>'+
+    (S.length?'<div class="dl-st"><span>'+S.length+(S.length>1?' alimentos':' alimento')+' · hoy</span>'+(verMac()&&T?'<span><b>'+kTxt(T[0])+'</b> kcal</span>':'')+'</div>':'')+
     (S.length?S.map(function(z){ var m=macS(z), zc=sueltoCk(z), c=cocInfo(zc), v=c?(ckAl(z.a)||c.s):'', g=c?gVista(zc,z.q,v):num(z.q)||0; return '<div class="ing ing-ed dl-si"><div class="ing-n"><b>'+esc(z.n)+'</b><small class="ing-k" id="sk-'+esc(z.i)+'">'+kTxt(m[0])+' kcal · P '+kTxt(m[1])+' · HC '+kTxt(m[2])+' · G '+kTxt(m[3])+'</small></div>'+
       '<div class="ing-gw"><label class="ing-g"><input data-v29="dlG" data-m="'+mi+'" data-i="'+esc(z.i)+'"'+(c?' data-vw="'+v+'"':'')+' inputmode="decimal" value="'+Math.round(g)+'" aria-label="Gramos de '+esc(z.n)+'"><span>g</span></label>'+(c?ckBtn(z.a,v,z.n):'')+'</div>'+
       '<div class="ing-bt"><button class="ing-x" data-a="dlQuitarS" data-m="'+mi+'" data-i="'+esc(z.i)+'" aria-label="Quitar '+esc(z.n)+'">'+ic('x')+'</button></div></div>'; }).join('')
