@@ -35,16 +35,10 @@ a{color:inherit}
 :focus-visible{outline:3px solid var(--tinta);outline-offset:3px;border-radius:6px}
 .cont{max-width:var(--ancho);margin:0 auto;padding:0 24px}
 
-/* el iPhone: proporciones de un iPhone 15 (390 × 844), con su marco, la isla y la barra de estado */
-.iphone{position:relative;width:300px;padding:3.4%;border-radius:15.5%/7.4%;background:linear-gradient(145deg,#3a3a3d,#121214 40%,#2a2a2d);box-shadow:inset 0 0 0 1.5px #4b4b4f,0 50px 90px -40px rgba(17,17,17,.55),0 18px 36px -18px rgba(17,17,17,.35)}
-.iphone::before,.iphone::after{content:"";position:absolute;width:3px;background:#2c2c2f;border-radius:2px}
-.iphone::before{left:-3px;top:21%;height:9%}
-.iphone::after{right:-3px;top:28%;height:14%}
-.pant{position:relative;aspect-ratio:390/844;border-radius:12.6%/5.85%;overflow:hidden;background:#fff}
-.pant .estado{display:block;width:100%;height:auto}
-.pant img{width:100%;aspect-ratio:390/797;object-fit:cover;object-position:top}
-.pant .isla{position:absolute;top:1.3%;left:50%;width:32%;height:4.3%;transform:translateX(-50%);background:#000;border-radius:999px}
-.pant .raya{position:absolute;bottom:.9%;left:50%;width:35%;height:.6%;transform:translateX(-50%);background:rgba(17,17,17,.55);border-radius:999px}
+/* v52.20.3: los móviles son fotos (img/m_*.webp: el de plata y el plano sin fondo; el de la escalera con su fondo) con la pantalla de la app dentro */
+.movil{display:block;height:auto;max-width:100%;flex:0 0 auto}
+.movil.plano{filter:drop-shadow(0 30px 34px rgba(17,17,17,.22)) drop-shadow(0 8px 12px rgba(17,17,17,.12))}
+.movil.plata{filter:drop-shadow(0 36px 40px rgba(17,17,17,.26)) drop-shadow(0 10px 14px rgba(17,17,17,.12))}
 
 /* cabecera */
 .cab{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.86);-webkit-backdrop-filter:saturate(180%) blur(14px);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .2s}
@@ -73,23 +67,17 @@ a{color:inherit}
 .portada .ent{font-size:clamp(18px,1.55vw,20px);color:var(--tinta2);max-width:31em;margin:0 0 32px}
 .acciones{display:flex;flex-wrap:wrap;gap:12px}
 .portada .nota{margin:26px 0 0;font-size:15px;color:var(--gris);max-width:30em}
-.escena{position:relative;height:740px}
-.escena .iphone{position:absolute;width:320px}
-.escena .a{right:2%;top:10px;z-index:2}
-.escena .b{right:40%;top:84px;transform:scale(.9);transform-origin:top right}
+.escena{position:relative}
+.escena .foto{display:block;width:100%;height:auto;border-radius:32px}
 @media (prefers-reduced-motion:no-preference){
-  .escena .a{animation:entra 1s cubic-bezier(.2,.7,.2,1) .2s both}
-  .escena .b{animation:entra2 1s cubic-bezier(.2,.7,.2,1) both}
-  @keyframes entra{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
-  @keyframes entra2{from{opacity:0;transform:translateY(48px) scale(.9)}to{opacity:1;transform:scale(.9)}}
+  .escena .foto{animation:entra 1s cubic-bezier(.2,.7,.2,1) .1s both}
+  @keyframes entra{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
 }
 @media (max-width:560px){.acciones .btn{padding:15px 20px;font-size:15px}}
 @media (max-width:980px){
   .portada{padding:28px 0 40px}
   .portada .cont{grid-template-columns:1fr;gap:36px}
-  .escena{height:auto;display:flex;justify-content:center;align-items:flex-start;gap:14px}
-  .escena .iphone{position:relative;inset:auto;width:min(47%,280px);transform:none;animation:none}
-  .escena .b{margin-top:48px}
+  .escena .foto{border-radius:24px}
 }
 
 /* frase */
@@ -113,12 +101,14 @@ a{color:inherit}
 .func li{display:flex;gap:12px;align-items:flex-start;font-size:16px;font-weight:600}
 .func li svg{flex:0 0 22px;margin-top:1px}
 .func .vis{display:flex;justify-content:center;align-items:flex-start;padding:56px 40px 0;height:600px;overflow:hidden}
-.func .vis .iphone{width:300px;flex:0 0 auto;box-shadow:inset 0 0 0 1.5px #4b4b4f,0 40px 70px -30px rgba(17,17,17,.45)}
+.func .vis .movil{width:300px}
+.func .vis.inclinado{align-items:center;padding:24px 28px}
+.func .vis.inclinado .movil{width:min(100%,470px)}
 .func .vis.dos{gap:20px}
-.func .vis.dos .iphone{width:250px}
-.func .vis.dos .iphone+.iphone{margin-top:56px}
+.func .vis.dos .movil{width:250px}
+.func .vis.dos .movil+.movil{margin-top:56px}
 .func .vis.entero{align-items:center;padding:28px 40px}
-.func .vis.entero .iphone{width:252px}
+.func .vis.entero .movil{width:252px}
 .func:nth-child(even) .txt{order:2}
 .func.rosa .vis{background:var(--rosa)}
 .func.perla .vis{background:var(--perla)}
@@ -133,11 +123,13 @@ a{color:inherit}
   .func:nth-child(even) .txt{order:0}
   .func .txt{padding:40px 28px 8px}
   .func .vis{height:460px;padding:36px 20px 0}
-  .func .vis .iphone{width:min(76%,290px)}
+  .func .vis .movil{width:min(76%,290px)}
+  .func .vis.inclinado{height:auto;padding:24px 12px}
+  .func .vis.inclinado .movil{width:min(100%,420px)}
   .func .vis.entero{height:auto;padding:28px 20px}
-  .func .vis.entero .iphone{width:min(66%,250px)}
-  .func .vis.dos .iphone{width:min(47%,230px)}
-  .func .vis.dos .iphone+.iphone{margin-top:40px}
+  .func .vis.entero .movil{width:min(66%,250px)}
+  .func .vis.dos .movil{width:min(47%,230px)}
+  .func .vis.dos .movil+.movil{margin-top:40px}
 }
 
 /* el panel en el ordenador */
@@ -247,10 +239,7 @@ footer nav a:hover{color:var(--tinta)}
       </div>
       <p class="nota">Para entrenadores online y presenciales. Sin instalar nada: funciona en el móvil y en el ordenador.</p>
     </div>
-    <div class="escena" aria-hidden="true">
-      <div class="iphone b"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/entreno.webp" alt="" width="780" height="1594"><span class="isla"></span><span class="raya"></span></div></div>
-      <div class="iphone a"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/hoy.webp" alt="" width="780" height="1594"><span class="isla"></span><span class="raya"></span></div></div>
-    </div>
+    <div class="escena"><img class="foto" src="/bienvenida/img/m_escalera_hoy.webp" alt="La app de MOOD ON en un móvil: «Hola, Ana», su semana y el entreno que le toca hoy" width="1400" height="1236" fetchpriority="high"></div>
   </div>
 </section>
 
@@ -275,7 +264,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>A tus clientes hombres les sale el mismo check-in, sin el ciclo</li>
           </ul>
         </div>
-        <div class="vis"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F4F4F6"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/ciclo.webp" alt="Check-in del día con el periodo, la fase del ciclo, el sueño y la energía" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis inclinado"><img class="movil plata" src="/bienvenida/img/m_plata_ciclo.webp" alt="Tu ciclo: el día del ciclo, la fase y cuándo le toca el periodo, con su check-in de hoy" width="900" height="999" loading="lazy"></div>
       </article>
 
       <article class="func perla">
@@ -288,7 +277,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Vídeo de cada ejercicio y tus notas</li>
           </ul>
         </div>
-        <div class="vis"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F7"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/series.webp" alt="Entreno en curso: series de aproximación y de trabajo, con lo que hizo la última vez" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis"><img class="movil plano" src="/bienvenida/img/m_plano_series.webp" alt="Entreno en curso: series de aproximación y de trabajo, con lo que hizo la última vez" width="720" height="1482" loading="lazy"></div>
       </article>
 
       <article class="func verde">
@@ -301,7 +290,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Lista de la compra, y productos con el código de barras o una foto de la etiqueta</li>
           </ul>
         </div>
-        <div class="vis"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/dieta.webp" alt="Su dieta de hoy: kcal comidas y las que le quedan, con proteína, hidratos y grasa" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis inclinado"><img class="movil plata" src="/bienvenida/img/m_plata_dieta.webp" alt="Su dieta de hoy: kcal comidas y las que le quedan, con proteína, hidratos y grasa" width="900" height="999" loading="lazy"></div>
       </article>
 
       <article class="func perla">
@@ -314,7 +303,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Tests de Cooper, 3, 5 y 10 km, con su evolución</li>
           </ul>
         </div>
-        <div class="vis"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/carrera.webp" alt="Su entreno de series: el ritmo de cada serie al momento y la media frente al objetivo" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis"><img class="movil plano" src="/bienvenida/img/m_plano_carrera.webp" alt="Su entreno de series: el ritmo de cada serie al momento y la media frente al objetivo" width="720" height="1482" loading="lazy"></div>
       </article>
 
       <article class="func ambar">
@@ -327,7 +316,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Sus logros en sus historias: publicidad que no tienes que pedir</li>
           </ul>
         </div>
-        <div class="vis dos"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#FFFFFF"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/fin.webp" alt="Resumen al terminar el entreno, con sus récords del día" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#A0A0A2"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/medalla.webp" alt="Una medalla lista para compartir en Instagram" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis dos"><img class="movil plano" src="/bienvenida/img/m_plano_fin.webp" alt="Resumen al terminar el entreno, con sus récords del día" width="720" height="1482" loading="lazy"><img class="movil plano" src="/bienvenida/img/m_plano_medalla.webp" alt="Una medalla lista para compartir en Instagram" width="720" height="1482" loading="lazy"></div>
       </article>
 
       <article class="func azul">
@@ -340,7 +329,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pagos online con Stripe</li>
           </ul>
         </div>
-        <div class="vis entero"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#A0A0A2"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/pago.webp" alt="Pago recibido: su plan renovado hasta la nueva fecha" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis entero"><img class="movil plano" src="/bienvenida/img/m_plano_pago.webp" alt="Pago recibido: su plan renovado hasta la nueva fecha" width="720" height="1482" loading="lazy"></div>
       </article>
 
       <article class="func noche">
@@ -353,7 +342,7 @@ footer nav a:hover{color:var(--tinta)}
             <li><svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><circle cx="11" cy="11" r="10" fill="#13915A"/><path d="M6.5 11.2l3 3 6-6.2" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>Videollamadas con Meet que se crean solas en tu calendario</li>
           </ul>
         </div>
-        <div class="vis dos"><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/coach_seg.webp" alt="Tu panel en el móvil: lo próximo con una clienta" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div><div class="iphone"><div class="pant"><svg class="estado" viewBox="0 0 390 47" aria-hidden="true"><rect width="390" height="47" fill="#F5F5F8"/><text x="54" y="32" text-anchor="middle" font-family="-apple-system,BlinkMacSystemFont,'Plus Jakarta Sans',sans-serif" font-size="17" font-weight="600" fill="#111">9:41</text><g fill="#111"><rect x="281" y="26" width="3.2" height="4.5" rx="1"/><rect x="286" y="23.5" width="3.2" height="7" rx="1"/><rect x="291" y="21" width="3.2" height="9.5" rx="1"/><rect x="296" y="18.5" width="3.2" height="12" rx="1"/><path d="M313.5 30l2.4-2.6a3.5 3.5 0 0 0-4.8 0z M308.2 24.2l1.6 1.7a5.6 5.6 0 0 1 7.4 0l1.6-1.7a8 8 0 0 0-10.6 0z M305.1 21l1.6 1.7a9.8 9.8 0 0 1 13.6 0l1.6-1.7a12.2 12.2 0 0 0-16.8 0z"/><rect x="330.5" y="21.5" width="20" height="8" rx="2"/></g><rect x="328.5" y="19.5" width="24" height="12" rx="3.6" fill="none" stroke="#111" stroke-opacity=".4"/><path d="M354.5 23.6v3.8a2 2 0 0 0 0-3.8z" fill="#111" fill-opacity=".45"/></svg><img src="/bienvenida/img/coach_evol.webp" alt="Tu panel en el móvil: entrenos, sueño, energía y peso de una clienta" width="780" height="1594" loading="lazy"><span class="isla"></span><span class="raya"></span></div></div></div>
+        <div class="vis dos"><img class="movil plano" src="/bienvenida/img/m_plano_coach_seg.webp" alt="Tu panel en el móvil: lo próximo con una clienta" width="720" height="1482" loading="lazy"><img class="movil plano" src="/bienvenida/img/m_plano_coach_evol.webp" alt="Tu panel en el móvil: entrenos, sueño, energía y peso de una clienta" width="720" height="1482" loading="lazy"></div>
       </article>
     </div>
   </div>
