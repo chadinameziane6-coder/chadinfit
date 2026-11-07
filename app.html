@@ -415,6 +415,13 @@ body.dd-activo,body.dd-activo *{cursor:grabbing!important}
 .dd-gl{display:none;font-size:13px;font-weight:600;color:var(--mg)}
 .dd-on .dd-gl{display:inline}
 .dd-sum{display:none;font-size:13.5px;color:var(--tx2);margin-top:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+button.dd-sum{width:100%;background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;color:var(--tx2)}
+.ej-ed.ej-c>*:not(.ej-top):not(.dd-sum){display:none!important}
+.ej-ed.ej-c{padding-top:10px;padding-bottom:12px}
+.ej-ed.ej-c .dd-sum{display:block;font-size:14px;margin-top:6px}.ej-ed.ej-c .dd-sum b{color:var(--tx)}
+.ej-ed.ej-c:hover{border-color:rgba(17,17,17,.28)}
+.ej-tg .ej-chev{width:18px;height:18px;transform:rotate(90deg);transition:transform .2s}.ej-tg[aria-expanded=true] .ej-chev{transform:rotate(-90deg)}
+.ej-listo{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px}
 .dd-on .dd-sum{display:block}
 .dd-src{opacity:.35}
 .dd-into{background:rgba(17,17,17,.1)!important;border-color:var(--mg)!important}
@@ -2584,7 +2591,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.1';
+var APP_V = 'v53.4.2';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -3774,8 +3781,8 @@ function runEd(e,ri,ei,lab){
       rec:'<label class="f">Recuperación<input'+aj+' data-rf="rec" value="'+esc(b.rec||'')+'" placeholder="2:00 o 90 s"></label>',
       rt:'<label class="f">Cómo recupera<select data-c="runRt"'+aj+'>'+RUN_RT.map(function(x){ return '<option value="'+x[0]+'"'+((b.rt||'')===x[0]?' selected':'')+'>'+esc(x[1])+'</option>'; }).join('')+'</select></label>'};
     return '<div class="rn-bed-g">'+campos.map(function(k){ return C[k]; }).join('')+'</div>'; }
-  var h='<div class="ej-ed rn-ed" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'"><div class="ej-top">'+asa(at,'ej','la carrera')+'<span class="ej-n">'+ic('correr')+'Carrera · '+lab+'</span>'+botonesEj(at)+'</div>'+
-    '<div class="dd-sum" id="rsum-'+ri+'-'+ei+'">'+runSumEd(e)+'</div>'+
+  var h='<div class="ej-ed rn-ed'+ejC(e)+'" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'"><div class="ej-top">'+asa(at,'ej','la carrera')+'<span class="ej-n">'+ic('correr')+'Carrera · '+lab+'</span>'+botonesEj(at,e)+'</div>'+
+    '<button type="button" class="dd-sum" data-a="ejAb"'+at+' aria-label="Abrir para cambiarlo" id="rsum-'+ri+'-'+ei+'">'+runSumEd(e)+'</button>'+
     '<label class="f">Tipo de sesión<select data-c="runSt"'+at+'>'+RUN_ST.map(function(x){ return '<option value="'+x[0]+'"'+(st===x[0]?' selected':'')+'>'+esc(x[1])+'</option>'; }).join('')+'</select></label>';
   if(st==='rodaje') h+='<label class="f">Qué rodaje<select data-c="runRo"'+at+'>'+RUN_RO.map(function(x){ return '<option value="'+x[0]+'"'+(e.ro===x[0]?' selected':'')+'>'+esc(x[1])+'</option>'; }).join('')+'</select></label>'+
     (e.ro==='progresivo'?'<div class="muted sm rn-ay">Pon el ritmo de salida y el de llegada, p. ej. 6:00-5:20.</div>':'');
@@ -3796,7 +3803,7 @@ function runEd(e,ri,ei,lab){
     '<div class="muted sm rn-ay">Déjalo vacío y verá «'+esc(runNombre(e))+'». Escribe uno solo si quieres llamarlo de otra forma.</div>'+
     '<label class="f">Indicaciones para '+cG('ella','él')+' <span class="muted">(opcional)</span><input'+at+' data-k="nota" value="'+esc(e.nota||'')+'" placeholder="Por ejemplo: en cinta al 1 %, terreno llano, sin mirar el reloj…"></label>'+
     '<div class="muted sm rn-ay">Las verá en su entreno, debajo del nombre.</div>'+
-    '<div class="rn-prev" id="rprev-'+ri+'-'+ei+'">'+runPrevEd(e)+'</div></div>';
+    '<div class="rn-prev" id="rprev-'+ri+'-'+ei+'">'+runPrevEd(e)+'</div>'+ejListo(at)+'</div>';
 }
 function runSumEd(e){ return '<b>'+esc(tituloEj(e))+'</b> <span class="muted">'+esc(runSubT(e))+'</span>'; }
 function runPrevEd(e){ return '<small class="rn-as">Así lo verá '+cG('ella','él')+'</small><b>'+esc(tituloEj(e))+'</b><span>'+esc(runSubT(e))+'</span>'+(e.nota?'<i>'+esc(e.nota)+'</i>':''); }      // v52.16
@@ -9076,12 +9083,17 @@ function rutinaEd(r,ri){
     '<div class="rut-acc"><button class="btn sm" data-a="guardarRut" data-r="'+ri+'">Guardar rutina</button><button class="link" data-a="rutCopiar" data-r="'+ri+'">'+ic('copiar')+'Copiar…</button><button class="link" data-a="rutModelo" data-r="'+ri+'">'+ic('modelo')+'Guardar como modelo</button><button class="link danger" data-a="borrarRut" data-r="'+ri+'">'+(r.id?'Archivar o borrar':'Quitar')+'</button></div></div>';
 }
 function asa(at,tipo,que){ return '<button type="button" class="dd-h" data-dd="'+tipo+'"'+at+' aria-label="Mover '+esc(que||'el ejercicio')+': arrastra o usa las flechas arriba y abajo" title="Arrastra para mover">⠿</button>'; }
-function botonesEj(at){ return '<div class="ej-btn"><button data-a="delEj"'+at+' aria-label="Quitar">'+ic('x')+'</button></div>'; }
-function sumEd(e){ var es=tipoEj(e)==='fuerza'?espLista(e).map(function(x){ return x.txt; }).join(' · '):''; return '<div class="dd-sum"><b>'+esc(tituloEj(e)||'Sin nombre')+'</b> <span class="muted">'+esc(resumenEj(e))+(es?' · '+esc(es):'')+'</span></div>'; }
+/* v53.4.2: al programar, cada ejercicio se cierra cuando lo terminas («Listo») y solo queda abierto el que estás programando
+   (CO.ejAb, el propio ejercicio: los ya guardados salen cerrados; uno nuevo, abierto). Cerrado: su nombre y su pauta en una línea */
+function ejVacioEd(e){ var t=tipoEj(e); return t==='run'?false:t==='bloque'?!(e.ej||[]).some(function(x){ return String(x.n||'').trim(); }):!String(e.n||'').trim(); }      // sin nombre: abierto, para programarlo
+function ejC(e){ return e===CO.ejAb||ejVacioEd(e)||window.__EJ_ABIERTOS?'':' ej-c'; }      // __EJ_ABIERTOS: solo las pruebas de antes de la v53.4.2
+function botonesEj(at,e){ var ab=!ejC(e); return '<div class="ej-btn"><button class="ej-tg" data-a="ejAb"'+at+' aria-expanded="'+ab+'" aria-label="'+(ab?'Cerrar':'Abrir para cambiarlo')+'">'+ic('flecha','ej-chev')+'</button><button data-a="delEj"'+at+' aria-label="Quitar">'+ic('x')+'</button></div>'; }
+function ejListo(at){ return '<button type="button" class="btn sec sm ej-listo" data-a="ejListo"'+at+'>'+ic('ok')+'Listo</button>'; }
+function sumEd(e,at){ var es=tipoEj(e)==='fuerza'?espLista(e).map(function(x){ return x.txt; }).join(' · '):''; return '<button type="button" class="dd-sum" data-a="ejAb"'+(at||'')+' aria-label="Abrir para cambiarlo"><b>'+esc(tituloEj(e)||'Sin nombre')+'</b> <span class="muted">'+esc(resumenEj(e))+(es?' · '+esc(es):'')+'</span></button>'; }
 function ejEd(e,ri,ei,g,lab,sig){
   var at=' data-r="'+ri+'" data-e="'+ei+'"', t=tipoEj(e), mv=esMov(e);
-  var h='<div class="ej-ed'+(g?' en-g':'')+(mv?' mov':'')+'" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'">';
-  h+='<div class="ej-top">'+asa(at,'ej',e.n||'el ejercicio')+'<span class="ej-n">'+(g?g.letra+g.pos:mv?'Movilidad '+lab.slice(1):'Ejercicio '+lab)+'</span>'+botonesEj(at)+'</div>'+sumEd(e)+
+  var h='<div class="ej-ed'+(g?' en-g':'')+(mv?' mov':'')+ejC(e)+'" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'">';
+  h+='<div class="ej-top">'+asa(at,'ej',e.n||'el ejercicio')+'<span class="ej-n">'+(g?g.letra+g.pos:mv?'Movilidad '+lab.slice(1):'Ejercicio '+lab)+'</span>'+botonesEj(at,e)+'</div>'+sumEd(e,at)+
     '<input class="ej-name"'+at+' data-k="n" list="exlib" value="'+esc(e.n)+'" placeholder="Nombre del ejercicio"><div class="ej-banco" id="eb-'+ri+'-'+ei+'">'+estadoBanco(e,ri,ei)+'</div>'+
     '<div class="seg"><button class="'+(t==='fuerza'?'on':'')+'" data-a="ejTipo" data-v="fuerza"'+at+'>'+(mv?'Series':'Fuerza')+'</button><button class="'+(t==='cardio'?'on':'')+'" data-a="ejTipo" data-v="cardio"'+at+'>Cardio</button></div>';
   if(t==='fuerza'&&mv){
@@ -9110,11 +9122,11 @@ function ejEd(e,ri,ei,g,lab,sig){
   }
   h+='<input class="mt6"'+at+' data-k="nota" value="'+esc(e.nota)+'" placeholder="Indicaciones técnicas (opcional)"><input class="mt6"'+at+' data-k="video" value="'+esc(e.video)+'" placeholder="Vídeo solo para '+cG('esta clienta','este cliente')+' (opcional; si no, usa el del banco)">';
   if(sig&&tipoEj(sig)!=='bloque'&&esMov(sig)===mv) h+='<button class="link unir" data-a="unir"'+at+'>'+(e.uni?ic('separar')+'Separar del siguiente':ic('enlace')+'Unir con el siguiente (superserie)')+'</button>';
-  return h+'</div>';
+  return h+ejListo(at)+'</div>';
 }
 function bloqueEd(e,ri,ei,lab){
   var at=' data-r="'+ri+'" data-e="'+ei+'"', f=FMT[e.f]||FMT.circuito;
-  return '<div class="ej-ed bl-ed" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'"><div class="ej-top">'+asa(at,'ej','el bloque')+'<span class="ej-n">Bloque funcional · '+lab+'</span>'+botonesEj(at)+'</div>'+sumEd(e)+
+  return '<div class="ej-ed bl-ed'+ejC(e)+'" id="ee-'+ri+'-'+ei+'" data-ee="'+ei+'"><div class="ej-top">'+asa(at,'ej','el bloque')+'<span class="ej-n">Bloque funcional · '+lab+'</span>'+botonesEj(at,e)+'</div>'+sumEd(e,at)+
     '<div class="bl-tit" id="bt-'+ri+'-'+ei+'">'+esc(tituloEj(e))+'</div>'+
     '<label class="f">Formato<select data-c="blFmt"'+at+'>'+FMT_ORDEN.map(function(k){ return '<option value="'+k+'"'+(e.f===k?' selected':'')+'>'+FMT[k][0]+'</option>'; }).join('')+'</select></label><div class="muted sm mt6">'+esc(f[1])+'</div>'+
     '<div class="grid2">'+f[2].map(function(p){ return '<label class="f">'+esc(p[1])+'<input'+at+' data-bp="'+p[0]+'" inputmode="numeric" value="'+esc(e.p[p[0]]!=null?e.p[p[0]]:'')+'" placeholder="'+esc(p[2])+'"></label>'; }).join('')+'</div>'+
@@ -9123,7 +9135,7 @@ function bloqueEd(e,ri,ei,lab){
     e.ej.map(function(x,k){ var ak=at+' data-bi="'+k+'"', v=videoDe(x.n,''); return '<div class="bl-ed-row"><input'+ak+' data-bk="n" list="exlib" value="'+esc(x.n)+'" placeholder="Ejercicio"><input'+ak+' data-bk="r" value="'+esc(x.r)+'" placeholder="'+(e.f==='hiit'||e.f==='tabata'?'a tope':'10 reps')+'"><input'+ak+' data-bk="kg" inputmode="decimal" value="'+esc(x.kg)+'" placeholder="–">'+
       (v?'<button class="vmini" data-a="prevVid" data-n="'+esc(x.n)+'" aria-label="Ver el vídeo de '+esc(x.n)+'">'+ic('play')+'</button>':'<span></span>')+'<button class="x" data-a="blDelEj"'+at+' data-x="'+k+'" aria-label="Quitar">'+ic('x')+'</button></div>'; }).join('')+
     '<div class="bl-add"><button class="btn sm" data-a="blPick"'+at+'>'+ic('lista')+'Elegir del banco</button><button class="link" data-a="blAddEj"'+at+'>+ Escribir uno</button></div>'+
-    '<input class="mt6"'+at+' data-k="n" value="'+esc(e.n||'')+'" placeholder="Nombre del bloque (opcional, p. ej. Finisher)"><input class="mt6"'+at+' data-k="nota" value="'+esc(e.nota)+'" placeholder="Indicaciones (opcional)"></div>';
+    '<input class="mt6"'+at+' data-k="n" value="'+esc(e.n||'')+'" placeholder="Nombre del bloque (opcional, p. ej. Finisher)"><input class="mt6"'+at+' data-k="nota" value="'+esc(e.nota)+'" placeholder="Indicaciones (opcional)">'+ejListo(at)+'</div>';
 }
 /* vídeo que vería la clienta: el propio de la rutina o el del banco */
 function videoDe(n,propio){ if(okUrl(propio)) return propio; var b=bancoDe(n); return b&&okUrl(b.video)?b.video:''; }
@@ -9313,7 +9325,12 @@ function marcarRut(ri){ CO.rut[ri]._s=true; var b=document.getElementById('rs-'+
 function repintar(){ pintarClienta(false); }
 function ejDe(el){ var r=CO.rut[+el.dataset.r]; return {r:r,e:r&&r.ejercicios[+el.dataset.e]}; }
 A.togDia=function(el){ var r=CO.rut[+el.dataset.r], k=el.dataset.d, i=r.dias.indexOf(k); if(i>=0) r.dias.splice(i,1); else r.dias.push(k); r.dias.sort(function(a,b){ return DIAS.indexOf(a)-DIAS.indexOf(b); }); r._s=true; repintar(); };
-function addItem(el,item){ var ri=+el.dataset.r, r=CO.rut[ri]; r.ejercicios.push(item); r._s=true; repintar(); var inp=document.querySelector('[data-r="'+ri+'"][data-e="'+(r.ejercicios.length-1)+'"]'+(item.tipo==='bloque'?'[data-bk="n"]':'[data-k="n"]')); if(inp){ inp.scrollIntoView({block:'center'}); inp.focus(); } }
+function ejVer(e){ var r=null, i=-1; (CO.rut||[]).forEach(function(x,k){ var j=x.ejercicios.indexOf(e); if(j>=0){ r=k; i=j; } }); var c=r==null?null:document.getElementById('ee-'+r+'-'+i); if(c){ var b=c.getBoundingClientRect(); if(b.top<70||b.top>innerHeight-80) c.scrollIntoView({block:'start'}); if(c.getBoundingClientRect().top<70) scrollBy(0,-80); } }
+document.addEventListener('focusin',function(ev){ var t=ev.target, c=t&&t.closest&&t.closest('.ej-ed'); if(!c||BOOT.mode==='clienta') return;      // lo que se está escribiendo es lo abierto
+  var m=/^ee-(\d+)-(\d+)$/.exec(c.id||''), r=m&&CO.rut&&CO.rut[+m[1]], e=r&&r.ejercicios[+m[2]]; if(e&&!t.matches('.dd-h,.ej-tg,.dd-sum,[data-a=delEj]')) CO.ejAb=e; });
+A.ejAb=function(el){ var x=ejDe(el); if(!x.e) return; CO.ejAb=!ejC(x.e)?null:x.e; repintar(); ejVer(x.e); };
+A.ejListo=function(el){ var x=ejDe(el); if(x.e&&ejVacioEd(x.e)) return toast(tipoEj(x.e)==='bloque'?'Primero añade algún ejercicio al bloque':'Primero ponle nombre al ejercicio'); CO.ejAb=null; repintar(); if(x.e) ejVer(x.e); };
+function addItem(el,item){ var ri=+el.dataset.r, r=CO.rut[ri]; r.ejercicios.push(item); CO.ejAb=item; r._s=true; repintar(); var inp=document.querySelector('[data-r="'+ri+'"][data-e="'+(r.ejercicios.length-1)+'"]'+(item.tipo==='bloque'?'[data-bk="n"]':'[data-k="n"]')); if(inp){ inp.scrollIntoView({block:'center'}); inp.focus(); } }
 A.addEj=function(el){ addItem(el,ejVacio()); };
 A.addCardio=function(el){ addItem(el,cardioVacio()); };
 A.addBloque=function(el){ addItem(el,bloqueVacio()); };
@@ -9347,7 +9364,7 @@ function guardarRutP(ri,callado){
   function no(t){ if(!callado) toast(t); var c=document.getElementById('rut-'+ri); if(c&&!callado) c.scrollIntoView({block:'start'}); var e=new Error(t); e.valida=1; return Promise.reject(e); }
   if(!String(r.nombre||'').trim()) return no('Ponle nombre a la rutina');
   var malBloque=r.ejercicios.filter(function(e){ return tipoEj(e)==='bloque'&&!(e.ej||[]).some(function(x){ return String(x.n||'').trim(); }); })[0];
-  if(malBloque) return no('Pon al menos un ejercicio en cada bloque funcional');
+  if(malBloque){ if(!callado){ CO.ejAb=malBloque; repintar(); } return no('Pon al menos un ejercicio en cada bloque funcional'); }
   var ej=r.ejercicios.map(function(e){ var c=copia(e); if(tipoEj(c)==='bloque'){ c.ej=c.ej.filter(function(x){ return String(x.n||'').trim(); }); if(!String(c.n||'').trim()){ c.n=''; c.na=nombreBloque(c); } }
     if(tipoEj(c)==='run'&&!String(c.n||'').trim()){ c.n=''; c.na=runNombre(c); } return c; }).filter(function(e){ return tipoEj(e)==='bloque'||tipoEj(e)==='run'||String(e.n||'').trim(); });
   if(!ej.length) return no('Añade al menos un ejercicio con nombre');
@@ -9987,12 +10004,12 @@ A.pickTog=function(el){
 A.pickOk=function(){
   var r=CO.rut[CO.pickR]; if(!r) return cerrarModal();
   if(!CO.pickSel.length) return toast('Elige al menos un ejercicio');
-  r.ejercicios=r.ejercicios.filter(function(e){ return String(e.n||'').trim(); });
-  var nm=0;
+  r.ejercicios=r.ejercicios.filter(function(e){ return tipoEj(e)==='run'||tipoEj(e)==='bloque'||String(e.n||'').trim(); });      // v53.4.2: las carreras y los bloques sin nombre no se quitan (su nombre es opcional)
+  var nm=0, n0=r.ejercicios.length;
   CO.pickSel.forEach(function(id){ var b=CO.banco.filter(function(x){ return x.id===id; })[0]; if(!b) return;
     if(b.grupo==='Movilidad'){ nm++; r.ejercicios.push({n:b.nombre,tipo:'fuerza',d:'',nota:'',video:'',sets:[{t:'normal',r:'10',rir:'',kg:'',det:''},{t:'normal',r:'10',rir:'',kg:'',det:''}]}); }
     else r.ejercicios.push(Object.assign(b.grupo==='Cardio'?cardioVacio():ejVacio(),{n:b.nombre})); });
-  r._s=true; var n=CO.pickSel.length; cerrarModal(); repintar(); toast(n+' añadido'+(n>1?'s':'')+(nm?' ('+nm+' al bloque de movilidad, arriba)':'')+'. Ajusta series y reps y guarda la rutina.');
+  r._s=true; CO.ejAb=r.ejercicios[n0]||null; var n=CO.pickSel.length; cerrarModal(); repintar(); if(CO.ejAb) ejVer(CO.ejAb); toast(n+' añadido'+(n>1?'s':'')+(nm?' ('+nm+' al bloque de movilidad, arriba)':'')+'. Ajusta series y reps y guarda la rutina.');
 };
 
 /* ---------- editor de dieta (v24: alimentos con gramos, como Fitia) ---------- */
