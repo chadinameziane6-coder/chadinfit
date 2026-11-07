@@ -19,8 +19,9 @@ html,body{margin:0;background:#F5F5F7;color:#141414;font:16px/1.5 -apple-system,
 .caja h1{font-size:22px;line-height:1.25;margin:16px 0 6px}
 .caja p{margin:6px 0 14px;color:#4A4A4E;font-size:15px}
 label{display:block;font-size:13px;font-weight:600;color:#4A4A4E;margin:14px 0 6px}
-input[type=email],input[type=password],input[type=text]{width:100%;border:1px solid #DCDCE0;border-radius:14px;padding:13px 14px;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fff;color:#141414;outline:none}
-input:focus{border-color:#111}
+input[type=email],input[type=password],input[type=text],input[type=number],input[type=date],select{width:100%;border:1px solid #DCDCE0;border-radius:14px;padding:13px 14px;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fff;color:#141414;outline:none}
+input:focus,select:focus{border-color:#111}
+select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234A4A4E' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;padding-right:36px}
 #codigo{letter-spacing:.3em;font-size:22px;text-align:center}
 .casilla{display:flex;gap:10px;align-items:center;margin:16px 0 0;font-size:15px;color:#141414;font-weight:400}
 .casilla input{width:20px;height:20px;accent-color:#111;margin:0}
@@ -57,6 +58,40 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 .est.activo{background:#E8F6EE;color:#0E5A33}.est.prueba{background:#EAF1FD;color:#123E8A}.est.impago{background:#FDECEE;color:#8A0F1E}
 .est.invitado{background:#FFF4E0;color:#7A4A00}.est.baja{background:#EDEDF0;color:#4A4A4E}
 .est.nuevo{background:#FFF4E0;color:#7A4A00}.est.contactado{background:#E8F6EE;color:#0E5A33}.est.descartado{background:#EDEDF0;color:#4A4A4E}
+.est.web{background:#E8F6EE;color:#0E5A33}.est.invitar{background:#EAF1FD;color:#123E8A}.est.no,.est.desactivado,.est.caducado,.est.agotado{background:#EDEDF0;color:#4A4A4E}
+/* v53.2 · secciones del panel */
+.menu{display:flex;gap:6px;margin:-8px 0 20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.menu a{flex:none;text-decoration:none;border-radius:999px;padding:10px 18px;font:600 14.5px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#EDEDF0;color:#141414}
+.menu a[aria-current=page]{background:#111;color:#fff}
+.tit-sec{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0 0 12px}
+.tit-sec h2{font-size:22px;margin:0 0 4px;line-height:1.2}
+.tit-sec p{margin:0;font-size:14px;color:#4A4A4E}
+.aviso{background:#FFF4E0;color:#7A4A00;border-radius:14px;padding:12px 14px;font-size:14px;margin:0 0 16px}
+.aviso.gris{background:#F5F5F7;color:#4A4A4E;margin:16px 0 0}
+.tarjetas{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px;margin-bottom:18px}
+.plan{background:#fff;border-radius:20px;padding:16px;box-shadow:0 6px 20px rgba(0,0,0,.04);display:flex;flex-direction:column;gap:6px}
+.plan.retirado{background:#FAFAFB;box-shadow:none;border:1px dashed #DCDCE0}
+.plan .cab-p{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:2px}
+.plan .nomp{font-size:18px;font-weight:700}
+.plan .precio b{font-size:26px;line-height:1.2}.plan .precio span{font-size:13.5px;color:#4A4A4E}
+.plan .dato{font-size:14px;color:#4A4A4E}
+.plan .bts{display:flex;gap:6px;margin-top:auto;padding-top:8px}
+.chip-b.peq{padding:8px 14px;font-size:13.5px}
+.ok-msg{background:#E8F6EE;color:#0E5A33;border-radius:14px;padding:10px 14px;font-size:14px;margin:0 0 14px}
+/* la hoja para crear o cambiar */
+#hoja{position:fixed;inset:0;background:rgba(20,20,20,.38);display:flex;align-items:center;justify-content:center;padding:20px;z-index:10}
+.hoja-caja{background:#fff;border-radius:22px;max-width:560px;width:100%;max-height:calc(100vh - 40px);overflow:auto;padding:22px 20px 20px}
+.hoja-caja h2{margin:0;font-size:20px}
+.hoja-caja .sub{margin:4px 0 4px;font-size:13.5px;color:#6E6E73}
+.fila2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+fieldset.marcas{border:0;padding:0;margin:16px 0 0;display:grid;gap:10px}
+fieldset.marcas legend{font-size:13px;font-weight:600;color:#4A4A4E;padding:0;margin-bottom:10px}
+fieldset.marcas .casilla{margin:0}
+.pista{font-size:12.5px;color:#87878B;margin-top:5px;min-height:1em}
+.bts-h{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
+.bts-h .btn{width:auto;flex:1 1 160px;margin-top:0}
+.btn.gris{background:#EDEDF0;color:#141414}
+.btn.rojo{background:#FDECEE;color:#8A0F1E}
 .vacio{color:#87878B;font-size:14.5px;padding:8px 2px}
 .msj{color:#4A4A4E;font-size:13.5px;margin-top:4px;white-space:pre-wrap;word-break:break-word}
 a{color:#141414}
@@ -72,6 +107,9 @@ a{color:#141414}
   tr:last-child{border-bottom:0}
   td{border:0;padding:3px 2px}
   td[data-l]:before{content:attr(data-l) ": ";color:#87878B;font-size:13px}
+  #hoja{padding:0;align-items:flex-end}
+  .hoja-caja{border-radius:22px 22px 0 0;max-height:92vh;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
+  .fila2{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -114,6 +152,12 @@ a{color:#141414}
     <div class="t"><div class="marca">MOOD ON</div><h1>Panel del dueño</h1></div>
     <div class="acc"><button class="chip-b" id="b-act" type="button">Actualizar</button><button class="chip-b neg" id="b-salir" type="button">Cerrar sesión</button></div>
   </div>
+  <nav class="menu" aria-label="Secciones del panel">
+    <a href="#inicio" data-v="inicio" aria-current="page">Inicio</a>
+    <a href="#planes" data-v="planes">Planes</a>
+  </nav>
+
+  <div id="v-inicio">
   <div class="cifras">
     <div class="cifra"><b id="c-ent">–</b><span>Entrenadores activos</span></div>
     <div class="cifra"><b id="c-cli">–</b><span>Clientes activos</span></div>
@@ -129,7 +173,35 @@ a{color:#141414}
     <p class="sub">Lo que mandan los entrenadores desde la web. Se borra solo a los 12 meses.</p>
     <div id="t-int"></div>
   </section>
+  </div>
+
+  <div id="v-planes" class="h">
+    <div class="tit-sec">
+      <div><h2>Planes</h2><p>Lo que pagan los entrenadores por usar MOOD ON. Precios sin IVA.</p></div>
+      <button class="chip-b neg" id="b-plan-nuevo" type="button">+ Crear plan</button>
+    </div>
+    <div class="aviso">Son los precios de la propuesta: cámbialos aquí cuando los decidáis. Todavía no se cobra nada a los entrenadores: los cobros llegan más adelante.</div>
+    <div id="pl-msg" class="ok-msg h" role="status"></div>
+    <div id="l-planes" class="tarjetas"><div class="vacio">Cargando…</div></div>
+    <section>
+      <div class="tit-sec">
+        <div><h2 style="font-size:17px">Descuentos y códigos</h2><p class="sub" style="margin:0">Para el precio de fundador, las recomendaciones o una campaña.</p></div>
+        <button class="chip-b" id="b-cod-nuevo" type="button">+ Crear código</button>
+      </div>
+      <div id="t-cod"></div>
+      <p class="sub" style="margin:12px 0 0">Los códigos se podrán usar cuando lleguen las invitaciones y los cobros a los entrenadores. Uno ya usado no se borra: se desactiva.</p>
+    </section>
+  </div>
+
   <p class="pie" id="pie"></p>
+</div>
+
+<div id="hoja" class="h" role="dialog" aria-modal="true" aria-labelledby="h-tit">
+  <div class="hoja-caja">
+    <h2 id="h-tit"></h2>
+    <div id="h-cuerpo"></div>
+    <div id="h-msg" class="msg err h" role="alert"></div>
+  </div>
 </div>
 
 <script>
@@ -226,12 +298,13 @@ a{color:#141414}
     $('c-cli').textContent = activos.reduce(function (s, k) { return s + (Number(k.activos) || 0); }, 0);
     $('c-int').textContent = I.filter(function (i) { return i.estado === 'nuevo'; }).length;
     $('t-ent').innerHTML = !C.length ? '<div class="vacio">Todavía no hay entrenadores.</div>' :
-      '<table><thead><tr><th>Entrenador</th><th>Estado</th><th>Clientes activos</th><th>Clientes en total</th><th>Última vez en su panel</th><th>Alta</th></tr></thead><tbody>' +
+      '<table><thead><tr><th>Entrenador</th><th>Estado</th><th>Plan</th><th>Clientes activos</th><th>Clientes en total</th><th>Última vez en su panel</th><th>Alta</th></tr></thead><tbody>' +
       C.map(function (k) {
         return '<tr><td><div class="nom">' + esc(k.nombre || k.id) + (k.id === 'co1' ? ' <span class="gris">· nº 1</span>' : '') + '</div>' +
           (k.email ? '<div class="gris">' + esc(k.email) + '</div>' : '') + '</td>' +
           '<td data-l="Estado">' + est(k.estado) + '</td>' +
-          '<td class="n" data-l="Clientes activos">' + (Number(k.activos) || 0) + '</td>' +
+          '<td data-l="Plan">' + (k.plan ? esc(k.plan_nombre || k.plan) + '<div class="gris">' + (k.limite ? 'Hasta ' + k.limite + ' activos' : 'Sin límite') + '</div>' : '<span class="gris">Sin plan</span>') + '</td>' +
+          '<td class="n" data-l="Clientes activos">' + (Number(k.activos) || 0) + (k.limite ? ' <span class="gris">de ' + k.limite + '</span>' : '') + '</td>' +
           '<td class="n" data-l="Clientes en total">' + (Number(k.clientes) || 0) + '</td>' +
           '<td data-l="Última vez en su panel">' + esc(hace(k.ultimo_panel, d.ahora)) + '</td>' +
           '<td class="n" data-l="Alta">' + esc(fecha(k.creado)) + '</td></tr>';
@@ -254,6 +327,8 @@ a{color:#141414}
     var b = $('b-act'); ocupado(b, true, 'Actualizando…');
     llamar({ acc: 'resumen', ses: ses }).then(function (r) {
       $('entrar').classList.add('h'); $('panel').classList.remove('h'); pintar(r);
+      irA(location.hash.slice(1), true);
+      if (vista === 'planes') cargarPlanes();
     }).catch(function (er) {
       if (/Vuelve a entrar/.test(er.message)) { guarda(K.ses, ''); verEntrar(); aviso(er.message); }
       else if ($('panel').classList.contains('h')) { verEntrar(); aviso(er.message); }
@@ -261,9 +336,213 @@ a{color:#141414}
     }).then(function () { ocupado(b, false, 'Actualizar'); });
   }
   $('b-act').addEventListener('click', cargar);
+
+  /* ---------- v53.2 · las secciones: Inicio y Planes ---------- */
+  var VISTAS = ['inicio', 'planes'], vista = 'inicio', PL = null;   // PL: los planes y los códigos (acc «planes»)
+  function irA(v, sinCargar) {
+    if (VISTAS.indexOf(v) < 0) v = 'inicio';
+    vista = v;
+    VISTAS.forEach(function (x) { $('v-' + x).classList.toggle('h', x !== v); });
+    Array.prototype.forEach.call(document.querySelectorAll('.menu a'), function (a) {
+      if (a.getAttribute('data-v') === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    });
+    if (!sinCargar && v === 'planes' && !PL) cargarPlanes();
+  }
+  window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) irA(location.hash.slice(1)); });
+  function fallo(er) {
+    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); verEntrar(); aviso(er.message); return true; }
+    return false;
+  }
+  function cargarPlanes() {
+    if (!PL) $('l-planes').innerHTML = '<div class="vacio">Cargando…</div>';
+    return llamar({ acc: 'planes', ses: lee(K.ses) }).then(function (r) { PL = r.d; pintarPlanes(); })
+      .catch(function (er) { if (!fallo(er)) $('l-planes').innerHTML = '<div class="vacio">' + esc(er.message) + '</div>'; });
+  }
+  function hecho(t) {
+    var m = $('pl-msg'); m.textContent = t; m.classList.remove('h');
+    clearTimeout(hecho.t); hecho.t = setTimeout(function () { m.classList.add('h'); }, 5000);
+  }
+
+  // textos: «14,90 €», «1.299 €»
+  function euros(n) {
+    if (n == null || n === '') return '';
+    n = Number(n); var ent = Math.floor(n), dec = Math.round((n - ent) * 100);
+    return String(ent).replace(/\B(?=(\d{3})+(?!\d))/g, '.') + (dec ? ',' + ('0' + dec).slice(-2) : '') + ' €';
+  }
+  var aTexto = function (n) { return n == null ? '' : (n % 1 ? Number(n).toFixed(2) : String(n)).replace('.', ','); };
+  var OFR = { web: 'En la web', invitar: 'Solo al invitar', no: 'Ya no se ofrece' };
+  var OFR_L = [['web', 'En la web y al invitar'], ['invitar', 'Solo al invitar (no sale en la web)'], ['no', 'Ya no se ofrece (lo conserva quien ya lo tiene)']];
+  var INC = [['app', 'Toda la app (entrenos, dieta, ciclo, carrera, chat)'], ['stripe', 'Cobrar a sus clientes con su Stripe'], ['meet', 'Videollamadas con Meet'],
+             ['logo', 'Su logo en la app'], ['migracion', 'Le pasamos sus clientes (migración)'], ['equipo', 'Varios entrenadores en la misma cuenta']];
+  var COBRO_L = [['cuota', 'Con cuota (al mes o al año)'], ['medida', 'A medida (se habla con cada uno)'], ['gratis', 'Sin cuota']];
+  EST.desactivado = 'Desactivado'; EST.caducado = 'Caducado'; EST.agotado = 'Agotado';
+  function dias(d) { d = Number(d) || 0; return !d ? 'Sin prueba gratis' : d % 30 === 0 ? (d === 30 ? '1 mes' : d / 30 + ' meses') + ' de prueba gratis' : d + ' días de prueba gratis'; }
+  function entrenadores(n) { return !n ? 'Ningún entrenador' : n === 1 ? '1 entrenador' : n + ' entrenadores'; }
+  function opts(lista, v) { return lista.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === String(v) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join(''); }
+  var plan = function (id) { return ((PL && PL.planes) || []).filter(function (p) { return p.id === id; })[0]; };
+  function diaTxt(s) { if (!s) return 'Sin fecha'; var p = String(s).split('-'); return Number(p[2]) + ' ' + MES[Number(p[1]) - 1] + ' ' + p[0]; }
+
+  function pintarPlanes() {
+    var P = (PL && PL.planes) || [], C = (PL && PL.codigos) || [], hoy = (PL && PL.hoy) || '';
+    $('l-planes').innerHTML = !P.length ? '<div class="vacio">Todavía no hay planes. Crea el primero con «+ Crear plan».</div>' : P.map(function (p) {
+      var precio = p.cobro === 'medida' ? '<b>A medida</b>' : p.cobro === 'gratis' ? '<b>Sin cuota</b>' :
+        '<b>' + esc(euros(p.precio_mes)) + '</b><span> al mes</span>' + (p.precio_anio != null ? '<div class="dato">' + esc(euros(p.precio_anio)) + ' al año</div>' : '<div class="dato gris">Sin pago anual</div>');
+      return '<article class="plan' + (p.ofrecer === 'no' ? ' retirado' : '') + '">' +
+        '<div class="cab-p"><span class="nomp">' + esc(p.nombre) + '</span><span class="est ' + esc(p.ofrecer) + '">' + esc(OFR[p.ofrecer] || p.ofrecer) + '</span></div>' +
+        '<div class="precio">' + precio + '</div>' +
+        '<div class="dato">' + (p.limite == null ? 'Sin límite de clientes' : 'Hasta ' + p.limite + ' clientes activos') + '</div>' +
+        '<div class="dato">' + esc(dias(p.prueba_dias)) + '</div>' +
+        '<div class="dato gris">' + esc(entrenadores(p.entrenadores)) + '</div>' +
+        '<div class="bts"><button class="chip-b peq" type="button" data-ed="' + esc(p.id) + '">Editar</button>' +
+        '<button class="chip-b peq" type="button" data-du="' + esc(p.id) + '">Duplicar</button></div></article>';
+    }).join('');
+    $('t-cod').innerHTML = !C.length ? '<div class="vacio">Todavía no hay códigos.</div>' :
+      '<table><thead><tr><th>Código</th><th>Qué hace</th><th>Usos</th><th>Hasta</th><th>Estado</th><th></th></tr></thead><tbody>' +
+      C.map(function (c) {
+        var e = !c.activo ? 'desactivado' : c.hasta && c.hasta < hoy ? 'caducado' : c.max_usos && c.usos >= c.max_usos ? 'agotado' : 'activo';
+        return '<tr><td class="nom">' + esc(c.codigo) + (c.nota ? '<div class="gris" style="font-weight:400">' + esc(c.nota) + '</div>' : '') + '</td>' +
+          '<td data-l="Qué hace">' + esc(queHace(c)) + '</td>' +
+          '<td class="n" data-l="Usos">' + c.usos + (c.max_usos ? ' de ' + c.max_usos : '') + '</td>' +
+          '<td class="n" data-l="Hasta">' + esc(diaTxt(c.hasta)) + '</td>' +
+          '<td data-l="Estado">' + est(e) + '</td>' +
+          '<td><button class="chip-b peq" type="button" data-cod="' + esc(c.codigo) + '">Editar</button></td></tr>';
+      }).join('') + '</tbody></table>';
+  }
+  function queHace(c) {
+    var t = c.tipo === 'descuento'
+      ? '−' + c.valor + ' %' + (c.meses ? (c.meses === 1 ? ' el primer mes' : ' los ' + c.meses + ' primeros meses') : ' siempre')
+      : (c.valor === 1 ? '1 mes gratis' : c.valor + ' meses gratis');
+    if (c.planes && c.planes.length) t += ' · solo ' + c.planes.map(function (id) { var p = plan(id); return p ? p.nombre : id; }).join(', ');
+    return t;
+  }
+
+  // la hoja para crear o cambiar (Escape o «Cancelar» la cierran)
+  var hojaDe = null;
+  function abrirHoja(titulo, html) {
+    hojaDe = document.activeElement;
+    $('h-tit').textContent = titulo; $('h-cuerpo').innerHTML = html; hojaAviso('');
+    $('hoja').classList.remove('h'); document.body.style.overflow = 'hidden';
+    var f = $('h-cuerpo').querySelector('input:not([disabled]),select'); if (f) f.focus();
+  }
+  function cerrarHoja() {
+    if ($('hoja').classList.contains('h')) return;
+    $('hoja').classList.add('h'); document.body.style.overflow = '';
+    if (hojaDe && hojaDe.focus) hojaDe.focus();
+  }
+  function hojaAviso(t) { var m = $('h-msg'); m.textContent = t || ''; m.classList.toggle('h', !t); }
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') cerrarHoja(); });
+  // borrar: hay que pulsar dos veces
+  function dosVeces(b, accion) {
+    if (b.getAttribute('data-seguro')) { accion(); return; }
+    var t = b.textContent; b.setAttribute('data-seguro', '1'); b.textContent = 'Pulsa otra vez para borrar';
+    setTimeout(function () { b.removeAttribute('data-seguro'); b.textContent = t; }, 5000);
+  }
+  function enviar(b, datos, ok) {
+    var t = b.textContent; ocupado(b, true, 'Guardando…'); hojaAviso('');
+    llamar(datos).then(function (r) { PL = r.d; pintarPlanes(); cerrarHoja(); hecho(ok); })
+      .catch(function (er) { if (!fallo(er)) hojaAviso(er.message); })
+      .then(function () { ocupado(b, false, t); });
+  }
+
+  // un plan
+  function hojaPlan(p, nuevo) {
+    var D = [0, 7, 14, 30, 60]; if (D.indexOf(Number(p.prueba_dias)) < 0) D.push(Number(p.prueba_dias)); D.sort(function (a, b) { return a - b; });
+    abrirHoja(nuevo ? (p.id ? 'Duplicar «' + p.nombre + '»' : 'Crear un plan') : 'Editar plan · ' + p.nombre,
+      '<p class="sub">' + (nuevo ? 'Un plan nuevo. Lo podrás cambiar cuando quieras.' : 'Lo que cambies aquí lo verá quien lo contrate a partir de ahora.') + '</p>' +
+      '<form id="f-plan" novalidate>' +
+      '<label for="p-nombre">Nombre</label><input id="p-nombre" type="text" maxlength="40" value="' + esc(nuevo && p.id ? (p.nombre + ' (copia)').slice(0, 40) : p.nombre || '') + '">' +
+      '<label for="p-cobro">Cómo se paga</label><select id="p-cobro">' + opts(COBRO_L, p.cobro || 'cuota') + '</select>' +
+      '<div id="p-precios" class="fila2"><div><label for="p-mes">Precio al mes, sin IVA</label><input id="p-mes" type="text" inputmode="decimal" placeholder="29,90" value="' + esc(aTexto(p.precio_mes)) + '"></div>' +
+      '<div><label for="p-anio">Precio al año, sin IVA</label><input id="p-anio" type="text" inputmode="decimal" placeholder="Vacío: sin pago anual" value="' + esc(aTexto(p.precio_anio)) + '"><div class="pista" id="p-pista"></div></div></div>' +
+      '<div class="fila2"><div><label for="p-limite">Clientes activos, como mucho</label><input id="p-limite" type="number" min="1" step="1" inputmode="numeric" placeholder="Vacío: sin límite" value="' + esc(p.limite == null ? '' : p.limite) + '"></div>' +
+      '<div><label for="p-prueba">Prueba gratis</label><select id="p-prueba">' + opts(D.map(function (d) { return [d, d ? (d % 30 === 0 ? (d === 30 ? '1 mes' : d / 30 + ' meses') : d + ' días') : 'Sin prueba']; }), p.prueba_dias == null ? 14 : p.prueba_dias) + '</select></div></div>' +
+      '<label for="p-ofrecer">Dónde se ofrece</label><select id="p-ofrecer">' + opts(OFR_L, p.ofrecer || 'web') + '</select>' +
+      '<fieldset class="marcas"><legend>Qué incluye</legend>' + INC.map(function (o) {
+        return '<label class="casilla"><input type="checkbox" name="inc" value="' + o[0] + '"' + ((p.incluye || []).indexOf(o[0]) >= 0 ? ' checked' : '') + '> ' + esc(o[1]) + '</label>';
+      }).join('') + '</fieldset>' +
+      '<label for="p-texto">Una frase para la web <span class="gris" style="font-weight:400">(si quieres)</span></label><input id="p-texto" type="text" maxlength="160" value="' + esc(p.texto || '') + '" placeholder="Para empezar con tus primeros clientes">' +
+      (!nuevo && p.entrenadores ? '<div class="aviso gris">Lo ' + (p.entrenadores === 1 ? 'tiene 1 entrenador' : 'tienen ' + p.entrenadores + ' entrenadores') + ': si cambias el precio, siguen con el que tenían. Cambiárselo, avisándoles con 30 días, llegará con los cobros.</div>' : '') +
+      '<div class="bts-h"><button class="btn" id="p-guardar" type="submit">' + (nuevo ? 'Crear plan' : 'Guardar cambios') + '</button>' +
+      '<button class="btn gris" id="p-cancelar" type="button">Cancelar</button>' +
+      (!nuevo && !p.entrenadores ? '<button class="btn rojo" id="p-borrar" type="button">Borrar plan</button>' : '') + '</div></form>');
+    function verCobro() {
+      $('p-precios').classList.toggle('h', $('p-cobro').value !== 'cuota');
+      var m = Number(String($('p-mes').value).replace(/[€\s]/g, '').replace(',', '.'));
+      $('p-pista').textContent = m > 0 ? 'Con 2 meses gratis serían ' + euros(Math.round(m * 1000) / 100) : '';
+    }
+    $('p-cobro').addEventListener('change', verCobro); $('p-mes').addEventListener('input', verCobro); verCobro();
+    $('p-cancelar').addEventListener('click', cerrarHoja);
+    if ($('p-borrar')) $('p-borrar').addEventListener('click', function () {
+      var b = this; dosVeces(b, function () { enviar(b, { acc: 'plan_borrar', ses: lee(K.ses), id: p.id }, 'Plan «' + p.nombre + '» borrado.'); });
+    });
+    $('f-plan').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var inc = Array.prototype.map.call(document.querySelectorAll('#f-plan input[name=inc]:checked'), function (x) { return x.value; });
+      var cobro = $('p-cobro').value;
+      enviar($('p-guardar'), { acc: 'plan_guardar', ses: lee(K.ses), nuevo: nuevo, plan: {
+        id: nuevo ? '' : p.id, nombre: $('p-nombre').value, cobro: cobro,
+        precio_mes: cobro === 'cuota' ? $('p-mes').value : '', precio_anio: cobro === 'cuota' ? $('p-anio').value : '',
+        limite: $('p-limite').value, prueba_dias: $('p-prueba').value, ofrecer: $('p-ofrecer').value, incluye: inc, texto: $('p-texto').value } },
+        nuevo ? 'Plan «' + $('p-nombre').value.trim() + '» creado.' : 'Cambios guardados.');
+    });
+  }
+  $('b-plan-nuevo').addEventListener('click', function () { hojaPlan({ cobro: 'cuota', prueba_dias: 14, ofrecer: 'web', incluye: ['app', 'stripe', 'meet', 'logo'] }, true); });
+  $('l-planes').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var p = plan(b.getAttribute('data-ed') || b.getAttribute('data-du')); if (!p) return;
+    hojaPlan(p, b.hasAttribute('data-du'));
+  });
+
+  // un código
+  function hojaCodigo(c, nuevo) {
+    var P = ((PL && PL.planes) || []).filter(function (p) { return p.cobro !== 'gratis'; });
+    abrirHoja(nuevo ? 'Crear un código' : 'Código ' + c.codigo,
+      '<p class="sub">Lo escribe el entrenador al darse de alta.' + (c.usos ? ' Se ha usado ' + (c.usos === 1 ? '1 vez' : c.usos + ' veces') + '.' : '') + '</p>' +
+      '<form id="f-cod" novalidate>' +
+      '<label for="c-cod">Código</label><input id="c-cod" type="text" maxlength="20" autocapitalize="characters" spellcheck="false" placeholder="FUNDADOR" value="' + esc(c.codigo || '') + '"' + (nuevo ? '' : ' disabled') + '>' +
+      '<div class="fila2"><div><label for="c-tipo">Qué hace</label><select id="c-tipo">' + opts([['descuento', 'Un % menos'], ['meses', 'Meses gratis']], c.tipo || 'descuento') + '</select></div>' +
+      '<div><label for="c-valor" id="c-valor-l"></label><input id="c-valor" type="number" min="1" step="1" inputmode="numeric" value="' + esc(c.valor || '') + '"></div></div>' +
+      '<div id="c-meses-c"><label for="c-meses">Durante cuántos meses</label><input id="c-meses" type="number" min="1" max="60" step="1" inputmode="numeric" placeholder="Vacío: siempre" value="' + esc(c.meses || '') + '"></div>' +
+      (P.length ? '<fieldset class="marcas"><legend>Para qué planes (si no marcas ninguno, para todos)</legend>' + P.map(function (p) {
+        return '<label class="casilla"><input type="checkbox" name="cpl" value="' + esc(p.id) + '"' + ((c.planes || []).indexOf(p.id) >= 0 ? ' checked' : '') + '> ' + esc(p.nombre) + '</label>';
+      }).join('') + '</fieldset>' : '') +
+      '<div class="fila2"><div><label for="c-max">Cuántas veces se puede usar</label><input id="c-max" type="number" min="1" step="1" inputmode="numeric" placeholder="Vacío: sin límite" value="' + esc(c.max_usos || '') + '"></div>' +
+      '<div><label for="c-hasta">Vale hasta</label><input id="c-hasta" type="date" value="' + esc(c.hasta || '') + '"><div class="pista">Vacío: sin fecha</div></div></div>' +
+      '<label for="c-nota">Nota <span class="gris" style="font-weight:400">(solo la ves tú)</span></label><input id="c-nota" type="text" maxlength="200" value="' + esc(c.nota || '') + '" placeholder="Para los 10 primeros entrenadores">' +
+      '<label class="casilla"><input id="c-activo" type="checkbox"' + (c.activo === false ? '' : ' checked') + '> Activo (se puede usar)</label>' +
+      '<div class="bts-h"><button class="btn" id="c-guardar" type="submit">' + (nuevo ? 'Crear código' : 'Guardar cambios') + '</button>' +
+      '<button class="btn gris" id="c-cancelar" type="button">Cancelar</button>' +
+      (!nuevo && !c.usos ? '<button class="btn rojo" id="c-borrar" type="button">Borrar código</button>' : '') + '</div></form>');
+    function verTipo() {
+      var d = $('c-tipo').value === 'descuento';
+      $('c-valor-l').textContent = d ? 'Cuánto descuenta (%)' : 'Cuántos meses gratis';
+      $('c-valor').max = d ? 100 : 12; $('c-valor').placeholder = d ? '30' : '1';
+      $('c-meses-c').classList.toggle('h', !d);
+    }
+    $('c-tipo').addEventListener('change', verTipo); verTipo();
+    $('c-cancelar').addEventListener('click', cerrarHoja);
+    if ($('c-borrar')) $('c-borrar').addEventListener('click', function () {
+      var b = this; dosVeces(b, function () { enviar(b, { acc: 'codigo_borrar', ses: lee(K.ses), codigo: c.codigo }, 'Código ' + c.codigo + ' borrado.'); });
+    });
+    $('f-cod').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var d = $('c-tipo').value === 'descuento', cod = nuevo ? $('c-cod').value : c.codigo;
+      enviar($('c-guardar'), { acc: 'codigo_guardar', ses: lee(K.ses), nuevo: nuevo, codigo: {
+        codigo: cod, tipo: $('c-tipo').value, valor: $('c-valor').value, meses: d ? $('c-meses').value : '',
+        planes: Array.prototype.map.call(document.querySelectorAll('#f-cod input[name=cpl]:checked'), function (x) { return x.value; }),
+        max_usos: $('c-max').value, hasta: $('c-hasta').value, nota: $('c-nota').value, activo: $('c-activo').checked } },
+        nuevo ? 'Código ' + String(cod).toUpperCase().replace(/\s+/g, '') + ' creado.' : 'Cambios guardados.');
+    });
+  }
+  $('b-cod-nuevo').addEventListener('click', function () { hojaCodigo({ tipo: 'descuento' }, true); });
+  $('t-cod').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-cod]'); if (!b) return;
+    var c = ((PL && PL.codigos) || []).filter(function (x) { return x.codigo === b.getAttribute('data-cod'); })[0];
+    if (c) hojaCodigo(c, false);
+  });
   $('b-salir').addEventListener('click', function () {
     var ses = lee(K.ses), disp = lee(K.disp);
-    guarda(K.ses, ''); guarda(K.disp, '');
+    guarda(K.ses, ''); guarda(K.disp, ''); PL = null;
     llamar({ acc: 'salir', ses: ses, disp: disp }).catch(function () { }).then(verEntrar);
   });
   cargar();
