@@ -19,7 +19,7 @@ html,body{margin:0;background:#F5F5F7;color:#141414;font:16px/1.5 -apple-system,
 .caja h1{font-size:22px;line-height:1.25;margin:16px 0 6px}
 .caja p{margin:6px 0 14px;color:#4A4A4E;font-size:15px}
 label{display:block;font-size:13px;font-weight:600;color:#4A4A4E;margin:14px 0 6px}
-input[type=email],input[type=password],input[type=text],input[type=number],input[type=date],select{width:100%;border:1px solid #DCDCE0;border-radius:14px;padding:13px 14px;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fff;color:#141414;outline:none}
+input[type=email],input[type=password],input[type=text],input[type=number],input[type=date],input[type=search],input[type=tel],select,textarea{width:100%;border:1px solid #DCDCE0;border-radius:14px;padding:13px 14px;font:16px -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#fff;color:#141414;outline:none}
 input:focus,select:focus{border-color:#111}
 select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%234A4A4E' stroke-width='1.6'/%3E%3C/svg%3E") no-repeat right 14px center;padding-right:36px}
 #codigo{letter-spacing:.3em;font-size:22px;text-align:center}
@@ -33,7 +33,8 @@ select{appearance:none;-webkit-appearance:none;background:#fff url("data:image/s
 .msg.ok{background:#E8F6EE;color:#0E5A33}
 small{display:block;color:#87878B;margin-top:18px;font-size:12.5px;line-height:1.45}
 /* panel */
-#panel{max-width:1040px;margin:0 auto;padding:20px 16px 48px}
+#panel{max-width:1240px;margin:0 auto;padding:20px 16px 48px}
+textarea{resize:vertical;min-height:84px;line-height:1.45}
 .cab{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 22px;flex-wrap:wrap}
 .cab .t{display:flex;flex-direction:column;gap:4px}
 .cab h1{font-size:24px;margin:0;line-height:1.2}
@@ -57,7 +58,7 @@ td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 .est{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
 .est.activo{background:#E8F6EE;color:#0E5A33}.est.prueba{background:#EAF1FD;color:#123E8A}.est.impago{background:#FDECEE;color:#8A0F1E}
 .est.invitado{background:#FFF4E0;color:#7A4A00}.est.baja{background:#EDEDF0;color:#4A4A4E}
-.est.nuevo{background:#FFF4E0;color:#7A4A00}.est.contactado{background:#E8F6EE;color:#0E5A33}.est.descartado{background:#EDEDF0;color:#4A4A4E}
+.est.nuevo{background:#FFF4E0;color:#7A4A00}.est.contactado,.est.demo,.est.propuesta{background:#EAF1FD;color:#123E8A}.est.descartado,.est.perdido{background:#EDEDF0;color:#4A4A4E}.est.ganado{background:#E8F6EE;color:#0E5A33}
 .est.web{background:#E8F6EE;color:#0E5A33}.est.invitar{background:#EAF1FD;color:#123E8A}.est.no,.est.desactivado,.est.caducado,.est.agotado{background:#EDEDF0;color:#4A4A4E}
 /* v53.2 · secciones del panel */
 .menu{display:flex;gap:6px;margin:-8px 0 20px;overflow-x:auto;-webkit-overflow-scrolling:touch}
@@ -92,6 +93,43 @@ fieldset.marcas .casilla{margin:0}
 .bts-h .btn{width:auto;flex:1 1 160px;margin-top:0}
 .btn.gris{background:#EDEDF0;color:#141414}
 .btn.rojo{background:#FDECEE;color:#8A0F1E}
+/* v53.3 · el CRM */
+.filtros{display:grid;grid-template-columns:2fr 1fr 1fr;gap:10px;margin:0 0 14px}
+.tablero{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:10px;overflow-x:auto;padding-bottom:8px;-webkit-overflow-scrolling:touch}
+.colu{background:#EDEDF0;border-radius:18px;padding:10px;display:flex;flex-direction:column;gap:8px;min-height:120px;min-width:0}
+.colu h3{margin:2px 4px 2px;font-size:13px;font-weight:700;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.colu h3 span{background:#fff;border-radius:999px;padding:1px 8px;font-size:12px;color:#4A4A4E}
+.colu.ganado{background:#E8F6EE}.colu.perdido{background:#F5F5F7;border:1px dashed #DCDCE0}
+.colu .nadie{font-size:12.5px;color:#87878B;padding:4px}
+.ficha-k{background:#fff;border:0;border-radius:14px;padding:10px 12px;text-align:left;cursor:pointer;font:inherit;color:inherit;display:flex;flex-direction:column;gap:3px;box-shadow:0 2px 8px rgba(0,0,0,.05);width:100%}
+.ficha-k:hover{box-shadow:0 0 0 2px #141414}
+.ficha-k b{font-size:14.5px;line-height:1.3;word-break:break-word}
+.ficha-k .mini{font-size:12.5px;color:#6E6E73}
+.ficha-k .px{font-size:12.5px;color:#4A4A4E}.px.tarde{color:#8A0F1E;font-weight:600}.px.hoy{color:#7A4A00;font-weight:600}
+.int{display:inline-block;border-radius:999px;padding:1px 8px;font-size:11.5px;font-weight:600;margin-right:4px}
+.int.alto{background:#E8F6EE;color:#0E5A33}.int.medio{background:#FFF4E0;color:#7A4A00}.int.bajo{background:#EDEDF0;color:#4A4A4E}
+.etiq{display:inline-block;background:#F5F5F7;border-radius:999px;padding:1px 8px;font-size:11.5px;color:#4A4A4E;margin:2px 4px 0 0}
+fieldset.etapas{border:0;padding:0;margin:14px 0 0}
+fieldset.etapas legend{font-size:13px;font-weight:600;color:#4A4A4E;padding:0;margin-bottom:8px}
+.etapas .op{display:flex;flex-wrap:wrap;gap:6px}
+.etapas label{margin:0;display:inline-flex;align-items:center;border-radius:999px;background:#EDEDF0;color:#141414;padding:9px 14px;font-size:14px;font-weight:600;cursor:pointer}
+.etapas input{position:absolute;opacity:0;width:1px;height:1px}
+.etapas label:has(input:checked){background:#111;color:#fff}
+.etapas label:has(input:focus-visible){outline:2px solid #111;outline-offset:2px}
+.acc-k{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0}
+.acc-k a{text-decoration:none}
+.caja-g{background:#E8F6EE;color:#0E5A33;border-radius:14px;padding:12px 14px;font-size:14px;margin:16px 0 0}
+.caja-g .btn{margin-top:10px;background:#0E5A33;color:#fff}
+.hist{margin-top:22px;border-top:1px solid #EDEDF0;padding-top:16px}
+.hist h3{font-size:16px;margin:0 0 10px}
+.hist ul{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+.hist li{background:#F5F5F7;border-radius:14px;padding:10px 12px;font-size:14px}
+.hist li .q{display:flex;justify-content:space-between;gap:8px;font-size:12.5px;color:#6E6E73;margin-bottom:3px}
+.hist li .t{white-space:pre-wrap;word-break:break-word}
+.hist li.etapa{background:#fff;border:1px dashed #DCDCE0}
+.enl.peq{margin:0;font-size:12.5px}
+.nota-crm{font-size:13px;color:#6E6E73;margin:14px 0 0;line-height:1.45}
+.fila-nota{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:end;margin-top:8px}
 .vacio{color:#87878B;font-size:14.5px;padding:8px 2px}
 .msj{color:#4A4A4E;font-size:13.5px;margin-top:4px;white-space:pre-wrap;word-break:break-word}
 a{color:#141414}
@@ -110,6 +148,10 @@ a{color:#141414}
   #hoja{padding:0;align-items:flex-end}
   .hoja-caja{border-radius:22px 22px 0 0;max-height:92vh;padding-bottom:calc(20px + env(safe-area-inset-bottom))}
   .fila2{grid-template-columns:1fr}
+  .filtros{grid-template-columns:1fr 1fr}
+  .filtros input{grid-column:1/3}
+  .tablero{grid-template-columns:repeat(6,78vw);scroll-snap-type:x mandatory}
+  .colu{scroll-snap-align:start}
 }
 </style>
 </head>
@@ -154,6 +196,7 @@ a{color:#141414}
   </div>
   <nav class="menu" aria-label="Secciones del panel">
     <a href="#inicio" data-v="inicio" aria-current="page">Inicio</a>
+    <a href="#crm" data-v="crm">CRM</a>
     <a href="#planes" data-v="planes">Planes</a>
   </nav>
 
@@ -161,7 +204,7 @@ a{color:#141414}
   <div class="cifras">
     <div class="cifra"><b id="c-ent">–</b><span>Entrenadores activos</span></div>
     <div class="cifra"><b id="c-cli">–</b><span>Clientes activos</span></div>
-    <div class="cifra"><b id="c-int">–</b><span>Solicitudes nuevas</span></div>
+    <div class="cifra"><b id="c-int">–</b><span>Contactos nuevos en el CRM</span></div>
   </div>
   <section>
     <h2>Entrenadores</h2>
@@ -169,10 +212,27 @@ a{color:#141414}
     <div id="t-ent"></div>
   </section>
   <section>
-    <h2>Quiero probarlo</h2>
-    <p class="sub">Lo que mandan los entrenadores desde la web. Se borra solo a los 12 meses.</p>
+    <div class="tit-sec">
+      <div><h2 style="font-size:17px">CRM · para hoy</h2><p class="sub" style="margin:0">Los contactos nuevos (también los de «Quiero probarlo» de la web) y los que tienen el próximo paso hoy o ya pasado.</p></div>
+      <a class="chip-b" href="#crm" style="text-decoration:none">Abrir el CRM</a>
+    </div>
     <div id="t-int"></div>
   </section>
+  </div>
+
+  <div id="v-crm" class="h">
+    <div class="tit-sec">
+      <div><h2>CRM de entrenadores</h2><p>Los entrenadores que podrían contratar MOOD ON, por etapas. Las solicitudes de la web entran solas.</p></div>
+      <button class="chip-b neg" id="b-crm-nuevo" type="button">+ Añadir contacto</button>
+    </div>
+    <div id="crm-msg" class="ok-msg h" role="status"></div>
+    <div class="filtros">
+      <input id="crm-q" type="search" placeholder="Buscar por nombre, email o etiqueta" aria-label="Buscar en el CRM">
+      <select id="crm-or" aria-label="De dónde viene"></select>
+      <select id="crm-in" aria-label="Interés"></select>
+    </div>
+    <div id="crm-tablero" class="tablero"><div class="vacio">Cargando…</div></div>
+    <p class="nota-crm">Quien no contrata se borra solo, con su historial, a los 12 meses del último contacto (lo dice la política de privacidad). Si apuntas a alguien que no te ha escrito por la web, díselo en tu primer mensaje y pásale moodonapp.com/privacidad.html#web.</p>
   </div>
 
   <div id="v-planes" class="h">
@@ -309,15 +369,17 @@ a{color:#141414}
           '<td data-l="Última vez en su panel">' + esc(hace(k.ultimo_panel, d.ahora)) + '</td>' +
           '<td class="n" data-l="Alta">' + esc(fecha(k.creado)) + '</td></tr>';
       }).join('') + '</tbody></table>';
-    $('t-int').innerHTML = !I.length ? '<div class="vacio">Nadie ha mandado «Quiero probarlo» todavía.</div>' :
-      '<table><thead><tr><th>Fecha</th><th>Quién</th><th>Contacto</th><th>Clientes</th><th>Estado</th></tr></thead><tbody>' +
-      I.map(function (i) {
-        var tel = String(i.movil || '').replace(/[^\d+]/g, '');
-        return '<tr><td class="n" data-l="Fecha">' + esc(fecha(i.fecha, true)) + '</td>' +
-          '<td><div class="nom">' + esc(i.nombre) + '</div>' + (i.mensaje ? '<div class="msj">' + esc(i.mensaje) + '</div>' : '') + '</td>' +
-          '<td data-l="Contacto"><a href="mailto:' + esc(i.email) + '">' + esc(i.email) + '</a>' + (tel ? '<div><a href="tel:' + esc(tel) + '">' + esc(i.movil) + '</a></div>' : '') + '</td>' +
-          '<td class="n" data-l="Clientes">' + esc(i.clientes || '—') + '</td>' +
-          '<td data-l="Estado">' + est(i.estado) + '</td></tr>';
+    var CR = d.crm || {}, H = CR.hoy || [], hoyD = d.hoy || '';
+    $('c-int').textContent = Number(CR.nuevos) || 0;
+    $('t-int').innerHTML = !H.length ? '<div class="vacio">Nada para hoy en el CRM.</div>' :
+      '<table><thead><tr><th>Quién</th><th>Contacto</th><th>Etapa</th><th>Próximo paso</th><th></th></tr></thead><tbody>' +
+      H.map(function (k) {
+        var tel = String(k.movil || '').replace(/[^\d+]/g, '');
+        return '<tr><td><div class="nom">' + esc(k.nombre) + '</div>' + (k.nota ? '<div class="msj">' + esc(String(k.nota).slice(0, 160)) + '</div>' : '') + '</td>' +
+          '<td data-l="Contacto">' + (k.email ? '<a href="mailto:' + esc(k.email) + '">' + esc(k.email) + '</a>' : '') + (tel ? '<div><a href="tel:' + esc(tel) + '">' + esc(k.movil) + '</a></div>' : '') + (!k.email && !tel ? '—' : '') + '</td>' +
+          '<td data-l="Etapa">' + est(k.etapa) + '</td>' +
+          '<td data-l="Próximo paso">' + proxTxt(k, hoyD) + '</td>' +
+          '<td><button class="chip-b peq" type="button" data-abre="' + esc(k.id) + '">Abrir</button></td></tr>';
       }).join('') + '</tbody></table>';
     $('pie').textContent = 'Entras como ' + (r.email || '') + ' · Actualizado ' + fecha(d.ahora, true) + ' · Aquí no se ve ningún dato de salud de los clientes: solo números.';
   }
@@ -329,6 +391,7 @@ a{color:#141414}
       $('entrar').classList.add('h'); $('panel').classList.remove('h'); pintar(r);
       irA(location.hash.slice(1), true);
       if (vista === 'planes') cargarPlanes();
+      if (vista === 'crm') cargarCrm();
     }).catch(function (er) {
       if (/Vuelve a entrar/.test(er.message)) { guarda(K.ses, ''); verEntrar(); aviso(er.message); }
       else if ($('panel').classList.contains('h')) { verEntrar(); aviso(er.message); }
@@ -338,7 +401,7 @@ a{color:#141414}
   $('b-act').addEventListener('click', cargar);
 
   /* ---------- v53.2 · las secciones: Inicio y Planes ---------- */
-  var VISTAS = ['inicio', 'planes'], vista = 'inicio', PL = null;   // PL: los planes y los códigos (acc «planes»)
+  var VISTAS = ['inicio', 'crm', 'planes'], vista = 'inicio', PL = null, KR = null;   // PL: planes y códigos · KR: el CRM
   function irA(v, sinCargar) {
     if (VISTAS.indexOf(v) < 0) v = 'inicio';
     vista = v;
@@ -347,6 +410,7 @@ a{color:#141414}
       if (a.getAttribute('data-v') === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
     if (!sinCargar && v === 'planes' && !PL) cargarPlanes();
+    if (!sinCargar && v === 'crm' && !KR) cargarCrm();
   }
   window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) irA(location.hash.slice(1)); });
   function fallo(er) {
@@ -535,6 +599,158 @@ a{color:#141414}
     });
   }
   $('b-cod-nuevo').addEventListener('click', function () { hojaCodigo({ tipo: 'descuento' }, true); });
+
+  /* ---------- v53.3 · el CRM de entrenadores ---------- */
+  var ETAPAS = [['nuevo', 'Nuevo'], ['contactado', 'Contactado'], ['demo', 'Demo'], ['propuesta', 'Propuesta'], ['ganado', 'Ganado'], ['perdido', 'Perdido']];
+  var ORIG = [['web', 'Web («Quiero probarlo»)'], ['instagram', 'Instagram'], ['recomendacion', 'Recomendación'], ['evento', 'Evento o curso'], ['otro', 'Otro']];
+  var INTER = [['', 'Sin decir'], ['alto', 'Alto'], ['medio', 'Medio'], ['bajo', 'Bajo']];
+  var NOTA_T = [['nota', 'Nota'], ['llamada', 'Llamada'], ['email', 'Email'], ['whatsapp', 'WhatsApp'], ['reunion', 'Reunión o demo']];
+  var NOTA_L = { nota: 'Nota', llamada: 'Llamada', email: 'Email', whatsapp: 'WhatsApp', reunion: 'Reunión o demo', etapa: 'Etapa', web: 'Desde la web' };
+  var lab = function (L, v) { for (var i = 0; i < L.length; i++) if (L[i][0] === v) return L[i][1]; return v; };
+  ETAPAS.forEach(function (e) { EST[e[0]] = e[1]; });
+  $('crm-or').innerHTML = '<option value="">De cualquier sitio</option>' + opts(ORIG.map(function (o) { return [o[0], o[0] === 'web' ? 'Web' : o[1]]; }), '');
+  $('crm-in').innerHTML = '<option value="">Cualquier interés</option>' + opts(INTER.slice(1), '');
+  var abrirLuego = '';
+  function proxTxt(k, hoyD) {
+    if (!k.proximo && !k.proximo_fecha) return k.etapa === 'nuevo' ? '<span class="px hoy">Contactarle</span>' : '<span class="gris">—</span>';
+    var f = k.proximo_fecha, cl = !f ? '' : f < hoyD ? ' tarde' : f === hoyD ? ' hoy' : '';
+    return '<span class="px' + cl + '">' + esc(k.proximo || 'Próximo paso') + (f ? ' · ' + (f === hoyD ? 'hoy' : esc(diaTxt(f)) + (f < hoyD ? ' (ya pasó)' : '')) : '') + '</span>';
+  }
+  function cargarCrm() {
+    if (!KR) $('crm-tablero').innerHTML = '<div class="vacio">Cargando…</div>';
+    return llamar({ acc: 'crm', ses: lee(K.ses) }).then(function (r) { KR = r.d; pintarCrm(); if (abrirLuego) { var id = abrirLuego; abrirLuego = ''; var k = contacto(id); if (k) hojaContacto(k, false); } })
+      .catch(function (er) { if (!fallo(er)) $('crm-tablero').innerHTML = '<div class="vacio">' + esc(er.message) + '</div>'; });
+  }
+  var contacto = function (id) { return ((KR && KR.contactos) || []).filter(function (k) { return k.id === id; })[0]; };
+  function hechoCrm(t) {
+    var m = $('crm-msg'); m.textContent = t; m.classList.remove('h');
+    clearTimeout(hechoCrm.t); hechoCrm.t = setTimeout(function () { m.classList.add('h'); }, 5000);
+  }
+  function pintarCrm() {
+    var K2 = (KR && KR.contactos) || [], hoyD = (KR && KR.hoy) || '';
+    var q = $('crm-q').value.trim().toLowerCase(), o = $('crm-or').value, it = $('crm-in').value;
+    var V = K2.filter(function (k) {
+      if (o && k.origen !== o) return false;
+      if (it && k.interes !== it) return false;
+      if (q && (k.nombre + ' ' + k.email + ' ' + k.instagram + ' ' + (k.etiquetas || []).join(' ')).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    $('crm-tablero').innerHTML = ETAPAS.map(function (e) {
+      var L = V.filter(function (k) { return k.etapa === e[0]; });
+      return '<div class="colu ' + e[0] + '"><h3>' + esc(e[1]) + ' <span>' + L.length + '</span></h3>' +
+        (!L.length ? '<div class="nadie">Nadie</div>' : L.map(function (k) {
+          var sub = [lab(ORIG, k.origen).replace(/ \(.*\)$/, ''), k.clientes ? k.clientes + ' clientes' : ''].filter(Boolean).join(' · ');
+          return '<button class="ficha-k" type="button" data-k="' + esc(k.id) + '"><b>' + esc(k.nombre) + '</b>' +
+            '<span class="mini">' + (k.interes ? '<span class="int ' + esc(k.interes) + '">' + esc(lab(INTER, k.interes)) + '</span>' : '') + esc(sub) + '</span>' +
+            (k.etapa === 'perdido' ? (k.motivo ? '<span class="mini">' + esc(k.motivo) + '</span>' : '') : k.etapa === 'ganado' ? '' : proxTxt(k, hoyD)) +
+            ((k.etiquetas || []).length ? '<span>' + k.etiquetas.slice(0, 3).map(function (t) { return '<span class="etiq">' + esc(t) + '</span>'; }).join('') + '</span>' : '') +
+            '</button>';
+        }).join('')) + '</div>';
+    }).join('');
+  }
+  ['crm-q', 'crm-or', 'crm-in'].forEach(function (id) { $(id).addEventListener(id === 'crm-q' ? 'input' : 'change', function () { if (KR) pintarCrm(); }); });
+  $('crm-tablero').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-k]'); if (!b) return;
+    var k = contacto(b.getAttribute('data-k')); if (k) hojaContacto(k, false);
+  });
+  $('t-int').addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-abre]'); if (!b) return;
+    abrirLuego = b.getAttribute('data-abre');
+    if (location.hash === '#crm') { if (KR) { var k = contacto(abrirLuego); abrirLuego = ''; if (k) hojaContacto(k, false); } else cargarCrm(); }
+    else { KR = null; location.hash = '#crm'; }
+  });
+  $('b-crm-nuevo').addEventListener('click', function () { hojaContacto({ etapa: 'nuevo', origen: 'instagram', interes: '', etiquetas: [] }, true); });
+  function notaTxt(n) {
+    if (n.tipo !== 'etapa') return n.texto;
+    var p = String(n.texto).split('>');
+    return !p[0] ? 'Añadido al CRM (' + lab(ETAPAS, p[1]) + ')' : 'Pasa de ' + lab(ETAPAS, p[0]) + ' a ' + lab(ETAPAS, p[1]);
+  }
+  function pintarNotas(k) {
+    var N = k.notas || [];
+    $('k-notas').innerHTML = !N.length ? '<li class="gris" style="background:none;padding:0">Todavía no hay nada apuntado.</li>' : N.map(function (n) {
+      return '<li class="' + (n.tipo === 'etapa' ? 'etapa' : '') + '"><div class="q"><span><b>' + esc(NOTA_L[n.tipo] || n.tipo) + '</b> · ' + esc(fecha(n.fecha, true)) + '</span>' +
+        (n.tipo !== 'etapa' && n.tipo !== 'web' ? '<button class="enl peq" type="button" data-nb="' + n.id + '">Borrar</button>' : '') + '</div><div class="t">' + esc(notaTxt(n)) + '</div></li>';
+    }).join('');
+  }
+  function hojaContacto(k, nuevo) {
+    var tel = String(k.movil || '').replace(/[^\d+]/g, ''), wa = tel.replace(/^\+/, '').replace(/^(?=[67]\d{8}$)/, '34');
+    var P = ((KR && KR.planes) || []).filter(function (p) { return p.ofrecer !== 'no' || p.id === k.plan; });
+    abrirHoja(nuevo ? 'Añadir un contacto' : k.nombre,
+      (nuevo ? '<p class="sub">Un entrenador que podría contratar MOOD ON (por Instagram, una recomendación, un evento…).</p>' :
+        '<p class="sub">' + esc(lab(ORIG, k.origen)) + ' · en el CRM desde el ' + esc(fecha(k.creado)) + ' · último contacto ' + esc(hace(k.ultimo, null).toLowerCase()) + '</p>' +
+        '<div class="acc-k">' + (k.email ? '<a class="chip-b peq" href="mailto:' + esc(k.email) + '">Email</a>' : '') + (tel ? '<a class="chip-b peq" href="tel:' + esc(tel) + '">Llamar</a><a class="chip-b peq" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+        (k.instagram ? '<a class="chip-b peq" href="https://instagram.com/' + esc(k.instagram) + '" target="_blank" rel="noopener">Instagram</a>' : '') + '</div>') +
+      '<form id="f-k" novalidate>' +
+      '<fieldset class="etapas"><legend>Etapa</legend><div class="op">' + ETAPAS.map(function (e) {
+        return '<label><input type="radio" name="k-et" value="' + e[0] + '"' + (e[0] === (k.etapa || 'nuevo') ? ' checked' : '') + '>' + esc(e[1]) + '</label>';
+      }).join('') + '</div></fieldset>' +
+      '<div class="fila2"><div><label for="k-nom">Nombre</label><input id="k-nom" type="text" maxlength="80" value="' + esc(k.nombre || '') + '"></div>' +
+      '<div><label for="k-em">Email</label><input id="k-em" type="email" maxlength="120" value="' + esc(k.email || '') + '"></div></div>' +
+      '<div class="fila2"><div><label for="k-mov">Móvil</label><input id="k-mov" type="tel" maxlength="30" placeholder="+34…" value="' + esc(k.movil || '') + '"></div>' +
+      '<div><label for="k-ig">Instagram</label><input id="k-ig" type="text" maxlength="40" placeholder="su usuario" value="' + esc(k.instagram || '') + '"></div></div>' +
+      '<div class="fila2"><div><label for="k-cli">Cuántos clientes tiene</label><input id="k-cli" type="text" maxlength="20" placeholder="15" value="' + esc(k.clientes || '') + '"></div>' +
+      '<div><label for="k-or">De dónde viene</label><select id="k-or">' + opts(ORIG, k.origen || 'otro') + '</select></div></div>' +
+      '<div class="fila2"><div><label for="k-in">Interés</label><select id="k-in">' + opts(INTER, k.interes || '') + '</select></div>' +
+      '<div><label for="k-pl">Plan que le encaja</label><select id="k-pl"><option value="">Sin elegir</option>' + opts(P.map(function (p) { return [p.id, p.nombre]; }), k.plan || '') + '</select></div></div>' +
+      '<label for="k-et2">Etiquetas <span class="gris" style="font-weight:400">(separadas por comas)</span></label><input id="k-et2" type="text" maxlength="200" placeholder="crossfit, Madrid, online" value="' + esc((k.etiquetas || []).join(', ')) + '">' +
+      '<div class="fila2"><div><label for="k-px">Próximo paso</label><input id="k-px" type="text" maxlength="140" placeholder="Llamarle para la demo" value="' + esc(k.proximo || '') + '"></div>' +
+      '<div><label for="k-pf">Cuándo</label><input id="k-pf" type="date" value="' + esc(k.proximo_fecha || '') + '"></div></div>' +
+      '<div id="k-perd"><label for="k-mot">Por qué no ha salido <span class="gris" style="font-weight:400">(si quieres)</span></label><input id="k-mot" type="text" maxlength="200" placeholder="Se queda con su app de ahora" value="' + esc(k.motivo || '') + '"></div>' +
+      '<div id="k-gan" class="caja-g"><b>Ha contratado: crear su cuenta de entrenador</b><div style="margin-top:4px">Llega en la próxima versión. Antes hay que subir el contrato de encargado del tratamiento que prepara la abogada: hasta entonces, invitar queda bloqueado.</div>' +
+      '<button class="btn" type="button" disabled>Crear su cuenta de entrenador</button></div>' +
+      '<div class="bts-h"><button class="btn" id="k-guardar" type="submit">' + (nuevo ? 'Añadir al CRM' : 'Guardar cambios') + '</button>' +
+      '<button class="btn gris" id="k-cancelar" type="button">' + (nuevo ? 'Cancelar' : 'Cerrar') + '</button>' +
+      (!nuevo ? '<button class="btn rojo" id="k-borrar" type="button">Borrar contacto</button>' : '') + '</div></form>' +
+      (nuevo ? '' : '<div class="hist"><h3>Historial</h3>' +
+        '<form id="f-nota" novalidate><div class="fila-nota"><div><label for="n-tipo" style="margin-top:0">Qué ha sido</label><select id="n-tipo">' + opts(NOTA_T, 'nota') + '</select></div>' +
+        '<button class="chip-b neg" id="n-add" type="submit">Apuntar</button></div>' +
+        '<label for="n-txt">Qué ha pasado</label><textarea id="n-txt" maxlength="2000" placeholder="Le he enseñado la app por videollamada: le encanta el chat y la dieta"></textarea></form>' +
+        '<ul id="k-notas"></ul><p class="pista" style="margin-top:12px">' + (k.etapa === 'ganado' ? 'Ha contratado: no se borra solo.' : 'Si no contrata, se borra solo el ' + esc(diaTxt(k.borrar_el)) + ' (12 meses después del último contacto; cada cosa que apuntes lo alarga).') + '</p></div>'));
+    function verEtapa() {
+      var e = (document.querySelector('#f-k input[name=k-et]:checked') || {}).value;
+      $('k-perd').classList.toggle('h', e !== 'perdido'); $('k-gan').classList.toggle('h', e !== 'ganado');
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('#f-k input[name=k-et]'), function (x) { x.addEventListener('change', verEtapa); });
+    verEtapa();
+    $('k-cancelar').addEventListener('click', cerrarHoja);
+    if (!nuevo) {
+      pintarNotas(k);
+      $('k-borrar').addEventListener('click', function () {
+        var b = this; dosVeces(b, function () {
+          var t = b.textContent; ocupado(b, true, 'Borrando…');
+          llamar({ acc: 'crm_borrar', ses: lee(K.ses), id: k.id }).then(function (r) { KR = r.d; pintarCrm(); cerrarHoja(); hechoCrm(k.nombre + ' borrado del CRM, con su historial.'); })
+            .catch(function (er) { if (!fallo(er)) hojaAviso(er.message); }).then(function () { ocupado(b, false, t); });
+        });
+      });
+      $('f-nota').addEventListener('submit', function (ev) {
+        ev.preventDefault();
+        var b = $('n-add'), t = b.textContent; ocupado(b, true, 'Apuntando…'); hojaAviso('');
+        llamar({ acc: 'crm_nota', ses: lee(K.ses), contacto: k.id, nota: { tipo: $('n-tipo').value, texto: $('n-txt').value } }).then(function (r) {
+          KR = r.d; pintarCrm(); var k2 = contacto(k.id); if (k2) { k.notas = k2.notas; pintarNotas(k2); } $('n-txt').value = '';
+        }).catch(function (er) { if (!fallo(er)) hojaAviso(er.message); }).then(function () { ocupado(b, false, t); });
+      });
+      $('k-notas').addEventListener('click', function (e) {
+        var b = e.target.closest('button[data-nb]'); if (!b) return;
+        dosVeces(b, function () {
+          llamar({ acc: 'crm_nota_borrar', ses: lee(K.ses), id: Number(b.getAttribute('data-nb')) }).then(function (r) {
+            KR = r.d; pintarCrm(); var k2 = contacto(k.id); if (k2) pintarNotas(k2);
+          }).catch(function (er) { if (!fallo(er)) hojaAviso(er.message); });
+        });
+      });
+    }
+    $('f-k').addEventListener('submit', function (ev) {
+      ev.preventDefault();
+      var e = (document.querySelector('#f-k input[name=k-et]:checked') || {}).value || 'nuevo';
+      var b = $('k-guardar'), t = b.textContent; ocupado(b, true, 'Guardando…'); hojaAviso('');
+      llamar({ acc: 'crm_guardar', ses: lee(K.ses), nuevo: nuevo, contacto: {
+        id: nuevo ? '' : k.id, etapa: e, nombre: $('k-nom').value, email: $('k-em').value, movil: $('k-mov').value, instagram: $('k-ig').value,
+        clientes: $('k-cli').value, origen: $('k-or').value, interes: $('k-in').value, plan: $('k-pl').value || null,
+        etiquetas: $('k-et2').value, proximo: $('k-px').value, proximo_fecha: $('k-pf').value || null, motivo: $('k-mot').value } })
+        .then(function (r) { var nom = $('k-nom').value.trim(); KR = r.d; pintarCrm(); cerrarHoja(); hechoCrm(nuevo ? nom + ' añadido al CRM.' : 'Cambios guardados.'); })
+        .catch(function (er) { if (!fallo(er)) hojaAviso(er.message); })
+        .then(function () { ocupado(b, false, t); });
+    });
+  }
   $('t-cod').addEventListener('click', function (e) {
     var b = e.target.closest('button[data-cod]'); if (!b) return;
     var c = ((PL && PL.codigos) || []).filter(function (x) { return x.codigo === b.getAttribute('data-cod'); })[0];
@@ -542,7 +758,7 @@ a{color:#141414}
   });
   $('b-salir').addEventListener('click', function () {
     var ses = lee(K.ses), disp = lee(K.disp);
-    guarda(K.ses, ''); guarda(K.disp, ''); PL = null;
+    guarda(K.ses, ''); guarda(K.disp, ''); PL = null; KR = null;
     llamar({ acc: 'salir', ses: ses, disp: disp }).catch(function () { }).then(verEntrar);
   });
   cargar();
