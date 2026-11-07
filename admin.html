@@ -219,8 +219,61 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
 .hoja-caja .bts-h{margin-top:22px}
 .hoja-caja .bts-h .btn{flex:1 1 160px}
 .fila2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
+/* v53.4 · invitar, la ficha de un entrenador y la plataforma */
+#invitar{display:flex;flex-wrap:wrap;gap:28px;padding:22px;scroll-margin-top:20px}
+#invitar .txt{flex:1 1 300px;min-width:0}
+#invitar h2{font-size:20px;margin:0 0 6px}
+#invitar .txt p{margin:0 0 12px;font-size:14.5px;color:#4A4A4E;line-height:1.5}
+.pasos-i{display:flex;flex-direction:column;gap:10px;font-size:14px;color:#4A4A4E}
+.pasos-i div{display:flex;gap:10px}.pasos-i b{color:#141414;width:18px;flex:none}
+#f-inv{flex:2 1 420px;min-width:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-content:start}
+#f-inv>div{display:flex;flex-direction:column;gap:6px;min-width:0}
+#f-inv label{margin:0}
+#f-inv .ancho{grid-column:1/-1}
+#f-inv .casilla{margin:0;font-size:15px}
+.bts-inv{flex-direction:row!important;flex-wrap:wrap;gap:10px!important;align-items:center}
+.bts-inv .btn{width:auto;margin:0;padding:14px 22px;font-size:15px}
+.est.pausado{background:#EDEDF0;color:#4A4A4E}.est.amb{background:#FFF4E0;color:#7A4A00}
+.nom-b{background:none;border:0;padding:0;font:600 14.5px var(--f);color:#141414;cursor:pointer;text-align:left}
+.nom-b:hover{text-decoration:underline}
+.enl-n{background:none;border:0;padding:0;font:600 14.5px var(--f);color:#141414;text-decoration:underline;cursor:pointer}
+td.fin{text-align:right;white-space:nowrap}
+.miga{font-size:14px;color:#6E6E73}.miga a{color:#4A4A4E}
+.fc-cab{display:flex;flex-wrap:wrap;align-items:center;gap:16px;padding:22px}
+.fc-cab .avatar{width:60px;height:60px;font-size:22px}
+.fc-cab .n{flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:4px}
+.fc-cab h1{margin:0;font-size:26px;line-height:1.2;word-break:break-word}
+.fc-cab .n>div{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.fc-cab .n>span{font-size:14.5px;color:#4A4A4E;word-break:break-word}
+.rejilla{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px;align-items:start}
+.caja-f{display:flex;flex-direction:column;gap:12px}
+.caja-f h2{font-size:17px;margin:0}
+.datos-f{display:flex;flex-direction:column;gap:6px;font-size:14.5px}
+.datos-f>div{display:flex;justify-content:space-between;gap:10px}
+.datos-f>div>span:first-child{color:#6E6E73;flex:none}
+.datos-f>div>span:last-child{text-align:right}
+.grande{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.grande b{font-size:26px}.grande span{font-size:14px;color:#4A4A4E}
+.uso-f{display:flex;flex-direction:column;gap:6px}
+.uso-f .r{display:flex;justify-content:space-between;font-size:14.5px}
+.uso-f .t{font-size:13px;color:#6E6E73}
+.barra-u{height:8px;background:#EDEDF0;border-radius:99px;overflow:hidden}.barra-u b{display:block;height:100%;background:#141414}.barra-u b.casi{background:#7A4A00}
+.historia{display:flex;flex-direction:column;gap:10px;font-size:14px}
+.historia div{display:flex;gap:12px}.historia .f{width:64px;flex:none;color:#6E6E73}
+.cuenta{display:flex;flex-wrap:wrap;gap:20px;align-items:flex-start}
+.cuenta>.t{flex:1 1 100%}
+.cuenta>.t p{margin:0;font-size:13.5px;color:#6E6E73}
+.cuenta>.o{flex:1 1 280px;min-width:0;display:flex;flex-direction:column;gap:8px}
+.cuenta>.o b{font-size:15px}.cuenta>.o b.rojo{color:#8A0F1E}.cuenta>.o span{font-size:13.5px;color:#4A4A4E}
+.cuenta>.o button{align-self:flex-start}
+.btn-r{border:1px solid #8A0F1E;border-radius:999px;padding:9px 14px;background:#fff;color:#8A0F1E;font:600 14px var(--f);cursor:pointer}
+.btn-r:disabled,.btn-b:disabled{opacity:.5;cursor:default}
+.doc{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 0;border-top:1px solid #F2F2F5;font-size:14.5px}
+.doc .q{flex:1 1 220px;min-width:0}
+.doc .q div{font-size:13px;color:#6E6E73}
 /* móvil */
 @media (max-width:860px){
+  #f-inv{grid-template-columns:1fr}
+  .fc-cab,#invitar{padding:18px}
   #panel{flex-direction:column;align-items:stretch;padding:14px 14px 40px;gap:16px}
   main{width:100%}
   .lado{position:static;flex:none;width:100%;padding:14px;flex-direction:row;flex-wrap:wrap;align-items:center;gap:8px}
@@ -292,6 +345,7 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
       <a href="#entrenadores" data-v="entrenadores"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></svg><span class="t">Entrenadores</span></a>
       <a href="#crm" data-v="crm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg><span class="t">CRM</span><span class="num h" id="n-crm" title="Para hoy"></span></a>
       <a href="#planes" data-v="planes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/></svg><span class="t">Planes</span></a>
+      <a href="#plataforma" data-v="plataforma"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span class="t">Plataforma</span></a>
     </nav>
     <div class="raya"></div>
     <div class="como">Entras como</div>
@@ -316,7 +370,8 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
     </div>
 
     <div id="v-entrenadores" class="vista h">
-      <header class="cab-v"><div class="t"><h1>Entrenadores</h1><p>Los entrenadores de MOOD ON. Invitar a los nuevos llega en la v53.4, cuando esté el contrato de encargado.</p></div></header>
+      <header class="cab-v"><div class="t"><h1>Entrenadores</h1></div><button class="btn-n" id="b-inv-ir" type="button">+ Invitar entrenador</button></header>
+      <div id="ent-msg" class="ok-msg h" role="status"></div>
       <div class="filtros">
         <input id="ent-q" type="search" placeholder="Buscar por nombre o email" aria-label="Buscar entrenador">
         <div class="chips" id="ent-chips" role="group" aria-label="Filtrar por estado"></div>
@@ -324,7 +379,35 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
       <section aria-label="Lista de entrenadores" style="padding:8px 12px">
         <div id="t-ent" class="tabla"></div>
       </section>
+      <section id="invitar" aria-labelledby="t-inv">
+        <div class="txt">
+          <h2 id="t-inv">Invitar a un entrenador</h2>
+          <p>Le llega un correo de MOOD ON para empezar (el enlace vale 7 días). Al entrar ve el mismo panel que Chadín, vacío, con su propia copia de la biblioteca.</p>
+          <div class="pasos-i">
+            <div><b>1</b><span>Escribes su nombre y su email.</span></div>
+            <div><b>2</b><span>Lee y acepta el contrato de encargado del tratamiento.</span></div>
+            <div><b>3</b><span>Crea su contraseña y entra con un código la primera vez.</span></div>
+            <div><b>4</b><span>Pone sus ajustes e invita a sus clientes.</span></div>
+          </div>
+        </div>
+        <form id="f-inv" novalidate></form>
+      </section>
       <p class="pie">Clientes sin contar la clienta de ejemplo. «Activos» son los que no tienen el acceso en pausa. Aquí no se ve ningún dato de salud de los clientes: solo números.</p>
+    </div>
+
+    <div id="v-ficha" class="vista h" aria-live="polite"></div>
+
+    <div id="v-plataforma" class="vista h">
+      <header class="cab-v"><div class="t"><h1>Plataforma y seguridad</h1></div></header>
+      <div id="pf-msg" class="ok-msg h" role="status"></div>
+      <section aria-labelledby="t-leg">
+        <h2 id="t-leg" style="font-size:17px">Documentos para los entrenadores</h2>
+        <p class="sub" style="margin-bottom:6px">Los aceptan al crear su cuenta, antes de meter clientes reales.</p>
+        <div id="pf-docs"></div>
+        <input id="pf-pdf" type="file" accept="application/pdf,.pdf" class="h" aria-label="El PDF del contrato">
+        <div id="pf-err" class="msg err h" role="alert"></div>
+        <p class="gris" style="margin:12px 0 0">Si subes una versión nueva, la aceptan los que invites a partir de entonces; los que ya están siguen con la que aceptaron. Un PDF de 3 MB como mucho.</p>
+      </section>
     </div>
 
     <div id="v-crm" class="vista h">
@@ -474,7 +557,7 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
   function ymd(s) { var p = String(s).split('-'); return new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2])); }
   function diaTxt(s) { if (!s) return 'Sin fecha'; var p = String(s).split('-'); return Number(p[2]) + ' ' + MES[Number(p[1]) - 1] + ' ' + p[0]; }
   function diaSem(s, hoyD) { var d = ymd(s), h = ymd(hoyD); var n = Math.round((d - h) / 864e5); return n === 1 ? 'Mañana' : n < 7 ? DIA[d.getDay()] + ' ' + d.getDate() : d.getDate() + ' ' + MES[d.getMonth()]; }
-  var EST = { activo: 'Activo', prueba: 'En prueba', impago: 'Impago', invitado: 'Invitado', baja: 'Baja' };
+  var EST = { activo: 'Activo', prueba: 'En prueba', impago: 'Impago', invitado: 'Invitado', pausado: 'En pausa', baja: 'Baja' };
   var est = function (e) { e = String(e || ''); return '<span class="est ' + esc(e) + '">' + esc(EST[e] || e) + '</span>'; };
   var plural = function (n, uno, varios) { return n + ' ' + (n === 1 ? uno : varios); };
   function opts(lista, v) { return lista.map(function (o) { return '<option value="' + esc(o[0]) + '"' + (String(o[0]) === String(v) ? ' selected' : '') + '>' + esc(o[1]) + '</option>'; }).join(''); }
@@ -486,15 +569,15 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
     var vivos = C.filter(function (k) { return k.estado === 'activo' || k.estado === 'prueba'; });
     var cuenta = {}; C.forEach(function (k) { cuenta[k.estado] = (cuenta[k.estado] || 0) + 1; });
     $('c-ent').textContent = vivos.length;
-    $('c-ent-s').textContent = ['activo', 'prueba', 'impago', 'invitado'].filter(function (e) { return cuenta[e]; })
-      .map(function (e) { return cuenta[e] + ' ' + { activo: cuenta[e] === 1 ? 'activo' : 'activos', prueba: 'en prueba', impago: cuenta[e] === 1 ? 'impago' : 'impagos', invitado: cuenta[e] === 1 ? 'invitado' : 'invitados' }[e]; }).join(' · ') || 'Ninguno todavía';
+    $('c-ent-s').textContent = ['activo', 'prueba', 'impago', 'pausado', 'invitado'].filter(function (e) { return cuenta[e]; })
+      .map(function (e) { return cuenta[e] + ' ' + { activo: cuenta[e] === 1 ? 'activo' : 'activos', prueba: 'en prueba', impago: cuenta[e] === 1 ? 'impago' : 'impagos', pausado: 'en pausa', invitado: cuenta[e] === 1 ? 'invitado' : 'invitados' }[e]; }).join(' · ') || 'Ninguno todavía';
     $('c-cli').textContent = vivos.reduce(function (s, k) { return s + (Number(k.activos) || 0); }, 0);
     $('c-cli-s').textContent = 'de ' + C.reduce(function (s, k) { return s + (Number(k.clientes) || 0); }, 0) + ' en total';
     var CR = d.crm || {}, H = CR.hoy || [], hoyD = d.hoy || '';
     $('c-int').textContent = Number(CR.nuevos) || 0;
     $('n-crm').textContent = H.length; $('n-crm').classList.toggle('h', !H.length);
     // «Para hoy»: lo que necesita algo de ti
-    var F = [];
+    var F = [], ah = d.ahora ? new Date(d.ahora) : new Date();
     if (H.length) {
       var nuevos = H.filter(function (k) { return k.etapa === 'nuevo' && !(k.proximo_fecha && k.proximo_fecha <= hoyD); });
       var pasos = H.filter(function (k) { return nuevos.indexOf(k) < 0; });
@@ -509,38 +592,241 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
       if (l && a >= Math.ceil(l * 0.8) && k.estado !== 'baja') F.push('<div class="fila-h"><span class="tag ve">' + esc(k.plan_nombre || 'Plan') + '</span><div class="q"><b>' + esc(k.nombre || k.id) + '</b><div>Tiene ' + a + ' de los ' + l +
         ' clientes de su plan. Buen momento para ofrecerle el siguiente.</div></div>' + (k.email ? '<a class="chip-b" href="mailto:' + esc(k.email) + '">Escribirle</a>' : '') + '</div>');
     });
+    C.forEach(function (k) {   // v53.4: una invitación que caducó sin aceptar
+      if (k.estado === 'invitado' && k.inv_caduca && new Date(k.inv_caduca) < ah) F.push('<div class="fila-h"><span class="tag amb">Invitación</span><div class="q"><b>' + esc(k.nombre) +
+        '</b><div>Su invitación caducó el ' + esc(fecha(k.inv_caduca)) + ' sin que la aceptara.</div></div><button class="chip-b" type="button" data-reenv="' + esc(k.id) + '">Reenviar</button></div>');
+    });
     $('t-hoy').innerHTML = F.length ? F.join('') : '<div class="vacio">Nada pendiente. Cuando algo necesite algo de ti, saldrá aquí.</div>';
-    var ah = d.ahora ? new Date(d.ahora) : new Date();
     $('i-fecha').textContent = DIAL[ah.getDay()] + ', ' + ah.getDate() + ' de ' + MESL[ah.getMonth()];
     $('yo').textContent = r.email || '';
     $('act').textContent = d.ahora ? 'Actualizado a las ' + fecha(d.ahora, true).split(', ')[1] : '';
     $('pie').textContent = 'Entras como ' + (r.email || '') + ' · Actualizado ' + fecha(d.ahora, true) + ' · Aquí no se ve ningún dato de salud de los clientes: solo números.';
-    pintarEnt();
+    pintarEnt(); pintarInv(); pintarPlat();
   }
   function pintarEnt() {
     var d = (R && R.d) || {}, C = d.coaches || [], q = $('ent-q').value.trim().toLowerCase();
     var cuenta = {}; C.forEach(function (k) { cuenta[k.estado] = (cuenta[k.estado] || 0) + 1; });
-    var E = [['', 'Todos', C.length]].concat([['activo', 'Activos'], ['prueba', 'En prueba'], ['impago', 'Impago'], ['invitado', 'Invitados'], ['baja', 'Bajas']]
+    var E = [['', 'Todos', C.length]].concat([['activo', 'Activos'], ['prueba', 'En prueba'], ['impago', 'Impago'], ['pausado', 'En pausa'], ['invitado', 'Invitados'], ['baja', 'Bajas']]
       .filter(function (e) { return cuenta[e[0]]; }).map(function (e) { return [e[0], e[1], cuenta[e[0]]]; }));
     if (entF && !cuenta[entF]) entF = '';
     $('ent-chips').innerHTML = E.map(function (e) { return '<button type="button" data-f="' + e[0] + '" aria-pressed="' + (e[0] === entF) + '">' + esc(e[1]) + ' · ' + e[2] + '</button>'; }).join('');
     var V = C.filter(function (k) { return (!entF || k.estado === entF) && (!q || ((k.nombre || '') + ' ' + (k.email || '')).toLowerCase().indexOf(q) >= 0); });
     $('t-ent').innerHTML = !C.length ? '<div class="vacio">Todavía no hay entrenadores.</div>' : !V.length ? '<div class="vacio">Ninguno con ese filtro.</div>' :
-      '<table><thead><tr><th>Entrenador</th><th>Estado</th><th>Plan</th><th>Clientes activos</th><th>En total</th><th>Última vez en su panel</th><th>Alta</th></tr></thead><tbody>' +
+      '<table><thead><tr><th>Entrenador</th><th>Estado</th><th>Plan</th><th>Clientes activos</th><th>Contrato</th><th>Última vez</th><th><span class="h">Abrir</span></th></tr></thead><tbody>' +
       V.map(function (k) {
-        var a = Number(k.activos) || 0, l = Number(k.limite) || 0, pc = l ? Math.min(100, Math.round(a * 100 / l)) : 0;
-        return '<tr><td><span class="nom">' + esc(k.nombre || k.id) + '</span>' + (k.id === 'co1' ? ' <span class="gris">· nº 1</span>' : '') +
-          (k.email ? '<div class="gris">' + esc(k.email) + '</div>' : '') + '</td>' +
-          '<td data-l="Estado">' + est(k.estado) + '</td>' +
-          '<td data-l="Plan">' + (k.plan ? esc(k.plan_nombre || k.plan) : '<span class="gris">Sin plan</span>') + '</td>' +
-          '<td class="n" data-l="Clientes activos">' + (l ? '<span class="uso"><span>' + a + ' de ' + l + '</span><i aria-hidden="true"><b class="' + (pc >= 80 ? 'casi' : '') + '" style="width:' + pc + '%"></b></i></span>' : a + ' <span class="gris">· sin límite</span>') + '</td>' +
-          '<td class="n" data-l="En total">' + (Number(k.clientes) || 0) + '</td>' +
-          '<td data-l="Última vez en su panel">' + esc(hace(k.ultimo_panel, d.ahora)) + '</td>' +
-          '<td class="n" data-l="Alta">' + esc(fecha(k.creado)) + '</td></tr>';
+        var a = Number(k.activos) || 0, l = Number(k.limite) || 0, pc = l ? Math.min(100, Math.round(a * 100 / l)) : 0, inv = k.estado === 'invitado';
+        return '<tr><td><button class="nom-b" type="button" data-fc="' + esc(k.id) + '">' + esc(k.nombre || k.id) + '</button>' + (k.id === 'co1' ? ' <span class="gris">· nº 1</span>' : '') +
+          '<div class="gris">' + esc(k.id === 'co1' ? 'La entrenadora de la casa' : k.email) + '</div></td>' +
+          '<td data-l="Estado">' + estK(k, d.hoy) + '</td>' +
+          '<td data-l="Plan">' + esc(planTxt(k)) + '</td>' +
+          '<td class="n" data-l="Clientes activos">' + (inv ? '<span class="gris">—</span>' : l ? '<span class="uso"><span>' + a + ' de ' + l + '</span><i aria-hidden="true"><b class="' + (pc >= 80 ? 'casi' : '') + '" style="width:' + pc + '%"></b></i></span>' : String(a)) + '</td>' +
+          '<td data-l="Contrato">' + (k.id === 'co1' ? '<span class="gris">No hace falta</span>' : k.contrato ? 'Firmado' : '<span class="est amb">Pendiente</span>') + '</td>' +
+          '<td data-l="Última vez">' + (inv || !k.ultimo_panel ? '<span class="gris">Aún no ha entrado</span>' : esc(hace(k.ultimo_panel, d.ahora))) + '</td>' +
+          '<td class="fin">' + (inv ? '<button class="enl-n" type="button" data-reenv="' + esc(k.id) + '">Reenviar</button>' : '<button class="enl-n" type="button" data-fc="' + esc(k.id) + '">Abrir</button>') + '</td></tr>';
       }).join('') + '</tbody></table>';
   }
   $('ent-q').addEventListener('input', pintarEnt);
   $('ent-chips').addEventListener('click', function (e) { var b = e.target.closest('button[data-f]'); if (!b) return; entF = b.getAttribute('data-f'); pintarEnt(); });
+
+  /* ---------- v53.4 · invitar, la ficha de cada entrenador y la plataforma ---------- */
+  var FK = null, fcPlan = false, invDe = null;   // FK: el entrenador abierto · invDe: lo que viene del CRM para invitarle
+  function nuevoR(r) { if (r && r.d) pintar({ email: R && R.email, d: r.d }); }
+  function diaC(s) { var d = new Date(s); return isNaN(d) ? '' : d.getDate() + ' ' + MES[d.getMonth()]; }
+  function quedan(s, hoyD) { return Math.round((ymd(String(s).slice(0, 10)) - ymd(hoyD || new Date().toISOString().slice(0, 10))) / 864e5); }
+  function estK(k, hoyD) {
+    var t = EST[k.estado] || k.estado;
+    if (k.estado === 'prueba' && k.prueba_hasta) { var n = quedan(k.prueba_hasta, hoyD); t += ' · ' + (n <= 0 ? 'acaba hoy' : n === 1 ? '1 día' : n + ' días'); }
+    if (k.estado === 'baja' && k.borrar_el) t += ' · se borra el ' + diaC(k.borrar_el);
+    return '<span class="est ' + esc(k.estado) + '">' + esc(t) + '</span>';
+  }
+  function planTxt(k) {
+    if (!k.plan) return 'Sin plan';
+    return k.cobro === 'gratis' ? 'Sin cuota' : k.cobro === 'medida' ? (k.plan_nombre || k.plan) + ' · a medida' : (k.plan_nombre || k.plan) + ' · ' + euros(k.precio_mes);
+  }
+  function planOpc(p) { return p.nombre + (p.cobro === 'gratis' ? ' · sin cuota' : p.cobro === 'medida' ? ' · a medida' : ' · ' + (p.limite ? 'hasta ' + p.limite + ' clientes' : 'sin límite') + ' · ' + euros(p.precio_mes)); }
+  function iniciales(n) { var p = String(n || '?').trim().split(/\s+/); return (p[0].charAt(0) + (p.length > 1 ? p[p.length - 1].charAt(0) : '')).toUpperCase(); }
+  function reenviar(id, b) {
+    var k = ((R && R.d && R.d.coaches) || []).filter(function (x) { return x.id === id; })[0] || FK || {};
+    var t = b ? b.textContent : ''; if (b) ocupado(b, true, 'Enviando…');
+    return llamar({ acc: 'reenviar', ses: lee(K.ses), id: id }).then(function (r) {
+      nuevoR(r); if (FK && FK.id === id) { FK = r.k; pintarFc(); }
+      hechoEn(vista === 'ficha' ? 'fc-msg' : vista === 'inicio' ? 'ent-msg' : 'ent-msg', 'Invitación reenviada a ' + (k.email || k.nombre) + '. El enlace anterior ya no vale.');
+      if (vista === 'inicio') { $('t-hoy').insertAdjacentHTML('afterbegin', '<div class="ok-msg">Invitación reenviada a ' + esc(k.email || k.nombre) + '.</div>'); }
+    }).catch(function (er) { if (!fallo(er)) { if (b) ocupado(b, false, t); alert(er.message); } });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('button[data-fc]'); if (b) { location.hash = 'entrenador/' + b.getAttribute('data-fc'); return; }
+    b = e.target.closest('button[data-reenv]'); if (b) reenviar(b.getAttribute('data-reenv'), b);
+  });
+  $('b-inv-ir').addEventListener('click', function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-n'); if (n) n.focus({ preventScroll: true }); });
+
+  // el formulario de invitar (bloqueado hasta que esté el contrato)
+  function pintarInv() {
+    var d = (R && R.d) || {}, P = d.planes || [], S = $('f-inv');
+    if (!d.contrato) {
+      S.innerHTML = '<div class="aviso ancho">Para invitar, primero sube el contrato de encargado del tratamiento que prepara la abogada: cada entrenador lo acepta al crear su cuenta, antes de meter datos de sus clientes.</div>' +
+        '<div class="ancho"><a class="chip-b neg" href="#plataforma" style="align-self:flex-start">Subir el contrato</a></div>';
+      return;
+    }
+    var v = S.getAttribute('data-listo') === '1' && !invDe ? { nombre: ($('inv-n') || {}).value, email: ($('inv-e') || {}).value, plan: ($('inv-p') || {}).value, prueba: ($('inv-d') || {}).value, bib: ($('inv-b') || {}).checked } : null;
+    var I = invDe || {}, pl = (v && v.plan) || (I.plan && P.some(function (p) { return p.id === I.plan; }) ? I.plan : ((P.filter(function (p) { return p.cobro === 'cuota'; })[0] || P[0] || {}).id));
+    S.innerHTML = (invDe ? '<div class="aviso gris ancho">Viene del CRM: al mandar la invitación, ' + esc(invDe.nombre) + ' pasa a «Ganado». <button class="enl peq" type="button" id="inv-sincrm" style="margin-left:6px">No enlazarlo</button></div>' : '') +
+      '<div><label for="inv-n">Nombre</label><input id="inv-n" type="text" maxlength="80" placeholder="Nombre y apellido" autocomplete="off" value="' + esc(v ? v.nombre : I.nombre || '') + '"></div>' +
+      '<div><label for="inv-e">Email</label><input id="inv-e" type="email" maxlength="120" placeholder="su@email.com" autocomplete="off" value="' + esc(v ? v.email : I.email || '') + '"></div>' +
+      '<div><label for="inv-p">Plan</label><select id="inv-p">' + opts(P.map(function (p) { return [p.id, planOpc(p)]; }), pl) + '</select></div>' +
+      '<div id="inv-dw"><label for="inv-d">Prueba gratis</label><select id="inv-d"></select></div>' +
+      '<label class="casilla ancho"><input id="inv-b" type="checkbox"' + (!v || v.bib ? ' checked' : '') + '> Darle una copia del banco de ejercicios, los alimentos y las recetas de Chadín</label>' +
+      '<div id="inv-err" class="msg err h ancho" role="alert" style="margin:0"></div>' +
+      '<div class="ancho bts-inv"><button class="btn" id="inv-ok" type="submit">Mandar invitación</button><span class="gris">Todavía no se cobra nada: los cobros a los entrenadores llegan más adelante.</span></div>';
+    S.setAttribute('data-listo', '1');
+    function prueba(sel) {
+      var p = P.filter(function (x) { return x.id === $('inv-p').value; })[0] || {}, D = [[30, '1 mes'], [14, '14 días'], [0, 'Sin prueba']], pd = Number(p.prueba_dias) || 0;
+      if (!D.some(function (x) { return x[0] === pd; })) D.splice(1, 0, [pd, pd + ' días']);
+      $('inv-d').innerHTML = opts(D, sel != null && sel !== '' ? sel : pd);
+      $('inv-dw').classList.toggle('h', p.cobro !== 'cuota');
+    }
+    prueba(v ? v.prueba : null);
+    $('inv-p').addEventListener('change', function () { prueba(null); });
+    if ($('inv-sincrm')) $('inv-sincrm').addEventListener('click', function () { invDe = null; S.removeAttribute('data-listo'); pintarInv(); });
+  }
+  $('f-inv').addEventListener('submit', function (ev) {
+    ev.preventDefault();
+    var b = $('inv-ok'), m = $('inv-err'), e = $('inv-e').value.trim();
+    ocupado(b, true, 'Mandando…'); m.classList.add('h');
+    llamar({ acc: 'invitar', ses: lee(K.ses), invitar: { nombre: $('inv-n').value, email: e, plan: $('inv-p').value, prueba: $('inv-d').value, biblioteca: $('inv-b').checked, crm: invDe ? invDe.crm : '' } })
+      .then(function (r) {
+        if (invDe) KR = null;
+        invDe = null; $('f-inv').removeAttribute('data-listo'); nuevoR(r);
+        hechoEn('ent-msg', 'Invitación mandada a ' + e.toLowerCase() + '. Le llega un correo para empezar (el enlace vale 7 días).');
+        $('v-entrenadores').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      })
+      .catch(function (er) { if (!fallo(er)) { m.textContent = er.message; m.classList.remove('h'); ocupado(b, false, 'Mandar invitación'); } });
+  });
+
+  // la ficha de un entrenador (como «Ficha» del diseño)
+  function abrirFc(id) {
+    if (!FK || FK.id !== id) { FK = null; fcPlan = false; $('v-ficha').innerHTML = '<div class="miga"><a href="#entrenadores">Entrenadores</a></div><section><div class="vacio">Cargando…</div></section>'; }
+    llamar({ acc: 'coach', ses: lee(K.ses), id: id }).then(function (r) { FK = r.k; nuevoR(r); pintarFc(); })
+      .catch(function (er) { if (!fallo(er)) $('v-ficha').innerHTML = '<div class="miga"><a href="#entrenadores">Entrenadores</a></div><section><div class="vacio">' + esc(er.message) + '</div></section>'; });
+  }
+  function pintarFc() {
+    var k = FK; if (!k) return;
+    var D = k.datos || {}, hoyD = (R && R.d && R.d.hoy) || '', co1 = k.id === 'co1', inv = k.estado === 'invitado', P = (R && R.d && R.d.planes) || [];
+    var desde = D.contrato ? D.contrato.fecha : k.creado, a = Number(k.activos) || 0, l = Number(k.limite) || 0, pc = l ? Math.min(100, Math.round(a * 100 / l)) : 0;
+    var wa = k.crm && k.crm.movil ? String(k.crm.movil).replace(/[^\d+]/g, '').replace(/^\+/, '').replace(/^(?=[67]\d{8}$)/, '34') : '';
+    var precio = k.cobro === 'cuota' ? '<b>' + esc(euros(k.precio_mes)) + '</b><span>al mes · plan ' + esc(k.plan_nombre) + (l ? ' (hasta ' + l + ' clientes)' : '') + '</span>'
+      : k.cobro === 'medida' ? '<b>A medida</b><span>plan ' + esc(k.plan_nombre) + '</span>' : '<b>Sin cuota</b><span>plan ' + esc(k.plan_nombre || 'sin plan') + '</span>';
+    var prueba = inv ? (k.cobro === 'cuota' && D.prueba_dias ? D.prueba_dias + ' días gratis desde que acepte' : 'Sin prueba')
+      : D.prueba_hasta ? (quedan(D.prueba_hasta, hoyD) >= 0 ? 'Hasta el ' + diaTxt(D.prueba_hasta) : 'Terminó el ' + diaTxt(D.prueba_hasta)) : 'Sin prueba';
+    var H = (k.crm ? [{ f: k.crm.creado, t: 'Llegó al CRM' + (k.crm.origen === 'web' ? ' desde la web («Quiero probarlo»)' : '') + '.' }] : []).concat(D.historia || []);
+    var cuenta = co1 ? '' : inv
+      ? op('Reenviar la invitación', 'Le llega otro correo con un enlace nuevo (vale 7 días; el anterior deja de valer).', '<button class="chip-b" type="button" id="fc-reenv">Reenviar</button>') +
+        op('Anular la invitación', 'Se borra su cuenta (todavía no tiene datos). En el CRM pasa a «perdido».', '<button class="btn-r" type="button" id="fc-anular">Anular…</button>', true)
+      : k.estado === 'baja'
+      ? op('Anular la baja', 'Se borra todo el ' + diaTxt(String(D.baja && D.baja.borrar_el).slice(0, 10)) + '. Hasta entonces puedes anularla y su cuenta vuelve a estar como antes.', '<button class="chip-b" type="button" id="fc-react">Anular la baja</button>')
+      : (k.estado === 'pausado'
+          ? op('Reactivar la cuenta', 'Está en pausa desde el ' + diaTxt(String(D.pausa && D.pausa.fecha).slice(0, 10)) + '. Al reactivarla, él y sus clientes vuelven a entrar.', '<button class="chip-b" type="button" id="fc-react">Reactivar</button>')
+          : op('Pausar la cuenta', 'Ni él ni sus clientes pueden entrar. No se borra nada: se reactiva con un toque.', '<button class="chip-b" type="button" id="fc-pausar">Pausar</button>')) +
+        (D.contrato && !k.ultimo_panel ? op('Reenviarle el enlace', 'Aceptó el contrato pero todavía no ha entrado en su panel: le llega otro correo para crear su contraseña.', '<button class="chip-b" type="button" id="fc-reenv">Reenviar</button>') : '') +
+        op('Dar de baja', 'Ni él ni sus clientes pueden entrar, se le manda un enlace para descargar una copia de todos sus datos y se borran a los 30 días.', '<button class="btn-r" type="button" id="fc-baja">Dar de baja…</button>', true);
+    function op(t, x, b, rojo) { return '<div class="o"><b' + (rojo ? ' class="rojo"' : '') + '>' + esc(t) + '</b><span>' + esc(x) + '</span>' + b + '</div>'; }
+    $('v-ficha').innerHTML =
+      '<div class="miga"><a href="#entrenadores">Entrenadores</a> › ' + esc(k.nombre) + '</div>' +
+      '<div id="fc-msg" class="ok-msg h" role="status"></div>' +
+      '<section class="fc-cab"><div class="avatar" aria-hidden="true">' + esc(iniciales(k.nombre)) + '</div>' +
+        '<div class="n"><div><h1>' + esc(k.nombre) + '</h1>' + estK({ estado: k.estado, prueba_hasta: D.prueba_hasta, borrar_el: D.baja && D.baja.borrar_el }, hoyD) + '</div>' +
+        '<span>' + esc(co1 ? 'La entrenadora de la casa' : k.email) + (inv ? ' · Invitado el ' + esc(fecha(k.creado)) : ' · Con MOOD ON desde el ' + esc(fecha(desde))) + '</span></div>' +
+        '<div class="kf-acc">' + (k.email ? '<a class="chip-b" href="mailto:' + esc(k.email) + '">Escribir email</a>' : '') + (wa ? '<a class="chip-b" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') + '</div></section>' +
+      '<div class="rejilla">' +
+        '<section class="caja-f" aria-labelledby="t-sus"><h2 id="t-sus">Suscripción</h2><div class="grande">' + precio + '</div>' +
+          '<div class="datos-f"><div><span>Prueba</span><span>' + esc(prueba) + '</span></div>' +
+          (D.copiada ? '<div><span>Su biblioteca</span><span>Copia de la de Chadín (' + plural(Number(D.copiada.ejercicios), 'ejercicio', 'ejercicios') + ', ' + plural(Number(D.copiada.alimentos), 'alimento', 'alimentos') + ' y ' + plural(Number(D.copiada.recetas), 'receta', 'recetas') + ')</span></div>' : '') + '</div>' +
+          (fcPlan ? '<div class="rej" style="grid-template-columns:1fr"><div><label for="fc-pl">Su plan</label><select id="fc-pl">' + opts(P.map(function (p) { return [p.id, planOpc(p)]; }), k.plan) + '</select></div></div>' +
+              '<div class="kf-acc"><button class="chip-b neg" type="button" id="fc-pl-ok">Guardar</button><button class="chip-b" type="button" id="fc-pl-no">Cancelar</button></div>'
+            : '<div class="kf-acc"><button class="chip-b neg" type="button" id="fc-plan">Cambiar de plan</button></div>') + '</section>' +
+        '<section class="caja-f" aria-labelledby="t-uso"><h2 id="t-uso">Uso</h2>' + (inv ? '<div class="gris">Todavía no ha aceptado la invitación.</div>' :
+          '<div class="uso-f"><div class="r"><span>Clientes activos</span><b>' + a + (l ? ' de ' + l : '') + '</b></div>' + (l ? '<div class="barra-u" aria-hidden="true"><b class="' + (pc >= 80 ? 'casi' : '') + '" style="width:' + pc + '%"></b></div>' +
+            '<span class="t">Al llegar a ' + l + ' le proponemos el plan siguiente. Nunca se bloquea a ningún cliente.</span>' : '') + '</div>' +
+          '<div class="datos-f"><div><span>Clientes en total</span><span>' + (Number(k.clientes) || 0) + (k.clientes - a > 0 ? ' (' + (k.clientes - a) + ' en pausa)' : '') + '</span></div>' +
+          '<div><span>Última vez en su panel</span><span>' + esc(k.ultimo_panel ? hace(k.ultimo_panel, k.ahora) : 'Aún no ha entrado') + '</span></div>' +
+          '<div><span>Último cliente nuevo</span><span>' + esc(k.ultimo_cliente ? fecha(k.ultimo_cliente) : 'Ninguno todavía') + '</span></div></div>') + '</section>' +
+        '<section class="caja-f" aria-labelledby="t-con"><h2 id="t-con">Contrato</h2>' + (co1 ? '<div class="gris">No hace falta: es la entrenadora de la casa.</div>' : D.contrato
+          ? '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est activo">Firmado</span><span>Contrato de encargado del tratamiento · ' + esc(fecha(D.contrato.fecha)) + ' · versión ' + Number(D.contrato.version) + '</span></div>' +
+            '<div class="kf-acc"><button class="chip-b" type="button" id="fc-pdf" data-v="' + Number(D.contrato.version) + '">Ver el contrato (PDF)</button></div>'
+          : '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est amb">Pendiente</span><span>Lo acepta al abrir su invitación, antes de crear su contraseña.</span></div>') + '</section>' +
+        '<section class="caja-f" aria-labelledby="t-not"><h2 id="t-not">Notas internas</h2><label for="fc-notas" style="margin:0;font-weight:400;color:#6E6E73">Solo las ves tú. Se guardan solas.</label>' +
+          '<textarea id="fc-notas" rows="4" maxlength="2000">' + esc(D.notas || '') + '</textarea><div class="estado-g" id="fc-nest" role="status" style="margin:0"></div></section>' +
+        '<section class="caja-f" aria-labelledby="t-his"><h2 id="t-his">Su historia con MOOD ON</h2><div class="historia">' + (H.length ? H.map(function (x) {
+          return '<div><span class="f">' + esc(diaC(x.f)) + '</span><span>' + esc(x.t) + '</span></div>'; }).join('') : '<div class="gris">Nada todavía.</div>') + '</div></section>' +
+      '</div>' +
+      (cuenta ? '<section class="cuenta" aria-labelledby="t-cue"><div class="t"><h2 id="t-cue" style="font-size:17px">Cuenta</h2><p>Todo pide confirmación y queda apuntado en su historia.</p></div>' + cuenta + '</section>' : '');
+    var ac = function (acc, ok, b, extra) {
+      var t = b ? b.textContent : ''; if (b) ocupado(b, true, 'Un momento…');
+      return llamar(Object.assign({ acc: acc, ses: lee(K.ses), id: k.id }, extra || {})).then(function (r) {
+        cerrarHoja(); if (r.borrado) { FK = null; nuevoR(r); location.hash = 'entrenadores'; hechoEn('ent-msg', ok); return; }
+        FK = r.k; fcPlan = false; nuevoR(r); pintarFc(); hechoEn('fc-msg', r.aviso ? ok + ' ' + r.aviso : ok);
+      }).catch(function (er) { if (!fallo(er)) { if (b) ocupado(b, false, t); if (!$('hoja').classList.contains('h')) hojaAviso(er.message); else { var m = $('fc-msg'); m.className = 'msg err'; m.textContent = er.message; } } });
+    };
+    function confirmar(tit, txt, boton, acc, ok) {
+      abrirHoja(tit, '<p class="sub" style="font-size:15px;color:#4A4A4E;line-height:1.5">' + txt + '</p><div class="bts-h"><button class="btn' + (acc === 'baja' || acc === 'anular' ? ' rojo' : '') + '" type="button" id="h-si">' + esc(boton) + '</button><button class="btn gris" type="button" id="h-no">Cancelar</button></div>');
+      $('h-no').addEventListener('click', cerrarHoja);
+      $('h-si').addEventListener('click', function () { ac(acc, ok, this); });
+      $('h-si').focus();
+    }
+    if ($('fc-plan')) $('fc-plan').addEventListener('click', function () { fcPlan = true; pintarFc(); $('fc-pl').focus(); });
+    if ($('fc-pl-no')) $('fc-pl-no').addEventListener('click', function () { fcPlan = false; pintarFc(); });
+    if ($('fc-pl-ok')) $('fc-pl-ok').addEventListener('click', function () { ac('coach_plan', 'Plan cambiado.', this, { plan: $('fc-pl').value }); });
+    $('fc-notas').addEventListener('change', function () {
+      var e2 = $('fc-nest'); e2.className = 'estado-g'; e2.textContent = 'Guardando…';
+      llamar({ acc: 'coach_notas', ses: lee(K.ses), id: k.id, notas: this.value }).then(function (r) { FK = r.k; e2.textContent = 'Guardado.'; })
+        .catch(function (er) { if (!fallo(er)) { e2.className = 'estado-g err'; e2.textContent = er.message; } });
+    });
+    if ($('fc-pdf')) $('fc-pdf').addEventListener('click', function () { verPdf(Number(this.getAttribute('data-v')), this); });
+    if ($('fc-reenv')) $('fc-reenv').addEventListener('click', function () { reenviar(k.id, this); });
+    if ($('fc-pausar')) $('fc-pausar').addEventListener('click', function () { confirmar('Pausar la cuenta de ' + k.nombre, 'Ni ' + esc(k.nombre) + ' ni sus clientes podrán entrar hasta que la reactives. No se borra nada.', 'Pausar', 'pausar', 'Cuenta en pausa.'); });
+    if ($('fc-react')) $('fc-react').addEventListener('click', function () { ac('reactivar', k.estado === 'baja' ? 'Baja anulada: su cuenta vuelve a estar en marcha.' : 'Cuenta reactivada.', this); });
+    if ($('fc-baja')) $('fc-baja').addEventListener('click', function () {
+      confirmar('Dar de baja a ' + k.nombre, 'Desde ahora, ni ' + esc(k.nombre) + ' ni sus clientes podrán entrar. Le mandamos por email un enlace para descargar una copia de todos sus datos en Excel y, <b>a los 30 días, se borra todo lo suyo</b> (sus clientes, sus archivos y sus ajustes). Hasta entonces puedes anular la baja.', 'Dar de baja', 'baja', 'Dado de baja. Le hemos mandado el enlace de su copia.');
+    });
+    if ($('fc-anular')) $('fc-anular').addEventListener('click', function () { confirmar('Anular la invitación de ' + k.nombre, 'Se borra su cuenta y su enlace deja de valer. Todavía no tiene datos.', 'Anular la invitación', 'anular', 'Invitación de ' + k.nombre + ' anulada.'); });
+  }
+  // ver un PDF del contrato (en otra pestaña)
+  function verPdf(version, b) {
+    var w = window.open('', '_blank'), t = b.textContent; ocupado(b, true, 'Abriendo…');
+    llamar({ acc: 'contrato_ver', ses: lee(K.ses), version: version || null }).then(function (r) {
+      var bin = atob(r.b64), u8 = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+      var url = URL.createObjectURL(new Blob([u8], { type: 'application/pdf' }));
+      if (w) w.location.href = url; else location.href = url;
+    }).catch(function (er) { if (w) w.close(); if (!fallo(er)) alert(er.message); }).then(function () { ocupado(b, false, t); });
+  }
+
+  // la plataforma: el contrato de encargado (y la política de privacidad de la web)
+  function pintarPlat() {
+    var C = R && R.d && R.d.contrato;
+    $('pf-docs').innerHTML =
+      '<div class="doc"><div class="q"><b>Contrato de encargado del tratamiento</b><div>' + (C ? 'Versión ' + Number(C.version) + ' · subido el ' + esc(fecha(C.fecha)) + ' · ' + Math.max(1, Math.round(C.bytes / 1024)) + ' KB'
+          : 'Lo prepara la abogada. Mientras no esté, no se puede invitar a ningún entrenador.') + '</div></div>' +
+        (C ? '<span class="est activo">Subido</span><button class="chip-b peq" type="button" id="pf-ver">Ver</button><button class="chip-b peq" type="button" id="pf-subir">Subir versión nueva</button>'
+           : '<span class="est amb">Falta subirlo</span><button class="chip-b peq neg" type="button" id="pf-subir">Subir PDF</button>') + '</div>' +
+      '<div class="doc"><div class="q"><b>Política de privacidad de la web</b><div>moodonapp.com/privacidad.html</div></div><span class="est activo">Publicada</span><a class="chip-b peq" href="/privacidad.html" target="_blank" rel="noopener">Ver</a></div>';
+    $('pf-subir').addEventListener('click', function () { $('pf-err').classList.add('h'); $('pf-pdf').value = ''; $('pf-pdf').click(); });
+    if ($('pf-ver')) $('pf-ver').addEventListener('click', function () { verPdf(null, this); });
+  }
+  $('pf-pdf').addEventListener('change', function () {
+    var f = this.files && this.files[0], m = $('pf-err'), b = $('pf-subir'); if (!f) return;
+    var mal = function (t) { m.textContent = t; m.classList.remove('h'); };
+    if (!/\.pdf$/i.test(f.name) && f.type !== 'application/pdf') return mal('Tiene que ser un PDF.');
+    if (f.size > 3 * 1024 * 1024) return mal('El PDF es demasiado grande (3 MB como mucho).');
+    var lr = new FileReader();
+    lr.onload = function () {
+      ocupado(b, true, 'Subiendo…');
+      llamar({ acc: 'contrato_subir', ses: lee(K.ses), nombre: f.name, b64: String(lr.result).replace(/^data:[^,]*,/, '') }).then(function (r) {
+        nuevoR(r); hechoEn('pf-msg', 'Contrato subido (versión ' + r.version + '). Ya puedes invitar entrenadores.');
+      }).catch(function (er) { if (!fallo(er)) { mal(er.message); var b2 = $('pf-subir'); if (b2) ocupado(b2, false, b2.textContent.replace('Subiendo…', 'Subir PDF')); } });
+    };
+    lr.onerror = function () { mal('No se ha podido leer el archivo.'); };
+    lr.readAsDataURL(f);
+  });
 
   function cargar() {
     var ses = lee(K.ses);
@@ -560,20 +846,22 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
   $('b-act').addEventListener('click', cargar);
 
   /* ---------- las secciones ---------- */
-  var VISTAS = ['inicio', 'entrenadores', 'crm', 'planes'], vista = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
+  var VISTAS = ['inicio', 'entrenadores', 'crm', 'planes', 'plataforma', 'ficha'], vista = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
   function irA(v, sinCargar) {
-    if (VISTAS.indexOf(v) < 0) v = 'inicio';
+    var fc = /^entrenador\/(co[0-9]{1,6})$/.exec(v || '');   // v53.4: la ficha de un entrenador (#entrenador/co2)
+    if (fc) v = 'ficha'; else if (VISTAS.indexOf(v) < 0 || v === 'ficha') v = 'inicio';
     vista = v;
     VISTAS.forEach(function (x) { $('v-' + x).classList.toggle('h', x !== v); });
     Array.prototype.forEach.call(document.querySelectorAll('.menu a'), function (a) {
-      if (a.getAttribute('data-v') === v) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+      if (a.getAttribute('data-v') === (v === 'ficha' ? 'entrenadores' : v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
+    if (fc) abrirFc(fc[1]);
     if (!sinCargar && v === 'planes' && !PL) cargarPlanes();
     if (!sinCargar && v === 'crm' && (!KR || abrirTras)) { cargarCrm(abrirTras); abrirTras = ''; }
   }
   window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) { irA(location.hash.slice(1)); window.scrollTo(0, 0); } });
   function fallo(er) {
-    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; verEntrar(); aviso(er.message); return true; }
+    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; verEntrar(); aviso(er.message); return true; }
     return false;
   }
   function hechoEn(id, t) {
@@ -902,6 +1190,7 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
     var tel = String(k.movil || '').replace(/[^\d+]/g, ''), wa = tel.replace(/^\+/, '').replace(/^(?=[67]\d{8}$)/, '34');
     var P = ((KR && KR.planes) || []).filter(function (p) { return p.ofrecer !== 'no' || p.id === k.plan; });
     var f = k.proximo_fecha, rojo = abierto(k) && f && f <= hoyD;
+    var yaCoach = k.email ? ((R && R.d && R.d.coaches) || []).filter(function (x) { return x.email && x.email.toLowerCase() === k.email.toLowerCase(); })[0] : null;   // v53.4
     var prox = modoK === 'prox'
       ? '<div class="prox-ed"><input id="k-px" type="text" maxlength="140" aria-label="Próximo paso" placeholder="Llamarle para la demo" value="' + esc(k.proximo || '') + '"><input id="k-pf" type="date" aria-label="Cuándo" value="' + esc(k.proximo_fecha || '') + '">' +
         '<button class="chip-b neg" id="k-px-ok" type="button">Guardar</button><button class="chip-b" id="k-px-no" type="button">Cancelar</button></div>'
@@ -940,10 +1229,10 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
             (n.tipo === 'etapa' ? esc(notaTxt(n)) : '<b>' + esc(NOTA_L[n.tipo] || n.tipo) + '.</b> ' + esc(n.texto)) + '</span>' +
             (n.tipo !== 'etapa' && n.tipo !== 'web' ? '<button class="enl peq" type="button" data-nb="' + n.id + '">Borrar</button>' : '') + '</div>';
         }).join('')) + '</div></div>' +
-      '<div class="pie-k"><button class="btn-v" id="k-gan" type="button" disabled>Ha contratado: crear su cuenta de entrenador</button>' +
+      '<div class="pie-k">' + (yaCoach ? '<button class="btn-v" type="button" data-fc="' + esc(yaCoach.id) + '">Ya es entrenador: ver su ficha</button>' : '<button class="btn-v" id="k-gan" type="button">Ha contratado: invitarle a MOOD ON</button>') +
         (k.etapa !== 'perdido' ? '<button class="btn-b" id="k-perder" type="button">Marcar como perdido…</button>' : '') +
         '<button class="enl" id="k-borrar" type="button" style="margin:0 0 0 auto;color:#8A0F1E">Borrar contacto</button></div>' +
-      '<p class="gris" style="margin:0">Crear su cuenta llega en la v53.4: antes hay que subir el contrato de encargado que prepara la abogada (hasta entonces, bloqueado). ' +
+      '<p class="gris" style="margin:0">' +
         (k.etapa === 'ganado' ? 'Ha contratado: no se borra solo.' : 'Si no contrata, se borra solo el ' + esc(diaTxt(k.borrar_el)) + ' (12 meses después del último contacto; cada cosa que apuntes lo alarga).') + '</p>';
     // los cambios se guardan al momento, como en el diseño
     function guardarK(cambios, ok) {
@@ -995,6 +1284,10 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
           .catch(function (er) { if (!fallo(er)) { $('k-err').textContent = er.message; $('k-err').classList.remove('h'); ocupado(b, false, t); } });
       });
     }
+    if ($('k-gan')) $('k-gan').addEventListener('click', function () {   // v53.4: a «Invitar a un entrenador», con sus datos
+      invDe = { nombre: k.nombre, email: k.email, plan: k.plan, crm: k.id }; $('f-inv').removeAttribute('data-listo'); pintarInv();
+      location.hash = 'entrenadores'; setTimeout(function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-e'); if (n && !n.value) n.focus({ preventScroll: true }); }, 60);
+    });
     if ($('k-perder')) $('k-perder').addEventListener('click', function () { guardarK({ etapa: 'perdido' }, 'Marcado como perdido. Si quieres, apunta por qué.').then(function () { if ($('k-mot')) $('k-mot').focus(); }); });
     $('k-borrar').addEventListener('click', function () {
       var b = this; dosVeces(b, function () {
@@ -1047,7 +1340,7 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
 
   $('b-salir').addEventListener('click', function () {
     var ses = lee(K.ses), disp = lee(K.disp);
-    guarda(K.ses, ''); guarda(K.disp, ''); PL = null; KR = null; R = null; selK = ''; modoK = ''; edPlan = null;
+    guarda(K.ses, ''); guarda(K.disp, ''); PL = null; KR = null; R = null; FK = null; invDe = null; selK = ''; modoK = ''; edPlan = null;
     llamar({ acc: 'salir', ses: ses, disp: disp }).catch(function () { }).then(verEntrar);
   });
   cargar();

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<meta name="api" content="https://spmibfqbhgbcomfqlvlc.supabase.co/functions/v1/api">
+<title>Tu cuenta de entrenador · MOOD ON</title>
+<meta name="theme-color" content="#F5F5F7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+/* v53.4 · la bienvenida del entrenador invitado: aceptar el contrato de encargado y crear su contraseña */
+:root{--f:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;background:#F5F5F7;color:#141414;font:16px/1.5 var(--f);-webkit-text-size-adjust:100%}
+button,a{font-family:var(--f)}
+#pag{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.caja{background:#fff;border-radius:22px;padding:28px 22px;max-width:480px;width:100%;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+.marca{font-weight:300;font-size:14px;letter-spacing:.42em}
+h1{font-size:24px;line-height:1.25;margin:16px 0 8px}
+p{margin:0 0 12px;color:#4A4A4E;font-size:15px}
+.plan{display:inline-block;background:#F5F5F7;border-radius:999px;padding:6px 12px;font-size:14px;font-weight:600;color:#141414;margin:2px 0 16px}
+.pasos{display:flex;flex-direction:column;gap:8px;margin:4px 0 18px;font-size:14px;color:#4A4A4E}
+.pasos div{display:flex;gap:10px;align-items:baseline}
+.pasos b{width:22px;height:22px;border-radius:50%;background:#EDEDF0;color:#141414;font-size:12.5px;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.pasos .ya b{background:#141414;color:#fff}
+.doc{background:#F5F5F7;border-radius:16px;padding:16px;margin:0 0 16px}
+.doc h2{margin:0 0 6px;font-size:16px}
+.doc p{font-size:14px;margin:0 0 12px}
+.chip{display:inline-block;border:0;border-radius:999px;padding:10px 16px;font:600 14px var(--f);background:#fff;color:#141414;text-decoration:none;box-shadow:0 0 0 1px #DCDCE0}
+.casilla{display:flex;gap:10px;align-items:flex-start;font-size:15px;color:#141414;margin:0 0 4px;cursor:pointer}
+.casilla input{width:20px;height:20px;accent-color:#141414;margin:2px 0 0;flex:none}
+.btn{display:block;width:100%;border:0;border-radius:999px;padding:15px;font:600 16px var(--f);margin-top:18px;cursor:pointer;background:#141414;color:#fff;text-align:center;text-decoration:none}
+.btn:disabled{opacity:.5;cursor:default}
+.msg{margin:14px 0 0;padding:12px 14px;border-radius:14px;font-size:14px;background:#FDECEE;color:#8A0F1E}
+.h{display:none!important}
+small{display:block;color:#87878B;margin-top:16px;font-size:12.5px;line-height:1.45}
+small a{color:#4A4A4E}
+</style>
+</head>
+<body>
+<div id="pag">
+  <div class="caja">
+    <div class="marca">MOOD ON</div>
+    <div id="c" aria-live="polite"><p style="margin-top:16px">Un momento…</p></div>
+    <small>¿Necesitas ayuda? Escribe a <a href="mailto:hola@moodonapp.com">hola@moodonapp.com</a>.</small>
+  </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var API = (document.querySelector('meta[name=api]').content || '').replace(/\/$/, '');
+  var tok = (/(?:^|[#&])i=(I[0-9a-f]{48})/.exec(location.hash) || [])[1] || '';
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  function llamar(d) {
+    d.i = tok;
+    return fetch(API + '/entrenador', { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(d), cache: 'no-store' })
+      .then(function (r) { return r.json(); })
+      .then(function (j) { if (!j || !j.ok) throw new Error(String((j && j.error) || 'No se ha podido hacer.').replace(/^Error: /, '')); return j; },
+            function (e) { if (e && e.message && !/fetch|network|Load failed/i.test(e.message)) throw e; throw new Error('No hay conexión. Prueba otra vez.'); });
+  }
+  function pasos(n) {
+    return '<div class="pasos">' + ['Lee y acepta el contrato de encargado', 'Crea tu contraseña', 'Entra en tu panel'].map(function (t, i) {
+      return '<div' + (i < n ? ' class="ya"' : '') + '><b>' + (i < n ? '✓' : i + 1) + '</b><span>' + t + '</span></div>'; }).join('') + '</div>';
+  }
+  function mal(t) { $('c').innerHTML = '<h1>Este enlace no vale</h1><p>' + esc(t) + '</p>'; }
+  function error(t) { var m = $('msg'); if (m) { m.textContent = t; m.classList.remove('h'); } }
+  function ir(b, d) {
+    var t = b.textContent; b.disabled = true; b.textContent = 'Un momento…';
+    llamar(d).then(function (r) { location.href = r.url; }).catch(function (e) { error(e.message); b.disabled = false; b.textContent = t; });
+  }
+  window.addEventListener('hashchange', function () { location.reload(); });   // otro enlace en la misma pestaña
+  if (!tok) { mal('Al enlace le falta un trozo. Ábrelo otra vez desde el correo de MOOD ON (el botón «Empezar»).'); return; }
+  llamar({ acc: 'ver' }).then(function (r) {
+    var hola = r.nombre ? 'Hola, ' + esc(r.nombre) + '.' : 'Hola.';
+    if (r.paso === 'aceptar') {
+      $('c').innerHTML = '<h1>' + hola + ' Te damos la bienvenida a MOOD ON</h1>' +
+        '<span class="plan">Plan ' + esc(r.plan) + (r.prueba ? ' · ' + r.prueba + ' días gratis' : '') + '</span>' + pasos(0) +
+        '<div class="doc"><h2>Contrato de encargado del tratamiento</h2>' +
+          '<p>Lo necesitas para meter datos de tus clientes en MOOD ON. Léelo antes de aceptarlo (versión ' + Number(r.contrato.version) + ').</p>' +
+          '<a class="chip" id="leer" href="' + esc(API + '/entrenador/contrato?i=' + tok) + '" target="_blank" rel="noopener">Leer el contrato (PDF)</a></div>' +
+        '<label class="casilla"><input type="checkbox" id="acepto"> <span>He leído y acepto el contrato de encargado del tratamiento de MOOD ON.</span></label>' +
+        '<button class="btn" id="b-ok" type="button">Aceptar y crear mi contraseña</button>' +
+        '<div id="msg" class="msg h" role="alert"></div>' +
+        '<small style="margin-top:12px">Te mandaremos una copia por email.</small>';
+      $('b-ok').addEventListener('click', function () {
+        if (!$('acepto').checked) return error('Marca la casilla para aceptar el contrato.');
+        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato.version });
+      });
+    } else if (r.paso === 'crear') {
+      $('c').innerHTML = '<h1>' + hola + ' Ya has aceptado el contrato</h1>' + pasos(1) +
+        '<p>Ahora crea tu contraseña para entrar en tu panel.</p><button class="btn" id="b-ok" type="button">Crear mi contraseña</button><div id="msg" class="msg h" role="alert"></div>';
+      $('b-ok').addEventListener('click', function () { ir(this, { acc: 'crear' }); });
+    } else {
+      $('c').innerHTML = '<h1>' + hola + ' Ya tienes tu cuenta</h1>' + pasos(3) +
+        '<p>Entra en tu panel con tu email y tu contraseña.</p><a class="btn" id="b-ok" href="' + esc(r.app) + '">Entrar en mi panel</a>';
+    }
+  }).catch(function (e) { mal(e.message); });
+})();
+</script>
+</body>
+</html>

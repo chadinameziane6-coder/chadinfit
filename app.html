@@ -2584,7 +2584,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v52.20.3';
+var APP_V = 'v53.4';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -7378,9 +7378,9 @@ function pintarLogin(msg){
     CO.modoLogin=r.coachConPass?'pass':'pin';
     var avi=avisoInicioHtml(true), arriba=safariEs();
     pantallaAcc((msg?'<p class="acc-msg">'+esc(msg)+'</p>':'')+(arriba?avi.replace('card acc-ini','card acc-ini arr'):'')+'<div class="card">'+(r.coachConPass
-      ?'<label class="f">Contraseña'+pwInput('co-p','current-password')+'</label>'+mantenerHtml('co-k','Mantener la sesión abierta 30 días en este dispositivo')+'<button class="btn mt" data-a="coEntrar">Entrar</button><button class="link mt acc-ol" data-a="coOlvide">¿Has olvidado tu contraseña?</button>'
+      ?'<label class="f">Email<input type="email" id="co-e" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="tu@email.com" value="'+esc(LS.get(SK.coe)||'')+'"></label><label class="f">Contraseña'+pwInput('co-p','current-password')+'</label>'+mantenerHtml('co-k','Mantener la sesión abierta 30 días en este dispositivo')+'<button class="btn mt" data-a="coEntrar">Entrar</button><button class="link mt acc-ol" data-a="coOlvide">¿Has olvidado tu contraseña?</button>'
       :'<label class="f">PIN<input type="password" id="pin" autocomplete="current-password" placeholder="••••••"></label>'+mantenerHtml('co-k','Mantener la sesión abierta 30 días en este dispositivo')+'<button class="btn mt" data-a="entrar">Entrar</button><p class="muted sm">Después crea tu contraseña: es más segura que el PIN.</p>')+'</div>'+(arriba?'':avi),'Panel de coach');
-    enterEn(['pin','co-p'],A.coEntrar); var i=document.getElementById(r.coachConPass?'co-p':'pin'); if(i) i.focus();
+    enterEn(['pin','co-e','co-p'],A.coEntrar); var i=document.getElementById(r.coachConPass?(LS.get(SK.coe)?'co-p':'co-e'):'pin'); if(i) i.focus();
   },function(e){ if(esRed(e)) return pantallaSinRed(''); pantallaMensaje('Ups',limpiaErr(e)); });
 }
 A.entrar=function(){ A.coEntrar(); };
@@ -14341,7 +14341,7 @@ function logoSvg(conSub){ return '<svg viewBox="0 0 1600 '+(conSub?311:224)+'" a
 function logoHtml(tam,sub){ return '<div class="logo-w logo-'+tam+'" role="img" aria-label="MOOD ON by Chadin">'+logoSvg(tam==='big'||tam==='cq')+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
 
 /* ---------- sesión guardada (en este móvil y, si la abre desde tu página de inicio, también allí) ---------- */
-var SK={cl:'chadin_ses',co:'chadin_co',dcl:'chadin_disp_cl',dco:'chadin_disp_co'};
+var SK={cl:'chadin_ses',co:'chadin_co',dcl:'chadin_disp_cl',dco:'chadin_disp_co',coe:'chadin_co_email'};   // v53.4: coe, el email con el que entró la coach
 function topLimpia(){ if(window.top===window.self||!BOOT.top) return; try{ window.top.postMessage({chadinfit:1,limpia:1},BOOT.top); }catch(e){} }      // v32: la página de inicio quita ?alta= / ?reset= de su dirección
 function topGuarda(k,v){ if(window.top===window.self||!BOOT.top) return; try{ window.top.postMessage({chadinfit:1,guarda:{k:k,v:v||null}},BOOT.top); }catch(e){} }
 var SS={get:function(k){ try{ var v=sessionStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } },set:function(k,v){ try{ sessionStorage.setItem(k,JSON.stringify(v)); }catch(e){} },del:function(k){ try{ sessionStorage.removeItem(k); }catch(e){} }};
@@ -14572,7 +14572,10 @@ function coachSesionOk(r){
 A.coEntrar=function(el){
   var kk=document.getElementById('co-k'); SES_CORTA=!!(kk&&!kk.checked);
   var x={info:infoDisp(),disp:LS.get(SK.dco)||'',corta:SES_CORTA};
-  if(CO.modoLogin==='pin') x.pin=val('pin'); else x.pass=document.getElementById('co-p').value;
+  if(CO.modoLogin==='pin') x.pin=val('pin'); else { x.pass=document.getElementById('co-p').value; x.email=val('co-e').toLowerCase(); }
+  // v53.4: con varios entrenadores, el email dice de quién es el panel (el dispositivo de confianza solo vale con el mismo email)
+  if(CO.modoLogin!=='pin'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(x.email)) return toast('Escribe tu email');
+  if(CO.modoLogin!=='pin'){ if(LS.get(SK.coe)&&x.email!==LS.get(SK.coe)) x.disp=''; LS.set(SK.coe,x.email); }
   if(!x.pin&&!x.pass) return toast(CO.modoLogin==='pin'?'Escribe tu PIN':'Escribe tu contraseña');
   cargando(api('coachEntrar',x)).then(function(r){
     if(r.codigo) return pintarCodigo(r.codigo,'co');
@@ -14580,8 +14583,9 @@ A.coEntrar=function(el){
   },function(e){ toast(limpiaErr(e),'err'); });
 };
 A.coOlvide=function(el){
+  if(document.getElementById('co-e')&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val('co-e'))) return toast('Escribe primero tu email');
   confirmar('Te enviaremos a tu email un enlace para crear una contraseña nueva (vale 1 hora).','Enviármelo',function(){
-    cargando(api('coachOlvide')).then(function(r){ modal('<h2>Mira tu email</h2><p>Te hemos enviado el enlace'+(r.email?' a <b>'+esc(r.email)+'</b>':'')+'. Mira también en Spam.</p><button class="btn mt" data-a="cerrarModal">Entendido</button>'); },function(e){ toast(limpiaErr(e),'err'); });
+    cargando(api('coachOlvide',val('co-e').toLowerCase()||LS.get(SK.coe)||'')).then(function(r){ modal('<h2>Mira tu email</h2><p>Te hemos enviado el enlace'+(r.email?' a <b>'+esc(r.email)+'</b>':'')+'. Mira también en Spam.</p><button class="btn mt" data-a="cerrarModal">Entendido</button>'); },function(e){ toast(limpiaErr(e),'err'); });
   },'Cancelar');
 };
 
