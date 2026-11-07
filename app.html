@@ -2351,7 +2351,14 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .lg-c{background:var(--card2);border:0;border-radius:16px;padding:12px;display:flex;flex-direction:column;align-items:flex-start;gap:3px;text-align:left;font:inherit;color:inherit;min-width:0}
 button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}.lg-c b{font:700 14px/1.25 Plus Jakarta Sans,sans-serif}.lg-c small{font-size:12px;color:var(--mu)}
 .lg-c:not(.ok) b{color:var(--tx2)}.lg-pb{display:block;width:100%;height:5px;border-radius:9px;background:#E3E3E8;margin-top:5px;overflow:hidden}.lg-pb i{display:block;height:100%;background:#D9822B;border-radius:9px}
-.lg-todos{display:inline-flex;align-items:center;gap:4px;margin-top:6px}.lg-todos .ic{width:15px;height:15px}
+.btn.sm.lg-todos{display:flex;width:100%;align-items:center;justify-content:center;gap:4px;margin-top:10px}.lg-todos .ic{width:15px;height:15px}
+.lg-lab{font-size:12.5px;font-weight:600;color:var(--mu);margin:2px 0 6px}
+.lg-fila{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin:0 0 10px}
+.lg-mini{background:none;border:0;padding:2px;display:flex;flex-direction:column;align-items:center;gap:5px;font:inherit;color:inherit;cursor:pointer;min-width:0}
+.lg-mini .lg-md{width:54px;height:54px}.lg-mini .lg-md .lg-in{width:42px;height:42px}.lg-mini .lg-md .lg-in .ic{width:20px;height:20px}
+.lg-mini small{font:600 11.5px/1.25 Plus Jakarta Sans,sans-serif;text-align:center;color:var(--tx);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;max-width:100%}
+.lg-sg{display:flex;align-items:center;gap:10px;background:var(--card2);border-radius:14px;padding:10px 12px;margin:0 0 6px}.lg-sg>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.lg-sg b{font:700 14px/1.25 Plus Jakarta Sans,sans-serif;color:var(--tx2)}.lg-sg small{font-size:12px;color:var(--mu)}.lg-sg .lg-pb{margin:3px 0 1px}
 .prueba-b{display:flex;align-items:center;gap:8px;background:#111;color:#fff;border-radius:14px;padding:9px 10px 9px 14px;margin:0 0 12px;font-size:13px}.prueba-b span{flex:1;min-width:0}.prueba-b .ic{width:17px;height:17px;flex:none}
 .prueba-b button{background:#fff;color:#111;border:0;border-radius:999px;padding:6px 12px;font:700 12.5px Plus Jakarta Sans,sans-serif;cursor:pointer}
 /* v46 · cuentas separadas en el móvil, medidas (gráfica de cada una, corregir y borrar), cerrar sesión, archivar o borrar rutina y MOOD ON en la hoja del plato */
@@ -2591,7 +2598,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.2';
+var APP_V = 'v53.4.3';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -15317,10 +15324,6 @@ function logroCelda(x,coach){
   var sub=x.ok?x.sub+(x.f?' · '+fCorta(x.f):''):x.sub, pr=x.ok?'':'<span class="lg-pb"><i style="width:'+Math.round(x.val/x.meta*100)+'%"></i></span>', b=x.ok&&!coach;
   return '<'+(b?'button data-a="lgVer" data-id="'+esc(x.id)+'"':'div')+' class="lg-c'+(x.ok?' ok':'')+'">'+medallaHtml(x.ic,x.ok,'',x.n)+'<b>'+esc(x.t)+'</b><small>'+esc(sub)+'</small>'+pr+'</'+(b?'button':'div')+'>';
 }
-function logrosVista(R,todos,coach){
-  var ver=todos?R.ok.concat(R.sig):R.ok.slice(0,6).concat(R.sig.slice(0,R.ok.length>=6?2:Math.max(2,6-R.ok.length)));
-  return '<div class="lg-grid">'+ver.map(function(x){ return logroCelda(x,coach); }).join('')+'</div>';
-}
 function rachaHtml(R,coach){
   var falta=Math.max(0,R.meta-R.semHechos);
   if(!R.racha&&!R.semHechos) return '<div class="lg-racha off">'+ic('fuego')+'<div><b>'+(coach?'Sin racha ahora mismo':'Empieza tu racha')+'</b><span>'+(coach?'Semana completa = '+R.meta+(R.meta===1?' entreno':' entrenos'):'Haz tus '+R.meta+' entrenos esta semana y gana tu primera «Semana completa».')+'</span></div></div>';
@@ -15328,10 +15331,18 @@ function rachaHtml(R,coach){
     (falta?(coach?'Esta semana lleva '+R.semHechos+' de '+R.meta:'Esta semana llevas '+R.semHechos+' de '+R.meta+'. ¡Te '+(falta===1?'falta 1':'faltan '+falta)+'!'):(coach?'Esta semana ya está completa':'Semana completa. ¡No la rompas!'))+'</span></div></div>';
 }
 function lgCuenta(R){ return R.ok.reduce(function(a,g){ return a+g.n; },0); }
+/* v53.4.3: la tarjeta de Progreso, recogida: las últimas 4 conseguidas y la próxima; el resto, en «Ver todas» */
+function lgCerca(R,k){
+  return R.sig.map(function(x,i){ return {x:x,i:i,p:x.meta?x.val/x.meta:0}; }).sort(function(a,b){ return b.p-a.p||a.i-b.i; }).slice(0,k).map(function(y){ return y.x; });
+}
+function logroMini(x){ return '<button class="lg-mini" data-a="lgVer" data-id="'+esc(x.id)+'" aria-label="'+esc(x.t)+'">'+medallaHtml(x.ic,true,'',x.n)+'<small>'+esc(x.t)+'</small></button>'; }
+function logroSig(x){ return '<div class="lg-sg">'+medallaHtml(x.ic,false,'sm')+'<div><b>'+esc(x.t)+'</b><span class="lg-pb"><i style="width:'+Math.round(x.val/x.meta*100)+'%"></i></span><small>'+esc(x.sub)+'</small></div></div>'; }
 function logrosCard(){
-  var R=logrosCl(), n=lgCuenta(R);
-  return '<div class="card lg-card" id="lg-card"><div class="card-t"><span class="ps-tt">'+ic('medalla')+'Tus medallas</span><span class="ps-obj">'+n+'</span></div>'+rachaHtml(R,false)+logrosVista(R,false,false)+
-    '<button class="link lg-todos" data-a="lgTodos">Ver todas'+ic('flecha')+'</button></div>';
+  var R=logrosCl(), n=lgCuenta(R), S=lgCerca(R,R.ok.length?1:2);
+  return '<div class="card lg-card" id="lg-card"><div class="card-t"><span class="ps-tt">'+ic('medalla')+'Tus medallas</span><span class="ps-obj">'+n+'</span></div>'+rachaHtml(R,false)+
+    (R.ok.length?'<div class="lg-lab">Las últimas que has conseguido</div><div class="lg-fila">'+R.ok.slice(0,4).map(logroMini).join('')+'</div>':'')+
+    (S.length?'<div class="lg-lab">'+(S.length>1?'Tus próximas medallas':'Tu próxima medalla')+'</div>'+S.map(logroSig).join(''):'')+
+    '<button class="btn sec sm lg-todos" data-a="lgTodos">Ver todas'+ic('flecha')+'</button></div>';
 }
 A.lgTodos=function(){ var R=logrosCl(); modal('<h2>Tus medallas</h2>'+rachaHtml(R,false)+(R.ok.length?'<div class="lab">Conseguidas</div>'+'<div class="lg-grid">'+R.ok.map(function(x){ return logroCelda(x,false); }).join('')+'</div>':'')+
   '<div class="lab">Las siguientes</div><div class="lg-grid">'+R.sig.map(function(x){ return logroCelda(x,false); }).join('')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
