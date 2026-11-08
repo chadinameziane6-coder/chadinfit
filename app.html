@@ -844,6 +844,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .rl-l{flex:1;display:flex;flex-direction:column;gap:10px}.rl-i{display:flex;align-items:center;gap:12px}.rl-i>.ic{color:#3A3A3C;margin:0}.rl-i span{display:flex;flex-direction:column}.rl-i:nth-child(2)>.ic{color:#B4561A}
 .rev-l .rl-i{flex-direction:row;align-items:center;flex:none}.rev-l.info{text-align:left}.rev-l .rl-i b{font-size:14.5px}
 .nt textarea{width:100%;min-height:58px}
+.nt-sub{margin:-4px 0 10px;line-height:1.4}.pill.nt-p{background:#F2F2F5;color:#3A3A3C}
 .nt-i{border-top:1px solid var(--line2);padding:10px 0 8px;margin-top:10px}
 .nt-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nt-h b{font-size:13px}.nt-h .ico-x{margin-left:auto}
 .nt-t{font-size:14px;line-height:1.45;color:var(--tx2);margin-top:4px}
@@ -2625,7 +2626,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.5';
+var APP_V = 'v53.4.6';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -8650,13 +8651,24 @@ A.semCada=function(el){
     var cl=CO.lista.filter(function(x){ return x.id===CO.cid; })[0]; if(cl&&cl.semanal){ cl.semanal.on=r.semanal; cl.semanal.cada=c.semanal_cada; }
     toast(n?'Revisión semanal: '+SEM_CADA[n].toLowerCase():'Sin revisión semanal','ok'); repintar(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
-/* notas privadas de la coach (ella nunca las ve): las sueltas y las de cada revisión semanal */
+/* notas privadas de la coach (ella nunca las ve): las sueltas y las de cada revisión semanal
+   v53.4.6: «Tus notas de cada revisión · solo tú», con también las de la revisión con ella (cada 20 días, o cada cuánto la tenga) y debajo del título
+   cada cuánto revisas; cada nota con lo que es (Revisión semanal, Revisión con ella o Nota) */
+function notasSubTxt(d){
+  var c=d.clienta||{}, rv=c.rev||{}, P=[];
+  if(c.plan!=='dieta'&&c.semanal) P.push('en tu revisión semanal ('+(SEM_CADA[c.semanal_cada||1]||'cada '+c.semanal_cada+' semanas').toLowerCase()+')');
+  if(rv.fecha||(d.actuaciones||[]).some(function(a){ return a.tipo==='revision'; })) P.push('en la revisión con '+cG('ella','él')+(rv.cada?' ('+periodoTxt(rv.cada)+')':''));
+  return (P.length?'Lo que apuntas '+listaY(P)+(P.length>1?',':'')+' y tus notas sueltas.':'Lo que apuntas en cada revisión y tus notas sueltas.')+' '+cG('Ella','Él')+' no lo ve.';
+}
 function notasCard(d){
-  var N=(d.actuaciones||[]).filter(function(a){ return (a.tipo==='nota'&&a.nota)||(a.tipo==='semanal'&&(a.nota||a.resultado)); });
-  var h='<div class="card nt"><div class="card-t">'+ic('candado')+'Tus notas · solo tú</div><textarea id="nt-n" rows="2" placeholder="Algo que quieras recordar de '+cG('ella','él')+' (no lo verá)"></textarea><button class="btn sm mt6" data-a="ntGuardar">Guardar nota</button>';
+  var N=(d.actuaciones||[]).filter(function(a){ return (a.tipo==='nota'&&a.nota)||(a.tipo==='semanal'&&(a.nota||a.resultado))||(a.tipo==='revision'&&a.estado!=='pendiente'&&(a.nota||a.resultado)); })
+    .map(function(a,i){ return {a:a,i:i,f:String(a.tipo==='semanal'?a.prevista:(a.fecha||a.creado||'')).slice(0,10)}; }).sort(function(x,y){ return x.f<y.f?1:x.f>y.f?-1:x.i-y.i; }).map(function(x){ return x.a; });      // la más reciente arriba
+  var h='<div class="card nt"><div class="card-t">'+ic('candado')+'Tus notas de cada revisión · solo tú</div><p class="muted sm nt-sub">'+esc(notasSubTxt(d))+'</p><textarea id="nt-n" rows="2" placeholder="Algo que quieras recordar de '+cG('ella','él')+' (no lo verá)"></textarea><button class="btn sm mt6" data-a="ntGuardar">Guardar nota</button>';
   if(N.length) h+=N.slice(0,CO.ntTodo?200:8).map(function(a){
-    var sem=a.tipo==='semanal';
-    return '<div class="nt-i"><div class="nt-h"><b>'+esc(sem?semTxt(a.prevista):fMedia(a.fecha||String(a.creado).slice(0,10)))+'</b>'+(sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'')+(a.tipo==='nota'&&a.id?'<button class="ico-x" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</div>'+(a.nota?'<div class="nt-t">'+br(a.nota)+'</div>':'')+'</div>';
+    var sem=a.tipo==='semanal', rev=a.tipo==='revision';
+    return '<div class="nt-i"><div class="nt-h"><b>'+esc(sem?semTxt(a.prevista):fMedia(a.fecha||String(a.creado).slice(0,10)))+'</b>'+
+      (sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rev?'<span class="pill">Revisión con '+cG('ella','él')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'<span class="pill nt-p">Nota</span>')+
+      (a.tipo==='nota'&&a.id?'<button class="ico-x" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</div>'+(a.nota?'<div class="nt-t">'+br(a.nota)+'</div>':'')+'</div>';
   }).join('')+(N.length>8&&!CO.ntTodo?'<button class="link mt6" data-a="ntTodo">Ver las '+N.length+'</button>':'');
   return h+'</div>';
 }
