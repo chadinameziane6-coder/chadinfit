@@ -960,12 +960,13 @@ details.sxf .ses-b{padding:2px 0 14px}
 .hc-eh{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;flex-wrap:wrap;margin-bottom:6px}.hc-eh .hc-n{margin:0}
 .hc-v{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:700;border-radius:999px;padding:3px 9px;background:#F2F2F5;color:var(--tx2)}.hc-v .ic{width:12px;height:12px;margin:0}
 .hc-v.s1{background:#E8F7EE;color:var(--ok)}.hc-v.s-1{background:#FFF1E6;color:var(--warn)}
-.hc-g{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(0,1fr) 26px;gap:0 8px;font-size:13.5px;font-variant-numeric:tabular-nums;align-items:center}
+.hc-g{display:grid;grid-template-columns:34px minmax(0,1fr) minmax(0,1fr) 26px;gap:0 8px;font-size:13.5px;font-variant-numeric:tabular-nums;align-items:stretch}.hc-g>span{display:flex;flex-direction:column;justify-content:center}
 .hc-g>span{padding:5px 0;border-top:1px solid var(--line2)}.hc-g>span.hd{border-top:0;padding:0 0 3px;font-size:11.5px;color:var(--mu);font-weight:700}
 .hc-g .n{color:var(--mu);font-weight:600}.hc-g .up b{color:var(--ok)}.hc-g .down b{color:var(--warn)}
-.hc-g .ar{display:flex;justify-content:flex-end}.hc-g .ar .ic{width:14px;height:14px;margin:0}.hc-g .ar.up{color:var(--ok)}.hc-g .ar.down{color:var(--warn)}.hc-g .ar.eq{color:var(--mu)}
+.hc-g .ar{align-items:flex-end}.hc-g .ar .ic{width:14px;height:14px;margin:0}.hc-g .ar.up{color:var(--ok)}.hc-g .ar.down{color:var(--warn)}.hc-g .ar.eq{color:var(--mu)}
 .hc-g .tot{font-weight:700}.hc-g .ar.tot{font-size:12.5px;white-space:nowrap}
-.hc-g.nf>span:not(.hd){font-size:13px}
+.hc-g .u{display:block;white-space:nowrap}.hc-g .u+.u{margin-top:2px}.hc-g .u i{font-style:normal;font-size:10.5px;font-weight:700;color:var(--mu);margin-left:5px;letter-spacing:.02em}
+.hc-g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px;font-size:13.5px}.hc-g2>span{padding:5px 0;border-top:1px solid var(--line2)}.hc-g2>span.hd{border-top:0;padding:0 0 3px;font-size:11.5px;color:var(--mu);font-weight:700}
 @media (max-width:560px){.hc-k{grid-template-columns:repeat(2,minmax(0,1fr))}}
 #modal .mbox.hc-box{max-width:1040px;max-height:94vh}.hc-box .hcmp{border:0;background:none;padding:0;margin:0}.hc-box .hcmp-h b{font-size:18px}
 .hc-rut{font-size:13.5px;font-weight:600;color:var(--mu);margin:2px 0 4px}.hc-box .hc-e{border-radius:14px}.hc-box .hc-g{font-size:14.5px}.hc-box .hc-kv b{font-size:22px}
@@ -2667,7 +2668,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.13';
+var APP_V = 'v53.4.14';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4236,6 +4237,12 @@ CH.hcB=function(t){ hfDe(est()).cmp.b=t.value; abrirCmp(); };
 function fMil(v){ v=num(v); if(v==null) return '–'; var n=Math.round(Math.abs(v)); return (v<0?'−':'')+String(n).replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
 function cmpSer(a,b){ if(!a||!b) return 0; var pa=num(a.p), pb=num(b.p), ra=num(a.r)||0, rb=num(b.r)||0;
   if(pa!=null||pb!=null){ if((pb||0)!==(pa||0)) return (pb||0)>(pa||0)?1:-1; } return rb===ra?0:rb>ra?1:-1; }
+/* series de trabajo de un ejercicio, con su izquierda si es unilateral: [{d, i}] */
+function serUni(rows){ return rows.filter(function(y){ return esSerieTrabajo(y)&&y.ld!=='I'; }).sort(function(p,q){ return (num(p.n)||0)-(num(q.n)||0); }).map(function(y){ return {d:y,i:rows.filter(function(z){ return z.ld==='I'&&num(z.n)===num(y.n)&&!(num(z.sb)>0); })[0]||null}; }); }
+function celU(s){ if(!s) return '<span class="muted">—</span>'; return s.i?'<span class="u">'+serC(s.d)+'<i>Dcha</i></span><span class="u">'+serC(s.i)+'<i>Izq</i></span>':serC(s.d); }
+function cmpSerU(a,b){ if(!a||!b) return 0; var c1=cmpSer(a.d,b.d), c2=a.i&&b.i?cmpSer(a.i,b.i):c1; return c1===c2?c1:!c1?c2:!c2?c1:0; }
+function totEj(rows){ var W=rows.filter(esSerieTrabajo), uni=W.some(function(y){ return y.ld==='I'; }), f=rows.some(function(y){ return y.mc; })&&!uni?2:1, vol=0, reps=0;      // unilateral: derecha + izquierda
+  W.forEach(function(y){ var r=num(y.r)||0; vol+=(num(y.p)||0)*r*f; reps+=r; }); return {vol:vol,reps:reps}; }
 function serC(y){ if(!y) return '<span class="muted">—</span>'; var p=num(y.p), r=num(y.r); return p!=null?fN(p)+' kg × '+fN(r,0):fN(r,0)+' reps'; }
 function cmpVer(A,B){ var t=difTxt(A,B); if(!t) return null;      // en corto: la tabla ya enseña cada serie
   if(/sumando todas las series/.test(t.txt)){ var dn=B.n-A.n; t.txt=dn?(Math.abs(dn)===1?(dn>0?'Una serie más':'Una serie menos'):Math.abs(dn)+(dn>0?' series más':' series menos')):t.txt.replace(/ sumando todas las series[\s\S]*$/,' en total'); }
@@ -4262,19 +4269,20 @@ function cmpSesiones(st,d,M,coach){
     '<div class="grid2"><label class="f">Antes<select data-c="hcA">'+opts(A1.id)+'</select></label><label class="f">Después<select data-c="hcB">'+opts(B1.id)+'</select></label></div>';
   h+='<div class="hc-k">'+cmpTile('Series',A1.series,B1.series,'',0,true)+cmpTile('Kg en total',A1.volumen,B1.volumen,'kg',0,true,fMil)+cmpTile('Minutos',A1.minutos,B1.minutos,'min',0,null)+cmpTile('Esfuerzo (RPE)',A1.rpe,B1.rpe,'',0,false)+'</div>';
   h+='<div class="hc-es">'+nombres.map(function(n){
-    var a=de(gA,n), b=de(gB,n), x0=(b||a).rows[0], RA=a?resEjS(a.rows):null, RB=b?resEjS(b.rows):null, fz=esFuerza(x0);
-    var exA=extrasSes(A1).nej[n], exB=extrasSes(B1).nej[n], t=(RA&&RB&&fz)?cmpVer(RA,RB):null;
-    var e='<div class="hc-e"><div class="hc-eh"><b class="hc-n">'+esc(n)+'</b>'+(t?'<span class="hc-v s'+t.s+'">'+ic(t.ic)+esc(t.s===0?'Igual':t.txt)+'</span>':'')+'</div>';
-    e+='<div class="hc-g'+(fz?'':' nf')+'"><span class="hd"></span><span class="hd">'+esc(fa)+'</span><span class="hd">'+esc(fb)+'</span><span class="hd"></span>';
-    if(!fz||!a||!b){      // cardio, bloque, carrera o lo que solo hizo un día: lo de cada día, al lado
+    var a=de(gA,n), b=de(gB,n), x0=(b||a).rows[0], RA=a?resEjS(a.rows):null, RB=b?resEjS(b.rows):null, fz=esFuerza(x0)&&x0.t!=='mov';
+    var exA=extrasSes(A1).nej[n], exB=extrasSes(B1).nej[n], t=(RA&&RB&&fz)?cmpVer(RA,RB):null, falta=!a?fa:!b?fb:'';
+    var e='<div class="hc-e"><div class="hc-eh"><b class="hc-n">'+esc(n)+'</b>'+(t?'<span class="hc-v s'+t.s+'">'+ic(t.ic)+esc(t.s===0?'Igual':t.txt)+'</span>':falta?'<span class="hc-v s0">No lo hizo el '+esc(falta)+'</span>':'')+'</div>';
+    if(!fz){      // cardio, bloque o carrera: lo de cada día, una al lado de la otra
       var lado=function(g,x){ return g?txtFilas(g.rows,null,x.id):'<span class="muted">No lo hizo</span>'; };
-      e+='<span></span><span>'+lado(a,A1)+'</span><span>'+lado(b,B1)+'</span><span></span>';
-    } else {
-      var SA=a.rows.filter(esEfectiva).sort(function(p,q){ return (num(p.n)||0)-(num(q.n)||0); }), SB=b.rows.filter(esEfectiva).sort(function(p,q){ return (num(p.n)||0)-(num(q.n)||0); });
-      for(var k=0;k<Math.max(SA.length,SB.length);k++){ var sa=SA[k], sb=SB[k], cs=cmpSer(sa,sb);
-        e+='<span class="n">'+(k+1)+'</span><span>'+serC(sa)+'</span><span class="'+(cs>0?'up':cs<0?'down':'')+'"><b>'+serC(sb)+'</b></span><span class="ar '+(cs>0?'up':cs<0?'down':'eq')+'">'+(sa&&sb?ic(cs>0?'sube':cs<0?'baja':'igual'):'')+'</span>'; }
-      var conKg=RA.vol>0||RB.vol>0, va=conKg?RA.vol:RA.reps, vb=conKg?RB.vol:RB.reps, dv=vb-va;
-      e+='<span class="n tot">Total</span><span class="tot">'+fMil(va)+(conKg?' kg':' reps')+'</span><span class="tot"><b>'+fMil(vb)+(conKg?' kg':' reps')+'</b></span><span class="ar tot '+(dv>0?'up':dv<0?'down':'eq')+'">'+(dv?(dv>0?'+':'−')+fMil(Math.abs(dv)):'=')+'</span>';
+      e+='<div class="hc-g2"><span class="hd">'+esc(fa)+'</span><span class="hd">'+esc(fb)+'</span><span>'+lado(a,A1)+'</span><span>'+lado(b,B1)+'</span></div>';
+    } else {      // v53.4.13: serie a serie (las unilaterales, derecha e izquierda una debajo de otra); si un día no lo hizo, «—»
+      e+='<div class="hc-g"><span class="hd"></span><span class="hd">'+esc(fa)+'</span><span class="hd">'+esc(fb)+'</span><span class="hd"></span>';
+      var SA=a?serUni(a.rows):[], SB=b?serUni(b.rows):[];
+      for(var k=0;k<Math.max(SA.length,SB.length);k++){ var sa=SA[k], sb=SB[k], cs=cmpSerU(sa,sb);
+        e+='<span class="n">'+(k+1)+'</span><span>'+celU(sa)+'</span><span class="'+(cs>0?'up':cs<0?'down':'')+'"><b>'+celU(sb)+'</b></span><span class="ar '+(cs>0?'up':cs<0?'down':'eq')+'">'+(sa&&sb?ic(cs>0?'sube':cs<0?'baja':'igual'):'')+'</span>'; }
+      var TA=a?totEj(a.rows):null, TB=b?totEj(b.rows):null, conKg=(TA&&TA.vol>0)||(TB&&TB.vol>0), u=conKg?' kg':' reps';
+      var va=TA?(conKg?TA.vol:TA.reps):null, vb=TB?(conKg?TB.vol:TB.reps):null, dv=(va!=null&&vb!=null)?vb-va:null;
+      e+='<span class="n tot">Total</span><span class="tot">'+(va==null?'<span class="muted">—</span>':fMil(va)+u)+'</span><span class="tot"><b>'+(vb==null?'<span class="muted">—</span>':fMil(vb)+u)+'</b></span><span class="ar tot '+(dv>0?'up':dv<0?'down':'eq')+'">'+(dv==null?'':dv?(dv>0?'+':'−')+fMil(Math.abs(dv)):'=')+'</span>';
     }
     e+='</div>';
     if(exA||exB) e+='<div class="hc-nt">'+(exA?'<div>'+ic('nota')+esc(fa)+': '+esc(exA)+'</div>':'')+(exB?'<div>'+ic('nota')+esc(fb)+': '+esc(exB)+'</div>':'')+'</div>';
