@@ -969,7 +969,8 @@ details.sxf .ses-b{padding:2px 0 14px}
 .hc-g2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 12px;font-size:13.5px}.hc-g2>span{padding:5px 0;border-top:1px solid var(--line2)}.hc-g2>span.hd{border-top:0;padding:0 0 3px;font-size:11.5px;color:var(--mu);font-weight:700}
 @media (max-width:560px){.hc-k{grid-template-columns:repeat(2,minmax(0,1fr))}}
 #modal .mbox.hc-box{max-width:1040px;max-height:94vh}.hc-box .hcmp{border:0;background:none;padding:0;margin:0}.hc-box .hcmp-h b{font-size:18px}
-.hc-rut{font-size:13.5px;font-weight:600;color:var(--mu);margin:2px 0 4px}.hc-box .hc-e{border-radius:14px}.hc-box .hc-g{font-size:14.5px}.hc-box .hc-kv b{font-size:22px}
+.hc-rut{font-size:13.5px;font-weight:600;color:var(--mu);margin:2px 0 4px}.hc-kv.hc-kt b{font-size:16px}.hc-kv.hc-kt i{font-size:12.5px}.hc-todo{margin-top:12px}
+@media(min-width:900px){.hc-box .hc-ej .hc-es{grid-template-columns:1fr}}#modal .mbox.hc-box.hc-uno{max-width:780px}.hc-box .hc-e{border-radius:14px}.hc-box .hc-g{font-size:14.5px}.hc-box .hc-kv b{font-size:22px}
 @media(min-width:900px){.hc-box .hc-es{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start;margin-top:8px}.hc-box .hc-es .hc-e{margin-top:0}#modal .mbox.hc-box{top:3vh;padding:22px 24px}}
 .hc-t{display:grid;grid-template-columns:1.2fr 1fr 1fr 1fr;gap:6px;padding:6px 0;border-top:1px solid var(--line2);font-size:14px;font-variant-numeric:tabular-nums}
 .hc-t.hd{border-top:0;font-size:12px;color:var(--mu);font-weight:600}
@@ -2668,7 +2669,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.14';
+var APP_V = 'v53.4.15';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4221,15 +4222,22 @@ A.hsMas=function(){ hfDe(est()).n+=BOOT.mode==='clienta'?10:20; repH(); };
 /* comparar dos entrenos de la misma rutina */
 A.hsCmp=function(){      // v53.4.13: la comparación se abre en grande, en primer plano (antes, dentro de la tarjeta)
   var st=est(), F=hfDe(st), d=datH();
-  var S=d.sesiones.slice().sort(function(a,b){ return a.fecha<b.fecha?1:-1; }), base=F.rut?S.filter(function(s){ return clave(s.rutina)===clave(F.rut); })[0]:null;
+  var S=d.sesiones.slice().sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
+  if(F.ej){      // v53.4.15: con un ejercicio elegido arriba, se comparan las dos últimas veces que lo hizo (de cualquier rutina), solo ese ejercicio
+    var LE=sesConEj(d,F.ej,S); if(LE.length<2) return toast('Solo lo ha hecho una vez: todavía no hay con qué compararlo');
+    F.cmp={b:LE[0].id,a:LE[1].id,ej:F.ej}; return abrirCmp();
+  }
+  var base=F.rut?S.filter(function(s){ return clave(s.rutina)===clave(F.rut); })[0]:null;
   base=base||S.filter(function(s){ return S.some(function(o){ return o!==s&&mismaRut(o,s); }); })[0]||S[0];
   if(!base) return;
   var L=S.filter(function(s){ return mismaRut(s,base); });
   F.cmp={b:L[0].id,a:(L[1]||L[0]).id};
   abrirCmp();
 };
+function sesConEj(d,ej,S){ var k=clave(ej), ids={}; d.series.forEach(function(y){ if(clave(y.e)===k) ids[y.sid]=1; }); return (S||d.sesiones.slice().sort(function(a,b){ return a.fecha<b.fecha?1:-1; })).filter(function(s){ return ids[s.id]; }); }
+A.hcTodo=function(){ var c=hfDe(est()).cmp; if(c){ c.ej=''; abrirCmp(); } };      // del ejercicio, a los dos entrenos completos
 function abrirCmp(){ var st=est(), d=datH(), h=cmpSesiones(st,d,calcMarcas(d.series),BOOT.mode!=='clienta'); if(!h) return cerrarModal();
-  modal(h); var bx=document.querySelector('#modal .mbox'); if(bx) bx.classList.add('hc-box'); }
+  modal(h); var bx=document.querySelector('#modal .mbox'); if(bx){ bx.classList.add('hc-box'); if(hfDe(st).cmp&&hfDe(st).cmp.ej) bx.classList.add('hc-uno'); } }      // un solo ejercicio: la ventana, más estrecha
 CH.hcA=function(t){ hfDe(est()).cmp.a=t.value; abrirCmp(); };
 CH.hcB=function(t){ hfDe(est()).cmp.b=t.value; abrirCmp(); };
 /* v53.4.13: comparar dos entrenos, de un vistazo: arriba sus cifras en recuadros (antes → después y el cambio, en verde si mejora y en
@@ -4256,18 +4264,23 @@ function cmpTile(lab,a,b,u,dec,mejorSube,fmt){
 function cmpSesiones(st,d,M,coach){
   var c=hfDe(st).cmp, byId={}; d.sesiones.forEach(function(s){ byId[s.id]=s; });
   var A1=byId[c.a], B1=byId[c.b]; if(!A1||!B1){ hfDe(st).cmp=null; return ''; }
-  var L=d.sesiones.filter(function(s){ return mismaRut(s,B1)||mismaRut(s,A1); }).sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
+  var EJ=c.ej||'', L=EJ?sesConEj(d,EJ):d.sesiones.filter(function(s){ return mismaRut(s,B1)||mismaRut(s,A1); }).sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
   if(B1.fecha<A1.fecha){ var t=A1; A1=B1; B1=t; }
   var una=L.every(function(s){ return clave(s.rutina||'Entreno')===clave(L[0].rutina||'Entreno'); });      // todas de la misma rutina: su nombre arriba y en cada fecha, solo el día
   function opts(sel){ return L.map(function(s){ return '<option value="'+esc(s.id)+'"'+(s.id===sel?' selected':'')+'>'+esc(fMedia(s.fecha))+(una?'':' · '+esc(s.rutina||'Entreno'))+'</option>'; }).join(''); }
   function sinMov(g){ return g.rows[0].t!=='mov'; }
   var gA=filasSesion(d.series.filter(function(y){ return y.sid===A1.id; })).filter(sinMov), gB=filasSesion(d.series.filter(function(y){ return y.sid===B1.id; })).filter(sinMov);
+  if(EJ){ var kE=clave(EJ), soloE=function(g){ return clave(g.e)===kE; }; gA=gA.filter(soloE); gB=gB.filter(soloE); gA.forEach(function(g){ g.e=EJ; }); gB.forEach(function(g){ g.e=EJ; }); }
   var nombres=[]; gB.concat(gA).forEach(function(g){ if(nombres.indexOf(g.e)<0) nombres.push(g.e); });
   function de(G,n){ return G.filter(function(g){ return g.e===n; })[0]; }
   var fa=fCorta(A1.fecha), fb=fCorta(B1.fecha);
-  var h='<div class="hcmp" id="hcmp"><div class="hcmp-h"><b>'+ic('comparar')+'Comparar dos entrenos</b><button class="ico-x" data-a="cerrarModal" aria-label="Cerrar comparación">'+ic('x')+'</button></div>'+(una?'<div class="hc-rut">'+esc(L[0].rutina||'Entreno')+'</div>':'')+
+  var h='<div class="hcmp'+(EJ?' hc-ej':'')+'" id="hcmp"><div class="hcmp-h"><b>'+ic('comparar')+(EJ?'Comparar '+esc(EJ):'Comparar dos entrenos')+'</b><button class="ico-x" data-a="cerrarModal" aria-label="Cerrar comparación">'+ic('x')+'</button></div>'+(una?'<div class="hc-rut">'+esc(L[0].rutina||'Entreno')+'</div>':'')+
     '<div class="grid2"><label class="f">Antes<select data-c="hcA">'+opts(A1.id)+'</select></label><label class="f">Después<select data-c="hcB">'+opts(B1.id)+'</select></label></div>';
-  h+='<div class="hc-k">'+cmpTile('Series',A1.series,B1.series,'',0,true)+cmpTile('Kg en total',A1.volumen,B1.volumen,'kg',0,true,fMil)+cmpTile('Minutos',A1.minutos,B1.minutos,'min',0,null)+cmpTile('Esfuerzo (RPE)',A1.rpe,B1.rpe,'',0,false)+'</div>';
+  if(EJ){      // v53.4.15: las cifras de ese ejercicio (no las del entreno entero)
+    var ea=gA[0], eb=gB[0], ta=ea?totEj(ea.rows):{}, tb=eb?totEj(eb.rows):{}, ra=ea?resEjS(ea.rows):null, rb=eb?resEjS(eb.rows):null, cb=ra&&rb?cmpSer(ra.best,rb.best):0;
+    h+='<div class="hc-k">'+cmpTile('Series',ea?serUni(ea.rows).length:'',eb?serUni(eb.rows).length:'','',0,true)+cmpTile('Kg en total',ta.vol||'',tb.vol||'','kg',0,true,fMil)+cmpTile('Reps en total',ta.reps,tb.reps,'',0,true)+
+      '<div class="hc-k1'+(cb>0?' up':cb<0?' down':'')+'"><span class="hc-kl">Mejor serie</span><span class="hc-kv hc-kt"><i>'+esc(ra?serieTxt(ra.best):'–')+'</i><span class="hc-ka">→</span><b>'+esc(rb?serieTxt(rb.best):'–')+'</b></span><span class="hc-kd">'+(cb?ic(cb>0?'sube':'baja')+(cb>0?'mejor':'peor'):ra&&rb?'igual':'')+'</span></div></div>';
+  } else h+='<div class="hc-k">'+cmpTile('Series',A1.series,B1.series,'',0,true)+cmpTile('Kg en total',A1.volumen,B1.volumen,'kg',0,true,fMil)+cmpTile('Minutos',A1.minutos,B1.minutos,'min',0,null)+cmpTile('Esfuerzo (RPE)',A1.rpe,B1.rpe,'',0,false)+'</div>';
   h+='<div class="hc-es">'+nombres.map(function(n){
     var a=de(gA,n), b=de(gB,n), x0=(b||a).rows[0], RA=a?resEjS(a.rows):null, RB=b?resEjS(b.rows):null, fz=esFuerza(x0)&&x0.t!=='mov';
     var exA=extrasSes(A1).nej[n], exB=extrasSes(B1).nej[n], t=(RA&&RB&&fz)?cmpVer(RA,RB):null, falta=!a?fa:!b?fb:'';
@@ -4288,6 +4301,7 @@ function cmpSesiones(st,d,M,coach){
     if(exA||exB) e+='<div class="hc-nt">'+(exA?'<div>'+ic('nota')+esc(fa)+': '+esc(exA)+'</div>':'')+(exB?'<div>'+ic('nota')+esc(fb)+': '+esc(exB)+'</div>':'')+'</div>';
     return e+'</div>';
   }).join('')+'</div>';
+  if(EJ) h+='<button class="link hc-todo" data-a="hcTodo">'+ic('comparar')+'Ver los dos entrenos completos</button>';
   return h+'<p class="muted sm hc-pie">'+ic('info')+'<span>En verde, lo que mejora; en naranja, lo que baja. «Kg en total» = kilos × repeticiones de todas las series: con el mismo peso, una repetición más también lo sube. Sin la movilidad.</span></p></div>';
 }
 
