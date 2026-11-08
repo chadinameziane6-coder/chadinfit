@@ -1795,7 +1795,7 @@ input[type=radio]:focus-visible{outline:2px solid #111;outline-offset:2px}input[
 .plan-cl h2{margin:0 0 8px}.plc-f{display:flex;gap:10px;flex-wrap:wrap}.plc-f>div{flex:1 1 120px;background:var(--card2);border-radius:12px;padding:9px 12px}
 .plc-f span{display:block;font-size:11.5px;color:var(--mu)}.plc-f b{font-size:14.5px}
 .plc-d{font-weight:700;margin:10px 0 0}.plc-d.warn{color:var(--warn)}.plc-d.bad{color:var(--bad)}
-.plc-p{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line2)}.plc-p>b{white-space:nowrap}.plc-p>span{display:flex;flex-direction:column;min-width:0}.plc-p small{font-size:12px;color:var(--mu)}
+.plc-p{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-top:1px solid var(--line2)}.plc-p>.plc-r{align-items:flex-end;flex:none;gap:3px}.plc-j,.pg-jl{display:inline-flex;align-items:center;gap:4px;font-size:12.5px;font-weight:600;white-space:nowrap}.plc-j .ic,.pg-jl .ic{width:15px;height:15px}.pg-a{gap:6px}.pg-a2{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex:none}.pg-jif{width:100%;height:520px;border:0;border-radius:14px;background:#F5F5F7;display:block;margin-top:8px}.plc-p>b{white-space:nowrap}.plc-p>span{display:flex;flex-direction:column;min-width:0}.plc-p small{font-size:12px;color:var(--mu)}
 .plan-av{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid rgba(178,106,0,.35);background:rgba(178,106,0,.06)}
 .plan-av.urg{border-color:rgba(209,59,59,.4);background:rgba(209,59,59,.06)}.plan-av>div{display:flex;flex-direction:column;gap:2px}.plan-av small{font-size:12.5px;color:var(--tx2)}
 .op-sol{display:flex;flex-direction:column;gap:4px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-top:10px;cursor:pointer;font:inherit;color:var(--tx)}
@@ -1826,6 +1826,7 @@ input[type=radio]:focus-visible{outline:2px solid #111;outline-offset:2px}input[
   .pg-h{display:none}.pg-r,.pg-th .pg-r{grid-template-columns:1fr 1fr;gap:8px 12px;padding:13px 14px}
   .pg-r>span[data-l]::before{content:attr(data-l);font-size:10.5px;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;font-weight:700}
   .pg-n{grid-column:1/-1}.pg-a{grid-column:1/-1;align-items:stretch!important}.pg-a .btn{width:100%}.pg-tot{margin-left:0;text-align:left}
+  .pg-th .pg-a{flex-direction:row!important;gap:8px}.pg-th .pg-a>*{flex:1}.pg-th .pg-a .pg-jl{justify-content:center;border:1px solid var(--line);border-radius:999px;padding:8px 10px;font-size:13.5px}      /* v53.4.31: Editar y Justificante, uno al lado del otro */
 }
 
 /* ===== v31 ===== */
@@ -2721,7 +2722,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.30';
+var APP_V = 'v53.4.31';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -14487,9 +14488,24 @@ function planClCard(){
     '<div class="plc-f">'+(p.desde?'<div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div>':'')+(p.hasta?'<div><span>'+(d!=null&&d<0?'Venció':'Vence')+'</span><b>'+esc(fAnio(p.hasta))+'</b></div>':'')+'</div>'+
     (d!=null?'<p class="plc-d'+(d<0?' bad':d<=7?' warn':'')+'">'+diasTxt(d)+'</p>':'')+
     (p.estado!=='baja'&&(p.hasta||(p.planes||[]).length)?'<button class="btn mt6'+(d!=null&&d<=7?'':' sec')+'" data-a="plRenovarCl">'+(p.pedido?ic('okc')+'Renovación pedida':'Renovar mi plan')+'</button>':'');
-  if((p.pagos||[]).length) h+='<div class="lab">Tus pagos</div>'+p.pagos.map(function(x){ return '<div class="plc-p"><span><b>'+esc(fAnio(x.fecha))+'</b><small>'+esc(x.plan)+(x.desde&&x.hasta?' · del '+esc(fCorta(x.desde))+' al '+esc(fCorta(x.hasta)):'')+(x.metodo?' · '+esc(METODO_L[x.metodo]||x.metodo):'')+'</small></span><b>'+eur(x.importe)+'</b></div>'; }).join('');
+  if((p.pagos||[]).length) h+='<div class="lab">Tus pagos</div>'+p.pagos.map(function(x){ return '<div class="plc-p"><span><b>'+esc(fAnio(x.fecha))+'</b><small>'+esc(x.plan)+(x.desde&&x.hasta?' · del '+esc(fCorta(x.desde))+' al '+esc(fCorta(x.hasta)):'')+(x.metodo?' · '+esc(METODO_L[x.metodo]||x.metodo):'')+'</small></span>'+
+    '<span class="plc-r"><b>'+eur(x.importe)+'</b>'+(x.id?'<button class="link plc-j" data-a="justCl" data-id="'+esc(x.id)+'">'+ic('descargar')+'Justificante</button>':'')+'</span></div>'; }).join('');      // v53.4.31
   return h+'</div>';
 }
+/* v53.4.31 · su justificante de cada pago, en PDF (con su plan y el periodo pagado) */
+A.justCl=function(el){ if(el.disabled) return; el.disabled=true;
+  cargando(api('miJustificante',BOOT.token,el.dataset.id)).then(function(r){ el.disabled=false; bajarArchivo(r,'Tu justificante de pago','Con tu plan, el periodo pagado y el importe. Guárdalo donde quieras.'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+/* descargar un archivo que llega del servidor en base64 (y, en el móvil, compartirlo o guardarlo en Archivos) */
+function bajarArchivo(r,tit,txt){
+  var bin=atob(r.b64), u8=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+  var bl=new Blob([u8],{type:r.tipo}), u=URL.createObjectURL(bl), f=null;
+  try{ f=new File([bl],r.nombre,{type:r.tipo}); }catch(e){ f=null; }
+  var sh=false; try{ sh=!!(f&&navigator.canShare&&navigator.canShare({files:[f]})&&/iPhone|iPad|Android/i.test(navigator.userAgent)); }catch(e){ sh=false; }
+  window.__bajarF=f;
+  modal('<h2>'+esc(tit)+'</h2><p class="muted">'+esc(txt)+'</p><a class="btn mt" href="'+u+'" download="'+esc(r.nombre)+'">'+ic('descargar')+'Descargar PDF</a>'+
+    (sh?'<button class="btn sec mt" data-a="bajarCompartir">Compartir o guardar en Archivos</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+}
+A.bajarCompartir=function(){ var f=window.__bajarF; if(f&&navigator.share) navigator.share({files:[f],title:f.name}).catch(function(){}); };
 /* v35: 3 días antes, «tu plan vence en 3 días»; al vencer, 3 días de cortesía con su cuenta atrás (luego pierde el acceso) */
 function planGracia(){ var p=CL.d&&CL.d.plan; return p&&p.acceso?diff(hoyStr(),p.acceso):null; }
 function planAvisoHoy(){
@@ -14828,7 +14844,7 @@ function pgHistHtml(){
   return h+'<div class="pg-t pg-th"><div class="pg-r pg-h"><span>Fecha</span><span>Cliente</span><span>Plan</span><span>Periodo</span><span>Forma de pago</span><span>Importe</span><span></span></div>'+L.map(function(p){
     return '<div class="pg-r"><span data-l="Fecha"><b>'+esc(fCorta(p.fecha))+'</b></span><span data-l="Cliente"><button class="link" data-a="pgCli" data-id="'+esc(p.cid)+'">'+esc(p.clienta)+'</button></span><span data-l="Plan">'+esc(p.plan)+(p.meses?'<small>'+mesesTxt(p.meses)+'</small>':'')+'</span>'+
       '<span data-l="Periodo">'+(p.desde?esc(fCorta(p.desde))+' – '+esc(fCorta(p.hasta)):'–')+'</span><span data-l="Forma de pago">'+esc(METODO_L[p.metodo]||'–')+(p.nota?'<small>'+esc(p.nota)+'</small>':'')+'</span><span data-l="Importe"><b>'+eur(p.importe)+'</b></span>'+
-      '<span class="pg-a"><button class="btn sm sec" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button></span></div>'; }).join('')+'</div>';
+      '<span class="pg-a"><button class="btn sm sec" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button><button class="link pg-jl" data-a="pgJust" data-id="'+esc(p.id)+'">'+ic('descargar')+'Justificante</button></span></div>'; }).join('')+'</div>';
 }
 CH.pgMes=function(t){ CO.pgF.mes=t.value; pintarPagos(false); };
 function pgPlanesHtml(){
@@ -14839,8 +14855,40 @@ function pgPlanesHtml(){
       '<div class="row mt6"><button class="btn sm sec" data-a="pgPlanEd" data-id="'+esc(p.id)+'">Editar</button><button class="link danger" data-a="pgPlanBorrar" data-id="'+esc(p.id)+'">'+(p.activo?'Archivar o borrar':'Borrar')+'</button></div></div>'; }).join('')+'</div>'
     :'<div class="card mt"><h3>Crea tus planes</h3><p class="muted sm">Por ejemplo: «Entreno + Dieta · trimestral · 180 €». Así, al registrar un pago, el precio y las fechas se ponen solos.</p></div>';
   h+='<div class="card mt"><div class="card-t">'+ic('info')+'Cómo te pagan</div><p class="muted sm">Lo ven tus clientes al pedir la renovación desde su app (por ejemplo: «Bizum al 600 000 000 indicando tu nombre»). No pongas contraseñas ni datos de tarjeta.</p><textarea id="pg-instr" rows="3" maxlength="600" placeholder="Bizum, transferencia (IBAN)…">'+esc(CO.pg.instr||'')+'</textarea><button class="btn sm mt6" data-a="pgInstr">Guardar</button></div>';
-  return h;
+  return h+pgJustCard();
 }
+/* v53.4.31 · justificantes de pago: el PDF de cada pago (con su plan) y, si lo activas, por email al registrarlo */
+function pgJustCard(){
+  var on=!!CO.pg.justEmail;
+  return '<div class="card mt pg-jc"><div class="card-t">'+ic('descargar')+'Justificantes de pago</div>'+
+    '<p class="muted sm">Cada pago tiene su justificante en PDF, con su plan, el periodo pagado y el importe. Tú lo descargas en el historial de cobros y tus clientes, en su app (Perfil → Tu plan).</p>'+
+    '<div class="fila dsc-f"><span>Mandárselo por email al registrar cada pago<small class="fila-s">También los pagos online. Con un plan mensual, les llega cada mes.</small></span><button class="sw'+(on?' on':'')+'" data-a="pgJustTog" aria-label="Mandar el justificante por email al registrar cada pago" aria-pressed="'+on+'"><i></i></button></div>'+
+    (CO.pg.emisorOk===false?'<p class="seg-av sm">'+ic('info')+'<span>Pon tu nombre y tu NIF en Seguridad y acceso → Política de privacidad: salen en el justificante.</span></p>':'')+
+    '<p class="muted sm">No es una factura: si alguien te la pide, hazla con tu programa de facturas.</p><button class="link" data-a="pgJustVer">Ver cómo les llega el email</button></div>';
+}
+A.pgJustTog=function(){ var si=!CO.pg.justEmail;
+  var ir=function(){ cargando(api('coachJustEmail',CO.pin,si)).then(function(r){ CO.pg.justEmail=r.justEmail; if(CO.vista==='pagos') pintarPagos(false); toast(r.justEmail?'Activado: con cada pago, su justificante por email':'Desactivado: ya no se manda por email','ok'); },function(e){ toast(limpiaErr(e),'err'); }); };
+  if(si) return confirmar('Desde ahora, cada vez que registres un pago (también los online), tu cliente recibirá su justificante por email. ¿Activarlo?','Activar',ir,'Cancelar');
+  ir();
+};
+A.pgJustVer=function(){ cargando(api('coachCorreoPrueba',CO.pin,'justificante',false)).then(function(m){
+  modal('<h2>Así les llega</h2><p class="muted sm">'+esc(m.asunto)+' · con el PDF adjunto (ejemplo con '+esc(EJEMPLO)+').</p><iframe id="pg-jif" class="pg-jif" title="El email del justificante"></iframe><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  var f=document.getElementById('pg-jif'); if(f) f.srcdoc='<!doctype html><meta charset="utf-8"><body style="margin:0">'+m.html+'</body>';
+},function(e){ toast(limpiaErr(e),'err'); }); };
+A.pgJust=function(el){
+  var id=el.dataset.id, p=((CO.pg&&CO.pg.pagos)||[]).filter(function(x){ return x.id===id; })[0]||{}; CO.pgJ={id:id,cli:p.clienta||''};
+  modal('<h2>Justificante de pago</h2><p class="muted">'+esc([p.clienta,p.plan,p.importe!=null?eur(p.importe):'',p.fecha?fAnio(p.fecha):''].filter(Boolean).join(' · '))+'</p>'+
+    '<p class="sm">Un PDF con su plan, el periodo pagado y el importe. Tu cliente también lo tiene en su app (Perfil → Tu plan).</p>'+
+    (CO.pg&&CO.pg.emisorOk===false?'<p class="seg-av sm">'+ic('info')+'<span>Para que salgan tu nombre y tu NIF, ponlos en Seguridad y acceso → Política de privacidad.</span></p>':'')+
+    '<button class="btn mt" data-a="pgJustPdf">'+ic('descargar')+'Descargar PDF</button><button class="btn sec mt" data-a="pgJustMail">Enviárselo por email</button><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+};
+A.pgJustPdf=function(el){ if(el.disabled) return; el.disabled=true;
+  cargando(api('coachJustificante',CO.pin,CO.pgJ.id)).then(function(r){ bajarArchivo(r,'Justificante de pago','Guárdalo o envíaselo como quieras.'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.pgJustMail=function(){ var J=CO.pgJ;
+  confirmar('¿Mandarle el justificante'+(J.cli?' a '+J.cli:'')+' por email?','Enviar',function(){
+    cargando(api('coachEnviarJustificante',CO.pin,J.id)).then(function(r){ toast('Enviado a '+r.enviado,'ok'); },function(e){ toast(limpiaErr(e),'err'); });
+  },'Cancelar');
+};
 A.pgVolver=function(){ cargarLista(true).catch(function(e){ toast(limpiaErr(e),'err'); }); };
 A.pgTab=function(el){ CO.pgF.t=el.dataset.v; pintarPagos(true); };
 A.pgFiltro=function(el){ CO.pgF.t='cli'; CO.pgF.f=CO.pgF.f===el.dataset.v&&el.classList.contains('pg-k')?'':el.dataset.v; pintarPagos(false); };
@@ -14859,7 +14907,7 @@ function pgCliModal(cid){
   modal('<h2>'+esc(c.nombre)+'</h2><div class="pg-res"><div><span>Plan</span><b>'+esc(c.plan_det||planTxt(c.plan)||'Sin plan')+'</b>'+(c.plan_cada?'<small>'+esc(perPlan(c.plan_cada))+'</small>':'')+'</div><div><span>Empezó</span><b>'+(c.plan_desde?esc(fAnio(c.plan_desde)):'–')+'</b></div><div><span>Vence</span><b>'+(c.plan_hasta?esc(fAnio(c.plan_hasta)):'–')+'</b><small><i class="pg-e e-'+e.k+'">'+esc(e.t)+'</i></small></div><div><span>Pagado en total</span><b>'+eur(tot)+'</b><small>'+(mes?mesesTxt(mes)+' pagados · ':'')+L.length+' pago'+(L.length===1?'':'s')+'</small></div></div>'+
     (P.pedidos.some(function(x){ return x.cid===cid; })?'<p class="seg-ok warn">'+ic('alerta')+'<span>Ha pedido renovar desde su app: '+esc(P.pedidos.filter(function(x){ return x.cid===cid; })[0].titulo.replace(/^Quiere renovar:\s*/,''))+'.</span></p>':'')+
     (true?'<button class="btn mt" data-a="rnAbrir" data-id="'+esc(cid)+'">'+ic('ok')+'Renovar su plan</button><button class="btn sec mt6" data-a="pgNuevo" data-id="'+esc(cid)+'">'+ic('mas')+'Registrar otro pago</button>':'<button class="btn mt" data-a="pgNuevo" data-id="'+esc(cid)+'">'+ic('mas')+'Registrar pago</button>')+
-    '<div class="lab">Pagos</div>'+(L.length?L.map(function(p){ return '<div class="plc-p"><span><b>'+esc(fAnio(p.fecha))+' · '+eur(p.importe)+'</b><small>'+esc(p.plan)+(p.desde?' · del '+esc(fCorta(p.desde))+' al '+esc(fCorta(p.hasta)):'')+(p.metodo?' · '+esc(METODO_L[p.metodo]):'')+(p.nota?' · '+esc(p.nota):'')+'</small></span><button class="btn sm sec" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button></div>'; }).join(''):'<p class="muted sm">Aún no tiene pagos registrados.</p>')+
+    '<div class="lab">Pagos</div>'+(L.length?L.map(function(p){ return '<div class="plc-p"><span><b>'+esc(fAnio(p.fecha))+' · '+eur(p.importe)+'</b><small>'+esc(p.plan)+(p.desde?' · del '+esc(fCorta(p.desde))+' al '+esc(fCorta(p.hasta)):'')+(p.metodo?' · '+esc(METODO_L[p.metodo]):'')+(p.nota?' · '+esc(p.nota):'')+'</small></span><span class="pg-a2"><button class="btn sm sec" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button><button class="link pg-jl" data-a="pgJust" data-id="'+esc(p.id)+'">'+ic('descargar')+'Justificante</button></span></div>'; }).join(''):'<p class="muted sm">Aún no tiene pagos registrados.</p>')+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 }
 /* registrar un pago */
@@ -15008,7 +15056,7 @@ function vPagosCl(){
   }
   h+='<section class="card"><div class="pgc-t">Historial de cobros <span>'+L.length+(L.length===1?' pago':' pagos')+' · '+eur(tot)+'</span></div>'+
     (L.length?'<div class="pgc-tw"><table class="pgc-tb"><thead><tr><th>Fecha</th><th>Plan</th><th>Periodo</th><th>Forma de pago</th><th class="r">Importe</th><th></th></tr></thead><tbody>'+
-      L.map(function(p){ return '<tr><td class="tf">'+esc(fAnio(p.fecha))+'</td><td class="tp">'+esc(p.plan||'–')+'</td><td class="tpe">'+(p.desde?esc(fCorta(p.desde))+' – '+esc(fCorta(p.hasta)):'–')+'</td><td class="tm">'+esc(METODO_L[p.metodo]||'–')+(p.nota?'<small>'+esc(p.nota)+'</small>':'')+'</td><td class="r ti"><b>'+eur(p.importe)+'</b></td><td class="r te"><button class="link" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button></td></tr>'; }).join('')+
+      L.map(function(p){ return '<tr><td class="tf">'+esc(fAnio(p.fecha))+'</td><td class="tp">'+esc(p.plan||'–')+'</td><td class="tpe">'+(p.desde?esc(fCorta(p.desde))+' – '+esc(fCorta(p.hasta)):'–')+'</td><td class="tm">'+esc(METODO_L[p.metodo]||'–')+(p.nota?'<small>'+esc(p.nota)+'</small>':'')+'</td><td class="r ti"><b>'+eur(p.importe)+'</b></td><td class="r te"><span class="pg-a2"><button class="link" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button><button class="link pg-jl" data-a="pgJust" data-id="'+esc(p.id)+'">'+ic('descargar')+'Justificante</button></span></td></tr>'; }).join('')+
       '</tbody><tfoot><tr><td colspan="4">Total</td><td class="r ti"><b>'+eur(tot)+'</b></td><td></td></tr></tfoot></table></div>'
       :'<p class="muted">Todavía no hay pagos apuntados. Con «Registrar pago» se apuntan y renuevan su plan.</p>')+'</section>';
   return h;
