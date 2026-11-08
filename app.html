@@ -2626,7 +2626,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.6';
+var APP_V = 'v53.4.7';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -8610,18 +8610,10 @@ function vSeg(){
   var d=CO.d, c=d.clienta, hoy=CO.hoy||hoyStr(), R=resumenFicha(), rv=c.rev||{}, h='';
   // 1. próximas fechas · v31: por fecha (atrasado, hoy, 7 días, más adelante), quién y un botón
   h+=proxFechasHtml();
-  // 2. novedades de la clienta y tus notas privadas (v23: en el ordenador, a la derecha)
-  var P1=h, U1=ultEntrenosCard(d), N1=notasCard(d); h='';
-  // 3. historial de actuaciones
-  var H=(d.actuaciones||[]).filter(function(a){ return a.estado!=='pendiente'&&a.tipo!=='nota'&&a.tipo!=='semanal'; });
-  h+='<div class="card sg-h"><div class="card-t">'+ic('lista')+'Registro de seguimiento · solo tú <button class="link" data-a="segOtra">'+ic('mas')+' Apuntar otra cosa</button></div><p class="sg-exp">Se rellena solo cuando usas los botones de Próximas fechas (Registrar revisión, Renovar o dar de baja, Prorrogar, Marcar hecha…): queda qué hiciste, cuándo, qué salió y la siguiente fecha. Con «Apuntar otra cosa» añades algo suelto, como una llamada. '+cG('Ella','Él')+' no lo ve.</p>';
-  h+=H.length?H.slice(0,CO.segTodo?400:12).map(function(a){
-    return '<div class="ah"><div class="ah-f"><b>'+esc(fCorta(a.fecha||a.prevista))+'</b>'+(String(a.fecha||a.prevista).slice(0,4)!==hoy.slice(0,4)?'<small>'+esc(String(a.fecha||a.prevista).slice(0,4))+'</small>':'')+'</div><span class="tk-ic t-'+(TT[a.tipo]?a.tipo:'tarea')+'">'+ic((TT[a.tipo]||TT.tarea)[0])+'</span><div class="ah-tx"><div><span class="ah-tipo">'+esc(a.tipo==='tarea'?a.titulo:TT[a.tipo]?TT[a.tipo][1]:a.tipo)+'</span>'+(a.resultado?' · <b>'+esc(a.resultado)+'</b>':'')+'</div>'+
-      (a.nota?'<div class="muted sm">'+br(a.nota)+'</div>':'')+(a.siguiente?'<div class="ah-sig">'+ic('flecha')+'Siguiente: '+esc(fMedia(a.siguiente))+'</div>':'')+'</div>'+(a.id&&!a.antigua?'<button class="ico-x" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar">'+ic('x')+'</button>':'')+'</div>';
-  }).join('')+(H.length>12&&!CO.segTodo?'<button class="link mt6" data-a="segTodo">Ver las '+H.length+'</button>':''):'<p class="muted sm" style="margin:0">Todavía no has registrado nada.</p>';
-  return dkCols([[1,P1],[3,N1]],[[2,U1],[4,h+'</div>']]);
+  // 2. sus últimos entrenos y tus notas privadas (v23: en el ordenador, a la derecha)
+  // v53.4.7: fuera el «Registro de seguimiento»: repetía lo que ya está en tus notas, Pagos, Evolución y Próximas fechas
+  return dkCols([[1,h]],[[2,ultEntrenosCard(d)],[3,notasCard(d)]]);
 }
-A.segTodo=function(){ CO.segTodo=true; repintar(); };
 var SEM_CADA={1:'Cada semana',2:'Cada 2 semanas',4:'Cada 4 semanas'};
 /* v26: lo que se configura de su seguimiento vive en Ficha */
 A.irFicha=function(){ var ir=function(){ var e=document.getElementById('cfg-seg'); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); };
@@ -8654,20 +8646,23 @@ A.semCada=function(el){
 /* notas privadas de la coach (ella nunca las ve): las sueltas y las de cada revisión semanal
    v53.4.6: «Tus notas de cada revisión · solo tú», con también las de la revisión con ella (cada 20 días, o cada cuánto la tenga) y debajo del título
    cada cuánto revisas; cada nota con lo que es (Revisión semanal, Revisión con ella o Nota) */
+/* v53.4.7: un recordatorio hecho en el que apuntaste qué salió o una nota (los «Quiere renovar» se cierran solos con el pago: eso está en Pagos) */
+function recNota(a){ return a.tipo==='tarea'&&a.estado!=='pendiente'&&!!a.fecha&&!!(a.nota||a.resultado)&&!/^Quiere renovar/.test(a.titulo||''); }
 function notasSubTxt(d){
   var c=d.clienta||{}, rv=c.rev||{}, P=[];
   if(c.plan!=='dieta'&&c.semanal) P.push('en tu revisión semanal ('+(SEM_CADA[c.semanal_cada||1]||'cada '+c.semanal_cada+' semanas').toLowerCase()+')');
   if(rv.fecha||(d.actuaciones||[]).some(function(a){ return a.tipo==='revision'; })) P.push('en la revisión con '+cG('ella','él')+(rv.cada?' ('+periodoTxt(rv.cada)+')':''));
+  if((d.actuaciones||[]).some(recNota)) P.push('al marcar hecho un recordatorio');      // v53.4.7
   return (P.length?'Lo que apuntas '+listaY(P)+(P.length>1?',':'')+' y tus notas sueltas.':'Lo que apuntas en cada revisión y tus notas sueltas.')+' '+cG('Ella','Él')+' no lo ve.';
 }
 function notasCard(d){
-  var N=(d.actuaciones||[]).filter(function(a){ return (a.tipo==='nota'&&a.nota)||(a.tipo==='semanal'&&(a.nota||a.resultado))||(a.tipo==='revision'&&a.estado!=='pendiente'&&(a.nota||a.resultado)); })
+  var N=(d.actuaciones||[]).filter(function(a){ return (a.tipo==='nota'&&a.nota)||(a.tipo==='semanal'&&(a.nota||a.resultado))||(a.tipo==='revision'&&a.estado!=='pendiente'&&(a.nota||a.resultado))||recNota(a); })
     .map(function(a,i){ return {a:a,i:i,f:String(a.tipo==='semanal'?a.prevista:(a.fecha||a.creado||'')).slice(0,10)}; }).sort(function(x,y){ return x.f<y.f?1:x.f>y.f?-1:x.i-y.i; }).map(function(x){ return x.a; });      // la más reciente arriba
   var h='<div class="card nt"><div class="card-t">'+ic('candado')+'Tus notas de cada revisión · solo tú</div><p class="muted sm nt-sub">'+esc(notasSubTxt(d))+'</p><textarea id="nt-n" rows="2" placeholder="Algo que quieras recordar de '+cG('ella','él')+' (no lo verá)"></textarea><button class="btn sm mt6" data-a="ntGuardar">Guardar nota</button>';
   if(N.length) h+=N.slice(0,CO.ntTodo?200:8).map(function(a){
-    var sem=a.tipo==='semanal', rev=a.tipo==='revision';
+    var sem=a.tipo==='semanal', rev=a.tipo==='revision', rec=a.tipo==='tarea';      // v53.4.7: también lo que apuntas al marcar hecho un recordatorio
     return '<div class="nt-i"><div class="nt-h"><b>'+esc(sem?semTxt(a.prevista):fMedia(a.fecha||String(a.creado).slice(0,10)))+'</b>'+
-      (sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rev?'<span class="pill">Revisión con '+cG('ella','él')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'<span class="pill nt-p">Nota</span>')+
+      (sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rev?'<span class="pill">Revisión con '+cG('ella','él')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rec?'<span class="pill">Recordatorio · '+esc(a.titulo||'')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'<span class="pill nt-p">Nota</span>')+
       (a.tipo==='nota'&&a.id?'<button class="ico-x" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</div>'+(a.nota?'<div class="nt-t">'+br(a.nota)+'</div>':'')+'</div>';
   }).join('')+(N.length>8&&!CO.ntTodo?'<button class="link mt6" data-a="ntTodo">Ver las '+N.length+'</button>':'');
   return h+'</div>';
@@ -8959,19 +8954,6 @@ A.thGuardar=function(el){
   var x={id:el.dataset.id,fecha:val('th-f'),resultado:val('th-r'),nota:val('th-n'),siguiente:val('th-s')};
   if(el.disabled) return; el.disabled=true;
   cargando(api('coachTareaHecha',CO.pin,CO.cid,x)).then(function(){ cerrarModal(); return abrirClienta(CO.cid,'seguimiento'); }).then(function(){ toast('Tarea hecha'+(x.siguiente?'. Siguiente: '+fMedia(x.siguiente):''),'ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
-};
-A.segOtra=function(){
-  var hoy=CO.hoy||hoyStr();
-  modal('<h2>Apuntar otra cosa</h2><p class="muted">Para lo que no es revisión ni plan: una llamada, un cambio puntual, una incidencia… Queda en tu registro de seguimiento; '+cG('ella','él')+' no lo ve.</p><div class="row mt"><button class="btn sm sec" data-a="segRev">Revisión</button><button class="btn sm sec" data-a="segPlan">Plan</button></div>'+
-    '<label class="f">Qué has hecho<input id="ot-t" placeholder="Llamada de seguimiento"></label><label class="f">Fecha<input type="date" id="ot-f" value="'+hoy+'" max="'+hoy+'"></label><label class="f">Resultado<input id="ot-r" placeholder="Qué ha salido"></label><label class="f">Nota (opcional)<textarea id="ot-n" rows="2"></textarea></label>'+
-    '<label class="f">Siguiente (opcional)<input type="date" id="ot-s"></label><button class="btn mt" data-a="otGuardar">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
-};
-A.otGuardar=function(el){
-  var x={titulo:val('ot-t'),fecha:val('ot-f'),resultado:val('ot-r'),nota:val('ot-n'),siguiente:val('ot-s')};
-  if(!x.titulo) return toast('Escribe qué has hecho');
-  if(el.disabled) return; el.disabled=true;
-  cargando(api('coachGuardarTarea',CO.pin,CO.cid,{titulo:x.titulo,prevista:x.fecha||CO.hoy})).then(function(r){ return api('coachTareaHecha',CO.pin,CO.cid,{id:r.act.id,fecha:x.fecha,resultado:x.resultado,nota:x.nota,siguiente:x.siguiente}); })
-    .then(function(){ cerrarModal(); return abrirClienta(CO.cid,'seguimiento'); }).then(function(){ toast('Registrado','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 A.segBorrarAct=function(el){
   var id=el.dataset.id;
