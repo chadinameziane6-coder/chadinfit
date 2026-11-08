@@ -2715,7 +2715,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.28';
+var APP_V = 'v53.4.29';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -15783,124 +15783,87 @@ function metaSemanal(rut){
 function yymmdd(f){ f=String(f||''); return f.slice(2,4)+f.slice(5,7)+f.slice(8,10); }
 function h5(s){ var h=7; s=String(s||''); for(var i=0;i<s.length;i++) h=(h*31+s.charCodeAt(i))>>>0; return ('0000'+h.toString(36)).slice(-5); }
 var LG_PASOS=[6000,8000,10000,12000,15000,20000,25000,30000], LG_ENT=[1,10,25,50,100,150,200,300,500], LG_KG=[20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,180,200], LG_KGM=[5,6,8,10,12,14,16,18,20,22,25,30,35,40];
+/* v53.4.29 · MEDALLAS, menos y que cuesten (lo pidió Javier: «no me gusta que le salten medallas todos los días»): logros de constancia
+   en tres plazos, cada uno se gana una sola vez (salvo «Mes completo», una al mes). Corto plazo (las primeras semanas): primer entreno,
+   primera semana completa, 10 entrenos, 7 check-ins seguidos y 7 días seguidos con sus pasos. Medio plazo (1 a 3 meses) y largo plazo
+   (6 meses o más). Fuera las de cada día o cada semana (récord de pasos, objetivo doble, día de récords, kilos nuevos en cada ejercicio…). */
+var LG_PL={c:'A corto plazo',m:'A medio plazo',l:'A largo plazo'}, LG_PL_SUB={c:'Para empezar con buen pie',m:'Constancia de semanas y meses',l:'Para los más constantes'};
 function logrosDe(d,o){
-  o=o||{}; var I=[], hoy=hoyStr(), add=function(id,gid,t,sub,icn,f,ord){ I.push({id:id,gid:gid,t:t,sub:sub||'',ic:icn,f:f||'',o:ord}); };
+  o=o||{}; var I=[], hoy=hoyStr(), add=function(id,t,sub,icn,f,pl,gid){ I.push({id:id,gid:gid||id,t:t,sub:sub||'',ic:icn,f:f||'',o:{c:1,m:2,l:3}[pl],pl:pl}); };
   var porF=function(a,b){ return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0; }, ses=(d.sesiones||[]).slice().sort(porF);
   /* entrenos */
-  LG_ENT.forEach(function(k,i){ if(ses[k-1]) add('e'+k,'e'+k,k===1?'Primer entreno':k+' entrenos',k===1?'¡Has empezado!':'Completados','pesa',ses[k-1].fecha,i); });
+  var ENT=[[1,'c'],[10,'c'],[25,'m'],[50,'m'],[100,'l'],[200,'l']];
+  ENT.forEach(function(x){ var k=x[0]; if(ses[k-1]) add('e'+k,k===1?'Primer entreno':k+' entrenos',k===1?'¡Has empezado!':'Completados desde que empezaste','pesa',ses[k-1].fecha,x[1]); });
+  /* semanas completas: la primera, y las seguidas (4, 12 y 24) */
   var meta=metaSemanal(d.rutinas), por={}; ses.forEach(function(s){ var l=lunesDe(s.fecha); (por[l]=por[l]||[]).push(s.fecha); });
-  var lh=lunesDe(hoy), run=0, best=0, compF={}, fW={};
+  var lh=lunesDe(hoy), run=0, best=0, compF={}, fW={}, prim=false, WS=[[4,'m'],[12,'l'],[24,'l']];
   if(ses.length) for(var l=lunesDe(ses[0].fecha);l<=lh;l=sumar(l,7)){
     var F=(por[l]||[]).sort();
     if(F.length>=meta){ run++; if(run>best) best=run; compF[l]=F[meta-1];
-      add('sc'+yymmdd(l),'sc','Semana completa','Tus '+meta+(meta===1?' entreno':' entrenos')+' · semana del '+fCorta(l),'cal',F[meta-1],10);
-      [4,8,12].forEach(function(N){ if(run===N&&!fW[N]){ fW[N]=1; add('w'+N,'w'+N,N+' semanas completas seguidas','Sin fallar ni una','fuego',F[meta-1],11); } }); }
+      if(!prim){ prim=true; add('sc1','Primera semana completa','Tus '+meta+(meta===1?' entreno':' entrenos')+' de la semana del '+fCorta(l),'cal',F[meta-1],'c'); }
+      WS.forEach(function(x){ var N=x[0]; if(run===N&&!fW[N]){ fW[N]=1; add('w'+N,N+' semanas completas seguidas','Sin fallar ni una','fuego',F[meta-1],x[1]); } }); }
     else if(l<lh) run=0;
   }
-  /* mes completo: todas las semanas que empiezan ese mes, completas */
+  /* mes completo (todas las semanas que empiezan ese mes, completas): una al mes */
   if(ses.length){ var m0=ses[0].fecha.slice(0,7);
     for(var m=m0;m<=hoy.slice(0,7);m=fechaDe(new Date(+m.slice(0,4),+m.slice(5,7),1)).slice(0,7)){
       var L1=[], dd=m+'-01'; while(diaSem(dd)!=='lun') dd=sumar(dd,1); for(;dd.slice(0,7)===m;dd=sumar(dd,7)) L1.push(dd);
-      if(L1.length&&m>=m0&&L1.every(function(x){ return compF[x]; })&&!(m===m0&&lunesDe(ses[0].fecha)>L1[0])) add('mc'+m.slice(2,4)+m.slice(5,7),'mc','Mes completo','Todas las semanas de '+aDate(m+'-15').toLocaleDateString('es-ES',{month:'long'}),'medalla',compF[L1[L1.length-1]],12);
+      if(L1.length&&L1.every(function(x){ return compF[x]; })&&!(m===m0&&lunesDe(ses[0].fecha)>L1[0])) add('mc'+m.slice(2,4)+m.slice(5,7),'Mes completo','Todas las semanas de '+aDate(m+'-15').toLocaleDateString('es-ES',{month:'long'}),'medalla',compF[L1[L1.length-1]],'m','mc');
     } }
-  /* fuerza: 3 y 5 récords seguidos en un ejercicio y la primera vez con X kg */
-  var M=calcMarcas(d.series||[]), recS={}, EJ={}, rs3=0;
-  Object.keys(M).forEach(function(key){ if(key==='_ses') return; var m=M[key]; if(!m||m.t!=='rec') return; var i=key.indexOf('|'), j=key.lastIndexOf('|'), k=key.slice(i+1,j); if(/\|i$/.test(k)) return; recS[k+'#'+key.slice(0,i)]=1; });
-  (d.series||[]).forEach(function(x){ if(!esSerieTrabajo(x)||x.ld==='I') return; var k=clave(x.e); if(!k) return; var e=EJ[k]=EJ[k]||{n:x.e,mc:false,s:{}}; if(x.mc) e.mc=true; var s=e.s[x.sid]=e.s[x.sid]||{f:String(x.f||''),p:0}; s.p=Math.max(s.p,num(x.p)||0); });
-  Object.keys(EJ).forEach(function(k){
-    var e=EJ[k], S=Object.keys(e.s).map(function(sid){ return {sid:sid,f:e.s[sid].f,p:e.s[sid].p}; }).sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; }), st=0, mx=0, T=e.mc?LG_KGM:LG_KG;
-    S.forEach(function(s,i){
-      if(recS[k+'#'+s.sid]){ st++; if(st>rs3) rs3=st; if(st===3) add('r3'+h5(k)+yymmdd(s.f),'r3|'+k,'3 récords seguidos',e.n,'trofeo',s.f,20); if(st===5) add('r5'+h5(k)+yymmdd(s.f),'r5|'+k,'5 récords seguidos',e.n,'trofeo',s.f,21); }
-      else st=0;
-      if(i>0&&mx>0&&s.p>mx){ var u=T.filter(function(t){ return mx<t&&s.p>=t; }).pop(); if(u) add('kg'+h5(k)+u,'kg'+h5(k)+u,'Primeros '+fN(u)+' kg'+(e.mc?' por mancuerna':''),e.n,'sube',s.f,22); }
-      mx=Math.max(mx,s.p);
-    });
-  });
-  /* v49 · récords: cuántos lleva, en cuántos ejercicios y los días de varios récords */
-  var sesF={}; ses.forEach(function(s){ sesF[s.id]=String(s.fecha||''); });
-  var RC=[], recEj={}, recSes={};
-  Object.keys(M).forEach(function(key){ if(key==='_ses') return; var m=M[key]; if(!m||m.t!=='rec') return; var i=key.indexOf('|'), j=key.lastIndexOf('|'), k=key.slice(i+1,j), sid=key.slice(0,i); if(/\|i$/.test(k)) return;
-    var f=sesF[sid]; if(!f) return; RC.push({f:f,k:k,sid:sid}); (recSes[sid]=recSes[sid]||{})[k]=1; });
-  RC.sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; });
-  var nRec=0, nEjR=0; RC.forEach(function(r){ nRec++; [1,10,25,50,100,250,500].forEach(function(N){ if(nRec===N) add('rc'+N,'rc'+N,N===1?'Primer récord':N+' récords','Batidos desde que empezaste','trofeo',r.f,23); });
-    if(!recEj[r.k]){ recEj[r.k]=1; nEjR++; [5,10,20].forEach(function(N){ if(nEjR===N) add('rx'+N,'rx'+N,'Récord en '+N+' ejercicios','Distintos, desde que empezaste','sube',r.f,24); }); } });
-  Object.keys(recSes).forEach(function(sid){ var n=Object.keys(recSes[sid]).length; if(n>=3) add('rd'+yymmdd(sesF[sid])+h5(sid).slice(0,2),'rd','Día de récords',n+' récords en un entreno','estrella',sesF[sid],25); });
-  /* v49 · volumen (kilos × repeticiones de todas tus series) y series */
-  var LG_VE=[2000,3000,4000,5000,6000,8000,10000,12000,15000,20000], LG_VT=[10000,50000,100000,250000,500000,1000000,2000000], LG_SE=[100,250,500,1000,2500,5000];
-  var maxV=0, accV=0, accS=0, mxR={}, nR={};
-  ses.forEach(function(s){ var v=num(s.volumen)||0, ns=num(s.series)||0, f=s.fecha;
-    if(v>0){
-      var u=LG_VE.filter(function(t){ return maxV<t&&v>=t; }).pop(); if(u) add('ve'+(u/1000),'ve'+(u/1000),fN(u/1000)+' toneladas en un entreno','Primera vez · '+fP(Math.round(v))+' kg','pesa',f,13);
-      var rk=clave(s.rutina||''); if(rk){ if((nR[rk]||0)>=2&&v>(mxR[rk]||0)) add('rv'+h5(rk)+yymmdd(f),'rv|'+rk,'Récord de volumen',(s.rutina||'')+' · '+fP(Math.round(v))+' kg','sube',f,14); mxR[rk]=Math.max(mxR[rk]||0,v); nR[rk]=(nR[rk]||0)+1; }
-      var a0=accV; accV+=v; LG_VT.forEach(function(t){ if(a0<t&&accV>=t) add('vt'+(t/1000),'vt'+(t/1000),fP(t/1000)+' toneladas levantadas','En total, desde que empezaste','trofeo',f,15); });
-      maxV=Math.max(maxV,v); }
-    var s0=accS; accS+=ns; LG_SE.forEach(function(t){ if(s0<t&&accS>=t) add('se'+t,'se'+t,fP(t)+' series hechas','Serie a serie, desde que empezaste','lista',f,16); });
-  });
-  /* v49 · meses seguidos entrenando (4 entrenos o más cada mes; el mes en curso no rompe la racha) */
-  var pm={}; ses.forEach(function(s){ var k=String(s.fecha).slice(0,7); pm[k]=(pm[k]||0)+1; }); var mRun=0, fMt={};
+  /* meses seguidos entrenando (4 entrenos o más cada mes; el mes en curso no rompe la racha) */
+  var pm={}; ses.forEach(function(s){ var k=String(s.fecha).slice(0,7); pm[k]=(pm[k]||0)+1; }); var mRun=0, fMt={}, MS=[[3,'m'],[6,'l'],[12,'l']];
   if(ses.length) for(var mm=ses[0].fecha.slice(0,7);mm<=hoy.slice(0,7);mm=fechaDe(new Date(+mm.slice(0,4),+mm.slice(5,7),1)).slice(0,7)){
-    if((pm[mm]||0)>=4){ mRun++; var fm=ses.filter(function(s){ return String(s.fecha).slice(0,7)===mm; })[3].fecha; [3,6,12].forEach(function(N){ if(mRun===N&&!fMt[N]){ fMt[N]=1; add('mt'+N,'mt'+N,N+' meses seguidos entrenando','Con 4 entrenos o más cada mes','cal',fm,17); } }); }
+    if((pm[mm]||0)>=4){ mRun++; var fm=ses.filter(function(s){ return String(s.fecha).slice(0,7)===mm; })[3].fecha; MS.forEach(function(x){ var N=x[0]; if(mRun===N&&!fMt[N]){ fMt[N]=1; add('mt'+N,N+' meses seguidos entrenando','Con 4 entrenos o más cada mes','cal',fm,x[1]); } }); }
     else if(mm<hoy.slice(0,7)) mRun=0; }
-  /* pasos (si tiene objetivo) */
-  var obj=o.obj||0, bestP=0, rP=0, semP=0, accP=0, nPc=0, mPc={};
+  /* récords: cuántos lleva (10, 25, 50 y 100) */
+  var M=calcMarcas(d.series||[]), sesF={}, RC=[]; ses.forEach(function(s){ sesF[s.id]=String(s.fecha||''); });
+  Object.keys(M).forEach(function(key){ if(key==='_ses') return; var mk=M[key]; if(!mk||mk.t!=='rec') return; var i=key.indexOf('|'), j=key.lastIndexOf('|'), k=key.slice(i+1,j), sid=key.slice(0,i); if(/\|i$/.test(k)) return; var f=sesF[sid]; if(f) RC.push(f); });
+  RC.sort(); var RCS=[[10,'m'],[25,'m'],[50,'l'],[100,'l']], nRec=RC.length;
+  RCS.forEach(function(x){ if(nRec>=x[0]) add('rc'+x[0],x[0]+' récords','Batidos desde que empezaste','trofeo',RC[x[0]-1],x[1]); });
+  /* kilos levantados en total (kilos × repeticiones de todas sus series) */
+  var accV=0, VT=[[100000,'m'],[1000000,'l']];
+  ses.forEach(function(s){ var v=num(s.volumen)||0; if(v<=0) return; var a0=accV; accV+=v; VT.forEach(function(x){ var t=x[0]; if(a0<t&&accV>=t) add('vt'+(t/1000),fP(t/1000)+' toneladas levantadas','En total, desde que empezaste','trofeo',s.fecha,x[1]); }); });
+  /* pasos (si tiene objetivo): días seguidos cumpliendo, días con su objetivo y el millón */
+  var obj=o.obj||0, rP=0, accP=0, nPc=0, fS={};
   if(obj){
-    var P=(d.pasosDias||[]).filter(function(x){ return x.p>0; }).sort(function(a,b){ return a.f<b.f?-1:1; }), st2=0, prev='', fS={}, primero=0, M7={};
-    P.forEach(function(x,i){
-      var u=LG_PASOS.filter(function(t){ return bestP<t&&x.p>=t; }).pop(); if(u) add('pp'+(u/1000),'pp'+(u/1000),'Primeros '+fP(u)+' pasos','En un día · '+fP(x.p),'pasos',x.f,30);
-      if(i>=3&&x.p>bestP) add('pr'+yymmdd(x.f),'pr','Récord de pasos','Tu mejor día: '+fP(x.p),'estrella',x.f,31);
-      if(x.p>=2*obj) add('pd'+yymmdd(x.f),'pd','Objetivo doble',fP(x.p)+' pasos en un día','rayo',x.f,32);
-      var p0=accP; accP+=x.p; [100000,250000,500000,1000000,2000000].forEach(function(t){ if(p0<t&&accP>=t) add('pt'+(t/1000),'pt'+(t/1000),t>=1000000?(t===1000000?'Un millón de pasos':fP(t/1000000)+' millones de pasos'):fP(t)+' pasos','En total, desde que empezaste','pasos',x.f,36); });
-      if(x.p>=obj){ if(!primero){ primero=1; add('po1','po1','Primer objetivo de pasos','Tus '+fP(obj)+' pasos','okc',x.f,33); }
-        nPc++; [10,25,50,100,200,365].forEach(function(N){ if(nPc===N) add('pc'+N,'pc'+N,N+' días con tu objetivo','De '+fP(obj)+' pasos','okc',x.f,37); });
-        var mk=String(x.f).slice(0,7); mPc[mk]=(mPc[mk]||0)+1; if(mPc[mk]===20) add('pm'+mk.slice(2,4)+mk.slice(5,7),'pm','Mes de pasos','20 días con tu objetivo en '+aDate(mk+'-15').toLocaleDateString('es-ES',{month:'long'}),'cal',x.f,38);
-        st2=prev&&sumar(prev,1)===x.f?st2+1:1; prev=x.f; [7,14,30].forEach(function(N){ if(st2===N&&!fS[N]){ fS[N]=1; add('ps'+N,'ps'+N,N+' días seguidos cumpliendo','Tu objetivo de '+fP(obj)+' pasos','fuego',x.f,34); } });
-        var lm=lunesDe(x.f); M7[lm]=(M7[lm]||0)+1; if(M7[lm]===7) add('sp'+yymmdd(lm),'sp','Semana perfecta de pasos','Los 7 días de la semana del '+fCorta(lm),'diana',x.f,35); }
-      if(x.p>bestP) bestP=x.p;
+    var P=(d.pasosDias||[]).filter(function(x){ return x.p>0; }).sort(function(a,b){ return a.f<b.f?-1:1; }), st2=0, prev='';
+    P.forEach(function(x){
+      var p0=accP; accP+=x.p; if(p0<1000000&&accP>=1000000) add('pt1000','Un millón de pasos','En total, desde que empezaste','pasos',x.f,'l');
+      if(x.p>=obj){ nPc++; [[50,'m'],[200,'l']].forEach(function(y){ if(nPc===y[0]) add('pc'+y[0],y[0]+' días con tu objetivo','De '+fP(obj)+' pasos','okc',x.f,y[1]); });
+        st2=prev&&sumar(prev,1)===x.f?st2+1:1; prev=x.f; [[7,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(st2===N&&!fS[N]){ fS[N]=1; add('ps'+N,N+' días seguidos cumpliendo','Tu objetivo de '+fP(obj)+' pasos','fuego',x.f,y[1]); } }); }
     });
-    rP=pasosRacha(d.pasosDias||[],obj); semP=M7[lunesDe(hoy)]||0;
+    rP=pasosRacha(d.pasosDias||[],obj);
   }
-  /* check-in */
+  /* check-ins: 7 y 30 días seguidos, y 200 en total */
   var ck=(d.diario||[]).map(function(x){ return String(x.fecha).slice(0,10); }).filter(function(f,i,a){ return f&&a.indexOf(f)===i; }).sort(), sc=0, pc='', fc={};
-  ck.forEach(function(f,i){ sc=pc&&sumar(pc,1)===f?sc+1:1; pc=f; [7,30,60,100].forEach(function(N){ if(sc===N&&!fc[N]){ fc[N]=1; add('c'+N,'c'+N,N+' check-ins seguidos','Contándole a tu coach cómo estás','checkin',f,40); } });
-    [10,25,50,100,200,365].forEach(function(N){ if(i+1===N) add('ct'+N,'ct'+N,N+' check-ins','Desde que empezaste','checkin',f,41); }); });
+  ck.forEach(function(f,i){ sc=pc&&sumar(pc,1)===f?sc+1:1; pc=f; [[7,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(sc===N&&!fc[N]){ fc[N]=1; add('c'+N,N+' check-ins seguidos','Contándole a tu coach cómo estás','checkin',f,y[1]); } });
+    if(i+1===200) add('ct200','200 check-ins','Desde que empezaste','checkin',f,'l'); });
   var scHoy=pc===hoy||pc===sumar(hoy,-1)?sc:0;
-  /* v49 · sueño (lo que apunta en su check-in): noches de 7 h o más */
-  var DZ={}; (d.diario||[]).forEach(function(x){ var f=String(x.fecha).slice(0,10), h=num(x.sueno); if(f&&h!=null) DZ[f]=h; });
-  var zF=Object.keys(DZ).sort(), zRun=0, zPrev='', zN=0, fZ={}, zW={};
-  zF.forEach(function(f){ var bien=DZ[f]>=7;
-    if(bien){ zN++; zRun=zPrev&&sumar(zPrev,1)===f?zRun+1:1; zPrev=f; [3,7,14,30].forEach(function(N){ if(zRun===N&&!fZ[N]){ fZ[N]=1; add('zs'+N,'zs'+N,N+' noches seguidas durmiendo bien','7 horas o más cada noche','luna',f,42); } });
-      [10,30,60,100].forEach(function(N){ if(zN===N) add('zn'+N,'zn'+N,N+' noches de buen descanso','De 7 horas o más','luna',f,43); }); }
-    else zRun=0;
-    var l=lunesDe(f); (zW[l]=zW[l]||[]).push(DZ[f]); });
-  Object.keys(zW).forEach(function(l){ var L=zW[l]; if(l>=lunesDe(hoy)||L.length<5) return; var me=L.reduce(function(a,b){ return a+b; },0)/L.length; if(me>=7) add('zw'+yymmdd(l),'zw','Semana de buen descanso','Media de '+fN(Math.round(me*10)/10)+' h · semana del '+fCorta(l),'luna',sumar(l,6),44); });
-  var zHoy=zPrev===hoy||zPrev===sumar(hoy,-1)?zRun:0;
-  /* v49 · peso y medidas: la constancia al apuntarlos (no los kilos: eso lo valoras tú) */
-  var MD=(d.medidas||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }), nPeso=0, nMed=0;
-  MD.forEach(function(m){ var f=String(m.fecha).slice(0,10);
-    if(num(m.peso)){ nPeso++; [5,10,25,50,100,200].forEach(function(N){ if(nPeso===N) add('wp'+N,'wp'+N,N+' registros de peso','Apuntados en tu app','peso',f,45); }); }
-    if(['cintura','cadera','muslo','brazo'].some(function(k){ return num(m[k]); })){ nMed++; [1,3,6,12].forEach(function(N){ if(nMed===N) add('wm'+N,'wm'+N,N===1?'Primeras medidas':N+' revisiones de medidas','Cintura, cadera, muslo y brazo','medidas',f,46); }); } });
+  /* sueño (lo que apunta en su check-in): noches de 7 h o más, 30 y 100 */
+  var zN=0, zF=[]; (d.diario||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }).forEach(function(x){ var f=String(x.fecha).slice(0,10), h=num(x.sueno); if(!f||h==null||zF.indexOf(f)>=0) return; zF.push(f);
+    if(h>=7){ zN++; [[30,'m'],[100,'l']].forEach(function(y){ if(zN===y[0]) add('zn'+y[0],y[0]+' noches de buen descanso','De 7 horas o más','luna',f,y[1]); }); } });
+  /* medidas: la constancia al revisarlas (3 y 12 revisiones) */
+  var nMed=0; (d.medidas||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }).forEach(function(md){ var f=String(md.fecha).slice(0,10);
+    if(['cintura','cadera','muslo','brazo'].some(function(k){ return num(md[k]); })){ nMed++; [[3,'m'],[12,'l']].forEach(function(y){ if(nMed===y[0]) add('wm'+y[0],y[0]+' revisiones de medidas','Cintura, cadera, muslo y brazo','medidas',f,y[1]); }); } });
   /* medallas: las del mismo tipo juntas (la última manda) */
   var G={}, ok=[];
-  I.forEach(function(x){ var g=G[x.gid]; if(!g){ g=G[x.gid]={id:x.gid,t:x.t,sub:x.sub,ic:x.ic,f:x.f,n:0,ids:[],o:x.o,ok:true,last:x}; ok.push(g); } g.n++; g.ids.push(x.id); if(x.f>=g.f){ g.f=x.f; g.sub=x.sub; g.last=x; } });
+  I.forEach(function(x){ var g=G[x.gid]; if(!g){ g=G[x.gid]={id:x.gid,t:x.t,sub:x.sub,ic:x.ic,f:x.f,n:0,ids:[],o:x.o,pl:x.pl,ok:true,last:x}; ok.push(g); } g.n++; g.ids.push(x.id); if(x.f>=g.f){ g.f=x.f; g.sub=x.sub; g.last=x; } });
   ok.sort(function(a,b){ return a.f<b.f?1:a.f>b.f?-1:b.o-a.o; });
-  /* las siguientes (en gris, con lo que le falta) */
-  var sig=[], nx=function(id,t,sub,icn,val,mt,ord){ sig.push({id:id,t:t,sub:sub,ic:icn,ok:false,val:Math.max(0,Math.min(val,mt)),meta:mt,o:ord}); }, semHechos=(por[lh]||[]).length;
-  var ne=LG_ENT.filter(function(k){ return ses.length<k; })[0]; if(ne) nx('ne',ne===1?'Primer entreno':ne+' entrenos','Llevas '+ses.length,'pesa',ses.length,ne,1);
-  if(!G.sc||semHechos<meta) nx('nsc',G.sc?'Otra semana completa':'Semana completa','Esta semana llevas '+semHechos+' de '+meta,'cal',semHechos,meta,2);
-  var nw=[4,8,12].filter(function(N){ return !fW[N]; })[0]; if(nw&&G.sc) nx('nw',nw+' semanas completas seguidas','Llevas '+run,'fuego',run,nw,3);
-  if(obj){ var np=LG_PASOS.filter(function(t){ return t>bestP; })[0]; if(np) nx('npp','Primeros '+fP(np)+' pasos',bestP?'Tu mejor día: '+fP(bestP):'Apunta tus pasos','pasos',bestP,np,4);
-    nx('nsp',G.sp?'Otra semana perfecta de pasos':'Semana perfecta de pasos','Esta semana: '+semP+' de 7 días','diana',semP,7,5);
-    var nps=[7,14,30].filter(function(N){ return !fS||!G['ps'+N]; })[0]; if(nps) nx('nps',nps+' días seguidos cumpliendo','Llevas '+rP,'fuego',rP,nps,6); }
-  if(!ok.some(function(g){ return /^r3\|/.test(g.id); })) nx('nr3','3 récords seguidos','Bate tu récord en un ejercicio 3 veces seguidas','trofeo',rs3,3,7);
-  if(!G.c7) nx('nc7','7 check-ins seguidos','Llevas '+scHoy,'checkin',scHoy,7,8);
-  /* v49 */
-  var nve=LG_VE.filter(function(t){ return t>maxV; })[0]; if(nve&&ses.length) nx('nve',fN(nve/1000)+' toneladas en un entreno',maxV?'Tu mejor entreno: '+fP(Math.round(maxV))+' kg':'Kilos × repeticiones de tus series','pesa',maxV,nve,9);
-  var nvt=LG_VT.filter(function(t){ return t>accV; })[0]; if(nvt&&ses.length) nx('nvt',fP(nvt/1000)+' toneladas levantadas','Llevas '+fP(Math.round(accV/1000))+' t','trofeo',accV,nvt,10);
-  var nse=LG_SE.filter(function(t){ return t>accS; })[0]; if(nse&&ses.length) nx('nse',fP(nse)+' series hechas','Llevas '+fP(accS),'lista',accS,nse,11);
-  var nrc=[1,10,25,50,100,250,500].filter(function(t){ return t>nRec; })[0]; if(nrc&&ses.length) nx('nrc',nrc===1?'Primer récord':nrc+' récords','Llevas '+nRec,'trofeo',nRec,nrc,12);
-  if(zF.length){ var nzs=[3,7,14,30].filter(function(N){ return !fZ[N]; })[0]; if(nzs) nx('nzs',nzs+' noches seguidas durmiendo bien','Llevas '+zHoy+' · 7 h o más','luna',zHoy,nzs,13); }
-  if(obj){ var npt=[100000,250000,500000,1000000,2000000].filter(function(t){ return t>accP; })[0]; if(npt) nx('npt',npt>=1000000?(npt===1000000?'Un millón de pasos':fP(npt/1000000)+' millones de pasos'):fP(npt)+' pasos','Llevas '+fP(accP),'pasos',accP,npt,14); }
-  var nct=[10,25,50,100,200,365].filter(function(t){ return t>ck.length; })[0]; if(nct) nx('nct',nct+' check-ins','Llevas '+ck.length,'checkin',ck.length,nct,15);
+  /* las siguientes (en gris, con lo que le falta): la próxima de cada tipo */
+  var sig=[], nx=function(id,t,sub,icn,val,mt,pl){ sig.push({id:id,t:t,sub:sub,ic:icn,ok:false,val:Math.max(0,Math.min(val,mt)),meta:mt,o:{c:1,m:2,l:3}[pl],pl:pl}); }, semHechos=(por[lh]||[]).length;
+  var ne=ENT.filter(function(x){ return ses.length<x[0]; })[0]; if(ne) nx('ne',ne[0]===1?'Primer entreno':ne[0]+' entrenos','Llevas '+ses.length,'pesa',ses.length,ne[0],ne[1]);
+  if(!G.sc1) nx('nsc','Primera semana completa','Esta semana llevas '+semHechos+' de '+meta,'cal',semHechos,meta,'c');
+  else { var nw=WS.filter(function(x){ return !fW[x[0]]; })[0]; if(nw) nx('nw',nw[0]+' semanas completas seguidas','Llevas '+run,'fuego',run,nw[0],nw[1]); }
+  var nmt=MS.filter(function(x){ return !fMt[x[0]]; })[0]; if(nmt&&ses.length) nx('nmt',nmt[0]+' meses seguidos entrenando','Llevas '+mRun+' · 4 entrenos o más cada mes','cal',mRun,nmt[0],nmt[1]);
+  var nrc=RCS.filter(function(x){ return nRec<x[0]; })[0]; if(nrc&&ses.length) nx('nrc',nrc[0]+' récords','Llevas '+nRec,'trofeo',nRec,nrc[0],nrc[1]);
+  var nvt=VT.filter(function(x){ return accV<x[0]; })[0]; if(nvt&&ses.length) nx('nvt',fP(nvt[0]/1000)+' toneladas levantadas','Llevas '+fP(Math.round(accV/1000))+' t','trofeo',accV,nvt[0],nvt[1]);
+  var nc=[[7,'c'],[30,'m']].filter(function(x){ return !fc[x[0]]; })[0]; if(nc) nx('nc',nc[0]+' check-ins seguidos','Llevas '+scHoy,'checkin',scHoy,nc[0],nc[1]);
+  if(ck.length<200&&fc[7]) nx('nct','200 check-ins','Llevas '+ck.length,'checkin',ck.length,200,'l');
+  if(obj){ var nps=[[7,'c'],[30,'m']].filter(function(x){ return !fS[x[0]]; })[0]; if(nps) nx('nps',nps[0]+' días seguidos cumpliendo','Llevas '+rP,'fuego',rP,nps[0],nps[1]);
+    var npc=[[50,'m'],[200,'l']].filter(function(x){ return nPc<x[0]; })[0]; if(npc) nx('npc',npc[0]+' días con tu objetivo','Llevas '+nPc,'okc',nPc,npc[0],npc[1]);
+    if(accP<1000000) nx('npt','Un millón de pasos','Llevas '+fP(accP),'pasos',accP,1000000,'l'); }
+  if(zF.length){ var nz=[[30,'m'],[100,'l']].filter(function(x){ return zN<x[0]; })[0]; if(nz) nx('nzn',nz[0]+' noches de buen descanso','Llevas '+zN+' · 7 h o más','luna',zN,nz[0],nz[1]); }
+  if(nMed){ var nm=[[3,'m'],[12,'l']].filter(function(x){ return nMed<x[0]; })[0]; if(nm) nx('nwm',nm[0]+' revisiones de medidas','Llevas '+nMed,'medidas',nMed,nm[0],nm[1]); }
   return {lista:ok.concat(sig), ok:ok, sig:sig, inst:I, racha:run, meta:meta, semHechos:semHechos};
 }
 function logrosCl(){ var d=CL.d, P=d.pasos?d.pasos.dias||[]:[], k=[lkCl(),d.sesiones.length,d.series.length,(d.diario||[]).length,(d.rutinas||[]).length,(d.medidas||[]).length,P.length,P.reduce(function(a,x){ return a+x.p; },0),d.pasos?d.pasos.obj:0,hoyStr()].join('|');
@@ -15910,7 +15873,7 @@ function lgLocK(){ return 'chadin_lgv_'+lkCl(); }
 function logVistos(){ var lg=CL.d&&CL.d.logros; if(!lg||lg.vistos==null) return null; var a=lg.vistos.slice(), loc=LS.get(lgLocK()); (Array.isArray(loc)?loc:[]).forEach(function(k){ if(a.indexOf(k)<0) a.push(k); }); return a; }
 /* los nuevos (sin ver y de las últimas 2 semanas: lo antiguo no se celebra de golpe) */
 function logrosNuevos(){
-  var lg=CL.d&&CL.d.logros, V=logVistos(); if(!lg||V==null||V.indexOf('v49')<0) return [];
+  var lg=CL.d&&CL.d.logros, V=logVistos(); if(!lg||V==null||V.indexOf('v53')<0) return [];      // v53.4.29: con las medallas nuevas
   var lim=sumar(hoyStr(),-14);
   return logrosCl().inst.filter(function(x){ return x.f&&x.f>=lim&&V.indexOf(x.id)<0; }).sort(function(a,b){ return a.f<b.f?1:a.f>b.f?-1:b.o-a.o; });
 }
@@ -15921,9 +15884,9 @@ function logrosMarcar(L,avisar){
 }
 /* la primera vez (y al pasar a los logros concretos de la v48): todo lo que ya tenía, visto (sin celebraciones de golpe) */
 function logrosInit(){
-  var lg=CL.d&&CL.d.logros; if(!lg||(lg.vistos!=null&&lg.vistos.indexOf('v49')>=0)||CL.lgIni===lkCl()) return; CL.lgIni=lkCl();
+  var lg=CL.d&&CL.d.logros; if(!lg||(lg.vistos!=null&&lg.vistos.indexOf('v53')>=0)||CL.lgIni===lkCl()) return; CL.lgIni=lkCl();      // v53.4.29: al pasar a las medallas nuevas, lo que ya tenía no se celebra de golpe
   // v49: también lo de las medallas nuevas; solo hace falta guardar lo de las últimas semanas (lo antiguo ya no se celebra)
-  var lim=sumar(hoyStr(),-21), ids=['v48','v49'].concat(logrosCl_().inst.filter(function(x){ return x.f&&x.f>=lim; }).map(function(x){ return x.id; }));
+  var lim=sumar(hoyStr(),-21), ids=['v48','v49','v53'].concat(logrosCl_().inst.filter(function(x){ return x.f&&x.f>=lim; }).map(function(x){ return x.id; }));
   lg.vistos=(lg.vistos||[]).concat(ids);
   api('logrosVistos',BOOT.token,ids,[]).catch(function(){});
 }
@@ -15988,8 +15951,11 @@ function logrosCard(){
     (S.length?'<div class="lg-lab">'+(S.length>1?'Tus próximas medallas':'Tu próxima medalla')+'</div>'+S.map(logroSig).join(''):'')+
     '<button class="btn sec sm lg-todos" data-a="lgTodos">Ver todas'+ic('flecha')+'</button></div>';
 }
-A.lgTodos=function(){ var R=logrosCl(); modal('<h2>Tus medallas</h2>'+rachaHtml(R,false)+(R.ok.length?'<div class="lab">Conseguidas</div>'+'<div class="lg-grid">'+R.ok.map(function(x){ return logroCelda(x,false); }).join('')+'</div>':'')+
-  '<div class="lab">Las siguientes</div><div class="lg-grid">'+R.sig.map(function(x){ return logroCelda(x,false); }).join('')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
+function lgPlazosHtml(R,coach){      // v53.4.29: por plazos, lo conseguido en color y lo siguiente en gris
+  return ['c','m','l'].map(function(pl){ var L=R.ok.filter(function(x){ return x.pl===pl; }).concat(R.sig.filter(function(x){ return x.pl===pl; })); if(!L.length) return '';
+    return '<div class="lg-pl"><div class="lab">'+LG_PL[pl]+' <span class="muted">· '+LG_PL_SUB[pl]+'</span></div><div class="lg-grid">'+L.map(function(x){ return logroCelda(x,coach); }).join('')+'</div></div>'; }).join('');
+}
+A.lgTodos=function(){ var R=logrosCl(); modal('<h2>Tus medallas</h2>'+rachaHtml(R,false)+lgPlazosHtml(R,false)+'<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
 
 /* ========================= MODO PRUEBA ========================= */
 var PRUEBA=0;
@@ -16053,8 +16019,7 @@ function logrosProgCard(){
   if(!anAb('lg')) return '<div class="card lg-prog an-cerr" id="lg-prog">'+anCab('lg','<span class="ps-tt">'+ic('medalla')+'Sus medallas</span>',String(n))+      // v52.18: plegado
     '<p class="muted sm an-res">'+(n?n+(n===1?' medalla':' medallas')+(u?' · la última: '+esc(lgTxt(u.last))+(u.f?' ('+esc(fMedia(u.f))+')':''):''):'Aún ninguna')+'. Toca para verlas.</p></div>';
   return '<div class="card lg-prog" id="lg-prog">'+anCab('lg','<span class="ps-tt">'+ic('medalla')+'Sus medallas</span>',String(n))+rachaHtml(R,true)+
-    (R.ok.length?'<div class="lg-grid">'+R.ok.map(function(x){ return logroCelda(x,true); }).join('')+'</div>':'<p class="muted sm">Aún ninguna.</p>')+
-    '<details class="lg-det"><summary>Las siguientes</summary><div class="lg-grid">'+R.sig.map(function(x){ return logroCelda(x,true); }).join('')+'</div></details></div>';
+    (R.ok.length?'':'<p class="muted sm">Aún ninguna.</p>')+lgPlazosHtml(R,true)+'</div>';      // v53.4.29: por plazos
 }
 function psCfg(x,msg){
   var cid=CO.cid;
