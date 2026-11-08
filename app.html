@@ -124,7 +124,7 @@ details summary::-webkit-details-marker{display:none}
 .rest-b{display:flex;gap:6px}
 .rest-b button{background:var(--card2);border:0;color:var(--tx);border-radius:10px;padding:10px 11px;font:600 14px Plus Jakarta Sans,sans-serif;cursor:pointer}
 .rest.fin .rest-b button{background:rgba(255,255,255,.25);color:#fff}
-.res3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 4px}
+.res3{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:8px;margin:14px 0 4px}
 .res3 div{background:var(--card2);border-radius:12px;padding:10px;text-align:center}
 .res3 b{display:block;font:600 24px Plus Jakarta Sans,sans-serif}.res3 span{font-size:11px;color:var(--mu)}
 .celebra{text-align:center}.big-ok{font-size:46px}
@@ -2681,7 +2681,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.18';
+var APP_V = 'v53.4.19';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -6406,7 +6406,8 @@ function resumenDr(){
     if(String(e.notaCl||'').trim()||e.sust) notas[e.n]=[e.sust?'En lugar de «'+e.sust+'» (no lo tenía en su gym)':'',String(e.notaCl||'').trim()].filter(String).join(' · ');   // v30
     if(e.tipo==='bloque'){
       if(!e.ok){ noHecho.push({e:e.n,h:0,p:1,t:'bloque',i:ei}); return; }
-      var r=e.res||{}, x={f:e.f,nombre:e.n,rr:repsRonda(e),ej:e.ej.map(function(z,k){ return {n:z.n,kg:e.kg[k]||z.kg||''}; })};
+      var r=e.res||{}, x={f:e.f,nombre:e.n,rr:repsRonda(e),ej:e.ej.map(function(z,k){ var o={n:z.n,kg:e.kg[k]||z.kg||''}; if(String(z.r||'').trim()) o.r=String(z.r).trim(); return o; })}, nb=nombreBloque(e);      // v53.4.19: + r (sus repeticiones) y nb (el formato), para la tarjeta de compartir
+      if(nb!==e.n) x.nb=nb;
       ['rondas','reps','esc','seg','total'].forEach(function(k){ if(num(r[k])!=null) x[k]=num(r[k]); }); if(r.cap) x.cap=true;
       series.push({ejercicio:e.n,serie:1,tipo:'bloque',objetivo:FMT[e.f]?FMT[e.f][0]:'',extra:x}); bloques++; return;
     }
@@ -6453,8 +6454,10 @@ A.finalizar=function(){
   var tm=todasMarcas(), c={rec:tm.filter(function(x){ return x.m.t==='rec'; }).length,mej:tm.filter(function(x){ return x.m.t==='mej'; }).length};
   var extra=[r.runKm?fN(r.runKm,2)+' km de carrera':'',r.cardio?fN(r.cardio)+' min de cardio':'',r.bloques?r.bloques+' bloque'+(r.bloques>1?'s':'')+' funcional'+(r.bloques>1?'es':''):''].filter(String).join(' · ');
   var conRun=dr.ej.some(function(e){ return e.tipo==='run'; });      // v52.17: con carrera, la escala de 0 a 10
-  var soloRun=r.runKm&&!r.efectivas&&!r.vol; if(soloRun) extra=[r.cardio?fN(r.cardio)+' min de cardio':'',r.bloques?r.bloques+' bloque'+(r.bloques>1?'s':'')+' funcional'+(r.bloques>1?'es':''):''].filter(String).join(' · ');
-  modal('<h2>'+(dr.edit?'Guardar cambios':'Finalizar entreno')+'</h2><div class="res3">'+(soloRun?'<div><b>'+fN(r.runKm,2)+'</b><span>km</span></div><div><b>'+(r.runRit?runT(r.runRit):'–')+'</b><span>min/km</span></div>':'<div><b>'+r.efectivas+'</b><span>series</span></div><div><b>'+fN(r.vol,0)+'</b><span>kg totales</span></div>')+'<div><b id="fin-min-v">'+r.min+'</b><span>minutos</span></div></div>'+
+  var soloRun=r.runKm&&!r.efectivas&&!r.vol, B1=!soloRun&&!r.efectivas&&!r.vol?resumenEjSeries(r.series).filter(function(e){ return e.bl&&e.bl.v; }):[];      // v53.4.19: sin fuerza, sin «0 series · 0 kg»; con un bloque, lo que hizo
+  if(B1.length===1&&r.bloques===1) extra=[r.runKm?fN(r.runKm,2)+' km de carrera':'',r.cardio?fN(r.cardio)+' min de cardio':''].filter(String).join(' · ');
+  if(soloRun) extra=[r.cardio?fN(r.cardio)+' min de cardio':'',r.bloques?r.bloques+' bloque'+(r.bloques>1?'s':'')+' funcional'+(r.bloques>1?'es':''):''].filter(String).join(' · ');
+  modal('<h2>'+(dr.edit?'Guardar cambios':'Finalizar entreno')+'</h2><div class="res3">'+(soloRun?'<div><b>'+fN(r.runKm,2)+'</b><span>km</span></div><div><b>'+(r.runRit?runT(r.runRit):'–')+'</b><span>min/km</span></div>':(r.efectivas||r.vol?'<div><b>'+r.efectivas+'</b><span>series</span></div><div><b>'+fN(r.vol,0)+'</b><span>kg totales</span></div>':B1.length===1&&r.bloques===1?'<div><b>'+esc(B1[0].bl.v[0])+'</b><span>'+esc(B1[0].bl.v[1])+'</span></div>':''))+'<div><b id="fin-min-v">'+r.min+'</b><span>minutos</span></div></div>'+
     '<div class="dur-ed"><span>Duración</span><button class="dur-b" data-a="durMas" data-v="-5" aria-label="5 minutos menos">−5</button><input id="fin-min" data-k="finmin" type="number" inputmode="numeric" min="1" max="300" value="'+r.min+'" aria-label="Minutos de entreno"><span class="muted">min</span><button class="dur-b" data-a="durMas" data-v="5" aria-label="5 minutos más">+5</button></div><p class="muted sm center dur-t">¿No es lo que has entrenado? Cámbialo aquí.</p>'+
     (cr?'<div class="rut-q"><b>¿Guardar los cambios en tu rutina «'+esc(cr.rutina)+'»?</b><small>Hoy: '+esc(cr.txt)+'. Si los guardas, la próxima vez te saldrá así.</small><div class="seg2" id="rut-q"><button data-a="rutQ" data-v="1">Sí, en mi rutina</button><button data-a="rutQ" data-v="0">Solo hoy</button></div></div>':'')+(extra?'<p class="muted sm center">'+esc(extra)+'</p>':'')+resumenMarcas(c)+
     (r.noHecho.length?'<div class="aviso-pend"><b>Te falta por apuntar</b> · si lo hiciste, rellénalo; si no, se guardará como no hecho y tu coach lo verá:'+r.noHecho.map(function(x){ return '<div class="pend-r"><span>'+esc(x.e)+' · '+(x.t==='bloque'?'sin hacer':x.h+' de '+x.p+(x.t==='cardio'?'':' series'))+'</span>'+(dr.edit||x.i==null?'':'<button class="btn sm sec" data-a="irRellenar" data-i="'+x.i+'">Rellenar</button>')+'</div>'; }).join('')+'</div>':'')+
@@ -13567,11 +13570,23 @@ function recsPorEj(prs){
   return L;
 }
 /* resumen de cada ejercicio hecho (para la tarjeta): series de trabajo y su mejor serie */
+/* v53.4.19: lo que hizo en un bloque, para las tarjetas: «5 rondas + 15 reps», «8:32»… (v = [cifra, qué es] para la casilla) */
+function blCard(f,o){
+  var N=function(k){ return num(o[k]); }, pl=function(n,a,b){ return n===1?a:b; }, rd=N('rondas'), rp=N('reps');
+  if(f==='amrap'){ if(rd==null) return null; return {txt:rd+pl(rd,' ronda',' rondas')+(rp?' + '+rp+' reps':''),v:[rp?rd+' + '+rp:String(rd),rp?'rondas + reps':pl(rd,'ronda','rondas')]}; }
+  if(f==='ladder'){ var es=N('esc'); if(es==null) return null; return {txt:es+pl(es,' escalón',' escalones')+(rp?' + '+rp+' reps':''),v:[rp?es+' + '+rp:String(es),rp?'escalones + reps':pl(es,'escalón','escalones')]}; }
+  if(f==='fortime'){ var sg=N('seg'); if(o.cap) return {txt:rp?rp+' reps al llegar al límite':'Hasta el tiempo límite',v:rp?[String(rp),'reps al límite']:null}; if(sg==null) return null; return {txt:'Tiempo: '+mmss(sg),v:[mmss(sg),'tiempo']}; }
+  if(rd==null) return null; var tt=N('total'), u=f==='circuito'?pl(tt||rd,'vuelta','vueltas'):f==='emom'?pl(tt||rd,'minuto','minutos'):pl(tt||rd,'ronda','rondas');
+  return {txt:rd+(tt?' de '+tt:'')+' '+u,v:f==='emom'?null:[tt?rd+'/'+tt:String(rd),u]};
+}
 function resumenEjSeries(series){
   var o={}, L=[];
   (series||[]).forEach(function(x){
     var t=x.tipo||x.t||'normal'; if(t==='aprox'||t==='mov') return;
-    var n=String(x.ejercicio||x.e||''); if(!n) return; var k=clave(n), b=o[k];
+    var n=String(x.ejercicio||x.e||''); if(!n) return;
+    if(t==='bloque'){ var eb=x.extra||x.x||{}; if(typeof eb==='string'){ try{ eb=JSON.parse(eb); }catch(e){ eb={}; } } eb=eb||{}; var rb=blCard(eb.f,eb);      // v53.4.19: cada bloque con lo que hizo y sus ejercicios (no «1 serie»)
+      L.push({n:n,txt:rb?rb.txt:'',bl:{f:eb.f||'',nb:eb.nb&&eb.nb!==n?String(eb.nb):'',v:rb&&rb.v,ej:(eb.ej||[]).filter(function(z){ return z&&String(z.n||'').trim(); }).map(function(z){ return {n:String(z.n),r:z.r?blRTxt(z.r):''}; })}}); return; }
+    var k=clave(n), b=o[k];
     if(!b){ b=o[k]={n:n,s:{},p:0,r:0,cardio:t==='cardio',min:0}; L.push(b); }
     if(t==='cardio'){ var ex=x.extra||x.x||{}; if(typeof ex==='string'){ try{ ex=JSON.parse(ex); }catch(e){ ex={}; } } b.min+=num(ex.tiempo)||0; b.s[x.serie||x.n]=1; return; }
     if(t==='run'){ var er=x.extra||x.x||{}; if(typeof er==='string'){ try{ er=JSON.parse(er); }catch(e){ er={}; } } b.run=true; if(er.tot){ b.km=num(er.km)||(num(er.kw)?num(er.kw)/1000:0); b.sg=num(er.s)||num(er.sw)||0; } return; }
@@ -13581,7 +13596,7 @@ function resumenEjSeries(series){
     var p=num(x.peso!=null?x.peso:x.p)||0, r=num(x.reps!=null?x.reps:x.r)||0;
     if(p>b.p||(p===b.p&&r>b.r)){ b.p=p; b.r=r; }
   });
-  return L.map(function(b){ var ns=Object.keys(b.s).length;
+  return L.map(function(b){ if(b.bl) return b; var ns=Object.keys(b.s).length;
     return {n:b.n,txt:b.run?(b.km?fN(b.km,2)+' km'+(b.sg?' · '+runRitT(b.sg/b.km):''):'Carrera'):b.cardio?(b.min?fN(b.min)+' min':ns+(ns===1?' vez':' veces')):ns+(ns===1?' serie':' series')}; });      // v33: sin kilos ni repeticiones
 }
 /* un entreno ya guardado, para volver a compartirlo */
@@ -13598,7 +13613,7 @@ function finHtml(U){
   var r=U.r||{}, C=compVol(r.vol), R=recsPorEj(U.prs), tr=CL.finModo==='trans', foto=tr&&!!CL.finFoto;
   return '<div class="celebra fin31"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button>'+
     '<div class="big-ok">'+ic('trofeo')+'</div><h2>¡Enhorabuena, has completado tu entrenamiento!</h2>'+
-    '<div class="res3">'+(r.runKm&&!r.efectivas&&!r.vol?'<div><b>'+fN(r.runKm,2)+'</b><span>km</span></div><div><b>'+(r.runRit?runT(r.runRit):'–')+'</b><span>min/km</span></div>':'<div><b>'+(r.efectivas||0)+'</b><span>'+(r.efectivas===1?'serie':'series')+'</span></div><div><b>'+fN(r.vol||0,0)+'</b><span>kg levantados</span></div>')+'<div><b>'+(r.min||0)+'</b><span>'+(+r.min===1?'minuto':'minutos')+'</span></div></div>'+
+    '<div class="res3">'+cajasDe(U,true).map(function(c){ return '<div><b>'+esc(c[0])+'</b><span>'+esc(c[1])+'</span></div>'; }).join('')+'</div>'+
     (r.runKm&&(r.efectivas||r.vol)?'<p class="muted sm">+ '+fN(r.runKm,2)+' km de carrera'+(r.runRit?' a '+runRitT(r.runRit):'')+'</p>':'')+
     (r.cardio?'<p class="muted sm">+ '+fN(r.cardio)+' min de cardio</p>':'')+
     (C?'<div class="cmp-vol">'+linSvg(C.img,'cmp-img',1.1)+'<span><b>'+esc(C.txt)+'</b><small>'+fN(r.vol,0)+' kg entre todas tus series</small></span></div>':'')+
@@ -13682,21 +13697,26 @@ function rrect(x,X,Y,w,h,r){ x.beginPath(); if(x.roundRect) x.roundRect(X,Y,w,h,
 function cabCard(U){ return (fCorta(U.fecha||hoyStr())+(U.rutina?' · '+U.rutina:'')).toUpperCase(); }
 function recortar(x,t,maxW){ if(x.measureText(t).width<=maxW) return t; while(t.length>3&&x.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t+'…'; }
 function cajasCard(x,W,y,cajas,modo){
-  var bw=(W-180-30*(cajas.length-1))/cajas.length;
-  cajas.forEach(function(c,k){ var bx=90+k*(bw+30);
+  var bw=Math.min(435,(W-180-30*(cajas.length-1))/cajas.length), x0=(W-cajas.length*bw-30*(cajas.length-1))/2;      // v53.4.19: una o dos casillas, centradas y del mismo ancho
+  cajas.forEach(function(c,k){ var bx=x0+k*(bw+30);
     x.save(); x.shadowColor='transparent'; x.fillStyle=modo==='trans'?'rgba(0,0,0,.32)':'rgba(255,255,255,.08)'; rrect(x,bx,y,bw,180,36); x.fill(); x.restore();
-    x.fillStyle='#FFFFFF'; x.textAlign='center'; x.font='800 80px'+FCV; x.fillText(c[0],bx+bw/2,y+100); x.fillStyle='rgba(255,255,255,.7)'; x.font='500 32px'+FCV; x.fillText(c[1],bx+bw/2,y+148); });
+    x.fillStyle='#FFFFFF'; x.textAlign='center'; x.font='800 '+textoAjustado(x,c[0],bw-40,80,'800')+'px'+FCV; x.fillText(c[0],bx+bw/2,y+100); x.fillStyle='rgba(255,255,255,.7)'; x.font='500 32px'+FCV; x.fillText(recortar(x,c[1],bw-30),bx+bw/2,y+148); });
   x.textAlign='left';
 }
-function cajasDe(U){
-  var r=U.r||{}, rec=recsPorEj(U.prs).length, c=[[String(r.efectivas||0),r.efectivas===1?'serie':'series'],[String(r.min||0),+r.min===1?'minuto':'minutos']];
-  if(rec) c.push([String(rec),rec===1?'récord':'récords']);
+/* v53.4.19: sin «0 series» ni «0 kg» si hoy no hubo fuerza; con un bloque solo, lo que hizo en él (rondas, tiempo…) */
+function cajasDe(U,fin){
+  var r=U.r||{}, rec=recsPorEj(U.prs).length, L=U.ej||[], B=L.filter(function(e){ return e.bl; }), fz=r.efectivas||r.vol, c=[];
+  if(r.runKm&&!fz){ c.push([fN(r.runKm,2),'km'],[r.runRit?runT(r.runRit):'–','min/km']); }
+  else if(fz||!L.length){ c.push([String(r.efectivas||0),r.efectivas===1?'serie':'series']); if(fin) c.push([fN(r.vol||0,0),'kg levantados']); }
+  if(B.length===1&&B[0].bl.v&&!fz) c.push(B[0].bl.v);
+  c.push([String(r.min||0),+r.min===1?'minuto':'minutos']);
+  if(rec&&!fin) c.push([String(rec),rec===1?'récord':'récords']);
   return c;
 }
 /* v33: arriba, duración, volumen y logros (con su icono); sin kilos ni repeticiones de cada ejercicio */
 function datosCard(x,W,y,L,modo){
-  var gap=24, bw=(W-180-gap*(L.length-1))/L.length, bh=228;
-  L.forEach(function(d,k){ var bx=90+k*(bw+gap), cx=bx+bw/2;
+  var gap=24, bw=Math.min(284,(W-180-gap*(L.length-1))/L.length), bh=228, x0=(W-L.length*bw-gap*(L.length-1))/2;      // v53.4.19: centradas (puede haber 1, 2 o 3)
+  L.forEach(function(d,k){ var bx=x0+k*(bw+gap), cx=bx+bw/2;
     x.save(); x.shadowColor='transparent'; x.fillStyle=modo==='trans'?'rgba(0,0,0,.34)':'rgba(255,255,255,.07)'; rrect(x,bx,y,bw,bh,34); x.fill();
     if(modo!=='trans'){ x.strokeStyle='rgba(255,255,255,.10)'; x.lineWidth=2; rrect(x,bx,y,bw,bh,34); x.stroke(); } x.restore();
     if(d[2]){ x.save(); x.shadowColor='transparent'; x.drawImage(d[2],cx-24,y+28,48,48); x.restore(); }
@@ -13705,29 +13725,76 @@ function datosCard(x,W,y,L,modo){
   });
   x.textAlign='left';
 }
+/* v53.4.19: qué cabe en la lista de la tarjeta «res» (alto disponible B): filas de 104 y los bloques, más altos.
+   Cada bloque: sus ejercicios uno debajo de otro; si no caben, seguidos en pocas líneas (nl = cuántas, lin(e) las cuenta); si tampoco, «N ejercicios» */
+function hBloqueRes(e,k,nl){ var b=e.bl, h=34+66+(b.nb?46:0)+(e.txt?92:0)+26; return nl?h+30+nl*50:h+(k?34+k*62:0)+(k<b.ej.length?52:0); }
+function filasRes(L,B,lin){
+  var meter=function(res){ var F=[], u=0;
+    for(var q=0;q<L.length;q++){ var e=L[q], n=e.bl?e.bl.ej.length:0, o={e:e,k:n,h:e.bl?hBloqueRes(e,n):104};
+      if(e.bl&&n&&u+o.h+res>B&&lin){ var nl=lin(e), h2=hBloqueRes(e,n,nl); if(u+h2+res<=B) o={e:e,k:n,nl:nl,h:h2}; }
+      if(e.bl&&u+o.h+res>B) o={e:e,k:0,h:hBloqueRes(e,0)};
+      if(u+o.h+res>B) break; F.push(o); u+=o.h; }
+    return F; };
+  var F=meter(0); return F.length===L.length?F:meter(54);
+}
+/* los ejercicios de un bloque, seguidos («Wall balls 10 reps · Burpees 10 reps · …») y repartidos en líneas de maxW */
+function lineasBl(x,b,maxW){
+  var T=b.ej.map(function(z){ x.font='700 36px'+FCV; var n=recortar(x,z.n,maxW-140), nw=x.measureText(n).width; x.font='600 34px'+FCV; var r=z.r?' '+z.r:'', rw=r?x.measureText(r).width:0; return {n:n,r:r,nw:nw,w:nw+rw}; });
+  x.font='600 34px'+FCV; var sw=x.measureText(' · ').width, Ls=[], cur=[], cw=0;
+  T.forEach(function(t){ var add=(cur.length?sw:0)+t.w; if(cur.length&&cw+add>maxW){ Ls.push({t:cur,w:cw}); cur=[]; cw=0; add=t.w; } cur.push(t); cw+=add; });
+  if(cur.length) Ls.push({t:cur,w:cw});
+  Ls.sw=sw; return Ls;
+}
+function bloqueRes(x,W,y,o){
+  var e=o.e, b=e.bl, cx=W/2, cy=y+34; x.textAlign='center';
+  x.fillStyle='#FFFFFF'; x.font='800 '+textoAjustado(x,e.n,W-260,52,'800')+'px'+FCV; x.fillText(e.n,cx,cy+48); cy+=66;
+  if(b.nb){ x.fillStyle='rgba(255,255,255,.62)'; x.font='600 32px'+FCV; x.fillText(recortar(x,b.nb,W-260),cx,cy+30); cy+=46; }
+  if(e.txt){ x.font='700 40px'+FCV; var t=recortar(x,e.txt,W-320), tw=x.measureText(t).width+72;
+    x.save(); x.shadowColor='transparent'; x.fillStyle='rgba(255,255,255,.12)'; rrect(x,cx-tw/2,cy+8,tw,70,35); x.fill(); x.restore();
+    x.fillStyle='#FFFFFF'; x.fillText(t,cx,cy+57); cy+=92; }
+  if(o.nl){ cy+=30; var Ls=lineasBl(x,b,W-260); x.textAlign='left';
+    Ls.forEach(function(l){ var px=cx-l.w/2;
+      l.t.forEach(function(t,k){ if(k){ x.font='600 34px'+FCV; x.fillStyle='rgba(255,255,255,.4)'; x.fillText(' · ',px,cy+38); px+=Ls.sw; }
+        x.font='700 36px'+FCV; x.fillStyle='#FFFFFF'; x.fillText(t.n,px,cy+38); px+=t.nw;
+        if(t.r){ x.font='600 34px'+FCV; x.fillStyle='rgba(255,255,255,.66)'; x.fillText(t.r,px,cy+38); px+=t.w-t.nw; } });
+      cy+=50; });
+  } else if(o.k){ cy+=34;
+    b.ej.slice(0,o.k).forEach(function(z){
+      x.font='600 36px'+FCV; var rr=z.r?'  '+z.r:'', rw=rr?x.measureText(rr).width:0;
+      x.font='700 40px'+FCV; var nm=recortar(x,z.n,W-280-rw), nw=x.measureText(nm).width, x0=cx-(nw+rw)/2;
+      x.textAlign='left'; x.fillStyle='#FFFFFF'; x.fillText(nm,x0,cy+44);
+      if(rr){ x.font='600 36px'+FCV; x.fillStyle='rgba(255,255,255,.66)'; x.fillText(rr,x0+nw,cy+44); }
+      cy+=62; }); }
+  if(!o.nl&&o.k<b.ej.length){ x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(b.ej.length+(b.ej.length===1?' ejercicio':' ejercicios'),cx,cy+38); cy+=52; }
+  x.textAlign='left';
+}
 function logoCard(x,W,y){ logoCanvas(x,(W-300)/2,y,300,'#FFFFFF',true); }      // v39: solo «MOOD ON» (sin «by Chadin»), por encima de la barra del chat de Instagram; y = arriba del logo
 function tarjetaEntreno(tipo,modo){
-  var U=CL.ultEntreno||{}; modo=modo||'negro'; var tr=modo==='trans', C=compVol((U.r||{}).vol);
-  return fuentesListas().then(function(){ return Promise.all([linImg(C?C.img:'barbell','#FFFFFF',0.7),linImg('trophy','#FFFFFF',1.5),linImg('stopwatch','#FFFFFF',1.5),linImg('barbell','#FFFFFF',1.5),linImg('trophy','#FFFFFF',1.7)]); }).then(function(I){
+  var U=CL.ultEntreno||{}; modo=modo||'negro'; var tr=modo==='trans', C=compVol((U.r||{}).vol), soloBl=(U.ej||[]).length&&(U.ej||[]).every(function(e){ return e.bl; });      // v53.4.19: solo bloques → el cronómetro (no la barra)
+  return fuentesListas().then(function(){ return Promise.all([linImg(C?C.img:soloBl?'stopwatch':'barbell','#FFFFFF',0.7),linImg('trophy','#FFFFFF',1.5),linImg('stopwatch','#FFFFFF',1.5),linImg('barbell','#FFFFFF',1.5),linImg('trophy','#FFFFFF',1.7)]); }).then(function(I){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), r=U.r||{}, ly=H-320;
     fondoCard(x,W,H,modo); sombraCard(x,modo);
     if(tipo==='res'){
       var L=U.ej||[], R=recsPorEj(U.prs), recs={}, nr=R.length; R.forEach(function(b){ recs[clave(b.e)]=1; });
       x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(fLarga(U.fecha||hoyStr()).toUpperCase(),W/2,176);
       x.fillStyle='#FFFFFF'; var tt=U.rutina||'Mi entreno', px=textoAjustado(x,tt,W-180,92,'800'); x.font='800 '+px+'px'+FCV; x.fillText(tt,W/2,286);
-      datosCard(x,W,350,[[(r.min||0)+' min','Duración',I[2]],[fN(r.vol||0,0)+' kg','Volumen',I[3]],[nr?String(nr):'–',nr===1?'Récord':'Récords',I[1]]],modo);
-      var top=640, rowH=104, max=L.length>8?7:L.length, ph=Math.max(1,max)*rowH+(L.length>max?70:16);
-      if(tr) ly=Math.min(H-320,top+ph+24+80);      // v39: sin fondo o con su foto, el logo justo debajo de la lista (su foto va debajo)
-      x.save(); x.shadowColor='transparent'; x.fillStyle=tr?'rgba(0,0,0,.34)':'rgba(255,255,255,.05)'; rrect(x,60,top,W-120,ph+24,40); x.fill(); x.restore();
-      L.slice(0,max).forEach(function(e,k){
-        var y=top+70+k*rowH, rec=!!recs[clave(e.n)];
+      var fz=r.efectivas||r.vol, T=[[(r.min||0)+' min','Duración',I[2]]];      // v53.4.19: el volumen y los récords, solo si hoy hubo fuerza
+      if(r.vol) T.push([fN(r.vol,0)+' kg','Volumen',I[3]]); if(fz||nr) T.push([nr?String(nr):'–',nr===1?'Récord':'Récords',I[1]]);
+      datosCard(x,W,350,T,modo);
+      var top=640, rowH=104, F=filasRes(L,880,function(e){ return lineasBl(x,e.bl,W-260).length; }), used=F.reduce(function(a,o){ return a+o.h; },0), mas=L.length-F.length, ph=16+used+(mas?54:0)+24;
+      if(tr) ly=Math.min(H-320,top+ph+80);      // v39: sin fondo o con su foto, el logo justo debajo de la lista (su foto va debajo)
+      x.save(); x.shadowColor='transparent'; x.fillStyle=tr?'rgba(0,0,0,.34)':'rgba(255,255,255,.05)'; rrect(x,60,top,W-120,ph,40); x.fill(); x.restore();
+      var yy=top+16;
+      F.forEach(function(o,k){
+        var e=o.e, y=yy+54, rec=!!recs[clave(e.n)]; yy+=o.h;
+        if(e.bl){ bloqueRes(x,W,y-54,o); if(k<F.length-1){ x.save(); x.shadowColor='transparent'; x.fillStyle='rgba(255,255,255,.12)'; x.fillRect(110,yy-14,W-220,2); x.restore(); } return; }
         x.textAlign='right'; x.fillStyle='rgba(255,255,255,.72)'; x.font='600 38px'+FCV; x.fillText(e.txt,W-110,y); var rw=x.measureText(e.txt).width;
         x.textAlign='left'; x.fillStyle='#FFFFFF'; x.font='700 42px'+FCV; var nm=recortar(x,e.n,W-250-rw-(rec?62:0)); x.fillText(nm,110,y);
         if(rec&&I[4]){ x.save(); x.shadowColor='transparent'; x.drawImage(I[4],110+x.measureText(nm).width+14,y-38,44,44); x.restore(); }
-        if(k<max-1){ x.save(); x.shadowColor='transparent'; x.fillStyle='rgba(255,255,255,.12)'; x.fillRect(110,y+36,W-220,2); x.restore(); }
+        if(k<F.length-1){ x.save(); x.shadowColor='transparent'; x.fillStyle='rgba(255,255,255,.12)'; x.fillRect(110,y+36,W-220,2); x.restore(); }
       });
       if(!L.length){ x.fillStyle='rgba(255,255,255,.8)'; x.font='600 44px'+FCV; x.textAlign='center'; x.fillText('¡Entreno hecho!',W/2,top+76); x.textAlign='left'; }
-      if(L.length>max){ x.fillStyle='rgba(255,255,255,.7)'; x.font='600 36px'+FCV; x.fillText('y '+(L.length-max)+' ejercicios más',110,top+70+max*rowH-14); }
+      if(mas){ x.textAlign='left'; x.fillStyle='rgba(255,255,255,.7)'; x.font='600 36px'+FCV; x.fillText('y '+mas+(mas===1?' ejercicio más':' ejercicios más'),110,yy+40); }
     } else {
       x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(recortar(x,cabCard(U),W-180),W/2,176);
       var cy=590, R0=300;
@@ -13743,7 +13810,7 @@ function tarjetaEntreno(tipo,modo){
         x.fillStyle='rgba(255,255,255,.78)'; x.font='500 46px'+FCV; x.fillText('Hoy he levantado lo mismo que',W/2,1010);
         x.fillStyle='#FFFFFF'; var t=(C.cant?C.cant+' ':'')+C.nom, p2=textoAjustado(x,t,W-140,112,'800'); x.font='800 '+p2+'px'+FCV; x.fillText(t,W/2,1140);
         x.font='800 68px'+FCV; x.fillText(fN(r.vol,0)+' kg',W/2,1250);
-      } else { x.fillStyle='#FFFFFF'; x.font='800 104px'+FCV; x.fillText('¡Entreno hecho!',W/2,1120); x.fillStyle='rgba(255,255,255,.78)'; x.font='600 48px'+FCV; x.fillText((r.min||0)+' minutos dándolo todo',W/2,1210); }
+      } else { x.fillStyle='#FFFFFF'; x.font='800 104px'+FCV; x.fillText('¡Entreno hecho!',W/2,1120); x.fillStyle='rgba(255,255,255,.78)'; x.font='600 48px'+FCV; x.fillText((r.min||0)+(+r.min===1?' minuto':' minutos')+' dándolo todo',W/2,1210); }
       cajasCard(x,W,1335,cajasDe(U),modo); ly=H-340;      // v39: un poco más arriba que en el resumen
     }
     sombraCard(x,modo); logoCard(x,W,ly);
