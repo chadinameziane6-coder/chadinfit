@@ -2503,6 +2503,12 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .cc .cc-fav{position:static;display:inline-flex;vertical-align:-2px;margin-right:3px;background:none;padding:0;width:auto;height:auto;color:#E5484D}.cc .cc-fav .ic{width:12px;height:12px;margin:0}
 .cc-tag{position:absolute;top:11px;left:11px;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 7px;font:700 10px Plus Jakarta Sans,sans-serif;color:#3A3A3C}
 .fin-1{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:4px 0 14px;padding:14px 16px;border:0;border-radius:18px;background:#111;color:#fff;font:inherit;cursor:pointer}.fin-1 .ic{flex:none;width:22px;height:22px;margin:0}.fin-1 span{flex:1;display:flex;flex-direction:column}.fin-1 b{font-size:16px}.fin-1 small{color:rgba(255,255,255,.72);font-size:12.5px;margin-top:2px}      /* v53.4.28: sube tu primer entreno */
+.ng-mes{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#fff;border-radius:16px;padding:6px 8px;margin:6px 0 12px;box-shadow:var(--sh)}.ng-mes b{font-size:16px}.ng-mes .ico{width:40px;height:40px}.ng-mes .ico[disabled]{opacity:.3}
+.ng-ks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}.ng-k{background:#fff;border-radius:16px;padding:12px 14px;box-shadow:var(--sh);display:flex;flex-direction:column;min-width:0}.ng-k span{color:var(--mu);font-size:12.5px}.ng-k b{font-size:24px;line-height:1.2;margin:2px 0}.ng-d{font-size:11.5px;color:var(--mu)}.ng-d.ok{color:var(--ok)}.ng-d.mal{color:var(--warn)}
+@media(max-width:560px){.ng-ks{grid-template-columns:repeat(2,1fr)}}
+.ng-g{width:100%;height:auto;display:block}.ng-gm{font:600 12px Plus Jakarta Sans,sans-serif;fill:var(--mu)}.ng-gm.on{fill:#111}.ng-gv{font:700 13px Plus Jakarta Sans,sans-serif;fill:#111}
+.ng-pl{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line2)}.ng-pl span:first-child{flex:1}.ng-tw{overflow-x:auto}.ng-t{width:100%;border-collapse:collapse;font-size:13.5px}.ng-t th,.ng-t td{text-align:right;padding:8px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}.ng-t th:first-child,.ng-t td:first-child{text-align:left}.ng-t th{color:var(--mu);font-weight:600;font-size:12px}.ng-t tr.on td{font-weight:700}
+.ng-acc{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 30px}.ng-acc .btn{flex:1;min-width:220px}      /* v53.4.30 · tu negocio */
 .ej-bus-w{position:relative;margin:4px 0 8px}.ej-bus{width:100%}.ej-bus-l{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:320px;overflow:auto;padding:4px}.ej-bus-l button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;font:inherit;color:inherit;border-radius:8px;cursor:pointer}.ej-bus-l button:hover,.ej-bus-l button:focus{background:var(--card2)}.ej-bus-l p{margin:8px 12px}      /* v53.4.27 */
 .cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
 .cc-x{border-style:dashed;border-color:#D8D8DD;background:#FAFAFB;align-items:center;justify-content:center;text-align:center;min-height:142px}.cc-x b{min-height:0;text-align:center;margin:2px}.cc-x small{text-align:center}
@@ -2715,7 +2721,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.29';
+var APP_V = 'v53.4.30';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8691,7 +8697,7 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnNeg','sube','Tu negocio'+'<small class="mn-s">Cómo va cada mes, su informe y tus datos en Excel</small>')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -11462,7 +11468,7 @@ function ladoHtml(){
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
-    it('sdPagos','euro','Pagos',v==='pagos')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+'</nav>'+
+    it('sdPagos','euro','Pagos',v==='pagos')+it('sdNeg','sube','Tu negocio',v==='negocio')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+'</nav>'+
     '<div class="sd-h">Clientes <span>'+act.length+'</span></div><div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0;
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+'" data-a="sdCli" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="sd-cn">'+esc(c.nombre)+'</span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
@@ -11481,6 +11487,7 @@ function repintarVista(){
   else if(CO.vista==='agenda') pintarAgenda();
   else if(CO.vista==='banco') pintarBanco();
   else if(CO.vista==='rutbib') pintarRutBib(false);
+  else if(CO.vista==='negocio') pintarNegocio(false);
   else if(CO.vista==='nutri') pintarNutri(false);
   else if(CO.vista==='pagos') pintarPagos(false);
   else if(CO.vista==='pasos'&&CO.psA) pintarPasosCfg(false);
@@ -14641,6 +14648,78 @@ A.lgCodigoOk=function(el){
 /* =====================================================================
    v29 · PAGOS (solo en tu panel)
    ===================================================================== */
+/* ======================= v53.4.30 · TU NEGOCIO =======================
+   Cómo va cada mes (cobros, clientes con plan, altas, bajas, renovaciones y entrenos de tus clientes) frente al anterior,
+   los últimos 12 meses, el informe del mes para guardar en PDF y todos tus datos en Excel. Solo números, nada de salud. */
+function mesTxtL(m,corto){ var t=MESES_L[+m.slice(5,7)-1]||''; return (corto?t.slice(0,3):t)+(corto?'':' '+m.slice(0,4)); }
+function mesMasCl(m,n){ var y=+m.slice(0,4), mo=+m.slice(5,7)-1+n, d=new Date(y,mo,1); return d.getFullYear()+'-'+pad(d.getMonth()+1); }
+A.sdNeg=function(){ siCambiosOk(function(){ cargarNegocio(true); }); };
+A.mnNeg=function(){ cerrarModal(); cargarNegocio(true); };
+function cargarNegocio(arriba,mes){
+  return cargando(api('coachNegocio',CO.pin,mes||CO.negMes||'')).then(function(r){ CO.neg=r; CO.negMes=r.mes; CO.vista='negocio'; pintarNegocio(arriba); },function(e){ toast(limpiaErr(e),'err'); });
+}
+A.negMes=function(el){ var m=mesMasCl(CO.negMes||hoyStr().slice(0,7),+el.dataset.d); if(m>hoyStr().slice(0,7)) return; cargarNegocio(false,m); };
+function negDif(v,a,malSiSube,fmt){
+  if(a==null) return '<small class="ng-d">—</small>'; var d=Math.round((v-a)*100)/100; if(!d) return '<small class="ng-d">igual que el mes anterior</small>';
+  var bien=malSiSube?d<0:d>0; return '<small class="ng-d '+(bien?'ok':'mal')+'">'+(d>0?'▲ +':'▼ −')+(fmt?fmt(Math.abs(d)):fN(Math.abs(d),0))+' frente a '+mesTxtL(mesMasCl(CO.negMes,-1),true)+'</small>';
+}
+function negKpi(t,v,txt,a,malSiSube,fmt){ return '<div class="ng-k"><span>'+t+'</span><b>'+txt+'</b>'+negDif(v,a,malSiSube,fmt)+'</div>'; }
+function negBarras(L){
+  var W=600, H=170, max=Math.max.apply(null,L.map(function(o){ return o.ingresos; }))||1, bw=W/L.length;
+  return '<svg class="ng-g" viewBox="0 0 '+W+' '+(H+26)+'" role="img" aria-label="Ingresos de los últimos 12 meses">'+L.map(function(o,i){ var h=Math.max(o.ingresos?4:1,Math.round(o.ingresos/max*(H-24))), x=i*bw+bw*0.18, w=bw*0.64, on=o.m===CO.negMes;
+    return '<rect x="'+x.toFixed(1)+'" y="'+(H-h)+'" width="'+w.toFixed(1)+'" height="'+h+'" rx="5" fill="'+(on?'#111':'#C7C7CC')+'"><title>'+esc(mesTxtL(o.m))+': '+esc(eur(o.ingresos))+'</title></rect>'+
+      (on&&o.ingresos?'<text x="'+(x+w/2).toFixed(1)+'" y="'+(H-h-6)+'" text-anchor="middle" class="ng-gv">'+esc(eur(o.ingresos))+'</text>':'')+
+      '<text x="'+(x+w/2).toFixed(1)+'" y="'+(H+18)+'" text-anchor="middle" class="ng-gm'+(on?' on':'')+'">'+esc(mesTxtL(o.m,true))+'</text>'; }).join('')+'</svg>';
+}
+function pintarNegocio(arriba){
+  var y=window.scrollY, R=CO.neg, L=R.meses, o=L[L.length-1], a=L.length>1?L[L.length-2]:null, esHoy=R.mes===R.hoy.slice(0,7), anio=L.reduce(function(s,x){ return s+x.ingresos; },0);
+  var h='<div class="tit-row"><h1 class="tit">Tu negocio</h1></div>'+
+    '<div class="ng-mes"><button class="ico" data-a="negMes" data-d="-1" aria-label="Mes anterior">'+ic('atras')+'</button><b>'+esc(cap(mesTxtL(R.mes)))+(esHoy?' <small class="muted">· en curso</small>':'')+'</b><button class="ico" data-a="negMes" data-d="1" aria-label="Mes siguiente"'+(esHoy?' disabled':'')+'>'+ic('flecha')+'</button></div>'+
+    '<div class="ng-ks">'+negKpi('Cobrado',o.ingresos,eur(o.ingresos),a&&a.ingresos,false,eur)+negKpi('Clientes con plan',o.conPlan,String(o.conPlan),a&&a.conPlan)+
+      negKpi('Altas',o.altas,String(o.altas),a&&a.altas)+negKpi('Bajas',o.bajas,String(o.bajas),a&&a.bajas,true)+
+      negKpi('Renovaciones',o.renov,String(o.renov),a&&a.renov)+negKpi('Entrenos de tus clientes',o.entrenos,String(o.entrenos),a&&a.entrenos)+'</div>'+
+    '<p class="muted sm">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+(o.cobros===1?' cobro':' cobros')+' · ticket medio '+eur(o.ingresos/o.cobros)+'. ':'')+
+      (o.entrenaron?o.entrenaron+(o.entrenaron===1?' cliente ha entrenado':' clientes han entrenado')+' · '+o.checkins+' check-ins.':'')+'</p>'+
+    '<div class="card"><div class="card-t">Cobrado en los últimos 12 meses <span class="muted">'+esc(eur(anio))+'</span></div>'+negBarras(L)+'</div>';
+  if(R.porPlan.length) h+='<div class="card"><div class="card-t">Por plan · '+esc(mesTxtL(R.mes))+'</div>'+R.porPlan.map(function(x){ return '<div class="ng-pl"><span>'+esc(x.plan)+'</span><span class="muted">'+x.cobros+(x.cobros===1?' cobro':' cobros')+'</span><b>'+esc(eur(x.importe))+'</b></div>'; }).join('')+'</div>';
+  h+='<div class="card"><div class="card-t">Mes a mes</div><div class="ng-tw"><table class="ng-t"><thead><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Entrenos</th></tr></thead><tbody>'+
+    L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m,true)))+' '+x.m.slice(2,4)+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.entrenos+'</td></tr>'; }).join('')+'</tbody></table></div>'+
+    '<p class="muted sm">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes. Sin la clienta de ejemplo.</p></div>'+
+    '<div class="ng-acc"><button class="btn" data-a="negInforme">'+ic('descargar')+'Informe de '+esc(mesTxtL(R.mes))+' (PDF)</button><button class="btn sec" data-a="negExportar">'+ic('descargar')+'Todos tus datos en Excel</button></div>';
+  app.innerHTML='<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Tu negocio</div><span style="width:70px"></span></header><main class="wrap coachw">'+h+'</main>';
+  window.scrollTo(0,arriba?0:y);
+}
+/* el informe del mes: una página limpia para guardar como PDF (Imprimir → Guardar como PDF) */
+A.negInforme=function(){
+  var R=CO.neg; if(!R) return; var L=R.meses, o=L[L.length-1], a=L.length>1?L[L.length-2]:null, quien=R.coach||'MOOD ON';
+  var dif=function(v,b,mal){ if(b==null) return ''; var d=Math.round((v-b)*100)/100; return d?' <i class="'+((mal?d<0:d>0)?'ok':'mal')+'">'+(d>0?'+':'−')+fN(Math.abs(d),Math.round(Math.abs(d))===Math.abs(d)?0:2)+'</i>':''; };
+  var fila=function(t,v,txt,b,mal){ return '<div class="k"><span>'+t+'</span><b>'+txt+dif(v,b,mal)+'</b></div>'; };
+  var html='<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Informe de '+esc(mesTxtL(R.mes))+' · '+esc(quien)+'</title><style>'+
+    'body{font:14px -apple-system,Segoe UI,Helvetica,Arial,sans-serif;color:#111;margin:32px;max-width:760px}h1{font-size:26px;margin:0 0 4px}h2{font-size:15px;margin:26px 0 8px;text-transform:uppercase;letter-spacing:.06em;color:#555}.sub{color:#666;margin:0 0 18px}'+
+    '.ks{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.k{border:1px solid #e5e5ea;border-radius:12px;padding:12px}.k span{display:block;color:#666;font-size:12px}.k b{font-size:22px}.k i{font-style:normal;font-size:12px;margin-left:6px}.ok{color:#13915A}.mal{color:#B26A00}'+
+    'table{width:100%;border-collapse:collapse;font-size:13px}th,td{text-align:right;padding:7px 6px;border-bottom:1px solid #eee}th:first-child,td:first-child{text-align:left}tr.on td{font-weight:700}.nota{color:#777;font-size:11.5px;margin-top:16px}.pie{margin-top:30px;color:#999;font-size:11px}'+
+    '@media print{body{margin:14mm}button{display:none}}</style></head><body>'+
+    '<h1>Informe de '+esc(mesTxtL(R.mes))+'</h1><p class="sub">'+esc(quien)+' · hecho el '+esc(fLarga(hoyStr()))+(R.mes===R.hoy.slice(0,7)?' (mes en curso)':'')+'</p>'+
+    '<div class="ks">'+fila('Cobrado',o.ingresos,eur(o.ingresos),a&&a.ingresos)+fila('Clientes con plan',o.conPlan,String(o.conPlan),a&&a.conPlan)+fila('Altas',o.altas,String(o.altas),a&&a.altas)+
+      fila('Bajas',o.bajas,String(o.bajas),a&&a.bajas,true)+fila('Renovaciones',o.renov,String(o.renov),a&&a.renov)+fila('Entrenos de tus clientes',o.entrenos,String(o.entrenos),a&&a.entrenos)+'</div>'+
+    '<p class="sub" style="margin-top:12px">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+' cobros · ticket medio '+eur(o.ingresos/o.cobros)+'. ':'')+(o.entrenaron?o.entrenaron+' clientes han entrenado · '+o.checkins+' check-ins.':'')+'</p>'+
+    (R.porPlan.length?'<h2>Por plan</h2><table><tr><th>Plan</th><th>Cobros</th><th>Importe</th></tr>'+R.porPlan.map(function(x){ return '<tr><td>'+esc(x.plan)+'</td><td>'+x.cobros+'</td><td>'+esc(eur(x.importe))+'</td></tr>'; }).join('')+'</table>':'')+
+    '<h2>Los últimos 12 meses</h2><table><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Entrenos</th></tr>'+L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m)))+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.entrenos+'</td></tr>'; }).join('')+'</table>'+
+    '<p class="nota">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes.</p><p class="pie">MOOD ON · moodonapp.com</p>'+
+    '<scr'+'ipt>setTimeout(function(){ try{ window.print(); }catch(e){} },400);<\/scr'+'ipt></body></html>';
+  var w=null; try{ w=window.open('','_blank'); }catch(e){}
+  if(w){ w.document.open(); w.document.write(html); w.document.close(); return; }
+  var u=URL.createObjectURL(new Blob([html],{type:'text/html'})); modal('<h2>Tu informe</h2><p class="muted">Ábrelo y, en el menú de imprimir, elige «Guardar como PDF».</p><a class="btn mt" href="'+u+'" target="_blank" rel="noopener">Abrir el informe</a><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+};
+/* todos tus datos en Excel (clientes, pagos, entrenos, peso y medidas y el resumen de cada mes) */
+A.negExportar=function(el){ if(el.disabled) return; el.disabled=true;
+  cargando(api('coachExportar',CO.pin)).then(function(r){ el.disabled=false;
+    var bin=atob(r.b64), u8=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
+    var u=URL.createObjectURL(new Blob([u8],{type:r.tipo}));
+    modal('<h2>Tus datos, en Excel</h2><p class="muted">Clientes, pagos, entrenos, peso y medidas y el resumen de cada mes, cada uno en su pestaña. Guárdalo en un sitio seguro: lleva datos de tus clientes.</p>'+
+      '<a class="btn mt" href="'+u+'" download="'+esc(r.nombre)+'">'+ic('descargar')+'Descargar '+esc(r.nombre)+'</a><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+};
 A.sdPagos=function(){ siCambiosOk(function(){ cargarPagos(true); }); };
 A.mnPagos=function(){ cerrarModal(); cargarPagos(true); };
 function cargarPagos(arriba){
