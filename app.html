@@ -2703,7 +2703,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.22';
+var APP_V = 'v53.4.23';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4814,7 +4814,8 @@ function revisarNoLeidos(){
     api('novedadesCl',BOOT.token).then(function(r){ if(!CL.d||!r||r.bloqueo) return; var antes=(CL.d.chat||{}).noLeidos||0; CL.d.chat=CL.d.chat||{}; CL.d.chat.noLeidos=r.n; pintarNoLeidosCl(); if(r.n>antes) toast('Tu coach te ha escrito: lo tienes en Chat','ok');
       var ids=function(L){ return (L||[]).map(function(a){ return a.id; }).join(','); }, nuevos=(r.av||[]).filter(function(a){ return !(CL.d.avisos||[]).some(function(b){ return b.id===a.id; }); });
       if(ids(r.av)!==ids(CL.d.avisos)){ CL.d.avisos=r.av||[]; if(CL.d.clienta&&r.visto!=null) CL.d.clienta.visto=r.visto; pintarBell(); if(nuevos.length) toast('Tienes '+(nuevos.length>1?nuevos.length+' avisos nuevos':'un aviso nuevo')+' de tu coach: mira la campana','ok'); }
-      if(r.ver&&CL.d.ver&&r.ver!==CL.d.ver&&!CL.abriendo&&CL.tab!=='entreno'&&!CL.dr){ CL.d.ver=r.ver; pedirFresco(JSON.stringify(CL.d)); }
+      var otroMovil=(r.pv!=null&&CL.pref&&num(r.pv)>(CL.prefV||0)&&!prefPend())||(r.mv!=null&&CL.mia&&num(r.mv)>(CL.miaV||0)&&!miaPend());      // v53.4.23: su dieta cambiada en otro móvil
+      if(((r.ver&&CL.d.ver&&r.ver!==CL.d.ver)||otroMovil)&&!CL.abriendo&&CL.tab!=='entreno'&&!CL.dr){ if(r.ver) CL.d.ver=r.ver; pedirFresco(JSON.stringify(CL.d)); }
       else if(r.ver) CL.d.ver=r.ver; },function(){});
     return;
   }
@@ -6707,19 +6708,67 @@ function difMac(d){ return d?dTxt(d[0])+' kcal · P '+dTxt(d[1])+' · HC '+dTxt(
 function platoImg(id,cls){ var u=id?srcImg(id):''; return '<div class="'+(cls||'pl-im')+'"'+(id?' data-img="'+esc(id)+'"':'')+'>'+(id?(u?'<img src="'+esc(u)+'" alt="" loading="lazy">':'<div class="spin"></div>'):'<span class="pl-ph">'+ic('dieta')+'</span>')+'</div>'; }
 
 /* ======================= v24 · DIETA DE LA CLIENTA ======================= */
-function prefCl(){
-  if(CL.pref) return CL.pref;
-  var p=CL.d.dietaPref||{}, loc=LS.get('chadin_dpref_'+BOOT.token);
-  if(loc&&loc.fav){ p=loc; setTimeout(guardarPref,1500); }       // no llegó a guardarse: se reenvía
+/* v53.4.23 · lo que apunta de su dieta no se pierde: cada guardado lleva la versión de la que partió (CL.prefV) y lo último que vio del
+   servidor (CL.prefB). Si otro móvil (o la app y Safari a la vez) guardó antes, el servidor no lo pisa: devuelve lo suyo, aquí se juntan
+   los cambios de los dos (merge3) y se vuelve a mandar. Lo que llega nuevo del servidor solo sustituye a lo de aquí si no hay nada sin guardar
+   y es más nuevo (antes, lo guardado en el móvil al abrir la app se quedaba y, al apuntar algo, borraba lo apuntado en el otro). */
+function estJ(x){ if(x===undefined) return 'u'; if(x===null||typeof x!=='object') return JSON.stringify(x); if(Array.isArray(x)) return '['+x.map(estJ).join(',')+']'; return '{'+Object.keys(x).sort().filter(function(k){ return x[k]!==undefined; }).map(function(k){ return JSON.stringify(k)+':'+estJ(x[k]); }).join(',')+'}'; }
+function esObj(x){ return !!x&&typeof x==='object'&&!Array.isArray(x); }
+function merge3(b,m,t){
+  var eb=estJ(b), em=estJ(m), et=estJ(t);
+  if(em===eb) return t===undefined?undefined:copia(t);
+  if(et===eb||em===et) return m===undefined?undefined:copia(m);
+  if(esObj(m)&&esObj(t)){ var o={}, B=esObj(b)?b:{}, K={}; [B,m,t].forEach(function(x){ Object.keys(x).forEach(function(k){ K[k]=1; }); });
+    Object.keys(K).forEach(function(k){ var v=merge3(B[k],m[k],t[k]); if(v!==undefined) o[k]=v; }); return o; }
+  return m===undefined?undefined:copia(m);      // los dos lo cambiaron: gana lo de este móvil (lo último que ha tocado)
+}
+function mergePref(b,m,t){
+  b=copia(b||{}); m=m||{}; t=t||{};
+  ['dia','ant'].forEach(function(k){ var md=m[k], td=t[k], bd=b[k];
+    if(md&&td&&md.f!==td.f){ if(String(td.f)>String(md.f)){ m=Object.assign({},m); m[k]=td; } else { t=Object.assign({},t); t[k]=md; } return; }      // otro día: vale el más reciente
+    if(md&&(!bd||bd.f!==md.f)) b[k]={f:md.f};      // aquí empezó ese día de cero (los dos lo empezaron: se juntan)
+  });
+  var r=merge3(b,m,t)||{}; r.v=t.v; return r;
+}
+function prefNorm(p){
   ['fav','elec','sw','n'].forEach(function(k){ if(!p[k]||typeof p[k]!=='object') p[k]={}; });
   p.compra=p.compra||{}; if([1,3,7,14].indexOf(+p.compra.dias)<0) p.compra.dias=7; p.compra.ok=p.compra.ok||{};
-  return (CL.pref=p);
+  return p;
+}
+function prefK(){ return 'chadin_dpref2_'+BOOT.token; }
+function prefPend(){ return !!(prefT||CL.prefVuelo||LS.get(prefK())); }
+function prefCl(){
+  var sv=(CL.d&&CL.d.dietaPref)||{}, svV=num(sv.v)||0;
+  if(CL.pref&&CL.prefD!==CL.d){ CL.prefD=CL.d; if(!prefPend()&&svV>(CL.prefV||0)) CL.pref=null; }      // lo nuevo del servidor, solo si es más nuevo y no hay nada sin guardar
+  if(CL.pref) return CL.pref;
+  LS.del('chadin_dpref_'+BOOT.token);      // el formato de antes (sin versión) no se usa: podía ser de hace días y borrar lo nuevo
+  var loc=LS.get(prefK()), p;
+  if(loc&&loc.p&&typeof loc.p==='object'){ p=loc.p; CL.prefB=loc.b||{}; CL.prefV=num(loc.v)||0; setTimeout(guardarPref,1500); }       // no llegó a guardarse: se reenvía (y se junta si hace falta)
+  else { p=copia(sv); CL.prefB=copia(sv); CL.prefV=svV; }
+  CL.prefD=CL.d;
+  return (CL.pref=prefNorm(p));
 }
 var prefT=null;
 function guardarPref(){
-  clearTimeout(prefT); var k='chadin_dpref_'+BOOT.token;
-  prefT=setTimeout(function(){ var p=prefCl(); api('guardarPrefDieta',BOOT.token,p).then(function(){ LS.del(k); },function(){ LS.set(k,p); }); },700);
+  clearTimeout(prefT); var p=prefCl(); LS.set(prefK(),{p:p,b:CL.prefB||{},v:CL.prefV||0});
+  prefT=setTimeout(function(){ prefT=null; enviarPref(); },700);
 }
+function enviarPref(){
+  if(CL.prefVuelo){ CL.prefOtra=true; return; }
+  var env=copia(prefCl()), k=prefK(); CL.prefVuelo=true; CL.prefOtra=false;
+  api('guardarPrefDieta',BOOT.token,env,CL.prefV||0).then(function(r){
+    CL.prefVuelo=false; r=r||{};
+    if(r.conflicto){      // otro móvil guardó antes: se juntan los cambios de los dos
+      var th=r.pref||{}, mz=prefNorm(mergePref(CL.prefB,prefCl(),th));
+      CL.pref=mz; CL.prefB=copia(th); CL.prefV=num(th.v)||0; if(CL.d){ CL.d.dietaPref=copia(th); CL.prefD=CL.d; }
+      LS.set(k,{p:mz,b:CL.prefB,v:CL.prefV}); repintarDieCl(); return enviarPref();
+    }
+    var sv=r.pref||env; CL.prefB=copia(sv); CL.prefV=num(sv.v)||(CL.prefV||0)+1; if(CL.d){ CL.d.dietaPref=copia(sv); CL.prefD=CL.d; }
+    if(estJ(prefCl())===estJ(env)&&!CL.prefOtra&&!prefT) LS.del(k); else { LS.set(k,{p:prefCl(),b:CL.prefB,v:CL.prefV}); if(!prefT) enviarPref(); }
+  },function(e){ CL.prefVuelo=false; LS.set(k,{p:prefCl(),b:CL.prefB||{},v:CL.prefV||0}); if(!esRed(e)) toast('No se ha podido guardar tu dieta de hoy: '+limpiaErr(e),'err'); });
+}
+/* después de juntar lo de otro móvil: se repinta la dieta (o Hoy) cuando no esté escribiendo */
+function repintarDieCl(){ CL._mez=null; if(BOOT.mode!=='clienta'||!CL.d||(CL.tab!=='dieta'&&CL.tab!=='hoy')) return; repintarLibre(function(){ if(CL.tab==='dieta'||CL.tab==='hoy'){ var y=window.scrollY; CL.keep=true; pintarCl(); window.scrollTo(0,y); } }); }
 function intCl(){ return CL.d.dietaInt||{grupos:[],al:[]}; }
 function verMac(){ return !!CL.d.dietaVer; }
 function soloK(){ return !!CL.d.dietaSoloK&&!libreCl(); }      // v49: tu coach te enseña las kcal, no los macros
@@ -12958,24 +13007,59 @@ A.banAl=function(el){
 
 /* ---------- dieta que cuadra ella ---------- */
 function libreCl(){ return !!(CL.d&&CL.d.dietaLibre); }
+/* v53.4.23: igual que lo de cada día (prefCl): con su versión (CL.miaV) y lo último del servidor (CL.miaB, en plano); si otro móvil
+   guardó antes, se juntan los cambios y se vuelve a mandar. Lo nuevo del servidor no pisa lo que está sin guardar ni es más viejo. */
+function miaK(){ return 'chadin_dmia2_'+BOOT.token; }
+function miaPend(){ return !!(miaT||CL.miaVuelo||LS.get(miaK())); }
+function miaNorm(m){ m=m||{}; m.o=m.o||{}; m.add=m.add||{}; m.cm=m.cm||{}; m.pc=m.pc||{}; return m; }
 function miaCl(){
   if(CL.mia&&CL.miaD===CL.d) return CL.mia;
-  var m=JSON.parse(JSON.stringify((CL.d&&CL.d.dietaMia)||{})), loc=LS.get('chadin_dmia_'+BOOT.token);
-  if(loc&&loc.o){ m=loc; setTimeout(guardarMia,1500); }        // no llegó a guardarse: se reenvía
-  m.o=m.o||{}; m.add=m.add||{}; m.cm=m.cm||{}; m.pc=m.pc||{}; CL.miaD=CL.d; CL.mezV=(CL.mezV||0)+1;
-  return (CL.mia=m);
+  var svV=num(CL.d&&CL.d.dietaMiaV)||0;
+  if(CL.mia&&(miaPend()||svV<(CL.miaV||0))){ CL.miaD=CL.d; return CL.mia; }      // hay algo sin guardar, o lo que llega es de antes
+  LS.del('chadin_dmia_'+BOOT.token);      // el formato de antes (sin versión) no se usa
+  var m=JSON.parse(JSON.stringify((CL.d&&CL.d.dietaMia)||{})), loc=LS.get(miaK());
+  if(loc&&loc.m&&loc.m.o){ m=loc.m; CL.miaB=loc.b||{}; CL.miaV=num(loc.v)||0; setTimeout(guardarMia,1500); }        // no llegó a guardarse: se reenvía
+  else { CL.miaB=miaPlano(miaNorm(copia(m))); CL.miaV=svV; }
+  CL.miaD=CL.d; CL.mezV=(CL.mezV||0)+1;
+  return (CL.mia=miaNorm(m));
 }
 function itPlano(it){ var o={i:it.i,a:it.a,q:num(it.q)||0}; if(it.x) o.x=it.x; if(it.xs) o.xs=it.xs; if(it.vw) o.vw=it.vw; return o; }
+function miaPlano(m){ var out={o:{},add:{}};
+  Object.keys(m.o||{}).forEach(function(id){ out.o[id]={it:((m.o[id]||{}).it||[]).map(itPlano)}; });
+  Object.keys(m.add||{}).forEach(function(c){ var L=(m.add[c]||[]).map(function(x){ var o={id:x.id,nombre:x.nombre,items:(x.items||[]).map(itPlano)}; ['lib','img','min','texto','tanda'].forEach(function(f){ if(x[f]) o[f]=x[f]; }); return o; }); if(L.length) out.add[c]=L; });
+  out.cm={}; Object.keys(m.cm||{}).forEach(function(pid){ var L=(m.cm[pid]||[]).map(function(x){ return {n:x.n,h:x.h||''}; }); if(L.length) out.cm[pid]=L; });      // v38
+  if(m.pc&&Object.keys(m.pc).length) out.pc=m.pc;      // v52: su reparto por comidas
+  return out;
+}
+/* lo junto (en plano), con los nombres y macros de cada alimento y plato sacados de lo de aquí o de lo del otro móvil */
+function miaHidr(pl,A,T){
+  var it1=function(x,L1,L2){ var f=(L1||[]).concat(L2||[]).filter(function(y){ return y&&y.i===x.i; })[0]; return f?Object.assign({},f,x):x; };
+  var o={o:{},add:{},cm:pl.cm||{},pc:pl.pc||{}};
+  Object.keys(pl.o||{}).forEach(function(id){ o.o[id]={it:(pl.o[id].it||[]).map(function(x){ return it1(x,(A.o[id]||{}).it,(T.o[id]||{}).it); })}; });
+  Object.keys(pl.add||{}).forEach(function(c){ o.add[c]=(pl.add[c]||[]).map(function(x){ var f=(A.add[c]||[]).concat(T.add[c]||[]).filter(function(y){ return y&&y.id===x.id; })[0]||{};
+    return Object.assign({},f,x,{items:(x.items||[]).map(function(it){ return it1(it,f.items,[]); })}); }); });
+  return o;
+}
 var miaT=null;
 function guardarMia(){
-  CL.mezV=(CL.mezV||0)+1; clearTimeout(miaT); var k='chadin_dmia_'+BOOT.token, m=miaCl(); LS.set(k,m);
-  miaT=setTimeout(function(){ var out={o:{},add:{}};
-    Object.keys(m.o).forEach(function(id){ out.o[id]={it:m.o[id].it.map(itPlano)}; });
-    Object.keys(m.add).forEach(function(c){ var L=(m.add[c]||[]).map(function(x){ var o={id:x.id,nombre:x.nombre,items:(x.items||[]).map(itPlano)}; ['lib','img','min','texto','tanda'].forEach(function(f){ if(x[f]) o[f]=x[f]; }); return o; }); if(L.length) out.add[c]=L; });
-    out.cm={}; Object.keys(m.cm||{}).forEach(function(pid){ var L=(m.cm[pid]||[]).map(function(x){ return {n:x.n,h:x.h||''}; }); if(L.length) out.cm[pid]=L; });      // v38
-    if(m.pc&&Object.keys(m.pc).length) out.pc=m.pc;      // v52: su reparto por comidas
-    api('guardarMiDieta',BOOT.token,out).then(function(){ LS.del(k); },function(e){ toast('No se ha podido guardar tu cambio: '+limpiaErr(e),'err'); });
-  },700);
+  CL.mezV=(CL.mezV||0)+1; clearTimeout(miaT); var m=miaCl(); LS.set(miaK(),{m:m,b:CL.miaB||{},v:CL.miaV||0});
+  miaT=setTimeout(function(){ miaT=null; enviarMia(); },700);
+}
+function enviarMia(){
+  if(CL.miaVuelo){ CL.miaOtra=true; return; }
+  var k=miaK(), env=miaPlano(miaCl()), conf=CL.miaConf; CL.miaVuelo=true; CL.miaOtra=false; CL.miaConf=false;
+  api('guardarMiDieta',BOOT.token,env,CL.miaV||0).then(function(r){
+    CL.miaVuelo=false; r=r||{};
+    if(r.conflicto){      // otro móvil guardó antes: se juntan los cambios y se manda lo junto (el servidor devuelve sus platos ya completos)
+      var th=miaPlano(miaNorm(copia(r.mia||{}))), mz=merge3(CL.miaB||{},env,th)||{};
+      CL.miaB=th; CL.miaV=num(r.v)||0; CL.miaConf=true;
+      CL.mia=miaNorm(miaHidr(mz,miaCl(),miaNorm(copia(r.mia||{})))); CL.miaD=CL.d; CL.mezV=(CL.mezV||0)+1; LS.set(k,{m:CL.mia,b:CL.miaB,v:CL.miaV}); repintarDieCl(); return enviarMia();
+    }
+    CL.miaV=num(r.v)||(CL.miaV||0)+1; CL.miaB=env;
+    var limpio=estJ(miaPlano(miaCl()))===estJ(env)&&!CL.miaOtra&&!miaT;
+    if(limpio){ LS.del(k); if(conf&&r.mia!==undefined&&CL.d){ CL.d.dietaMia=r.mia; CL.d.dietaMiaV=CL.miaV; CL.mia=null; CL.miaD=null; CL.mezV=(CL.mezV||0)+1; repintarDieCl(); } }      // tras juntar: sus platos completos, del servidor
+    else { LS.set(k,{m:miaCl(),b:CL.miaB,v:CL.miaV}); if(!miaT) enviarMia(); }
+  },function(e){ CL.miaVuelo=false; LS.set(k,{m:miaCl(),b:CL.miaB||{},v:CL.miaV||0}); toast('No se ha podido guardar tu cambio: '+limpiaErr(e),'err'); });
 }
 /* tus platos: lo que ha cambiado ella encima de los de su coach, y los suyos */
 function planesMez(P){
