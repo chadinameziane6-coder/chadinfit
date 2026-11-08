@@ -364,7 +364,7 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .unir{display:block;margin-top:4px}
 .bl-ed{border-color:rgba(42,120,214,.35);background:#F7FAFE}
 .bl-tit{font:600 17px Plus Jakarta Sans,sans-serif;text-transform:uppercase;color:#2A78D6;margin-top:6px}
-.bl-ed-h,.bl-ed-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,.8fr) 30px;gap:5px;align-items:center}
+.bl-ed-h,.bl-ed-row{display:grid;grid-template-columns:minmax(0,1.9fr) minmax(0,.7fr) minmax(0,1fr) minmax(0,.6fr) 30px 30px;gap:5px;align-items:center}
 .bl-ed-h{font-size:10px;color:var(--mu);font-weight:700;letter-spacing:.05em;text-transform:uppercase;margin-top:4px}
 .bl-ed-row{margin-top:6px}.bl-ed-row input{padding:8px 6px;font-size:14px}
 /* v10: notas, no hecho, revisión de fotos, fases y calendario */
@@ -463,7 +463,11 @@ button.sp:hover{border-color:rgba(17,17,17,.3)}
 .vthumb.sm{width:58px;height:33px}
 .eb-t{display:flex;gap:10px;align-items:center;flex-wrap:wrap;flex:1;min-width:0}
 .vmini{width:30px;height:36px;border-radius:8px;border:1px solid var(--line);background:#fff;color:var(--mg);cursor:pointer;font-size:12px;padding:0}
-.bl-ed-h,.bl-ed-row{grid-template-columns:minmax(0,2fr) minmax(0,1.2fr) minmax(0,.8fr) 30px 30px}
+.bl-ed-h,.bl-ed-row{grid-template-columns:minmax(0,1.9fr) minmax(0,.7fr) minmax(0,1fr) minmax(0,.6fr) 30px 30px}
+.bl-ed-row select.bl-u{padding:8px 4px;font-size:14px;min-width:0;width:100%}
+.bl-ud-ex{margin:-2px 0 4px}
+@media (max-width:560px){.bl-ed-h{display:none}.bl-ed-row{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,.6fr) 30px 30px;grid-template-areas:'n n n v x' 'c u k . .';margin-top:10px;row-gap:5px}
+.bl-ed-row .bl-n{grid-area:n}.bl-ed-row .bl-c{grid-area:c}.bl-ed-row .bl-u{grid-area:u}.bl-ed-row .bl-k{grid-area:k}.bl-ed-row>.vmini,.bl-ed-row>span:nth-last-child(2){grid-area:v}.bl-ed-row>.x{grid-area:x}}
 .pick-w{border-bottom:1px solid var(--line2)}
 .pick-w .pick{border-bottom:0}
 .pick-t{flex:1;min-width:0}
@@ -2643,7 +2647,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.11';
+var APP_V = 'v53.4.12';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -3304,6 +3308,26 @@ var FMT={ // nombre, explicación, parámetros [clave, etiqueta, por defecto]
   ladder:['Ladder','Escalera: en cada escalón cambian las repeticiones.',[['ini','Reps iniciales',2],['inc','Cambio por escalón (+/-)',2],['fin','Reps finales (opcional)',''],['min','Duración (min, opcional)','']]]
 };
 var FMT_ORDEN=['hiit','circuito','tabata','emom','amrap','fortime','ladder'];
+/* v53.4.12: en un bloque funcional, cada ejercicio en lo que se cuenta: reps, kcal (Assault bike), metros (trineo, remo, SkiErg…),
+   segundos o minutos. Se guarda como antes, en su texto (x.r = «15 kcal»: la cantidad y la unidad); lo que no lleva unidad
+   («a tope», «50 saltos», «8 por lado»), tal cual, con «sin unidad». x.u: la unidad elegida mientras no hay cantidad (no se guarda) */
+var BL_UD=[['reps','reps'],['kcal','kcal'],['m','metros'],['s','segundos'],['min','minutos'],['','sin unidad']];
+function blUdPar(r){
+  r=String(r||'').trim(); if(!r) return {c:'',u:null};
+  var m=r.match(/^(.*?)(\s*)(reps?|repeticiones|kcal|cal|calor[ií]as|metros|m|segundos|seg|s|minutos|min)\.?$/i);
+  if(m&&m[1].trim()&&(m[2]||/\d$/.test(m[1]))){ var u=m[3].toLowerCase(); return {c:m[1].trim(),u:/^rep/.test(u)?'reps':/cal/.test(u)?'kcal':/^min/.test(u)?'min':/^m/.test(u)?'m':'s'}; }
+  return {c:r,u:/^\d+([.,]\d+)?$/.test(r)?'reps':''};
+}
+function blJunta(c,u){ c=String(c||'').trim(); return !c?'':u?c+' '+u:c; }
+function blRTxt(r){ var P=blUdPar(r); return P.u?blJunta(P.c,P.u):String(r||''); }      // lo que ve ella: «15» → «15 reps», «500m» → «500 m»
+function udDe(n){ var k=clave(n);
+  if(/assault|air ?bike|airbike|echo ?bike|bike ?erg|bici de aire/.test(k)) return 'kcal';
+  if(/skierg|ski erg|esqui ergometro|remo ergometro|rower|trineo|sled|prowler|farmer|granjero|zancadas con saco|sandbag|^carrera|sprint|running|ida y vuelta|shuttle/.test(k)) return 'm';
+  if(/plancha|plank|hollow hold|isometric|colgad|dead hang|wall sit|sentadilla en pared/.test(k)) return 's';
+  return 'reps'; }
+function blUdVer(x){ return x.r?blUdPar(x.r).u:x.u!=null?x.u:udDe(x.n); }
+function blDef(n,f){ if(f==='hiit'||f==='tabata') return ''; var u=udDe(n), k=clave(n); return ({reps:'10',kcal:'10',m:/trineo|sled|prowler|farmer|granjero|saco|sandbag/.test(k)?'25':'200',s:'30',min:'1'})[u]+' '+u; }
+function blPh(f,u){ return f==='hiit'||f==='tabata'?'a tope':({reps:'10',kcal:'10',m:'200',s:'30',min:'1'})[u]||''; }
 function tipoEj(e){ return e&&(e.tipo==='cardio'||e.tipo==='bloque'||e.tipo==='run')?e.tipo:'fuerza'; }      // v52.13: + run (carrera)
 function setsPlan(e){ // series planificadas (también para rutinas con el formato antiguo)
   if(Array.isArray(e.sets)&&e.sets.length) return e.sets;
@@ -5181,7 +5205,7 @@ function rutinaBloque(r,principal,txt,f){
     var e=x.e, t=tipoEj(e), nom=tituloEj(e), g=G[j];
     var nm=t!=='bloque'&&infoEj(e).hay?'<button class="li-v" data-a="verEjRut" data-r="'+esc(r.id)+'" data-i="'+x.i+'">'+esc(nom)+'<i>'+ic('play')+'vídeo</i></button>':'<b class="li-n">'+esc(nom)+'</b>';
     var sec=nMov&&j===0?'<li class="li-sec mov">'+ic('mov')+'Movilidad · calentamiento</li>':nMov&&j===nMov?'<li class="li-sec">'+ic('pesa')+'Entrenamiento principal</li>':'';
-    return sec+'<li class="'+(g?'en-grp':'')+(t==='bloque'?' li-bl':'')+(x.mov?' li-mov':'')+'"><span class="ej-lab">'+esc(L[j])+'</span><div>'+(g&&g.pos===1?'<div class="grp-mini">'+esc(g.label)+' '+g.letra+'</div>':'')+nm+' <span class="muted">'+esc(resumenEj(e))+'</span>'+(t==='fuerza'?espLinea(e):'')+(t==='bloque'?'<div class="muted sm">'+esc((e.ej||[]).map(function(x){ return x.n+(x.r?' '+x.r:''); }).join(' · '))+'</div>':'')+'</div></li>';
+    return sec+'<li class="'+(g?'en-grp':'')+(t==='bloque'?' li-bl':'')+(x.mov?' li-mov':'')+'"><span class="ej-lab">'+esc(L[j])+'</span><div>'+(g&&g.pos===1?'<div class="grp-mini">'+esc(g.label)+' '+g.letra+'</div>':'')+nm+' <span class="muted">'+esc(resumenEj(e))+'</span>'+(t==='fuerza'?espLinea(e):'')+(t==='bloque'?'<div class="muted sm">'+esc((e.ej||[]).map(function(x){ return x.n+(x.r?' '+blRTxt(x.r):''); }).join(' · '))+'</div>':'')+'</div></li>';
   }).join('')+'</ul></div></details><button class="btn '+(principal?'':'sec')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(txt||(principal?'Comenzar rutina':'Repetir rutina'))+'</button></div>';
 }
 function semanaStrip(hoy,sel){
@@ -5984,7 +6008,7 @@ function bloqueCard(e,i,lab){
   var ukg=uv&&uv.rows[0]?(extraDe(uv.rows[0]).ej||[]):[];
   h+='<div class="bl-ej">'+e.ej.map(function(x,k){
     var last=(ukg.filter(function(u){ return clave(u.n)===clave(x.n); })[0]||{}).kg, conKg=!vacio(x.kg)||!vacio(last)||!vacio(e.kg[k]);
-    return '<div class="bl-row"><div class="bl-n">'+(infoEj(x).hay?'<button class="li-v" data-a="verEj" data-i="'+i+'" data-k="'+k+'">'+esc(x.n)+'<i>'+ic('play')+'vídeo</i></button>':'<b>'+esc(x.n)+'</b>')+(x.r||x.nota?'<div class="muted sm">'+esc([x.r,x.nota].filter(String).join(' · '))+'</div>':'')+'</div>'+
+    return '<div class="bl-row"><div class="bl-n">'+(infoEj(x).hay?'<button class="li-v" data-a="verEj" data-i="'+i+'" data-k="'+k+'">'+esc(x.n)+'<i>'+ic('play')+'vídeo</i></button>':'<b>'+esc(x.n)+'</b>')+(x.r||x.nota?'<div class="muted sm">'+esc([blRTxt(x.r),x.nota].filter(String).join(' · '))+'</div>':'')+'</div>'+
       (conKg?'<input class="bl-kg" data-i="'+i+'" data-bi="'+k+'" inputmode="decimal" placeholder="'+esc((x.kg||last||'')+' kg')+'" value="'+esc(e.kg[k]||'')+'" aria-label="Kg">':'')+'</div>';
   }).join('')+'</div>';
   if(!e.ok) h+='<button class="btn mt" data-a="tmrIni" data-i="'+i+'">'+ic('play')+'Empezar con temporizador</button>';
@@ -6185,7 +6209,7 @@ function fasesBloque(e){
   return out;
 }
 function tmEl(){ return ((TM.pausaT||Date.now())-TM.t0-TM.pausado)/1000; }
-function txtEj(x){ return x?(x.n+(x.r?' · '+x.r:'')+(x.kg?' · '+x.kg+' kg':'')):''; }
+function txtEj(x){ return x?(x.n+(x.r?' · '+blRTxt(x.r):'')+(x.kg?' · '+x.kg+' kg':'')):''; }
 A.tmrIni=function(el){
   var i=+el.dataset.i, e=CL.dr.ej[i]; prepararAudio(); ocultarRest();
   TM={i:i,e:e,f:e.f,fases:fasesBloque(e),t0:Date.now(),pausaT:null,pausado:0,prep:10,fin:false,cnt:0,k:0,r:1,fase:'ej',restFin:0,bip:-1,fi:-1,seg:null,cap:false};
@@ -9238,8 +9262,11 @@ function bloqueEd(e,ri,ei,lab){
     '<label class="f">Formato<select data-c="blFmt"'+at+'>'+FMT_ORDEN.map(function(k){ return '<option value="'+k+'"'+(e.f===k?' selected':'')+'>'+FMT[k][0]+'</option>'; }).join('')+'</select></label><div class="muted sm mt6">'+esc(f[1])+'</div>'+
     '<div class="grid2">'+f[2].map(function(p){ return '<label class="f">'+esc(p[1])+'<input'+at+' data-bp="'+p[0]+'" inputmode="numeric" value="'+esc(e.p[p[0]]!=null?e.p[p[0]]:'')+'" placeholder="'+esc(p[2])+'"></label>'; }).join('')+'</div>'+
     (e.f==='hiit'?'<label class="f">Intensidad<input'+at+' data-bp="int" value="'+esc(e.p.int||'')+'" placeholder="Ej.: RPE 8, ritmo alto"></label>':'')+
-    '<div class="lab">Ejercicios del bloque</div><div class="bl-ed-h"><span>Ejercicio</span><span>'+(e.f==='hiit'||e.f==='tabata'||e.f==='emom'?'Tarea':'Reps / tiempo')+'</span><span>Kg</span><span></span><span></span></div>'+
-    e.ej.map(function(x,k){ var ak=at+' data-bi="'+k+'"', v=videoDe(x.n,''); return '<div class="bl-ed-row"><input'+ak+' data-bk="n" list="exlib" value="'+esc(x.n)+'" placeholder="Ejercicio"><input'+ak+' data-bk="r" value="'+esc(x.r)+'" placeholder="'+(e.f==='hiit'||e.f==='tabata'?'a tope':'10 reps')+'"><input'+ak+' data-bk="kg" inputmode="decimal" value="'+esc(x.kg)+'" placeholder="–">'+
+    '<div class="lab">Ejercicios del bloque</div><div class="muted sm bl-ud-ex">Elige en qué se cuenta cada uno: reps, kcal (la Assault bike), metros (trineo, remo, SkiErg) o tiempo.</div><div class="bl-ed-h"><span>Ejercicio</span><span>Cantidad</span><span>Unidad</span><span>Kg</span><span></span><span></span></div>'+
+    e.ej.map(function(x,k){ var ak=at+' data-bi="'+k+'"', v=videoDe(x.n,''), P=blUdPar(x.r), u=blUdVer(x);
+      return '<div class="bl-ed-row"><input class="bl-n"'+ak+' data-bk="n" data-c="blNom" list="exlib" value="'+esc(x.n)+'" placeholder="Ejercicio" aria-label="Ejercicio"><input class="bl-c"'+ak+' data-bk="c" value="'+esc(P.c)+'" placeholder="'+esc(blPh(e.f,u))+'" aria-label="Cantidad">'+
+      '<select class="bl-u" data-c="blUd"'+at+' data-bu="'+k+'" aria-label="En qué se cuenta">'+BL_UD.map(function(o){ return '<option value="'+o[0]+'"'+(o[0]===u?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select>'+
+      '<input class="bl-k"'+ak+' data-bk="kg" inputmode="decimal" value="'+esc(x.kg)+'" placeholder="kg" aria-label="Kg">'+
       (v?'<button class="vmini" data-a="prevVid" data-n="'+esc(x.n)+'" aria-label="Ver el vídeo de '+esc(x.n)+'">'+ic('play')+'</button>':'<span></span>')+'<button class="x" data-a="blDelEj"'+at+' data-x="'+k+'" aria-label="Quitar">'+ic('x')+'</button></div>'; }).join('')+
     '<div class="bl-add"><button class="btn sm" data-a="blPick"'+at+'>'+ic('lista')+'Elegir del banco</button><button class="link" data-a="blAddEj"'+at+'>+ Escribir uno</button></div>'+
     '<input class="mt6"'+at+' data-k="n" value="'+esc(e.n||'')+'" placeholder="Nombre del bloque (opcional, p. ej. Finisher)"><input class="mt6"'+at+' data-k="nota" value="'+esc(e.nota)+'" placeholder="Indicaciones (opcional)">'+ejListo(at)+'</div>';
@@ -9412,7 +9439,7 @@ function inCoach(t){
     if(t.dataset.sk!=null){ E.sets[+t.dataset.j][t.dataset.sk]=t.value; }
     else if(t.dataset.ck!=null){ E.obj=E.obj||{}; E.obj[t.dataset.ck]=t.value; }
     else if(t.dataset.bp!=null){ E.p=E.p||{}; E.p[t.dataset.bp]=t.value; }
-    else if(t.dataset.bi!=null){ E.ej[+t.dataset.bi][t.dataset.bk]=t.value; }
+    else if(t.dataset.bi!=null){ var BZ=E.ej[+t.dataset.bi]; if(t.dataset.bk==='c') blSetC(BZ,t); else BZ[t.dataset.bk]=t.value; }      // v53.4.12: la cantidad, con su unidad
     else if(t.dataset.rb!=null&&E.bl){ E.bl[+t.dataset.rb][t.dataset.rf]=t.value; if(E.st==='compe'&&E.ot) runCompeP(E); }      // v52.13: bloques de la carrera
     else if(k==='ot'&&tipoEj(E)==='run'){ E.ot=t.value; runCompeP(E); }      // v52.17: competición, tiempo objetivo
     else {
@@ -9449,7 +9476,19 @@ A.igualarSets=function(el){ var x=ejDe(el), a=x.e.sets[0]; x.e.sets.forEach(func
 A.cmTog=function(el){ var x=ejDe(el), e=x.e, k=el.dataset.m, i=e.m.indexOf(k); if(i>=0){ if(e.m.length>1) e.m.splice(i,1); } else e.m.push(k); e.m.sort(function(a,b){ return CM_ORDEN.indexOf(a)-CM_ORDEN.indexOf(b); }); x.r._s=true; repintar(); };
 A.tglFlag=function(el){ var x=ejDe(el), f=el.dataset.f, v=!flagsEj(x.e)[f]; x.e[f]=v; x.r._s=true; repintar(); };
 A.unir=function(el){ var x=ejDe(el); x.e.uni=!x.e.uni; if(!x.e.uni) delete x.e.uni; x.r._s=true; repintar(); };
-A.blAddEj=function(el){ var x=ejDe(el); x.e.ej.push({n:'',r:x.e.f==='hiit'||x.e.f==='tabata'?'':'10 reps',kg:'',nota:''}); x.r._s=true; repintar(); };
+A.blAddEj=function(el){ var x=ejDe(el), r0=blDef('',x.e.f); x.e.ej.push({n:'',r:r0,kg:'',nota:'',_d:r0}); x.r._s=true; repintar(); };
+/* v53.4.12: la cantidad (con la unidad elegida al lado; si escribe «15 kcal», vale tal cual), la unidad y, al poner el nombre, su unidad de siempre */
+function blSetC(Z,t){
+  var row=t.closest('.bl-ed-row'), sel=row&&row.querySelector('[data-c=blUd]'), u=sel?sel.value:blUdVer(Z), c=t.value, P=blUdPar(c);
+  if(P.u&&!/^\s*\d+([.,]\d+)?\s*$/.test(c)){ Z.r=blJunta(P.c,P.u); u=P.u; } else Z.r=blJunta(c,u);
+  Z.u=u; delete Z._d; if(sel&&sel.value!==u) sel.value=u;
+}
+CH.blUd=function(t){ var x=ejDe(t); if(!x.e) return; var Z=x.e.ej[+t.dataset.bu]; if(!Z) return; var row=t.closest('.bl-ed-row'), ci=row&&row.querySelector('[data-bk=c]');
+  Z.u=t.value; Z.r=blJunta(ci?ci.value:blUdPar(Z.r).c,t.value); delete Z._d; if(ci) ci.placeholder=blPh(x.e.f,t.value); marcarRut(+t.dataset.r); };
+CH.blNom=function(t){ var x=ejDe(t); if(!x.e) return; var Z=x.e.ej[+t.dataset.bi]; if(!Z) return;
+  if(Z._d!=null?Z.r===Z._d:(!Z.r||Z.r==='10 reps')){ Z.r=blDef(Z.n,x.e.f); Z._d=Z.r; delete Z.u; }
+  var row=t.closest('.bl-ed-row'); if(!row) return; var u=blUdVer(Z), ci=row.querySelector('[data-bk=c]'), sel=row.querySelector('[data-c=blUd]');
+  if(ci){ ci.value=blUdPar(Z.r).c; ci.placeholder=blPh(x.e.f,u); } if(sel) sel.value=u; marcarRut(+t.dataset.r); };
 A.blDelEj=function(el){ var x=ejDe(el); x.e.ej.splice(+el.dataset.x,1); x.r._s=true; repintar(); };
 CH.setTipo=function(t){ var x=ejDe(t), j=+t.dataset.j, S=x.e.sets, st=S[j], I=TS_INFO[t.value]; st.t=t.value;
   if(I){ var r=I.r; if(I.pr){ var k=0; for(var q=j-1;q>=0&&S[q].t===t.value;q--) k++; r=String(I.pr[Math.min(k,I.pr.length-1)]); }
@@ -9460,7 +9499,7 @@ CH.setTipo=function(t){ var x=ejDe(t), j=+t.dataset.j, S=x.e.sets, st=S[j], I=TS
   x.r._s=true; repintar(); if(I&&cambia) toast('Con lo de la guía: '+(st.r||'–')+' reps'+(st.rir?' · RIR '+st.rir:'')+'. Cámbialo si quieres'); };
 A.tsGuiaSet=function(el){ var x=ejDe(el), I=TS_INFO[el.dataset.t]; if(!I) return; var k=0; x.e.sets.forEach(function(s){ if(s.t!==el.dataset.t) return; if(I.pr){ s.r=String(I.pr[Math.min(k,I.pr.length-1)]); k++; } else if(I.r) s.r=I.r; if(I.rir) s.rir=I.rir; }); x.r._s=true; repintar(); toast('Repeticiones de la guía puestas'); };
 CH.grupoTipo=function(t){ var x=ejDe(t); x.e.gt=t.value; if(!t.value) delete x.e.gt; x.r._s=true; repintar(); };
-CH.blFmt=function(t){ var x=ejDe(t); x.e.f=t.value; x.e.p={}; if(t.value==='hiit'||t.value==='tabata') x.e.ej.forEach(function(z){ if(z.r==='10 reps') z.r=''; }); x.r._s=true; repintar(); };
+CH.blFmt=function(t){ var x=ejDe(t); x.e.f=t.value; x.e.p={}; if(t.value==='hiit'||t.value==='tabata') x.e.ej.forEach(function(z){ if(z.r==='10 reps'||(z._d!=null&&z.r===z._d)){ z.r=''; z._d=''; } }); x.r._s=true; repintar(); };
 A.addRut=function(){ var d=DIAS.indexOf(CO.diaRut)>=0?[CO.diaRut]:[]; if(CO.diaRut==='sin') d=[];
   var hoy=CO.hoy||hoyStr(), vig=CO.rut.filter(function(r){ return vigenteEn(r,hoy,CO.rut); }), des=vig.map(function(r){ return r.desde; }).filter(String).sort()[0]||'', has=vig.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0]||'';
   CO.rut.push({id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[ejVacio()],_s:true}); repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
@@ -9773,7 +9812,7 @@ A.bpTog=function(el){ var B=CO.bp, n=el.dataset.n, i=B.sel.indexOf(n); if(i>=0) 
 A.bpOk=function(){
   var B=CO.bp, r=CO.rut[B.r], e=r&&r.ejercicios[B.e]; if(!e||!B.sel.length) return cerrarModal();
   e.ej=(e.ej||[]).filter(function(x){ return String(x.n||'').trim(); });
-  B.sel.forEach(function(n){ e.ej.push({n:n,r:e.f==='hiit'||e.f==='tabata'?'':'10 reps',kg:'',nota:''}); });
+  B.sel.forEach(function(n){ var r0=blDef(n,e.f); e.ej.push({n:n,r:r0,kg:'',nota:'',_d:r0}); });      // v53.4.12: la Assault bike, en kcal; el trineo, en metros…
   r._s=true; cerrarModal(); repintar(); undoTick(); toast(B.sel.length+(B.sel.length===1?' ejercicio añadido':' ejercicios añadidos')+' al bloque','ok');
 };
 /* en el banco: los ejercicios nuevos de la biblioteca, para añadirlos de una vez */
