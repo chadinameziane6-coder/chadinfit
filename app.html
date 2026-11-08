@@ -8610,9 +8610,9 @@ function vSeg(){
   var d=CO.d, c=d.clienta, hoy=CO.hoy||hoyStr(), R=resumenFicha(), rv=c.rev||{}, h='';
   // 1. próximas fechas · v31: por fecha (atrasado, hoy, 7 días, más adelante), quién y un botón
   h+=proxFechasHtml();
-  // 2. sus últimos entrenos y tus notas privadas (v23: en el ordenador, a la derecha)
+  // 2. sus últimos entrenos (en el ordenador, a la derecha) y tus notas privadas, debajo de Próximas fechas
   // v53.4.7: fuera el «Registro de seguimiento»: repetía lo que ya está en tus notas, Pagos, Evolución y Próximas fechas
-  return dkCols([[1,h]],[[2,ultEntrenosCard(d)],[3,notasCard(d)]]);
+  return dkCols([[1,h],[3,notasCard(d)]],[[2,ultEntrenosCard(d)]]);
 }
 var SEM_CADA={1:'Cada semana',2:'Cada 2 semanas',4:'Cada 4 semanas'};
 /* v26: lo que se configura de su seguimiento vive en Ficha */
