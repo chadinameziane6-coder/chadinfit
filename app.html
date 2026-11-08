@@ -1769,6 +1769,14 @@ input[type=radio]:focus-visible{outline:2px solid #111;outline-offset:2px}input[
 .gf-l{margin-top:6px}.gf-r{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line2);padding:10px 0}.gf-r>div{flex:1;min-width:0;display:flex;flex-direction:column}.gf-r small{color:var(--mu);font-size:12.5px;line-height:1.35}.gf-r>span{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.gf-q{color:#B42318}
 .gf-mira{outline:3px solid #111;outline-offset:3px;border-radius:16px;transition:outline-color .6s}
 .md-it{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line2);padding:10px 0}.md-it>div{flex:1;min-width:0;display:flex;flex-direction:column}.md-it small{color:var(--mu);font-size:12.5px}.md-x{color:var(--mu)}
+/* v53.4.25 · banco de rutinas */
+.md-et{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:var(--card2);border:1px solid var(--line);color:var(--tx2);margin:0 4px 4px 0;line-height:1.5}
+.md-it .rb-ets{margin-top:4px}
+.rb-it{padding:14px 16px}.rb-h{display:flex;align-items:flex-start;gap:10px}.rb-tx{flex:1;min-width:0;display:flex;flex-direction:column}.rb-tx b{font-size:15.5px}.rb-tx small{color:var(--mu);font-size:12.5px;margin-top:2px}
+.rb-ets{margin-top:8px}.rb-ej{margin-top:4px;line-height:1.4}.rb-acc{display:flex;gap:16px;margin-top:8px}.rb-acc .link{font-size:13px}
+.rb-et{margin:10px 0 4px}.rb-et small{color:var(--mu);font-weight:500;margin-left:2px}.rb-et .on small{color:inherit;opacity:.75}
+.et-ch{margin:6px 0 8px}.et-add{display:flex;gap:8px;align-items:center;margin-bottom:6px}.et-add input{flex:1;min-width:0}
+.md-ed .f:first-child{margin-top:0}.md-pie{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0 30px}.md-pie .btn{flex:1;min-width:200px}
 #md-q{margin:4px 0 6px}.rut-nuevas{gap:8px;flex-wrap:wrap}.rut-nuevas .btn{flex:1 1 180px;margin:0}
 .rir-i{background:none;border:0;padding:0;font:inherit;color:inherit;display:inline-flex;align-items:center;gap:3px;cursor:pointer;text-decoration:underline dotted;text-underline-offset:3px}.rir-i .ic{margin:0;width:15px;height:15px;color:var(--mu)}
 .rir-t{display:flex;flex-direction:column;gap:6px;margin:12px 0}.rir-t>div{display:flex;align-items:center;gap:12px;background:var(--card2);border-radius:12px;padding:8px 12px}.rir-t b{flex:none;width:34px;height:34px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;font-size:15px}.rir-t span{font-size:14.5px}
@@ -2704,7 +2712,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.24';
+var APP_V = 'v53.4.25';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7744,7 +7752,7 @@ function snapBorrar(k){ try{ localStorage.removeItem(k); localStorage.removeItem
 /* ficha de cada clienta: en memoria 15 minutos; al abrirla se ve al momento y se pide lo nuevo por detrás */
 function ponerClienta(id,d,sub,refresco){
   var keep=refresco?{ej:CO.ej,repSem:CO.repSem,diaRut:CO.diaRut,dieV:CO.dieV,calSel:CO.calSel,calY:CO.calY,planI:CO.planI}:null;
-  CO.cid=id; CO.avResto=null; CO.d=d; CO.d.fases=d.fases||[]; CO.banco=d.banco||[]; if(d.gruposEj) GRUPOS_X=d.gruposEj; CO.vista='clienta'; CO.sub=sub||'evolucion'; CO.ej=null; CO.repSem=null; CO.diaRut=null; CO.dieV=null; CO.calc=null; CO.cqVisto=false; CO.calSel=null; CO.calY=null; CO.fotos=null; CO.fcache={}; CO.cargandoFotos=false; resetEdicion();
+  CO.md=null; CO.cid=id; CO.avResto=null; CO.d=d; CO.d.fases=d.fases||[]; CO.banco=d.banco||[]; if(d.gruposEj) GRUPOS_X=d.gruposEj; CO.vista='clienta'; CO.sub=sub||'evolucion'; CO.ej=null; CO.repSem=null; CO.diaRut=null; CO.dieV=null; CO.calc=null; CO.cqVisto=false; CO.calSel=null; CO.calY=null; CO.fotos=null; CO.fcache={}; CO.cargandoFotos=false; resetEdicion();
   if(FOTOS_C[id]&&!refresco){ CO.fotos=FOTOS_C[id]; setTimeout(function(){ if(CO.cid===id) cargarFotos(CO); },1500); }      // v30: las fotos de antes al momento
   if(keep){ Object.keys(keep).forEach(function(k){ CO[k]=keep[k]; }); if(CO.die&&CO.planI>=CO.die.planes.length) CO.planI=0; }
   pintarClienta(!refresco);
@@ -7879,7 +7887,7 @@ function precargarHoy(){
 }
 function normalizarDieta(D){ D.notas=D.notas||''; D.desde=D.desde||''; D.hasta=D.hasta||''; D.planes=(D.planes||[]); D.planes.forEach(function(p){ p.comidas=p.comidas||[]; p.comidas.forEach(function(c){ if(!c.opciones||!c.opciones.length) c.opciones=[nuevaOp()]; c.opciones.forEach(function(o){ if(!o.id) o.id='o'+rand(6); o.items=o.items||[]; if(CO.nutM) o.items.forEach(hidratarIt); }); }); }); return D; }
 function resetEdicion(){ CO.opVis={}; CO.rut=copia(CO.d.rutinas); CO.die=CO.d.dieta?normalizarDieta(copia(CO.d.dieta)):null; CO.dieSucia=false; CO.planI=0; CO.cqe=null; CO.cqeSucio=false; CO.cqeAbierto=false; if(typeof undoReset==='function') undoReset(); }
-function haySinGuardar(){ return CO.rut.some(function(r){return r._s;})||CO.dieSucia||!!CO.cqeSucio; }
+function haySinGuardar(){ return CO.rut.some(function(r){return r._s;})||CO.dieSucia||!!CO.cqeSucio||!!(CO.md&&CO.mdSucio); }
 function siCambios(fn){
   if(!haySinGuardar()) return fn();
   CO.trasGuardar=fn;
@@ -7890,10 +7898,12 @@ function queSinGuardar(){
   var R=CO.rut.filter(function(r){ return r._s; }), L=[];
   if(R.length===1) L.push('La rutina «'+(R[0].nombre||'sin nombre')+'»'); else if(R.length) L.push(R.length+' rutinas');
   if(CO.dieSucia) L.push('la dieta'); if(CO.cqeSucio) L.push('el cuestionario');
+  if(CO.md&&!CO.cid){ L=['La rutina «'+(CO.md.nombre||'nueva')+'»']; R=[]; }      // v53.4.25: en el banco de rutinas, todo es una
   var t=listaY(L); return t.charAt(0).toUpperCase()+t.slice(1)+(L.length>1||R.length>1?' tienen':' tiene')+' cambios que aún no has guardado';
 }
 /* guarda todo lo que tenga cambios; devuelve los avisos que se pueden mandar a la clienta */
 function guardarTodoP(){
+  if(CO.md&&!CO.cid) return guardarModeloP();
   var av=[], fallos=[], ok=0, p=Promise.resolve();
   // v48: una rutina que falla (p. ej. una «+ Nueva rutina» vacía) ya no para el resto: se guardan las demás y se dice cuál falta
   CO.rut.slice().forEach(function(r){ if(r._s) p=p.then(function(){ var ri=CO.rut.indexOf(r); if(ri<0) return; return guardarRutP(ri,true).then(function(a){ ok++; if(a) av.push(a); },function(e){ fallos.push({r:r,msg:e&&e.valida?e.message:limpiaErr(e)}); }); }); });
@@ -7951,6 +7961,7 @@ A.gbarGuardar=function(el){
 A.volver=function(){ siCambios(function(){ cargarLista(true).catch(function(e){ toast(limpiaErr(e),'err'); }); }); };
 A.sub=function(el){ siCambios(function(){ CO.sub=el.dataset.t; pintarClienta(true); }); };
 function pintarClienta(arriba){
+  if(CO.md&&!CO.cid) return pintarModeloEd(arriba);      // v53.4.25: una rutina del banco de rutinas, con el mismo editor
   var y=window.scrollY, c=CO.d.clienta;
   if(CO.sub==='chat'&&MC.modo) mcCerrar();     // v26: un solo chat abierto a la vez (el de la ficha o el pequeño)
   var nCh=((CO.lista||[]).filter(function(x){ return x.id===CO.cid; })[0]||{}).chat, nC=nCh?nCh.noLeidos:0;
@@ -8668,7 +8679,7 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -9392,15 +9403,17 @@ function rutinaEd(r,ri){
   }
   var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<div class="sec-h mov"><b>'+ic('mov')+'Movilidad · calentamiento</b></div><div class="dd-sec mov" data-sec="mov">'+movH+'</div><div class="sec-h"><b>'+ic('pesa')+'Entrenamiento principal</b></div>':'')+
     '<div class="dd-sec" data-sec="main">'+(mainH||(E.length?'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>':''))+'</div></div>';
-  return '<div class="card" id="rut-'+ri+'"><div class="rut-top"><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="Nombre (p. ej. Glúteo y pierna A)"><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>'+
+  return '<div class="card" id="rut-'+ri+'">'+(CO.md&&CO.rut.length===1?'<span class="hidden" id="rs-'+ri+'"></span>':      // v53.4.25: en el banco de rutinas, una sola rutina lleva el nombre de arriba
+    '<div class="rut-top"><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="'+(CO.md?'Nombre de este día (p. ej. Día 1 · Pierna)':'Nombre (p. ej. Glúteo y pierna A)')+'"><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>')+
     (esDia&&r.dias.indexOf(dia)<0?'<div class="aviso-dia">Ya no está asignada al '+DLARGO[dia]+'. Guarda la rutina para aplicarlo.</div>':'')+
-    '<div class="lab">Días que le toca</div><div class="dias-sel">'+DIAS.map(function(k){ return '<button class="'+(r.dias.indexOf(k)>=0?'on':'')+'" data-a="togDia" data-r="'+ri+'" data-d="'+k+'">'+DL[k]+'</button>'; }).join('')+'</div>'+
-    '<div class="grid2 rut-fe"><label class="f">Empieza<input type="date" data-r="'+ri+'" data-k="desde" value="'+esc(r.desde||'')+'"></label><label class="f">Termina<input type="date" data-r="'+ri+'" data-k="hasta" value="'+esc(r.hasta||'')+'"></label></div>'+
-    '<div class="muted sm mt6 rut-est" id="rf-'+ri+'">'+estadoRut(r)+'</div>'+(CO.rut.filter(function(x){ return x!==r&&rutFutura(x)===rutFutura(r); }).length?'<button class="link'+(fechasDistintas(r)?'':' hidden')+'" id="ft-'+ri+'" data-a="fechasTodas" data-r="'+ri+'">Poner estas fechas a '+(rutFutura(r)?'las demás rutinas de la próxima programación':'sus demás rutinas actuales')+' y guardar</button>':'')+
+    '<div class="lab">'+(CO.md?'Días <span class="muted">(opcional)</span>':'Días que le toca')+'</div><div class="dias-sel">'+DIAS.map(function(k){ return '<button class="'+(r.dias.indexOf(k)>=0?'on':'')+'" data-a="togDia" data-r="'+ri+'" data-d="'+k+'">'+DL[k]+'</button>'; }).join('')+'</div>'+
+    (CO.md?'':'<div class="grid2 rut-fe"><label class="f">Empieza<input type="date" data-r="'+ri+'" data-k="desde" value="'+esc(r.desde||'')+'"></label><label class="f">Termina<input type="date" data-r="'+ri+'" data-k="hasta" value="'+esc(r.hasta||'')+'"></label></div>'+
+    '<div class="muted sm mt6 rut-est" id="rf-'+ri+'">'+estadoRut(r)+'</div>')+(!CO.md&&CO.rut.filter(function(x){ return x!==r&&rutFutura(x)===rutFutura(r); }).length?'<button class="link'+(fechasDistintas(r)?'':' hidden')+'" id="ft-'+ri+'" data-a="fechasTodas" data-r="'+ri+'">Poner estas fechas a '+(rutFutura(r)?'las demás rutinas de la próxima programación':'sus demás rutinas actuales')+' y guardar</button>':'')+
     (E.length?'<div class="muted sm mt rut-cta">'+rutCuenta(E,nMov,tot)+'</div>':'')+
     lista+
     ejAddHtml(ri,E,G)+
-    '<div class="rut-acc"><button class="btn sm" data-a="guardarRut" data-r="'+ri+'">Guardar rutina</button><button class="link" data-a="rutCopiar" data-r="'+ri+'">'+ic('copiar')+'Copiar…</button><button class="link" data-a="rutModelo" data-r="'+ri+'">'+ic('modelo')+'Guardar como modelo</button><button class="link danger" data-a="borrarRut" data-r="'+ri+'">'+(r.id?'Archivar o borrar':'Quitar')+'</button></div></div>';
+    (CO.md?(CO.rut.length>1?'<div class="rut-acc"><button class="link danger" data-a="mdQuitarRut" data-r="'+ri+'">Quitar esta rutina</button></div>':'')+'</div>':      // v53.4.25: en el banco de rutinas, sin fechas ni «Guardar rutina» (se guarda todo con «Guardar en tu banco»)
+    '<div class="rut-acc"><button class="btn sm" data-a="guardarRut" data-r="'+ri+'">Guardar rutina</button><button class="link" data-a="rutCopiar" data-r="'+ri+'">'+ic('copiar')+'Copiar…</button><button class="link" data-a="rutModelo" data-r="'+ri+'">'+ic('modelo')+'Guardar como modelo</button><button class="link danger" data-a="borrarRut" data-r="'+ri+'">'+(r.id?'Archivar o borrar':'Quitar')+'</button></div></div>');
 }
 /* v53.4.16 (NUEVAS MEJORAS, punto 9): al programar no sale un ejercicio de fuerza por defecto. Abajo de la rutina, «Ejercicio N · ¿Qué quieres
    programar?» y eliges qué es: desde el banco, ejercicio de fuerza, cardio, carrera o bloque funcional; y se abre con su formato.
@@ -9741,14 +9754,17 @@ A.addRut=function(){ var d=DIAS.indexOf(CO.diaRut)>=0?[CO.diaRut]:[]; if(CO.diaR
   CO.rut.push({id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[],_s:true}); repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
 A.dupRut=function(el){ var ri=+el.dataset.r, n=copia(CO.rut[ri]); n.id=''; n.nombre=(n.nombre||'Rutina')+' (copia)'; n.dias=[]; n._s=true; delete n._vista; CO.rut.splice(ri+1,0,n); CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut='sin'; repintar(); var c=document.getElementById('rut-'+(ri+1)); if(c) c.scrollIntoView({block:'start'}); toast('Rutina duplicada (sin día). Elige sus días, ajusta y guarda.'); };
 /* v21: guardar una rutina devuelve una promesa (para la barra de guardar y para "Guardar y salir") */
+function ejGuardables(r){
+  return r.ejercicios.map(function(e){ var c=copia(e); if(tipoEj(c)==='bloque'){ c.ej=c.ej.filter(function(x){ return String(x.n||'').trim(); }); if(!String(c.n||'').trim()){ c.n=''; c.na=nombreBloque(c); } }
+    if(tipoEj(c)==='run'&&!String(c.n||'').trim()){ c.n=''; c.na=runNombre(c); } return c; }).filter(function(e){ return tipoEj(e)==='bloque'||tipoEj(e)==='run'||String(e.n||'').trim(); });
+}
 function guardarRutP(ri,callado){
   var r=CO.rut[ri]; if(!r) return Promise.resolve(null);
   function no(t){ if(!callado) toast(t); var c=document.getElementById('rut-'+ri); if(c&&!callado) c.scrollIntoView({block:'start'}); var e=new Error(t); e.valida=1; return Promise.reject(e); }
   if(!String(r.nombre||'').trim()) return no('Ponle nombre a la rutina');
   var malBloque=r.ejercicios.filter(function(e){ return tipoEj(e)==='bloque'&&!(e.ej||[]).some(function(x){ return String(x.n||'').trim(); }); })[0];
   if(malBloque){ if(!callado){ CO.ejAb=malBloque; repintar(); } return no('Pon al menos un ejercicio en cada bloque funcional'); }
-  var ej=r.ejercicios.map(function(e){ var c=copia(e); if(tipoEj(c)==='bloque'){ c.ej=c.ej.filter(function(x){ return String(x.n||'').trim(); }); if(!String(c.n||'').trim()){ c.n=''; c.na=nombreBloque(c); } }
-    if(tipoEj(c)==='run'&&!String(c.n||'').trim()){ c.n=''; c.na=runNombre(c); } return c; }).filter(function(e){ return tipoEj(e)==='bloque'||tipoEj(e)==='run'||String(e.n||'').trim(); });
+  var ej=ejGuardables(r);
   if(!ej.length) return no('Añade al menos un ejercicio con nombre');
   if(r.desde&&r.hasta&&r.hasta<r.desde) return no('La rutina termina antes de empezar: revisa sus fechas');
   var eraNueva=!r.id;
@@ -11431,7 +11447,7 @@ function ladoHtml(){
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
-    it('sdPagos','euro','Pagos',v==='pagos')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+'</nav>'+
+    it('sdPagos','euro','Pagos',v==='pagos')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+'</nav>'+
     '<div class="sd-h">Clientes <span>'+act.length+'</span></div><div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0;
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+'" data-a="sdCli" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="sd-cn">'+esc(c.nombre)+'</span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
@@ -11449,6 +11465,7 @@ function repintarVista(){
   else if(CO.vista==='lista') pintarLista();
   else if(CO.vista==='agenda') pintarAgenda();
   else if(CO.vista==='banco') pintarBanco();
+  else if(CO.vista==='rutbib') pintarRutBib(false);
   else if(CO.vista==='nutri') pintarNutri(false);
   else if(CO.vista==='pagos') pintarPagos(false);
   else if(CO.vista==='pasos'&&CO.psA) pintarPasosCfg(false);
@@ -13374,24 +13391,28 @@ A.rutModelo=function(el){
   CO.mdR=R.map(function(r){ return {nombre:r.nombre,dias:r.dias,video:r.video||'',ejercicios:r.ejercicios}; });
   modal('<h2>Guardar como modelo</h2><p class="muted sm">'+(R.length>1?'Se guardan '+R.length+' rutinas juntas (la programación).':'Se guarda la rutina «'+esc(R[0].nombre||'Rutina')+'».')+' Después la pones a cualquier cliente en un momento con «+ Desde un modelo».</p>'+
     '<label class="f">Nombre del modelo<input id="md-n" maxlength="80" value="'+esc(R.length>1?'Programación '+(CO.d.clienta.objetivo||'')+'':R[0].nombre||'')+'" placeholder="Glúteo 3 días · intermedia"></label>'+
+    '<div id="et-w">'+etChooser(CO.etSel=[])+'</div>'+
     '<label class="f">Nota <span class="muted">(opcional, solo para ti)</span><input id="md-no" maxlength="300" placeholder="Para quién va bien, nivel…"></label>'+
-    '<button class="btn mt" data-a="mdGuardar">'+ic('modelo')+'Guardar modelo</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+    '<button class="btn mt" data-a="mdGuardar">'+ic('modelo')+'Guardar en tu banco de rutinas</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+  if(!CO.mdEt) api('coachModelos',CO.pin).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; etRepintar(); },function(){});      // v53.4.25: sus etiquetas de siempre
 };
 A.mdGuardar=function(el){
   var nom=val('md-n'); if(!nom) return toast('Ponle nombre al modelo'); if(el.disabled) return; el.disabled=true;
-  cargando(api('coachGuardarModelo',CO.pin,{nombre:nom,nota:val('md-no'),rutinas:CO.mdR})).then(function(r){ CO.modelos=r.lista; cerrarModal(); toast('Modelo guardado: lo tienes en «+ Desde un modelo»','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+  cargando(api('coachGuardarModelo',CO.pin,{nombre:nom,nota:val('md-no'),etiquetas:CO.etSel||[],rutinas:CO.mdR})).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; cerrarModal(); toast('Guardada en tu banco de rutinas: la tienes en «Desde un modelo»','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 A.desdeModelo=function(){
   var go=function(){ pintarModelos(); };
   if(CO.modelos){ go(); api('coachModelos',CO.pin).then(function(r){ CO.modelos=r.lista; if(document.getElementById('md-list')) pintarModelos(); },function(){}); return; }
-  cargando(api('coachModelos',CO.pin)).then(function(r){ CO.modelos=r.lista; go(); },function(e){ toast(limpiaErr(e),'err'); });
+  cargando(api('coachModelos',CO.pin)).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; go(); },function(e){ toast(limpiaErr(e),'err'); });
 };
+A.mdEtF=function(el){ CO.mdT=el.dataset.t; pintarModelos(); };
 function pintarModelos(){
-  var L=CO.modelos||[], q=clave(CO.mdQ||'');
-  var V=L.filter(function(m){ return !q||clave(m.nombre+' '+m.nota).indexOf(q)>=0; });
-  modal('<h2>Desde un modelo</h2>'+(L.length?'<input id="md-q" data-v29="mdQ" placeholder="Buscar modelo…" value="'+esc(CO.mdQ||'')+'" aria-label="Buscar modelo">':'')+
-    '<div id="md-list">'+(V.length?V.map(function(m){ return '<div class="md-it"><div><b>'+esc(m.nombre)+'</b><small>'+(m.tipo==='programa'?m.n+' rutinas':'1 rutina')+' · '+m.ej+' ejercicios'+(m.nota?' · '+esc(m.nota):'')+'</small></div><button class="btn sm" data-a="mdPoner" data-id="'+esc(m.id)+'">Usar</button><button class="ico md-x" data-a="mdBorrar" data-id="'+esc(m.id)+'" aria-label="Borrar modelo">'+ic('papelera')+'</button></div>'; }).join(''):
-      '<p class="muted">'+(L.length?'Ningún modelo con ese nombre.':'Todavía no tienes modelos. En cualquier rutina, «Guardar como modelo»; o guarda toda la programación de un cliente con «Guardar la programación como modelo».')+'</p>')+'</div>'+
+  var L=CO.modelos||[];
+  if(CO.mdT&&!(CO.mdEt||[]).some(function(x){ return etLow(x)===etLow(CO.mdT); })) CO.mdT='';
+  var V=mdFiltrar(L,CO.mdQ,CO.mdT);      // v53.4.25: también por sus etiquetas y sus ejercicios
+  modal('<h2>Desde tu banco de rutinas</h2>'+(L.length?'<input id="md-q" data-v29="mdQ" placeholder="Buscar rutina o ejercicio…" value="'+esc(CO.mdQ||'')+'" aria-label="Buscar modelo">'+etTiposHtml(L,CO.mdT,'mdEtF'):'')+
+    '<div id="md-list">'+(V.length?V.map(function(m){ return '<div class="md-it"><div><b>'+esc(m.nombre)+'</b><small>'+(m.tipo==='programa'?m.n+' rutinas':'1 rutina')+' · '+m.ej+' ejercicios'+(m.nota?' · '+esc(m.nota):'')+'</small>'+((m.etiquetas||[]).length?'<span class="rb-ets">'+mdEtiq(m)+'</span>':'')+'</div><button class="btn sm" data-a="mdPoner" data-id="'+esc(m.id)+'">Usar</button><button class="ico md-x" data-a="mdBorrar" data-id="'+esc(m.id)+'" aria-label="Borrar modelo">'+ic('papelera')+'</button></div>'; }).join(''):
+      '<p class="muted">'+(L.length?'Ninguna rutina con ese nombre o etiqueta.':'Tu banco de rutinas está vacío. Créalas en «Banco de rutinas» o, en cualquier rutina, «Guardar como modelo».')+'</p>')+'</div>'+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 }
 IN29.mdQ=function(t){ CO.mdQ=t.value; clearTimeout(IN29.mq); IN29.mq=setTimeout(function(){ var v=t.value; pintarModelos(); var i=document.getElementById('md-q'); if(i){ i.focus(); i.setSelectionRange(v.length,v.length); } },200); };
@@ -13403,6 +13424,112 @@ A.mdPoner=function(el){
   toast((m.rutinas.length>1?m.rutinas.length+' rutinas añadidas':'Rutina añadida')+' desde «'+m.nombre+'». Revisa días y fechas y dale a Guardar');
 };
 A.mdBorrar=function(el){ var id=el.dataset.id; confirmar('¿Borrar este modelo? Las rutinas que ya pusiste a tus clientes no cambian.','Borrar modelo',function(){ cargando(api('coachBorrarModelo',CO.pin,id)).then(function(){ CO.modelos=(CO.modelos||[]).filter(function(m){ return m.id!==id; }); pintarModelos(); },function(e){ toast(limpiaErr(e),'err'); }); }); };
+
+/* ======================= v53.4.25 · BANCO DE RUTINAS =======================
+   Como el banco de ejercicios y el de alimentos: tus rutinas y programaciones tipo, creadas aquí mismo con el editor de siempre
+   (fuerza, cardio, carrera, bloques y movilidad), con etiquetas para encontrarlas (Fuerza, Carrera, Funcional… las que quieras).
+   Al programar a un cliente salen en «Desde un modelo» (con sus etiquetas para filtrar). Es la tabla Modelos (+ etiquetas). */
+var ET_SUG=['Fuerza','Hipertrofia','Carrera','Funcional','Movilidad','Principiante','Intermedio','Avanzado'];
+function etLow(t){ return String(t||'').toLowerCase(); }
+function etSugs(sel){ var out=[], k={}; (sel||[]).concat(CO.mdEt||[],ET_SUG).forEach(function(t){ var x=etLow(t); if(t&&!k[x]){ k[x]=1; out.push(t); } }); return out; }
+function etChooser(sel){
+  return '<div class="lab">Etiquetas <span class="muted">(para encontrarla luego)</span></div><div class="tipos et-ch" role="group" aria-label="Etiquetas">'+etSugs(sel).map(function(t){ var on=(sel||[]).some(function(x){ return etLow(x)===etLow(t); });
+    return '<button class="'+(on?'on':'')+'" data-a="etTog" data-t="'+esc(t)+'" aria-pressed="'+on+'">'+esc(t)+'</button>'; }).join('')+'</div>'+
+    '<div class="et-add"><input id="et-n" maxlength="24" placeholder="Otra etiqueta…" aria-label="Nueva etiqueta"><button class="btn sm sec" data-a="etAdd">Añadir</button></div>';
+}
+function etRepintar(){ var w=document.getElementById('et-w'); if(w) w.innerHTML=etChooser(CO.etSel||[]); }
+function etMarcar(){ if(CO.md&&!CO.cid){ CO.mdSucio=true; actualizarGbar(); } }
+A.etTog=function(el){ var S=CO.etSel||(CO.etSel=[]), t=el.dataset.t, i=S.map(etLow).indexOf(etLow(t));
+  if(i>=0) S.splice(i,1); else { if(S.length>=8) return toast('Como mucho 8 etiquetas'); S.push(t); } etRepintar(); etMarcar(); };
+A.etAdd=function(){ var i=document.getElementById('et-n'), t=String(i&&i.value||'').replace(/,/g,' ').trim().slice(0,24); if(!t) return i&&i.focus();
+  var S=CO.etSel||(CO.etSel=[]); if(S.map(etLow).indexOf(etLow(t))<0){ if(S.length>=8) return toast('Como mucho 8 etiquetas'); S.push(t); } etRepintar(); etMarcar(); var n=document.getElementById('et-n'); if(n) n.focus(); };
+document.addEventListener('keydown',function(ev){ var t=ev.target; if(ev.key==='Enter'&&t&&t.id==='et-n'){ ev.preventDefault(); A.etAdd(); } });
+function mdEtiq(m){ return (m.etiquetas||[]).map(function(t){ return '<span class="md-et">'+esc(t)+'</span>'; }).join(''); }
+function mdNombresEj(m){ var E=[]; (m.rutinas||[]).forEach(function(r){ (r.ejercicios||[]).forEach(function(e){ var n=String(e.n||e.na||'').trim(); if(!n&&tipoEj(e)==='bloque') n=nombreBloque(e); if(!n&&tipoEj(e)==='run') n=runNombre(e); if(n) E.push(n); }); }); return E; }
+function mdResumen(m){ var E=mdNombresEj(m); return E.slice(0,4).join(' · ')+(E.length>4?' · y '+(E.length-4)+' más':''); }
+function mdCuenta(m){ return (m.n>1?m.n+' rutinas · ':'')+m.ej+(m.ej===1?' ejercicio':' ejercicios'); }
+function mdFiltrar(L,q,t){ q=clave(q||''); return (L||[]).filter(function(m){ return (!t||(m.etiquetas||[]).some(function(x){ return etLow(x)===etLow(t); }))&&(!q||clave(m.nombre+' '+(m.nota||'')+' '+(m.etiquetas||[]).join(' ')+' '+mdNombresEj(m).join(' ')).indexOf(q)>=0); }); }
+function etTiposHtml(L,sel,accion){
+  var ET=CO.mdEt||[]; if(!ET.length) return '';
+  return '<div class="tipos rb-et" role="group" aria-label="Etiquetas"><button class="'+(!sel?'on':'')+'" data-a="'+accion+'" data-t="">Todas</button>'+ET.map(function(x){ var n=mdFiltrar(L,'',x).length;
+    return '<button class="'+(etLow(sel)===etLow(x)?'on':'')+'" data-a="'+accion+'" data-t="'+esc(x)+'">'+esc(x)+' <small>'+n+'</small></button>'; }).join('')+'</div>';
+}
+A.sdRutBib=function(){ siCambiosOk(function(){ cargarRutBib(true); }); };
+A.mnRutBib=function(){ cerrarModal(); cargarRutBib(true); };
+function cargarRutBib(arriba){
+  var go=function(){ CO.md=null; CO.vista='rutbib'; pintarRutBib(arriba); };
+  if(CO.modelos&&CO.mdEt){ go(); var ant=JSON.stringify(CO.modelos);
+    api('coachModelos',CO.pin).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; if(JSON.stringify(r.lista)!==ant) repintarLibre(function(){ if(CO.vista==='rutbib') pintarRutBib(false); }); },function(){}); return Promise.resolve(); }
+  return cargando(api('coachModelos',CO.pin)).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; go(); },function(e){ toast(limpiaErr(e),'err'); });
+}
+function rbLista(V){
+  if(!V.length) return '<p class="muted mt">Ninguna rutina con ese nombre o etiqueta.</p>';
+  return V.map(function(m){ return '<div class="card rb-it"><div class="rb-h"><div class="rb-tx"><b>'+esc(m.nombre)+'</b><small>'+mdCuenta(m)+(m.nota?' · '+esc(m.nota):'')+'</small></div><button class="btn sm sec" data-a="rbEditar" data-id="'+esc(m.id)+'">Editar</button></div>'+
+    ((m.etiquetas||[]).length?'<div class="rb-ets">'+mdEtiq(m)+'</div>':'')+'<div class="muted sm rb-ej">'+esc(mdResumen(m))+'</div>'+
+    '<div class="rb-acc"><button class="link" data-a="rbDuplicar" data-id="'+esc(m.id)+'">'+ic('copiar')+'Duplicar</button><button class="link danger" data-a="rbBorrar" data-id="'+esc(m.id)+'">Borrar</button></div></div>'; }).join('');
+}
+function pintarRutBib(arriba){
+  var y=window.scrollY, L=CO.modelos||[];
+  if(CO.rbT&&!(CO.mdEt||[]).some(function(x){ return etLow(x)===etLow(CO.rbT); })) CO.rbT='';
+  var h='<div class="tit-row"><h1 class="tit">Rutinas <span class="muted">'+L.length+'</span></h1><span class="tit-bt"><button class="btn sm" data-a="rbNueva">+ Nueva</button></span></div>'+
+    '<p class="muted sm">Tus rutinas y programaciones tipo. Al programar a un cliente las añades con <b>Desde un modelo</b> y allí las ajustas a él (esta no cambia).</p>';
+  if(L.length) h+='<input data-v29="rbQ" id="rb-q" value="'+esc(CO.rbQ||'')+'" placeholder="Buscar rutina o ejercicio…" aria-label="Buscar rutina">'+etTiposHtml(L,CO.rbT,'rbEt')+'<div id="rb-list">'+rbLista(mdFiltrar(L,CO.rbQ,CO.rbT))+'</div>';
+  else h+='<div class="card"><h3>Todavía no tienes rutinas aquí</h3><p class="muted sm">Crea tus rutinas tipo («Glúteo 3 días · intermedia», «Series 6 × 800 m», «Rodaje largo 14 km»…) o guarda la de cualquier cliente con «Guardar como modelo». Ponles etiquetas y, al programar, las añades en un momento.</p><button class="btn mt" data-a="rbNueva">+ Crear la primera</button></div>';
+  app.innerHTML='<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Banco de rutinas</div><span style="width:70px"></span></header><main class="wrap coachw">'+h+'</main>';
+  window.scrollTo(0,arriba?0:y);
+}
+IN29.rbQ=function(t){ CO.rbQ=t.value; clearTimeout(IN29.rq); IN29.rq=setTimeout(function(){ var l=document.getElementById('rb-list'); if(l) l.innerHTML=rbLista(mdFiltrar(CO.modelos,CO.rbQ,CO.rbT)); },150); };
+A.rbEt=function(el){ CO.rbT=el.dataset.t; pintarRutBib(false); };
+function mdDe(id){ return (CO.modelos||[]).filter(function(m){ return m.id===id; })[0]; }
+A.rbBorrar=function(el){ var m=mdDe(el.dataset.id); if(!m) return; confirmar('¿Borrar «'+m.nombre+'» de tu banco? Las rutinas que ya pusiste a tus clientes no cambian.','Borrar',function(){
+  cargando(api('coachBorrarModelo',CO.pin,m.id)).then(function(){ CO.modelos=(CO.modelos||[]).filter(function(x){ return x.id!==m.id; }); return api('coachModelos',CO.pin).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; }); }).then(function(){ toast('Rutina borrada de tu banco','ok'); pintarRutBib(false); },function(e){ toast(limpiaErr(e),'err'); }); }); };
+A.rbDuplicar=function(el){ var m=mdDe(el.dataset.id); if(!m) return; if(el.disabled) return; el.disabled=true;
+  cargando(api('coachGuardarModelo',CO.pin,{nombre:(m.nombre+' (copia)').slice(0,80),nota:m.nota||'',etiquetas:m.etiquetas||[],rutinas:m.rutinas})).then(function(r){ CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; toast('Duplicada: «'+m.nombre+' (copia)»','ok'); abrirModeloEd(mdDe(r.id)); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.rbNueva=function(){ abrirModeloEd(null); };
+A.rbEditar=function(el){ var m=mdDe(el.dataset.id); if(m) abrirModeloEd(m); };
+/* el editor: el mismo de las rutinas de cada cliente, sin fechas; se guarda todo junto en tu banco */
+function bancoListo(){
+  if(CO.bancoR){ CO.banco=CO.bancoR.lista; GRUPOS_X=CO.bancoR.grupos||GRUPOS_X; return Promise.resolve(); }
+  return cargando(api('coachBanco',CO.pin)).then(function(r){ CO.bancoR=r; CO.banco=r.lista; GRUPOS_X=r.grupos||GRUPOS_X; });
+}
+function abrirModeloEd(m){
+  return bancoListo().then(function(){
+    CO.md={id:m?m.id:'',nombre:m?m.nombre:'',nota:m?m.nota||'':'',etiquetas:m?(m.etiquetas||[]).slice():[]}; CO.etSel=CO.md.etiquetas; CO.mdSucio=false;
+    CO.cid=null; CO.d={clienta:{id:'',nombre:'',cfg:{}},rutinas:[],rutinasAnteriores:[],otras:[],ajustes:[],cambios:[],sesiones:[],series:[],medidas:[],diario:[],fases:[],dieta:null,dietasAnteriores:[]};
+    CO.rut=m?copia(m.rutinas||[]).map(function(r){ return {id:'',nombre:r.nombre||'',dias:(r.dias||[]).slice(),desde:'',hasta:'',video:r.video||'',ejercicios:r.ejercicios||[]}; }):[{id:'',nombre:'',dias:[],desde:'',hasta:'',video:'',ejercicios:[]}];
+    CO.die=null; CO.dieSucia=false; CO.cqe=null; CO.cqeSucio=false; CO.opVis={}; CO.ej=null; CO.ejAb=null;
+    CO.vista='clienta'; CO.sub='entrenos'; CO.diaRut='todas'; if(typeof undoReset==='function') undoReset(); pintarClienta(true);
+    if(!m) setTimeout(function(){ var i=document.querySelector('.md-ed [data-f=nombre]'); if(i) i.focus(); },60);
+  },function(e){ toast(limpiaErr(e),'err'); });
+}
+function pintarModeloEd(arriba){
+  var y=window.scrollY, M=CO.md, nuevo=!M.id;
+  var cab='<div class="card md-ed"><label class="f">Nombre<input data-v29="mdCampo" data-f="nombre" maxlength="80" value="'+esc(M.nombre)+'" placeholder="Glúteo 3 días · intermedia, Series 6 × 800 m…"></label>'+
+    '<div id="et-w">'+etChooser(M.etiquetas)+'</div>'+
+    '<label class="f">Nota <span class="muted">(opcional, solo para ti)</span><input data-v29="mdCampo" data-f="nota" maxlength="300" value="'+esc(M.nota)+'" placeholder="Para quién va bien, nivel…"></label></div>';
+  var rs=CO.rut.map(function(r,ri){ return rutinaEd(r,ri); }).join('');
+  var pie='<div class="row rut-nuevas"><button class="btn sec" data-a="addRut">+ Otra rutina'+(CO.rut.length===1?' (para una programación de varios días)':'')+'</button></div>'+
+    '<div class="md-pie"><button class="btn" data-a="mdGuardarEd">'+ic('ok')+'Guardar en tu banco</button><button class="btn sec" data-a="mdVolver">Volver al banco de rutinas</button></div>';
+  app.innerHTML='<header class="top"><button class="link" data-a="mdVolver">'+ic('atras')+'Rutinas</button><div class="top-n">'+(nuevo?'Nueva rutina':esc(M.nombre||'Rutina'))+'</div><span style="width:70px"></span></header>'+
+    '<main class="wrap coachw md-main">'+cab+rs+pie+'</main>'+gbarHtml();
+  actualizarGbar(); window.scrollTo(0,arriba?0:y); setTimeout(pintarImgs,0);
+}
+IN29.mdCampo=function(t){ if(!CO.md) return; CO.md[t.dataset.f]=t.value; CO.mdSucio=true; actualizarGbar(); };
+A.mdQuitarRut=function(el){ var ri=+el.dataset.r, r=CO.rut[ri]; if(!r) return; confirmar('¿Quitar «'+(r.nombre||'esta rutina')+'» de la programación?','Quitar',function(){ CO.rut.splice(ri,1); CO.mdSucio=true; repintar(); undoTick(); }); };
+function guardarModeloP(){
+  var M=CO.md, nom=String(M.nombre||'').trim();
+  function no(t,sel){ toast(t); var i=sel&&document.querySelector(sel); if(i){ i.scrollIntoView({block:'center'}); i.focus(); } var e=new Error(t); e.valida=1; return Promise.reject(e); }
+  if(!nom) return no('Ponle nombre a la rutina','.md-ed [data-f=nombre]');
+  if(CO.rut.some(function(r){ return r.ejercicios.some(function(e){ return tipoEj(e)==='bloque'&&!(e.ej||[]).some(function(x){ return String(x.n||'').trim(); }); }); })) return no('Pon al menos un ejercicio en cada bloque funcional');
+  var R=CO.rut.map(function(r){ return {nombre:CO.rut.length===1?nom:String(r.nombre||'').trim(),dias:r.dias||[],video:r.video||'',ejercicios:ejGuardables(r)}; }).filter(function(r){ return r.ejercicios.length; });
+  if(!R.length) return no('Añade al menos un ejercicio');
+  if(R.some(function(r){ return !r.nombre; })) return no('Ponle nombre a cada rutina de la programación','.md-main .tit-in');
+  return cargando(api('coachGuardarModelo',CO.pin,{id:M.id,nombre:nom,nota:M.nota||'',etiquetas:M.etiquetas||[],rutinas:R})).then(function(r){
+    M.id=r.id; M.nombre=nom; CO.modelos=r.lista; CO.mdEt=r.etiquetas||[]; CO.mdSucio=false; CO.rut.forEach(function(x){ x._s=false; if(CO.rut.length===1||!String(x.nombre||'').trim()) x.nombre=nom; }); setTimeout(undoReset,0); return [];
+  },function(e){ toast(limpiaErr(e),'err'); throw e; });
+}
+A.mdGuardarEd=function(el){ if(el.disabled) return; el.disabled=true; guardarModeloP().then(function(){ el.disabled=false; toast('Guardada en tu banco de rutinas','ok'); repintar(); },function(){ el.disabled=false; }); };
+A.mdVolver=function(){ siCambios(function(){ CO.md=null; CO.d=null; CO.rut=[]; CO.etSel=null; CO.mdSucio=false; cargarRutBib(true); }); };
 
 /* ---------- entreno de la clienta: aviso de salto raro de kilos o repeticiones ---------- */
 function refSerie(e,j){
