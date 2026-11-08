@@ -845,6 +845,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .rev-l .rl-i{flex-direction:row;align-items:center;flex:none}.rev-l.info{text-align:left}.rev-l .rl-i b{font-size:14.5px}
 .nt textarea{width:100%;min-height:58px}
 .nt-sub{margin:-4px 0 10px;line-height:1.4}.pill.nt-p{background:#F2F2F5;color:#3A3A3C}
+.btn.lg-ch,.link.lg-wa{display:flex;align-items:center;justify-content:center;gap:7px;width:100%}.lg-ch .ic,.lg-wa .ic{margin:0;width:18px;height:18px}      /* v53.4.8: felicitar un logro */
 .nt-i{border-top:1px solid var(--line2);padding:10px 0 8px;margin-top:10px}
 .nt-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.nt-h b{font-size:13px}.nt-h .ico-x{margin-left:auto}
 .nt-t{font-size:14px;line-height:1.45;color:var(--tx2);margin-top:4px}
@@ -2626,7 +2627,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.7';
+var APP_V = 'v53.4.8';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -4609,7 +4610,7 @@ A.subOk=function(el){
 /* =====================================================================
    v20 · CHAT coach ↔ clienta: texto, notas de voz, fotos, vídeos y archivos
    ===================================================================== */
-var CHT={msgs:null,cid:null,tmr:null,rec:null,cache:{},por:{}};
+var CHT={msgs:null,cid:null,tmr:null,rec:null,cache:{},por:{},borr:{}};      // v53.4.8: borr = mensaje empezado por clienta (felicitar un logro)
 /* v26: chat pequeño (ventana flotante) de la coach: MC.cid = clienta cuya conversación está abierta en ella */
 var MC={cid:null,modo:null};
 function chatCid(){ return MC.cid||CO.cid; }
@@ -4773,13 +4774,14 @@ function chatHtml(){
   var otro=BOOT.mode==='clienta'?'tu coach':primerNombre(nomChat())||'ella';
   return '<div class="chat"><div class="chat-l" id="chat-l">'+chatListaHtml()+'</div></div>'+
     '<div class="chat-bar'+(BOOT.mode==='clienta'?' cl':'')+'" id="chat-bar"><label class="chat-adj" aria-label="Adjuntar foto, vídeo o archivo">'+ic('mas')+'<input type="file" data-c="chatAdj" hidden></label>'+
-    '<textarea id="chat-t" rows="1" placeholder="Escribe a '+esc(otro)+'…" aria-label="Mensaje"></textarea>'+
+    '<textarea id="chat-t" rows="1" placeholder="Escribe a '+esc(otro)+'…" aria-label="Mensaje">'+esc(BOOT.mode==='clienta'?'':CHT.borr[chatCid()]||'')+'</textarea>'+
     '<button class="chat-mic" data-a="chatMic" aria-label="Grabar nota de voz">'+ic('mic')+'</button><button class="chat-env" data-a="chatEnviar" aria-label="Enviar">'+ic('enviar')+'</button></div>';
 }
 function chatAbrir(){
   chatSync();
   pedirPase();
-  setTimeout(function(){ chatCargar(false); chatPoll(); var t=document.getElementById('chat-t'); if(t){ t.addEventListener('input',function(){ t.style.height='auto'; t.style.height=Math.min(140,t.scrollHeight)+'px'; }); t.addEventListener('keydown',function(e){ if(MC.cid&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); A.chatEnviar(); } }); if(MC.cid) t.focus(); } if(!MC.cid) window.scrollTo(0,document.body.scrollHeight); },0);
+  setTimeout(function(){ chatCargar(false); chatPoll(); var t=document.getElementById('chat-t'); if(t){ t.addEventListener('input',function(){ t.style.height='auto'; t.style.height=Math.min(140,t.scrollHeight)+'px'; var k=chatCid(); if(BOOT.mode!=='clienta'&&CHT.borr[k]!=null){ if(t.value) CHT.borr[k]=t.value; else delete CHT.borr[k]; } });
+    if(t.value){ t.style.height=Math.min(140,t.scrollHeight)+'px'; t.focus(); t.setSelectionRange(t.value.length,t.value.length); } t.addEventListener('keydown',function(e){ if(MC.cid&&e.key==='Enter'&&!e.shiftKey&&!e.isComposing){ e.preventDefault(); A.chatEnviar(); } }); if(MC.cid) t.focus(); } if(!MC.cid) window.scrollTo(0,document.body.scrollHeight); },0);
 }
 function chatEnviarMsj(m){
   var tmp=Object.assign({id:'tmp'+rand(8),de:chatYo(),fecha:new Date().toISOString().slice(0,10)+' '+new Date().toTimeString().slice(0,8),_tmp:true},m);
@@ -4789,7 +4791,7 @@ function chatEnviarMsj(m){
       if(BOOT.mode!=='clienta'){ var c=cliDe(chatCid()); if(c){ c.chat=c.chat||{}; c.chat.ult=previaMsj(r.mensaje); if(VISTA.ancha) ladoCo(); } } },
     function(e){ tmp._err=true; tmp._envio=m; chatPintarLista(false); toast(esRed(e)?'Sin conexión: el mensaje no se ha enviado':limpiaErr(e),'err'); });
 }
-A.chatEnviar=function(){ var t=document.getElementById('chat-t'), v=t?t.value.trim():''; if(!v) return toast('Escribe el mensaje'); t.value=''; t.style.height='auto'; chatEnviarMsj({tipo:'texto',texto:v}); };
+A.chatEnviar=function(){ var t=document.getElementById('chat-t'), v=t?t.value.trim():''; if(!v) return toast('Escribe el mensaje'); delete CHT.borr[chatCid()]; t.value=''; t.style.height='auto'; chatEnviarMsj({tipo:'texto',texto:v}); };
 A.chatReintentar=function(el){ var m=(CHT.msgs||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(!m) return; CHT.msgs.splice(CHT.msgs.indexOf(m),1); chatEnviarMsj(m._envio||{tipo:m.tipo,texto:m.texto}); };
 A.chatQuitar=function(el){ CHT.msgs=(CHT.msgs||[]).filter(function(m){ return m.id!==el.dataset.id; }); chatPintarLista(false); };
 A.chatMenu=function(el){ var id=el.dataset.id; confirmar('¿Borrar este mensaje? Se borra también para '+(BOOT.mode==='clienta'?'tu coach':'ella')+' y no se puede deshacer.','Borrar mensaje',function(){ cargando(chatApi('borrar',id)).then(function(){ CHT.msgs=CHT.msgs.filter(function(m){ return m.id!==id; }); chatPintarLista(false); toast('Mensaje borrado'); },function(e){ toast(limpiaErr(e),'err'); }); }); };
@@ -8647,7 +8649,13 @@ A.semCada=function(el){
    v53.4.6: «Tus notas de cada revisión · solo tú», con también las de la revisión con ella (cada 20 días, o cada cuánto la tenga) y debajo del título
    cada cuánto revisas; cada nota con lo que es (Revisión semanal, Revisión con ella o Nota) */
 /* v53.4.7: un recordatorio hecho en el que apuntaste qué salió o una nota (los «Quiere renovar» se cierran solos con el pago: eso está en Pagos) */
-function recNota(a){ return a.tipo==='tarea'&&a.estado!=='pendiente'&&!!a.fecha&&!!(a.nota||a.resultado)&&!/^Quiere renovar/.test(a.titulo||''); }
+/* v53.4.8: los avisos que te llegan solos (ha apuntado su peso, ha subido sus fotos, un logro, un cambio de ejercicio) traen su texto: solo salen en tus notas si escribiste algo al marcarlos */
+var T_AUTO=/^(Ha apuntado|Ha subido sus fotos|Ha conseguido un logro|Quiere renovar|No tiene «)/;
+function esLogroT(t){ return !!t&&t.tipo==='tarea'&&t.titulo==='Ha conseguido un logro'; }
+function logroTxt(n){ return String(n||'').split('\n')[0].replace(/\s*¡Felicítal[ao]!\s*$/,'').replace(/[.\s]+$/,''); }
+function recNota(a){ if(a.tipo!=='tarea'||a.estado==='pendiente'||!a.fecha||/^Quiere renovar/.test(a.titulo||'')) return false;
+  if(esLogroT(a)) return /\n/.test(a.nota||'');            // el logro, solo con tu nota (va en la segunda línea)
+  return !!a.resultado||(!!a.nota&&!T_AUTO.test(a.titulo||'')); }
 function notasSubTxt(d){
   var c=d.clienta||{}, rv=c.rev||{}, P=[];
   if(c.plan!=='dieta'&&c.semanal) P.push('en tu revisión semanal ('+(SEM_CADA[c.semanal_cada||1]||'cada '+c.semanal_cada+' semanas').toLowerCase()+')');
@@ -8662,7 +8670,7 @@ function notasCard(d){
   if(N.length) h+=N.slice(0,CO.ntTodo?200:8).map(function(a){
     var sem=a.tipo==='semanal', rev=a.tipo==='revision', rec=a.tipo==='tarea';      // v53.4.7: también lo que apuntas al marcar hecho un recordatorio
     return '<div class="nt-i"><div class="nt-h"><b>'+esc(sem?semTxt(a.prevista):fMedia(a.fecha||String(a.creado).slice(0,10)))+'</b>'+
-      (sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rev?'<span class="pill">Revisión con '+cG('ella','él')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rec?'<span class="pill">Recordatorio · '+esc(a.titulo||'')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'<span class="pill nt-p">Nota</span>')+
+      (sem?'<span class="pill">Revisión semanal'+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rev?'<span class="pill">Revisión con '+cG('ella','él')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':rec&&esLogroT(a)?'<span class="pill">Logro</span>':rec?'<span class="pill">Recordatorio · '+esc(a.titulo||'')+(a.resultado?' · '+esc(a.resultado):'')+'</span>':'<span class="pill nt-p">Nota</span>')+
       (a.tipo==='nota'&&a.id?'<button class="ico-x" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</div>'+(a.nota?'<div class="nt-t">'+br(a.nota)+'</div>':'')+'</div>';
   }).join('')+(N.length>8&&!CO.ntTodo?'<button class="link mt6" data-a="ntTodo">Ver las '+N.length+'</button>':'');
   return h+'</div>';
@@ -8944,14 +8952,39 @@ A.taGuardar=function(el){
 function modalTareaHecha(id){
   var t=tareaPend(id), hoy=CO.hoy||hoyStr(); if(!t) return;
   if(/^Quiere renovar/.test(t.titulo||'')) return modalRenovar(CO.cid);      // v29.2: se resuelve en la ventana de renovar
+  if(esLogroT(t)) return modalLogroHecho(t);      // v53.4.8: un logro, solo tu nota y su chat para felicitarla
   modal('<h2>'+esc(t.titulo)+'</h2><p class="muted">Prevista: '+esc(fLarga(t.prevista))+'.'+(t.nota?' '+esc(t.nota):'')+'</p>'+
     '<label class="f">Hecha el<input type="date" id="th-f" value="'+hoy+'" max="'+hoy+'"></label><label class="f">Resultado<input id="th-r" placeholder="Qué ha salido"></label><label class="f">Nota (opcional)<textarea id="th-n" rows="2"></textarea></label>'+
     '<label class="f">Repetir el (opcional)<input type="date" id="th-s"></label>'+
     '<button class="btn mt" data-a="thGuardar" data-id="'+esc(id)+'">Marcar hecha</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
 }
 A.segTareaHecha=function(el){ modalTareaHecha(el.dataset.id); };
+/* v53.4.8 · «Ha conseguido un logro»: sin «Resultado» ni fechas, solo tu nota (privada) y, abajo, su chat para felicitarla.
+   Felicitarla la marca como hecha y abre su chat con el mensaje empezado (lo cambias o lo borras antes de enviarlo). */
+function logroMsj(t){ var c=CO.d.clienta||{}, n=primerNombre(c.nombre); return '¡Enhorabuena'+(n?', '+n:'')+'! '+logroTxt(t.nota)+'.'; }
+function modalLogroHecho(t){
+  var id=t.id, wa=waDe(CO.cid);
+  modal('<h2>'+esc(t.titulo)+'</h2><p class="muted">'+esc(fLarga(t.prevista))+'. '+esc(logroTxt(t.nota))+'.</p>'+
+    '<label class="f">Nota (opcional)<textarea id="th-n" rows="2" placeholder="Solo la ves tú"></textarea></label>'+
+    '<button class="btn mt" data-a="lgHecho" data-id="'+esc(id)+'">Marcar hecha</button>'+
+    '<button class="btn sec mt lg-ch" data-a="lgChat" data-id="'+esc(id)+'">'+ic('nota')+cG('Felicitarla','Felicitarlo')+' por el chat</button>'+
+    (wa?'<button class="link mt6 lg-wa" data-a="lgWa" data-id="'+esc(id)+'">'+ic('wa')+'O por WhatsApp</button>':'')+
+    '<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+}
+function lgGuardar(el,ir){
+  var id=el.dataset.id, t=tareaPend(id), cid=CO.cid; if(!t||el.disabled) return;
+  var n=val('th-n'), x={id:id,fecha:CO.hoy||hoyStr(),resultado:'',nota:n?logroTxt(t.nota)+'.\n'+n:'',siguiente:''};
+  if(ir==='chat') CHT.borr[cid]=logroMsj(t);
+  document.querySelectorAll('#modal [data-a^=lg]').forEach(function(b){ b.disabled=true; });
+  cargando(api('coachTareaHecha',CO.pin,cid,x)).then(function(){ cerrarModal(); return abrirClienta(cid,ir==='chat'?'chat':'seguimiento'); })
+    .then(function(){ toast(ir==='chat'?'Hecha. Escríbele en el chat':'Hecha','ok'); },function(e){ delete CHT.borr[cid]; document.querySelectorAll('#modal [data-a^=lg]').forEach(function(b){ b.disabled=false; }); toast(limpiaErr(e),'err'); });
+}
+A.lgHecho=function(el){ lgGuardar(el,''); };
+A.lgChat=function(el){ lgGuardar(el,'chat'); };
+A.lgWa=function(el){ var t=tareaPend(el.dataset.id), w=waDe(CO.cid); if(!t||!w) return; window.open('https://wa.me/'+w+'?text='+encodeURIComponent(logroMsj(t)),'_blank','noopener'); lgGuardar(el,''); };
 A.thGuardar=function(el){
-  var x={id:el.dataset.id,fecha:val('th-f'),resultado:val('th-r'),nota:val('th-n'),siguiente:val('th-s')};
+  var x={id:el.dataset.id,fecha:val('th-f'),resultado:val('th-r'),nota:val('th-n'),siguiente:val('th-s')}, t0=tareaPend(x.id);
+  if(t0&&T_AUTO.test(t0.titulo||'')&&x.nota&&!x.resultado) x.resultado='Hecha';      // v53.4.8: tu nota en un aviso automático también sale en tus notas
   if(el.disabled) return; el.disabled=true;
   cargando(api('coachTareaHecha',CO.pin,CO.cid,x)).then(function(){ cerrarModal(); return abrirClienta(CO.cid,'seguimiento'); }).then(function(){ toast('Tarea hecha'+(x.siguiente?'. Siguiente: '+fMedia(x.siguiente):''),'ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
