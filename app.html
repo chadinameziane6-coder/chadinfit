@@ -323,7 +323,7 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .bl-row{display:flex;gap:10px;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--line2)}
 .bl-n{min-width:0}
 .bl-kg{width:84px;flex:none;text-align:center;padding:8px 4px}
-.bl-res{margin-top:6px}
+.bl-res{margin-top:6px}.bl-res .grid2{align-items:end}.bl-ay{margin-top:6px;line-height:1.4}
 .tmr{position:fixed;inset:0;z-index:75;display:flex;flex-direction:column;background:#141414;color:#fff;padding:calc(12px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));transition:background .25s}
 .tmr.trabajo{background:var(--mg)}
 .tmr.descanso{background:#13915A}
@@ -343,7 +343,7 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .tmr .btn{background:#fff;border-color:#fff;color:var(--tx)}
 .tmr .btn.sec{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.4);color:#fff}
 .tmr.fin .btn{background:var(--mg);border-color:var(--mg);color:#fff}.tmr.fin .btn.sec{background:#fff;border-color:var(--line);color:var(--tx)}
-.tmr-res{width:100%;max-width:360px;text-align:left}
+.tmr-res{width:100%;max-width:360px;text-align:left}.tmr-ay{font-size:13.5px;line-height:1.45;color:var(--tx2);margin-top:12px}
 .seg{display:inline-flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;margin-top:10px}
 .seg button{border:0;background:#fff;padding:8px 14px;font:600 13px Plus Jakarta Sans,sans-serif;color:var(--mu);cursor:pointer}
 .seg button.on{background:var(--mg);color:#fff}
@@ -2681,7 +2681,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.17';
+var APP_V = 'v53.4.18';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -6082,7 +6082,18 @@ function cardioCard(e,i,lab){
   });
   return h+pieEj(e,i);
 }
-var RES_CAMPOS={amrap:[['rondas','Rondas'],['reps','Reps extra']],fortime:[['tiempo','Tiempo (m:ss)'],['reps','Reps si llegaste al límite']],ladder:[['esc','Escalones'],['reps','Reps extra']],circuito:[['rondas','Vueltas hechas']],hiit:[['rondas','Rondas hechas']],tabata:[['rondas','Intervalos hechos']],emom:[['rondas','Minutos completados']]};
+var RES_CAMPOS={amrap:[['rondas','Rondas completas'],['reps','Reps de la ronda a medias']],fortime:[['tiempo','Tiempo (m:ss)'],['reps','Reps al llegar al límite']],ladder:[['esc','Escalones completos'],['reps','Reps del escalón a medias']],circuito:[['rondas','Vueltas hechas']],hiit:[['rondas','Rondas hechas']],tabata:[['rondas','Intervalos hechos']],emom:[['rondas','Minutos completados']]};
+/* v53.4.18 (NUEVAS MEJORAS, punto 11): qué es «Reps extra». Ahora «Reps de la ronda a medias» (o del escalón) con una línea que lo explica,
+   con un ejemplo de su propio bloque; en un For Time sin tiempo límite, sin ese campo (no se usa) */
+function resCampos(e){ var C=RES_CAMPOS[e.f]||RES_CAMPOS.circuito; return e.f==='fortime'&&!pnum(e,'cap')?C.filter(function(c){ return c[0]!=='reps'; }):C; }
+function resAyuda(e){
+  if(e.f==='amrap'){ var N=(e.ej||[]).map(function(x){ var m=String(x.r||'').match(/^\s*(\d+)\s*(reps?)?\s*$/i); return m?+m[1]:0; }), ej='';
+    if(N[0]&&N[1]&&e.ej[0].n&&e.ej[1].n){ var b=Math.max(1,Math.floor(N[1]/2)); ej=' (por ejemplo, '+N[0]+' '+e.ej[0].n+' y '+b+' '+e.ej[1].n+' = '+(N[0]+b)+')'; }
+    return 'Si el tiempo se acabó a mitad de una ronda, pon las repeticiones que hiciste de ella'+ej+'. Si no, déjalo vacío.'; }
+  if(e.f==='ladder') return 'Si el tiempo se acabó a mitad de un escalón, pon las repeticiones que hiciste de él. Si no, déjalo vacío.';
+  if(e.f==='fortime'&&pnum(e,'cap')) return 'Solo si llegaste al tiempo límite ('+pnum(e,'cap')+' min) sin terminar: las repeticiones que llevabas. Si no, déjalo vacío.';
+  return '';
+}
 function totalBloque(e){ return e.f==='emom'?pnum(e,'min'):e.f==='amrap'||e.f==='fortime'||e.f==='ladder'?null:pnum(e,'rondas'); }
 function bloqueCard(e,i,lab){
   var f=FMT[e.f]||FMT.circuito, uv=ultimaVez(e.n), res=e.res||{};
@@ -6094,11 +6105,12 @@ function bloqueCard(e,i,lab){
       (conKg?'<input class="bl-kg" data-i="'+i+'" data-bi="'+k+'" inputmode="decimal" placeholder="'+esc((x.kg||last||'')+' kg')+'" value="'+esc(e.kg[k]||'')+'" aria-label="Kg">':'')+'</div>';
   }).join('')+'</div>';
   if(!e.ok) h+='<button class="btn mt" data-a="tmrIni" data-i="'+i+'">'+ic('play')+'Empezar con temporizador</button>';
-  h+='<div class="bl-res"><div class="lab">Resultado</div><div class="grid2">'+(RES_CAMPOS[e.f]||RES_CAMPOS.circuito).map(function(c){
+  var ay=resAyuda(e);
+  h+='<div class="bl-res"><div class="lab">Resultado</div><div class="grid2">'+resCampos(e).map(function(c){
     var v=c[0]==='tiempo'?(num(res.seg)!=null?mmss(res.seg):''):(res[c[0]]!=null?res[c[0]]:'');
     var ph=c[0]==='rondas'&&totalBloque(e)?String(totalBloque(e)):'';
     return '<label class="f">'+esc(c[1])+'<input data-i="'+i+'" data-bk="'+c[0]+'" inputmode="'+(c[0]==='tiempo'?'text':'numeric')+'" placeholder="'+esc(ph)+'" value="'+esc(v)+'"></label>';
-  }).join('')+'</div><button class="btn '+(e.ok?'':'sec ')+'mt" data-a="blOk" data-i="'+i+'">'+(e.ok?ic('ok')+'Bloque hecho':'Marcar bloque como hecho')+'</button></div>';
+  }).join('')+'</div>'+(ay?'<div class="muted sm bl-ay">'+esc(ay)+'</div>':'')+'<button class="btn '+(e.ok?'':'sec ')+'mt" data-a="blOk" data-i="'+i+'">'+(e.ok?ic('ok')+'Bloque hecho':'Marcar bloque como hecho')+'</button></div>';
   return h+pieEj(e,i);
 }
 function segDe(v){ var m=String(v||'').trim().match(/^(\d+)(?::(\d{1,2}))?$/); if(!m) return null; return m[2]!=null?(+m[1])*60+(+m[2]):(+m[1])*60; }
@@ -6305,9 +6317,9 @@ function pintarTm(){
   var d=document.getElementById('tmr'); if(!d||!TM) return;
   var e=TM.e, f=TM.f, acc='';
   if(TM.fin){
-    var tot=totalBloque(e), campos=RES_CAMPOS[f]||RES_CAMPOS.circuito, val={rondas:f==='amrap'?TM.cnt:(f==='circuito'?TM.hechas:(tot||'')),reps:'',esc:TM.cnt,tiempo:TM.seg!=null?mmss(TM.seg):''};
+    var tot=totalBloque(e), campos=resCampos(e), ay=resAyuda(e), val={rondas:f==='amrap'?TM.cnt:(f==='circuito'?TM.hechas:(tot||'')),reps:'',esc:TM.cnt,tiempo:TM.seg!=null?mmss(TM.seg):''};
     d.className='tmr fin';
-    d.innerHTML='<div class="tmr-top"><span></span><div class="tmr-t">'+esc(e.n)+'</div><span></span></div><div class="tmr-c"><div class="tmr-fase">¡Terminado!</div><div class="tmr-res">'+campos.map(function(c){ return '<label class="f">'+esc(c[1])+'<input id="tmres-'+c[0]+'" inputmode="'+(c[0]==='tiempo'?'text':'numeric')+'" value="'+esc(val[c[0]]!=null?val[c[0]]:'')+'"></label>'; }).join('')+'</div></div>'+
+    d.innerHTML='<div class="tmr-top"><span></span><div class="tmr-t">'+esc(e.n)+'</div><span></span></div><div class="tmr-c"><div class="tmr-fase">¡Terminado!</div><div class="tmr-res">'+campos.map(function(c){ return '<label class="f">'+esc(c[1])+'<input id="tmres-'+c[0]+'" inputmode="'+(c[0]==='tiempo'?'text':'numeric')+'" value="'+esc(val[c[0]]!=null?val[c[0]]:'')+'"></label>'; }).join('')+(ay?'<div class="tmr-ay">'+esc(ay)+'</div>':'')+'</div></div>'+
       '<div class="tmr-b"><button class="btn sec" data-a="tmrCerrar">Cerrar sin guardar</button><button class="btn" data-a="tmrGuardar">Guardar resultado</button></div>';
     return;
   }
