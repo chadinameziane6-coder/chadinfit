@@ -1191,10 +1191,13 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .ev-fz{display:flex;align-items:center;gap:5px;margin-top:3px;font-size:12.5px;font-weight:600;color:#C2410C}.ev-fz .ic{width:13px;height:13px;flex:none}
 .ev-cu{font:800 22px Plus Jakarta Sans,sans-serif;margin:4px 0}
 /* v53.4.4 · la cuenta atrás de su competición (tarjeta negra con los días en grande), qué es cada tipo y varios bloques */
-.ev-hoy.ev-cd{display:block;background:#111;color:#fff;padding:18px 18px 16px;border:0;text-align:left}
-.ev-cdk{display:flex;align-items:center;gap:6px;font:700 11.5px/1.2 Plus Jakarta Sans,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#F5C242}.ev-cdk .ic{width:15px;height:15px;flex:none}
-.ev-cdn{display:block;font:800 20px/1.2 Plus Jakarta Sans,sans-serif;margin:10px 0 3px}
-.ev-cdf{display:block;color:rgba(255,255,255,.65);font-size:13px;line-height:1.35}
+.ev-hoy.ev-cd{display:flex;align-items:center;gap:12px;background:#111;color:#fff;padding:14px 16px;border:0;text-align:left}
+.ev-cdx{flex:1;min-width:0;display:flex;flex-direction:column}
+.ev-cdk{display:flex;align-items:center;gap:5px;font:700 10.5px/1.2 Plus Jakarta Sans,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#F5C242}.ev-cdk .ic{width:13px;height:13px;flex:none}
+.ev-cdn{display:block;font:800 16px/1.25 Plus Jakarta Sans,sans-serif;margin:5px 0 2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-cdf{display:block;color:rgba(255,255,255,.65);font-size:12.5px;line-height:1.3;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ev-cdc{flex:none;display:flex;flex-direction:column;align-items:center;min-width:54px}.ev-cdc b{font:800 34px/.95 Plus Jakarta Sans,sans-serif;letter-spacing:-.02em}.ev-cdc small{font:600 12px/1.2 Plus Jakarta Sans,sans-serif;color:rgba(255,255,255,.7);margin-top:2px}
+.ev-cdc.hoy b{font-size:20px;color:#F5C242}
 .ev-cdd{display:flex;align-items:flex-end;gap:10px;margin:16px 0 2px}
 .ev-cdd b{font:800 64px/.82 Plus Jakarta Sans,sans-serif;letter-spacing:-.03em}
 .ev-cdd span{display:flex;flex-direction:column;font:700 18px/1.1 Plus Jakarta Sans,sans-serif}
@@ -1202,8 +1205,6 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .ev-cdd.hoy b{font-size:46px;color:#F5C242}
 .ev-cdp{margin-top:14px}.ev-cdb{display:block;height:6px;border-radius:3px;background:rgba(255,255,255,.18);overflow:hidden}.ev-cdb i{display:block;height:100%;background:#F5C242;border-radius:3px}
 .ev-cdp small{display:block;margin-top:6px;font-size:12.5px;color:rgba(255,255,255,.75)}
-.ev-cdo{display:block;margin-top:12px;font-size:13.5px;font-weight:600;color:#fff}
-.ev-cdo2{display:block;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.15);font-size:12.5px;line-height:1.4;color:rgba(255,255,255,.75)}.ev-cdo2 b{color:#fff}
 .ev-cdd.cl{margin:6px 0 4px}.ev-cdd.cl small{color:var(--mu)}.ev-cdd.cl.hoy b{color:#111}
 .ev-cdp.cl{margin:10px 0 12px}.ev-cdp.cl .ev-cdb{background:#ECECEF}.ev-cdp.cl .ev-cdb i{background:#111}.ev-cdp.cl small{color:var(--mu)}
 .ev-px{font-size:13.5px;line-height:1.45;color:#3A3A3C;margin:8px 0 0}
@@ -2624,7 +2625,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.4';
+var APP_V = 'v53.4.5';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -13933,8 +13934,9 @@ A.descTog=function(el){ var k=el.dataset.k, on=!descCfg()[k]; descGuardar(k,on);
 A.descProbar=function(){ prepararAudio(); var c=descCfg(); if(!c.son) return toast('Tienes el aviso quitado: actívalo para probarlo','err');
   var t=0; if(c.cta){ [0,1,2].forEach(function(k){ setTimeout(function(){ pitido(660,90,0.45); },150+k*1000); }); t=3150; }
   setTimeout(function(){ avisar(); },t||150); toast('¿Lo oyes? Si no, sube el volumen del móvil','ok'); };
-/* v52.11 · sus competiciones en Hoy: la próxima con su cuenta atrás (y, si es otra, la principal) y, después, «¿Cómo te fue?»
-   v53.4.4: la cuenta atrás con otro estilo (tarjeta negra, los días en grande y, si tiene bloques que la preparan, «Semana 6 de 11 de tu preparación») */
+/* v52.11 · sus competiciones en Hoy: la próxima con su cuenta atrás y, después, «¿Cómo te fue?»
+   v53.4.4: la cuenta atrás con otro estilo (negra, los días en grande); v53.4.5: en Hoy, en una línea; al tocar una, la cuenta atrás grande
+   con «Semana 6 de 11 de tu preparación» (evDiasGrande, evPrepHtml) */
 function evSemTxt(n){ var s=Math.floor(n/7), d=n%7; return s+' '+(s===1?'semana':'semanas')+(d?' y '+d+' '+(d===1?'día':'días'):''); }
 function evDiasGrande(e,hoy,cl){ var n=diff(hoy,e.fecha);
   if(n<=0) return '<div class="ev-cdd hoy'+(cl||'')+'"><b>¡Hoy!</b> <span>Es el día</span></div>';
@@ -13950,11 +13952,11 @@ function eventoHoyCard(){
   var pend=E.filter(function(e){ return e.fecha<hoy&&e.fecha>=sumar(hoy,-14)&&!e.resultado; }).pop();      // desde el día siguiente (ese día se puede contar desde la lista)
   if(pend) h+='<div class="card ev-hoy ev-pend"><span class="ev-ic pri">'+ic('trofeo')+'</span><div class="ev-tx"><b>¿Cómo te fue en '+esc(pend.nombre)+'?</b><small>Cuéntaselo a tu coach: tu marca o cómo te sentiste.</small></div><button class="btn sm" data-a="evClRes" data-id="'+esc(pend.id)+'">Contarlo</button></div>';
   var P=E.filter(function(e){ return e.fecha>=hoy; }); if(!P.length) return h;
-  var sig=P[0], pri=P.filter(function(e){ return e.prioridad==='principal'; })[0];
-  return h+'<button class="card ev-hoy ev-cd" data-a="evClLista"><span class="ev-cdk">'+ic('trofeo')+(sig.prioridad==='principal'?'Tu objetivo principal':'Tu próxima competición · preparatoria')+'</span>'+
-    '<b class="ev-cdn">'+esc(sig.nombre)+'</b><small class="ev-cdf">'+esc([sig.modalidad,fLarga(sig.fecha),sig.lugar].filter(String).join(' · '))+'</small>'+
-    evDiasGrande(sig,hoy)+evPrepHtml(sig,hoy)+(sig.objetivo?'<small class="ev-cdo">Tu objetivo: '+esc(sig.objetivo)+'</small>':'')+
-    (pri&&pri!==sig?'<small class="ev-cdo2">Después, tu objetivo principal: <b>'+esc(pri.nombre)+'</b> · '+esc(faltanTxt(pri.fecha,hoy).toLowerCase())+'</small>':'')+'</button>';
+  var sig=P[0], n=diff(hoy,sig.fecha);
+  /* v53.4.5: en una línea, para no cargar su Hoy: qué es, su nombre, el día y los días que faltan; lo demás (su preparación, su objetivo, qué es), al tocarla */
+  return h+'<button class="card ev-hoy ev-cd" data-a="evClLista"><span class="ev-cdx"><span class="ev-cdk">'+ic('trofeo')+(sig.prioridad==='principal'?'Tu objetivo principal':'Tu próxima competición')+'</span>'+
+    '<b class="ev-cdn">'+esc(sig.nombre)+'</b><small class="ev-cdf">'+esc([fMedia(sig.fecha),sig.lugar].filter(String).join(' · '))+'</small></span>'+
+    (n>0?'<span class="ev-cdc"><b>'+n+'</b> <small>'+(n===1?'día':'días')+'</small></span>':'<span class="ev-cdc hoy"><b>¡Hoy!</b></span>')+'</button>';
 }
 /* otro día de su semana con competición: arriba, qué es y cuánto falta (o «¿Cómo te fue?» si ya pasó) */
 function eventoDiaCard(f){
