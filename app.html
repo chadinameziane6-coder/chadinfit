@@ -222,6 +222,7 @@ input.hora{text-align:center}
 .comida-ed textarea{margin-top:8px}
 /* modal, aviso, carga */
 #modal{position:fixed;inset:0;z-index:60;display:none}
+body.tm-on #modal{z-index:78}      /* v53.4.17: con el temporizador abierto (z-index 75), sus avisos van encima */
 #modal.open{display:block}
 #modal .mb{position:absolute;inset:0;background:rgba(20,20,20,.38)}
 #modal .mbox{position:absolute;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:#fff;border:1px solid var(--line);border-bottom:0;border-radius:20px 20px 0 0;padding:20px 18px calc(20px + env(safe-area-inset-bottom));max-height:90vh;overflow-y:auto;animation:sube .22s ease-out;box-shadow:0 -10px 40px rgba(20,20,20,.15)}
@@ -2680,7 +2681,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.16';
+var APP_V = 'v53.4.17';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -6295,11 +6296,11 @@ A.tmrIni=function(el){
   var i=+el.dataset.i, e=CL.dr.ej[i]; prepararAudio(); ocultarRest();
   TM={i:i,e:e,f:e.f,fases:fasesBloque(e),t0:Date.now(),pausaT:null,pausado:0,prep:10,fin:false,cnt:0,k:0,r:1,fase:'ej',restFin:0,bip:-1,fi:-1,seg:null,cap:false};
   if(e.f==='circuito') TM.prep=5;
-  var d=document.createElement('div'); d.id='tmr'; d.className='tmr'; document.body.appendChild(d);
+  var d=document.createElement('div'); d.id='tmr'; d.className='tmr'; document.body.appendChild(d); document.body.classList.add('tm-on');
   try{ if(navigator.wakeLock) navigator.wakeLock.request('screen').then(function(w){ if(TM) TM.wl=w; },function(){}); }catch(err){}
   pintarTm(); clearInterval(tmI); tmI=setInterval(tickTm,200);
 };
-function cerrarTm(){ clearInterval(tmI); tmI=null; try{ if(TM&&TM.wl) TM.wl.release(); }catch(e){} TM=null; var d=document.getElementById('tmr'); if(d) d.remove(); }
+function cerrarTm(){ clearInterval(tmI); tmI=null; try{ if(TM&&TM.wl) TM.wl.release(); }catch(e){} TM=null; var d=document.getElementById('tmr'); if(d) d.remove(); document.body.classList.remove('tm-on'); }
 function pintarTm(){
   var d=document.getElementById('tmr'); if(!d||!TM) return;
   var e=TM.e, f=TM.f, acc='';
@@ -6367,7 +6368,13 @@ A.tmrAcc=function(){
 };
 A.tmrPausa=function(){ if(!TM) return; if(TM.pausaT){ TM.pausado+=Date.now()-TM.pausaT; TM.pausaT=null; } else TM.pausaT=Date.now(); var b=document.getElementById('tm-pausa'); if(b) b.textContent=TM.pausaT?'Seguir':'Pausa'; };
 A.tmrTerminar=function(){ if(!TM) return; var x=tmEl()-TM.prep, F=TM.fases, hechas=0, acu=0; F.forEach(function(p){ acu+=p.dur; if(acu<=x&&p.k!=='descanso') hechas++; }); TM.hechasTiempo=hechas; TM.fin=true; pintarTm(); var r=document.getElementById('tmres-rondas'); if(r){ var porR=TM.f==='hiit'?Math.max(1,TM.e.ej.length):1; r.value=String(Math.floor(hechas/porR)); } };
-A.tmrSalir=function(){ if(!TM) return; if(!TM.pausaT) A.tmrPausa(); confirmar('¿Salir del temporizador? Podrás apuntar el resultado a mano.','Salir',function(){ cerrarTm(); },'Seguir'); };
+/* v53.4.17 (NUEVAS MEJORAS, punto 10): la ✕ sí sale. Antes la pregunta se abría detrás del temporizador (no se veía) y solo se quedaba en pausa.
+   Ahora sale encima, con el tiempo en pausa: «Salir» lo cierra y «Seguir con el …» vuelve a ponerlo en marcha si iba corriendo */
+A.tmrSalir=function(){ if(!TM) return; var corria=!TM.pausaT, f=FMT[TM.f]||FMT.circuito; if(corria) A.tmrPausa(); TM.sigue=corria;
+  pendiente=function(){ cerrarTm(); };
+  modal('<h2>¿Salir del '+esc(f[0])+'?</h2><p class="muted">El tiempo está en pausa. Si sales, el resultado lo apuntas tú en el bloque'+(TM.cnt&&(TM.f==='amrap'||TM.f==='ladder')?' (llevas '+TM.cnt+(TM.f==='amrap'?(TM.cnt===1?' ronda':' rondas'):(TM.cnt===1?' escalón':' escalones'))+')':'')+'.</p>'+
+    '<button class="btn" data-a="confOk">Salir</button><button class="btn sec mt" data-a="tmrSeguir">Seguir con el '+esc(f[0])+'</button>'); };
+A.tmrSeguir=function(){ cerrarModal(); if(TM&&TM.sigue&&TM.pausaT) A.tmrPausa(); if(TM) TM.sigue=false; };
 A.tmrCerrar=function(){ cerrarTm(); };
 A.tmrGuardar=function(){
   if(!TM) return; var e=TM.e, r={};
