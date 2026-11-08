@@ -2502,6 +2502,7 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .cc-ok{position:absolute;top:11px;right:11px;width:23px;height:23px;border-radius:50%;background:#2FAE7A;color:#fff;display:flex;align-items:center;justify-content:center}.cc-ok .ic{width:13px;height:13px;margin:0}
 .cc .cc-fav{position:static;display:inline-flex;vertical-align:-2px;margin-right:3px;background:none;padding:0;width:auto;height:auto;color:#E5484D}.cc .cc-fav .ic{width:12px;height:12px;margin:0}
 .cc-tag{position:absolute;top:11px;left:11px;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 7px;font:700 10px Plus Jakarta Sans,sans-serif;color:#3A3A3C}
+.fin-1{display:flex;align-items:center;gap:12px;width:100%;text-align:left;margin:4px 0 14px;padding:14px 16px;border:0;border-radius:18px;background:#111;color:#fff;font:inherit;cursor:pointer}.fin-1 .ic{flex:none;width:22px;height:22px;margin:0}.fin-1 span{flex:1;display:flex;flex-direction:column}.fin-1 b{font-size:16px}.fin-1 small{color:rgba(255,255,255,.72);font-size:12.5px;margin-top:2px}      /* v53.4.28: sube tu primer entreno */
 .ej-bus-w{position:relative;margin:4px 0 8px}.ej-bus{width:100%}.ej-bus-l{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:320px;overflow:auto;padding:4px}.ej-bus-l button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;font:inherit;color:inherit;border-radius:8px;cursor:pointer}.ej-bus-l button:hover,.ej-bus-l button:focus{background:var(--card2)}.ej-bus-l p{margin:8px 12px}      /* v53.4.27 */
 .cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
 .cc-x{border-style:dashed;border-color:#D8D8DD;background:#FAFAFB;align-items:center;justify-content:center;text-align:center;min-height:142px}.cc-x b{min-height:0;text-align:center;margin:2px}.cc-x small{text-align:center}
@@ -2714,7 +2715,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.27';
+var APP_V = 'v53.4.28';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5314,7 +5315,7 @@ function vHoy(){
     var rh=d.rutinas.filter(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,hoy,d.rutinas); });
     h+='<div class="card hl"><div class="card-t">Hoy toca</div>';
     var Mh=hecho.length?calcMarcas(d.series):null;
-    hecho.forEach(function(s){ h+='<div class="hoy-ok"><div class="ho-h">'+ic('okc')+'<span>Hecho hoy</span><button class="btn sm sec" data-a="compartirSes" data-id="'+esc(s.id)+'">'+ic('compartir')+'Compartir</button></div>'+sesFila(s,d,Mh,false,false,{hoy:1})+(s.rutina_id&&d.rutinas.some(function(r){ return r.id===s.rutina_id; })?'<button class="link ho-rep" data-a="empezar" data-id="'+esc(s.rutina_id)+'">'+ic('reinicio')+'Repetir esta rutina</button>':'')+'</div>'; });      // v44: una sola tarjeta
+    hecho.forEach(function(s){ h+='<div class="hoy-ok"><div class="ho-h">'+ic('okc')+'<span>Hecho hoy</span><button class="btn sm '+(esPrimeraSes(s)?'':'sec')+'" data-a="compartirSes" data-id="'+esc(s.id)+'">'+ic('compartir')+(esPrimeraSes(s)?'Sube tu primer entreno':'Compartir')+'</button></div>'+sesFila(s,d,Mh,false,false,{hoy:1})+(s.rutina_id&&d.rutinas.some(function(r){ return r.id===s.rutina_id; })?'<button class="link ho-rep" data-a="empezar" data-id="'+esc(s.rutina_id)+'">'+ic('reinicio')+'Repetir esta rutina</button>':'')+'</div>'; });      // v44: una sola tarjeta
     if(!d.rutinas.length) h+='<h2>Muy pronto</h2><p class="muted">Tu coach todavía no te ha asignado rutinas.</p>';
     else if(!rh.length) h+='<div class="rp-desc"><b>Descanso</b><span>'+esc(fLarga(hoy))+'</span></div><p class="muted">Hoy toca recuperar: camina, estira, hidrátate y cuida la alimentación.</p>';
     var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); };
@@ -6546,7 +6547,7 @@ function terminadoOk(dr,r,prs,tarde,datos){
   return cargando(datos&&!datos.bloqueo?Promise.resolve(datos):api('apiClienta',BOOT.token)).then(function(d){ CL.d=d; colaLocal(d); snapGuardar(SNAP.k(),JSON.stringify(d)); },function(){}).then(function(){
     if(tarde){ CL.keep=true; pintarCl(); toast(ed?'Cambios del entreno enviados':'Tu entreno se ha enviado','ok'); return; }
     if(ed){ cerrarModal(); CL.tab='progreso'; pintarCl(); toast('Entreno actualizado','ok'); return; }
-    var U={r:r,prs:prs||[],rutina:dr.rutina||'',fecha:dr.fecha||hoyStr(),ej:r.ej||[]}; logrosInit(); logrosTrasEntreno(U);      // v47: sus logros nuevos, en la pantalla de «¡Enhorabuena!»
+    var U={r:r,prs:prs||[],rutina:dr.rutina||'',fecha:dr.fecha||hoyStr(),ej:r.ej||[],primero:((CL.d&&CL.d.sesiones)||[]).length===1}; logrosInit(); logrosTrasEntreno(U);      // v53.4.28: su primer entreno → «Sube tu primer entreno»      // v47: sus logros nuevos, en la pantalla de «¡Enhorabuena!»
     CL.tab='hoy'; pintarCl(); CL.finSlide=0; abrirFin(U);
   });
 }
@@ -13920,14 +13921,15 @@ function finHtml(U){
   CL.ultEntreno=U; CL.finModo=CL.finModo||'negro'; CL.finSlide=0; CL.finCv={};
   var r=U.r||{}, C=compVol(r.vol), R=recsPorEj(U.prs), tr=CL.finModo==='trans', foto=tr&&!!CL.finFoto;
   return '<div class="celebra fin31"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button>'+
-    '<div class="big-ok">'+ic('trofeo')+'</div><h2>¡Enhorabuena, has completado tu entrenamiento!</h2>'+
+    '<div class="big-ok">'+ic('trofeo')+'</div><h2>'+(U.primero?'¡Tu primer entreno en MOOD ON!':'¡Enhorabuena, has completado tu entrenamiento!')+'</h2>'+
+    (U.primero?'<button class="fin-1" data-a="finIrSh">'+ic('compartir')+'<span><b>Sube tu primer entreno</b><small>A tus historias de Instagram, con fondo negro o con tu foto debajo</small></span>'+ic('flecha')+'</button>':'')+      // v53.4.28
     '<div class="res3">'+cajasDe(U,true).map(function(c){ return '<div><b>'+esc(c[0])+'</b><span>'+esc(c[1])+'</span></div>'; }).join('')+'</div>'+
     (r.runKm&&(r.efectivas||r.vol)?'<p class="muted sm">+ '+fN(r.runKm,2)+' km de carrera'+(r.runRit?' a '+runRitT(r.runRit):'')+'</p>':'')+
     (r.cardio?'<p class="muted sm">+ '+fN(r.cardio)+' min de cardio</p>':'')+
     (C?'<div class="cmp-vol">'+linSvg(C.img,'cmp-img',1.1)+'<span><b>'+esc(C.txt)+'</b><small>'+fN(r.vol,0)+' kg entre todas tus series</small></span></div>':'')+
     (R.length?'<div class="fin-recs"><div class="fin-rt">'+ic('trofeo')+(R.length===1?'¡1 récord hoy!':'¡'+R.length+' récords hoy!')+'</div>'+R.slice(0,4).map(function(b){ return '<div class="fin-r"><b>'+esc(b.e)+'</b><span>'+(b.p?fN(b.p)+' kg × ':'')+rU(fN(b.r,0),uNom(b.e))+'</span></div>'; }).join('')+(R.length>4?'<small class="muted">y '+(R.length-4)+' más</small>':'')+'</div>':'')+logrosFinHtml(U)+
     '<button class="link fin-ver" data-a="finVerTodo">Ver tu entreno completo en Progreso'+ic('flecha')+'</button>'+
-    '<div class="fin-sh"><div class="fin-sh-t"><b>Compártelo</b><div class="seg2" id="fin-modo"><button data-a="finModo" data-v="negro"'+(tr?'':' class="on"')+'>Fondo negro</button><button data-a="finModo" data-v="trans"'+(tr?' class="on"':'')+'>Con tu foto</button></div></div>'+
+    '<div class="fin-sh" id="fin-sh"><div class="fin-sh-t"><b>'+(U.primero?'Sube tu primer entreno':'Compártelo')+'</b><div class="seg2" id="fin-modo"><button data-a="finModo" data-v="negro"'+(tr?'':' class="on"')+'>Fondo negro</button><button data-a="finModo" data-v="trans"'+(tr?' class="on"':'')+'>Con tu foto</button></div></div>'+
       '<div class="car'+(tr&&!foto?' trans':'')+'" id="fin-car">'+['vol','res'].map(function(t,i){ return '<div class="car-s" data-i="'+i+'"><div class="car-ph">'+ic('reloj')+'Preparando…</div></div>'; }).join('')+'</div>'+
       '<div class="car-dots" id="fin-dots"><i class="on"></i><i></i></div>'+
       '<p class="muted sm fin-tip" id="fin-tip">'+finTip()+'</p>'+
@@ -13947,6 +13949,7 @@ function finTip(){
     :'Hazte una foto (en el gimnasio, un selfie…) y te ponemos el entreno encima. O «Copiar sin fondo» y pégalo encima de tu foto en Instagram.';
   return '<b class="fin-mot">'+esc(finMot())+'</b><span>'+esc(sub)+'</span>';
 }
+A.finIrSh=function(){ var e=document.getElementById('fin-sh'); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); };
 function abrirFin(U){
   if(U!==CL.ultEntreno){ CL.finFoto=null; CL.finMotI=null; }               // v33: otro entreno, otra foto (v35: y otra frase)
   modal(finHtml(U)); var bx=document.querySelector('#modal .mbox'); if(bx) bx.classList.add('mfull');
@@ -13991,7 +13994,8 @@ CH.finFoto=function(t){
 A.finModo=function(el){ if(CL.finModo===el.dataset.v) return; CL.finModo=el.dataset.v; if(CL.ultEntreno) abrirFin(CL.ultEntreno); };
 A.finVerTodo=function(){ cerrarModal(); CL.tab='progreso'; pintarCl(); setTimeout(function(){ var h=document.getElementById('hist'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); },120); };
 A.finVolver=function(){ if(CL.ultEntreno) abrirFin(CL.ultEntreno); else cerrarModal(); };
-A.compartirSes=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return; CL.finSlide=0; abrirFin(ultDeSesion(s)); };
+function esPrimeraSes(s){ return !!s&&(CL.d.sesiones||[]).every(function(x){ return x.id===s.id||String(x.fecha)>String(s.fecha); }); }
+A.compartirSes=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return; CL.finSlide=0; var U=ultDeSesion(s); U.primero=esPrimeraSes(s); abrirFin(U); };
 /* ---- dibujar las tarjetas ---- */
 var FCV=' Plus Jakarta Sans, -apple-system, Helvetica, Arial, sans-serif';
 function fuentesListas(){ try{ return document.fonts&&document.fonts.ready?Promise.race([document.fonts.ready,new Promise(function(r){ setTimeout(r,1500); })]):Promise.resolve(); }catch(e){ return Promise.resolve(); } }
@@ -14002,7 +14006,7 @@ function fondoCard(x,W,H,modo){
 }
 function sombraCard(x,modo){ if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.5)'; x.shadowBlur=22; x.shadowOffsetY=3; } else { x.shadowColor='transparent'; x.shadowBlur=0; x.shadowOffsetY=0; } }
 function rrect(x,X,Y,w,h,r){ x.beginPath(); if(x.roundRect) x.roundRect(X,Y,w,h,r); else { x.moveTo(X+r,Y); x.arcTo(X+w,Y,X+w,Y+h,r); x.arcTo(X+w,Y+h,X,Y+h,r); x.arcTo(X,Y+h,X,Y,r); x.arcTo(X,Y,X+w,Y,r); x.closePath(); } }
-function cabCard(U){ return (fCorta(U.fecha||hoyStr())+(U.rutina?' · '+U.rutina:'')).toUpperCase(); }
+function cabCard(U){ return U.primero?'MI PRIMER ENTRENO · '+fCorta(U.fecha||hoyStr()).toUpperCase():(fCorta(U.fecha||hoyStr())+(U.rutina?' · '+U.rutina:'')).toUpperCase(); }      // v53.4.28
 function recortar(x,t,maxW){ if(x.measureText(t).width<=maxW) return t; while(t.length>3&&x.measureText(t+'…').width>maxW) t=t.slice(0,-1); return t+'…'; }
 function cajasCard(x,W,y,cajas,modo){
   var bw=Math.min(435,(W-180-30*(cajas.length-1))/cajas.length), x0=(W-cajas.length*bw-30*(cajas.length-1))/2;      // v53.4.19: una o dos casillas, centradas y del mismo ancho
@@ -14084,7 +14088,7 @@ function tarjetaEntreno(tipo,modo){
     fondoCard(x,W,H,modo); sombraCard(x,modo);
     if(tipo==='res'){
       var L=U.ej||[], R=recsPorEj(U.prs), recs={}, nr=R.length; R.forEach(function(b){ recs[clave(b.e)]=1; });
-      x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(fLarga(U.fecha||hoyStr()).toUpperCase(),W/2,176);
+      x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(U.primero?'MI PRIMER ENTRENO':fLarga(U.fecha||hoyStr()).toUpperCase(),W/2,176);      // v53.4.28
       x.fillStyle='#FFFFFF'; var tt=U.rutina||'Mi entreno', px=textoAjustado(x,tt,W-180,92,'800'); x.font='800 '+px+'px'+FCV; x.fillText(tt,W/2,286);
       var fz=r.efectivas||r.vol, T=[[(r.min||0)+' min','Duración',I[2]]];      // v53.4.19: el volumen y los récords, solo si hoy hubo fuerza
       if(r.vol) T.push([fN(r.vol,0)+' kg','Volumen',I[3]]); if(fz||nr) T.push([nr?String(nr):'–',nr===1?'Récord':'Récords',I[1]]);
@@ -15720,17 +15724,14 @@ function tarjetaPasos(o,modo){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), ok=o.n>=o.obj;
     fondoCard(x,W,H,modo); sombraCard(x,modo); x.textAlign='center';
     x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(fLarga(o.f).toUpperCase(),W/2,176);
-    if(icp) x.drawImage(icp,W/2-55,250,110,110);
-    x.fillStyle='#FFFFFF'; var px=textoAjustado(x,fP(o.n),W-160,250,'800'); x.font='800 '+px+'px'+FCV; x.fillText(fP(o.n),W/2,620);
-    x.fillStyle='rgba(255,255,255,.72)'; x.font='500 52px'+FCV; x.fillText('pasos hoy',W/2,705);
-    var L=o.L||[], max=Math.max(o.obj*1.15,Math.max.apply(null,L.map(function(z){ return z.p; })))||1, bw=74, gap=46, x0=(W-(7*bw+6*gap))/2, base=1040, hM=250;
-    L.forEach(function(z,i){ var h=z.hay?Math.max(18,Math.round(z.p/max*hM)):12, X=x0+i*(bw+gap);
-      x.fillStyle=z.ok?'#FFFFFF':z.hay?'rgba(255,255,255,.34)':'rgba(255,255,255,.14)'; rrect(x,X,base-h,bw,h,Math.min(18,h/2)); x.fill();
-      x.fillStyle=z.f===o.f?'#FFFFFF':'rgba(255,255,255,.55)'; x.font=(z.f===o.f?'800 ':'600 ')+'34px'+FCV; x.fillText(DL[diaSem(z.f)],X+bw/2,base+56); });
+    /* v53.4.28: sin la gráfica de la semana (lo pidió Javier): sus pasos, el objetivo y la frase, más centrados */
+    if(icp) x.drawImage(icp,W/2-55,330,110,110);
+    x.fillStyle='#FFFFFF'; var px=textoAjustado(x,fP(o.n),W-160,250,'800'); x.font='800 '+px+'px'+FCV; x.fillText(fP(o.n),W/2,700);
+    x.fillStyle='rgba(255,255,255,.72)'; x.font='500 52px'+FCV; x.fillText('pasos hoy',W/2,785);
     var pill=ok?'Objetivo de '+fP(o.obj)+' cumplido · '+o.ok+' de 7 días':'Objetivo '+fP(o.obj)+' · faltan '+fP(o.obj-o.n);
-    x.font='700 38px'+FCV; var pw=x.measureText(pill).width+110; x.fillStyle='#FFFFFF'; rrect(x,(W-pw)/2,1150,pw,88,44); x.fill();
-    x.fillStyle='#111111'; x.fillText(pill,W/2,1207);
-    var yF=fraseCard(x,W,1310,o.fr,46);
+    x.font='700 38px'+FCV; var pw=x.measureText(pill).width+110; x.fillStyle='#FFFFFF'; rrect(x,(W-pw)/2,880,pw,88,44); x.fill();
+    x.fillStyle='#111111'; x.fillText(pill,W/2,937);
+    var yF=fraseCard(x,W,1070,o.fr,46);
     logoCard(x,W,Math.min(H-420,yF+62));      // v49: el logo, más arriba (justo debajo de la frase, sin pisarla)
     return cv;
   });
