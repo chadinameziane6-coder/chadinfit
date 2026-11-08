@@ -2502,6 +2502,7 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .cc-ok{position:absolute;top:11px;right:11px;width:23px;height:23px;border-radius:50%;background:#2FAE7A;color:#fff;display:flex;align-items:center;justify-content:center}.cc-ok .ic{width:13px;height:13px;margin:0}
 .cc .cc-fav{position:static;display:inline-flex;vertical-align:-2px;margin-right:3px;background:none;padding:0;width:auto;height:auto;color:#E5484D}.cc .cc-fav .ic{width:12px;height:12px;margin:0}
 .cc-tag{position:absolute;top:11px;left:11px;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 7px;font:700 10px Plus Jakarta Sans,sans-serif;color:#3A3A3C}
+.cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
 .cc-x{border-style:dashed;border-color:#D8D8DD;background:#FAFAFB;align-items:center;justify-content:center;text-align:center;min-height:142px}.cc-x b{min-height:0;text-align:center;margin:2px}.cc-x small{text-align:center}
 .cc-ic{width:36px;height:36px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:6px}.cc-ic .ic{width:17px;height:17px;margin:0}
 .cb-su{display:flex;align-items:center;gap:10px;width:calc(100% - 14px);margin-top:8px;padding:10px 12px;border-radius:14px;background:#F4F4F6;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer}.cb.com .cb-su{background:#fff}
@@ -2712,7 +2713,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.25';
+var APP_V = 'v53.4.26';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7225,8 +7226,9 @@ var bancoBg=false;
 function libSugCm(p,mi){
   if(!CL.bancoM){ if(!bancoBg){ bancoBg=true; cargarBancoCl().then(function(){ if(CL.tab==='dieta'){ CL.keep=true; pintarCl(); } },function(){}); } return []; }
   var c=p.comidas[mi], cat=catCm(c), M=miaCl(), mios=(M.add[p.id+'|'+mi]||[]).map(function(x){ return x.lib; });
-  var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&adaptarRecCl(r); }); if(!L.length) return [];
-  var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,6);      // cambian cada día
+  var oc=prefCl().oc||{};      // v53.4.26: las que ha quitado de sus sugerencias
+  var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&!oc[r.id]&&adaptarRecCl(r); }); if(!L.length) return [];
+  var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,3);      // cambian cada día (v53.4.26: 3, no 6; el resto, en «Más de la biblioteca»)
 }
 function cbHtml(p,mi){
   var c=p.comidas[mi], x=comidoDe(p,mi), S=sueltosDe(p,mi), lib=libreCl(), vm=verMac(), ob=vm?objCmAuto(p,mi):null, algo=!!x||S.length>0, t=algo?cmT(p,mi):'', mc=algo&&vm?cmComido(p,mi):null, cn=String(c.nombre).toLowerCase(), ops=opsHoja(c);
@@ -7236,7 +7238,8 @@ function cbHtml(p,mi){
     (algo?'<button class="mh-ck'+(t?' on':'')+'" data-a="mnComido" data-m="'+mi+'" aria-pressed="'+!!t+'" aria-label="'+(t?'Ya no lo he comido: ':'Lo he comido: ')+esc(cn)+'">'+ic('ok')+'</button>':'')+'</div>';
   var sug=lib?libSugCm(p,mi):[];
   h+='<div class="car" id="car-'+mi+'">'+ops.map(function(y){ return ccHtml(p,mi,y.o,y.i,x,t,ob); }).join('')+
-    sug.map(function(r){ return '<button class="cc cc-lib" data-a="plLib" data-m="'+mi+'" data-r="'+esc(r.id)+'">'+platoImg(r.img,'cc-im')+'<span class="cc-tag">Biblioteca</span><b>'+esc((adaptarRecCl(r)||{}).n||r.n)+'</b><small>'+(ob?'≈ '+kTxt(ob[0])+' kcal':esc(r.min)+' min')+'</small></button>'; }).join('');
+    sug.map(function(r){ var nm=(adaptarRecCl(r)||{}).n||r.n; return '<span class="cc-w"><button class="cc cc-lib" data-a="plLib" data-m="'+mi+'" data-r="'+esc(r.id)+'">'+platoImg(r.img,'cc-im')+'<span class="cc-tag">Sugerencia</span><b>'+esc(nm)+'</b><small>'+(ob?'≈ '+kTxt(ob[0])+' kcal':esc(r.min)+' min')+'</small></button>'+
+      '<button class="cc-q" data-a="libOcultar" data-r="'+esc(r.id)+'" aria-label="Quitar «'+esc(nm)+'» de tus sugerencias">'+ic('x')+'</button></span>'; }).join('');
   h+='</div>';
   if(!ops.length&&!sug.length) h+='<p class="muted sm cb-vac">'+(lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
   if(S.length) h+='<button class="cb-su" data-a="mnSu" data-m="'+mi+'">'+ic('lista')+'<span><b>'+esc(S.map(function(z){ var zc=sueltoCk(z), cc=cocInfo(zc); return z.n+' '+gTxt(cc?gVista(zc,z.q,ckAl(z.a)||cc.s):z.q); }).join(' · '))+'</b><small>'+(vm?kTxt(sumMac(S.map(macS))[0])+' kcal · ':'')+S.length+(S.length>1?' alimentos sueltos':' alimento suelto')+'</small></span>'+ic('flecha')+'</button>';
@@ -7271,6 +7274,8 @@ A.plAbrir=function(el){
   if(!(x&&x.o===o.id)) plAjustar(p,true);      // las que cuadran ella: sus gramos ya ajustados a su objetivo de esa comida (solo para hoy)
   plAbrirCon(PL);
 };
+/* v53.4.26: las sugerencias de la biblioteca (no las ha elegido ella) se quitan con su ✕ y ya no le salen en esa comida ni en las demás */
+A.libOcultar=function(el){ var id=el.dataset.r, pf=prefCl(); pf.oc=pf.oc||{}; pf.oc[id]=1; guardarPref(); CL.keep=true; pintarCl(); toast('Quitada de tus sugerencias. Si la quieres, la tienes en «Más de la biblioteca»'); };
 A.plLib=function(el){ conBanco(function(){
   var p=planSelCl(); if(!p) return; var mi=+el.dataset.m, r=libTodas().filter(function(x){ return x.id===el.dataset.r; })[0]; if(!r) return;
   var x=adaptarRecCl(r); if(!x) return toast('Hay algo en esta receta que no puedes comer');
