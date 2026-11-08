@@ -2502,6 +2502,7 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .cc-ok{position:absolute;top:11px;right:11px;width:23px;height:23px;border-radius:50%;background:#2FAE7A;color:#fff;display:flex;align-items:center;justify-content:center}.cc-ok .ic{width:13px;height:13px;margin:0}
 .cc .cc-fav{position:static;display:inline-flex;vertical-align:-2px;margin-right:3px;background:none;padding:0;width:auto;height:auto;color:#E5484D}.cc .cc-fav .ic{width:12px;height:12px;margin:0}
 .cc-tag{position:absolute;top:11px;left:11px;background:rgba(255,255,255,.94);border-radius:8px;padding:2px 7px;font:700 10px Plus Jakarta Sans,sans-serif;color:#3A3A3C}
+.ej-bus-w{position:relative;margin:4px 0 8px}.ej-bus{width:100%}.ej-bus-l{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:320px;overflow:auto;padding:4px}.ej-bus-l button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;font:inherit;color:inherit;border-radius:8px;cursor:pointer}.ej-bus-l button:hover,.ej-bus-l button:focus{background:var(--card2)}.ej-bus-l p{margin:8px 12px}      /* v53.4.27 */
 .cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
 .cc-x{border-style:dashed;border-color:#D8D8DD;background:#FAFAFB;align-items:center;justify-content:center;text-align:center;min-height:142px}.cc-x b{min-height:0;text-align:center;margin:2px}.cc-x small{text-align:center}
 .cc-ic{width:36px;height:36px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:6px}.cc-ic .ic{width:17px;height:17px;margin:0}
@@ -2713,7 +2714,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.26';
+var APP_V = 'v53.4.27';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -3081,6 +3082,10 @@ function pesoCard(med,boton,reg){
 
 CH.f1rm=function(t){ CO.f1rm=t.value; pintarClienta(false); };
 CH.ejSel=function(t){ var st=BOOT.mode==='clienta'?CL:CO; st[t.dataset.sk||'ej']=t.value; if(BOOT.mode==='clienta'){ CL.keep=true; pintarCl(); } else pintarClienta(false); };
+/* v53.4.27 · «Progresión por ejercicio»: escribiendo, debajo salen los que coinciden (de los del desplegable); al tocar uno se ve el suyo */
+A.ejBusSel=function(el){ var st=BOOT.mode==='clienta'?CL:CO; st[el.dataset.sk||'ej']=el.dataset.v; if(BOOT.mode==='clienta'){ CL.keep=true; pintarCl(); } else pintarClienta(false); };
+document.addEventListener('keydown',function(ev){ var t=ev.target; if(ev.key==='Enter'&&t&&t.classList&&t.classList.contains('ej-bus')){ ev.preventDefault(); var b=t.parentNode.querySelector('.ej-bus-l button'); if(b) b.click(); } else if(ev.key==='Escape'&&t&&t.classList&&t.classList.contains('ej-bus')){ var x=t.parentNode.querySelector('.ej-bus-l'); if(x) x.hidden=true; } });
+document.addEventListener('focusout',function(ev){ var t=ev.target; if(t&&t.classList&&t.classList.contains('ej-bus')) setTimeout(function(){ var x=t.parentNode&&t.parentNode.querySelector('.ej-bus-l'); if(x&&!x.contains(document.activeElement)) x.hidden=true; },250); });
 
 /* ---------------- récords y mejoras ---------------- */
 function calcMarcas(series){
@@ -3193,6 +3198,7 @@ function ejercicioCard(series,st,coach,go){
   var h='<div class="card"><div class="card-t">'+esc((go&&go.tit)||'Progresión por ejercicio')+'</div>';
   if(!lista.length) return h+'<p class="muted">Cuando haya entrenos registrados verás aquí la evolución de cada '+(TI&&TI[0]!=='fuerza'?'bloque y de cada máquina':'ejercicio')+'.</p></div>';
   if(!st[SK]||!porEj[st[SK]]) st[SK]=clave(lista[0].n);
+  if(lista.length>4) h+='<div class="ej-bus-w"><input class="ej-bus" type="search" data-v29="ejBus" data-sk="'+SK+'" placeholder="Buscar ejercicio…" autocomplete="off" enterkeyhint="search" aria-label="Buscar ejercicio"><div class="ej-bus-l" hidden></div></div>';      // v53.4.27: además del desplegable, buscar escribiendo
   h+='<select data-c="ejSel" data-sk="'+SK+'">'+lista.map(function(x){ var k=clave(x.n); return '<option value="'+esc(k)+'"'+(k===st[SK]?' selected':'')+'>'+esc(x.n)+(TI&&TI.length===1?'':x.tipo==='cardio'?' · cardio':x.tipo==='bloque'?' · funcional':x.tipo==='run'?' · carrera':'')+'</option>'; }).join('')+'</select>';
   var E=porEj[st[SK]], ses={};
   E.filas.forEach(function(x){ (ses[x.sid]=ses[x.sid]||{f:x.f,sid:x.sid,rows:[]}).rows.push(x); });
@@ -10089,10 +10095,12 @@ var META_L={
   lat:{t:'Lado',o:[['bi','Bilateral'],['uni','Unilateral']]},
   fn:{t:'Función',o:[['principal','Principal (compuesto)'],['accesoria','Accesoria']]},
   reg:{t:'Qué apunta',o:[['kg','Kilos y repeticiones'],['corporal','Solo repeticiones (peso corporal)'],['lastre','Peso corporal + lastre opcional']]},
-  zona:{t:'Qué trabaja',o:[['cadera','Cadera'],['toracica','Columna torácica'],['lumbar','Zona lumbar y pelvis'],['hombro','Hombro'],['tobillo','Tobillo'],['isquios','Isquiosurales'],['aductores','Aductores'],['flexores','Flexores de cadera'],['gluteo','Glúteo y piriforme'],['cuello','Cuello'],['muneca','Muñeca']]}
+  zona:{t:'Qué trabaja',o:[['cadera','Cadera'],['toracica','Columna torácica'],['lumbar','Zona lumbar y pelvis'],['hombro','Hombro'],['tobillo','Tobillo'],['isquios','Isquiosurales'],['aductores','Aductores'],['flexores','Flexores de cadera'],['gluteo','Glúteo y piriforme'],['rodilla','Extensión de la rodilla'],['cuello','Cuello'],['muneca','Muñeca']]}
 };
 var META_CAMPO={eq:'equipo',pat:'patron',niv:'nivel',mod:'modalidad',fn:'funcion',zona:'zona',reg:'registro'};
-function metaTxt(k,v){ var o=(META_L[k].o.filter(function(x){ return x[0]===v; })[0]); return o?o[1]:''; }
+function metaTxt(k,v){ if(k==='zona'&&String(v||'').indexOf(',')>=0) return zonasDe(v).map(function(z){ return metaTxt('zona',z); }).filter(String).join(', '); var o=(META_L[k].o.filter(function(x){ return x[0]===v; })[0]); return o?o[1]:''; }
+/* v53.4.26: en movilidad, «qué trabaja» puede ser más de una zona ('cadera,rodilla') */
+function zonasDe(v){ return String(v||'').split(',').map(function(z){ return z.trim(); }).filter(String); }
 var RE_PRINCIPAL=/hip thrust(?! unilateral| a una)|sentadilla(?! sissy| con salto)|hack|prensa|p[eé]ndulo|peso muerto(?! a una)|press (de )?banca|press inclinado|press de pecho|press militar|press de hombro|dominada|jal[oó]n|remo(?! ergómetro| ergometro)|zancada|b[uú]lgara|step.?up|thruster|flexiones|puente de gl[uú]teo con barra/i;
 function inferirMeta(n,g){
   n=String(n||'').toLowerCase(); var o={};
@@ -10109,7 +10117,7 @@ function inferirMeta(n,g){
   o.fn=o.mod==='fuerza'&&RE_PRINCIPAL.test(n)?'principal':'accesoria';
   o.niv=/convencional|sumo con barra|frontal|n[oó]rdico|dominadas(?! asistid)|copenhague|sissy|rueda/.test(n)?'avanzado':(o.eq==='maquina'||o.eq==='polea'||o.eq==='banda'||o.eq==='mancuernas'||o.mod==='movilidad'||o.pat==='core')?'principiante':'intermedio';
   o.zona=o.mod!=='movilidad'?'':/tor[aá]cic|gato|camello|libro|open book|foam/.test(n)?'toracica':/lumbar|ni[nñ]o|cobra|p[eé]lvic|pelvis/.test(n)?'lumbar':/hombro|[aá]ngel|dislocaci|wall slide/.test(n)?'hombro':
-    /tobillo|rodilla a la pared/.test(n)?'tobillo':/isquio|femoral/.test(n)?'isquios':/aductor|rana|frog|rockback/.test(n)?'aductores':/psoas|flexores|couch|cu[aá]driceps/.test(n)?'flexores':/piriforme|paloma|figura 4|gl[uú]teo/.test(n)?'gluteo':/cuello|cervical/.test(n)?'cuello':/mu[nñ]eca/.test(n)?'muneca':'cadera';
+    /tobillo|rodilla a la pared/.test(n)?'tobillo':/extensi[oó]n de (la )?rodilla|rodilla/.test(n)?'rodilla':/isquio|femoral/.test(n)?'isquios':/aductor|rana|frog|rockback/.test(n)?'aductores':/psoas|flexores|couch|cu[aá]driceps/.test(n)?'flexores':/piriforme|paloma|figura 4|gl[uú]teo/.test(n)?'gluteo':/cuello|cervical/.test(n)?'cuello':/mu[nñ]eca/.test(n)?'muneca':'cadera';
   return o;
 }
 /* meta de un ejercicio del banco: lo guardado y, si falta, lo deducido */
@@ -10126,7 +10134,7 @@ function pasaFiltro(b,F){
   if(F.g&&gk(b)!==F.g&&(b.g2||[]).indexOf(F.g)<0) return false;      // v40: también por los grupos que trabaja
   if(F.vid==='si'&&!b.video||F.vid==='no'&&b.video) return false;      // v42: con o sin vídeo
   var m=metaEj(b);
-  for(var k in META_L){ if(F[k]&&m[k]!==F[k]) return false; }
+  for(var k in META_L){ if(F[k]&&(k==='zona'?zonasDe(m.zona).indexOf(F[k])<0:m[k]!==F[k])) return false; }
   if(F.q){ var q=clave(F.q); if(clave(b.nombre).indexOf(q)<0) return false; }
   return true;
 }
@@ -10180,7 +10188,7 @@ function pintarBanco(arriba){
     gs.filter(function(g){ return !f.g||g===f.g; }).forEach(function(g){
       var L=B.filter(function(b){ return gk(b)===g&&pasaFiltro(b,F2); }); if(!L.length) return; n+=L.length;
       if(g==='Movilidad'){   // movilidad: agrupada por lo que trabaja
-        h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+META_L.zona.o.map(function(z){ var Z=L.filter(function(b){ return metaEj(b).zona===z[0]; }); return Z.length?'<div class="bsub" data-z="'+z[0]+'"><h4>'+esc(z[1])+'</h4>'+Z.map(function(b){ return fila(b,g); }).join('')+'</div>':''; }).join('')+'</div>';
+        h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+META_L.zona.o.map(function(z){ var Z=L.filter(function(b){ return zonasDe(metaEj(b).zona).indexOf(z[0])>=0; }); return Z.length?'<div class="bsub" data-z="'+z[0]+'"><h4>'+esc(z[1])+'</h4>'+Z.map(function(b){ return fila(b,g); }).join('')+'</div>':''; }).join('')+'</div>';
       } else h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+L.map(function(b){ return fila(b,g); }).join('')+'</div>';
     });
     if(f.g&&f.g!=='_'){      // v40: con un grupo elegido, también los que lo trabajan como secundario
@@ -10201,6 +10209,7 @@ function filtrarBanco(){
 }
 A.filtroVid=function(el){ CO.bf.vid=el.dataset.v; pintarBanco(false); };
 A.filtroG=function(el){ CO.bf.g=el.dataset.g; if(CO.bf.g!=='Movilidad'&&CO.bf.mod!=='movilidad') CO.bf.zona=''; pintarBanco(false); };
+A.beZona=function(el){ var w=document.getElementById('be-zona'); if(!w) return; el.classList.toggle('on'); el.setAttribute('aria-pressed',el.classList.contains('on')); w.dataset.v=[].slice.call(w.querySelectorAll('button.on')).map(function(b){ return b.dataset.v; }).join(','); };
 A.nuevoEj=function(){ modalEjBanco({nombre:CO.bf&&CO.bf.q||''}); };
 A.editarEj=function(el){ var b=CO.banco.filter(function(x){ return x.id===el.dataset.id; })[0]; if(b) modalEjBanco(b); };
 A.editarEjBanco=function(el){ A.editarEj(el); };
@@ -10258,7 +10267,7 @@ function metaEdHtml(x){
   return '<details class="be-meta"'+(x.id?'':' open')+'><summary>'+ic('filtro')+'Datos para buscarlo <span class="muted sm">'+esc(metaLinea(x))+'</span></summary><div class="grid2">'+
     ['eq','pat','niv','mod','fn'].map(function(k){ return '<label class="f">'+META_L[k].t+'<select id="be-'+k+'">'+META_L[k].o.map(function(o){ return '<option value="'+o[0]+'"'+(m[k]===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'; }).join('')+
     '<label class="f">Qué apunta<select id="be-reg"><option value=""'+(!x.reg?' selected':'')+'>Según el material (ahora: '+esc((metaTxt('reg',apuntaDe(Object.assign({},x,{reg:''}),x.nombre))||'').toLowerCase())+')</option>'+META_L.reg.o.map(function(o){ return '<option value="'+o[0]+'"'+(x.reg===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'+      // v52.8
-    '<label class="f">Movilidad: qué trabaja<select id="be-zona"><option value="">No es de movilidad</option>'+META_L.zona.o.map(function(o){ return '<option value="'+o[0]+'"'+(m.zona===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label></div>'+
+    '</div><div class="lab">Movilidad: qué trabaja <span class="muted">(si es de movilidad; puedes marcar varias)</span></div><div class="tipos zona" id="be-zona" data-v="'+esc(zonasDe(m.mod==='movilidad'?m.zona:x.zona).join(','))+'">'+META_L.zona.o.map(function(o){ var on=zonasDe(m.mod==='movilidad'?m.zona:x.zona).indexOf(o[0])>=0; return '<button type="button" class="'+(on?'on':'')+'" data-a="beZona" data-v="'+o[0]+'" aria-pressed="'+on+'">'+o[1]+'</button>'; }).join('')+'</div>'+
     '<p class="muted sm">La función decide cómo se le sugiere progresar: en los <b>principales</b> (compuestos) se prioriza subir el peso; en los <b>accesorios</b>, primero llegar a 15 repeticiones con el mismo peso.</p></details>';
 }
 /* v38 · vídeos de YouTube para el banco: 3 propuestas por ejercicio sin vídeo; sin el servicio, buscar y pegar */
@@ -10303,7 +10312,7 @@ function trasBanco(){ if(CO.vista==='banco') pintarBanco(false); else if(CO.vist
 A.guardarEjBanco=function(){
   var GS=CO.ejEd.gs||{p:val('be-g'),s:[]};
   var e={id:CO.ejEd.id||'',nombre:val('be-n'),grupo:GS.p,g2:GS.s.slice(),video:val('be-v'),indicaciones:val('be-i'),mc:document.getElementById('be-mc').checked,ld:document.getElementById('be-ld').checked};
-  ['eq','pat','niv','mod','fn','zona','reg'].forEach(function(k){ var el=document.getElementById('be-'+k); if(el) e[META_CAMPO[k]]=el.value; });
+  ['eq','pat','niv','mod','fn','zona','reg'].forEach(function(k){ var el=document.getElementById('be-'+k); if(el) e[META_CAMPO[k]]=k==='zona'?(el.dataset.v||''):el.value; });
   if(!e.nombre) return toast('Ponle nombre al ejercicio');
   if(e.video&&!/^https:\/\//i.test(e.video)) return toast('El vídeo tiene que ser un enlace que empiece por https://');
   cargando(api('coachGuardarEjercicio',CO.pin,e)).then(function(r){
@@ -13420,6 +13429,13 @@ function pintarModelos(){
       '<p class="muted">'+(L.length?'Ninguna rutina con ese nombre o etiqueta.':'Tu banco de rutinas está vacío. Créalas en «Banco de rutinas» o, en cualquier rutina, «Guardar como modelo».')+'</p>')+'</div>'+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 }
+IN29.ejBus=function(t){
+  var sk=t.dataset.sk||'ej', box=t.parentNode.querySelector('.ej-bus-l'), sel=document.querySelector('select[data-c=ejSel][data-sk="'+sk+'"]'), W=clave(t.value).split(/\s+/).filter(String);
+  if(!box) return; if(!sel||!W.length){ box.hidden=true; box.innerHTML=''; return; }
+  var L=[].slice.call(sel.options).filter(function(o){ var n=clave(o.textContent); return W.every(function(w){ return n.indexOf(w)>=0; }); }).slice(0,8);
+  box.innerHTML=L.length?L.map(function(o){ return '<button type="button" data-a="ejBusSel" data-sk="'+esc(sk)+'" data-v="'+esc(o.value)+'">'+esc(o.textContent)+'</button>'; }).join(''):'<p class="muted sm">Ninguno con ese nombre</p>';
+  box.hidden=false;
+};
 IN29.mdQ=function(t){ CO.mdQ=t.value; clearTimeout(IN29.mq); IN29.mq=setTimeout(function(){ var v=t.value; pintarModelos(); var i=document.getElementById('md-q'); if(i){ i.focus(); i.setSelectionRange(v.length,v.length); } },200); };
 A.mdPoner=function(el){
   var m=(CO.modelos||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(!m) return;
