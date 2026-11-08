@@ -434,6 +434,17 @@ button.dd-sum{width:100%;background:none;border:0;padding:0;font:inherit;text-al
 .dd-g>.grp-ed{margin-bottom:0}
 .dd-g .ej-ed{margin-top:8px;background:#fff}
 .dd-vacio{padding:10px 2px}
+/* v53.4.16: «Ejercicio N · ¿Qué quieres programar?» */
+.ej-add{margin-top:14px;border:1.5px dashed #D2D2D8;border-radius:16px;padding:12px 12px 12px}
+.ej-add-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:0 2px 10px}.ej-add-h b{font-size:15px;font-weight:800}.ej-add-h span{color:var(--mu);font-size:13.5px}
+.ej-add-g{display:flex;flex-wrap:wrap;gap:8px}
+.ej-add-g button{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1.5px solid var(--line);border-radius:12px;padding:9px 12px;font:inherit;color:var(--tx);cursor:pointer;text-align:left;min-height:44px}
+.ej-add-g button:hover{border-color:#111}.ej-add-g button .ic{width:18px;height:18px;flex:none}.ej-add-g button b{font-size:14px;font-weight:700;line-height:1.2}
+.ej-add-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}.ej-add:not(.ej-add1) .ej-add-g button{flex-direction:column;justify-content:flex-start;gap:6px;padding:11px 4px 9px;min-height:64px;text-align:center}.ej-add:not(.ej-add1) .ej-add-g button b{font-size:13px}
+.ej-add1 .ej-add-g{grid-template-columns:repeat(auto-fill,minmax(110px,1fr))}
+.ej-add1 .ej-add-g button{flex-direction:column;align-items:flex-start;gap:8px;padding:12px;min-height:96px}.ej-add1 .ej-add-g button .ic{width:22px;height:22px}
+.ej-add1 .ej-add-g button b{display:block;font-size:14.5px}.ej-add1 .ej-add-g small{display:block;font-size:12.5px;line-height:1.35;color:var(--tx2);margin-top:3px}
+@media(max-width:699px){.ej-add:not(.ej-add1) .ej-add-g{gap:6px}.ej-add:not(.ej-add1) .ej-add-g button{gap:5px;padding:8px 2px;min-height:60px}.ej-add:not(.ej-add1) .ej-add-g button b{font-size:0}.ej-add:not(.ej-add1) .ej-add-g button b::after{content:attr(data-c);font-size:11.5px;font-weight:700}}
 .dd-sec{min-height:8px}
 .sec-h{display:flex;flex-direction:column;gap:2px;margin:16px 0 0;padding-top:12px;border-top:1px solid var(--line2)}
 .sec-h b{font:600 13px Plus Jakarta Sans,sans-serif;letter-spacing:.12em;text-transform:uppercase;color:var(--tx2)}
@@ -2669,7 +2680,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.15';
+var APP_V = 'v53.4.16';
 
 /* ---------------- utilidades ---------------- */
 function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];}); }
@@ -9270,7 +9281,7 @@ function rutinaEd(r,ri){
     i=fin+1;
   }
   var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<div class="sec-h mov"><b>'+ic('mov')+'Movilidad · calentamiento</b><span>'+cG('La clienta','El cliente')+' lo ve arriba, antes del entreno. No cuenta en series ni volumen.</span></div><div class="dd-sec mov" data-sec="mov">'+movH+'</div><div class="sec-h"><b>'+ic('pesa')+'Entrenamiento principal</b></div>':'')+
-    '<div class="dd-sec" data-sec="main">'+(mainH||'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>')+'</div></div>';
+    '<div class="dd-sec" data-sec="main">'+(mainH||(E.length?'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>':''))+'</div></div>';
   return '<div class="card" id="rut-'+ri+'"><div class="rut-top"><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="Nombre (p. ej. Glúteo y pierna A)"><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>'+
     (esDia&&r.dias.indexOf(dia)<0?'<div class="aviso-dia">Ya no está asignada al '+DLARGO[dia]+'. Guarda la rutina para aplicarlo.</div>':'')+
     '<div class="lab">Días que le toca</div><div class="dias-sel">'+DIAS.map(function(k){ return '<button class="'+(r.dias.indexOf(k)>=0?'on':'')+'" data-a="togDia" data-r="'+ri+'" data-d="'+k+'">'+DL[k]+'</button>'; }).join('')+'</div>'+
@@ -9278,11 +9289,18 @@ function rutinaEd(r,ri){
     '<label class="f">Vídeo de la sesión completa (opcional)<input data-r="'+ri+'" data-k="video" value="'+esc(r.video||'')+'" placeholder="Enlace de YouTube o Drive: '+cG('ella','él')+' lo sigue mientras entrena"></label>'+
     '<div class="muted sm mt6 rut-est" id="rf-'+ri+'">'+estadoRut(r)+'</div>'+(CO.rut.filter(function(x){ return x!==r&&rutFutura(x)===rutFutura(r); }).length?'<button class="link" data-a="fechasTodas" data-r="'+ri+'">Poner estas fechas a '+(rutFutura(r)?'las demás rutinas de la próxima programación':'sus demás rutinas actuales')+' y guardar</button>':'')+
     (esDia&&r.dias.length>1?'<div class="muted sm mt6">Se repite '+r.dias.map(function(d){ return 'el '+DLARGO[d]; }).join(', ').replace(/, ([^,]*)$/,' y $1')+': los cambios valen para todos esos días.</div>':'')+
-    '<div class="muted sm mt6">'+rutCuenta(E,nMov,tot)+(E.length>1?' · <span class="dd-tip">Arrastra <b>⠿</b> para cambiar el orden</span>':'')+'</div>'+
+    (E.length?'<div class="muted sm mt6">'+rutCuenta(E,nMov,tot)+(E.length>1?' · <span class="dd-tip">Arrastra <b>⠿</b> para cambiar el orden</span>':'')+'</div>':'')+
     lista+
-    '<div class="row mt"><button class="btn sec sm" data-a="pickBanco" data-r="'+ri+'">+ Desde el banco</button><button class="btn sec sm" data-a="addEj" data-r="'+ri+'">+ Ejercicio</button><button class="btn sec sm" data-a="addCardio" data-r="'+ri+'">+ Cardio</button><button class="btn sec sm" data-a="addRun" data-r="'+ri+'">+ Carrera</button><button class="btn sec sm" data-a="addBloque" data-r="'+ri+'">+ Bloque funcional</button></div>'+
+    ejAddHtml(ri,E,G)+
     '<div class="rut-acc"><button class="btn sm" data-a="guardarRut" data-r="'+ri+'">Guardar rutina</button><button class="link" data-a="rutCopiar" data-r="'+ri+'">'+ic('copiar')+'Copiar…</button><button class="link" data-a="rutModelo" data-r="'+ri+'">'+ic('modelo')+'Guardar como modelo</button><button class="link danger" data-a="borrarRut" data-r="'+ri+'">'+(r.id?'Archivar o borrar':'Quitar')+'</button></div></div>';
 }
+/* v53.4.16 (NUEVAS MEJORAS, punto 9): al programar no sale un ejercicio de fuerza por defecto. Abajo de la rutina, «Ejercicio N · ¿Qué quieres
+   programar?» y eliges qué es: desde el banco, ejercicio de fuerza, cardio, carrera o bloque funcional; y se abre con su formato.
+   Con la rutina vacía, en grande y con lo que es cada uno; con ejercicios, en una fila */
+var EJ_ADD=[['pickBanco','lista','Desde el banco','Uno o varios de tu banco','Banco'],['addEj','pesa','Ejercicio de fuerza','Series, reps, RIR y kilos','Fuerza'],['addCardio','pulso','Cardio','Tiempo, distancia, pasos…','Cardio'],['addRun','correr','Carrera','Rodaje, series, test…','Carrera'],['addBloque','reloj','Bloque funcional','AMRAP, EMOM, For Time…','Bloque']];      // [acción, icono, nombre, qué es, en corto (la fila del móvil)]
+function ejAddHtml(ri,E,G){ var n=E.filter(function(e,i){ return !G[i]&&!esMov(e); }).length+1, v=!E.length;
+  return '<div class="ej-add'+(v?' ej-add1':'')+'" id="ea-'+ri+'"><div class="ej-add-h"><b>Ejercicio '+n+'</b><span>¿Qué quieres programar?</span></div><div class="ej-add-g">'+
+    EJ_ADD.map(function(o){ return '<button type="button" data-a="'+o[0]+'" data-r="'+ri+'" aria-label="'+o[2]+'">'+ic(o[1])+'<span><b data-c="'+o[4]+'">'+o[2]+'</b>'+(v?'<small>'+o[3]+'</small>':'')+'</span></button>'; }).join('')+'</div></div>'; }
 function asa(at,tipo,que){ return '<button type="button" class="dd-h" data-dd="'+tipo+'"'+at+' aria-label="Mover '+esc(que||'el ejercicio')+': arrastra o usa las flechas arriba y abajo" title="Arrastra para mover">⠿</button>'; }
 /* v53.4.2: al programar, cada ejercicio se cierra cuando lo terminas («Listo») y solo queda abierto el que estás programando
    (CO.ejAb, el propio ejercicio: los ya guardados salen cerrados; uno nuevo, abierto). Cerrado: su nombre y su pauta en una línea */
@@ -9570,9 +9588,10 @@ CH.setTipo=function(t){ var x=ejDe(t), j=+t.dataset.j, S=x.e.sets, st=S[j], I=TS
 A.tsGuiaSet=function(el){ var x=ejDe(el), I=TS_INFO[el.dataset.t]; if(!I) return; var k=0; x.e.sets.forEach(function(s){ if(s.t!==el.dataset.t) return; if(I.pr){ s.r=String(I.pr[Math.min(k,I.pr.length-1)]); k++; } else if(I.r) s.r=I.r; if(I.rir) s.rir=I.rir; }); x.r._s=true; repintar(); toast('Repeticiones de la guía puestas'); };
 CH.grupoTipo=function(t){ var x=ejDe(t); x.e.gt=t.value; if(!t.value) delete x.e.gt; x.r._s=true; repintar(); };
 CH.blFmt=function(t){ var x=ejDe(t); x.e.f=t.value; x.e.p={}; if(t.value==='hiit'||t.value==='tabata') x.e.ej.forEach(function(z){ if(z.r==='10 reps'||(z._d!=null&&z.r===z._d)){ z.r=''; z._d=''; } }); x.r._s=true; repintar(); };
+/* v53.4.16: la rutina nueva empieza sin nada: «Ejercicio 1» y eliges qué es (ejAddHtml) */
 A.addRut=function(){ var d=DIAS.indexOf(CO.diaRut)>=0?[CO.diaRut]:[]; if(CO.diaRut==='sin') d=[];
   var hoy=CO.hoy||hoyStr(), vig=CO.rut.filter(function(r){ return vigenteEn(r,hoy,CO.rut); }), des=vig.map(function(r){ return r.desde; }).filter(String).sort()[0]||'', has=vig.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0]||'';
-  CO.rut.push({id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[ejVacio()],_s:true}); repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
+  CO.rut.push({id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[],_s:true}); repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
 A.dupRut=function(el){ var ri=+el.dataset.r, n=copia(CO.rut[ri]); n.id=''; n.nombre=(n.nombre||'Rutina')+' (copia)'; n.dias=[]; n._s=true; delete n._vista; CO.rut.splice(ri+1,0,n); CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut='sin'; repintar(); var c=document.getElementById('rut-'+(ri+1)); if(c) c.scrollIntoView({block:'start'}); toast('Rutina duplicada (sin día). Elige sus días, ajusta y guarda.'); };
 /* v21: guardar una rutina devuelve una promesa (para la barra de guardar y para "Guardar y salir") */
 function guardarRutP(ri,callado){
