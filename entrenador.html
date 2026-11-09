@@ -101,16 +101,16 @@ small a{color:#4A4A4E}
           campo('t-nif', 'NIF o CIF', 'off', '') +
           campo('t-dir', 'Dirección fiscal', 'street-address', '', 'Calle, número y piso') +
           '<div class="fila2">' + campo('t-cp', 'Código postal', 'postal-code', '', '', 'numeric') + campo('t-ciudad', 'Población', 'address-level2', '') + '</div>' +
-          (T.email ? '<p class="dato">Tu email: <b>' + esc(T.email) + '</b></p>' : '') + '</div>' +
+          (T.email ? '<p class="dato">Tu email: <b>' + esc(T.email) + '</b></p>' : r.pideEmail ? campo('t-email', 'Tu email (con él entrarás en tu panel)', 'email', '', 'tu@email.com', 'email') : '') + '</div>' +      // v53.4.50
         (r.contrato ? '<label class="casilla"><input type="checkbox" id="acepto"> <span>He leído y acepto el contrato de encargado del tratamiento de MOOD ON.</span></label>' : '') +
         '<button class="btn" id="b-ok" type="button">' + (r.contrato ? 'Aceptar y crear mi contraseña' : 'Crear mi contraseña') + '</button>' +
         '<div id="msg" class="msg h" role="alert"></div>' +
         (r.contrato ? '<small style="margin-top:12px">Te mandaremos por email una copia del contrato y la hoja de aceptación con tus datos.</small>' : '');
       $('b-ok').addEventListener('click', function () {
-        var d = { nombre: $('t-nombre').value, nif: $('t-nif').value, dir: $('t-dir').value, cp: $('t-cp').value, ciudad: $('t-ciudad').value };
-        if (!d.nombre.trim() || !d.nif.trim() || !d.dir.trim() || !d.cp.trim() || !d.ciudad.trim()) return error(r.contrato ? 'Rellena tus datos para el contrato: los necesitamos todos.' : 'Rellena tus datos: los necesitamos todos.');
+        var d = { nombre: $('t-nombre').value, nif: $('t-nif').value, dir: $('t-dir').value, cp: $('t-cp').value, ciudad: $('t-ciudad').value }, em = $('t-email') ? $('t-email').value.trim() : null;
+        if (em === '' || !d.nombre.trim() || !d.nif.trim() || !d.dir.trim() || !d.cp.trim() || !d.ciudad.trim()) return error(r.contrato ? 'Rellena tus datos para el contrato: los necesitamos todos.' : 'Rellena tus datos: los necesitamos todos.');
         if (r.contrato && !$('acepto').checked) return error('Marca la casilla para aceptar el contrato.');
-        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato ? r.contrato.version : null, titular: d });
+        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato ? r.contrato.version : null, titular: d, email: em || undefined });
       });
     } else if (r.paso === 'crear') {
       $('c').innerHTML = '<h1>' + hola + (r.contrato ? ' Ya has aceptado el contrato' : ' Ya tienes tus datos') + '</h1>' + pasos(1, !!r.contrato) +

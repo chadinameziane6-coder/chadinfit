@@ -72,6 +72,7 @@ main{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:20px}
 .chip-b{border:0;border-radius:999px;padding:10px 16px;font:600 14px var(--f);cursor:pointer;background:#EDEDF0;color:#141414;text-decoration:none;display:inline-block;text-align:center}
 .chip-b.peq{padding:8px 14px;font-size:13.5px}
 .chip-b.neg{background:#141414;color:#fff}
+.inv-via{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.inv-via .gris{margin-right:4px}
 .chip-b:disabled{opacity:.5;cursor:default}
 .cifras{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .cifra{background:#fff;border-radius:18px;padding:16px 18px;display:flex;flex-direction:column;gap:4px}
@@ -652,7 +653,7 @@ td.fin{text-align:right;white-space:nowrap}
       V.map(function (k) {
         var a = Number(k.activos) || 0, l = Number(k.limite) || 0, pc = l ? Math.min(100, Math.round(a * 100 / l)) : 0, inv = k.estado === 'invitado';
         return '<tr><td><button class="nom-b" type="button" data-fc="' + esc(k.id) + '">' + esc(k.nombre || k.id) + '</button>' + (k.id === 'co1' ? ' <span class="gris">· nº 1</span>' : '') +
-          '<div class="gris">' + esc(k.id === 'co1' ? 'La entrenadora de la casa' : k.email) + '</div></td>' +
+          '<div class="gris">' + esc(k.id === 'co1' ? 'La entrenadora de la casa' : k.email || 'Invitado por WhatsApp · falta su email') + '</div></td>' +
           '<td data-l="Estado">' + estK(k, d.hoy) + '</td>' +
           '<td data-l="Plan">' + esc(planTxt(k)) + '</td>' +
           '<td class="n" data-l="Clientes activos">' + (inv ? '<span class="gris">—</span>' : l ? '<span class="uso"><span>' + a + ' de ' + l + '</span><i aria-hidden="true"><b class="' + (pc >= 80 ? 'casi' : '') + '" style="width:' + pc + '%"></b></i></span>' : String(a)) + '</td>' +
@@ -684,11 +685,23 @@ td.fin{text-align:right;white-space:nowrap}
   function reenviar(id, b) {
     var k = ((R && R.d && R.d.coaches) || []).filter(function (x) { return x.id === id; })[0] || FK || {};
     var t = b ? b.textContent : ''; if (b) ocupado(b, true, 'Enviando…');
+    var w = !k.email ? window.open('', '_blank') : null;      // v53.4.50: invitado por WhatsApp: se reenvía por WhatsApp
     return llamar({ acc: 'reenviar', ses: lee(K.ses), id: id }).then(function (r) {
       nuevoR(r); if (FK && FK.id === id) { FK = r.k; pintarFc(); }
-      hechoEn(vista === 'ficha' ? 'fc-msg' : vista === 'inicio' ? 'ent-msg' : 'ent-msg', 'Invitación reenviada a ' + (k.email || k.nombre) + '. El enlace anterior ya no vale.');
+      if (r.wa) { if (w) w.location.href = r.wa.url; waAviso(r.wa, vista === 'ficha' ? 'fc-msg' : 'ent-msg'); }
+      else if (w) w.close();
+      hechoEn(vista === 'ficha' ? 'fc-msg' : vista === 'inicio' ? 'ent-msg' : 'ent-msg', (r.wa ? 'Nueva invitación por WhatsApp para ' + k.nombre : 'Invitación reenviada a ' + (k.email || k.nombre)) + '. El enlace anterior ya no vale.');
       if (vista === 'inicio') { $('t-hoy').insertAdjacentHTML('afterbegin', '<div class="ok-msg">Invitación reenviada a ' + esc(k.email || k.nombre) + '.</div>'); }
-    }).catch(function (er) { if (!fallo(er)) { if (b) ocupado(b, false, t); alert(er.message); } });
+    }).catch(function (er) { if (w) w.close(); if (!fallo(er)) { if (b) ocupado(b, false, t); alert(er.message); } });
+  }
+  // v53.4.50: por si el navegador no deja abrir WhatsApp: el enlace para abrirlo o copiar el mensaje
+  function waAviso(x, junto) {
+    var A = $('inv-wa'), J = junto && $(junto);
+    if (J) { A = $('wa-av') || document.createElement('div'); A.id = 'wa-av'; J.insertAdjacentElement('afterend', A); }
+    if (!A) return;
+    A.innerHTML = '<div class="aviso gris">Su invitación por WhatsApp: <a class="chip-b peq neg" href="' + esc(x.url) + '" target="_blank" rel="noopener">Abrir WhatsApp</a> <button class="chip-b peq" type="button" id="inv-wa-cp">Copiar el mensaje</button></div>';
+    A.classList.remove('h');
+    $('inv-wa-cp').addEventListener('click', function () { var bc = this; try { navigator.clipboard.writeText(x.texto).then(function () { bc.textContent = 'Copiado'; }); } catch (_e) { prompt('Copia el mensaje:', x.texto); } });
   }
   document.addEventListener('click', function (e) {
     var b = e.target.closest('button[data-fc]'); if (b) { location.hash = 'entrenador/' + b.getAttribute('data-fc'); return; }
@@ -738,18 +751,23 @@ td.fin{text-align:right;white-space:nowrap}
   $('b-inv-ir').addEventListener('click', function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-n'); if (n) n.focus({ preventScroll: true }); });
 
   // el formulario de invitar (v53.4.49: ya no espera al contrato; si lo has subido, lo acepta al empezar)
+  var invVia = 'email';
   function pintarInv() {
     var d = (R && R.d) || {}, P = d.planes || [], S = $('f-inv');
-    var v = S.getAttribute('data-listo') === '1' && !invDe ? { nombre: ($('inv-n') || {}).value, email: ($('inv-e') || {}).value, plan: ($('inv-p') || {}).value, prueba: ($('inv-d') || {}).value, bib: ($('inv-b') || {}).checked } : null;
+    var v = S.getAttribute('data-listo') === '1' && !invDe ? { nombre: ($('inv-n') || {}).value, email: ($('inv-e') || {}).value, movil: ($('inv-m') || {}).value, plan: ($('inv-p') || {}).value, prueba: ($('inv-d') || {}).value, bib: ($('inv-b') || {}).checked } : null;
+    var wa = invVia === 'wa';      // v53.4.50: por email o por WhatsApp (él pone su email al empezar)
     var I = invDe || {}, pl = (v && v.plan) || (I.plan && P.some(function (p) { return p.id === I.plan; }) ? I.plan : ((P.filter(function (p) { return p.cobro === 'cuota'; })[0] || P[0] || {}).id));
     S.innerHTML = (invDe ? '<div class="aviso gris ancho">Viene del CRM: al mandar la invitación, ' + esc(invDe.nombre) + ' pasa a «Ganado». <button class="enl peq" type="button" id="inv-sincrm" style="margin-left:6px">No enlazarlo</button></div>' : '') +
+      '<div class="ancho inv-via" role="group" aria-label="Cómo le invitas"><span class="gris">Cómo le invitas</span><button type="button" class="chip-b' + (wa ? '' : ' neg') + '" data-via="email" aria-pressed="' + !wa + '">Por email</button><button type="button" class="chip-b' + (wa ? ' neg' : '') + '" data-via="wa" aria-pressed="' + wa + '">Por WhatsApp</button></div>' +
       '<div><label for="inv-n">Nombre</label><input id="inv-n" type="text" maxlength="80" placeholder="Nombre y apellido" autocomplete="off" value="' + esc(v ? v.nombre : I.nombre || '') + '"></div>' +
-      '<div><label for="inv-e">Email</label><input id="inv-e" type="email" maxlength="120" placeholder="su@email.com" autocomplete="off" value="' + esc(v ? v.email : I.email || '') + '"></div>' +
+      (wa ? '<div><label for="inv-m">Móvil (WhatsApp)</label><input id="inv-m" type="tel" maxlength="20" placeholder="600 000 000" autocomplete="off" value="' + esc(v && v.movil != null ? v.movil : I.movil || '') + '"></div>'
+        : '<div><label for="inv-e">Email</label><input id="inv-e" type="email" maxlength="120" placeholder="su@email.com" autocomplete="off" value="' + esc(v && v.email != null ? v.email : I.email || '') + '"></div>') +
       '<div><label for="inv-p">Plan</label><select id="inv-p">' + opts(P.map(function (p) { return [p.id, planOpc(p)]; }), pl) + '</select></div>' +
       '<div id="inv-dw"><label for="inv-d">Prueba gratis</label><select id="inv-d"></select></div>' +
       '<label class="casilla ancho"><input id="inv-b" type="checkbox"' + (!v || v.bib ? ' checked' : '') + '> Darle una copia del banco de ejercicios, los alimentos y las recetas de Chadín</label>' +
       '<div id="inv-err" class="msg err h ancho" role="alert" style="margin:0"></div>' +
-      '<div class="ancho bts-inv"><button class="btn" id="inv-ok" type="submit">Mandar invitación</button><span class="gris">Todavía no se cobra nada: los cobros a los entrenadores llegan más adelante.</span></div>';
+      '<div class="ancho bts-inv"><button class="btn" id="inv-ok" type="submit">' + (wa ? 'Crear y abrir WhatsApp' : 'Mandar invitación') + '</button><span class="gris">' + (wa ? 'Se abre WhatsApp con el mensaje y su enlace ya escritos. Él pone su email al empezar: ese será el de su cuenta.' : 'Todavía no se cobra nada: los cobros a los entrenadores llegan más adelante.') + '</span></div>' +
+      '<div id="inv-wa" class="ancho h"></div>';
     S.setAttribute('data-listo', '1');
     function prueba(sel) {
       var p = P.filter(function (x) { return x.id === $('inv-p').value; })[0] || {}, D = [[30, '1 mes'], [14, '14 días'], [0, 'Sin prueba']], pd = Number(p.prueba_dias) || 0;
@@ -760,19 +778,27 @@ td.fin{text-align:right;white-space:nowrap}
     prueba(v ? v.prueba : null);
     $('inv-p').addEventListener('change', function () { prueba(null); });
     if ($('inv-sincrm')) $('inv-sincrm').addEventListener('click', function () { invDe = null; S.removeAttribute('data-listo'); pintarInv(); });
+    S.querySelectorAll('[data-via]').forEach(function (bv) { bv.addEventListener('click', function () {
+      if (invDe) { invDe.nombre = $('inv-n').value; if ($('inv-e')) invDe.email = $('inv-e').value; if ($('inv-m')) invDe.movil = $('inv-m').value; }
+      invVia = bv.getAttribute('data-via'); pintarInv(); var f = $(invVia === 'wa' ? 'inv-m' : 'inv-e'); if (f && !f.value) f.focus(); }); });
   }
   $('f-inv').addEventListener('submit', function (ev) {
     ev.preventDefault();
-    var b = $('inv-ok'), m = $('inv-err'), e = $('inv-e').value.trim();
-    ocupado(b, true, 'Mandando…'); m.classList.add('h');
-    llamar({ acc: 'invitar', ses: lee(K.ses), invitar: { nombre: $('inv-n').value, email: e, plan: $('inv-p').value, prueba: $('inv-d').value, biblioteca: $('inv-b').checked, crm: invDe ? invDe.crm : '' } })
+    var b = $('inv-ok'), m = $('inv-err'), wa = invVia === 'wa', e = wa ? '' : $('inv-e').value.trim(), mv = wa ? $('inv-m').value.trim() : '', bt = b.textContent;
+    var w = wa ? window.open('', '_blank') : null;      // v53.4.50: la pestaña de WhatsApp, abierta ya (si no, el navegador la bloquea)
+    ocupado(b, true, wa ? 'Creando…' : 'Mandando…'); m.classList.add('h');
+    llamar({ acc: 'invitar', ses: lee(K.ses), invitar: { via: wa ? 'wa' : 'email', nombre: $('inv-n').value, email: e, movil: mv, plan: $('inv-p').value, prueba: $('inv-d').value, biblioteca: $('inv-b').checked, crm: invDe ? invDe.crm : '' } })
       .then(function (r) {
         if (invDe) KR = null;
         invDe = null; $('f-inv').removeAttribute('data-listo'); nuevoR(r);
-        hechoEn('ent-msg', 'Invitación mandada a ' + e.toLowerCase() + '. Le llega un correo para empezar (el enlace vale 7 días).');
+        if (r.wa) {
+          if (w) w.location.href = r.wa.url;
+          hechoEn('ent-msg', 'Cuenta creada. ' + (w ? 'Se ha abierto WhatsApp con su invitación: solo te falta enviarla.' : 'Abre WhatsApp para mandarle su invitación.') + ' Cuando entre, pondrá su email: ese será el de su cuenta.');
+          waAviso(r.wa, 'ent-msg');
+        } else hechoEn('ent-msg', 'Invitación mandada a ' + e.toLowerCase() + '. Le llega un correo para empezar (el enlace vale 7 días).');
         $('v-entrenadores').scrollIntoView({ behavior: 'smooth', block: 'start' });
       })
-      .catch(function (er) { if (!fallo(er)) { m.textContent = er.message; m.classList.remove('h'); ocupado(b, false, 'Mandar invitación'); } });
+      .catch(function (er) { if (w) w.close(); if (!fallo(er)) { m.textContent = er.message; m.classList.remove('h'); ocupado(b, false, bt); } });
   });
 
   // la ficha de un entrenador (como «Ficha» del diseño)
@@ -792,7 +818,7 @@ td.fin{text-align:right;white-space:nowrap}
       : D.prueba_hasta ? (quedan(D.prueba_hasta, hoyD) >= 0 ? 'Hasta el ' + diaTxt(D.prueba_hasta) : 'Terminó el ' + diaTxt(D.prueba_hasta)) : 'Sin prueba';
     var H = (k.crm ? [{ f: k.crm.creado, t: 'Llegó al CRM' + (k.crm.origen === 'web' ? ' desde la web («Quiero probarlo»)' : '') + '.' }] : []).concat(D.historia || []);
     var cuenta = co1 ? '' : inv
-      ? op('Reenviar la invitación', 'Le llega otro correo con un enlace nuevo (vale 7 días; el anterior deja de valer).', '<button class="chip-b" type="button" id="fc-reenv">Reenviar</button>') +
+      ? op('Reenviar la invitación', k.email ? 'Le llega otro correo con un enlace nuevo (vale 7 días; el anterior deja de valer).' : 'Se abre WhatsApp con un enlace nuevo (vale 7 días; el anterior deja de valer).', '<button class="chip-b" type="button" id="fc-reenv">' + (k.email ? 'Reenviar' : 'Reenviar por WhatsApp') + '</button>') +
         op('Anular la invitación', 'Se borra su cuenta (todavía no tiene datos). En el CRM pasa a «perdido».', '<button class="btn-r" type="button" id="fc-anular">Anular…</button>', true)
       : k.estado === 'baja'
       ? op('Anular la baja', 'Se borra todo el ' + diaTxt(String(D.baja && D.baja.borrar_el).slice(0, 10)) + '. Hasta entonces puedes anularla y su cuenta vuelve a estar como antes.', '<button class="chip-b" type="button" id="fc-react">Anular la baja</button>')
@@ -807,7 +833,7 @@ td.fin{text-align:right;white-space:nowrap}
       '<div id="fc-msg" class="ok-msg h" role="status"></div>' +
       '<section class="fc-cab"><div class="avatar" aria-hidden="true">' + esc(iniciales(k.nombre)) + '</div>' +
         '<div class="n"><div><h1>' + esc(k.nombre) + '</h1>' + estK({ estado: k.estado, prueba_hasta: D.prueba_hasta, borrar_el: D.baja && D.baja.borrar_el }, hoyD) + '</div>' +
-        '<span>' + esc(co1 ? 'La entrenadora de la casa' : k.email) + (inv ? ' · Invitado el ' + esc(fecha(k.creado)) : ' · Con MOOD ON desde el ' + esc(fecha(desde))) + '</span></div>' +
+        '<span>' + esc(co1 ? 'La entrenadora de la casa' : k.email || 'Invitado por WhatsApp · aún sin email') + (inv ? ' · Invitado el ' + esc(fecha(k.creado)) : ' · Con MOOD ON desde el ' + esc(fecha(desde))) + '</span></div>' +
         '<div class="kf-acc">' + (k.email ? '<a class="chip-b" href="mailto:' + esc(k.email) + '">Escribir email</a>' : '') + (wa ? '<a class="chip-b" href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') + '</div></section>' +
       '<div class="rejilla">' +
         '<section class="caja-f" aria-labelledby="t-sus"><h2 id="t-sus">Suscripción</h2><div class="grande">' + precio + '</div>' +
@@ -1428,7 +1454,7 @@ td.fin{text-align:right;white-space:nowrap}
       });
     }
     if ($('k-gan')) $('k-gan').addEventListener('click', function () {   // v53.4: a «Invitar a un entrenador», con sus datos
-      invDe = { nombre: k.nombre, email: k.email, plan: k.plan, crm: k.id }; $('f-inv').removeAttribute('data-listo'); pintarInv();
+      invDe = { nombre: k.nombre, email: k.email, movil: k.movil || '', plan: k.plan, crm: k.id }; $('f-inv').removeAttribute('data-listo'); pintarInv();
       location.hash = 'entrenadores'; setTimeout(function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-e'); if (n && !n.value) n.focus({ preventScroll: true }); }, 60);
     });
     if ($('k-perder')) $('k-perder').addEventListener('click', function () { guardarK({ etapa: 'perdido' }, 'Marcado como perdido. Si quieres, apunta por qué.').then(function () { if ($('k-mot')) $('k-mot').focus(); }); });
