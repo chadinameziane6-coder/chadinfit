@@ -12,7 +12,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
 <style>
-/* v53.4 · la bienvenida del entrenador invitado: aceptar el contrato de encargado y crear su contraseña */
+/* v53.4 · la bienvenida del entrenador invitado: aceptar el contrato de encargado (desde la v53.4.49, si se ha subido) y crear su contraseña */
 :root{--f:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
 *{box-sizing:border-box}
 html,body{margin:0;background:#F5F5F7;color:#141414;font:16px/1.5 var(--f);-webkit-text-size-adjust:100%}
@@ -70,8 +70,8 @@ small a{color:#4A4A4E}
       .then(function (j) { if (!j || !j.ok) throw new Error(String((j && j.error) || 'No se ha podido hacer.').replace(/^Error: /, '')); return j; },
             function (e) { if (e && e.message && !/fetch|network|Load failed/i.test(e.message)) throw e; throw new Error('No hay conexión. Prueba otra vez.'); });
   }
-  function pasos(n) {
-    return '<div class="pasos">' + ['Pon tus datos y acepta el contrato', 'Crea tu contraseña', 'Entra en tu panel'].map(function (t, i) {
+  function pasos(n, con) {      // v53.4.49: sin contrato subido, el 1.º paso es solo poner sus datos
+    return '<div class="pasos">' + [con === false ? 'Pon tus datos' : 'Pon tus datos y acepta el contrato', 'Crea tu contraseña', 'Entra en tu panel'].map(function (t, i) {
       return '<div' + (i < n ? ' class="ya"' : '') + '><b>' + (i < n ? '✓' : i + 1) + '</b><span>' + t + '</span></div>'; }).join('') + '</div>';
   }
   function campo(id, txt, ac, val, ph, modo) {
@@ -90,34 +90,34 @@ small a{color:#4A4A4E}
     var hola = r.nombre ? 'Hola, ' + esc(r.nombre) + '.' : 'Hola.', T = r.titular || {};
     if (r.paso === 'aceptar') {
       $('c').innerHTML = '<h1>' + hola + ' Te damos la bienvenida a MOOD ON</h1>' +
-        '<span class="plan">Plan ' + esc(r.plan) + (r.prueba ? ' · ' + r.prueba + ' días gratis' : '') + '</span>' + pasos(0) +
-        '<div class="doc"><h2>Contrato de encargado del tratamiento</h2>' +
+        '<span class="plan">Plan ' + esc(r.plan) + (r.prueba ? ' · ' + r.prueba + ' días gratis' : '') + '</span>' + pasos(0, !!r.contrato) +
+        (r.contrato ? '<div class="doc"><h2>Contrato de encargado del tratamiento</h2>' +
           '<p>Lo necesitas para meter datos de tus clientes en MOOD ON. Léelo antes de aceptarlo (versión ' + Number(r.contrato.version) + ').</p>' +
-          '<a class="chip" id="leer" href="' + esc(API + '/entrenador/contrato?i=' + tok) + '" target="_blank" rel="noopener">Leer el contrato (PDF)</a></div>' +
+          '<a class="chip" id="leer" href="' + esc(API + '/entrenador/contrato?i=' + tok) + '" target="_blank" rel="noopener">Leer el contrato (PDF)</a></div>' : '') +
         // v53.4.46: sus datos, que van en el contrato (y en su política de privacidad para sus clientes)
-        '<div class="doc" id="tus"><h2>Tus datos para el contrato</h2>' +
-          '<p>Salen en el contrato que aceptas y son los de tu política de privacidad para tus clientes.</p>' +
+        '<div class="doc" id="tus"><h2>' + (r.contrato ? 'Tus datos para el contrato' : 'Tus datos') + '</h2>' +
+          '<p>' + (r.contrato ? 'Salen en el contrato que aceptas y son los de tu política de privacidad para tus clientes.' : 'Son los de tu política de privacidad para tus clientes (como responsable de sus datos).') + '</p>' +
           campo('t-nombre', 'Nombre y apellidos o razón social', 'organization', T.nombre) +
           campo('t-nif', 'NIF o CIF', 'off', '') +
           campo('t-dir', 'Dirección fiscal', 'street-address', '', 'Calle, número y piso') +
           '<div class="fila2">' + campo('t-cp', 'Código postal', 'postal-code', '', '', 'numeric') + campo('t-ciudad', 'Población', 'address-level2', '') + '</div>' +
           (T.email ? '<p class="dato">Tu email: <b>' + esc(T.email) + '</b></p>' : '') + '</div>' +
-        '<label class="casilla"><input type="checkbox" id="acepto"> <span>He leído y acepto el contrato de encargado del tratamiento de MOOD ON.</span></label>' +
-        '<button class="btn" id="b-ok" type="button">Aceptar y crear mi contraseña</button>' +
+        (r.contrato ? '<label class="casilla"><input type="checkbox" id="acepto"> <span>He leído y acepto el contrato de encargado del tratamiento de MOOD ON.</span></label>' : '') +
+        '<button class="btn" id="b-ok" type="button">' + (r.contrato ? 'Aceptar y crear mi contraseña' : 'Crear mi contraseña') + '</button>' +
         '<div id="msg" class="msg h" role="alert"></div>' +
-        '<small style="margin-top:12px">Te mandaremos por email una copia del contrato y la hoja de aceptación con tus datos.</small>';
+        (r.contrato ? '<small style="margin-top:12px">Te mandaremos por email una copia del contrato y la hoja de aceptación con tus datos.</small>' : '');
       $('b-ok').addEventListener('click', function () {
         var d = { nombre: $('t-nombre').value, nif: $('t-nif').value, dir: $('t-dir').value, cp: $('t-cp').value, ciudad: $('t-ciudad').value };
-        if (!d.nombre.trim() || !d.nif.trim() || !d.dir.trim() || !d.cp.trim() || !d.ciudad.trim()) return error('Rellena tus datos para el contrato: los necesitamos todos.');
-        if (!$('acepto').checked) return error('Marca la casilla para aceptar el contrato.');
-        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato.version, titular: d });
+        if (!d.nombre.trim() || !d.nif.trim() || !d.dir.trim() || !d.cp.trim() || !d.ciudad.trim()) return error(r.contrato ? 'Rellena tus datos para el contrato: los necesitamos todos.' : 'Rellena tus datos: los necesitamos todos.');
+        if (r.contrato && !$('acepto').checked) return error('Marca la casilla para aceptar el contrato.');
+        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato ? r.contrato.version : null, titular: d });
       });
     } else if (r.paso === 'crear') {
-      $('c').innerHTML = '<h1>' + hola + ' Ya has aceptado el contrato</h1>' + pasos(1) +
+      $('c').innerHTML = '<h1>' + hola + (r.contrato ? ' Ya has aceptado el contrato' : ' Ya tienes tus datos') + '</h1>' + pasos(1, !!r.contrato) +
         '<p>Ahora crea tu contraseña para entrar en tu panel.</p><button class="btn" id="b-ok" type="button">Crear mi contraseña</button><div id="msg" class="msg h" role="alert"></div>';
       $('b-ok').addEventListener('click', function () { ir(this, { acc: 'crear' }); });
     } else {
-      $('c').innerHTML = '<h1>' + hola + ' Ya tienes tu cuenta</h1>' + pasos(3) +
+      $('c').innerHTML = '<h1>' + hola + ' Ya tienes tu cuenta</h1>' + pasos(3, !!r.contrato) +
         '<p>Entra en tu panel con tu email y tu contraseña.</p><a class="btn" id="b-ok" href="' + esc(r.app) + '">Entrar en mi panel</a>';
     }
   }).catch(function (e) { mal(e.message); });

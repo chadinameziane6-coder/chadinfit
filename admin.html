@@ -107,6 +107,7 @@ tr:last-child td{border-bottom:0}
 td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
 .nom{font-weight:600}
 .est{display:inline-block;border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.est.sin{background:#EDEDF0;color:#4A4A4E}
 .est.activo{background:#E8F6EE;color:#0E5A33}.est.prueba{background:#EAF1FD;color:#123E8A}.est.impago{background:#FDECEE;color:#8A0F1E}
 .est.invitado{background:#FFF4E0;color:#7A4A00}.est.baja{background:#EDEDF0;color:#4A4A4E}
 .est.web{background:#E8F6EE;color:#0E5A33}.est.invitar{background:#EAF1FD;color:#123E8A}.est.no,.est.desactivado,.est.caducado,.est.agotado{background:#EDEDF0;color:#4A4A4E}
@@ -409,7 +410,7 @@ td.fin{text-align:right;white-space:nowrap}
           <p>Le llega un correo de MOOD ON para empezar (el enlace vale 7 días). Al entrar ve el mismo panel que Chadín, vacío, con su propia copia de la biblioteca.</p>
           <div class="pasos-i">
             <div><b>1</b><span>Escribes su nombre y su email.</span></div>
-            <div><b>2</b><span>Pone sus datos (nombre, NIF y dirección) y acepta el contrato de encargado del tratamiento.</span></div>
+            <div><b>2</b><span>Pone sus datos (nombre, NIF y dirección) y, si has subido un contrato, lo acepta.</span></div>
             <div><b>3</b><span>Crea su contraseña y entra con un código la primera vez.</span></div>
             <div><b>4</b><span>Pone sus ajustes e invita a sus clientes.</span></div>
           </div>
@@ -655,7 +656,7 @@ td.fin{text-align:right;white-space:nowrap}
           '<td data-l="Estado">' + estK(k, d.hoy) + '</td>' +
           '<td data-l="Plan">' + esc(planTxt(k)) + '</td>' +
           '<td class="n" data-l="Clientes activos">' + (inv ? '<span class="gris">—</span>' : l ? '<span class="uso"><span>' + a + ' de ' + l + '</span><i aria-hidden="true"><b class="' + (pc >= 80 ? 'casi' : '') + '" style="width:' + pc + '%"></b></i></span>' : String(a)) + '</td>' +
-          '<td data-l="Contrato">' + (k.id === 'co1' ? '<span class="gris">No hace falta</span>' : k.contrato ? 'Firmado' : '<span class="est amb">Pendiente</span>') + '</td>' +
+          '<td data-l="Contrato">' + (k.id === 'co1' ? '<span class="gris">No hace falta</span>' : k.contrato ? (k.contrato.sin ? '<span class="gris">Sin contrato</span>' : 'Firmado') : '<span class="est amb">Pendiente</span>') + '</td>' +
           '<td data-l="Última vez">' + (inv || !k.ultimo_panel ? '<span class="gris">Aún no ha entrado</span>' : esc(hace(k.ultimo_panel, d.ahora))) + '</td>' +
           '<td class="fin">' + (inv ? '<button class="enl-n" type="button" data-reenv="' + esc(k.id) + '">Reenviar</button>' : '<button class="enl-n" type="button" data-fc="' + esc(k.id) + '">Abrir</button>') + '</td></tr>';
       }).join('') + '</tbody></table>';
@@ -736,14 +737,9 @@ td.fin{text-align:right;white-space:nowrap}
   $('b-demo-ir').addEventListener('click', function () { $('demo').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   $('b-inv-ir').addEventListener('click', function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-n'); if (n) n.focus({ preventScroll: true }); });
 
-  // el formulario de invitar (bloqueado hasta que esté el contrato)
+  // el formulario de invitar (v53.4.49: ya no espera al contrato; si lo has subido, lo acepta al empezar)
   function pintarInv() {
     var d = (R && R.d) || {}, P = d.planes || [], S = $('f-inv');
-    if (!d.contrato) {
-      S.innerHTML = '<div class="aviso ancho">Para invitar, primero sube el contrato de encargado del tratamiento que prepara la abogada: cada entrenador lo acepta al crear su cuenta, antes de meter datos de sus clientes.</div>' +
-        '<div class="ancho"><a class="chip-b neg" href="#plataforma" style="align-self:flex-start">Subir el contrato</a></div>';
-      return;
-    }
     var v = S.getAttribute('data-listo') === '1' && !invDe ? { nombre: ($('inv-n') || {}).value, email: ($('inv-e') || {}).value, plan: ($('inv-p') || {}).value, prueba: ($('inv-d') || {}).value, bib: ($('inv-b') || {}).checked } : null;
     var I = invDe || {}, pl = (v && v.plan) || (I.plan && P.some(function (p) { return p.id === I.plan; }) ? I.plan : ((P.filter(function (p) { return p.cobro === 'cuota'; })[0] || P[0] || {}).id));
     S.innerHTML = (invDe ? '<div class="aviso gris ancho">Viene del CRM: al mandar la invitación, ' + esc(invDe.nombre) + ' pasa a «Ganado». <button class="enl peq" type="button" id="inv-sincrm" style="margin-left:6px">No enlazarlo</button></div>' : '') +
@@ -803,7 +799,7 @@ td.fin{text-align:right;white-space:nowrap}
       : (k.estado === 'pausado'
           ? op('Reactivar la cuenta', 'Está en pausa desde el ' + diaTxt(String(D.pausa && D.pausa.fecha).slice(0, 10)) + '. Al reactivarla, él y sus clientes vuelven a entrar.', '<button class="chip-b" type="button" id="fc-react">Reactivar</button>')
           : op('Pausar la cuenta', 'Ni él ni sus clientes pueden entrar. No se borra nada: se reactiva con un toque.', '<button class="chip-b" type="button" id="fc-pausar">Pausar</button>')) +
-        (D.contrato && !k.ultimo_panel ? op('Reenviarle el enlace', 'Aceptó el contrato pero todavía no ha entrado en su panel: le llega otro correo para crear su contraseña.', '<button class="chip-b" type="button" id="fc-reenv">Reenviar</button>') : '') +
+        (D.contrato && !k.ultimo_panel ? op('Reenviarle el enlace', 'Ya puso sus datos pero todavía no ha entrado en su panel: le llega otro correo para crear su contraseña.', '<button class="chip-b" type="button" id="fc-reenv">Reenviar</button>') : '') +
         op('Dar de baja', 'Ni él ni sus clientes pueden entrar, se le manda un enlace para descargar una copia de todos sus datos y se borran a los 30 días.', '<button class="btn-r" type="button" id="fc-baja">Dar de baja…</button>', true);
     function op(t, x, b, rojo) { return '<div class="o"><b' + (rojo ? ' class="rojo"' : '') + '>' + esc(t) + '</b><span>' + esc(x) + '</span>' + b + '</div>'; }
     $('v-ficha').innerHTML =
@@ -827,12 +823,13 @@ td.fin{text-align:right;white-space:nowrap}
           '<div><span>Última vez en su panel</span><span>' + esc(k.ultimo_panel ? hace(k.ultimo_panel, k.ahora) : 'Aún no ha entrado') + '</span></div>' +
           '<div><span>Último cliente nuevo</span><span>' + esc(k.ultimo_cliente ? fecha(k.ultimo_cliente) : 'Ninguno todavía') + '</span></div></div>') + '</section>' +
         '<section class="caja-f" aria-labelledby="t-con"><h2 id="t-con">Contrato</h2>' + (co1 ? '<div class="gris">No hace falta: es la entrenadora de la casa.</div>' : D.contrato
-          ? '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est activo">Firmado</span><span>Contrato de encargado del tratamiento · ' + esc(fecha(D.contrato.fecha)) + ' · versión ' + Number(D.contrato.version) + '</span></div>' +
+          ? (D.contrato.sin ? '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est sin">Sin contrato</span><span>Creó su cuenta el ' + esc(fecha(D.contrato.fecha)) + ', sin contrato de encargado subido</span></div>'      // v53.4.49
+            : '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est activo">Firmado</span><span>Contrato de encargado del tratamiento · ' + esc(fecha(D.contrato.fecha)) + ' · versión ' + Number(D.contrato.version) + '</span></div>') +
             (D.contrato.titular ? '<div class="datos-f"><div><span>Nombre o razón social</span><span>' + esc(D.contrato.titular.nombre) + '</span></div>' +      // v53.4.46: sus datos del contrato
               '<div><span>NIF o CIF</span><span>' + esc(D.contrato.titular.nif) + '</span></div>' +
               '<div><span>Dirección fiscal</span><span>' + esc(D.contrato.titular.dir + ', ' + D.contrato.titular.cp + ' ' + D.contrato.titular.ciudad) + '</span></div></div>' : '') +
-            '<div class="kf-acc"><button class="chip-b" type="button" id="fc-pdf" data-v="' + Number(D.contrato.version) + '">Ver el contrato (PDF)</button>' +
-              (D.contrato.titular ? '<button class="chip-b" type="button" id="fc-hoja">Hoja de aceptación (PDF)</button>' : '') + '</div>'
+            (D.contrato.sin ? '' : '<div class="kf-acc"><button class="chip-b" type="button" id="fc-pdf" data-v="' + Number(D.contrato.version) + '">Ver el contrato (PDF)</button>' +
+              (D.contrato.titular ? '<button class="chip-b" type="button" id="fc-hoja">Hoja de aceptación (PDF)</button>' : '') + '</div>')
           : '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est amb">Pendiente</span><span>Lo acepta al abrir su invitación, antes de crear su contraseña.</span></div>') + '</section>' +
         '<section class="caja-f" aria-labelledby="t-not"><h2 id="t-not">Notas internas</h2><label for="fc-notas" style="margin:0;font-weight:400;color:#6E6E73">Solo las ves tú. Se guardan solas.</label>' +
           '<textarea id="fc-notas" rows="4" maxlength="2000">' + esc(D.notas || '') + '</textarea><div class="estado-g" id="fc-nest" role="status" style="margin:0"></div></section>' +
@@ -887,9 +884,9 @@ td.fin{text-align:right;white-space:nowrap}
     var C = R && R.d && R.d.contrato;
     $('pf-docs').innerHTML =
       '<div class="doc"><div class="q"><b>Contrato de encargado del tratamiento</b><div>' + (C ? 'Versión ' + Number(C.version) + ' · subido el ' + esc(fecha(C.fecha)) + ' · ' + Math.max(1, Math.round(C.bytes / 1024)) + ' KB'
-          : 'Lo prepara la abogada. Mientras no esté, no se puede invitar a ningún entrenador.') + '</div></div>' +
+          : 'Opcional. Si lo subes, cada entrenador que invites desde entonces lo acepta al empezar.') + '</div></div>' +
         (C ? '<span class="est activo">Subido</span><button class="chip-b peq" type="button" id="pf-ver">Ver</button><button class="chip-b peq" type="button" id="pf-subir">Subir versión nueva</button>'
-           : '<span class="est amb">Falta subirlo</span><button class="chip-b peq neg" type="button" id="pf-subir">Subir PDF</button>') + '</div>' +
+           : '<span class="est sin">Sin subir</span><button class="chip-b peq" type="button" id="pf-subir">Subir PDF</button>') + '</div>' +
       '<div class="doc"><div class="q"><b>Política de privacidad de la web</b><div>moodonapp.com/privacidad.html</div></div><span class="est activo">Publicada</span><a class="chip-b peq" href="/privacidad.html" target="_blank" rel="noopener">Ver</a></div>';
     $('pf-subir').addEventListener('click', function () { $('pf-err').classList.add('h'); $('pf-pdf').value = ''; $('pf-pdf').click(); });
     if ($('pf-ver')) $('pf-ver').addEventListener('click', function () { verPdf(null, this); });
