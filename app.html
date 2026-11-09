@@ -2742,7 +2742,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.38';
+var APP_V = 'v53.4.39';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8735,7 +8735,7 @@ function tilesHtml(){ if(!CO.lista) return ''; var act=CO.lista.filter(function(
 /* v53.4.38 · «Tu logo» (entrenadores que no son la cuenta nº 1): se reduce en el móvil (como mucho 720 × 240) y se guarda en su hoja Marca */
 A.coLogo=function(){
   if(CO.casa!==false) return; CO.lgNuevo=null;
-  modal('<h2>Tu logo</h2><p class="muted sm">Sale junto a MOOD ON arriba en la app de tus clientes, al entrar, en su cuestionario y en sus emails. Mejor un PNG con fondo transparente.</p><div id="lg-prev"></div>'+
+  modal('<h2>Tu logo</h2><p class="muted sm">Sale junto a MOOD ON arriba en la app de tus clientes (una vez dentro) y en sus emails. Al abrir la app y al compartir, solo MOOD ON. Mejor un PNG con fondo transparente.</p><div id="lg-prev"></div>'+
     '<input type="file" id="lg-f" accept="image/png,image/jpeg,image/webp" style="display:none"><button class="btn sec mt" data-a="coLogoElegir">'+ic('foto')+(LOGO_CO?'Elegir otra imagen':'Elegir imagen')+'</button>'+
     '<button class="btn mt" data-a="coLogoOk">Guardar</button>'+(CO.logoV?'<button class="link danger mt" data-a="coLogoQuitar">Quitar mi logo</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
   lgPrev(); var f=document.getElementById('lg-f'); if(f) f.addEventListener('change',lgLeer);
@@ -12915,7 +12915,7 @@ var AYUDA=[
   {g:3,q:'¿Cómo mando el justificante de un pago?',r:'En Pagos puedes activar el justificante por email: con cada pago, a tu cliente le llega su justificante en PDF. También lo puedes descargar de cada pago.',a:'sdPagos',k:'justificante recibo factura pdf pago'},
   {g:3,q:'¿Dónde veo cuánto gano?',r:'En Tu negocio: cómo va cada mes (lo que cobras, tus clientes y su actividad), su informe y tus datos en Excel.',a:'sdNeg',k:'negocio ganancias ingresos informe mes excel exportar'},
   {g:4,q:'¿Cómo cambio mi nombre en la app de mis clientes?',r:'Sale en su chat («Chat con tu coach, …»). Es el mismo para todos tus clientes.',a:'coNombre',b:'Cambiar mi nombre',k:'nombre coach entrenador'},
-  {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en el menú) lo subes: sale junto a MOOD ON arriba en la app de tus clientes, al entrar, en su cuestionario y en sus emails. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
+  {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en el menú) lo subes: sale junto a MOOD ON arriba en la app de tus clientes (una vez dentro) y en sus emails. Al abrir la app y en lo que comparten, solo MOOD ON. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
   {g:4,q:'¿Cómo creo o cambio mi contraseña?',r:'En Seguridad y acceso: tu contraseña del panel y cómo entran tus clientes.',a:'segCfg',k:'contraseña seguridad acceso entrar'},
   {g:4,q:'¿Cómo veo la app como la ve un cliente?',r:'En Modo prueba ves los correos que les llegan y su app con una clienta de ejemplo, sin tocar a nadie real.',a:'sdPrueba',k:'prueba ejemplo correos ver app cliente'},
   {g:4,q:'¿Cómo tengo el panel a mano en el móvil?',r:'Abre tu panel en el navegador del móvil ({PANEL}) y añádelo a la pantalla de inicio: en iPhone, Compartir → «Añadir a pantalla de inicio»; en Android, el menú ⋮ → «Añadir a pantalla de inicio».',k:'movil iphone android pantalla de inicio enlace panel'},
@@ -15491,7 +15491,7 @@ function conMarca(){
   try{ return localStorage.getItem('moodon_casa')==='1'; }catch(e){ return false; }
 }
 function marcaTxt(){ return conMarca()?'MOOD ON by Chadin':'MOOD ON'; }
-/* v53.4.38 · el logo de su entrenador junto a MOOD ON (opción C): lo sube en «Tu logo»; aquí se guarda en el móvil ({v, src})
+/* v53.4.38 · el logo de su entrenador junto a MOOD ON (opción C), solo dentro de la app (arriba en su app y en el panel; v53.4.39: al abrir —entrar, cuestionario— y al compartir, solo MOOD ON): lo sube en «Tu logo»; aquí se guarda en el móvil ({v, src})
    y se pide aparte (logoMarca / coachLogoVer) solo cuando cambia su versión (logoV en su app, en el panel y en el arranque con enlace). */
 var LOGO_CO=LS.get('moodon_logo')||null;
 function logoCoImg(){ return LOGO_CO&&LOGO_CO.src&&!conMarca()?LOGO_CO.src:''; }
@@ -15506,7 +15506,7 @@ function logoCoSync(v){
     logosRepintar(); },function(){ logoCoSync.pid=''; });
 }
 setTimeout(function(){ if(BOOT&&BOOT.logoV!==undefined) logoCoSync(BOOT.logoV); },0);
-function logoHtml(tam,sub){ var m=conMarca(), co=logoCoImg(), at=' data-tam="'+tam+'" data-sub="'+esc(sub||'')+'"';
+function logoHtml(tam,sub){ var m=conMarca(), co=tam==='top'||tam==='side'?logoCoImg():'', at=' data-tam="'+tam+'" data-sub="'+esc(sub||'')+'"';
   if(co) return '<div class="logo-w logo-'+tam+' logo-co"'+at+' role="img" aria-label="Logo de tu coach y MOOD ON"><div class="lco-w"><img class="lco" src="'+co+'" alt=""><i class="lsep"></i>'+logoSvg(false)+'</div>'+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>';
   return '<div class="logo-w logo-'+tam+'"'+at+' role="img" aria-label="'+(m?'MOOD ON by Chadin':'MOOD ON')+'">'+logoSvg(m&&(tam==='big'||tam==='cq'))+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
 
