@@ -2511,7 +2511,7 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .ng-pl{display:flex;align-items:center;gap:10px;padding:8px 0;border-top:1px solid var(--line2)}.ng-pl span:first-child{flex:1}.ng-tw{overflow-x:auto}.ng-t{width:100%;border-collapse:collapse;font-size:13.5px}.ng-t th,.ng-t td{text-align:right;padding:8px 6px;border-bottom:1px solid var(--line2);white-space:nowrap}.ng-t th:first-child,.ng-t td:first-child{text-align:left}.ng-t th{color:var(--mu);font-weight:600;font-size:12px}.ng-t tr.on td{font-weight:700}
 .ng-acc{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 30px}.ng-acc .btn{flex:1;min-width:220px}      /* v53.4.30 · tu negocio */
 .ej-bus-w{position:relative;margin:4px 0 8px}.ej-bus{width:100%}.ej-bus-l{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:30;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 10px 26px rgba(0,0,0,.12);max-height:320px;overflow:auto;padding:4px}.ej-bus-l button{display:block;width:100%;text-align:left;padding:10px 12px;border:0;background:none;font:inherit;color:inherit;border-radius:8px;cursor:pointer}.ej-bus-l button:hover,.ej-bus-l button:focus{background:var(--card2)}.ej-bus-l p{margin:8px 12px}      /* v53.4.27 */
-.cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
+.cc-w{flex:none;position:relative;display:flex;scroll-snap-align:start}.pq-bt{display:flex;gap:8px;margin:4px 0 6px}.pq-bt .btn{flex:1}.pq-l{display:flex;flex-direction:column}.pq-f>span{display:flex;align-items:center;gap:10px;min-width:0}.pq-im{width:44px;height:44px;border-radius:10px;overflow:hidden;flex:none;background:#F2F2F5;display:flex;align-items:center;justify-content:center}.pq-im img{width:100%;height:100%;object-fit:cover;display:block}.pq-im .ic{width:18px;height:18px;color:#B0B0B5}.pq-t{display:flex;flex-direction:column;min-width:0}.pq-t b{font-size:14.5px;overflow:hidden;text-overflow:ellipsis}.pq-f.off .pq-t,.pq-f.off .pq-im{opacity:.45}.pq-sug{margin-top:10px;border-top:1px solid var(--line2);padding-top:12px}.cc-q{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);box-shadow:0 1px 3px rgba(0,0,0,.15);display:flex;align-items:center;justify-content:center;padding:0;color:#3A3A3C;cursor:pointer}.cc-q .ic{width:14px;height:14px;margin:0}      /* v53.4.26: quitar una sugerencia */
 .cc-x{border-style:dashed;border-color:#D8D8DD;background:#FAFAFB;align-items:center;justify-content:center;text-align:center;min-height:142px}.cc-x b{min-height:0;text-align:center;margin:2px}.cc-x small{text-align:center}
 .cc-ic{width:36px;height:36px;border-radius:50%;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;margin-bottom:6px}.cc-ic .ic{width:17px;height:17px;margin:0}
 .cb-su{display:flex;align-items:center;gap:10px;width:calc(100% - 14px);margin-top:8px;padding:10px 12px;border-radius:14px;background:#F4F4F6;border:0;font:inherit;color:inherit;text-align:left;cursor:pointer}.cb.com .cb-su{background:#fff}
@@ -2722,7 +2722,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.31';
+var APP_V = 'v53.4.32';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7240,7 +7240,7 @@ var bancoBg=false;
 function libSugCm(p,mi){
   if(!CL.bancoM){ if(!bancoBg){ bancoBg=true; cargarBancoCl().then(function(){ if(CL.tab==='dieta'){ CL.keep=true; pintarCl(); } },function(){}); } return []; }
   var c=p.comidas[mi], cat=catCm(c), M=miaCl(), mios=(M.add[p.id+'|'+mi]||[]).map(function(x){ return x.lib; });
-  var oc=prefCl().oc||{};      // v53.4.26: las que ha quitado de sus sugerencias
+  var oc=prefCl().oc||{}; if(prefCl().ns) return [];      // v53.4.26: las que ha quitado de sus sugerencias · v53.4.32: ns = no quiere sugerencias
   var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&!oc[r.id]&&adaptarRecCl(r); }); if(!L.length) return [];
   var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,3);      // cambian cada día (v53.4.26: 3, no 6; el resto, en «Más de la biblioteca»)
 }
@@ -7251,14 +7251,15 @@ function cbHtml(p,mi){
     (mc?'<span class="cbk">'+kTxt(mc[0])+' <small>kcal</small></span>':'')+
     (algo?'<button class="mh-ck'+(t?' on':'')+'" data-a="mnComido" data-m="'+mi+'" aria-pressed="'+!!t+'" aria-label="'+(t?'Ya no lo he comido: ':'Lo he comido: ')+esc(cn)+'">'+ic('ok')+'</button>':'')+'</div>';
   var sug=lib?libSugCm(p,mi):[];
-  h+='<div class="car" id="car-'+mi+'">'+ops.map(function(y){ return ccHtml(p,mi,y.o,y.i,x,t,ob); }).join('')+
+  h+='<div class="car" id="car-'+mi+'">'+ops.map(function(y){ var cc=ccHtml(p,mi,y.o,y.i,x,t,ob); if(!lib||(x&&x.o===y.o.id)) return cc;      // v53.4.32: cada plato con su ✕ (el que tiene hoy, no)
+      return '<span class="cc-w">'+cc+'<button class="cc-q" data-a="plOcultar" data-m="'+mi+'" data-o="'+esc(y.o.id)+'" aria-label="Quitar «'+esc(nombreOp(y.o,y.i))+'» de tu '+esc(cn)+'">'+ic('x')+'</button></span>'; }).join('')+
     sug.map(function(r){ var nm=(adaptarRecCl(r)||{}).n||r.n; return '<span class="cc-w"><button class="cc cc-lib" data-a="plLib" data-m="'+mi+'" data-r="'+esc(r.id)+'">'+platoImg(r.img,'cc-im')+'<span class="cc-tag">Sugerencia</span><b>'+esc(nm)+'</b><small>'+(ob?'≈ '+kTxt(ob[0])+' kcal':esc(r.min)+' min')+'</small></button>'+
       '<button class="cc-q" data-a="libOcultar" data-r="'+esc(r.id)+'" aria-label="Quitar «'+esc(nm)+'» de tus sugerencias">'+ic('x')+'</button></span>'; }).join('');
   h+='</div>';
-  if(!ops.length&&!sug.length) h+='<p class="muted sm cb-vac">'+(lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
+  if(!ops.length&&(!sug.length||(lib&&c.nq))) h+='<p class="muted sm cb-vac">'+(lib&&c.nq?'Has quitado los platos de esta comida: crea el tuyo, elige una receta o vuelve a poner alguno en «Mis platos».':lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
   if(S.length) h+='<button class="cb-su" data-a="mnSu" data-m="'+mi+'">'+ic('lista')+'<span><b>'+esc(S.map(function(z){ var zc=sueltoCk(z), cc=cocInfo(zc); return z.n+' '+gTxt(cc?gVista(zc,z.q,ckAl(z.a)||cc.s):z.q); }).join(' · '))+'</b><small>'+(vm?kTxt(sumMac(S.map(macS))[0])+' kcal · ':'')+S.length+(S.length>1?' alimentos sueltos':' alimento suelto')+'</small></span>'+ic('flecha')+'</button>';
   // v52 · lo demás, pequeño y debajo (sin tener que deslizar hasta el final): alimentos sueltos, más de la biblioteca y «Copiar de ayer»
-  var R=repCm(p,mi), ac=(lib?'<button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
+  var R=repCm(p,mi), ac=(lib?'<button class="cb-ch" data-a="plMios" data-m="'+mi+'">'+ic('ajuste')+'Mis platos'+(c.nq?' · '+c.nq+(c.nq>1?' quitados':' quitado'):'')+'</button><button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
     (R?'<button class="cb-ch cb-rep" data-a="mnRepCm" data-m="'+mi+'" aria-label="Copiar de ayer: '+esc(R.txt)+'">'+ic('reinicio')+(R.A.f===sumar(hoyStr(),-1)?'Copiar de ayer':'Copiar del '+esc(fCorta(R.A.f)))+'</button>':'');
   if(ac) h+='<div class="cb-ac">'+ac+'</div>';
   if(lib&&c.extra) h+='<button class="link danger cb-q" data-a="dlQuitarCm" data-m="'+mi+'">Quitar esta comida</button>';
@@ -7288,6 +7289,35 @@ A.plAbrir=function(el){
   if(!(x&&x.o===o.id)) plAjustar(p,true);      // las que cuadran ella: sus gramos ya ajustados a su objetivo de esa comida (solo para hoy)
   plAbrirCon(PL);
 };
+/* v53.4.32 · las que cuadran su dieta quitan los platos que no quieren (los de su coach y los suyos) y los vuelven a poner cuando
+   quieran, uno a uno o todos («Mis platos» de cada comida). Lo de su coach no se borra: solo deja de salirle. */
+var PQ_UNDO=null;
+function plTodosCm(p,mi){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[], T=planesMez(P,true), q=T.filter(function(x){ return x.id===p.id; })[0], c=q&&q.comidas[mi]; return c?c.opciones||[]:[]; }
+A.plOcultar=function(el){ var p=planSelCl(); if(!p) return; var mi=+el.dataset.m, id=el.dataset.o, o=opCm(p,mi,id), M=miaCl(), c=p.comidas[mi], x=comidoDe(p,mi); if(!o||(x&&x.o===id)) return;
+  M.q[id]=1; PQ_UNDO=[id]; guardarMia(); CL.keep=true; pintarCl();
+  toastAcc('Quitado de tu '+String(c.nombre).toLowerCase()+': '+nombreOp(o,(c.opciones||[]).indexOf(o)),'Deshacer','plOcDesh'); };
+A.plOcDesh=function(){ var t=document.getElementById('tacc'); if(t) t.className=''; if(!PQ_UNDO) return; var M=miaCl(); PQ_UNDO.forEach(function(id){ delete M.q[id]; }); PQ_UNDO=null; guardarMia(); CL.keep=true; pintarCl(); toast('Vuelve a salirte','ok'); };
+A.plMios=function(el){ CL.pqM=+el.dataset.m; modal('<div id="pq-box"></div>'); pqPintar(); };
+function pqPintar(){
+  var b=document.getElementById('pq-box'), p=planSelCl(); if(!b||!p) return; var mi=CL.pqM, c=p.comidas[mi]; if(!c){ cerrarModal(); return; }
+  var M=miaCl(), Q=M.q||{}, L=plTodosCm(p,mi), x=comidoDe(p,mi), vm=verMac(), pf=prefCl(), nom=String(c.nombre).toLowerCase(), nOc=Object.keys(pf.oc||{}).length, quit=L.filter(function(o){ return Q[o.id]; }).length;
+  var h='<h2>Mis platos · '+esc(c.nombre)+'</h2><p class="muted sm">Quita los que no quieras ver en tu '+esc(nom)+' y vuelve a poner los que quieras. Los de tu coach no se borran: solo dejan de salirte.</p>';
+  if(L.length) h+='<div class="pq-bt"><button class="btn sm sec" data-a="pqTodos" data-v="0"'+(quit>=L.length-(x?1:0)?' disabled':'')+'>Quitar todos</button><button class="btn sm sec" data-a="pqTodos" data-v="1"'+(quit?'':' disabled')+'>Ponerlos todos</button></div>';
+  h+=L.length?'<div class="pq-l">'+L.map(function(o,i){ var on=!Q[o.id], hoy=!!x&&x.o===o.id, m=vm?macOpEf(o):null;
+      return '<div class="fila pq-f'+(on?'':' off')+'"><span>'+platoImg(o.img,'pq-im')+'<span class="pq-t"><b>'+esc(nombreOp(o,i))+'</b><small class="fila-s">'+(o.mio===2?'Tu plato':o.mio===1?'De tu coach, cambiado por ti':'De tu coach')+(m?' · '+kTxt(m[0])+' kcal':'')+(hoy?' · lo tienes hoy':'')+'</small></span></span>'+
+        '<button class="sw'+(on?' on':'')+'" data-a="pqTog" data-o="'+esc(o.id)+'"'+(hoy?' disabled':'')+' aria-pressed="'+on+'" aria-label="«'+esc(nombreOp(o,i))+'» en tu '+esc(nom)+'"><i></i></button></div>'; }).join('')+'</div>':'<p class="muted sm">Todavía no hay platos en esta comida.</p>';
+  h+='<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en cada comida (cambian cada día)</small></span><button class="sw'+(pf.ns?'':' on')+'" data-a="pqSug" aria-pressed="'+!pf.ns+'" aria-label="Sugerencias de la biblioteca en tus comidas"><i></i></button></div>'+
+    (nOc?'<button class="link" data-a="pqSugVolver">Volver a poner '+(nOc>1?'las '+nOc+' sugerencias que quitaste':'la sugerencia que quitaste')+'</button>':'')+
+    '<button class="btn sec mt" data-a="cerrarModal">Listo</button>';
+  b.innerHTML=h;
+}
+function pqHecho(msg){ guardarMia(); CL.keep=true; pintarCl(); pqPintar(); if(msg) toast(msg,'ok'); }
+A.pqTog=function(el){ if(el.disabled) return; var M=miaCl(), id=el.dataset.o; if(M.q[id]) delete M.q[id]; else M.q[id]=1; pqHecho(); };
+A.pqTodos=function(el){ if(el.disabled) return; var p=planSelCl(); if(!p) return; var mi=CL.pqM, M=miaCl(), x=comidoDe(p,mi), L=plTodosCm(p,mi), on=el.dataset.v==='1';
+  L.forEach(function(o){ if(on) delete M.q[o.id]; else if(!(x&&x.o===o.id)) M.q[o.id]=1; });
+  pqHecho(on?'Vuelven a salirte todos':(x?'Quitados todos (menos el que tienes hoy)':'Quitados todos: añade los tuyos o vuelve a poner los que quieras')); };
+A.pqSug=function(){ var pf=prefCl(); if(pf.ns) delete pf.ns; else pf.ns=1; guardarPref(); CL.keep=true; pintarCl(); pqPintar(); };
+A.pqSugVolver=function(){ var pf=prefCl(); pf.oc={}; guardarPref(); CL.keep=true; pintarCl(); pqPintar(); toast('Vuelven a salirte las sugerencias','ok'); };
 /* v53.4.26: las sugerencias de la biblioteca (no las ha elegido ella) se quitan con su ✕ y ya no le salen en esa comida ni en las demás */
 A.libOcultar=function(el){ var id=el.dataset.r, pf=prefCl(); pf.oc=pf.oc||{}; pf.oc[id]=1; guardarPref(); CL.keep=true; pintarCl(); toast('Quitada de tus sugerencias. Si la quieres, la tienes en «Más de la biblioteca»'); };
 A.plLib=function(el){ conBanco(function(){
@@ -13054,7 +13084,7 @@ function libreCl(){ return !!(CL.d&&CL.d.dietaLibre); }
    guardó antes, se juntan los cambios y se vuelve a mandar. Lo nuevo del servidor no pisa lo que está sin guardar ni es más viejo. */
 function miaK(){ return 'chadin_dmia2_'+BOOT.token; }
 function miaPend(){ return !!(miaT||CL.miaVuelo||LS.get(miaK())); }
-function miaNorm(m){ m=m||{}; m.o=m.o||{}; m.add=m.add||{}; m.cm=m.cm||{}; m.pc=m.pc||{}; return m; }
+function miaNorm(m){ m=m||{}; m.o=m.o||{}; m.add=m.add||{}; m.cm=m.cm||{}; m.pc=m.pc||{}; m.q=m.q||{}; return m; }      // v53.4.32: q = platos que ha quitado ella
 function miaCl(){
   if(CL.mia&&CL.miaD===CL.d) return CL.mia;
   var svV=num(CL.d&&CL.d.dietaMiaV)||0;
@@ -13072,12 +13102,13 @@ function miaPlano(m){ var out={o:{},add:{}};
   Object.keys(m.add||{}).forEach(function(c){ var L=(m.add[c]||[]).map(function(x){ var o={id:x.id,nombre:x.nombre,items:(x.items||[]).map(itPlano)}; ['lib','img','min','texto','tanda'].forEach(function(f){ if(x[f]) o[f]=x[f]; }); return o; }); if(L.length) out.add[c]=L; });
   out.cm={}; Object.keys(m.cm||{}).forEach(function(pid){ var L=(m.cm[pid]||[]).map(function(x){ return {n:x.n,h:x.h||''}; }); if(L.length) out.cm[pid]=L; });      // v38
   if(m.pc&&Object.keys(m.pc).length) out.pc=m.pc;      // v52: su reparto por comidas
+  var q=Object.keys(m.q||{}).filter(function(k){ return m.q[k]; }); if(q.length){ out.q={}; q.forEach(function(k){ out.q[k]=1; }); }      // v53.4.32
   return out;
 }
 /* lo junto (en plano), con los nombres y macros de cada alimento y plato sacados de lo de aquí o de lo del otro móvil */
 function miaHidr(pl,A,T){
   var it1=function(x,L1,L2){ var f=(L1||[]).concat(L2||[]).filter(function(y){ return y&&y.i===x.i; })[0]; return f?Object.assign({},f,x):x; };
-  var o={o:{},add:{},cm:pl.cm||{},pc:pl.pc||{}};
+  var o={o:{},add:{},cm:pl.cm||{},pc:pl.pc||{},q:pl.q||{}};
   Object.keys(pl.o||{}).forEach(function(id){ o.o[id]={it:(pl.o[id].it||[]).map(function(x){ return it1(x,(A.o[id]||{}).it,(T.o[id]||{}).it); })}; });
   Object.keys(pl.add||{}).forEach(function(c){ o.add[c]=(pl.add[c]||[]).map(function(x){ var f=(A.add[c]||[]).concat(T.add[c]||[]).filter(function(y){ return y&&y.id===x.id; })[0]||{};
     return Object.assign({},f,x,{items:(x.items||[]).map(function(it){ return it1(it,f.items,[]); })}); }); });
@@ -13105,14 +13136,17 @@ function enviarMia(){
   },function(e){ CL.miaVuelo=false; LS.set(k,{m:miaCl(),b:CL.miaB||{},v:CL.miaV||0}); toast('No se ha podido guardar tu cambio: '+limpiaErr(e),'err'); });
 }
 /* tus platos: lo que ha cambiado ella encima de los de su coach, y los suyos */
-function planesMez(P){
-  var M=miaCl(); if(CL._mez&&CL._mezP===P&&CL._mezV===CL.mezV) return CL._mez;
+function planesMez(P,todos){
+  var M=miaCl(), Q=M.q||{}, d=prefCl().dia, hoy=(!todos&&d&&d.f===hoyStr()&&d.c)||{}, kq=hoyStr()+Object.keys(hoy).filter(function(k){ return hoy[k]&&Q[hoy[k].o]; }).map(function(k){ return k+'='+hoy[k].o; }).join(',');
+  if(!todos&&CL._mez&&CL._mezP===P&&CL._mezV===CL.mezV&&CL._mezK===kq) return CL._mez;      // v53.4.32: sin los platos que ha quitado (salvo el que tiene hoy)
   var out=P.map(function(p){ var ex=((M.cm||{})[p.id]||[]).map(function(x,j){ return {nombre:x.n,hora:x.h||'',opciones:[],extra:true,ej:j}; });      // v38: las comidas que añade ella
     return Object.assign({},p,{comidas:(p.comidas||[]).concat(ex).map(function(c,mi){
     var ops=(c.opciones||[]).map(function(o){ var ov=M.o[o.id]; return ov?Object.assign({},o,{items:ov.it,mio:1,orig:o}):o; });
-    var add=(M.add[p.id+'|'+mi]||[]).map(function(x){ return Object.assign({},x,{mio:2}); }), pcM=M.pc&&M.pc[p.id]&&M.pc[p.id][mi];
-    return Object.assign({},c,{opciones:ops.concat(add)},pcM!=null?{pctM:pcM}:{}); })}); });      // v52: pctM = el % del día que ha puesto ella
-  CL._mez=out; CL._mezP=P; CL._mezV=CL.mezV; return out;
+    var add=(M.add[p.id+'|'+mi]||[]).map(function(x){ return Object.assign({},x,{mio:2}); }), pcM=M.pc&&M.pc[p.id]&&M.pc[p.id][mi], hx=hoy[p.id+'|'+mi];
+    var todas=ops.concat(add), vis=todos?todas:todas.filter(function(o){ return !Q[o.id]||(hx&&hx.o===o.id); });
+    return Object.assign({},c,{opciones:vis},todos?{nq:0}:{nq:todas.length-vis.length},pcM!=null?{pctM:pcM}:{}); })}); });      // v52: pctM = el % del día que ha puesto ella
+  if(todos) return out;
+  CL._mez=out; CL._mezP=P; CL._mezV=CL.mezV; CL._mezK=kq; return out;
 }
 function pctCm(c){ return num(c&&c.pctM!=null?c.pctM:c&&c.pct); }
 function objCmCl(p,c){ var o=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)], pc=pctCm(c); return o[0]!=null&&pc?o.map(function(v){ return v==null?null:v*pc/100; }):null; }
@@ -13245,6 +13279,9 @@ function miaResumenHtml(){
     ((M.add&&M.add[p.id+'|'+mi])||[]).forEach(function(x){ var k=sumMac((x.items||[]).map(macIt));
       F.push('<div class="mia-r nuevo"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+(c.nombre||'Comida')+' · «'+(x.nombre||'Mi plato')+'»')+' <i>plato suyo</i></b><span>'+esc((x.items||[]).map(function(it){ return (it.n||'?')+' '+gTxt(it.q); }).join(' · ')||'sin alimentos todavía')+'</span>'+(k?'<small>'+kTxt(k[0])+' kcal · P '+kTxt(k[1])+' · HC '+kTxt(k[2])+' · G '+kTxt(k[3])+'</small>':'')+'</div>'); });
   }); });
+  P.forEach(function(p){ (p.comidas||[]).forEach(function(c,mi){      // v53.4.32: los platos tuyos que ha quitado de su app
+    var Lq=(c.opciones||[]).map(function(o,oi){ return M.q&&M.q[o.id]?(o.nombre||'Opción '+(oi+1)):null; }).filter(Boolean);
+    if(Lq.length) F.push('<div class="mia-r"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+(c.nombre||'Comida'))+'</b><span>Ha quitado de su app: '+esc(Lq.join(' · '))+'</span><small>No se borran de tu dieta: '+cG('ella','él')+' los puede volver a poner</small></div>'); }); });
   P.forEach(function(p){ var nb=(p.comidas||[]).length; ((M.cm&&M.cm[p.id])||[]).forEach(function(x,j){      // v38: comidas que ha añadido ella
     var L=(M.add&&M.add[p.id+'|'+(nb+j)])||[];
     F.push('<div class="mia-r nuevo"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+'Comida añadida: '+x.n+(x.h?' · '+x.h:''))+'</b><span>'+esc(L.length?L.map(function(y){ return '«'+(y.nombre||'Mi plato')+'» '+kTxt((sumMac((y.items||[]).map(macIt))||[0])[0])+' kcal'; }).join(' · '):'sin platos todavía')+'</span></div>'); }); });
