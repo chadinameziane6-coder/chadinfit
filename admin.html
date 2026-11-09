@@ -88,6 +88,11 @@ section h2{margin:0 0 4px;font-size:18px}
 .tag{font-size:12.5px;font-weight:600;border-radius:999px;padding:3px 10px;white-space:nowrap}
 .tag.amb{background:#FFF4E0;color:#7A4A00}.tag.ve{background:#E8F6EE;color:#0E5A33}
 .vacio{color:#87878B;font-size:14.5px;padding:8px 2px}
+.ay-i{padding:16px 0;border-top:1px solid #F2F2F5}.ay-i:first-child{border-top:0;padding-top:2px}      /* v53.4.35 · Ayuda */
+.ay-c{display:flex;flex-wrap:wrap;align-items:center;gap:8px}.ay-c b{font-size:15px}.tag.gr{background:#F2F2F5;color:#4A4A4E}
+.ay-t{margin:8px 0 0;white-space:pre-wrap;font-size:15px;overflow-wrap:anywhere}
+.ay-r{background:#F5F5F7;border-radius:14px;padding:10px 14px;margin-top:10px;font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}.ay-r b{display:block;font-size:12.5px;color:#4A4A4E;margin-bottom:2px}
+.ay-b{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}.ay-fm textarea{margin-top:10px}
 .ok-msg{background:#E8F6EE;color:#0E5A33;border-radius:14px;padding:10px 14px;font-size:14px}
 .aviso{background:#FFF4E0;color:#7A4A00;border-radius:14px;padding:12px 14px;font-size:14px}
 .aviso.gris{background:#F5F5F7;color:#4A4A4E}
@@ -344,6 +349,7 @@ td.fin{text-align:right;white-space:nowrap}
       <a href="#inicio" data-v="inicio" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg><span class="t">Inicio</span></a>
       <a href="#entrenadores" data-v="entrenadores"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></svg><span class="t">Entrenadores</span></a>
       <a href="#crm" data-v="crm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg><span class="t">CRM</span><span class="num h" id="n-crm" title="Para hoy"></span></a>
+      <a href="#ayuda" data-v="ayuda"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.7 9.4a2.4 2.4 0 0 1 4.6.9c0 1.6-2.3 2.1-2.3 3.5"/><path d="M12 16.9h.01"/></svg><span class="t">Ayuda</span><span class="num h" id="n-ayuda" title="Sin contestar"></span></a>
       <a href="#planes" data-v="planes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/></svg><span class="t">Planes</span></a>
       <a href="#plataforma" data-v="plataforma"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span class="t">Plataforma</span></a>
     </nav>
@@ -393,6 +399,15 @@ td.fin{text-align:right;white-space:nowrap}
         <form id="f-inv" novalidate></form>
       </section>
       <p class="pie">Clientes sin contar la clienta de ejemplo. «Activos» son los que no tienen el acceso en pausa. Aquí no se ve ningún dato de salud de los clientes: solo números.</p>
+    </div>
+
+    <div id="v-ayuda" class="vista h">
+      <header class="cab-v"><div class="t"><h1>Ayuda</h1><p>Lo que te escriben los entrenadores desde «Ayuda» en su panel. Al contestar, le llega por email y lo ve en su panel.</p></div></header>
+      <div id="ay-msg" class="ok-msg h" role="status"></div>
+      <div id="ay-err" class="msg err h" role="alert" style="margin:0"></div>
+      <div class="filtros"><div class="chips" id="ay-f" role="group" aria-label="Filtrar mensajes"></div></div>
+      <section aria-label="Mensajes de los entrenadores"><div id="ay-l"><div class="vacio">Cargando…</div></div></section>
+      <p class="pie">En el formulario les pedimos que no escriban datos de salud de sus clientes (basta con el nombre).</p>
     </div>
 
     <div id="v-ficha" class="vista h" aria-live="polite"></div>
@@ -576,8 +591,10 @@ td.fin{text-align:right;white-space:nowrap}
     var CR = d.crm || {}, H = CR.hoy || [], hoyD = d.hoy || '';
     $('c-int').textContent = Number(CR.nuevos) || 0;
     $('n-crm').textContent = H.length; $('n-crm').classList.toggle('h', !H.length);
+    var nAy = AY ? ayAbiertas() : Number((d.ayuda || {}).abiertas) || 0; ayContar(nAy);   // v53.4.35
     // «Para hoy»: lo que necesita algo de ti
     var F = [], ah = d.ahora ? new Date(d.ahora) : new Date();
+    if (nAy) F.push('<div class="fila-h"><span class="tag amb">Ayuda</span><div class="q"><b>' + esc(plural(nAy, 'mensaje sin contestar', 'mensajes sin contestar')) + '</b><div>Te han escrito desde «Ayuda» en su panel.</div></div><a class="chip-b" href="#ayuda">Contestar</a></div>');
     if (H.length) {
       var nuevos = H.filter(function (k) { return k.etapa === 'nuevo' && !(k.proximo_fecha && k.proximo_fecha <= hoyD); });
       var pasos = H.filter(function (k) { return nuevos.indexOf(k) < 0; });
@@ -837,6 +854,7 @@ td.fin{text-align:right;white-space:nowrap}
       irA(location.hash.slice(1), true);
       if (vista === 'planes') cargarPlanes();
       if (vista === 'crm' && !abrirTras) cargarCrm();
+      if (vista === 'ayuda') cargarAyuda();
     }).catch(function (er) {
       if (/Vuelve a entrar/.test(er.message)) { guarda(K.ses, ''); verEntrar(); aviso(er.message); }
       else if ($('panel').classList.contains('h')) { verEntrar(); aviso(er.message); }
@@ -846,7 +864,7 @@ td.fin{text-align:right;white-space:nowrap}
   $('b-act').addEventListener('click', cargar);
 
   /* ---------- las secciones ---------- */
-  var VISTAS = ['inicio', 'entrenadores', 'crm', 'planes', 'plataforma', 'ficha'], vista = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
+  var VISTAS = ['inicio', 'entrenadores', 'crm', 'ayuda', 'planes', 'plataforma', 'ficha'], vista = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
   function irA(v, sinCargar) {
     var fc = /^entrenador\/(co[0-9]{1,6})$/.exec(v || '');   // v53.4: la ficha de un entrenador (#entrenador/co2)
     if (fc) v = 'ficha'; else if (VISTAS.indexOf(v) < 0 || v === 'ficha') v = 'inicio';
@@ -858,10 +876,11 @@ td.fin{text-align:right;white-space:nowrap}
     if (fc) abrirFc(fc[1]);
     if (!sinCargar && v === 'planes' && !PL) cargarPlanes();
     if (!sinCargar && v === 'crm' && (!KR || abrirTras)) { cargarCrm(abrirTras); abrirTras = ''; }
+    if (!sinCargar && v === 'ayuda') cargarAyuda();
   }
   window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) { irA(location.hash.slice(1)); window.scrollTo(0, 0); } });
   function fallo(er) {
-    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; verEntrar(); aviso(er.message); return true; }
+    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; AY = null; verEntrar(); aviso(er.message); return true; }
     return false;
   }
   function hechoEn(id, t) {
@@ -1062,6 +1081,68 @@ td.fin{text-align:right;white-space:nowrap}
     var b = e.target.closest('button[data-cod]'); if (!b) return;
     var c = ((PL && PL.codigos) || []).filter(function (x) { return x.codigo === b.getAttribute('data-cod'); })[0];
     if (c) hojaCodigo(c, false);
+  });
+
+  /* ---------- v53.4.35 · Ayuda: lo que escriben los entrenadores desde su panel ---------- */
+  var AY = null, ayF = null, ayResp = '', ayBorr = {};
+  var AY_T = { duda: 'Duda', error: 'Algo no funciona', sugerencia: 'Sugerencia', cobros: 'Cobros y plan' };
+  var AY_E = { abierta: ['Sin contestar', 'amb'], respondida: ['Contestado', 've'], resuelta: ['Resuelto', 'gr'] };
+  function ayAbiertas() { return ((AY && AY.mensajes) || []).filter(function (m) { return m.estado === 'abierta'; }).length; }
+  function ayContar(n) { $('n-ayuda').textContent = n; $('n-ayuda').classList.toggle('h', !n); }
+  function cargarAyuda() {
+    if (!AY) $('ay-l').innerHTML = '<div class="vacio">Cargando…</div>';
+    return llamar({ acc: 'ayuda', ses: lee(K.ses) }).then(function (r) { AY = r.d || {}; pintarAyuda(); })
+      .catch(function (er) { if (!fallo(er)) $('ay-l').innerHTML = '<div class="vacio">' + esc(er.message) + '</div>'; });
+  }
+  function pintarAyuda() {
+    var M = (AY && AY.mensajes) || [], cu = { abierta: 0, respondida: 0, resuelta: 0 };
+    M.forEach(function (m) { cu[m.estado] = (cu[m.estado] || 0) + 1; });
+    ayContar(cu.abierta);
+    if (ayF === null) ayF = cu.abierta ? 'abierta' : '';
+    if (ayF && !cu[ayF]) ayF = '';
+    $('ay-f').innerHTML = [['', 'Todos', M.length], ['abierta', 'Sin contestar', cu.abierta], ['respondida', 'Contestados', cu.respondida], ['resuelta', 'Resueltos', cu.resuelta]]
+      .filter(function (x) { return !x[0] || x[2]; }).map(function (x) { return '<button type="button" data-f="' + x[0] + '" aria-pressed="' + (x[0] === ayF) + '">' + esc(x[1]) + ' · ' + x[2] + '</button>'; }).join('');
+    var V = M.filter(function (m) { return !ayF || m.estado === ayF; });
+    $('ay-l').innerHTML = !M.length ? '<div class="vacio">Todavía no te ha escrito nadie. Cuando un entrenador use «Escribir a MOOD ON» en su panel, saldrá aquí (y te llegará un email).</div>' :
+      !V.length ? '<div class="vacio">Ninguno con ese filtro.</div>' : V.map(function (m) {
+        var e = AY_E[m.estado] || AY_E.abierta, id = String(m.rid), abierto = ayResp === id;
+        var det = [AY_T[m.tipo] || 'Duda', fecha(m.creado, true), m.pantalla ? 'en ' + m.pantalla : '', m.version].filter(Boolean).join(' · ');
+        return '<div class="ay-i" data-rid="' + esc(id) + '"><div class="ay-c"><span class="tag ' + e[1] + '">' + esc(e[0]) + '</span><b>' + esc(m.coach_nombre || m.coach) + '</b>' +
+          '<span class="gris">' + esc(det) + '</span></div>' +
+          '<p class="ay-t">' + esc(m.texto) + '</p>' +
+          (m.respuesta && !abierto ? '<div class="ay-r"><b>Tu respuesta' + (m.respondida ? ' · ' + esc(m.respondida) : '') + (m.visto ? ' · ya la ha visto' : '') + '</b>' + esc(m.respuesta) + '</div>' : '') +
+          (abierto ? '<div class="ay-fm"><label class="h" for="ay-tx">Tu respuesta</label><textarea id="ay-tx" rows="5" maxlength="3000" placeholder="Escribe tu respuesta. Le llega por email y la ve en su panel, en Ayuda.">' + esc(ayBorr[id] != null ? ayBorr[id] : m.respuesta || '') + '</textarea>' +
+            '<div class="ay-b"><button class="btn-n" type="button" data-env="' + esc(id) + '">Enviar respuesta</button><button class="chip-b" type="button" data-cancel="1">Cancelar</button>' +
+            '<span class="gris">' + (m.coach_email ? 'Se la mandamos a ' + esc(m.coach_email) : 'No tiene email: solo la verá en su panel') + '</span></div></div>' :
+            '<div class="ay-b"><button class="chip-b peq neg" type="button" data-resp="' + esc(id) + '">' + (m.respuesta ? 'Cambiar respuesta' : 'Contestar') + '</button>' +
+            (m.estado === 'resuelta' ? '<button class="chip-b peq" type="button" data-est="abierta" data-id="' + esc(id) + '">Volver a abrir</button>' : '<button class="chip-b peq" type="button" data-est="resuelta" data-id="' + esc(id) + '">Marcar resuelto</button>') +
+            (m.coach_email ? '<a class="chip-b peq" href="mailto:' + esc(m.coach_email) + '">Email</a>' : '') +
+            (/^co[0-9]{1,6}$/.test(m.coach || '') && m.coach !== 'co1' ? '<a class="chip-b peq" href="#entrenador/' + esc(m.coach) + '">Ver su ficha</a>' : '') + '</div>') + '</div>';
+      }).join('');
+    if (ayResp) { var t = $('ay-tx'); if (t) { t.focus(); t.addEventListener('input', function () { ayBorr[ayResp] = t.value; }); } }
+  }
+  function ayError(t) { var m = $('ay-err'); m.textContent = t; m.classList.toggle('h', !t); }
+  $('ay-f').addEventListener('click', function (e) { var b = e.target.closest('button[data-f]'); if (!b) return; ayF = b.getAttribute('data-f'); pintarAyuda(); });
+  $('ay-l').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    if (b.hasAttribute('data-resp')) { ayResp = b.getAttribute('data-resp'); ayError(''); pintarAyuda(); return; }
+    if (b.hasAttribute('data-cancel')) { ayResp = ''; pintarAyuda(); return; }
+    if (b.hasAttribute('data-env')) {
+      var id = b.getAttribute('data-env'), t = $('ay-tx').value.trim();
+      if (t.length < 2) { ayError('Escribe la respuesta.'); return; }
+      ayError(''); ocupado(b, true, 'Enviando…');
+      llamar({ acc: 'ayuda_responder', ses: lee(K.ses), rid: Number(id), respuesta: t }).then(function (r) {
+        AY = r.d || AY; ayResp = ''; delete ayBorr[id]; pintarAyuda(); hechoEn('ay-msg', r.aviso || 'Contestado.');
+      }).catch(function (er) { if (!fallo(er)) { ocupado(b, false, 'Enviar respuesta'); ayError(er.message); } });
+      return;
+    }
+    if (b.hasAttribute('data-est')) {
+      var est = b.getAttribute('data-est'), rid = b.getAttribute('data-id');
+      ocupado(b, true); ayError('');
+      llamar({ acc: 'ayuda_estado', ses: lee(K.ses), rid: Number(rid), estado: est }).then(function (r) {
+        AY = r.d || AY; pintarAyuda(); hechoEn('ay-msg', est === 'resuelta' ? 'Marcado como resuelto.' : 'Vuelve a estar sin contestar.');
+      }).catch(function (er) { if (!fallo(er)) { ocupado(b, false); ayError(er.message); } });
+    }
   });
 
   /* ---------- el CRM de entrenadores ---------- */
