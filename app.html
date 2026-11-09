@@ -2676,6 +2676,12 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .pp-c{width:26px;height:26px;border-radius:50%;border:1.5px solid #D1D1D6;display:flex;align-items:center;justify-content:center;font:700 12px Plus Jakarta Sans,sans-serif;color:var(--mu);flex:none}
 .pp-f.ok .pp-c{background:#1E8E5A;border-color:#1E8E5A;color:#fff}.pp-f.ok .pp-t b{color:var(--mu);font-weight:600;text-decoration:line-through}.pp-f.on .pp-c{border-color:#111;color:#111}.pp-c .ic{width:14px;height:14px}
 .pp-f .btn{flex:none}.pp-pie{margin:8px 0 0}@media(max-width:560px){.pp-f{flex-wrap:wrap}.pp-f .btn{margin-left:38px}}
+.lco-w{display:flex;align-items:center;justify-content:center;gap:12px}.lco{display:block;width:auto;object-fit:contain}.lsep{display:block;width:1px;align-self:stretch;background:currentColor;opacity:.22}      /* v53.4.38 · logo del entrenador */
+.logo-big .lco{height:56px;max-width:44vw}.logo-big.logo-co svg{width:150px}.logo-top .lco{height:30px;max-width:120px}.logo-top.logo-co svg{width:78px}
+.logo-side .lco{height:34px;max-width:104px}.logo-side.logo-co svg{width:80px}.logo-cq .lco{height:36px;max-width:130px}.logo-cq.logo-co svg{width:88px}
+.logo-top .lco-w,.logo-side .lco-w,.logo-cq .lco-w{justify-content:flex-start}
+.lg-pv{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 14px 12px;margin:10px 0 4px;display:flex;flex-direction:column;align-items:center;gap:10px;color:#111}.lg-pv .lco{height:46px;max-width:55%}.lg-pv svg{width:110px;height:auto;display:block}.lg-pv small{color:var(--mu);font-size:12px}
+.lg-vac{flex-direction:row;justify-content:center;color:var(--mu);font-size:13.5px;padding:22px 14px}
 </style>
 </head>
 <body>
@@ -2736,7 +2742,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.37';
+var APP_V = 'v53.4.38';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5296,6 +5302,7 @@ function pantallaSinRed(extra){
 A.reintentarCarga=function(){ app.innerHTML='<div class="login">'+logoHtml('big')+'<div class="card center"><p class="muted">Conectando…</p></div></div>'; (BOOT.mode==='cuest'?arrancarCuest:arrancarClienta)(); };
 
 function pintarCl(){
+  if(CL.d&&CL._lgD!==CL.d){ CL._lgD=CL.d; logoCoSync(CL.d.logoV); }      // v53.4.38: el logo de su coach
   var y=window.scrollY, keep=CL.keep; CL.keep=false;
   if(CL.d&&CL.d.bloqueo){ pararReloj(); app.innerHTML=vBloqueo(); window.scrollTo(0,0); return; }      // v31: plan vencido sin renovar
   if(CL.tab==='entreno'&&CL.dr){ pintarEntreno(); if(keep) window.scrollTo(0,y); return; }
@@ -7792,7 +7799,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ var t=CO.pin; if(/^C/.test(t||'')) api('salir',t).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); CO.coachNombre=r.coachNombre||'Chadin'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.empezar=r.empezar||null;      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
+function ponerResumen(r){ setTimeout(pedirFotosCo,400); CO.coachNombre=r.coachNombre||'Chadin'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
@@ -8725,12 +8732,42 @@ function tileCli(c){
     avCo(c.id,c.nombre,'sd-av hm-av')+'<b class="hm-cn">'+esc(nomCorto(c.nombre))+'</b><small class="'+e.c+'">'+esc(e.t)+'</small></button>';
 }
 function tilesHtml(){ if(!CO.lista) return ''; var act=CO.lista.filter(function(c){ return c.activa; }), pau=CO.lista.filter(function(c){ return !c.activa; }); return act.concat(pau).map(tileCli).join(''); }
+/* v53.4.38 · «Tu logo» (entrenadores que no son la cuenta nº 1): se reduce en el móvil (como mucho 720 × 240) y se guarda en su hoja Marca */
+A.coLogo=function(){
+  if(CO.casa!==false) return; CO.lgNuevo=null;
+  modal('<h2>Tu logo</h2><p class="muted sm">Sale junto a MOOD ON arriba en la app de tus clientes, al entrar, en su cuestionario y en sus emails. Mejor un PNG con fondo transparente.</p><div id="lg-prev"></div>'+
+    '<input type="file" id="lg-f" accept="image/png,image/jpeg,image/webp" style="display:none"><button class="btn sec mt" data-a="coLogoElegir">'+ic('foto')+(LOGO_CO?'Elegir otra imagen':'Elegir imagen')+'</button>'+
+    '<button class="btn mt" data-a="coLogoOk">Guardar</button>'+(CO.logoV?'<button class="link danger mt" data-a="coLogoQuitar">Quitar mi logo</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+  lgPrev(); var f=document.getElementById('lg-f'); if(f) f.addEventListener('change',lgLeer);
+};
+A.mnLogo=function(){ A.coLogo(); };
+function lgPrev(){ var b=document.getElementById('lg-prev'); if(!b) return; var src=CO.lgNuevo||(LOGO_CO&&LOGO_CO.src);
+  b.innerHTML=src?'<div class="lg-pv"><div class="lco-w"><img class="lco" src="'+src+'" alt="Tu logo"><i class="lsep"></i>'+logoSvg(false)+'</div><small>Así lo verán tus clientes, arriba en su app</small></div>':'<div class="lg-pv lg-vac">'+ic('foto')+'<span>Todavía no has subido tu logo</span></div>'; }
+A.coLogoElegir=function(){ var f=document.getElementById('lg-f'); if(f){ f.value=''; f.click(); } };
+function lgLeer(){
+  var f=this.files&&this.files[0]; if(!f) return;
+  if(!/^image\/(png|jpeg|webp)$/.test(f.type)) return toast('Sube una imagen PNG, JPG o WebP','err');
+  var rd=new FileReader(); rd.onload=function(){ var im=new Image(); im.onload=function(){
+    var k=Math.min(1,720/im.width,240/im.height), w=Math.max(1,Math.round(im.width*k)), h=Math.max(1,Math.round(im.height*k)), c=document.createElement('canvas'); c.width=w; c.height=h;
+    c.getContext('2d').drawImage(im,0,0,w,h);
+    var u=f.type==='image/jpeg'?c.toDataURL('image/jpeg',0.9):c.toDataURL('image/png'); if(u.length>300000) u=c.toDataURL('image/webp',0.86);
+    if(u.length>300000) return toast('El logo pesa demasiado. Prueba con una imagen más pequeña','err');
+    CO.lgNuevo=u; lgPrev(); }; im.onerror=function(){ toast('No se ha podido abrir esa imagen','err'); }; im.src=rd.result; };
+  rd.readAsDataURL(f);
+}
+function lgListo(L,msg){ CO.logoV=L?L.v:''; if(L){ LOGO_CO={v:L.v,src:'data:'+L.tipo+';base64,'+L.img}; LS.set('moodon_logo',LOGO_CO); } else { LOGO_CO=null; LS.del('moodon_logo'); }
+  cerrarModal(); repintarVista(); ladoCo(); logosRepintar(); toast(msg,'ok'); }
+A.coLogoOk=function(el){ if(!CO.lgNuevo) return toast(LOGO_CO?'Elige otra imagen para cambiarlo':'Elige primero tu logo'); if(el.disabled) return; el.disabled=true;
+  cargando(api('coachLogo',CO.pin,{img:CO.lgNuevo})).then(function(r){ lgListo(r.logo,'Listo: tus clientes ya ven tu logo'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.coLogoQuitar=function(){ confirmar('¿Quitar tu logo? Tus clientes verán solo MOOD ON.','Quitar logo',function(){
+  cargando(api('coachLogo',CO.pin,{quitar:true})).then(function(){ lgListo(null,'Logo quitado'); },function(e){ toast(limpiaErr(e),'err'); }); }); };
 /* v53.4.36 · «Primeros pasos» para un entrenador nuevo (no sale a Chadín): 5 pasos que se marcan solos, cada uno con su botón.
    Desaparece al terminarlos o con «Ocultar». */
 function ppPasos(){
   var E=CO.empezar||{}, R=(CO.lista||[]).filter(function(c){ return c.nombre!==EJEMPLO; }), c1=R[0];
   return [
     {t:'Pon tu nombre',d:'Sale en el chat de tus clientes («Chat con tu coach, …»).',ok:!!E.nombre,a:'coNombre',b:'Poner mi nombre'},
+    {t:'Sube tu logo',d:'Sale junto a MOOD ON en la app de tus clientes y en sus emails.',ok:!!CO.logoV,a:'coLogo',b:'Subir mi logo'},
     {t:'Crea tus planes y precios',d:'En Pagos → Tus planes. Con ellos registras sus pagos y, si conectas Stripe, te pagan desde su app.',ok:(E.planes||0)>0,a:'sdPagos',b:'Ir a Pagos'},
     {t:'Da de alta a tu primer cliente',d:'Le mandas su cuestionario y, al rellenarlo, le llega su acceso por email.',ok:R.length>0,a:'nuevaClienta',b:'Nuevo cliente'},
     {t:'Ponle su rutina',d:'En su ficha, pestaña Entrenos (o desde tu Banco de rutinas).',ok:R.some(function(c){ return (c.rutinas||0)>0; }),a:'ppAbrir',v:'entrenos',b:'Ir a sus entrenos',off:!c1},
@@ -8775,7 +8812,7 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnNeg','sube','Tu negocio'+'<small class="mn-s">Cómo va cada mes, su informe y tus datos en Excel</small>')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnNeg','sube','Tu negocio'+'<small class="mn-s">Cómo va cada mes, su informe y tus datos en Excel</small>')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -11613,7 +11650,7 @@ function ladoHtml(){
       var n=(c.chat&&c.chat.noLeidos)||0;
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+'" data-a="sdCli" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="sd-cn">'+esc(c.nombre)+'</span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
     }).join('')+'</div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
-    '<div class="sd-pie"><button class="sd-i" data-a="segCfg">'+ic('candado')+'<span>Seguridad y acceso</span>'+(CO.seg&&CO.seg.conPass?'':'<b class="sd-new">Revisar</b>')+'</button>'+(CO.casa!==false?'<button class="sd-i" data-a="appCfg">'+ic('enlace')+'<span>Página de inicio</span>'+(CO.appUrl?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="vistaMovil">'+ic('movil')+'<span>Vista móvil</span></button><button class="sd-i" data-a="salirCoach">'+ic('atras')+'<span>Salir</span></button><small>MOOD ON · '+APP_V+'</small></div>';
+    '<div class="sd-pie">'+(CO.casa===false?'<button class="sd-i" data-a="coLogo">'+ic('foto')+'<span>Tu logo</span>'+(CO.logoV?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="segCfg">'+ic('candado')+'<span>Seguridad y acceso</span>'+(CO.seg&&CO.seg.conPass?'':'<b class="sd-new">Revisar</b>')+'</button>'+(CO.casa!==false?'<button class="sd-i" data-a="appCfg">'+ic('enlace')+'<span>Página de inicio</span>'+(CO.appUrl?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="vistaMovil">'+ic('movil')+'<span>Vista móvil</span></button><button class="sd-i" data-a="salirCoach">'+ic('atras')+'<span>Salir</span></button><small>MOOD ON · '+APP_V+'</small></div>';
 }
 function sdChatAb(){ if(CO.sdChat==null) CO.sdChat=LS.get('chadin_sdchat')!=='0'; return CO.sdChat; }
 function siCambiosOk(fn){ if((CO.vista!=='clienta'&&!(CO.vista==='nutri'&&CO.nutVolver))||!CO.rut||!CO.d) return fn(); siCambios(fn); }
@@ -12878,6 +12915,7 @@ var AYUDA=[
   {g:3,q:'¿Cómo mando el justificante de un pago?',r:'En Pagos puedes activar el justificante por email: con cada pago, a tu cliente le llega su justificante en PDF. También lo puedes descargar de cada pago.',a:'sdPagos',k:'justificante recibo factura pdf pago'},
   {g:3,q:'¿Dónde veo cuánto gano?',r:'En Tu negocio: cómo va cada mes (lo que cobras, tus clientes y su actividad), su informe y tus datos en Excel.',a:'sdNeg',k:'negocio ganancias ingresos informe mes excel exportar'},
   {g:4,q:'¿Cómo cambio mi nombre en la app de mis clientes?',r:'Sale en su chat («Chat con tu coach, …»). Es el mismo para todos tus clientes.',a:'coNombre',b:'Cambiar mi nombre',k:'nombre coach entrenador'},
+  {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en el menú) lo subes: sale junto a MOOD ON arriba en la app de tus clientes, al entrar, en su cuestionario y en sus emails. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
   {g:4,q:'¿Cómo creo o cambio mi contraseña?',r:'En Seguridad y acceso: tu contraseña del panel y cómo entran tus clientes.',a:'segCfg',k:'contraseña seguridad acceso entrar'},
   {g:4,q:'¿Cómo veo la app como la ve un cliente?',r:'En Modo prueba ves los correos que les llegan y su app con una clienta de ejemplo, sin tocar a nadie real.',a:'sdPrueba',k:'prueba ejemplo correos ver app cliente'},
   {g:4,q:'¿Cómo tengo el panel a mano en el móvil?',r:'Abre tu panel en el navegador del móvil ({PANEL}) y añádelo a la pantalla de inicio: en iPhone, Compartir → «Añadir a pantalla de inicio»; en Android, el menú ⋮ → «Añadir a pantalla de inicio».',k:'movil iphone android pantalla de inicio enlace panel'},
@@ -12898,7 +12936,7 @@ function marcarAyVisto(){
 }
 function ayFiltradas(){
   var P=sinTil(CO.ayQ||'').split(/[^a-z0-9ñ_]+/).filter(function(p){ return p.length>1; });
-  return AYUDA.filter(function(x){ if(x.a==='sdPrueba'&&CO.casa===false) return false; if(!P.length) return true; var t=sinTil(x.q+' '+x.r+' '+(x.k||'')); return P.every(function(p){ return t.indexOf(p)>=0; }); });
+  return AYUDA.filter(function(x){ if((x.a==='sdPrueba'&&CO.casa===false)||(x.a==='coLogo'&&CO.casa!==false)) return false; if(!P.length) return true; var t=sinTil(x.q+' '+x.r+' '+(x.k||'')); return P.every(function(p){ return t.indexOf(p)>=0; }); });
 }
 function ayListaHtml(){
   var L=ayFiltradas(), q=String(CO.ayQ||'').trim();
@@ -15453,7 +15491,24 @@ function conMarca(){
   try{ return localStorage.getItem('moodon_casa')==='1'; }catch(e){ return false; }
 }
 function marcaTxt(){ return conMarca()?'MOOD ON by Chadin':'MOOD ON'; }
-function logoHtml(tam,sub){ var m=conMarca(); return '<div class="logo-w logo-'+tam+'" role="img" aria-label="'+(m?'MOOD ON by Chadin':'MOOD ON')+'">'+logoSvg(m&&(tam==='big'||tam==='cq'))+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
+/* v53.4.38 · el logo de su entrenador junto a MOOD ON (opción C): lo sube en «Tu logo»; aquí se guarda en el móvil ({v, src})
+   y se pide aparte (logoMarca / coachLogoVer) solo cuando cambia su versión (logoV en su app, en el panel y en el arranque con enlace). */
+var LOGO_CO=LS.get('moodon_logo')||null;
+function logoCoImg(){ return LOGO_CO&&LOGO_CO.src&&!conMarca()?LOGO_CO.src:''; }
+function logosRepintar(){ document.querySelectorAll('.logo-w[data-tam]').forEach(function(el){ el.outerHTML=logoHtml(el.dataset.tam,el.dataset.sub||''); }); }
+function logoCoSync(v){
+  v=v||''; if(conMarca()) v='';
+  if(!v){ if(LOGO_CO){ LOGO_CO=null; LS.del('moodon_logo'); logosRepintar(); } return; }
+  if((LOGO_CO&&LOGO_CO.v===v)||logoCoSync.pid===v) return; logoCoSync.pid=v;
+  var co=BOOT.mode==='coach';
+  api(co?'coachLogoVer':'logoMarca',co?CO.pin:BOOT.token).then(function(r){ var L=co?r&&r.logo:r; logoCoSync.pid='';
+    if(L&&L.img){ LOGO_CO={v:L.v,src:'data:'+L.tipo+';base64,'+L.img}; LS.set('moodon_logo',LOGO_CO); } else { LOGO_CO=null; LS.del('moodon_logo'); }
+    logosRepintar(); },function(){ logoCoSync.pid=''; });
+}
+setTimeout(function(){ if(BOOT&&BOOT.logoV!==undefined) logoCoSync(BOOT.logoV); },0);
+function logoHtml(tam,sub){ var m=conMarca(), co=logoCoImg(), at=' data-tam="'+tam+'" data-sub="'+esc(sub||'')+'"';
+  if(co) return '<div class="logo-w logo-'+tam+' logo-co"'+at+' role="img" aria-label="Logo de tu coach y MOOD ON"><div class="lco-w"><img class="lco" src="'+co+'" alt=""><i class="lsep"></i>'+logoSvg(false)+'</div>'+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>';
+  return '<div class="logo-w logo-'+tam+'"'+at+' role="img" aria-label="'+(m?'MOOD ON by Chadin':'MOOD ON')+'">'+logoSvg(m&&(tam==='big'||tam==='cq'))+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
 
 /* ---------- sesión guardada (en este móvil y, si la abre desde tu página de inicio, también allí) ---------- */
 var SK={cl:'chadin_ses',co:'chadin_co',dcl:'chadin_disp_cl',dco:'chadin_disp_co',coe:'chadin_co_email'};   // v53.4: coe, el email con el que entró la coach
