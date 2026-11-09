@@ -2722,7 +2722,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.32';
+var APP_V = 'v53.4.33';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -13951,7 +13951,7 @@ function resumenEjSeries(series){
     if(p>b.p||(p===b.p&&r>b.r)){ b.p=p; b.r=r; }
   });
   return L.map(function(b){ if(b.bl) return b; var ns=Object.keys(b.s).length;
-    return {n:b.n,txt:b.run?(b.km?fN(b.km,2)+' km'+(b.sg?' · '+runRitT(b.sg/b.km):''):'Carrera'):b.cardio?(b.min?fN(b.min)+' min':ns+(ns===1?' vez':' veces')):ns+(ns===1?' serie':' series')}; });      // v33: sin kilos ni repeticiones
+    return {n:b.n,run:b.run?1:0,km:b.run?b.km||0:0,sg:b.run?b.sg||0:0,txt:b.run?(b.km?fN(b.km,2)+' km'+(b.sg?' · '+runRitT(b.sg/b.km):''):'Carrera'):b.cardio?(b.min?fN(b.min)+' min':ns+(ns===1?' vez':' veces')):ns+(ns===1?' serie':' series')}; });      // v33: sin kilos ni repeticiones
 }
 /* un entreno ya guardado, para volver a compartirlo */
 function ultDeSesion(s){
@@ -14007,7 +14007,7 @@ function finModoAct(){ return CL.finModo==='trans'&&CL.finFoto?'foto':CL.finModo
 function finCanvas(t,m){
   CL.finCv=CL.finCv||{}; var k=t+'|'+m;
   if(CL.finCv[k]) return Promise.resolve(CL.finCv[k]);
-  return (m==='foto'?tarjetaEntreno(t,'trans').then(componerFoto):tarjetaEntreno(t,m)).then(function(cv){
+  return (m==='foto'?tarjetaEntreno(t,'trans',true).then(componerFoto):tarjetaEntreno(t,m)).then(function(cv){
     var o={cv:cv,url:cv.toDataURL('image/png')}; CL.finCv[k]=o; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); return o; });
 }
 function finPreparar(){
@@ -14126,11 +14126,30 @@ function bloqueRes(x,W,y,o){
   x.textAlign='left';
 }
 function logoCard(x,W,y){ logoCanvas(x,(W-300)/2,y,300,'#FFFFFF',true); }      // v39: solo «MOOD ON» (sin «by Chadin»), por encima de la barra del chat de Instagram; y = arriba del logo
-function tarjetaEntreno(tipo,modo){
+/* v53.4.33 · una carrera sola (sin fuerza ni bloques): la tarjeta, como una pegatina tipo Strava (propuesta C que eligió Javier):
+   qué carrera y el día, distancia y ritmo, el tiempo y el logo, en el centro (con su foto, en la parte de abajo) */
+function soloCarrera(U){ var r=U.r||{}; return !!(r.runKm&&!(r.efectivas||r.vol)&&!(U.ej||[]).some(function(e){ return e.bl; })); }
+function pegatinaRun(x,W,H,U,modo,enFoto){
+  var r=U.r||{}, R=(U.ej||[]).filter(function(e){ return e.run; }), km=num(r.runKm)||R.reduce(function(a,e){ return a+(num(e.km)||0); },0), sg=R.reduce(function(a,e){ return a+(num(e.sg)||0); },0);
+  var rit=r.runRit||(km&&sg?sg/km:null), nom=R.length===1?R[0].n:'Carrera', cab=(U.primero?'Mi primer entreno':nom)+' · '+fCorta(U.fecha||hoyStr());
+  var y0=enFoto?1140:760, cx=W/2, lbl=function(t,X,Y){ x.fillStyle='#FFFFFF'; x.font='700 32px'+FCV; x.textAlign='center'; try{ x.letterSpacing='3px'; }catch(e){} x.fillText(t,X,Y); try{ x.letterSpacing='0px'; }catch(e){} };
+  sombraCard(x,modo);
+  x.fillStyle='#FFFFFF'; x.textAlign='center'; try{ x.letterSpacing='4px'; }catch(e){} x.font='700 '+textoAjustado(x,cab.toUpperCase(),W-160,35,'700')+'px'+FCV; x.fillText(cab.toUpperCase(),cx,y0); try{ x.letterSpacing='0px'; }catch(e){}
+  var v1=fN(km,2)+' km', v2=rit?runT(rit)+' /km':'–', px=Math.min(textoAjustado(x,v1,420,90,'800'),textoAjustado(x,v2,420,90,'800'));
+  x.font='800 '+px+'px'+FCV; var w1=x.measureText(v1).width, w2=x.measureText(v2).width, gap=52, tot=w1+gap+w2, xa=cx-tot/2+w1/2, xb=cx+tot/2-w2/2, ya=y0+90;
+  lbl('DISTANCIA',xa,ya); lbl('RITMO',xb,ya);
+  x.fillStyle='#FFFFFF'; x.font='800 '+px+'px'+FCV; x.textAlign='center'; x.fillText(v1,xa,ya+100); x.fillText(v2,xb,ya+100);
+  x.save(); if(modo!=='trans'){ x.shadowColor='transparent'; } x.fillStyle='rgba(255,255,255,.8)'; x.fillRect(cx-tot/2+w1+gap/2-2.5,ya-34,5,150); x.restore();
+  var yt=ya+215; lbl('TIEMPO',cx,yt); x.fillStyle='#FFFFFF'; x.font='800 '+px+'px'+FCV; x.textAlign='center'; x.fillText(sg?runT(sg):(r.min||0)+' min',cx,yt+100);
+  logoCanvas(x,(W-293)/2,yt+160,293,'#FFFFFF',true);
+  x.textAlign='left';
+}
+function tarjetaEntreno(tipo,modo,enFoto){
   var U=CL.ultEntreno||{}; modo=modo||'negro'; var tr=modo==='trans', C=compVol((U.r||{}).vol), soloBl=(U.ej||[]).length&&(U.ej||[]).every(function(e){ return e.bl; });      // v53.4.19: solo bloques → el cronómetro (no la barra)
   return fuentesListas().then(function(){ return Promise.all([linImg(C?C.img:soloBl?'stopwatch':'barbell','#FFFFFF',0.7),linImg('trophy','#FFFFFF',1.5),linImg('stopwatch','#FFFFFF',1.5),linImg('barbell','#FFFFFF',1.5),linImg('trophy','#FFFFFF',1.7)]); }).then(function(I){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), r=U.r||{}, ly=H-320;
     fondoCard(x,W,H,modo); sombraCard(x,modo);
+    if(tipo!=='res'&&soloCarrera(U)){ pegatinaRun(x,W,H,U,modo,enFoto); return cv; }      // v53.4.33
     if(tipo==='res'){
       var L=U.ej||[], R=recsPorEj(U.prs), recs={}, nr=R.length; R.forEach(function(b){ recs[clave(b.e)]=1; });
       x.textAlign='center'; x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(U.primero?'MI PRIMER ENTRENO':fLarga(U.fecha||hoyStr()).toUpperCase(),W/2,176);      // v53.4.28
