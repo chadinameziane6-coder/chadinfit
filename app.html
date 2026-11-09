@@ -2841,7 +2841,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.44';
+var APP_V = 'v53.4.45';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8103,6 +8103,8 @@ A.crearEjemplo=function(el){
 };
 /* v53.4.41 · alta en un paso: sus datos, su móvil o su email, y el cuestionario ya enviado (WhatsApp o email) */
 A.nuevaClienta=function(){
+  if(privFalta()) return modal('<h2>Antes, tus datos para la privacidad</h2><p class="muted">Tus clientes aceptan tu política de privacidad en su cuestionario, y en ella tienes que salir tú como responsable de sus datos: tu nombre, tu NIF y un email de contacto. Se ponen una vez.</p>'+
+    '<button class="btn mt" data-a="ppPriv">Poner mis datos</button><button class="btn sec mt" data-a="cerrarModal">Ahora no</button>');      // v53.4.45
   CO.nSexo='mujer';
   modal('<h2>Nuevo cliente</h2><label class="f">Nombre<input id="n-nombre" placeholder="Nombre y apellido"></label><div class="lab">Es</div><div class="tipos ops" id="n-sexo"><button class="on" data-a="nSexo" data-v="mujer">Mujer</button><button data-a="nSexo" data-v="hombre">Hombre</button></div><label class="f">Objetivo<input id="n-obj" placeholder="Ej.: recomposición, ganar fuerza…"></label>'+
     '<label class="f">Móvil <span class="muted">(para mandarle el cuestionario)</span><input id="n-movil" inputmode="tel" autocomplete="off" placeholder="612 345 678"></label>'+
@@ -9012,6 +9014,7 @@ function ppPasos(){
   var E=CO.empezar||{}, R=(CO.lista||[]).filter(function(c){ return c.nombre!==EJEMPLO; }), c1=R[0];
   return [
     {t:'Pon tu nombre',d:'Sale en el chat de tus clientes («Chat con tu coach, …»).',ok:!!E.nombre,a:'coNombre',b:'Poner mi nombre'},
+    {t:'Pon tus datos para la privacidad',d:'Tu nombre, tu NIF y un email de contacto: salen en la política que aceptan tus clientes en su cuestionario. Sin ellos no puedes dar de alta clientes.',ok:!!E.priv,a:'ppPriv',b:'Poner mis datos'},      // v53.4.45
     {t:'Sube tu logo',d:'Sale junto a MOOD ON en la app de tus clientes y en sus emails.',ok:!!CO.logoV,a:'coLogo',b:'Subir mi logo'},
     {t:'Crea tus planes y precios',d:'En Pagos → Tus planes. Con ellos registras sus pagos y, si conectas Stripe, te pagan desde su app.',ok:(E.planes||0)>0,a:'sdPagos',b:'Ir a Pagos'},
     {t:'Da de alta a tu primer cliente',d:'Le mandas su cuestionario y, al rellenarlo, le llega su acceso por email.',ok:R.length>0,a:'nuevaClienta',b:'Nuevo cliente'},
@@ -9030,6 +9033,9 @@ function ppHtml(){
         (x.ok||x.off?'':'<button class="btn sm'+(on?'':' sec')+'" data-a="'+x.a+'"'+(x.v?' data-v="'+x.v+'"':'')+'>'+esc(x.b)+'</button>')+'</div>'; }).join('')+
     '<p class="tip pp-pie">¿Dudas? En <button class="link sm" data-a="sdAyuda">Ayuda</button> tienes cómo se hace cada cosa y puedes escribirnos.</p></div>';
 }
+/* v53.4.45 · tus datos como responsable, desde «Primeros pasos» o al ir a dar de alta un cliente sin ellos */
+A.ppPriv=function(){ cerrarModal(); cargando(api('coachSeguridad',CO.pin)).then(function(r){ CO.segD=r; CO.privPP=true; A.segPriv(); },function(e){ toast(limpiaErr(e),'err'); }); };
+function privFalta(){ return CO.casa===false&&CO.empezar&&CO.empezar.priv===false; }
 A.ppAbrir=function(el){ var R=(CO.lista||[]).filter(function(c){ return c.nombre!==EJEMPLO; }); if(!R.length) return; abrirClienta(R[0].id,el.dataset.v||'seguimiento'); };
 A.ppOcultar=function(){ LS.set('moodon_pp_off',1); if(CO.vista==='lista') pintarLista(); toast('Lo tienes todo en Ayuda'); };
 function inicioHtml(){
@@ -16273,7 +16279,7 @@ A.accEnlace=function(){
 };
 A.accCerrar=function(){ confirmar('Se cerrará su sesión en todos sus dispositivos. Tendrá que volver a entrar con su contraseña.','Cerrar sus sesiones',function(){ accPost({accion:'cerrar'},function(r){ toast('Sesiones cerradas: '+r.cerradas,'ok'); }); },'Cancelar'); };
 
-A.segCfg=function(){ cerrarModal(); cargando(api('coachSeguridad',CO.pin)).then(function(r){ CO.segD=r; pintarSeg(); },function(e){ toast(limpiaErr(e),'err'); }); };
+A.segCfg=function(){ cerrarModal(); CO.privPP=false; cargando(api('coachSeguridad',CO.pin)).then(function(r){ CO.segD=r; pintarSeg(); },function(e){ toast(limpiaErr(e),'err'); }); };
 A.mnSeg=function(){ A.segCfg(); };
 function accFila(t,k,ayuda){ var on=!!CO.segD.ajustes[k]; return '<div class="fila mt"><span>'+t+'</span><button class="sw'+(on?' on':'')+'" data-a="segAj" data-k="'+k+'" aria-pressed="'+on+'" aria-label="'+esc(t)+'"><i></i></button></div><p class="muted sm">'+ayuda+'</p>'; }
 function pintarSeg(){
@@ -16343,7 +16349,8 @@ A.segPrivOk=function(el){
   var x={nombre:val('pv-n').trim(),nif:val('pv-i').trim(),email:val('pv-e').trim(),ciudad:val('pv-c').trim()};
   if(!x.nombre||!x.nif||!x.email) return toast('Pon tu nombre, tu NIF y un email de contacto');
   if(el.disabled) return; el.disabled=true;
-  cargando(api('coachPrivacidad',CO.pin,x)).then(function(){ toast('Guardado','ok'); A.segCfg(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+  cargando(api('coachPrivacidad',CO.pin,x)).then(function(){ toast('Guardado','ok'); if(CO.empezar) CO.empezar.priv=true;
+    if(CO.privPP){ CO.privPP=false; cerrarModal(); repintarVista(); return; } A.segCfg(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 A.segAj=function(el){
   var k=el.dataset.k, x={}; x[k]=!CO.segD.ajustes[k];
