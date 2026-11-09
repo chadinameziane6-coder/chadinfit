@@ -2662,6 +2662,14 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .pgc-m .p i{background:#15803D}.pgc-m .g i{background:#D92D20}
 .pgc-ley i{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;color:#fff;vertical-align:-3px}.pgc-ley i .ic{width:10px;height:10px;margin:0;stroke-width:3}
 .pgc-ley .p{background:#15803D}.pgc-ley .g{background:#D92D20}
+.ay-bus{width:100%;margin:12px 0 2px}.ay-g{font:700 11px Plus Jakarta Sans,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--mu);margin:20px 4px 8px}      /* v53.4.35 · Ayuda */
+.ay-it{padding:0;overflow:hidden}.ay-it summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:14px 16px;font:700 14.5px Plus Jakarta Sans,sans-serif}
+.ay-it summary::-webkit-details-marker{display:none}.ay-it summary span{flex:1;min-width:0}.ay-it summary .ic{color:var(--mu);transition:transform .2s}.ay-it[open] summary .ic{transform:rotate(90deg)}
+.ay-r{padding:0 16px 16px;font-size:14px;line-height:1.5;color:var(--tx2)}.ay-r p{margin:0}.ay-r .btn{margin-top:12px}.ay-r .btn .ic{margin:0 0 0 4px}
+.ay-cto{text-align:center;padding:20px 18px;margin-top:22px}.ay-cto>b{display:block;font:800 15px Plus Jakarta Sans,sans-serif}.ay-cto p{margin:6px 0 14px}
+.ay-mh{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.ay-mh small{color:var(--mu)}.ay-est{margin-left:auto;font:700 11.5px Plus Jakarta Sans,sans-serif;color:var(--mu)}.ay-est.ok{color:#1E8E5A}
+.ay-tx{margin:10px 0 0;font-size:14px}.ay-resp{background:var(--card2);border-radius:12px;padding:10px 12px;margin-top:10px;font-size:14px}.ay-resp b{display:block;font:700 11px Plus Jakarta Sans,sans-serif;letter-spacing:.08em;margin-bottom:3px}
+.ay-m.nueva{box-shadow:0 0 0 2px var(--mg)}
 </style>
 </head>
 <body>
@@ -2722,7 +2730,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.34';
+var APP_V = 'v53.4.35';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7776,7 +7784,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ var t=CO.pin; if(/^C/.test(t||'')) api('salir',t).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); CO.coachNombre=r.coachNombre||'Chadin'; CO.sugNuevas=r.sugNuevas||0; CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
+function ponerResumen(r){ setTimeout(pedirFotosCo,400); CO.coachNombre=r.coachNombre||'Chadin'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
   if(!MC.cid) chatPararPoll(); document.body.classList.remove('con-gbar');
@@ -7902,7 +7910,7 @@ A.nSexo=function(el){ CO.nSexo=el.dataset.v; document.querySelectorAll('#n-sexo 
 A.crearClienta=function(){
   var n=val('n-nombre'); if(!n) return toast('Escribe el nombre');
   var cq=!!(document.getElementById('n-cq')||{}).checked, h=CO.nSexo==='hombre';
-  cargando(api('coachCrearClienta',CO.pin,{nombre:n,objetivo:val('n-obj'),cuestionario:cq,sexo:CO.nSexo||'mujer'})).then(function(r){ cerrarModal(); abrirClienta(r.id,'enlace').then(function(){ if(cq) irACuest(); toast(cq?(h?'Cliente creado':'Clienta creada')+'. Envíale el cuestionario y, cuando quieras, su enlace (pestaña Enlace).':(h?'Cliente creado':'Clienta creada'),'ok'); }); },function(e){ toast(limpiaErr(e),'err'); });
+  cargando(api('coachCrearClienta',CO.pin,{nombre:n,objetivo:val('n-obj'),cuestionario:cq,sexo:CO.nSexo||'mujer'})).then(function(r){ cerrarModal(); abrirClienta(r.id,'enlace').then(function(){ if(cq) irACuest(); toast(cq?(h?'Cliente creado':'Clienta creada')+'. Envíale el cuestionario y, cuando quieras, su acceso (pestaña Ficha).':(h?'Cliente creado':'Clienta creada'),'ok'); }); },function(e){ toast(limpiaErr(e),'err'); });
 };
 A.abrir=function(el){ abrirClienta(el.dataset.id,'seguimiento'); };
 function abrirClienta(id,sub){
@@ -8733,7 +8741,7 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnNeg','sube','Tu negocio'+'<small class="mn-s">Cómo va cada mes, su informe y tus datos en Excel</small>')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+it('mnPagos','euro','Pagos')+it('mnNeg','sube','Tu negocio'+'<small class="mn-s">Cómo va cada mes, su informe y tus datos en Excel</small>')+it('mnSug','idea','Sugerencias'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnNutri','dieta','Alimentos y recetas')+it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>'))+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -11504,7 +11512,7 @@ function ladoHtml(){
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
-    it('sdPagos','euro','Pagos',v==='pagos')+it('sdNeg','sube','Tu negocio',v==='negocio')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+'</nav>'+
+    it('sdPagos','euro','Pagos',v==='pagos')+it('sdNeg','sube','Tu negocio',v==='negocio')+it('sdSug','idea','Sugerencias',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+it('sdPrueba','ojo','Modo prueba',v==='prueba')+it('sdAyuda','ayuda','Ayuda',v==='ayuda',CO.ayudaNuevas?'<b class="dot-n" aria-label="'+CO.ayudaNuevas+(CO.ayudaNuevas===1?' respuesta nueva':' respuestas nuevas')+'">'+CO.ayudaNuevas+'</b>':'')+'</nav>'+
     '<div class="sd-h">Clientes <span>'+act.length+'</span></div><div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0;
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+'" data-a="sdCli" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="sd-cn">'+esc(c.nombre)+'</span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
@@ -11526,6 +11534,7 @@ function repintarVista(){
   else if(CO.vista==='negocio') pintarNegocio(false);
   else if(CO.vista==='nutri') pintarNutri(false);
   else if(CO.vista==='pagos') pintarPagos(false);
+  else if(CO.vista==='ayuda') pintarAyuda(false);
   else if(CO.vista==='pasos'&&CO.psA) pintarPasosCfg(false);
   else if(CO.vista==='prueba'&&CO.pr){ pintarPrueba(false); prVer(CO.prSel); }
   else ladoCo();
@@ -12738,6 +12747,110 @@ A.sgEnviar=function(el){
   if(el.disabled) return; el.disabled=true;
   cargando(api('enviarSugerencia',BOOT.token,{tema:CL.sgT,texto:t,anonima:!!(document.getElementById('sg-an')||{}).checked})).then(function(r){
     CL.d.sugerencias=r.sugerencias; CL.keep=true; pintarCl(); toast('¡Gracias! Tu coach la verá en su panel','ok');
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+};
+
+/* =====================================================================
+   v53.4.35 · AYUDA: respuestas cortas a «cómo se hace…» (con «Llévame ahí») y «Escribir a MOOD ON»
+   (lo que escribe se guarda en su cuenta y le llega al dueño; la respuesta sale aquí y por email)
+   ===================================================================== */
+ICONS.ayuda='<circle cx="12" cy="12" r="9"/><path d="M9.7 9.4a2.4 2.4 0 0 1 4.6.9c0 1.6-2.3 2.1-2.3 3.5"/><path d="M12 16.9h.01"/>';
+var AY_G=['Clientes','Entrenos y dieta','Agenda y seguimiento','Cobros y negocio','Tu cuenta y la app'];
+var AY_PANT={lista:'Inicio',agenda:'Calendario',pagos:'Pagos',negocio:'Tu negocio',sug:'Sugerencias',banco:'Banco de ejercicios',rutbib:'Banco de rutinas',nutri:'Alimentos y recetas',prueba:'Modo prueba',pasos:'Pasos',clienta:'Ficha de cliente'};
+var AY_SUB={seguimiento:'Seguimiento',chat:'Chat',evolucion:'Evolución',progreso:'Progreso',calendario:'Calendario',entrenos:'Entrenos',dieta:'Dieta',pagos:'Pagos',enlace:'Ficha'};
+var AY_TIPOS=[['duda','Duda'],['error','Algo no funciona'],['sugerencia','Sugerencia'],['cobros','Cobros y plan']];
+var AYUDA=[
+  {g:0,q:'¿Cómo doy de alta a un cliente?',r:'Pulsa «Nuevo cliente», escribe su nombre, si es mujer u hombre y su objetivo, y deja marcado «Crear también su cuestionario inicial». Se abre su ficha: envíale el cuestionario. Cuando lo rellena con su email, le llega solo un correo para crear su contraseña y entrar en su app.',a:'nuevaClienta',b:'Nuevo cliente',k:'nuevo crear añadir invitar cuestionario acceso empezar'},
+  {g:0,q:'Mi cliente no puede entrar o no le llega el correo',r:'Que mire en Spam y en Promociones. Si no está, abre su ficha, pestaña Ficha, y pulsa «Reenviar el acceso» (o «Enviar acceso por email» si todavía no lo tiene). Comprueba que su email esté bien escrito. Si sigue sin poder, escríbenos.',a:'sdInicio',b:'Ver mis clientes',k:'contraseña login entrar email correo spam acceso olvidado'},
+  {g:0,q:'¿Cómo hablo con un cliente?',r:'En su ficha, pestaña Chat. Lo que escribes le sale en su app con un punto rojo, y puedes mandarle fotos y notas de voz. Si lo prefieres, activa «WhatsApp directo» en su ficha y tendrás un botón a su WhatsApp junto al chat.',k:'chat mensaje whatsapp escribir nota de voz'},
+  {g:0,q:'¿Cómo veo cómo va un cliente?',r:'Abre su ficha. En Seguimiento tienes lo último (entrenos, check-ins y lo pendiente); en Evolución y Progreso, cómo cambian con el tiempo sus medidas, sus fotos y sus marcas.',a:'sdInicio',b:'Ver mis clientes',k:'progreso evolucion seguimiento medidas fotos peso marcas'},
+  {g:0,q:'¿Cómo quito a un cliente que ya no entrena conmigo?',r:'Si lo deja, en su ficha, pestaña Pagos, pulsa «Renovar» y elige «No renueva»: sus datos se quedan guardados. Si quieres borrarlo con todos sus datos, pestaña Ficha → «Borrar cliente». Eso no se puede deshacer.',k:'baja borrar eliminar quitar dejar renovar'},
+  {g:1,q:'¿Cómo le pongo una rutina?',r:'En su ficha, pestaña Entrenos: «+ Nueva rutina» y añade los ejercicios, o usa una de tu Banco de rutinas. Guárdala y le sale en su app.',a:'sdRutBib',k:'rutina entreno ejercicios plan semana crear'},
+  {g:1,q:'¿Cómo copio una rutina a otro cliente o a otra semana?',r:'Abre la rutina y pulsa «Copiar rutina»: eliges a quién (o a qué fecha) y la ajustas antes de guardar.',k:'copiar duplicar rutina otra semana otro cliente'},
+  {g:1,q:'¿Cómo añado un ejercicio o su vídeo?',r:'En el Banco de ejercicios: busca el ejercicio o crea uno nuevo, y pega el enlace de su vídeo (por ejemplo, de YouTube) y sus indicaciones.',a:'sdBanco',k:'ejercicio video youtube banco nuevo tecnica'},
+  {g:1,q:'¿Cómo le hago una dieta?',r:'En su ficha, pestaña Dieta: pones sus kcal y macros y sus comidas con tus platos, recetas o alimentos. Para ir más rápido, «Copiar dieta…» la trae de otro cliente y la ajustas.',k:'dieta comidas macros kcal calorias menu copiar'},
+  {g:1,q:'¿Puede elegir sus platos?',r:'Sí. En su pestaña Dieta, activa «Autorregulación de macros»: con tu objetivo de kcal y macros, elige en su app entre tus platos, las recetas de la biblioteca o alimentos sueltos. Puede quitar los platos que no quiera y volver a ponerlos cuando quiera.',k:'elegir platos libre autorregulacion quitar recetas'},
+  {g:1,q:'¿Cómo añado alimentos y recetas?',r:'En Alimentos y recetas: busca o crea alimentos con sus macros, y recetas con sus ingredientes. Después los usas en todas tus dietas.',a:'sdNutri',k:'alimento receta macros ingredientes biblioteca'},
+  {g:2,q:'¿Cómo programo una videollamada?',r:'En su ficha, pestaña Seguimiento: «Programar videollamada». Se crea con su enlace para conectarse y la ves en tu Calendario.',a:'sdCal',k:'videollamada llamada meet reunion cita calendario'},
+  {g:2,q:'¿Cómo le pido revisiones y fotos?',r:'Desde su ficha (Seguimiento) programas cada cuánto te manda su revisión y sus fotos. Le sale en su app cuando le toca y, cuando lo envía, lo tienes en Inicio.',k:'revision check-in checkin fotos semanal programar'},
+  {g:2,q:'¿Qué sale en Inicio?',r:'Tus tareas: lo atrasado y lo de hoy (revisiones y fotos que llegan, dietas o planes que acaban, mensajes…). Cuando lo haces, desaparece.',a:'sdInicio',k:'inicio tareas pendiente hoy avisos'},
+  {g:2,q:'¿Dónde veo las sugerencias de mis clientes?',r:'En Sugerencias están las que te mandan desde su app. Puedes responderles y marcarlas como hechas.',a:'sdSug',k:'sugerencias ideas opiniones'},
+  {g:3,q:'¿Cómo cobro a mis clientes?',r:'En Pagos: crea tus planes («Nuevo plan») con su precio. Puedes conectar tu Stripe para que te paguen online desde su app, o apuntar a mano lo que te pagan por Bizum, transferencia o en efectivo («Registrar pago»).',a:'sdPagos',k:'cobrar pagos plan precio bizum transferencia efectivo cuota'},
+  {g:3,q:'¿Cómo conecto Stripe?',r:'En Pagos, «Conectar Stripe»: pega una clave restringida de tu cuenta de Stripe (empieza por rk_live_). El dinero va directo a tu Stripe. Si quieres probar antes, usa una clave de prueba (rk_test_).',a:'sdPagos',k:'stripe tarjeta pago online clave cobrar'},
+  {g:3,q:'¿Cómo mando el justificante de un pago?',r:'En Pagos puedes activar el justificante por email: con cada pago, a tu cliente le llega su justificante en PDF. También lo puedes descargar de cada pago.',a:'sdPagos',k:'justificante recibo factura pdf pago'},
+  {g:3,q:'¿Dónde veo cuánto gano?',r:'En Tu negocio: cómo va cada mes (lo que cobras, tus clientes y su actividad), su informe y tus datos en Excel.',a:'sdNeg',k:'negocio ganancias ingresos informe mes excel exportar'},
+  {g:4,q:'¿Cómo cambio mi nombre en la app de mis clientes?',r:'Sale en su chat («Chat con tu coach, …»). Es el mismo para todos tus clientes.',a:'coNombre',b:'Cambiar mi nombre',k:'nombre coach entrenador'},
+  {g:4,q:'¿Cómo creo o cambio mi contraseña?',r:'En Seguridad y acceso: tu contraseña del panel y cómo entran tus clientes.',a:'segCfg',k:'contraseña seguridad acceso entrar'},
+  {g:4,q:'¿Cómo veo la app como la ve un cliente?',r:'En Modo prueba ves los correos que les llegan y su app con una clienta de ejemplo, sin tocar a nadie real.',a:'sdPrueba',k:'prueba ejemplo correos ver app cliente'},
+  {g:4,q:'¿Cómo tengo el panel a mano en el móvil?',r:'En Página de inicio tienes el enlace de tu panel. Ábrelo en el navegador del móvil y añádelo a la pantalla de inicio (en iPhone: Compartir → «Añadir a pantalla de inicio»).',a:'appCfg',k:'movil iphone android pantalla de inicio enlace panel'},
+  {g:4,q:'¿Quién ve los datos de mis clientes?',r:'Tú y cada cliente lo suyo. MOOD ON los guarda para que funcione la app, como encargado del tratamiento. En el panel de MOOD ON solo vemos números (por ejemplo, cuántos clientes tienes), nunca sus datos de salud.',k:'privacidad datos rgpd proteccion salud seguridad'},
+  {g:4,q:'Algo no va bien',r:'Recarga la página (o cierra y vuelve a abrir la app). Si sigue igual, escríbenos con «Algo no funciona» y cuéntanos qué hacías: el mensaje va con la pantalla en la que estabas y la versión de la app, así lo vemos antes.',a:'ayEscribir',b:'Escribir a MOOD ON',k:'error fallo no funciona problema bug'}
+];
+function ayTipoTxt(t){ var x=AY_TIPOS.filter(function(y){ return y[0]===t; })[0]; return x?x[1]:'Duda'; }
+A.sdAyuda=function(){ siCambiosOk(function(){ abrirAyuda(); }); };
+A.mnAyuda=function(){ cerrarModal(); abrirAyuda(); };
+function abrirAyuda(){
+  if(CO.vista!=='ayuda') CO.ayDesde=(AY_PANT[CO.vista]||String(CO.vista||''))+(CO.vista==='clienta'&&CO.sub?' · '+(AY_SUB[CO.sub]||CO.sub):'');      // la pantalla de la que viene, legible
+  CO.vista='ayuda'; CO.ayQ=CO.ayQ||''; pintarAyuda(true);
+  api('coachAyudaLista',CO.pin).then(function(r){ CO.ay=r.lista||[]; if(CO.vista==='ayuda') pintarAyMsgs(); marcarAyVisto(); },function(){ if(!CO.ay){ CO.ay=[]; if(CO.vista==='ayuda') pintarAyMsgs(); } });
+}
+function marcarAyVisto(){
+  if(!(CO.ay||[]).some(function(m){ return m.respuesta&&!m.visto; })) return;
+  setTimeout(function(){ api('coachAyudaVisto',CO.pin).then(function(){ CO.ayudaNuevas=0; (CO.ay||[]).forEach(function(m){ if(m.respuesta) m.visto=1; }); ladoCo(); },function(){}); },1500);
+}
+function ayFiltradas(){
+  var P=sinTil(CO.ayQ||'').split(/[^a-z0-9ñ_]+/).filter(function(p){ return p.length>1; });
+  return AYUDA.filter(function(x){ if(!P.length) return true; var t=sinTil(x.q+' '+x.r+' '+(x.k||'')); return P.every(function(p){ return t.indexOf(p)>=0; }); });
+}
+function ayListaHtml(){
+  var L=ayFiltradas(), q=String(CO.ayQ||'').trim();
+  if(!L.length) return '<div class="card"><p class="muted">No hay ninguna respuesta con «'+esc(q)+'». Escríbenos abajo y te contestamos.</p></div>';
+  return AY_G.map(function(g,gi){
+    var I=L.filter(function(x){ return x.g===gi; }); if(!I.length) return '';
+    return '<div class="ay-g">'+esc(g)+'</div>'+I.map(function(x){
+      return '<details class="card ay-it"'+(q&&L.length<=2?' open':'')+'><summary><span>'+esc(x.q)+'</span>'+ic('flecha')+'</summary><div class="ay-r"><p>'+esc(x.r)+'</p>'+
+        (x.a?'<button class="btn sm" data-a="ayIr" data-i="'+AYUDA.indexOf(x)+'">'+esc(x.b||'Llévame ahí')+ic('flecha')+'</button>':'')+'</div></details>';
+    }).join('');
+  }).join('');
+}
+function ayMsgsHtml(){
+  var L=CO.ay;
+  if(!L) return '<p class="muted sm">Cargando…</p>';
+  if(!L.length) return '<p class="muted sm">Todavía no nos has escrito. Lo que nos mandes y nuestra respuesta saldrán aquí.</p>';
+  return L.map(function(m){
+    var e=m.estado==='resuelta'?['Resuelto','ok']:m.estado==='respondida'?['Respondido','ok']:['Enviado · te contestamos pronto',''];
+    return '<div class="card ay-m'+(m.respuesta&&!m.visto?' nueva':'')+'"><div class="ay-mh"><span class="pill">'+esc(ayTipoTxt(m.tipo))+'</span><small>'+esc(fCorta(String(m.fecha).slice(0,10)))+'</small><span class="ay-est '+e[1]+'">'+esc(e[0])+'</span></div>'+
+      '<p class="ay-tx">'+br(m.texto)+'</p>'+(m.respuesta?'<div class="ay-resp"><b>MOOD ON</b>'+br(m.respuesta)+'</div>':'')+'</div>';
+  }).join('');
+}
+function pintarAyMsgs(){ var e=document.getElementById('ay-ms'); if(e) e.innerHTML=ayMsgsHtml(); }
+function pintarAyuda(arriba){
+  CO.cid=null; document.body.classList.remove('con-gbar');
+  var h='<div class="hm-fecha">Respuestas rápidas y contacto con MOOD ON</div><h1 class="hm-t">Ayuda</h1>'+
+    '<input id="ay-q" class="ay-bus" type="search" autocomplete="off" placeholder="Busca: alta, rutina, Stripe, contraseña…" aria-label="Buscar en la ayuda" value="'+esc(CO.ayQ||'')+'">'+
+    '<div id="ay-l">'+ayListaHtml()+'</div>'+
+    '<div class="card ay-cto"><b>¿No encuentras lo que buscas?</b><p class="muted sm">Escríbenos: una duda, algo que no funciona, una idea o algo de tu plan. Te contestamos aquí y por email.</p><button class="btn" data-a="ayEscribir">'+ic('enviar')+'Escribir a MOOD ON</button></div>'+
+    '<div class="ay-g">Tus mensajes</div><div id="ay-ms">'+ayMsgsHtml()+'</div>';
+  app.innerHTML='<header class="top"><button class="link" data-a="pgVolver">'+ic('atras')+'Inicio</button><div class="top-n">Ayuda</div><span style="width:70px"></span></header><main class="wrap coachw">'+h+'</main>';
+  ladoCo(); if(arriba) window.scrollTo(0,0);
+  var q=document.getElementById('ay-q');
+  if(q) q.addEventListener('input',function(){ CO.ayQ=q.value; var l=document.getElementById('ay-l'); if(l) l.innerHTML=ayListaHtml(); });
+}
+A.ayIr=function(el){ var x=AYUDA[+el.dataset.i]; if(x&&x.a&&A[x.a]) A[x.a](el); };
+A.ayEscribir=function(){
+  CO.ayT=CO.ayT||'duda';
+  modal('<h2>Escribir a MOOD ON</h2><div class="lab">¿Qué es?</div><div class="tipos ops" id="ay-t">'+AY_TIPOS.map(function(t){ return '<button class="'+(CO.ayT===t[0]?'on':'')+'" data-a="ayTipo" data-v="'+t[0]+'">'+esc(t[1])+'</button>'; }).join('')+'</div>'+
+    '<label class="f">Cuéntanos<textarea id="ay-x" rows="5" maxlength="2000" placeholder="Qué querías hacer, qué ha pasado o qué te gustaría…">'+esc(CO.ayBorr||'')+'</textarea></label>'+
+    '<p class="muted sm">No escribas datos de salud de tus clientes: si es sobre uno, basta con su nombre. El mensaje va con la pantalla en la que estabas y la versión de la app ('+esc(APP_V)+').</p>'+
+    '<button class="btn mt" data-a="ayEnviar">'+ic('enviar')+'Enviar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+  var x=document.getElementById('ay-x'); if(x){ x.addEventListener('input',function(){ CO.ayBorr=x.value; }); setTimeout(function(){ x.focus(); },50); }
+};
+A.ayTipo=function(el){ CO.ayT=el.dataset.v; document.querySelectorAll('#ay-t button').forEach(function(b){ b.classList.toggle('on',b===el); }); };
+A.ayEnviar=function(el){
+  var t=val('ay-x'); if(t.length<5) return toast('Cuéntanos un poco más');
+  if(el.disabled) return; el.disabled=true;
+  cargando(api('coachAyuda',CO.pin,{tipo:CO.ayT||'duda',texto:t,pantalla:CO.ayDesde||'',v:APP_V})).then(function(r){
+    CO.ay=r.lista||[]; CO.ayBorr=''; cerrarModal(); if(CO.vista==='ayuda') pintarAyMsgs(); toast('Enviado. Te contestamos aquí y por email','ok');
   },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
