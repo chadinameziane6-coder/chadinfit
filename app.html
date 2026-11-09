@@ -2842,7 +2842,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.51';
+var APP_V = 'v53.4.52';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -15632,7 +15632,7 @@ function pgResHtml(R){
   var ant=sumarMeses(m+'-01',-1).slice(0,7), sig=sumarMeses(m+'-01',1).slice(0,7);
   h+='<div class="card pg-sec"><div class="pg-mh"><button class="ico sm" data-a="pgMesMov" data-v="'+ant+'" aria-label="Mes anterior">‹</button><div><b>Cobros de '+esc(mesTxt(m))+'</b><small>'+L.length+' pago'+(L.length===1?'':'s')+' · <b>'+eur(tot)+'</b></small></div>'+(m<hoy.slice(0,7)?'<button class="ico sm" data-a="pgMesMov" data-v="'+sig+'" aria-label="Mes siguiente">›</button>':'<span style="width:32px"></span>')+'</div>';
   h+=L.length?L.map(function(p){ var x=R.filter(function(r){ return r.c.id===p.cid; })[0], prev=P.pagos.some(function(q){ return q.cid===p.cid&&q.fecha<p.fecha; });
-      return '<div class="pg-r pg-rr pg-pay"><span class="pg-n"><span class="pg-av ok">'+ic('ok')+'</span><span><button class="link" data-a="pgCli" data-id="'+esc(p.cid)+'"><b>'+esc(p.clienta)+'</b></button><small>'+esc(fCorta(p.fecha))+' · '+esc(METODO_L[p.metodo]||'–')+(p.desde?' · cubre '+esc(fCorta(p.desde))+' – '+esc(fCorta(p.hasta)):'')+'</small></span></span><span class="pg-rd"><i class="pg-e '+(prev?'e-ok':'e-new')+'">'+(prev?'Renovó':'Primer pago')+'</i><b class="pg-imp">'+eur(p.importe)+'</b></span><span class="pg-a"></span></div>'; }).join('')
+      return '<div class="pg-r pg-rr pg-pay"><span class="pg-n"><span class="pg-av ok">'+ic('ok')+'</span><span><button class="link" data-a="pgCli" data-id="'+esc(p.cid)+'"><b>'+esc(p.clienta)+'</b></button><small>'+esc(fCorta(p.fecha))+' · '+esc(METODO_L[p.metodo]||'–')+(p.desde?' · cubre '+esc(fCorta(p.desde))+' – '+esc(fCorta(p.hasta)):'')+'</small></span></span><span class="pg-rd"><i class="pg-e '+(prev?'e-ok':'e-new')+'">'+(prev?'Renovó':'Primer pago')+'</i><b class="pg-imp">'+eur(p.importe)+'</b></span><span class="pg-a">'+(CO.casa===true?'<button class="btn sm sec" data-a="pgEditar" data-id="'+esc(p.id)+'">Editar</button>':'')+'</span></div>'; }).join('')      // v53.4.52: en tu panel nº 1, editar o borrar desde el Resumen
     :'<p class="muted sm">Sin cobros en '+esc(mesTxt(m))+'.</p>';
   h+='</div>';
   // vencen este mes (más adelante) y no renuevan
