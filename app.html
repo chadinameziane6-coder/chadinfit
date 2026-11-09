@@ -2841,7 +2841,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.43';
+var APP_V = 'v53.4.44';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -3558,6 +3558,7 @@ var RE_MANC=/mancuerna/i, RE_UNI=/unilateral|b[uú]lgara|zancada|step.?up|a una 
 function flagsEj(e){
   if(!e||tipoEj(e)!=='fuerza'||esMov(e)) return {mc:false,ld:false,sk:false,lt:false};
   var b=bancoDe(e.n), n=String(e.n||'');
+  if(b) return {mc:!!b.mc,ld:!!b.ld,sk:corporalEj(n),lt:apuntaEj(n)==='lastre'};      // v53.4.44 (Javier): si está en el banco, manda lo del banco (con mancuernas, unilateral y qué apunta); la rutina no lo repite
   return {mc:typeof e.mc==='boolean'?e.mc:b?!!b.mc:RE_MANC.test(n),ld:typeof e.ld==='boolean'?e.ld:b?!!b.ld:RE_UNI.test(n),
     sk:typeof e.sk==='boolean'?e.sk:corporalEj(n), lt:typeof e.sk==='boolean'?false:apuntaEj(n)==='lastre'};       // v31: con su peso corporal, sin kilos (salvo que marques «con peso extra»); v52.8: lt = peso corporal + lastre opcional
 }
@@ -9056,7 +9057,7 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tus bancos</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div>'+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div>'+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -9935,8 +9936,8 @@ function ejEd(e,ri,ei,g,lab,sig){
     descEd(e,at,DESC_FZ,'Descanso entre series');
     h+=apxEd(e,at);
     var AJx=ajusteDe(CO.d.ajustes,e.n); if(AJx&&ajustesTxt(AJx)) h+='<div class="aj-ed">'+ic('ajuste')+'<span>Su máquina: '+esc(ajustesTxt(AJx))+'</span></div>';
-    var FL=flagsEj(e);
-    h+='<div class="ej-sec"><div class="ej-sl">Cómo lo apunta '+(CO.cid?cG('ella','él'):'tu cliente')+' <span class="muted">(opcional)</span></div><div class="flags-ed"><button class="flag'+(FL.mc?' on':'')+'" data-a="tglFlag" data-f="mc"'+at+' aria-pressed="'+FL.mc+'">'+ic('pesa')+'Con mancuernas</button><button class="flag'+(FL.ld?' on':'')+'" data-a="tglFlag" data-f="ld"'+at+' aria-pressed="'+FL.ld+'">'+ic('lado')+'Unilateral</button><button class="flag'+(FL.sk?' on':'')+'" data-a="tglFlag" data-f="sk"'+at+' aria-pressed="'+FL.sk+'">'+ic('user')+'Peso corporal</button></div>'+(FL.mc?'<p class="muted sm flag-ex">Con mancuernas: apunta el peso de una.</p>':'')+(FL.ld?'<p class="muted sm flag-ex">Unilateral: apunta derecha e izquierda.</p>':'')+(FL.sk?'<p class="muted sm flag-ex">Peso corporal: apunta solo reps y RIR (sin kilos).</p>':FL.lt?'<p class="muted sm flag-ex">Peso corporal con lastre opcional: si lo lleva, apunta sus kilos.</p>':'')+'</div>';
+    var FL=flagsEj(e), enB=!!bancoDe(e.n);
+    if(!enB) h+='<div class="ej-sec"><div class="ej-sl">Cómo lo apunta '+(CO.cid?cG('ella','él'):'tu cliente')+' <span class="muted">(no está en tu banco)</span></div><div class="flags-ed"><button class="flag'+(FL.mc?' on':'')+'" data-a="tglFlag" data-f="mc"'+at+' aria-pressed="'+FL.mc+'">'+ic('pesa')+'Con mancuernas</button><button class="flag'+(FL.ld?' on':'')+'" data-a="tglFlag" data-f="ld"'+at+' aria-pressed="'+FL.ld+'">'+ic('lado')+'Unilateral</button><button class="flag'+(FL.sk?' on':'')+'" data-a="tglFlag" data-f="sk"'+at+' aria-pressed="'+FL.sk+'">'+ic('user')+'Peso corporal</button></div>'+(FL.mc?'<p class="muted sm flag-ex">Con mancuernas: apunta el peso de una.</p>':'')+(FL.ld?'<p class="muted sm flag-ex">Unilateral: apunta derecha e izquierda.</p>':'')+(FL.sk?'<p class="muted sm flag-ex">Peso corporal: apunta solo reps y RIR (sin kilos).</p>':FL.lt?'<p class="muted sm flag-ex">Peso corporal con lastre opcional: si lo lleva, apunta sus kilos.</p>':'')+'</div>';
   } else {
     h+='<div class="lab">Qué apunta</div><div class="tipos">'+CM_ORDEN.map(function(k){ return '<button class="'+(e.m.indexOf(k)>=0?'on':'')+'" data-a="cmTog" data-m="'+k+'"'+at+'>'+esc(CM[k][0])+'</button>'; }).join('')+'</div>'+
       '<div class="grid2">'+e.m.map(function(k){ return '<label class="f">Objetivo · '+esc(CM[k][0].toLowerCase())+(CM[k][1]?' ('+CM[k][1]+')':'')+'<input'+at+' data-ck="'+k+'" value="'+esc(e.obj[k]||'')+'" placeholder="Opcional"></label>'; }).join('')+
@@ -12000,7 +12001,7 @@ function ladoHtml(){
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid)+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
-    it('sdPagos','euro','Pagos',v==='pagos')+it('sdSug','idea','Feedback',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+'<div class="sd-bk"><div class="sd-bk-h">Tus bancos</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div>'+      // v53.4.43: los bancos, juntos y resaltados (opción C de Javier)
+    it('sdPagos','euro','Pagos',v==='pagos')+it('sdSug','idea','Feedback',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+'<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div>'+      // v53.4.43: los bancos, juntos y resaltados (opción C de Javier)
 (CO.casa?it('sdPrueba','ojo','Modo prueba',v==='prueba'):'')+it('sdAyuda','ayuda','Ayuda',v==='ayuda',CO.ayudaNuevas?'<b class="dot-n" aria-label="'+CO.ayudaNuevas+(CO.ayudaNuevas===1?' respuesta nueva':' respuestas nuevas')+'">'+CO.ayudaNuevas+'</b>':'')+'</nav>'+
     '<div class="sd-h">Clientes <span>'+act.length+'</span></div>'+(act.length>1?cliBuscaHtml('sd-q'):'')+'<div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0;
@@ -15477,7 +15478,7 @@ function negExpHtml(){
   return '<div class="card ng-exp"><div class="card-t">'+ic('descargar')+'Exportar a Excel</div><div class="tipos">'+ops.map(function(o){ return '<button class="'+(E.t===o[0]?'on':'')+'" data-a="negExpT" data-v="'+o[0]+'">'+esc(o[1])+'</button>'; }).join('')+'</div>'+
     (E.t==='fechas'?'<div class="grid2 mt6"><label class="f">Desde<input type="date" id="ne-d" data-v29="negExpF" value="'+esc(E.d||'')+'"></label><label class="f">Hasta<input type="date" id="ne-h" data-v29="negExpF" value="'+esc(E.h||'')+'" max="'+hoyStr()+'"></label></div>':
       '<p class="muted sm" style="margin:8px 0 0">Del '+esc(fMedia(r.d))+' al '+esc(fMedia(r.h))+'.</p>')+
-    '<p class="muted sm">Un Excel con tus cobros, el resumen de cada mes, tus clientes, sus entrenos y su peso y medidas de esas fechas, cada cosa en su pestaña. Lleva datos de tus clientes: guárdalo en un sitio seguro.</p>'+
+    '<p class="muted sm">Solo lo económico: el resumen del periodo, los cobros, mes a mes, por plan, por forma de pago y lo que ha pagado cada cliente y cómo está su plan. Para tu gestoría o para ver cómo va tu negocio.</p>'+
     '<div class="row"><button class="btn" data-a="negExportar">'+ic('descargar')+'Descargar Excel</button><button class="btn sec" data-a="negInforme">Informe de '+esc(mesTxtL(m))+' (PDF)</button></div></div>';
 }
 A.negCob=function(el){ CO.negCob=el.dataset.v; pintarPagos(false); };
@@ -15512,7 +15513,7 @@ A.negExportar=function(el){ if(el.disabled) return;
   cargando(api('coachExportar',CO.pin,{desde:r0.d,hasta:r0.h})).then(function(r){ el.disabled=false;
     var bin=atob(r.b64), u8=new Uint8Array(bin.length); for(var i=0;i<bin.length;i++) u8[i]=bin.charCodeAt(i);
     var u=URL.createObjectURL(new Blob([u8],{type:r.tipo}));
-    modal('<h2>Tu Excel está listo</h2><p class="muted">Del '+esc(fMedia(r0.d))+' al '+esc(fMedia(r0.h))+': cobros, resumen de cada mes, clientes, entrenos y peso y medidas, cada uno en su pestaña. Guárdalo en un sitio seguro: lleva datos de tus clientes.</p>'+
+    modal('<h2>Tu Excel está listo</h2><p class="muted">Del '+esc(fMedia(r0.d))+' al '+esc(fMedia(r0.h))+': resumen, cobros, por mes, por plan, por forma de pago y clientes, cada uno en su pestaña. Solo lo económico.</p>'+
       '<a class="btn mt" href="'+u+'" download="'+esc(r.nombre)+'">'+ic('descargar')+'Descargar '+esc(r.nombre)+'</a><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
   },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
