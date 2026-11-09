@@ -934,6 +934,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .tmr-x .ic{width:22px;height:22px;margin:0}.ej-btn button .ic,button.x .ic{margin:0}
 /* entrenos: lista y sesión */
 .hc .card-t{flex-wrap:wrap}.hc .card-t .btn{margin-left:auto}
+.btn.ver-b{background:#141414;border-color:#141414;color:#fff}.btn.ver-b .muted{color:rgba(255,255,255,.72)}.btn.ver-b:hover{background:#2C2C2E}      /* v53.4.51: «Ver registros», «Comparar…» en negro, que se vean (en el panel) */
 .hf{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;margin-bottom:6px}
 .hf-s{display:flex;align-items:center;gap:6px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding-left:10px}
 .hf-s .ic{color:var(--mu);margin:0}.hf-s select{border:0;background-color:transparent;padding-left:2px;font-size:14.5px}
@@ -2841,7 +2842,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.48';
+var APP_V = 'v53.4.51';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -4171,7 +4172,7 @@ function fotosCard(st,subir){
       return '<button class="fo-th" data-a="verFoto" data-id="'+esc(x.id)+'"><img src="'+esc(x.mini)+'" alt="'+esc(TIPO[x.tipo]||'')+'"><span>'+esc(TIPO[x.tipo]||'')+'</span></button>';
     }).join('')+'</div>'+contextoFotoHtml(fe)+'</div>';
   }).join('');
-  if(subir||todas.length>1) h+='<div class="row mt">'+(subir?'<button class="btn sm" data-a="subirFotosModal">+ Subir fotos</button>':'')+(todas.length>1?'<button class="btn sm sec" data-a="comparar">'+ic('comparar')+'Comparar lado a lado</button>':'')+'</div>';
+  if(subir||todas.length>1) h+='<div class="row mt">'+(subir?'<button class="btn sm" data-a="subirFotosModal">+ Subir fotos</button>':'')+(todas.length>1?'<button class="btn sm '+(BOOT.mode!=='clienta'?'ver-b':'sec')+'" data-a="comparar">'+ic('comparar')+'Comparar lado a lado</button>':'')+'</div>';
   if(BOOT.mode!=='clienta'&&todas.length>1) h+='<button class="link mt6" data-a="foTodo">'+(CO.foTodo?'Ver solo las últimas':'Ver todas las fechas ('+todas.length+')')+'</button>';
   return h+'</div>';
 }
@@ -4387,7 +4388,7 @@ function sesFila(x,d,M,coach,comentarios,op){
 var PER_H=[[30,'30 días'],[90,'3 meses'],[180,'6 meses'],[0,'Todo']];
 function histCard(st,coach){
   var d=datH(), F=hfDe(st), M=calcMarcas(d.series);
-  var h='<div class="card hc" id="hist"><div class="card-t">'+ic('lista')+(coach?'Sus entrenos':'Tus entrenos')+(d.sesiones.length>1?'<button class="btn sm sec" data-a="hsCmp">'+ic('comparar')+'Comparar dos</button>':'')+'</div>';
+  var h='<div class="card hc" id="hist"><div class="card-t">'+ic('lista')+(coach?'Sus entrenos':'Tus entrenos')+(d.sesiones.length>1?'<button class="btn sm '+(coach?'ver-b':'sec')+'" data-a="hsCmp">'+ic('comparar')+'Comparar dos</button>':'')+'</div>';
   if(!d.sesiones.length) return h+'<p class="muted" style="margin:0">Todavía no hay entrenos registrados.</p></div>';
   var R=rutinasSes(d), E=ejerciciosSes(d);
   if(F.rut&&R.map(clave).indexOf(clave(F.rut))<0) F.rut='';
@@ -8295,7 +8296,7 @@ function cuerpoCard(d){
   var sel=medSelDe(); if(!K.some(function(k){ return k[0]===(sel||'peso'); })) sel=K[0][0]==='peso'?'':K[0][0];
   var cur=sel||'peso';
   var h='<div class="card pmx" id="peso-card"><div class="card-t">'+ic('sube')+(reg.peso&&reg.medidas?'Peso y medidas':reg.peso?'Peso':'Medidas')+(reg.diario?' <span class="pill">Se pesa a diario</span>':'')+
-    (m.length?'<button class="btn sm sec" data-a="medTabla">'+ic('lista')+'Ver registros <span class="muted">'+m.length+'</span></button>':'')+'</div>';
+    (m.length?'<button class="btn sm ver-b" data-a="medTabla">'+ic('lista')+'Ver registros <span class="muted">'+m.length+'</span></button>':'')+'</div>';
   if(!m.length) return h+'<p class="muted" style="margin:0">Aún no ha apuntado su peso ni sus medidas.</p></div>';
   // los recuadros (si todas empiezan el mismo día, «desde el …» una sola vez, arriba)
   var ini={}; K.forEach(function(k){ var q=m.filter(function(x){ return num(x[k[0]])!=null; }); if(q.length>1) ini[q[0].fecha]=1; });
@@ -8484,7 +8485,7 @@ function runUltCard(d,R){
   return '<div class="card" id="run-ult"><div class="card-t">Sus últimas carreras</div><div class="rn-ul">'+L.slice(0,8).map(function(o){
     var X=runParecida(d,o), B=X.L[0], fr=B?runFrases(X.A,B.o).join(' · ')||'igual':'';
     return '<div class="rn-ur"><div><b>'+esc(o.e)+'</b><small>'+esc(fMedia(o.f))+' · '+esc(runResTxt(o.rows))+'</small>'+(B?'<span class="rn-cf">Frente a la del '+esc(fCorta(B.o.f))+(B.q===1?' (se parecen poco)':'')+': '+esc(fr)+'</span>':'')+'</div>'+
-      (B?'<button class="btn sm sec" data-a="runCmp" data-s="'+esc(o.sid)+'" data-e="'+esc(o.e)+'">'+ic('comparar')+'Comparar</button>':'<span class="muted sm">'+(runInstancias(d).some(function(x){ return x.f<o.f&&x.F; })?'Sin otra parecida':'La primera')+'</span>')+'</div>'; }).join('')+'</div>'+
+      (B?'<button class="btn sm ver-b" data-a="runCmp" data-s="'+esc(o.sid)+'" data-e="'+esc(o.e)+'">'+ic('comparar')+'Comparar</button>':'<span class="muted sm">'+(runInstancias(d).some(function(x){ return x.f<o.f&&x.F; })?'Sin otra parecida':'La primera')+'</span>')+'</div>'; }).join('')+'</div>'+
     (L.length>8?'<p class="muted sm">Y '+(L.length-8)+' más en el periodo.</p>':'')+'<p class="muted sm mt6">Cada una, frente a la anterior que más se le parece. «Comparar» abre el detalle.</p></div>';
 }
 A.per=function(el){ CO.per=+el.dataset.v; pintarClienta(false); };
