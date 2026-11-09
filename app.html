@@ -2736,7 +2736,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.36';
+var APP_V = 'v53.4.37';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5657,19 +5657,9 @@ A.cycCal=function(){
 };
 
 /* ---------- dieta de hoy ---------- */
-function planesCl(){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[]; return !P.length?P:libreCl()?planesMez(P):planesOc(P); }      // v53.4.36: sin «autorregulación», solo sin los platos que ha quitado
-/* v53.4.36 · todos pueden quitar platos de su dieta (antes, solo las que cuadran su dieta): sin «autorregulación» se guardan en sus
-   preferencias (pref.qd); con ella, en su versión de la dieta (mia.q). El que tiene hoy no se quita. */
-function qOcCl(){ if(libreCl()){ var M=miaCl(); M.q=M.q||{}; return M.q; } var pf=prefCl(); pf.qd=pf.qd||{}; return pf.qd; }
-function guardarOc(){ if(libreCl()) guardarMia(); else { CL._ocK=null; guardarPref(); } }
-function planesOc(P){
-  var pf=prefCl(), Q=pf.qd||{}; if(!Object.keys(Q).length) return P;
-  var d=pf.dia, hoy=(d&&d.f===hoyStr()&&d.c)||{}, kq=JSON.stringify(Q)+'|'+JSON.stringify(hoy);
-  if(CL._ocP===P&&CL._ocK===kq) return CL._oc;
-  var out=P.map(function(p){ return Object.assign({},p,{comidas:(p.comidas||[]).map(function(c,mi){ var hx=hoy[p.id+'|'+mi], todas=c.opciones||[], vis=todas.filter(function(o){ return !Q[o.id]||(hx&&hx.o===o.id); });
-    return Object.assign({},c,{opciones:vis,nq:todas.length-vis.length}); })}); });
-  CL._oc=out; CL._ocP=P; CL._ocK=kq; return out;
-}      // v33: con lo que ha cuadrado ella
+function planesCl(){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[]; return libreCl()&&P.length?planesMez(P):P; }      // v33: con lo que ha cuadrado ella · v53.4.37: quitar platos, solo con «autorregulación» (Javier)
+function qOcCl(){ var M=miaCl(); M.q=M.q||{}; return M.q; }      // los platos que ha quitado (solo quien cuadra su dieta)
+function guardarOc(){ guardarMia(); }
 function entrenaDia(f){ var ds=diaSem(f); return CL.d.rutinas.some(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,f,CL.d.rutinas); })||CL.d.sesiones.some(function(s){ return s.fecha===f; }); }
 function planDe(f){
   var P=planesCl(); if(!P.length) return null;
@@ -7148,7 +7138,7 @@ function anilloHtml(p){
     (cl>0.5?'<circle cx="60" cy="60" r="'+R+'" class="fg'+(pasa?' pasa':'')+'" stroke-dasharray="'+cl.toFixed(1)+' '+L.toFixed(1)+'"/>':'')+
     '</svg><div class="kr-c">'+cen+'</div></div><div class="kr-s">'+der+'</div></div>'+(ms?'<div class="kr-ms">'+ms+'</div>':'')+av+'</div>';
 }
-function cmsMenu(p){ var lib=libreCl(); return ordenCms(p).filter(function(mi){ return lib||(p.comidas[mi].opciones||[]).length||p.comidas[mi].nq; }); }      // v53.4.36: y las que se ha quedado sin platos (para volver a ponerlos)
+function cmsMenu(p){ var lib=libreCl(); return ordenCms(p).filter(function(mi){ return lib||(p.comidas[mi].opciones||[]).length; }); }
 /* el menú del último día con algo elegido (para «Copiar el menú de ayer») */
 function menuAnt(){ var pf=prefCl(), h=hoyStr(), d=pf.dia; if(diaConAlgo(d)&&d.f<h) return antDe(d); return pf.ant&&pf.ant.f&&pf.ant.f<h&&(pf.ant.c||pf.ant.s)?(pf.ant.c=pf.ant.c||{},pf.ant):null; }
 /* v52 · «Copiar de ayer» en cada comida: el plato y los alimentos sueltos de esa comida el último día (como elegidos, sin comer) */
@@ -7277,15 +7267,15 @@ function cbHtml(p,mi){
     (mc?'<span class="cbk">'+kTxt(mc[0])+' <small>kcal</small></span>':'')+
     (algo?'<button class="mh-ck'+(t?' on':'')+'" data-a="mnComido" data-m="'+mi+'" aria-pressed="'+!!t+'" aria-label="'+(t?'Ya no lo he comido: ':'Lo he comido: ')+esc(cn)+'">'+ic('ok')+'</button>':'')+'</div>';
   var sug=lib?libSugCm(p,mi):[];
-  h+='<div class="car" id="car-'+mi+'">'+ops.map(function(y){ var cc=ccHtml(p,mi,y.o,y.i,x,t,ob); if(x&&x.o===y.o.id) return cc;      // v53.4.32: cada plato con su ✕ (el que tiene hoy, no) · v53.4.36: para todos
+  h+='<div class="car" id="car-'+mi+'">'+ops.map(function(y){ var cc=ccHtml(p,mi,y.o,y.i,x,t,ob); if(!lib||(x&&x.o===y.o.id)) return cc;      // v53.4.32: cada plato con su ✕ (el que tiene hoy, no); solo quien cuadra su dieta
       return '<span class="cc-w">'+cc+'<button class="cc-q" data-a="plOcultar" data-m="'+mi+'" data-o="'+esc(y.o.id)+'" aria-label="Quitar «'+esc(nombreOp(y.o,y.i))+'» de tu '+esc(cn)+'">'+ic('x')+'</button></span>'; }).join('')+
     sug.map(function(r){ var nm=(adaptarRecCl(r)||{}).n||r.n; return '<span class="cc-w"><button class="cc cc-lib" data-a="plLib" data-m="'+mi+'" data-r="'+esc(r.id)+'">'+platoImg(r.img,'cc-im')+'<span class="cc-tag">Sugerencia</span><b>'+esc(nm)+'</b><small>'+(ob?'≈ '+kTxt(ob[0])+' kcal':esc(r.min)+' min')+'</small></button>'+
       '<button class="cc-q" data-a="libOcultar" data-r="'+esc(r.id)+'" aria-label="Quitar «'+esc(nm)+'» de tus sugerencias">'+ic('x')+'</button></span>'; }).join('');
   h+='</div>';
-  if(!ops.length&&(!sug.length||c.nq)) h+='<p class="muted sm cb-vac">'+(lib&&c.nq?'Has quitado los platos de esta comida: crea el tuyo, elige una receta o vuelve a poner alguno en «Mis platos».':c.nq?'Has quitado los platos de esta comida: vuelve a poner alguno en «Mis platos».':lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
+  if(!ops.length&&(!sug.length||(lib&&c.nq))) h+='<p class="muted sm cb-vac">'+(lib&&c.nq?'Has quitado los platos de esta comida: crea el tuyo, elige una receta o vuelve a poner alguno en «Mis platos».':lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
   if(S.length) h+='<button class="cb-su" data-a="mnSu" data-m="'+mi+'">'+ic('lista')+'<span><b>'+esc(S.map(function(z){ var zc=sueltoCk(z), cc=cocInfo(zc); return z.n+' '+gTxt(cc?gVista(zc,z.q,ckAl(z.a)||cc.s):z.q); }).join(' · '))+'</b><small>'+(vm?kTxt(sumMac(S.map(macS))[0])+' kcal · ':'')+S.length+(S.length>1?' alimentos sueltos':' alimento suelto')+'</small></span>'+ic('flecha')+'</button>';
   // v52 · lo demás, pequeño y debajo (sin tener que deslizar hasta el final): alimentos sueltos, más de la biblioteca y «Copiar de ayer»
-  var R=repCm(p,mi), ac=(lib||c.nq||ops.length>1?'<button class="cb-ch" data-a="plMios" data-m="'+mi+'">'+ic('ajuste')+'Mis platos'+(c.nq?' · '+c.nq+(c.nq>1?' quitados':' quitado'):'')+'</button>':'')+(lib?'<button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
+  var R=repCm(p,mi), ac=(lib?'<button class="cb-ch" data-a="plMios" data-m="'+mi+'">'+ic('ajuste')+'Mis platos'+(c.nq?' · '+c.nq+(c.nq>1?' quitados':' quitado'):'')+'</button>':'')+(lib?'<button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
     (R?'<button class="cb-ch cb-rep" data-a="mnRepCm" data-m="'+mi+'" aria-label="Copiar de ayer: '+esc(R.txt)+'">'+ic('reinicio')+(R.A.f===sumar(hoyStr(),-1)?'Copiar de ayer':'Copiar del '+esc(fCorta(R.A.f)))+'</button>':'');
   if(ac) h+='<div class="cb-ac">'+ac+'</div>';
   if(lib&&c.extra) h+='<button class="link danger cb-q" data-a="dlQuitarCm" data-m="'+mi+'">Quitar esta comida</button>';
@@ -7318,7 +7308,7 @@ A.plAbrir=function(el){
 /* v53.4.32 · las que cuadran su dieta quitan los platos que no quieren (los de su coach y los suyos) y los vuelven a poner cuando
    quieran, uno a uno o todos («Mis platos» de cada comida). Lo de su coach no se borra: solo deja de salirle. */
 var PQ_UNDO=null;
-function plTodosCm(p,mi){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[], T=libreCl()?planesMez(P,true):P, q=T.filter(function(x){ return x.id===p.id; })[0], c=q&&q.comidas[mi]; return c?c.opciones||[]:[]; }
+function plTodosCm(p,mi){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[], T=planesMez(P,true), q=T.filter(function(x){ return x.id===p.id; })[0], c=q&&q.comidas[mi]; return c?c.opciones||[]:[]; }
 A.plOcultar=function(el){ var p=planSelCl(); if(!p) return; var mi=+el.dataset.m, id=el.dataset.o, o=opCm(p,mi,id), c=p.comidas[mi], x=comidoDe(p,mi); if(!o||(x&&x.o===id)) return;
   qOcCl()[id]=1; PQ_UNDO=[id]; guardarOc(); CL.keep=true; pintarCl();
   toastAcc('Quitado de tu '+String(c.nombre).toLowerCase()+': '+nombreOp(o,(c.opciones||[]).indexOf(o)),'Deshacer','plOcDesh'); };
@@ -10690,9 +10680,9 @@ function prefResumen(){
   (CO.die?CO.die.planes:[]).forEach(function(p){ p.comidas.forEach(function(c){ c.opciones.forEach(function(o,j){ if(o.id) nom[o.id]=o.nombre||(c.nombre+' · opción '+(j+1)); }); }); });
   Object.keys(pf.fav||{}).forEach(function(k){ if(nom[k]&&fav.indexOf(nom[k])<0) fav.push(nom[k]); });
   Object.keys(pf.n||{}).filter(function(k){ return nom[k]; }).sort(function(a,b){ return pf.n[b]-pf.n[a]; }).slice(0,5).forEach(function(k){ top.push(nom[k]+' ×'+pf.n[k]); });
-  var sw=Object.keys(pf.sw||{}).length, qd=CO.d.clienta.dietaLibre?[]:Object.keys(pf.qd||{}).filter(function(k){ return nom[k]; }).map(function(k){ return nom[k]; });      // v53.4.36: los platos tuyos que ha quitado
-  if(!fav.length&&!top.length&&!sw&&!qd.length) return '';
-  return '<div class="die-pref">'+(qd.length?'<div><b>Ha quitado de su app:</b> '+esc(qd.join(', '))+' <span class="muted">(no se borran de tu dieta: los puede volver a poner)</span></div>':'')+(fav.length?'<div><b>'+ic('corazon')+'Favoritos:</b> '+esc(fav.slice(0,6).join(', '))+'</div>':'')+(top.length?'<div><b>Lo que más elige:</b> '+esc(top.join(', '))+'</div>':'')+(sw?'<div><b>Cambios de alimento:</b> '+sw+'</div>':'')+'</div>';
+  var sw=Object.keys(pf.sw||{}).length;
+  if(!fav.length&&!top.length&&!sw) return '';
+  return '<div class="die-pref">'+(fav.length?'<div><b>'+ic('corazon')+'Favoritos:</b> '+esc(fav.slice(0,6).join(', '))+'</div>':'')+(top.length?'<div><b>Lo que más elige:</b> '+esc(top.join(', '))+'</div>':'')+(sw?'<div><b>Cambios de alimento:</b> '+sw+'</div>':'')+'</div>';
 }
 function vDietaPlan(){
   var otras=CO.d.otras.length?'<button class="btn sec mt" data-a="copiarDieta">'+ic('copiar')+'Copiar dieta…</button>':'';     // v32: traer o llevar, con «De → A»
@@ -14976,15 +14966,13 @@ function pintarNegocio(arriba){
     '<div class="ng-mes"><button class="ico" data-a="negMes" data-d="-1" aria-label="Mes anterior">'+ic('atras')+'</button><b>'+esc(cap(mesTxtL(R.mes)))+(esHoy?' <small class="muted">· en curso</small>':'')+'</b><button class="ico" data-a="negMes" data-d="1" aria-label="Mes siguiente"'+(esHoy?' disabled':'')+'>'+ic('flecha')+'</button></div>'+
     '<div class="ng-ks">'+negKpi('Cobrado',o.ingresos,eur(o.ingresos),a&&a.ingresos,false,eur)+negKpi('Clientes con plan',o.conPlan,String(o.conPlan),a&&a.conPlan)+
       negKpi('Altas',o.altas,String(o.altas),a&&a.altas)+negKpi('Bajas',o.bajas,String(o.bajas),a&&a.bajas,true)+
-      negKpi('Renovaciones',o.renov,String(o.renov),a&&a.renov)+negKpi('Entrenos hechos',o.entrenos,String(o.entrenos),a&&a.entrenos)+'</div>'+
-    '<p class="muted sm">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+(o.cobros===1?' cobro':' cobros')+' · ticket medio '+eur(o.ingresos/o.cobros)+'. ':'')+
-      (o.entrenaron?o.entrenaron+(o.entrenaron===1?' cliente ha entrenado':' clientes han entrenado')+' · '+o.checkins+' check-ins.':'')+'</p>'+
-    '<p class="muted sm">«Entrenos hechos» son las sesiones que tus clientes han guardado en su app este mes: es su actividad, no tiene que ver con los cobros.</p>'+      // v53.4.36 (Javier: «¿a qué se refiere?»)
+      negKpi('Renovaciones',o.renov,String(o.renov),a&&a.renov)+negKpi('Ticket medio',o.cobros?o.ingresos/o.cobros:0,o.cobros?eur(o.ingresos/o.cobros):'–',a&&a.cobros?a.ingresos/a.cobros:null,false,eur)+'</div>'+      // v53.4.37: solo cuentas (Javier: los entrenos no tienen que ver)
+    '<p class="muted sm">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+(o.cobros===1?' cobro':' cobros')+' este mes.':'')+'</p>'+
     '<div class="card"><div class="card-t">Cobrado en los últimos 12 meses <span class="muted">'+esc(eur(anio))+'</span></div>'+negBarras(L)+'</div>';
   if(R.porPlan.length) h+='<div class="card"><div class="card-t">Por plan · '+esc(mesTxtL(R.mes))+'</div>'+R.porPlan.map(function(x){ return '<div class="ng-pl"><span>'+esc(x.plan)+'</span><span class="muted">'+x.cobros+(x.cobros===1?' cobro':' cobros')+'</span><b>'+esc(eur(x.importe))+'</b></div>'; }).join('')+'</div>';
-  h+='<div class="card"><div class="card-t">Mes a mes</div><div class="ng-tw"><table class="ng-t"><thead><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Entrenos</th></tr></thead><tbody>'+
-    L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m,true)))+' '+x.m.slice(2,4)+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.entrenos+'</td></tr>'; }).join('')+'</tbody></table></div>'+
-    '<p class="muted sm">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes. Entrenos: sesiones que han guardado tus clientes. Sin la clienta de ejemplo.</p></div>'+
+  h+='<div class="card"><div class="card-t">Mes a mes</div><div class="ng-tw"><table class="ng-t"><thead><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Renovaciones</th></tr></thead><tbody>'+
+    L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m,true)))+' '+x.m.slice(2,4)+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.renov+'</td></tr>'; }).join('')+'</tbody></table></div>'+
+    '<p class="muted sm">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes. Sin la clienta de ejemplo.</p></div>'+
     '<div class="ng-acc"><button class="btn" data-a="negInforme">'+ic('descargar')+'Informe de '+esc(mesTxtL(R.mes))+' (PDF)</button><button class="btn sec" data-a="negExportar">'+ic('descargar')+'Todos tus datos en Excel</button></div>';
   app.innerHTML='<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Tu negocio</div><span style="width:70px"></span></header><main class="wrap coachw">'+h+'</main>';
   window.scrollTo(0,arriba?0:y);
@@ -15001,11 +14989,11 @@ A.negInforme=function(){
     '@media print{body{margin:14mm}button{display:none}}</style></head><body>'+
     '<h1>Informe de '+esc(mesTxtL(R.mes))+'</h1><p class="sub">'+esc(quien)+' · hecho el '+esc(fLarga(hoyStr()))+(R.mes===R.hoy.slice(0,7)?' (mes en curso)':'')+'</p>'+
     '<div class="ks">'+fila('Cobrado',o.ingresos,eur(o.ingresos),a&&a.ingresos)+fila('Clientes con plan',o.conPlan,String(o.conPlan),a&&a.conPlan)+fila('Altas',o.altas,String(o.altas),a&&a.altas)+
-      fila('Bajas',o.bajas,String(o.bajas),a&&a.bajas,true)+fila('Renovaciones',o.renov,String(o.renov),a&&a.renov)+fila('Entrenos hechos',o.entrenos,String(o.entrenos),a&&a.entrenos)+'</div>'+
-    '<p class="sub" style="margin-top:12px">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+' cobros · ticket medio '+eur(o.ingresos/o.cobros)+'. ':'')+(o.entrenaron?o.entrenaron+' clientes han entrenado · '+o.checkins+' check-ins.':'')+'</p>'+
+      fila('Bajas',o.bajas,String(o.bajas),a&&a.bajas,true)+fila('Renovaciones',o.renov,String(o.renov),a&&a.renov)+fila('Ticket medio',o.cobros?Math.round(o.ingresos/o.cobros*100)/100:0,o.cobros?eur(o.ingresos/o.cobros):'–',a&&a.cobros?Math.round(a.ingresos/a.cobros*100)/100:null)+'</div>'+
+    '<p class="sub" style="margin-top:12px">'+(o.retencion!=null?'Siguen '+o.retencion+' de cada 100 clientes con plan del mes anterior. ':'')+(o.cobros?o.cobros+' cobros.':'')+'</p>'+
     (R.porPlan.length?'<h2>Por plan</h2><table><tr><th>Plan</th><th>Cobros</th><th>Importe</th></tr>'+R.porPlan.map(function(x){ return '<tr><td>'+esc(x.plan)+'</td><td>'+x.cobros+'</td><td>'+esc(eur(x.importe))+'</td></tr>'; }).join('')+'</table>':'')+
-    '<h2>Los últimos 12 meses</h2><table><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Entrenos</th></tr>'+L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m)))+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.entrenos+'</td></tr>'; }).join('')+'</table>'+
-    '<p class="nota">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes. Entrenos hechos: sesiones que han guardado tus clientes en su app (actividad, no cobros).</p><p class="pie">MOOD ON · moodonapp.com</p>'+
+    '<h2>Los últimos 12 meses</h2><table><tr><th>Mes</th><th>Cobrado</th><th>Con plan</th><th>Altas</th><th>Bajas</th><th>Renovaciones</th></tr>'+L.slice().reverse().map(function(x){ return '<tr'+(x.m===R.mes?' class="on"':'')+'><td>'+esc(cap(mesTxtL(x.m)))+'</td><td>'+esc(eur(x.ingresos))+'</td><td>'+x.conPlan+'</td><td>'+x.altas+'</td><td>'+x.bajas+'</td><td>'+x.renov+'</td></tr>'; }).join('')+'</table>'+
+    '<p class="nota">Con plan: con un pago que cubre ese mes. Bajas: tenían plan el mes anterior y ese no. Renovaciones: cobros de quien ya había pagado antes.</p><p class="pie">MOOD ON · moodonapp.com</p>'+
     '<scr'+'ipt>setTimeout(function(){ try{ window.print(); }catch(e){} },400);<\/scr'+'ipt></body></html>';
   var w=null; try{ w=window.open('','_blank'); }catch(e){}
   if(w){ w.document.open(); w.document.write(html); w.document.close(); return; }
