@@ -2475,6 +2475,12 @@ button.lg-c{cursor:pointer}.lg-c .lg-i{width:38px;height:38px;margin-bottom:4px}
 .lg-sg{display:flex;align-items:center;gap:10px;background:var(--card2);border-radius:14px;padding:10px 12px;margin:0 0 6px}.lg-sg>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
 .lg-sg b{font:700 14px/1.25 Plus Jakarta Sans,sans-serif;color:var(--tx2)}.lg-sg small{font-size:12px;color:var(--mu)}.lg-sg .lg-pb{margin:3px 0 1px}
 .prueba-b{display:flex;align-items:center;gap:8px;background:#111;color:#fff;border-radius:14px;padding:9px 10px 9px 14px;margin:0 0 12px;font-size:13px}.prueba-b span{flex:1;min-width:0}.prueba-b .ic{width:17px;height:17px;flex:none}
+.demo-b{margin:2px 2px 12px;background:#111;color:#fff;border-radius:14px;padding:10px 12px;font-size:12px;line-height:1.4}.demo-b b{display:block;font-size:13px;margin-bottom:2px}
+.demo-b div{display:flex;gap:6px;margin-top:8px}.demo-b button{background:#fff;color:#111;border:0;border-radius:999px;padding:5px 11px;font:700 12px Plus Jakarta Sans,sans-serif;cursor:pointer}.demo-b button+button{background:rgba(255,255,255,.16);color:#fff}
+#demo-p{display:none}
+body.en-demo:not(.ancho) #demo-p{display:flex;position:fixed;left:10px;bottom:calc(74px + env(safe-area-inset-bottom));z-index:31;align-items:center;gap:6px;background:#111;color:#fff;border:0;border-radius:999px;padding:8px 13px;font:700 12px Plus Jakarta Sans,sans-serif;box-shadow:0 6px 18px rgba(0,0,0,.2);cursor:pointer}
+#demo-p .ic{width:15px;height:15px}
+body.pant-acc #demo-p{display:none!important}
 .prueba-b button{background:#fff;color:#111;border:0;border-radius:999px;padding:6px 12px;font:700 12.5px Plus Jakarta Sans,sans-serif;cursor:pointer}
 /* v46 · cuentas separadas en el móvil, medidas (gráfica de cada una, corregir y borrar), cerrar sesión, archivar o borrar rutina y MOOD ON en la hoja del plato */
 #loader{flex-direction:column;gap:16px}#loader .ld-lento{display:none;max-width:290px;text-align:center;background:#fff;border-radius:18px;padding:14px 16px;box-shadow:0 8px 26px rgba(0,0,0,.12)}#loader.lento .ld-lento{display:block}#loader .ld-lento p{margin:0 0 10px;font-size:14px;line-height:1.45;color:var(--tx2)}
@@ -2719,6 +2725,7 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
     var b = { mode: 'login' };
     if (p.alta || p.reset) b = { mode: 'alta', token: String(p.alta || p.reset).slice(0, 60) };
     else if (p.prueba) b = { mode: 'prueba', token: String(p.prueba).slice(0, 60) };
+    else if (p.demo) b = { mode: 'coach', demo: 1, pase: String(p.demo).slice(0, 60), casa: false };   // v53.4.40: el entrenador de prueba
     else if (p.clienta) b = { mode: 'clienta', token: String(p.clienta).slice(0, 40) };
     else if (p.cuestionario) b = { mode: 'cuest', token: String(p.cuestionario).slice(0, 40) };
     else if ('coach' in p) b = { mode: 'coach' };
@@ -2742,7 +2749,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.39';
+var APP_V = 'v53.4.40';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -2855,10 +2862,14 @@ var ICONS={
   agarre:'<circle cx="9" cy="6" r="1.3"/><circle cx="15" cy="6" r="1.3"/><circle cx="9" cy="12" r="1.3"/><circle cx="15" cy="12" r="1.3"/><circle cx="9" cy="18" r="1.3"/><circle cx="15" cy="18" r="1.3"/>'
 };
 function ic(n,cls){ return '<svg class="ic'+(cls?' '+cls:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+(ICONS[n]||'')+'</svg>'; }
+/* v53.4.40 · el entrenador de prueba (?demo=… desde el panel de dirección): lo que guarda la app se queda solo en esta pestaña
+   (sessionStorage); así no toca la sesión ni lo guardado de tu panel de verdad en este navegador */
+var DEMO=!!(window.BOOT&&BOOT.demo);
+function LSX(){ return DEMO?sessionStorage:localStorage; }
 var LS = {
-  get:function(k){ try{ var v=localStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } },
-  set:function(k,v){ try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
-  del:function(k){ try{ localStorage.removeItem(k); }catch(e){} }
+  get:function(k){ try{ var v=LSX().getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } },
+  set:function(k,v){ try{ LSX().setItem(k,JSON.stringify(v)); }catch(e){} },
+  del:function(k){ try{ LSX().removeItem(k); }catch(e){} }
 };
 
 /* ---------------- servidor ---------------- */
@@ -5231,8 +5242,8 @@ var ICO={
 
 /* v26 · más rápida: se pinta al momento con lo último que se vio en este móvil y, a la vez, se pide lo nuevo */
 var SNAP={k:function(){ return 'chadin_snap_'+(BOOT.mode==='clienta'?lkCl():'coach'); }};
-function snapLeer(k){ try{ var t=localStorage.getItem(k), m=num(localStorage.getItem(k+'_t')); if(!t||!m||Date.now()-m>14*864e5) return null; return t; }catch(e){ return null; } }
-function snapGuardar(k,txt){ if(SES_CORTA) return; try{ if(txt.length>1500000){ localStorage.removeItem(k); return; } localStorage.setItem(k,txt); localStorage.setItem(k+'_t',String(Date.now())); }catch(e){ try{ localStorage.removeItem(k); }catch(e2){} } }
+function snapLeer(k){ try{ var t=LSX().getItem(k), m=num(LSX().getItem(k+'_t')); if(!t||!m||Date.now()-m>14*864e5) return null; return t; }catch(e){ return null; } }
+function snapGuardar(k,txt){ if(SES_CORTA) return; try{ if(txt.length>1500000){ LSX().removeItem(k); return; } LSX().setItem(k,txt); LSX().setItem(k+'_t',String(Date.now())); }catch(e){ try{ LSX().removeItem(k); }catch(e2){} } }
 function ocupado(){ var a=document.activeElement, m=document.getElementById('modal'); return !!(m&&m.classList.contains('open'))||!!document.getElementById('np')||!!(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&!a.readOnly); }
 /* repinta en cuanto no esté escribiendo ni con una ventana abierta (como mucho, 2 minutos) */
 var RL={t:null};
@@ -5271,7 +5282,7 @@ function pedirFresco(ref){
     CL.abriendo=false; fin();
     if(rapido&&esRed(e)){ CL.sinFresco=true; return toast('Sin conexión: ves lo último que se cargó en este móvil','err'); }
     if(esRed(e)&&!rapido) return pantallaSinRed('Si estabas entrenando, lo que llevabas apuntado no se pierde: lo verás al volver a abrirla.');
-    try{ localStorage.removeItem(k); localStorage.removeItem(k+'_t'); }catch(e2){}      // enlace cambiado o acceso pausado: no se enseña nada guardado
+    try{ LSX().removeItem(k); LSX().removeItem(k+'_t'); }catch(e2){}      // enlace cambiado o acceso pausado: no se enseña nada guardado
     if(rapido){ CL.d=null; CL.dr=null; }
     if(CADUCA_RE.test(limpiaErr(e))) return;                                        // v28: vuelve a la pantalla de entrar
     if(esRed(e)) return pantallaSinRed('Si estabas entrenando, lo que llevabas apuntado no se pierde: lo verás al volver a abrirla.');
@@ -7771,6 +7782,7 @@ A.medBorrar=function(el){ var f=el.dataset.f; confirmar('¿Borrar el registro de
 var CO={pin:'',lista:null,url:'',hoy:'',cid:null,d:null,sub:'evolucion',rut:[],die:null,dieSucia:false,ej:null,opVis:{},nf:{q:'',c:'',mios:false}};
 
 function arrancarCoach(){
+  if(DEMO) return arrancarDemo();               // v53.4.40: el entrenador de prueba
   LS.del('chadin_pin');                         // v28: el PIN ya no se guarda en el móvil, solo la sesión
   var t=sesLee('co'); SES_CORTA=!LS.get(SK.co)&&!!SS.get(SK.co);
   var p=sesDeTop();
@@ -7798,7 +7810,7 @@ function pintarLogin(msg){
   },function(e){ if(esRed(e)) return pantallaSinRed(''); pantallaMensaje('Ups',limpiaErr(e)); });
 }
 A.entrar=function(){ A.coEntrar(); };
-A.salirCoach=function(){ var t=CO.pin; if(/^C/.test(t||'')) api('salir',t).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
+A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) api('salir',t).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
 function ponerResumen(r){ setTimeout(pedirFotosCo,400); CO.coachNombre=r.coachNombre||'Chadin'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
@@ -7826,7 +7838,7 @@ function cargarLista(rapido){
   });
   return Promise.resolve();
 }
-function snapBorrar(k){ try{ localStorage.removeItem(k); localStorage.removeItem(k+'_t'); }catch(e){} }
+function snapBorrar(k){ try{ LSX().removeItem(k); LSX().removeItem(k+'_t'); }catch(e){} }
 /* ficha de cada clienta: en memoria 15 minutos; al abrirla se ve al momento y se pide lo nuevo por detrás */
 function ponerClienta(id,d,sub,refresco){
   var keep=refresco?{ej:CO.ej,repSem:CO.repSem,diaRut:CO.diaRut,dieV:CO.dieV,calSel:CO.calSel,calY:CO.calY,planI:CO.planI}:null;
@@ -11641,7 +11653,7 @@ function ladoHtml(){
   var act=(CO.lista||[]).filter(function(c){ return c.activa; }), v=CO.vista, urg=0;
   try{ urg=tareasTodas().filter(function(t){ return !t.info&&(t.g==='atr'||t.g==='hoy'); }).length+(semanalPend().length?1:0); }catch(e){}
   function it(a,i,t,on,extra){ return '<button class="sd-i'+(on?' on':'')+'" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+(extra||'')+'</button>'; }
-  return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+
+  return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
@@ -15487,8 +15499,8 @@ function logoSvg(conSub){ return '<svg viewBox="0 0 1600 '+(conSub?311:224)+'" a
    (la pantalla de entrar, sin enlace), lo que se vio la última vez en este móvil; la primera vez, «MOOD ON». */
 function conMarca(){
   var v=CO&&CO.pin&&CO.casa!=null?CO.casa:(typeof CL!=='undefined'&&CL&&CL.d&&CL.d.casa!=null)?CL.d.casa:BOOT.casa;
-  if(v===true||v===false){ try{ localStorage.setItem('moodon_casa',v?'1':'0'); }catch(e){} return v; }
-  try{ return localStorage.getItem('moodon_casa')==='1'; }catch(e){ return false; }
+  if(v===true||v===false){ try{ LSX().setItem('moodon_casa',v?'1':'0'); }catch(e){} return v; }
+  try{ return LSX().getItem('moodon_casa')==='1'; }catch(e){ return false; }
 }
 function marcaTxt(){ return conMarca()?'MOOD ON by Chadin':'MOOD ON'; }
 /* v53.4.38 · el logo de su entrenador junto a MOOD ON (opción C), solo dentro de la app (arriba en su app y en el panel; v53.4.39: al abrir —entrar, cuestionario— y al compartir, solo MOOD ON): lo sube en «Tu logo»; aquí se guarda en el móvil ({v, src})
@@ -15517,6 +15529,7 @@ function topGuarda(k,v){ if(window.top===window.self||!BOOT.top) return; try{ wi
 var SS={get:function(k){ try{ var v=sessionStorage.getItem(k); return v?JSON.parse(v):null; }catch(e){ return null; } },set:function(k,v){ try{ sessionStorage.setItem(k,JSON.stringify(v)); }catch(e){} },del:function(k){ try{ sessionStorage.removeItem(k); }catch(e){} }};
 var SES_CORTA=false;      // v28.1: «Mantener la sesión abierta» sin marcar: la sesión no se guarda en el móvil (solo mientras usas la app)
 function sesGuarda(k,v){
+  if(DEMO){ if(v) SS.set(SK[k],v); else SS.del(SK[k]); return; }      // v53.4.40: la de prueba, solo en esta pestaña (y nunca a tu página de inicio)
   if(!v){ LS.del(SK[k]); SS.del(SK[k]); topGuarda(k,null); return; }
   if(SES_CORTA&&(k==='cl'||k==='co')){ SS.set(SK[k],v); LS.del(SK[k]); topGuarda(k,null); return; }
   LS.set(SK[k],v); topGuarda(k,v);
@@ -15580,7 +15593,8 @@ var CADUCA_RE=/sesión ha caducado|Ahora entras con tu email/i, irLoginT=null;
 function sesionCaducada(m){
   clearTimeout(irLoginT);
   irLoginT=setTimeout(function(){
-    if(BOOT.mode==='coach'){ if(!CO.pin) return; sesGuarda('co',null); CO.lista=null; CO.pin=''; try{ mcCerrar(); }catch(e){} pintarLogin(m); }
+    if(BOOT.mode==='coach'&&DEMO){ if(CO.pin) demoFin('La prueba ha terminado (dura 12 horas).'); }
+    else if(BOOT.mode==='coach'){ if(!CO.pin) return; sesGuarda('co',null); CO.lista=null; CO.pin=''; try{ mcCerrar(); }catch(e){} pintarLogin(m); }
     else if(BOOT.mode==='clienta'&&PRUEBA) pruebaCaducada();
     else if(BOOT.mode==='clienta'){
       if(/Ahora entras/.test(m)&&!/^S/.test(BOOT.token||'')){ topLimpia(); ENLACE_VIEJO=BOOT.token; limpiarCuentaCl(); BOOT.mode='login'; BOOT.token=''; BOOT.lk=''; return arrancarLogin(); }      // v32: enlace antiguo (o la app fijada con él): entra con su sesión guardada (v46: solo si es de la misma clienta) o le pide usuario y contraseña
@@ -15728,7 +15742,7 @@ A.clSalir=function(){
   if(PRUEBA) return A.pruebaSalir();
   confirmar('¿Cerrar sesión en este móvil? Para volver a entrar necesitarás tu email y tu contraseña.','Cerrar sesión',function(){
     var t=BOOT.token; api('salir',t).catch(function(){}); sesGuarda('cl',null);
-    try{ localStorage.removeItem(SNAP.k()); localStorage.removeItem(SNAP.k()+'_t'); }catch(e){}
+    try{ LSX().removeItem(SNAP.k()); LSX().removeItem(SNAP.k()+'_t'); }catch(e){}
     limpiarCuentaCl(); BOOT.mode='login'; BOOT.token=''; BOOT.lk=''; window.scrollTo(0,0); pintarLoginCl('Has cerrado sesión.');
   },'Cancelar');
 };
@@ -16440,6 +16454,35 @@ A.pruebaSalir=function(){
   pantallaAcc('<div class="card center"><h2>Has salido del modo prueba</h2><p class="muted">Ya puedes cerrar esta pestaña y volver a tu panel.</p></div>','Modo prueba');
 };
 function pruebaCaducada(){ SS.del('chadin_prueba'); limpiarCuentaCl(); BOOT.token=''; pantallaAcc('<div class="card center"><h2>La prueba ha terminado</h2><p class="muted">Dura 2 horas. Ábrela otra vez desde tu panel → Modo prueba.</p></div>','Modo prueba'); }
+
+/* ========================= v53.4.40 · ENTRENADOR DE PRUEBA =========================
+   El dueño lo abre desde el panel de dirección (Entrenadores → Ver como entrenador) con un pase de un solo uso: ve el panel
+   como lo ve cualquier entrenador. La sesión (12 horas) y todo lo que guarda la app se quedan solo en esta pestaña. */
+function arrancarDemo(){
+  SES_CORTA=true; document.body.classList.add('en-demo');
+  if(!document.getElementById('demo-p')) document.body.insertAdjacentHTML('beforeend','<button id="demo-p" type="button" data-a="demoInfo">'+ic('ojo')+'Entrenador de prueba</button>');
+  var t=SS.get(SK.co);
+  if(t){ CO.pin=t; cargarLista(true).catch(function(){}); return; }       // al recargar la pestaña
+  pantallaAcc('<div class="card center"><p class="muted">Abriendo el panel del entrenador de prueba…</p></div>','Entrenador de prueba');
+  api('entrarDemo',String(BOOT.pase||''),infoDisp()).then(function(r){
+    SS.set(SK.co,r.ses); CO.pin=r.ses; document.body.classList.remove('pant-acc');
+    try{ history.replaceState(null,'',location.pathname+'?demo=1'); }catch(e){}
+    cargarLista(true).catch(function(){});
+  },function(e){ demoFin(limpiaErr(e)); });
+}
+function demoFin(m){
+  SS.del(SK.co); CO.pin=''; CO.lista=null; try{ mcCerrar(); }catch(e){} cerrarModal();
+  var p=document.getElementById('demo-p'); if(p) p.remove();
+  pantallaAcc('<div class="card center"><h2>Entrenador de prueba</h2><p>'+esc(m||'Has salido.')+'</p><p class="muted sm">Para volver, ábrelo otra vez desde el panel de dirección → Entrenadores → Ver como entrenador. Ya puedes cerrar esta pestaña.</p></div>','Entrenador de prueba');
+}
+function demoLado(){ return DEMO?'<div class="demo-b"><b>Entrenador de prueba</b>Así ve MOOD ON un entrenador. De aquí no sale nada: ni emails ni cobros.<div><button type="button" data-a="demoInfo">Qué es</button><button type="button" data-a="demoSalir">Salir</button></div></div>':''; }
+A.demoInfo=function(){
+  modal('<h2>Entrenador de prueba</h2><p>Estás viendo MOOD ON como lo ve un entrenador. Puedes tocarlo todo: crear clientes, rutinas, dietas, escribir en el chat…</p>'+
+    '<p class="muted">De aquí no sale nada: no se envía ningún email, no se conecta Stripe ni Google y no se cobra. No cuenta en tus números del panel de dirección.</p>'+
+    '<p class="muted sm">Para empezar de cero o borrarlo: panel de dirección → Entrenadores → Ver como entrenador.</p>'+
+    '<button class="btn mt" data-a="cerrarModal">Seguir probando</button><button class="btn sec mt" data-a="demoSalir">Salir</button>');
+};
+A.demoSalir=function(){ var t=CO.pin; if(/^C/.test(t||'')) api('salir',t).catch(function(){}); demoFin('Has salido del entrenador de prueba.'); };
 
 /* ---------- v47 · panel: pasos y logros en la ficha ---------- */
 var PS_OBJ=[5000,8000,10000,12000];

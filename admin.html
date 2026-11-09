@@ -226,6 +226,18 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
 .fila2{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}
 /* v53.4 · invitar, la ficha de un entrenador y la plataforma */
 #invitar{display:flex;flex-wrap:wrap;gap:28px;padding:22px;scroll-margin-top:20px}
+/* v53.4.40 · ver como entrenador */
+.cab-b{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#demo{scroll-margin-top:20px}
+.demo-op{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.demo-op button{text-align:left;border:1px solid #E5E5EA;background:#fff;border-radius:16px;padding:14px 16px;cursor:pointer;font:inherit;color:inherit}
+.demo-op button:hover{border-color:#141414}
+.demo-op button b{display:block;font-size:15px;margin-bottom:3px}
+.demo-op button span{font-size:13px;color:#6E6E73}
+.demo-op button:disabled{opacity:.5;cursor:default}
+.demo-ya{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.demo-ya .q{flex:1;min-width:200px;font-size:14px}
+.demo-ya .q div{color:#6E6E73;font-size:13px}
 #invitar .txt{flex:1 1 300px;min-width:0}
 #invitar h2{font-size:20px;margin:0 0 6px}
 #invitar .txt p{margin:0 0 12px;font-size:14.5px;color:#4A4A4E;line-height:1.5}
@@ -376,7 +388,7 @@ td.fin{text-align:right;white-space:nowrap}
     </div>
 
     <div id="v-entrenadores" class="vista h">
-      <header class="cab-v"><div class="t"><h1>Entrenadores</h1></div><button class="btn-n" id="b-inv-ir" type="button">+ Invitar entrenador</button></header>
+      <header class="cab-v"><div class="t"><h1>Entrenadores</h1></div><div class="cab-b"><button class="chip-b" id="b-demo-ir" type="button">Ver como entrenador</button><button class="btn-n" id="b-inv-ir" type="button">+ Invitar entrenador</button></div></header>
       <div id="ent-msg" class="ok-msg h" role="status"></div>
       <div class="filtros">
         <input id="ent-q" type="search" placeholder="Buscar por nombre o email" aria-label="Buscar entrenador">
@@ -384,6 +396,12 @@ td.fin{text-align:right;white-space:nowrap}
       </div>
       <section aria-label="Lista de entrenadores" style="padding:8px 12px">
         <div id="t-ent" class="tabla"></div>
+      </section>
+      <section id="demo" aria-labelledby="t-demo">
+        <h2 id="t-demo">Ver como entrenador</h2>
+        <p class="sub">Un entrenador de prueba solo para ti: abre su panel en otra pestaña y lo ves tal cual lo verá quien invites. No sale en la lista ni cuenta en tus números, no envía emails y no se cobra.</p>
+        <div id="demo-acc"></div>
+        <div id="demo-err" class="msg err h" role="alert" style="margin:12px 0 0"></div>
       </section>
       <section id="invitar" aria-labelledby="t-inv">
         <div class="txt">
@@ -618,7 +636,7 @@ td.fin{text-align:right;white-space:nowrap}
     $('yo').textContent = r.email || '';
     $('act').textContent = d.ahora ? 'Actualizado a las ' + fecha(d.ahora, true).split(', ')[1] : '';
     $('pie').textContent = 'Entras como ' + (r.email || '') + ' · Actualizado ' + fecha(d.ahora, true) + ' · Aquí no se ve ningún dato de salud de los clientes: solo números.';
-    pintarEnt(); pintarInv(); pintarPlat();
+    pintarEnt(); pintarInv(); pintarPlat(); pintarDemo();
   }
   function pintarEnt() {
     var d = (R && R.d) || {}, C = d.coaches || [], q = $('ent-q').value.trim().toLowerCase();
@@ -675,6 +693,47 @@ td.fin{text-align:right;white-space:nowrap}
     var b = e.target.closest('button[data-fc]'); if (b) { location.hash = 'entrenador/' + b.getAttribute('data-fc'); return; }
     b = e.target.closest('button[data-reenv]'); if (b) reenviar(b.getAttribute('data-reenv'), b);
   });
+  /* ---------- v53.4.40 · ver como entrenador (el entrenador de prueba) ---------- */
+  var demoElegir = false;
+  function pintarDemo() {
+    var D = R && R.d && R.d.demo, el = $('demo-acc'); if (!el) return;
+    var ops = '<div class="demo-op"><button type="button" data-demo="vacio"><b>Como el primer día</b><span>Vacío, con su copia de la biblioteca: lo que ve nada más entrar.</span></button>' +
+      '<button type="button" data-demo="ejemplos"><b>Con clientes de ejemplo</b><span>Una clienta de ejemplo con 12 semanas de datos y otros 4 clientes inventados, dos con mensajes sin leer.</span></button></div>';
+    if (!D || demoElegir) { el.innerHTML = (D ? '<p class="sub" style="margin:0 0 10px">Se borra el de ahora y se crea otro:</p>' : '') + ops + (D ? '<p style="margin:10px 0 0"><button class="chip-b peq" type="button" id="demo-no">Cancelar</button></p>' : ''); }
+    else el.innerHTML = '<div class="demo-ya"><div class="q"><b>Tu entrenador de prueba</b><div>' + (D.modo === 'ejemplos' ? 'Con clientes de ejemplo' : 'Empezó vacío') + (D.creado ? ' · creado el ' + esc(fecha(D.creado)) : '') + '. Lo que hagas en él se queda hasta que empieces de cero.</div></div>' +
+      '<button class="chip-b neg" type="button" id="demo-abrir">Abrir su panel</button><button class="chip-b" type="button" id="demo-cero">Empezar de cero</button><button class="chip-b" type="button" id="demo-borrar">Borrarlo</button></div>';
+    var no = $('demo-no'); if (no) no.addEventListener('click', function () { demoElegir = false; pintarDemo(); });
+    var ab = $('demo-abrir'); if (ab) ab.addEventListener('click', function () { abrirDemo({}, this); });
+    var ce = $('demo-cero'); if (ce) ce.addEventListener('click', function () { demoElegir = true; pintarDemo(); });
+    var bo = $('demo-borrar'); if (bo) bo.addEventListener('click', function () {
+      if (!window.confirm('¿Borrar el entrenador de prueba y todo lo que has hecho en él?')) return;
+      var b = this, t = b.textContent; ocupado(b, true, 'Borrando…'); $('demo-err').classList.add('h');
+      llamar({ acc: 'demo_borrar', ses: lee(K.ses) }).then(function (r) { demoElegir = false; nuevoR(r); hechoEn('ent-msg', 'Entrenador de prueba borrado.'); })
+        .catch(function (er) { if (!fallo(er)) { ocupado(b, false, t); $('demo-err').textContent = er.message; $('demo-err').classList.remove('h'); } });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('button[data-demo]'), function (b) {
+      b.addEventListener('click', function () { abrirDemo({ modo: b.getAttribute('data-demo'), nuevo: !!(R && R.d && R.d.demo) }, b); });
+    });
+  }
+  // la pestaña se abre ya (si no, el navegador la bloquea) y se le pone la dirección cuando llega el pase
+  function abrirDemo(o, b) {
+    var w = window.open('', '_blank'), bs = $('demo-acc').querySelectorAll('button'), t = b.innerHTML;
+    Array.prototype.forEach.call(bs, function (x) { x.disabled = true; });
+    if (o.modo) b.innerHTML = '<b>Preparándolo…</b><span>' + (o.modo === 'ejemplos' ? 'Creando los clientes de ejemplo (unos segundos).' : 'Un momento.') + '</span>'; else b.textContent = 'Abriendo…';
+    $('demo-err').classList.add('h');
+    if (w) { try { w.document.title = 'MOOD ON · Entrenador de prueba'; w.document.body.innerHTML = '<p style="font:15px -apple-system,sans-serif;color:#6E6E73;text-align:center;margin-top:30vh">Preparando el entrenador de prueba…</p>'; } catch (e) { } }
+    llamar({ acc: 'demo_abrir', ses: lee(K.ses), modo: o.modo || '', nuevo: !!o.nuevo }).then(function (r) {
+      var url = new URL('app.html?demo=' + encodeURIComponent(r.pase), location.href).href;
+      demoElegir = false; nuevoR(r);
+      if (w) { try { w.opener = null; } catch (e) { } w.location.href = url; }
+      else { $('demo-err').innerHTML = 'Tu navegador ha bloqueado la pestaña nueva. <a href="' + esc(url) + '" target="_blank" rel="noopener">Ábrela aquí</a> (vale 10 minutos).'; $('demo-err').classList.remove('h'); }
+    }).catch(function (er) {
+      if (w) w.close();
+      if (!fallo(er)) { $('demo-err').textContent = er.message; $('demo-err').classList.remove('h'); }
+      Array.prototype.forEach.call(bs, function (x) { x.disabled = false; }); b.innerHTML = t;
+    });
+  }
+  $('b-demo-ir').addEventListener('click', function () { $('demo').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   $('b-inv-ir').addEventListener('click', function () { $('invitar').scrollIntoView({ behavior: 'smooth', block: 'start' }); var n = $('inv-n'); if (n) n.focus({ preventScroll: true }); });
 
   // el formulario de invitar (bloqueado hasta que esté el contrato)
