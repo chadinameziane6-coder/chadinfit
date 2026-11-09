@@ -37,6 +37,13 @@ p{margin:0 0 12px;color:#4A4A4E;font-size:15px}
 .btn:disabled{opacity:.5;cursor:default}
 .msg{margin:14px 0 0;padding:12px 14px;border-radius:14px;font-size:14px;background:#FDECEE;color:#8A0F1E}
 .h{display:none!important}
+/* v53.4.46 · sus datos para el contrato */
+.campo{display:block;margin:0 0 10px}
+.campo span{display:block;font-size:13px;font-weight:600;color:#4A4A4E;margin:0 0 4px}
+.campo input{width:100%;border:0;border-radius:12px;padding:12px 14px;font:16px var(--f);color:#141414;background:#fff;box-shadow:0 0 0 1px #DCDCE0}
+.campo input:focus{outline:none;box-shadow:0 0 0 2px #141414}
+.fila2{display:grid;grid-template-columns:120px 1fr;gap:10px}
+.dato{font-size:14px;color:#4A4A4E;margin:2px 0 0}
 small{display:block;color:#87878B;margin-top:16px;font-size:12.5px;line-height:1.45}
 small a{color:#4A4A4E}
 </style>
@@ -64,8 +71,12 @@ small a{color:#4A4A4E}
             function (e) { if (e && e.message && !/fetch|network|Load failed/i.test(e.message)) throw e; throw new Error('No hay conexión. Prueba otra vez.'); });
   }
   function pasos(n) {
-    return '<div class="pasos">' + ['Lee y acepta el contrato de encargado', 'Crea tu contraseña', 'Entra en tu panel'].map(function (t, i) {
+    return '<div class="pasos">' + ['Pon tus datos y acepta el contrato', 'Crea tu contraseña', 'Entra en tu panel'].map(function (t, i) {
       return '<div' + (i < n ? ' class="ya"' : '') + '><b>' + (i < n ? '✓' : i + 1) + '</b><span>' + t + '</span></div>'; }).join('') + '</div>';
+  }
+  function campo(id, txt, ac, val, ph, modo) {
+    return '<label class="campo"><span>' + esc(txt) + '</span><input id="' + id + '" autocomplete="' + ac + '" value="' + esc(val || '') + '"' +
+      (ph ? ' placeholder="' + esc(ph) + '"' : '') + (modo ? ' inputmode="' + modo + '"' : '') + '></label>';
   }
   function mal(t) { $('c').innerHTML = '<h1>Este enlace no vale</h1><p>' + esc(t) + '</p>'; }
   function error(t) { var m = $('msg'); if (m) { m.textContent = t; m.classList.remove('h'); } }
@@ -76,20 +87,30 @@ small a{color:#4A4A4E}
   window.addEventListener('hashchange', function () { location.reload(); });   // otro enlace en la misma pestaña
   if (!tok) { mal('Al enlace le falta un trozo. Ábrelo otra vez desde el correo de MOOD ON (el botón «Empezar»).'); return; }
   llamar({ acc: 'ver' }).then(function (r) {
-    var hola = r.nombre ? 'Hola, ' + esc(r.nombre) + '.' : 'Hola.';
+    var hola = r.nombre ? 'Hola, ' + esc(r.nombre) + '.' : 'Hola.', T = r.titular || {};
     if (r.paso === 'aceptar') {
       $('c').innerHTML = '<h1>' + hola + ' Te damos la bienvenida a MOOD ON</h1>' +
         '<span class="plan">Plan ' + esc(r.plan) + (r.prueba ? ' · ' + r.prueba + ' días gratis' : '') + '</span>' + pasos(0) +
         '<div class="doc"><h2>Contrato de encargado del tratamiento</h2>' +
           '<p>Lo necesitas para meter datos de tus clientes en MOOD ON. Léelo antes de aceptarlo (versión ' + Number(r.contrato.version) + ').</p>' +
           '<a class="chip" id="leer" href="' + esc(API + '/entrenador/contrato?i=' + tok) + '" target="_blank" rel="noopener">Leer el contrato (PDF)</a></div>' +
+        // v53.4.46: sus datos, que van en el contrato (y en su política de privacidad para sus clientes)
+        '<div class="doc" id="tus"><h2>Tus datos para el contrato</h2>' +
+          '<p>Salen en el contrato que aceptas y son los de tu política de privacidad para tus clientes.</p>' +
+          campo('t-nombre', 'Nombre y apellidos o razón social', 'organization', T.nombre) +
+          campo('t-nif', 'NIF o CIF', 'off', '') +
+          campo('t-dir', 'Dirección fiscal', 'street-address', '', 'Calle, número y piso') +
+          '<div class="fila2">' + campo('t-cp', 'Código postal', 'postal-code', '', '', 'numeric') + campo('t-ciudad', 'Población', 'address-level2', '') + '</div>' +
+          (T.email ? '<p class="dato">Tu email: <b>' + esc(T.email) + '</b></p>' : '') + '</div>' +
         '<label class="casilla"><input type="checkbox" id="acepto"> <span>He leído y acepto el contrato de encargado del tratamiento de MOOD ON.</span></label>' +
         '<button class="btn" id="b-ok" type="button">Aceptar y crear mi contraseña</button>' +
         '<div id="msg" class="msg h" role="alert"></div>' +
-        '<small style="margin-top:12px">Te mandaremos una copia por email.</small>';
+        '<small style="margin-top:12px">Te mandaremos por email una copia del contrato y la hoja de aceptación con tus datos.</small>';
       $('b-ok').addEventListener('click', function () {
+        var d = { nombre: $('t-nombre').value, nif: $('t-nif').value, dir: $('t-dir').value, cp: $('t-cp').value, ciudad: $('t-ciudad').value };
+        if (!d.nombre.trim() || !d.nif.trim() || !d.dir.trim() || !d.cp.trim() || !d.ciudad.trim()) return error('Rellena tus datos para el contrato: los necesitamos todos.');
         if (!$('acepto').checked) return error('Marca la casilla para aceptar el contrato.');
-        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato.version });
+        ir(this, { acc: 'aceptar', acepto: true, version: r.contrato.version, titular: d });
       });
     } else if (r.paso === 'crear') {
       $('c').innerHTML = '<h1>' + hola + ' Ya has aceptado el contrato</h1>' + pasos(1) +

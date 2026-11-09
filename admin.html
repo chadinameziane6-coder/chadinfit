@@ -409,7 +409,7 @@ td.fin{text-align:right;white-space:nowrap}
           <p>Le llega un correo de MOOD ON para empezar (el enlace vale 7 días). Al entrar ve el mismo panel que Chadín, vacío, con su propia copia de la biblioteca.</p>
           <div class="pasos-i">
             <div><b>1</b><span>Escribes su nombre y su email.</span></div>
-            <div><b>2</b><span>Lee y acepta el contrato de encargado del tratamiento.</span></div>
+            <div><b>2</b><span>Pone sus datos (nombre, NIF y dirección) y acepta el contrato de encargado del tratamiento.</span></div>
             <div><b>3</b><span>Crea su contraseña y entra con un código la primera vez.</span></div>
             <div><b>4</b><span>Pone sus ajustes e invita a sus clientes.</span></div>
           </div>
@@ -828,7 +828,11 @@ td.fin{text-align:right;white-space:nowrap}
           '<div><span>Último cliente nuevo</span><span>' + esc(k.ultimo_cliente ? fecha(k.ultimo_cliente) : 'Ninguno todavía') + '</span></div></div>') + '</section>' +
         '<section class="caja-f" aria-labelledby="t-con"><h2 id="t-con">Contrato</h2>' + (co1 ? '<div class="gris">No hace falta: es la entrenadora de la casa.</div>' : D.contrato
           ? '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est activo">Firmado</span><span>Contrato de encargado del tratamiento · ' + esc(fecha(D.contrato.fecha)) + ' · versión ' + Number(D.contrato.version) + '</span></div>' +
-            '<div class="kf-acc"><button class="chip-b" type="button" id="fc-pdf" data-v="' + Number(D.contrato.version) + '">Ver el contrato (PDF)</button></div>'
+            (D.contrato.titular ? '<div class="datos-f"><div><span>Nombre o razón social</span><span>' + esc(D.contrato.titular.nombre) + '</span></div>' +      // v53.4.46: sus datos del contrato
+              '<div><span>NIF o CIF</span><span>' + esc(D.contrato.titular.nif) + '</span></div>' +
+              '<div><span>Dirección fiscal</span><span>' + esc(D.contrato.titular.dir + ', ' + D.contrato.titular.cp + ' ' + D.contrato.titular.ciudad) + '</span></div></div>' : '') +
+            '<div class="kf-acc"><button class="chip-b" type="button" id="fc-pdf" data-v="' + Number(D.contrato.version) + '">Ver el contrato (PDF)</button>' +
+              (D.contrato.titular ? '<button class="chip-b" type="button" id="fc-hoja">Hoja de aceptación (PDF)</button>' : '') + '</div>'
           : '<div class="kf-acc" style="align-items:center;font-size:14.5px"><span class="est amb">Pendiente</span><span>Lo acepta al abrir su invitación, antes de crear su contraseña.</span></div>') + '</section>' +
         '<section class="caja-f" aria-labelledby="t-not"><h2 id="t-not">Notas internas</h2><label for="fc-notas" style="margin:0;font-weight:400;color:#6E6E73">Solo las ves tú. Se guardan solas.</label>' +
           '<textarea id="fc-notas" rows="4" maxlength="2000">' + esc(D.notas || '') + '</textarea><div class="estado-g" id="fc-nest" role="status" style="margin:0"></div></section>' +
@@ -858,6 +862,7 @@ td.fin{text-align:right;white-space:nowrap}
         .catch(function (er) { if (!fallo(er)) { e2.className = 'estado-g err'; e2.textContent = er.message; } });
     });
     if ($('fc-pdf')) $('fc-pdf').addEventListener('click', function () { verPdf(Number(this.getAttribute('data-v')), this); });
+    if ($('fc-hoja')) $('fc-hoja').addEventListener('click', function () { verPdf(0, this, { acc: 'hoja', id: k.id }); });
     if ($('fc-reenv')) $('fc-reenv').addEventListener('click', function () { reenviar(k.id, this); });
     if ($('fc-pausar')) $('fc-pausar').addEventListener('click', function () { confirmar('Pausar la cuenta de ' + k.nombre, 'Ni ' + esc(k.nombre) + ' ni sus clientes podrán entrar hasta que la reactives. No se borra nada.', 'Pausar', 'pausar', 'Cuenta en pausa.'); });
     if ($('fc-react')) $('fc-react').addEventListener('click', function () { ac('reactivar', k.estado === 'baja' ? 'Baja anulada: su cuenta vuelve a estar en marcha.' : 'Cuenta reactivada.', this); });
@@ -867,9 +872,10 @@ td.fin{text-align:right;white-space:nowrap}
     if ($('fc-anular')) $('fc-anular').addEventListener('click', function () { confirmar('Anular la invitación de ' + k.nombre, 'Se borra su cuenta y su enlace deja de valer. Todavía no tiene datos.', 'Anular la invitación', 'anular', 'Invitación de ' + k.nombre + ' anulada.'); });
   }
   // ver un PDF del contrato (en otra pestaña)
-  function verPdf(version, b) {
+  function verPdf(version, b, pide) {      // v53.4.46: pide = otra petición (su hoja de aceptación)
     var w = window.open('', '_blank'), t = b.textContent; ocupado(b, true, 'Abriendo…');
-    llamar({ acc: 'contrato_ver', ses: lee(K.ses), version: version || null }).then(function (r) {
+    var q = pide || { acc: 'contrato_ver', version: version || null }; q.ses = lee(K.ses);
+    llamar(q).then(function (r) {
       var bin = atob(r.b64), u8 = new Uint8Array(bin.length); for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
       var url = URL.createObjectURL(new Blob([u8], { type: 'application/pdf' }));
       if (w) w.location.href = url; else location.href = url;
