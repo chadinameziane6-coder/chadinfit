@@ -2722,7 +2722,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.33';
+var APP_V = 'v53.4.34';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7240,9 +7240,9 @@ var bancoBg=false;
 function libSugCm(p,mi){
   if(!CL.bancoM){ if(!bancoBg){ bancoBg=true; cargarBancoCl().then(function(){ if(CL.tab==='dieta'){ CL.keep=true; pintarCl(); } },function(){}); } return []; }
   var c=p.comidas[mi], cat=catCm(c), M=miaCl(), mios=(M.add[p.id+'|'+mi]||[]).map(function(x){ return x.lib; });
-  var oc=prefCl().oc||{}; if(prefCl().ns) return [];      // v53.4.26: las que ha quitado de sus sugerencias · v53.4.32: ns = no quiere sugerencias
-  var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&!oc[r.id]&&adaptarRecCl(r); }); if(!L.length) return [];
-  var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,3);      // cambian cada día (v53.4.26: 3, no 6; el resto, en «Más de la biblioteca»)
+  var pf=prefCl(), oc=pf.oc||{}; if(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi])) return [];      // v53.4.26: las que ha quitado · v53.4.34: sin sugerencias en esta comida (o en ninguna)
+  var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&adaptarRecCl(r); }); if(!L.length) return [];
+  var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,3).filter(function(r){ return !oc[r.id]; });      // cambian cada día; v53.4.34: si quita una, no sale otra en su lugar
 }
 function cbHtml(p,mi){
   var c=p.comidas[mi], x=comidoDe(p,mi), S=sueltosDe(p,mi), lib=libreCl(), vm=verMac(), ob=vm?objCmAuto(p,mi):null, algo=!!x||S.length>0, t=algo?cmT(p,mi):'', mc=algo&&vm?cmComido(p,mi):null, cn=String(c.nombre).toLowerCase(), ops=opsHoja(c);
@@ -7306,7 +7306,8 @@ function pqPintar(){
   h+=L.length?'<div class="pq-l">'+L.map(function(o,i){ var on=!Q[o.id], hoy=!!x&&x.o===o.id, m=vm?macOpEf(o):null;
       return '<div class="fila pq-f'+(on?'':' off')+'"><span>'+platoImg(o.img,'pq-im')+'<span class="pq-t"><b>'+esc(nombreOp(o,i))+'</b><small class="fila-s">'+(o.mio===2?'Tu plato':o.mio===1?'De tu coach, cambiado por ti':'De tu coach')+(m?' · '+kTxt(m[0])+' kcal':'')+(hoy?' · lo tienes hoy':'')+'</small></span></span>'+
         '<button class="sw'+(on?' on':'')+'" data-a="pqTog" data-o="'+esc(o.id)+'"'+(hoy?' disabled':'')+' aria-pressed="'+on+'" aria-label="«'+esc(nombreOp(o,i))+'» en tu '+esc(nom)+'"><i></i></button></div>'; }).join('')+'</div>':'<p class="muted sm">Todavía no hay platos en esta comida.</p>';
-  h+='<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en cada comida (cambian cada día)</small></span><button class="sw'+(pf.ns?'':' on')+'" data-a="pqSug" aria-pressed="'+!pf.ns+'" aria-label="Sugerencias de la biblioteca en tus comidas"><i></i></button></div>'+
+  var sOn=!(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi]));
+  h+='<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en tu '+esc(nom)+' (cambian cada día)</small></span><button class="sw'+(sOn?' on':'')+'" data-a="pqSug" aria-pressed="'+sOn+'" aria-label="Sugerencias de la biblioteca en tu '+esc(nom)+'"><i></i></button></div>'+
     (nOc?'<button class="link" data-a="pqSugVolver">Volver a poner '+(nOc>1?'las '+nOc+' sugerencias que quitaste':'la sugerencia que quitaste')+'</button>':'')+
     '<button class="btn sec mt" data-a="cerrarModal">Listo</button>';
   b.innerHTML=h;
@@ -7315,11 +7316,15 @@ function pqHecho(msg){ guardarMia(); CL.keep=true; pintarCl(); pqPintar(); if(ms
 A.pqTog=function(el){ if(el.disabled) return; var M=miaCl(), id=el.dataset.o; if(M.q[id]) delete M.q[id]; else M.q[id]=1; pqHecho(); };
 A.pqTodos=function(el){ if(el.disabled) return; var p=planSelCl(); if(!p) return; var mi=CL.pqM, M=miaCl(), x=comidoDe(p,mi), L=plTodosCm(p,mi), on=el.dataset.v==='1';
   L.forEach(function(o){ if(on) delete M.q[o.id]; else if(!(x&&x.o===o.id)) M.q[o.id]=1; });
+  var pf=prefCl(), k=p.id+'|'+mi; pf.nsm=pf.nsm||{}; if(on){ delete pf.nsm[k]; } else { pf.nsm[k]=1; } guardarPref();      // v53.4.34: y las sugerencias de esta comida
   pqHecho(on?'Vuelven a salirte todos':(x?'Quitados todos (menos el que tienes hoy)':'Quitados todos: añade los tuyos o vuelve a poner los que quieras')); };
-A.pqSug=function(){ var pf=prefCl(); if(pf.ns) delete pf.ns; else pf.ns=1; guardarPref(); CL.keep=true; pintarCl(); pqPintar(); };
+A.pqSug=function(){ var p=planSelCl(); if(!p) return; var pf=prefCl(), k=p.id+'|'+CL.pqM; pf.nsm=pf.nsm||{};
+  if(pf.ns||pf.nsm[k]){ if(pf.ns){ delete pf.ns; } delete pf.nsm[k]; } else pf.nsm[k]=1;      // v53.4.34: por comida
+  guardarPref(); CL.keep=true; pintarCl(); pqPintar(); };
 A.pqSugVolver=function(){ var pf=prefCl(); pf.oc={}; guardarPref(); CL.keep=true; pintarCl(); pqPintar(); toast('Vuelven a salirte las sugerencias','ok'); };
 /* v53.4.26: las sugerencias de la biblioteca (no las ha elegido ella) se quitan con su ✕ y ya no le salen en esa comida ni en las demás */
-A.libOcultar=function(el){ var id=el.dataset.r, pf=prefCl(); pf.oc=pf.oc||{}; pf.oc[id]=1; guardarPref(); CL.keep=true; pintarCl(); toast('Quitada de tus sugerencias. Si la quieres, la tienes en «Más de la biblioteca»'); };
+A.libOcultar=function(el){ var id=el.dataset.r, pf=prefCl(), cb=el.closest('.cb'); CL.pqM=cb?+cb.dataset.m:null; pf.oc=pf.oc||{}; pf.oc[id]=1; guardarPref(); CL.keep=true; pintarCl(); toastAcc('Quitada. Para no ver sugerencias en esta comida: «Mis platos»','Mis platos','plMiosT'); };
+A.plMiosT=function(){ var t=document.getElementById('tacc'); if(t) t.className=''; if(CL.pqM==null||isNaN(CL.pqM)) return; modal('<div id="pq-box"></div>'); pqPintar(); };
 A.plLib=function(el){ conBanco(function(){
   var p=planSelCl(); if(!p) return; var mi=+el.dataset.m, r=libTodas().filter(function(x){ return x.id===el.dataset.r; })[0]; if(!r) return;
   var x=adaptarRecCl(r); if(!x) return toast('Hay algo en esta receta que no puedes comer');
