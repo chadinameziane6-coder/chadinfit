@@ -1857,7 +1857,7 @@ input[type=radio]:focus-visible{outline:2px solid #111;outline-offset:2px}input[
 .ts-pie{margin-top:10px}.ts-g{border-top:1px solid var(--line2);padding:8px 0}.ts-g summary{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:pointer;list-style:none}.ts-g summary::-webkit-details-marker{display:none}.ts-g summary .ts-cg{margin:0}
 .ts-ed{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;background:#F7F7F9;border-radius:12px;padding:8px 10px;margin:4px 0 8px;font-size:12.5px;line-height:1.4;color:var(--tx2)}.ts-ed>svg{width:14px;height:14px;flex:none}.ts-ed>span{flex:1 1 260px}.ts-ed .ts-cg{margin:0 2px 0 0;padding:1px 7px}.ts-ed .link{font-size:12.5px}
 .hc-pie{display:flex;gap:6px;align-items:flex-start;margin-top:10px}.hc-pie svg{width:14px;height:14px;flex:none;margin-top:2px}
-.av-ch{border:1.5px solid var(--line2);border-radius:14px;padding:4px 12px 10px;margin-top:10px}.av-ch>textarea,.av-ch>small{display:none}.av-ch>small{font-size:12px;color:var(--mu)}.av-ch.on>textarea{display:block;width:100%;margin-top:6px}.av-ch.on>small{display:block;margin-top:4px}.av-ch.on{border-color:#000}
+.av-ch{border:1.5px solid var(--line2);border-radius:14px;padding:4px 12px 10px;margin-top:10px}.av-pdf{padding-bottom:4px}.die-pdf{display:flex;gap:8px;flex-wrap:wrap}.av-ch>textarea,.av-ch>small{display:none}.av-ch>small{font-size:12px;color:var(--mu)}.av-ch.on>textarea{display:block;width:100%;margin-top:6px}.av-ch.on>small{display:block;margin-top:4px}.av-ch.on{border-color:#000}
 .gf-l{margin-top:6px}.gf-r{display:flex;align-items:center;gap:10px;border-top:1px solid var(--line2);padding:10px 0}.gf-r>div{flex:1;min-width:0;display:flex;flex-direction:column}.gf-r small{color:var(--mu);font-size:12.5px;line-height:1.35}.gf-r>span{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}.gf-q{color:#B42318}
 .gf-mira{outline:3px solid #111;outline-offset:3px;border-radius:16px;transition:outline-color .6s}
 .md-it{display:flex;align-items:center;gap:8px;border-top:1px solid var(--line2);padding:10px 0}.md-it>div{flex:1;min-width:0;display:flex;flex-direction:column}.md-it small{color:var(--mu);font-size:12.5px}.md-x{color:var(--mu)}
@@ -2841,7 +2841,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.45';
+var APP_V = 'v53.4.47';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -9271,9 +9271,19 @@ function preguntarAviso(o){
   var tit=o.tipo==='dieta'?(o.nueva?'Tienes dieta nueva':'Tu dieta ha cambiado'):(o.prog?'Tienes programación nueva':o.nueva?'Tienes rutina nueva':'Tu rutina ha cambiado');
   modal('<h2>¿Avisar a '+esc(nom)+'?</h2><p class="muted">Si dices que sí, le saldrá en la campana de su app: <b>'+esc(tit)+'</b>'+(o.que?' ('+esc(o.que)+')':'')+'. Si es un cambio menor, mejor no '+cG('avisarla','avisarle')+'.</p>'+
     '<label class="f">Nota en la campana (opcional)<textarea id="av-msg" rows="2" maxlength="400" placeholder="Ej.: he subido el peso del hip thrust"></textarea></label>'+
-    avChatHtml(o,nom)+
-    '<button class="btn mt" data-a="avisoSi" id="av-si">'+(avChatOn()?'Sí, '+cG('avisarla','avisarle')+' (campana y chat)':'Sí, '+cG('avisarla','avisarle')+'')+'</button><button class="btn sec mt" data-a="avisoNo">No, es un cambio menor</button>');
+    avChatHtml(o,nom)+(o.tipo==='dieta'?avPdfHtml(c):'')+
+    '<button class="btn mt" data-a="avisoSi" id="av-si">'+avSiTxt(o)+'</button><button class="btn sec mt" data-a="avisoNo">No, es un cambio menor</button>');
 }
+/* v53.4.47: con la dieta, también el PDF por email (se recuerda; de primeras, sí) */
+function avMail(){ var c=CO.d&&CO.d.clienta; return (c&&c.acceso&&c.acceso.email)||''; }
+function avPdfOn(o){ return (!o||o.tipo==='dieta')&&!!avMail()&&LS.get('chadin_avpdf')!=='0'; }
+function avSiTxt(o){ var q=['campana']; if(avChatOn()) q.push('chat'); if(avPdfOn(o)) q.push('la dieta por email');
+  return 'Sí, '+cG('avisarla','avisarle')+(q.length>1?' ('+q.slice(0,-1).join(', ')+' y '+q[q.length-1]+')':''); }
+function avPdfHtml(c){ var m=avMail(), on=avPdfOn();
+  if(!m) return '<div class="av-ch av-pdf"><div class="fila"><span>Enviarle la dieta en PDF por email<small class="fila-s">No tiene email en su ficha: ponlo en «Sus datos» para mandársela.</small></span></div></div>';
+  return '<div class="av-ch av-pdf'+(on?' on':'')+'"><div class="fila"><span>Enviarle también la dieta en PDF por email<small class="fila-s">Le llega a '+esc(m)+', con su dieta tal como la has guardado.</small></span><button class="sw'+(on?' on':'')+'" data-a="avPdfTog" aria-label="Enviarle también la dieta en PDF por email" aria-pressed="'+on+'"><i></i></button></div></div>'; }
+A.avPdfTog=function(el){ var on=LS.get('chadin_avpdf')==='0'; LS.set('chadin_avpdf',on?'1':'0'); el.classList.toggle('on',on); el.setAttribute('aria-pressed',on);
+  var b=el.closest('.av-pdf'); if(b) b.classList.toggle('on',on); var s=document.getElementById('av-si'); if(s&&CO.avPend) s.textContent=avSiTxt(CO.avPend); };
 /* v48: el aviso también por el chat (opcional): mensaje ya escrito, lo cambias si quieres y se recuerda para la próxima */
 function avChatOn(){ return LS.get('chadin_avchat')==='1'; }
 function avQue(o){ var v=o.tipo!=='dieta'&&!o.prog&&String(o.que||'').indexOf(', ')>0; return o.tipo==='dieta'?'tu dieta ya subida':o.prog?'tu programación nueva ya subida':v?'tus rutinas ya subidas':'tu rutina ya subida'; }
@@ -9284,7 +9294,7 @@ function avChatHtml(o,nom){ var on=avChatOn();
     '<textarea id="av-chat" rows="3" maxlength="1000" aria-label="Mensaje por el chat">'+esc(avChatTxt(o,nom))+'</textarea><small>Si lo cambias, la próxima vez te sale tu versión (con el nombre de cada cliente).</small>'+(waDe(CO.cid)?'<button class="link wa-l" data-a="avWa">'+ic('wa')+'Mandárselo también por WhatsApp</button>':'')+'</div>'; }
 A.avWa=function(){ var n=waDe(CO.cid), t=val('av-chat'); if(n) window.open('https://wa.me/'+n+(t?'?text='+encodeURIComponent(t):''),'_blank','noopener'); };
 A.avChatTog=function(el){ var on=!avChatOn(); LS.set('chadin_avchat',on?'1':'0'); el.classList.toggle('on',on); el.setAttribute('aria-pressed',on);
-  var b=document.getElementById('av-ch'); if(b) b.classList.toggle('on',on); var s=document.getElementById('av-si'); if(s) s.textContent=on?'Sí, '+cG('avisarla','avisarle')+' (campana y chat)':'Sí, '+cG('avisarla','avisarle');
+  var b=document.getElementById('av-ch'); if(b) b.classList.toggle('on',on); var s=document.getElementById('av-si'); if(s&&CO.avPend) s.textContent=avSiTxt(CO.avPend);
   if(on){ var t=document.getElementById('av-chat'); if(t) setTimeout(function(){ t.focus(); },50); } };
 function avGuardarPlantilla(o,nom,t){ var def=avChatTxt(o,nom); if(t===def) return;
   var p=t; if(nom) p=p.split(nom).join('{nombre}'); var q=avQue(o); if(p.indexOf(q)>=0) p=p.split(q).join('{que}'); LS.set('chadin_avchat_txt_'+(o.tipo==='dieta'?'dieta':'rutina'),p); }
@@ -9296,9 +9306,13 @@ A.avisoSi=function(el){
   var c=CO.d&&CO.d.clienta, nom=String(c&&c.nombre||'').split(' ')[0], chat=avChatOn()?String(val('av-chat')||'').trim():'';
   if(avChatOn()&&!chat){ el.disabled=false; return toast('Escribe el mensaje del chat o desactívalo'); }
   if(chat) avGuardarPlantilla(o,nom,chat);
+  var pdf=avPdfOn(o), cid=CO.cid;
   cargando(api('coachAvisarClienta',CO.pin,CO.cid,{tipo:o.tipo,nueva:!!o.nueva,prog:!!o.prog,que:o.que||'',nota:val('av-msg'),chat:!!chat,chatTxt:chat})).then(function(r){ CO.avPend=null; cerrarModal();
     if(r&&r.chat){ if(CHT.por[CO.cid]) CHT.por[CO.cid].push(r.chat); if(CHT.cid===CO.cid&&CHT.msgs&&CHT.msgs!==CHT.por[CO.cid]) CHT.msgs.push(r.chat); }
-    toast(r&&r.chat?'Aviso enviado: en su campana y por el chat':'Aviso enviado: le saldrá en su campana','ok'); trasAviso(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+    var hecho=r&&r.chat?'Aviso enviado: en su campana y por el chat':'Aviso enviado: le saldrá en su campana';
+    if(!pdf){ toast(hecho,'ok'); trasAviso(); return; }
+    return cargando(api('coachEnviarDieta',CO.pin,cid)).then(function(m){ toast(hecho+'. Y su dieta en PDF, a '+m.enviado,'ok'); },function(e){ toast(hecho+', pero el email con la dieta no ha salido: '+limpiaErr(e),'err'); }).then(trasAviso);
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
 /* ---------- ficha: pestaña Seguimiento ---------- */
@@ -11003,6 +11017,7 @@ function vDietaPlan(){
     '<div class="row mt">'+(P.length===1?'<button class="btn sm" data-a="dividirPlan">Separar en entreno y descanso</button>':'')+(P.length<4?'<button class="btn sm sec" data-a="dupPlan">Duplicar este plan</button>':'')+(P.length>1?'<button class="link danger" data-a="borrarPlan">Borrar este plan</button>':'')+'</div>'+
     '<div class="lab">Vigencia de esta dieta</div><div class="grid2"><label class="f" style="margin-top:0">Empieza<input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'"></label><label class="f" style="margin-top:0">Termina<input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'"></label></div>'+
     '<div class="muted sm mt6" id="die-dur">'+duracionDieta()+'</div>'+
+    (CO.d.dieta?'<div class="die-pdf mt"><button class="btn sm sec" data-a="diePdf">'+ic('descargar')+'Descargar en PDF</button><button class="btn sm sec" data-a="dieMail">'+ic('enviar')+'Enviársela por email</button></div>':'')+      // v53.4.47
     (CO.d.dieta?'<button class="link mt" data-a="nuevaDieta">Empezar una dieta nueva (esta queda guardada en el historial)</button>':'')+
     (CO.d.dieta?'<button class="link mt6" data-a="bdGuardarAbrir">'+ic('lista')+'Guardar en tu banco de dietas</button><button class="link mt6" data-a="bdAbrir">'+ic('lista')+'Poner una de tu banco (esta queda en el historial)</button>':'')+(CO.d.otras.length?'<button class="link mt6" data-a="copiarDieta">'+ic('copiar')+'Copiar dieta: traer la de otro cliente o llevar esta a otra</button>':'')+'</div>';
   var ve='<div class="card"><div class="card-t">Lo que ve '+nom+'</div>'+verKmHtml(true)+
@@ -11286,6 +11301,15 @@ function guardarDietaP(){
   },function(e){ toast(limpiaErr(e),'err'); throw e; });
 }
 A.guardarDieta=function(){ guardarDietaP().then(function(av){ toast('Dieta publicada','ok'); repintar(); preguntarAviso(av); },function(){}); };
+/* v53.4.47 · su dieta en PDF: descargarla o mandársela por email (sale lo guardado) */
+A.diePdf=function(el){ if(CO.dieSucia) return toast('Guarda antes la dieta: el PDF sale con lo guardado'); if(el.disabled) return; el.disabled=true;
+  cargando(api('coachDietaPdf',CO.pin,CO.cid)).then(function(r){ el.disabled=false; bajarArchivo(r,'Su dieta en PDF','Guárdala o envíasela como quieras.'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.dieMail=function(){ if(CO.dieSucia) return toast('Guarda antes la dieta: el PDF sale con lo guardado');
+  var c=CO.d.clienta, nom=String(c.nombre||'').split(' ')[0], m=avMail(), cid=CO.cid;
+  if(!m) return toast(nom+' no tiene email en su ficha: ponlo en «Sus datos» para mandársela','err');
+  confirmar('¿Enviarle a '+nom+' su dieta en PDF por email? Le llega a '+m+'.','Enviar',function(){
+    cargando(api('coachEnviarDieta',CO.pin,cid)).then(function(r){ toast('Dieta enviada en PDF a '+r.enviado,'ok'); },function(e){ toast(limpiaErr(e),'err'); });
+  },'Cancelar'); };
 function duracionDieta(){
   var D=CO.die; if(!D||!D.desde) return 'Sin fecha de inicio: se pone la de hoy al guardar.';
   if(!D.hasta) return 'Desde el '+fCorta(D.desde)+', sin fecha de fin.';
@@ -13269,6 +13293,7 @@ var AYUDA=[
   {g:1,q:'¿Cómo le pongo una rutina?',r:'En su ficha, pestaña Entrenos: «+ Nueva rutina» y añade los ejercicios, o usa una de tu Banco de rutinas. Guárdala y le sale en su app.',a:'sdRutBib',k:'rutina entreno ejercicios plan semana crear'},
   {g:1,q:'¿Cómo copio una rutina a otro cliente o a otra semana?',r:'Abre la rutina y pulsa «Copiar rutina»: eliges a quién (o a qué fecha) y la ajustas antes de guardar.',k:'copiar duplicar rutina otra semana otro cliente'},
   {g:1,q:'¿Cómo añado un ejercicio o su vídeo?',r:'En el Banco de ejercicios: busca el ejercicio (sus palabras, en cualquier orden: «tríceps banco barra») o crea uno nuevo, y pega el enlace de su vídeo (por ejemplo, de YouTube) y sus indicaciones.',a:'sdBanco',k:'ejercicio video youtube banco nuevo tecnica buscar'},
+  {g:1,q:'¿Cómo le mando su dieta en PDF?',r:'Al guardar su dieta te sale «¿Avisar a…?»: deja activado «Enviarle también la dieta en PDF por email» y pulsa «Sí» (se recuerda para la próxima). Cuando quieras, en su pestaña Dieta: «Descargar en PDF» o «Enviársela por email». Sale lo guardado, con las kcal y los macros solo si se los dejas ver en su app.',k:'pdf dieta email correo mandar enviar descargar imprimir exportar'},
   {g:1,q:'¿Cómo uso la misma dieta con varios clientes?',r:'En la dieta de un cliente, «Guardar en tu banco de dietas». Después, en otro cliente, pestaña Dieta → «Desde tu banco de dietas» (o «Poner una de tu banco»): eliges una y, si quieres, la ajustas a sus kcal (se escalan los gramos de cada plato). La que tenía queda en su historial.',k:'banco dietas plantilla copiar misma dieta kcal ajustar'},
   {g:1,q:'¿Cómo le hago una dieta?',r:'En su ficha, pestaña Dieta: pones sus kcal y macros y sus comidas con tus platos, recetas o alimentos. Para ir más rápido, «Copiar dieta…» la trae de otro cliente y la ajustas.',k:'dieta comidas macros kcal calorias menu copiar'},
   {g:1,casa:1,q:'¿Puede elegir sus platos?',r:'Sí. En su pestaña Dieta, activa «Autorregulación de macros»: con tu objetivo de kcal y macros, elige en su app entre tus platos, las recetas de la biblioteca o alimentos sueltos. Puede quitar los platos que no quiera y volver a ponerlos cuando quiera.',k:'elegir platos libre autorregulacion quitar recetas'},
@@ -14095,7 +14120,7 @@ A.bdUsarOk=function(el){
   var sw=document.querySelector('[data-a=bdAjTog]'), on=!!(sw&&sw.classList.contains('on')), k=on?num(val('bd-k')):0;
   if(on&&!k) return toast('Escribe sus kcal');
   el.disabled=true; var cid=CO.cid, n=primerNombre(nomCl());
-  cargando(api('coachUsarBancoDieta',CO.pin,x.id,cid,k||'')).then(function(r){ delete CCACHE[cid]; cerrarModal(); return abrirClienta(cid,'dieta').then(function(){ toast('«'+x.nombre+'» puesta a '+n+(r.ajustada?' (ajustada a '+fN(r.kcal)+' kcal)':'')+(r.archivada?'. La anterior queda en su historial':''),'ok'); }); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+  cargando(api('coachUsarBancoDieta',CO.pin,x.id,cid,k||'')).then(function(r){ delete CCACHE[cid]; cerrarModal(); return abrirClienta(cid,'dieta').then(function(){ toast('«'+x.nombre+'» puesta a '+n+(r.ajustada?' (ajustada a '+fN(r.kcal)+' kcal)':'')+(r.archivada?'. La anterior queda en su historial':''),'ok'); preguntarAviso({tipo:'dieta',nueva:true,que:''}); }); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });      // v53.4.47: y el aviso (con la dieta en PDF por email)
 };
 A.bdBorrar=function(el){ var id=el.dataset.id, x=(CO.bd||[]).filter(function(b){ return b.id===id; })[0]; if(!x) return;
   if(!window.confirm('¿Borrar «'+x.nombre+'» de tu banco? A quien ya se la pusiste no le cambia nada.')) return;
