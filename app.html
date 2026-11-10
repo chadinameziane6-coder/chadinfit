@@ -1672,6 +1672,7 @@ body.ancho .dk-cols.lado>.dk-col:first-child{position:sticky;top:128px;max-heigh
 .die-pref{background:var(--card2);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:12.5px;color:var(--tx2);display:flex;flex-direction:column;gap:3px}.die-pref .ic{width:12px;height:12px;margin:0 3px 0 0;fill:var(--mg);color:var(--mg)}
 body.ancho .comida-ed{display:block}
 body.ancho .op-low{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}body.ancho .op-low .op-r>.f:first-child{margin-top:10px}
+.nd-pl{border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-top:8px}.nd-pn{font-weight:700;font-size:14px;margin-bottom:6px}.nd-ah{margin-top:6px}.nd-calc{margin:2px 0 4px;white-space:normal;text-align:left}.nd-cn{font-size:13.5px;font-weight:700;line-height:1.25}.nd-cn small{font-weight:500;color:var(--mu)}      /* v53.4.70 */
 .dop{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.dop-t{font-size:12.5px;font-weight:600;color:var(--tx2);margin-bottom:8px}.dop-g{display:grid;gap:8px}body.ancho .dop-g{grid-template-columns:repeat(2,minmax(0,1fr))}
 .dop-b{display:flex;align-items:center;gap:12px;width:100%;min-height:62px;text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:11px 12px;cursor:pointer;font:inherit;color:var(--tx);-webkit-tap-highlight-color:transparent}.dop-b:hover{background:#ECECF0;border-color:#D6D6DB}.dop-b:active{transform:scale(.99)}.dop-b:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
 .dop-i{flex:0 0 38px;width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center}.dop-i .ic{width:20px;height:20px;vertical-align:0}.dop-x{display:flex;flex-direction:column;min-width:0;flex:1}.dop-x b{font:700 14px Plus Jakarta Sans,sans-serif;line-height:1.3;color:var(--tx)}.dop-x small{font-size:12.5px;line-height:1.35;color:var(--tx2);margin-top:2px}.dop-ch{width:18px;height:18px;color:var(--mu);flex:0 0 auto}      /* v53.4.68 */
@@ -2893,7 +2894,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.69';
+var APP_V = 'v53.4.70';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -10473,6 +10474,7 @@ function inCoach(t){
   if(k==='buscaEj'){ CO.bf.q=t.value; filtrarBanco(); return; }
   if(k==='buscaAl'){ buscarAl(t); return; }
   if(k==='buscaPref'){ buscarPref(t); return; }
+  if(k==='nd'){ inNd(t); return; }      // v53.4.70
   if(t.dataset.gn!=null){ if(t.tagName!=='SELECT') inGen(t); return; }
   if(k==='buscaNut'){ CO.nf.q=t.value; filtrarNut(); return; }
   if(k==='buscaRecM'){ var pos=t.selectionStart; modalRecetas(t.value); var nb=document.querySelector('#modal [data-k=buscaRecM]'); if(nb){ nb.focus(); try{ nb.setSelectionRange(pos,pos); }catch(e){} } return; }
@@ -11261,7 +11263,7 @@ function hidratarDie(){ if(!CO.die||!CO.nutM) return; CO.die.planes.forEach(func
 
 /* objetivos del día y de cada comida (por su % del día) */
 function objDia(p){ var v=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)]; return v.some(function(x){ return x!=null; })?v:null; }
-function objCm(p,c){ var o=objDia(p), pc=num(c.pct); return o&&pc?o.map(function(v){ return v==null?null:v*pc/100; }):null; }
+function objCm(p,c){ var o=objDia(p), pc=num(c.pct), rp=c.rp; return o&&pc?o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }):null; }      // v53.4.70: con su reparto por macros (c.rp), si lo tiene
 function opVisI(mi){ var c=planActual().comidas[mi], i=CO.opVis[CO.planI+'|'+mi]||0; return Math.max(0,Math.min(i,c.opciones.length-1)); }
 function totDia(p){ return sumMac(p.comidas.map(function(c,mi){ return macOp(c.opciones[opVisI(mi)]); })); }
 function cmpTabla(obj,plan,tit){
@@ -11287,7 +11289,7 @@ function resDiaHtml(){
 function totOpHtml(o){ var m=macOp(o); return m?'<b>Total del plato</b><span>'+macLinea(m)+'</span>':''; }
 function cmpCm(p,c,o){
   var ob=objCm(p,c), m=macOp(o);
-  if(ob) return '<div class="cm-obj"><div class="lab" style="margin:10px 0 4px">Objetivo de '+esc(String(c.nombre||'la comida').toLowerCase())+' · '+fN(c.pct,0)+' % del día</div>'+cmpTabla(ob,m,'Plato')+'</div>';
+  if(ob) return '<div class="cm-obj"><div class="lab" style="margin:10px 0 4px">Objetivo de '+esc(String(c.nombre||'la comida').toLowerCase())+' · '+fN(c.pct,0)+' % del día'+(c.rp?' <small class="muted">(prot. '+c.rp.p+' % · hidr. '+c.rp.c+' % · grasa '+c.rp.g+' %)</small>':'')+'</div>'+cmpTabla(ob,m,'Plato')+'</div>';      // v53.4.70: con su reparto por macros
   return objDia(p)&&m?'<p class="muted sm mt6">Pon el % del día de esta comida para comparar con su objetivo.</p>':'';
 }
 function itMacHtml(it){ var m=macIt(it), u=unidTxt(it.u,it.q), vw=vwDe(it); if(vw) u='= '+gTxt(Math.round(gVista(it,it.q,vwOtro(vw))))+' '+vwTxt(vwOtro(vw))+' (aprox.)'; return (u?'<span class="it-un">'+esc(u)+'</span>':'')+(m?'<span>'+kTxt(m[0])+' kcal · P '+fN(m[1],0)+' · HC '+fN(m[2],0)+' · G '+fN(m[3],0)+'</span>':''); }
@@ -11358,6 +11360,7 @@ function vDietaPlan(){
   var otras=CO.d.otras.length?'<button class="btn sec mt" data-a="copiarDieta">'+ic('copiar')+'Copiar dieta…</button>':'';     // v32: traer o llevar, con «De → A»
   if(!CO.die) return '<div class="card"><h2>Sin dieta todavía</h2><p class="muted">Crea su plan: objetivos de kcal y macros y las comidas del día, cada una con varios platos hechos con alimentos y gramos (o recetas tuyas) y foto si quieres.</p><button class="btn mt" data-a="crearDieta">Crear dieta</button><button class="btn sec mt" data-a="bdAbrir">'+ic('lista')+'Desde tu banco de dietas</button>'+otras+'</div>';
   if(!CO.nut){ cargarNut().then(function(){ hidratarDie(); if(CO.vista==='clienta'&&CO.sub==='dieta') repintar(); },function(e){ toast('No se han podido cargar los alimentos: '+limpiaErr(e),'err'); }); return '<div class="card"><p class="muted">Cargando alimentos y recetas…</p></div>'; }
+  if(CO.ndGen){ var ndg=CO.ndGen; CO.ndGen=null; setTimeout(function(){ ndGenerarPlatos(ndg); },0); }      // v53.4.70: la dieta nueva, con sus platos generados
   var P=CO.die.planes, p=planActual(), nom=esc(String(CO.d.clienta.nombre||'').split(' ')[0]), ver=!!CO.d.clienta.dietaMacros;
   var cab='<div class="card"><div class="card-t">Planes <span class="pill warn'+(CO.dieSucia?'':' hidden')+'" id="ds">Sin guardar</span></div>'+
     '<div class="tipos">'+P.map(function(x,i){ return '<button class="'+(i===CO.planI?'on':'')+'" data-a="planI" data-i="'+i+'">'+esc(x.nombre||('Plan '+(i+1)))+'</button>'; }).join('')+'</div>'+
@@ -11669,18 +11672,145 @@ function dietasAntCard(){
   if(!L.length) return h+'<p class="muted sm">Cuando empieces una dieta nueva, la actual se guarda aquí con sus fechas para que lleves el control.</p></div>';
   return h+L.map(function(x,k){ return '<div class="otra"><div><b>'+fCorta(x.desde)+' – '+fCorta(x.hasta)+'</b> <span class="muted sm">· '+Math.max(1,Math.round((diff(x.desde,x.hasta)+1)/7))+' sem.</span><div class="muted sm">'+esc(x.resumen||'')+'</div></div><button class="btn sm sec" data-a="verDietaAnt" data-x="'+k+'">Ver</button></div>'; }).join('')+'</div>';
 }
+/* v53.4.70 · DIETA NUEVA en dos pasos (pedido por Javier: «que te vuelva a pedir macros y kcal… que se genere automático con esos macros y sus gustos,
+   alergias… y que se pueda cambiar el reparto, que el pre-entreno tenga pocas grasas… intuitivo y fácil»).
+   1) Fechas, kcal y macros de cada plan (con los de ahora; o los de la calculadora) y cómo empieza: platos nuevos generados con sus macros y su
+      alimentación, o la de ahora con los gramos ajustados a las kcal nuevas. 2) Si se generan: el reparto de cada comida (% de kcal, proteína,
+      hidratos y grasa; al cambiar uno, lo que sobra o falta en esa columna se reparte solo entre las demás) y cuántos platos por comida.
+      El reparto se queda en la dieta (comida.rp) y sale igual la próxima vez. Los platos generados quedan para revisar y «Guardar y publicar». */
+var ND_K=['kcal','proteina','carbohidratos','grasa'];
+function tipoCmDe(n){ n=sinTil(n); return /desayun/.test(n)?'d':/recena|media|merienda|snack|tentempie|pre|post|antes|despues/.test(n)?'m':/comida|almuerzo|cena/.test(n)?'c':'m'; }
+/* reparte «total» en enteros proporcionales a v (si todo es 0, a partes iguales) */
+function repartir(v,total){
+  var s=v.reduce(function(a,x){ return a+Math.max(0,x||0); },0), n=v.length; if(!n) return [];
+  var raw=v.map(function(x){ return s>0?Math.max(0,x||0)*total/s:total/n; }), r=raw.map(Math.floor), falta=total-r.reduce(function(a,x){ return a+x; },0);
+  raw.map(function(x,i){ return [x-Math.floor(x),i]; }).sort(function(a,b){ return b[0]-a[0]; }).slice(0,falta).forEach(function(z){ r[z[1]]++; });
+  return r;
+}
+function ndRepDe(p){
+  var cms=(p.comidas||[]).filter(function(c){ return String(c.nombre||'').trim(); }), n=cms.length;
+  if(!n){ cms=CM_PRESET[4].map(function(x){ return {nombre:x[0],hora:x[2],pct:x[3]}; }); n=4; }
+  var pre=CM_PRESET[n]||null, L=cms.map(function(c,i){ var k=num(c.pct), rp=c.rp||{}; return {nombre:c.nombre,hora:c.hora||'',tipo:tipoCmDe(c.nombre),k:k,p:num(rp.p),c:num(rp.c),g:num(rp.g)}; });
+  var kOk=L.every(function(x){ return x.k!=null; }); if(!kOk){ var base=L.map(function(x,i){ return x.k!=null?x.k:pre?pre[i][3]:100/n; }); L.forEach(function(x,i){ x.k=base[i]; }); }
+  var K=repartir(L.map(function(x){ return x.k; }),100); L.forEach(function(x,i){ x.k=K[i]; });
+  ['p','c','g'].forEach(function(f){ var ok=L.every(function(x){ return x[f]!=null; }); var v=repartir(L.map(function(x){ return ok?x[f]:x.k; }),100); L.forEach(function(x,i){ x[f]=v[i]; }); });
+  return L;
+}
+function ndCalc(){ try{ if(!CO.d||!CO.d.clienta) return null; var r=calcRes(calcEstado()); return r&&r.kcal>0&&r.ch>0?r:null; }catch(e){ return null; } }
 A.nuevaDieta=function(){
   if(CO.dieSucia) return toast('Guarda primero los cambios de la dieta actual');
-  var D=CO.d.dieta||{}, hoy=CO.hoy||hoyStr();
-  modal('<h2>Empezar una dieta nueva</h2><p class="muted">La dieta actual'+(D.desde?' (desde el '+fCorta(D.desde)+')':'')+' se guarda en el historial y termina el día antes de la nueva. Se copia como punto de partida para que la cambies.</p>'+
-    '<div class="grid2"><label class="f">Empieza<input type="date" id="nd-desde" value="'+hoy+'"></label><label class="f">Termina (opcional)<input type="date" id="nd-hasta"></label></div>'+
-    '<button class="btn mt" data-a="nuevaDietaOk">Empezar dieta nueva</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+  var D=CO.d.dieta||{}, P=(D.planes&&D.planes.length?D.planes:(CO.die&&CO.die.planes)||[]);
+  CO.nd={desde:CO.hoy||hoyStr(),hasta:'',modo:'gen',paso:1,pi:0,
+    planes:P.map(function(p){ return {nombre:p.nombre||'Plan',ahora:ND_K.map(function(k){ return p[k]==null?'':String(p[k]); }),obj:ND_K.map(function(k){ return p[k]==null?'':String(p[k]); }),rep:ndRepDe(p),opc:Math.min(4,Math.max(1,(p.comidas||[]).reduce(function(a,c){ return Math.max(a,(c.opciones||[]).length); },0)||3))}; })};
+  ndPintar();
 };
-A.nuevaDietaOk=function(el){
-  var de=val('nd-desde'), ha=val('nd-hasta'); if(!de) return toast('Pon la fecha de inicio'); if(ha&&ha<de) return toast('La fecha de fin es anterior al inicio');
+function ndPintar(){ var b=document.querySelector('#modal .mbox'), st=b&&CO.nd.mismo?b.scrollTop:0; CO.nd.mismo=false; modal(CO.nd.paso===2?ndPaso2():ndPaso1()); var b2=document.querySelector('#modal .mbox'); if(b2&&st) b2.scrollTop=st; }
+function ndKcalMac(o){ var P=num(o[1]),C=num(o[2]),G=num(o[3]); return P!=null&&C!=null&&G!=null?Math.round(4*P+4*C+9*G):null; }
+function ndPaso1(){
+  var N=CO.nd, D=CO.d.dieta||{}, nom=esc(primerNombre(CO.d.clienta.nombre||'')), al=alimCl(), r=ndCalc(), gen=N.modo==='gen';
+  var pl=N.planes.map(function(p,pi){
+    var ah=p.ahora; return '<div class="nd-pl"><div class="nd-pn">'+esc(p.nombre)+'</div><div class="grid4">'+
+      [['Kcal',0],['Proteína (g)',1],['Hidratos (g)',2],['Grasa (g)',3]].map(function(z){ return '<label class="f" style="margin-top:0">'+z[0]+'<input data-k="nd" data-f="o" data-p="'+pi+'" data-i="'+z[1]+'" inputmode="numeric" value="'+esc(p.obj[z[1]])+'"></label>'; }).join('')+'</div>'+
+      '<div class="muted sm nd-ah" id="nd-ah-'+pi+'">'+ndAhTxt(pi)+'</div></div>'; }).join('');
+  return '<h2>Dieta nueva para '+nom+'</h2><p class="muted sm">La de ahora'+(D.desde?' (desde el '+fCorta(D.desde)+')':'')+' se guarda en su historial y termina el día antes de la nueva.</p>'+
+    '<div class="grid2"><label class="f">Empieza<input type="date" id="nd-desde" value="'+esc(N.desde)+'"></label><label class="f">Termina (opcional)<input type="date" id="nd-hasta" value="'+esc(N.hasta)+'"></label></div>'+
+    '<div class="lab">Kcal y macros de la dieta nueva</div>'+(r?'<button class="btn sm sec nd-calc" data-a="ndCalc">'+ic('calc')+'Usar las de la calculadora: '+kTxt(r.kcal)+' kcal · P '+r.pr+' · HC '+r.ch+' · G '+r.gr+'</button>':'')+pl+
+    '<div class="lab">¿Cómo empieza?</div>'+
+    '<button class="mo-op'+(gen?' on':'')+'" data-a="ndModo" data-v="gen"><span class="mo-rd"></span><span><b>Generar platos nuevos</b><small>Con estos macros y su alimentación: '+esc(alimResumen(al)||'come de todo')+'. Eliges el reparto de cada comida en el paso siguiente.</small></span></button>'+
+    '<button class="mo-op'+(!gen?' on':'')+'" data-a="ndModo" data-v="copiar"><span class="mo-rd"></span><span><b>Copiar la de ahora</b><small>Los mismos platos, con los gramos ajustados a las kcal nuevas.</small></span></button>'+
+    '<button class="btn mt" data-a="ndSig">'+(gen?'Siguiente: reparto de las comidas':'Empezar dieta nueva')+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
+}
+function ndAhTxt(pi){
+  var p=CO.nd.planes[pi], a=p.ahora, o=p.obj, km=ndKcalMac(o), k=num(o[0]), t=[];
+  if(a.some(function(x){ return x!==''; })) t.push('Ahora: '+(a[0]!==''?a[0]+' kcal':'– kcal')+' · P '+(a[1]||'–')+' · HC '+(a[2]||'–')+' · G '+(a[3]||'–'));
+  if(km!=null&&k!=null&&Math.abs(km-k)>30) t.push('<span class="warn-t">Los macros suman '+kTxt(km)+' kcal</span>');
+  return t.join(' · ');
+}
+function inNd(t){
+  var N=CO.nd; if(!N) return; var f=t.dataset.f, pi=+t.dataset.p, i=+t.dataset.i;
+  if(f==='o'){ var p=N.planes[pi]; p.obj[i]=String(t.value||'').trim();
+    if(i>0){ var km=ndKcalMac(p.obj); if(km!=null){ p.obj[0]=String(km); var e=document.querySelector('#modal [data-k=nd][data-f=o][data-p="'+pi+'"][data-i="0"]'); if(e) e.value=p.obj[0]; } }
+    var a=document.getElementById('nd-ah-'+pi); if(a) a.innerHTML=ndAhTxt(pi); return; }
+  if(f==='r'){ var L=N.planes[N.pi].rep, v=num(t.value); if(v==null) return; if(t.dataset.c2==='k'&&L[i].kAnt==null) L[i].kAnt=L[i].k; L[i][t.dataset.c2]=Math.max(0,Math.min(100,Math.round(v))); var g=document.getElementById('nd-g-'+i); if(g) g.textContent=ndGrTxt(N.pi,i); }
+}
+function ndLeerFechas(){ var a=document.getElementById('nd-desde'), b=document.getElementById('nd-hasta'); if(a) CO.nd.desde=a.value; if(b) CO.nd.hasta=b.value; }
+A.ndCalc=function(){ var r=ndCalc(); if(!r) return; ndLeerFechas(); CO.nd.planes.forEach(function(p){ p.obj=[String(r.kcal),String(r.pr),String(r.ch),String(r.gr)]; }); CO.nd.mismo=true; ndPintar(); toast('Puestas las de la calculadora en '+(CO.nd.planes.length>1?'todos los planes':'su plan')+'. Cámbialas si quieres.','ok'); };
+A.ndModo=function(el){ ndLeerFechas(); CO.nd.modo=el.dataset.v; CO.nd.mismo=true; ndPintar(); };
+function ndValida(){
+  var N=CO.nd; if(!N.desde) return 'Pon la fecha de inicio'; if(N.hasta&&N.hasta<N.desde) return 'La fecha de fin es anterior al inicio';
+  for(var i=0;i<N.planes.length;i++){ var o=N.planes[i].obj, nm=N.planes.length>1?' de «'+N.planes[i].nombre+'»':'';
+    if(N.modo==='gen'&&o.slice(1).some(function(x){ return num(x)==null; })) return 'Pon proteína, hidratos y grasa'+nm+' para generar los platos';
+    var k=num(o[0]); if(k!=null&&(k<400||k>8000)) return 'Revisa las kcal'+nm; }
+  return '';
+}
+function ndObjEnvio(){ return CO.nd.planes.map(function(p){ var o={}; ND_K.forEach(function(k,i){ o[k]=p.obj[i]; }); return o; }); }
+A.ndSig=function(el){
+  ndLeerFechas(); var e=ndValida(); if(e) return toast(e,'err');
+  if(CO.nd.modo==='gen'){ CO.nd.paso=2; CO.nd.pi=0; ndPintar(); return; }
+  ndEnviar(el,{desde:CO.nd.desde,hasta:CO.nd.hasta,obj:ndObjEnvio(),ajustar:true},null);
+};
+A.ndAtras=function(){ CO.nd.paso=1; ndPintar(); };
+A.ndPlan=function(el){ CO.nd.pi=+el.dataset.i; CO.nd.mismo=true; ndPintar(); };
+A.ndOpc=function(el){ CO.nd.planes[CO.nd.pi].opc=+el.dataset.v; CO.nd.mismo=true; ndPintar(); };
+A.ndNcm=function(el){ var n=+el.dataset.v, p=CO.nd.planes[CO.nd.pi]; if(p.rep.length===n) return; p.rep=CM_PRESET[n].map(function(x){ return {nombre:x[0],hora:x[2],tipo:x[1],k:x[3],p:x[3],c:x[3],g:x[3]}; }); CO.nd.mismo=true; ndPintar(); };
+/* al cambiar un % (al salir de la casilla): lo que sobra o falta en esa columna se reparte entre las demás comidas; el % de kcal arrastra a los de su comida que iban igual */
+CH.ndRep=function(t){
+  var N=CO.nd; if(!N) return; var L=N.planes[N.pi].rep, i=+t.dataset.i, f=t.dataset.c2, v=num(t.value); if(v==null){ N.mismo=true; ndPintar(); return; }
+  v=Math.max(0,Math.min(100,Math.round(v)));
+  var cols=[f]; if(f==='k'){ var ant=L[i].kAnt!=null?L[i].kAnt:L[i].k; ['p','c','g'].forEach(function(x){ if(L[i][x]===ant) cols.push(x); }); }
+  cols.forEach(function(x){ L[i][x]=v; var otros=L.map(function(c,j){ return j===i?0:c[x]; }), r=repartir(otros.filter(function(z,j){ return j!==i; }),100-v), q=0; L.forEach(function(c,j){ if(j!==i) c[x]=r[q++]; }); });
+  L.forEach(function(c){ delete c.kAnt; }); N.mismo=true; ndPintar();
+};
+function ndObjPlan(pi){ var o=CO.nd.planes[pi].obj, P=num(o[1]),C=num(o[2]),G=num(o[3]), K=num(o[0]); return [K!=null?K:ndKcalMac(o),P,C,G]; }
+function ndGrTxt(pi,i){ var ob=ndObjPlan(pi), c=CO.nd.planes[pi].rep[i]; if(ob[1]==null) return ''; return kTxt(ob[0]*c.k/100)+' kcal · P '+Math.round(ob[1]*c.p/100)+' g · HC '+Math.round(ob[2]*c.c/100)+' g · G '+Math.round(ob[3]*c.g/100)+' g'; }
+function ndPaso2(){
+  var N=CO.nd, p=N.planes[N.pi], L=p.rep, ob=ndObjPlan(N.pi), suma=function(k){ return L.reduce(function(a,c){ return a+(c[k]||0); },0); };
+  var mal=['k','p','c','g'].filter(function(k){ return suma(k)!==100; });
+  return '<p class="muted sm" style="margin:0 0 2px">Paso 2 de 2</p><h2>Reparto de las comidas</h2>'+
+    '<p class="tip">Lo que le toca en cada comida, en % del día. Si cambias uno, lo que sobra o falta se reparte solo entre las demás comidas. Por ejemplo, para un pre-entreno con poca grasa, baja su % de grasa.</p>'+
+    (N.planes.length>1?'<div class="tipos">'+N.planes.map(function(x,i){ return '<button class="'+(i===N.pi?'on':'')+'" data-a="ndPlan" data-i="'+i+'">'+esc(x.nombre)+'</button>'; }).join('')+'</div>':'')+
+    '<p class="muted sm mt6">Objetivo: '+kTxt(ob[0])+' kcal · P '+ob[1]+' g · HC '+ob[2]+' g · G '+ob[3]+' g</p>'+
+    '<div class="lab">Comidas al día</div><div class="tipos">'+[3,4,5,6].map(function(k){ return '<button class="'+(L.length===k?'on':'')+'" data-a="ndNcm" data-v="'+k+'">'+k+'</button>'; }).join('')+'</div>'+
+    '<div class="gen-t mt"><div class="gen-r gen-h"><span>Comida</span><span>% kcal</span><span>% prot.</span><span>% hidr.</span><span>% grasa</span></div>'+
+    L.map(function(c,i){ return '<div class="gen-r"><span><b class="nd-cn">'+esc(c.nombre)+(c.hora?' <small>· '+esc(c.hora)+'</small>':'')+'</b><small id="nd-g-'+i+'">'+ndGrTxt(N.pi,i)+'</small></span>'+
+      ['k','p','c','g'].map(function(k){ return '<input data-k="nd" data-f="r" data-c="ndRep" data-c2="'+k+'" data-i="'+i+'" inputmode="numeric" value="'+c[k]+'" aria-label="% de '+({k:'kcal',p:'proteína',c:'hidratos',g:'grasa'})[k]+' en '+esc(c.nombre)+'">'; }).join('')+'</div>'; }).join('')+
+    (mal.length?'<p class="sm bad-t">Alguna columna no suma 100 %.</p>':'')+'</div>'+
+    '<div class="lab">Platos para elegir en cada comida</div><div class="tipos">'+[1,2,3,4].map(function(k){ return '<button class="'+(p.opc===k?'on':'')+'" data-a="ndOpc" data-v="'+k+'">'+k+'</button>'; }).join('')+'</div>'+
+    '<p class="muted sm mt">Los platos salen de la biblioteca con los gramos ya cuadrados y respetando su alimentación. Después los revisas y pulsas «Guardar y publicar dieta»: hasta entonces ve la de antes.</p>'+
+    '<button class="btn mt" data-a="ndGenerar">Generar dieta nueva</button><button class="btn sec mt" data-a="ndAtras">Atrás</button>';
+}
+A.ndGenerar=function(el){
+  var N=CO.nd, mal=N.planes.some(function(p){ return ['k','p','c','g'].some(function(k){ return p.rep.reduce(function(a,c){ return a+(c[k]||0); },0)!==100; }); });
+  if(mal) return toast('Cada columna del reparto tiene que sumar 100 %','err');
+  ndEnviar(el,{desde:N.desde,hasta:N.hasta,obj:ndObjEnvio(),ajustar:false},N.planes.map(function(p){ return {rep:copia(p.rep),opc:p.opc}; }));
+};
+function ndEnviar(el,opt,gen){
   if(el.disabled) return; el.disabled=true;
-  cargando(api('coachNuevaDieta',CO.pin,CO.cid,{desde:de,hasta:ha})).then(function(){ cerrarModal(); CO.dietaNueva=true; toast('Dieta anterior guardada en el historial','ok'); abrirClienta(CO.cid,'dieta'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
-};
+  cargando(api('coachNuevaDieta',CO.pin,CO.cid,opt)).then(function(r){
+    cerrarModal(); CO.dietaNueva=true; CO.nd=null;
+    if(gen){ CO.ndGen=gen; toast('Dieta anterior guardada en el historial. Generando los platos…','ok'); }
+    else toast('Dieta nueva empezada'+(r&&r.sinAjustar&&r.sinAjustar.length?'. Los gramos de «'+r.sinAjustar.join('», «')+'» no se han ajustado (el cambio de kcal es muy grande): revísalos':' con los gramos ajustados a las kcal nuevas'),r&&r.sinAjustar&&r.sinAjustar.length?'warn':'ok');
+    abrirClienta(CO.cid,'dieta');
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+}
+/* con la dieta ya cargada (y los alimentos y recetas): pone en cada plan los platos de la biblioteca cuadrados a su reparto */
+function ndGenerarPlatos(gen){
+  if(!CO.die) return; var al=alimCl(), sin=[];
+  CO.die.planes.forEach(function(p,pi){
+    var G=gen[pi]; if(!G) return; var ob=objDia(p); if(!ob||ob[1]==null||ob[2]==null||ob[3]==null) return;
+    if(ob[0]==null) ob[0]=4*ob[1]+4*ob[2]+9*ob[3];
+    usadasG={};
+    p.comidas=G.rep.map(function(c){
+      var o=[ob[0]*c.k/100,ob[1]*c.p/100,ob[2]*c.c/100,ob[3]*c.g/100], R=recetasPara(c.tipo,o,al,usadasG,G.opc);
+      if(!R.length) sin.push(c.nombre);
+      var cm={nombre:c.nombre,hora:c.hora,pct:String(c.k),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
+      if(!(c.p===c.k&&c.c===c.k&&c.g===c.k)) cm.rp={p:c.p,c:c.c,g:c.g};
+      return cm;
+    });
+  });
+  CO.opVis={}; CO.planI=0; marcarDie(); repintar();
+  toast(sin.length?'No hay platos de la biblioteca que pueda comer para: '+sin.filter(function(x,i,a){ return a.indexOf(x)===i; }).join(', ')+'. Añádelos a mano y pulsa «Guardar y publicar dieta».':'Dieta nueva generada. Revisa los platos y pulsa «Guardar y publicar dieta».',sin.length?'err':'ok');
+}
 A.verDietaAnt=function(el){
   var x=(CO.d.dietasAnteriores||[])[+el.dataset.x]; if(!x) return; CO.dantI=+el.dataset.x;
   modal('<h2>Dieta del '+fCorta(x.desde)+' al '+fCorta(x.hasta)+'</h2>'+(x.planes||[]).map(function(p){
@@ -14279,7 +14409,7 @@ function planesMez(P,todos){
   CL._mez=out; CL._mezP=P; CL._mezV=CL.mezV; CL._mezK=kq; return out;
 }
 function pctCm(c){ return num(c&&c.pctM!=null?c.pctM:c&&c.pct); }
-function objCmCl(p,c){ var o=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)], pc=pctCm(c); return o[0]!=null&&pc?o.map(function(v){ return v==null?null:v*pc/100; }):null; }
+function objCmCl(p,c){ var o=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)], pc=pctCm(c), rp=c&&c.pctM==null?c.rp:null; return o[0]!=null&&pc?o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }):null; }      // v53.4.70: con el reparto por macros de su coach (si no lo ha cambiado ella)
 /* el plato que se puede tocar: si es de su coach, se copia (con sus cambios de alimento ya puestos) */
 function opEditable(o){
   var M=miaCl();
