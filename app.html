@@ -2845,7 +2845,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.54';
+var APP_V = 'v53.4.55';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -16534,10 +16534,12 @@ function pushClCard(){
   var e=PUSH.est; if(!e||e==='no'&&!pushIOS()) return e==='no'?'<div class="card push-c"><div class="card-t">'+ic('campana')+'Avisos en este móvil</div><p class="muted sm">Este navegador no permite avisos. Abre MOOD ON en Safari (iPhone) o en Chrome (Android).</p></div>':'';
   var h='<div class="card push-c"><div class="card-t">'+ic('campana')+'Avisos en este móvil</div>';
   if(e==='on'){
-    var cfg=(CL.d.clienta&&CL.d.clienta.push)||{dia:'08:00'}, on=cfg.dia!=='no';
-    h+='<p class="seg-ok">'+ic('okc')+'<span>Activados: te avisamos cuando tu coach te cambie algo o te escriba, de tu videollamada y de tu plan.</span></p>'+
-      '<div class="fila dsc-f"><span>Recordatorio de cada mañana<small class="fila-s">Lo que te toca hoy (en los días de descanso, nada).</small></span><button class="sw'+(on?' on':'')+'" data-a="pushDiaTog" aria-label="Recordatorio de cada mañana" aria-pressed="'+on+'"><i></i></button></div>'+
+    var cfg=(CL.d.clienta&&CL.d.clienta.push)||{dia:'08:00',off:{}}, on=cfg.dia!=='no', off=cfg.off||{}, el=!!cfg.elegir;
+    h+='<p class="seg-ok">'+ic('okc')+'<span>'+(el?'Activados en este móvil. Elige cuáles quieres recibir:':'Activados: te avisamos cuando tu coach te cambie algo o te escriba, de tu videollamada y de tu plan.')+'</span></p>'+
+      (el?pushFila('pushTipo','cambios','Cambios de tu coach','Cuando te cambia la rutina o la dieta.',!off.cambios)+pushFila('pushTipo','chat','Mensajes','Cuando tu coach te escribe (sin el texto del mensaje).',!off.chat):'')+
+      pushFila('pushDiaTog','','Recordatorio de cada mañana','Lo que te toca hoy (en los días de descanso, nada).',on)+
       (on?'<label class="f push-hora">A qué hora<select id="push-h">'+PUSH_HORAS.map(function(x){ return '<option'+(x===cfg.dia?' selected':'')+'>'+x+'</option>'; }).join('')+'</select></label>':'')+
+      (el?pushFila('pushTipo','llamada','Videollamadas','10 minutos antes de empezar.',!off.llamada)+pushFila('pushTipo','plan','Tu plan','3 días antes de que venza y el mismo día.',!off.plan):'')+
       '<button class="link" data-a="pushOff">Desactivar los avisos en este móvil</button>';
   } else if(e==='ios'){
     h+='<p class="muted sm">Para que te lleguen los avisos de tu coach en el iPhone, como los de cualquier app, añade MOOD ON a tu pantalla de inicio:</p>'+pushPasosIOS();
@@ -16548,6 +16550,14 @@ function pushClCard(){
   }
   return h+'</div>';
 }
+/* v53.4.55 · un interruptor de la lista de avisos (en la cuenta nº 1, cada uno elige cuáles quiere) */
+function pushFila(a,k,t,sub,v){ return '<div class="fila dsc-f"><span>'+t+'<small class="fila-s">'+sub+'</small></span><button class="sw'+(v?' on':'')+'" data-a="'+a+'"'+(k?' data-k="'+k+'"':'')+' aria-label="'+esc(t)+'" aria-pressed="'+v+'"><i></i></button></div>'; }
+A.pushTipo=function(el){ if(el.disabled) return; el.disabled=true;
+  var k=el.dataset.k, cfg=(CL.d.clienta&&CL.d.clienta.push)||{off:{}}, estaba=!!(cfg.off||{})[k], o={}; o[k]=estaba?0:1;
+  cargando(api('pushCfg',BOOT.token,{off:o})).then(function(r){ if(CL.d&&CL.d.clienta) CL.d.clienta.push=r.cfg; CL.keep=true; pintarCl(); toast(estaba?'Hecho: te volverán a llegar':'Hecho: ya no te llegarán','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.pushTipoCo=function(el){ if(el.disabled) return; el.disabled=true;
+  var k=el.dataset.k, estaba=!!((CO.push||{}).off||{})[k], o={}; o[k]=estaba?0:1;
+  cargando(api('coachPushCfg',CO.pin,{off:o})).then(function(r){ CO.push=r.cfg; pushCoModal(); toast(estaba?'Hecho: te volverán a llegar':'Hecho: ya no te llegarán','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 function pushHoyCard(){
   var e=PUSH.est; if((e!=='off'&&e!=='ios')||LS.get('mo_push_no')||!CL.d||CL.d.bloqueo) return '';
   return '<div class="card push-hoy"><div class="card-t">'+ic('campana')+'Recibe avisos de tu coach</div>'+
@@ -16575,8 +16585,11 @@ document.addEventListener('change',function(ev){ var t=ev.target; if(t&&t.id==='
 /* ---------- el entrenador: «Avisos» (menú y aviso en su inicio) ---------- */
 function pushCoModal(){
   var e=PUSH.est, cfg=CO.push||{resumen:true}, aqui=pushMovil()?'en este móvil':'en este ordenador', h='<h2>Avisos</h2>';
-  if(e==='on') h+='<p class="seg-ok">'+ic('okc')+'<span>Activados '+aqui+'. Te avisamos cuando un cliente te escriba, responda su cuestionario, suba sus fotos o apunte su peso y sus medidas.</span></p>'+
-    '<div class="fila dsc-f"><span>Resumen de cada mañana<small class="fila-s">A las 8:00, lo que tienes pendiente hoy (solo números, sin nombres).</small></span><button class="sw'+(cfg.resumen?' on':'')+'" data-a="pushResTog" aria-label="Resumen de cada mañana" aria-pressed="'+!!cfg.resumen+'"><i></i></button></div>'+
+  var off=cfg.off||{}, el=!!cfg.elegir;
+  if(e==='on') h+='<p class="seg-ok">'+ic('okc')+'<span>Activados '+aqui+(el?'. Elige cuáles quieres recibir:':'. Te avisamos cuando un cliente te escriba, responda su cuestionario, suba sus fotos o apunte su peso y sus medidas.')+'</span></p>'+
+    (el?pushFila('pushTipoCo','chat','Mensajes de clientes','Quién te ha escrito (sin el texto del mensaje).',!off.chat)+pushFila('pushTipoCo','cuest','Cuestionarios respondidos','Cuando un cliente envía su cuestionario.',!off.cuest)+
+      pushFila('pushTipoCo','fotos','Fotos de progreso','Cuando un cliente sube sus fotos.',!off.fotos)+pushFila('pushTipoCo','medidas','Peso y medidas','Cuando lo apuntan (sin las cifras). Si se pesan a diario, solo cuando apuntan medidas.',!off.medidas):'')+
+    pushFila('pushResTog','','Resumen de cada mañana','A las 8:00, lo que tienes pendiente hoy (solo números, sin nombres).',!!cfg.resumen)+
     '<p class="muted sm mt">Para recibirlos también en tu móvil, abre ahí tu panel y actívalos. En el iPhone, con tu panel en la pantalla de inicio.</p><button class="link" data-a="pushOff">Desactivar los avisos '+aqui+'</button>';
   else if(e==='ios') h+='<p class="muted">En el iPhone y el iPad, los avisos llegan con tu panel en la pantalla de inicio:</p><ol class="push-pasos"><li>Abre tu panel en <b>Safari</b>.</li><li>Toca '+ic('compartir')+' <b>Compartir</b> → <b>«Añadir a pantalla de inicio»</b>.</li><li>Ábrelo desde ese icono, entra y vuelve aquí: <b>Avisos → Activar</b>.</li></ol>';
   else if(e==='bloq') h+='<p class="muted">Has bloqueado los avisos de MOOD ON '+aqui+'. Para volver a recibirlos: '+esc(pushBloqTxt())+'</p>';
