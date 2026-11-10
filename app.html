@@ -907,7 +907,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 /* v17 · fotos, revisión semanal, notas privadas, avisos opcionales */
 .t-fotos{background:rgba(214,108,42,.1);color:#B4561A}.t-semanal{background:rgba(20,20,20,.07);color:var(--tx)}.t-nota{background:#ECECF0;color:var(--tx2)}
 .np-nb{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line);font-size:12.5px;color:var(--mu)}
-.rl-l{flex:1;display:flex;flex-direction:column;gap:10px}.rl-i{display:flex;align-items:center;gap:12px}.rl-i>.ic{color:#3A3A3C;margin:0}.rl-i span{display:flex;flex-direction:column}.rl-i:nth-child(2)>.ic{color:#B4561A}
+.rl-l{flex:1;display:flex;flex-direction:column;gap:10px}.rl-i{display:flex;align-items:center;gap:12px}.rl-i>.ic{color:#3A3A3C;margin:0}.rl-i span{display:flex;flex-direction:column}.rl-i.rl-fo>.ic{color:#B4561A}
 .rev-l .rl-i{flex-direction:row;align-items:center;flex:none}.rev-l.info{text-align:left}.rev-l .rl-i b{font-size:14.5px}
 .nt textarea{width:100%;min-height:58px}
 .nt-sub{margin:-4px 0 10px;line-height:1.4}.pill.nt-p{background:#F2F2F5;color:#3A3A3C}
@@ -2163,6 +2163,10 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .ll-ev.mia{background:#EFEDFF;color:#5A3FB0}.ll-ev.nueva{background:#111;color:#fff}
 .ll-av{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin:8px 2px 0;line-height:1.4}.ll-av .ic{flex:none;width:15px;height:15px;margin:1px 0 0}.ll-av.bad{color:var(--bad)}.ll-av.ok{color:var(--tx2)}.ll-av.ok .ic{color:var(--ok)}
 /* v35 · qué apunta cada clienta y peso de hoy */
+.rg-b{padding:10px 0 4px}.rg-b+.rg-b{border-top:1px solid var(--line)}.rg-t{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;margin-bottom:6px}.rg-t .ic{width:16px;height:16px;margin:0;color:var(--mu)}
+.rg-ch{margin:0 0 6px}.rg-ch button{font-size:12.5px;padding:6px 11px}.rg-l{font-size:13px;color:#3A3A3C;line-height:1.45}.rg-l b{font-weight:700}
+.rg-f{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:13px}.rg-f .ic{width:13px;height:13px;margin:0}
+.rg-res{background:#F5F5F7;border-radius:12px;padding:10px 12px;font-size:13.5px;line-height:1.45;margin-top:10px}
 .cf-reg button{display:inline-flex;align-items:center;gap:4px}.cf-reg .ic{width:13px;height:13px;margin:0}.cf-dia{margin-top:8px}
 .ph-c .card-t .ic{margin-right:6px}.ph-r{display:flex;gap:18px;flex-wrap:wrap;margin:2px 0 4px}.ph-r>div{display:flex;flex-direction:column}.ph-r b{font:700 22px Plus Jakarta Sans,sans-serif}.ph-r small{font-size:12px;color:var(--mu)}
 .ph-r .baja b{color:var(--ok)}.ph-r .sube b{color:var(--warn)}
@@ -2871,7 +2875,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.61';
+var APP_V = 'v53.4.62';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5752,6 +5756,8 @@ function avisosCl(){
   if(R){ var n=diff(hoy,R.rv.fecha); if(n<=0&&!R.todo) L.push({k:'rev',R:R,n:n,accion:true,nuevo:false}); }      // v38: hecha, ya no sale
   var F=fotosEstado();
   if(F&&!F.ok&&F.n<=0) L.push({k:'fotos',F:F,n:F.n,accion:true,nuevo:false});
+  var PP=progEstado('peso'), PM=progEstado('medidas'), pd=!!(PP&&!PP.ok&&PP.n<=0), md=!!(PM&&!PM.ok&&PM.n<=0);      // v53.4.62
+  if(pd||md){ var fp=[pd?PP.P.fecha:'',md?PM.P.fecha:''].filter(String).sort()[0]; L.push({k:'pm',peso:pd,med:md,f:fp,n:diff(hoy,fp),accion:true,nuevo:false}); }
   var LL=llProx(); if(LL){ var mm=llMin(LL); L.unshift({k:'ll',l:LL,accion:mm<=10,nuevo:String(LL.creado||'')>visto&&mm>10}); }      // v31
   // cambios de rutina o dieta: solo los que la coach ha decidido avisar
   (d.avisos||[]).forEach(function(a){
@@ -5759,6 +5765,16 @@ function avisosCl(){
     L.push({k:'av',id:a.id,f:f,nuevo:f>visto,ico:die?'dieta':'pesa',tipo:die?'dieta':'rutina',tit:a.titulo,txt:a.texto,btn:die?'Ver mi dieta':'Ver mi entreno',x:die?'dieta':'hoy'});
   });
   return L.filter(function(a){ return a.k!=='av'; }).concat(L.filter(function(a){ return a.k==='av'; }).sort(function(a,b){ return a.f<b.f?1:-1; }));
+}
+/* v53.4.62: su peso y sus medidas con su día (lo programa su entrenador); hecho = ya lo ha apuntado desde el día que cuenta */
+function progEstado(k){
+  var c=CL.d&&CL.d.clienta, P=c&&(k==='peso'?c.pesoProg:c.medProg), R=regCl(); if(!P||!P.fecha||!(k==='peso'?R.peso&&!R.diario:R.medidas)) return null;
+  var ok=(CL.d.medidas||[]).some(function(m){ return m.fecha>=P.desde&&(k==='peso'?num(m.peso)!=null:MED_CM.some(function(x){ return num(m[x])!=null; })); });
+  return {P:P,n:diff(hoyStr(),P.fecha),ok:ok};
+}
+function npPm(a){
+  var t=a.peso&&a.med?'Toca pesarte y medirte':a.peso?'Toca pesarte':'Toca medirte';
+  return '<button class="np-i np-btn acc" data-a="npAcc" data-x="medidas"><span class="np-ic t-fotos">'+ic(a.peso?'peso':'medidas')+'</span><span class="np-tx"><span class="np-t">'+t+'</span><span class="np-d">'+esc(a.n>=0?'Hoy':'Desde el '+fMedia(a.f))+' · Apunta '+(a.peso&&a.med?'tu peso y tus medidas':a.peso?'tu peso':'tus medidas')+'</span></span>'+ic('flecha','np-ch')+'</button>';
 }
 function fotosEstado(){
   var fo=CL.d&&CL.d.clienta&&CL.d.clienta.fotos; if(!fo||!fo.fecha) return null;
@@ -5789,6 +5805,7 @@ function npHtml(L){
   return h+L.map(function(a){
     if(a.k==='rev') return npRev(a);
     if(a.k==='fotos') return npFotos(a);
+    if(a.k==='pm') return npPm(a);
     if(a.k==='ll') return npLlamada(a);
     return '<div class="np-i'+(a.nuevo?' nuevo':'')+'"><span class="np-ic t-'+a.tipo+'">'+ic(a.ico)+'</span><div class="np-tx"><div class="np-t">'+esc(a.tit)+(a.nuevo?'<span class="np-new">Nuevo</span>':'')+'</div><div class="np-d">'+esc(a.txt)+'</div><div class="np-f">'+esc(a.f.slice(0,10)===hoyStr()?'Hoy':fMedia(a.f.slice(0,10)))+'</div>'+
       '<button class="link np-b" data-a="npAcc" data-x="'+a.x+'" data-id="'+esc(a.id||'')+'">'+esc(a.btn)+ic('flecha')+'</button></div></div>';
@@ -5821,10 +5838,13 @@ function revLinea(hoy){
   var R=revEstado(), F=fotosEstado(), L=[];
   function cu(f){ var n=diff(hoy,f); return fMedia(f)+' · '+(n<0?'pendiente':n===0?'hoy':n===1?'mañana':'en '+n+' días'); }
   if(R) L.push('<span class="rl-i">'+ic('rev')+'<span><b>Próxima revisión</b><small>'+esc(R.todo&&diff(hoy,R.rv.fecha)<=0?fMedia(R.rv.fecha)+' · ya apuntada':cu(R.rv.fecha))+'</small></span></span>');      // v38: hecha, lo dice
-  if(F) L.push('<span class="rl-i">'+ic('foto')+'<span><b>Próximas fotos</b><small>'+esc(cu(F.fo.fecha))+'</small></span></span>');
+  var PP=progEstado('peso'), PM=progEstado('medidas');      // v53.4.62
+  if(PP) L.push('<span class="rl-i">'+ic('peso')+'<span><b>Próximo peso</b><small>'+esc(PP.ok&&PP.n<=0?fMedia(PP.P.fecha)+' · ya apuntado':cu(PP.P.fecha))+'</small></span></span>');
+  if(PM) L.push('<span class="rl-i">'+ic('medidas')+'<span><b>Próximas medidas</b><small>'+esc(PM.ok&&PM.n<=0?fMedia(PM.P.fecha)+' · ya apuntadas':cu(PM.P.fecha))+'</small></span></span>');
+  if(F) L.push('<span class="rl-i rl-fo">'+ic('foto')+'<span><b>Próximas fotos</b><small>'+esc(cu(F.fo.fecha))+'</small></span></span>');
   if(!L.length) return '';
   // v26: si hoy toca (o está pendiente), lleva a la campana; si no, solo informa
-  var toca=avisosCl().some(function(a){ return a.k==='rev'||a.k==='fotos'; });
+  var toca=avisosCl().some(function(a){ return a.k==='rev'||a.k==='fotos'||a.k==='pm'; });
   return toca?'<button class="card rev-l" data-a="avisos"><span class="rl-l">'+L.join('')+'</span>'+ic('flecha','chev')+'</button>':'<div class="card rev-l info"><span class="rl-l">'+L.join('')+'</span></div>';
 }
 /* ---------- check-in ---------- */
@@ -9498,7 +9518,6 @@ function cfgSegCard(){
     c.plan_estado==='baja'?'<b class="bad-t">No renueva</b>':'']:['<span class="muted">Sin indicar</span>'],'<span class="cf-bs">'+b('segEditPlan',c.plan||c.plan_hasta?'Editar':'Indicar')+b('pgFicha','Pagos')+'</span>');
   h+=cfgFila('revision','Revisión con '+cG('ella','él')+'',rv.fecha?[esc(periodoTxt(rv.cada,true)),'Próxima: '+esc(fMedia(rv.fecha)),(rv.pide||[]).length?'Antes apunta '+esc(listaY(rv.pide.map(function(k){ return PIDE_L[k]; }))):'No le pides que apunte nada']:['<span class="muted">Sin programar · lo normal, cada 20 días</span>'],b('segProgRev',rv.fecha?'Cambiar':'Programar'));
   h+=regFilaHtml();
-  h+=cfgFila('fotos','Fotos de progreso',fo.fecha?[esc(periodoTxt(fo.cada,true)),'Próximas: '+esc(fMedia(fo.fecha))]:['<span class="muted">Sin programar · lo normal, cada mes</span>'],b('segFotos',fo.fecha?'Cambiar':'Programar'));
   if(c.plan!=='dieta'){
     var nS=c.semanal?(c.semanal_cada||1):0;
     h+=cfgFila('semanal','Revisión semanal · solo tú',['Repasas su semana el domingo. '+cG('Ella','Él')+' no la ve.','<div class="tipos ops cf-sem">'+[[1,'Cada semana'],[2,'Cada 2 semanas'],[4,'Cada 4 semanas'],[0,'No']].map(function(o){ return '<button class="'+(nS===o[0]?'on':'')+'" data-a="semCada" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>']);
@@ -12425,16 +12444,74 @@ A.phGuardar=function(el){
   var p={fecha:hoy,peso:String(v)}; colaPon('guardarMedidas',[p]); medLocal(CL.d,'guardarMedidas',p); CL.phEd=0;      // v46: sin esperar
   toast('Peso guardado','ok'); CL.keep=true; pintarCl();
 };
-/* coach: qué apunta cada clienta (peso, medidas, fotos y si se pesa a diario) */
-function regFilaHtml(){
-  var R=regDe(CO.d.clienta.registra), O=[['peso','Peso'],['medidas','Medidas'],['fotos','Fotos']];
-  return cfgFila('fotos','Qué apunta '+cG('ella','él')+'',['<div class="tipos ops cf-reg">'+O.map(function(o){ return '<button class="'+(R[o[0]]?'on':'')+'" data-a="regTog" data-k="'+o[0]+'" aria-pressed="'+R[o[0]]+'">'+(R[o[0]]?ic('ok'):'')+o[1]+'</button>'; }).join('')+'</div>',
-    R.peso?'<label class="chk-l cf-dia"><input type="checkbox" data-c="regDiario"'+(R.diario?' checked':'')+'><span>Se pesa a diario: en su Hoy apunta el peso cada mañana y la app hace la media de 7 días</span></label>':'',
-    '<span class="muted">En su app solo le sale lo que marques (y en la revisión no se le pide lo demás).</span>']);
+/* v53.4.62 · «Qué apunta y cada cuánto» (opción B, elegida por Javier: todo a la vista, sin abrir nada): peso, medidas y fotos,
+   cada una con sus botones de cada cuánto y su próximo día. Sustituye a «Qué apunta», «Se pesa a diario» y la fila de las fotos */
+var RG_OPS={peso:[['diario','A diario'],['1s','Cada semana'],['2s','Cada 2 semanas'],['1m','Cada mes'],['otra','Otra…'],['libre','Sin fecha fija'],['no','No']],
+  medidas:[['1s','Cada semana'],['2s','Cada 2 semanas'],['1m','Cada mes'],['otra','Otra…'],['libre','Sin fecha fija'],['no','No']],
+  fotos:[['2s','Cada 2 semanas'],['1m','Cada mes'],['otra','Otra…'],['libre','Sin fecha fija'],['no','No']]};
+var RG_N={peso:['Peso','peso','Próximo','Se pesará'],medidas:['Medidas','medidas','Próximas','Se medirá'],fotos:['Fotos de progreso','foto','Próximas','Subirá sus fotos']};
+var RG_CADA=[['','Una sola vez'],['1s','Cada semana'],['10d','Cada 10 días'],['2s','Cada 2 semanas'],['3s','Cada 3 semanas'],['4s','Cada 4 semanas'],['1m','Cada mes'],['6s','Cada 6 semanas'],['2m','Cada 2 meses'],['3m','Cada 3 meses']];
+function rgProg(k){ var c=CO.d.clienta; return (k==='peso'?c.pesoProg:k==='medidas'?c.medProg:c.fotos)||{}; }
+function rgEstado(k){
+  var R=regDe(CO.d.clienta.registra), P=rgProg(k); if(!R[k]) return 'no'; if(k==='peso'&&R.diario) return 'diario'; if(!P.fecha) return 'libre';
+  return RG_OPS[k].some(function(o){ return o[0]===P.cada&&/^\d/.test(o[0]); })?P.cada:'otra';
 }
-function regEnviar(R){ var cid=CO.cid; cargando(api('coachRegistra',CO.pin,cid,R)).then(function(r){ if(CO.cid!==cid) return; CO.d.clienta.registra=r.registra; delete CCACHE[cid]; toast('Guardado: '+[r.registra.peso?'peso'+(r.registra.diario?' a diario':''):'',r.registra.medidas?'medidas':'',r.registra.fotos?'fotos':''].filter(String).join(', '),'ok'); if(!r.registra.fotos&&CO.d.clienta.fotos) CO.d.clienta.fotos.fecha=''; repintar(); },function(e){ toast(limpiaErr(e),'err'); }); }
-A.regTog=function(el){ var R=regDe(CO.d.clienta.registra), k=el.dataset.k; R[k]=!R[k]; if(k==='peso'&&!R.peso) R.diario=false; if(!R.peso&&!R.medidas&&!R.fotos) return toast('Deja al menos una cosa: peso, medidas o fotos'); regEnviar(R); };
-CH.regDiario=function(t){ var R=regDe(CO.d.clienta.registra); R.diario=!!t.checked; regEnviar(R); };
+function rgDia(f,cada){
+  var m=/^(\d+)([dsm])$/.exec(String(cada||'')); if(!m||!f) return '';
+  if(m[2]==='s') return ' · los '+['domingos','lunes','martes','miércoles','jueves','viernes','sábados'][aDate(f).getDay()];
+  if(m[2]==='m') return ' · el día '+(+f.slice(8,10));
+  return '';
+}
+function regFilaHtml(){
+  var c=CO.d.clienta, pide=(c.rev&&c.rev.fecha&&c.rev.pide)||[];
+  var bl=['peso','medidas','fotos'].map(function(k){
+    var e=rgEstado(k), P=rgProg(k), N=RG_N[k];
+    var chips=RG_OPS[k].map(function(o){ var lab=o[0]==='otra'&&e==='otra'?periodoTxt(P.cada,true):o[1];
+      return '<button class="'+(e===o[0]?'on':'')+'" data-a="rgSel" data-k="'+k+'" data-v="'+o[0]+'" aria-pressed="'+(e===o[0])+'">'+esc(lab)+'</button>'; }).join('');
+    var lin=e==='diario'?'Lo apunta cada mañana en su Hoy y la app hace la media de 7 días.'
+      :e==='no'?'No le sale en su app.'
+      :e==='libre'?'Lo apunta cuando quiera'+(pide.indexOf(k)>=0?' y antes de cada revisión':'')+', sin recordatorio propio.'
+      :N[2]+': <b>'+esc(fMedia(P.fecha))+'</b>'+esc(rgDia(P.fecha,P.cada))+' <button class="link rg-f" data-a="rgFecha" data-k="'+k+'">'+ic('lapiz')+'Cambiar día</button>';
+    return '<div class="rg-b" data-k="'+k+'"><div class="rg-t">'+ic(N[1])+N[0]+'</div><div class="tipos ops rg-ch">'+chips+'</div><div class="rg-l">'+lin+'</div></div>';
+  }).join('');
+  return cfgFila('fotos','Qué apunta '+cG('ella','él')+' y cada cuánto',[bl,'<span class="muted">En su app solo le sale lo que marques. El día que le toca, le sale en la campana y en el aviso de la mañana; cuando lo apunta, pasa sola a la siguiente fecha.</span>']);
+}
+A.rgSel=function(el){
+  var k=el.dataset.k, v=el.dataset.v, hoy=CO.hoy||hoyStr(), P=rgProg(k);
+  if(v==='otra') return rgModal(k,true);
+  if(v===rgEstado(k)) return;
+  var x={k:k};
+  if(v==='no'||v==='libre'||v==='diario') x.modo=v;
+  else { x.modo='fecha'; x.cada=v; x.fecha=P.fecha&&P.fecha>=hoy&&diff(hoy,P.fecha)<=diff(hoy,sumarPeriodo(hoy,v))?P.fecha:sumarPeriodo(hoy,v); }
+  rgEnviar(x,el);
+};
+A.rgFecha=function(el){ rgModal(el.dataset.k,false); };
+function rgModal(k,otra){
+  var hoy=CO.hoy||hoyStr(), P=rgProg(k), N=RG_N[k], e=rgEstado(k), cada=otra?(e==='otra'?P.cada:'10d'):(P.fecha?P.cada:'1s');
+  var fe=P.fecha&&!otra?P.fecha:(P.fecha&&e==='otra'?P.fecha:sumarPeriodo(hoy,cada||'1s'));
+  modal('<h2>'+esc(N[0])+'</h2><div class="grid2"><label class="f">Cada cuánto<select id="rg-ca" data-c="rgRes">'+RG_CADA.map(function(o){ return '<option value="'+o[0]+'"'+(o[0]===String(cada||'')?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'+
+    '<label class="f">Próximo día<input type="date" id="rg-fe" data-c="rgRes" value="'+esc(fe)+'"></label></div><div class="rg-res" id="rg-res"></div>'+
+    '<button class="btn mt" data-a="rgOk" data-k="'+k+'">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+  CH.rgRes();
+}
+CH.rgRes=function(){
+  var b=document.querySelector('#modal [data-a=rgOk]'), r=document.getElementById('rg-res'); if(!b||!r) return;
+  var k=b.dataset.k, ca=val('rg-ca'), fe=val('rg-fe');
+  r.innerHTML=fe?esc(RG_N[k][3])+' <b>'+esc(ca?periodoTxt(ca)+rgDia(fe,ca).replace(' · ',', '):'una sola vez')+'</b>. '+(ca?'Primera vez':'El día')+': '+esc(fMedia(fe))+'. Ese día le sale en la campana y en el aviso de la mañana.':'Pon el día.';
+};
+A.rgOk=function(el){ var fe=val('rg-fe'); if(!fe) return toast('Pon el día'); rgEnviar({k:el.dataset.k,modo:'fecha',fecha:fe,cada:val('rg-ca')},el,true); };
+function rgEnviar(x,el,modalAbierto){
+  var cid=CO.cid, R=regDe(CO.d.clienta.registra);
+  if(x.modo==='no'&&['peso','medidas','fotos'].filter(function(q){ return q!==x.k&&R[q]; }).length===0) return toast('Deja al menos una cosa: peso, medidas o fotos');
+  if(el&&el.disabled) return; if(el) el.disabled=true;
+  cargando(api('coachProgramarRegistro',CO.pin,cid,x)).then(function(r){
+    if(el) el.disabled=false; if(CO.cid!==cid) return;
+    var c=CO.d.clienta; c.registra=r.registra; c.fotos=r.fotos; c.pesoProg=r.pesoProg; c.medProg=r.medProg; delete CCACHE[cid];
+    if(modalAbierto) cerrarModal();
+    var P=rgProg(x.k), e=rgEstado(x.k), t=e==='no'?'no':e==='diario'?'a diario':e==='libre'?'sin fecha fija':periodoTxt(P.cada)+' · '+(x.k==='peso'?'próximo ':'próximas ')+fMedia(P.fecha);
+    toast(RG_N[x.k][0]+': '+t,'ok'); repintar();
+  },function(e){ if(el) el.disabled=false; toast(limpiaErr(e),'err'); });
+}
 /* series por semana: hechas (barra) frente a lo programado (fondo gris y raya) */
 function barrasMeta(items,o){
   o=o||{}; var n=items.length; if(!n) return '';
