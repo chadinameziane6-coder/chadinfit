@@ -2924,7 +2924,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.76';
+var APP_V = 'v53.4.77';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11512,6 +11512,16 @@ function modalRecetas(q){
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
   setTimeout(pintarImgs,0);
 }
+/* v53.4.77 · cuadra los gramos de un plato ya hecho a los macros de su comida (Javier: «si eliges platos ya hechos, que se ajuste solo»), como las
+   recetas de la biblioteca (cuadrarReceta): cada alimento sube o baja según su papel (proteína, hidratos o grasa; la verdura y lo que no tiene grupo
+   se quedan) y conserva lo demás (crudo/cocido, intercambios). Sin objetivo de la comida o con alimentos que no están en el banco, ajusta solo por kcal. */
+function cuadrarItems(items,ob){
+  if(!items||!items.length||!ob||ob[0]==null) return false;
+  var rol={prot:'p',lac:'p',hc:'c',fruta:'c',grasa:'g'}, ok=ob[1]!=null&&ob[2]!=null&&ob[3]!=null&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; });
+  if(ok){ var x={ing:items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,rol:rol[it.x||a.x]||''}; })};
+    if(x.ing.some(function(z){ return z.rol; })){ var r=cuadrarReceta(x,ob); items.forEach(function(it,i){ it.q=r[i].q; }); return true; } }
+  var m=macItems(items); if(!m||!(m[0]>0)) return false; var f=ob[0]/m[0]; items.forEach(function(it){ it.q=String(redG((num(it.q)||0)*f)); }); return true;
+}
 A.recPon=function(el){
   var r=CO.nut.recetas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return;
   var c=planActual().comidas[CO.recMi], n=Math.max(1,num(r.raciones)||1);
@@ -11521,9 +11531,10 @@ A.recPon=function(el){
     if(tot&&tot[0]>0&&ob&&ob[0]>0) k=Math.max(0.5,Math.min(Math.min(n,4),Math.round(ob[0]/(tot[0]/n)*2)/2));      // v48: su parte, la que cuadra con esta comida
     if(k!==1) (o.items||[]).forEach(function(it){ it.q=String(Math.round((num(it.q)||0)*k*10)/10); });
     o.tanda={r:n,k:k,c:''}; }
+  var cuadro=!o.tanda&&cuadrarItems(o.items,objCm(planActual(),c));      // v53.4.77: tus recetas también entran cuadradas a los macros de esta comida
   var vacia=c.opciones.length===1&&!c.opciones[0].nombre&&!c.opciones[0].texto&&!c.opciones[0].img&&!(c.opciones[0].items||[]).length;
   if(vacia) c.opciones[0]=o; else c.opciones.push(o);
-  CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.indexOf(o); cerrarModal(); marcarDie(); repintar(); toast(o.tanda?'Añadida: le toca '+racTxt(o.tanda.k)+' de '+n+'. En su app pesa todo lo que ha hecho y le digo los gramos de su parte.':'Receta añadida. Ajusta los gramos si hace falta.','ok');
+  CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.indexOf(o); cerrarModal(); marcarDie(); repintar(); toast(o.tanda?'Añadida: le toca '+racTxt(o.tanda.k)+' de '+n+'. En su app pesa todo lo que ha hecho y le digo los gramos de su parte.':cuadro?'Receta añadida con los gramos de esta comida':'Receta añadida. Pon el % del día de esta comida para cuadrar los gramos.','ok');
 };
 A.recGuardarOp=function(el){
   var o=opDe({dataset:{x:'d',m:el.dataset.m,o:el.dataset.o}}); if(!o||!o.items||!o.items.length) return;
