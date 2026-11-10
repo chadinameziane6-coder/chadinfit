@@ -2173,6 +2173,7 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .ll-ev.mia{background:#EFEDFF;color:#5A3FB0}.ll-ev.nueva{background:#111;color:#fff}
 .ll-av{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;margin:8px 2px 0;line-height:1.4}.ll-av .ic{flex:none;width:15px;height:15px;margin:1px 0 0}.ll-av.bad{color:var(--bad)}.ll-av.ok{color:var(--tx2)}.ll-av.ok .ic{color:var(--ok)}
 /* v35 · qué apunta cada clienta y peso de hoy */
+.pq-x{flex:0 0 auto;width:36px;height:36px;border-radius:999px;border:0;background:#F2F2F5;color:#3A3A3C;display:flex;align-items:center;justify-content:center;cursor:pointer}.pq-x .ic{width:16px;height:16px;margin:0}.pq-x:disabled{opacity:.35;cursor:default}
 .rg-b{padding:10px 0 4px}.rg-b+.rg-b{border-top:1px solid var(--line)}.rg-t{display:flex;align-items:center;gap:6px;font-weight:700;font-size:14px;margin-bottom:6px}.rg-t .ic{width:16px;height:16px;margin:0;color:var(--mu)}
 .rg-ch{margin:0 0 6px}.rg-ch button{font-size:12.5px;padding:6px 11px}.rg-l{font-size:13px;color:#3A3A3C;line-height:1.45}.rg-l b{font-weight:700}
 .rg-f{display:inline-flex;align-items:center;gap:4px;margin-left:6px;font-size:13px}.rg-f .ic{width:13px;height:13px;margin:0}
@@ -2885,7 +2886,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.63';
+var APP_V = 'v53.4.64';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7731,10 +7732,10 @@ function cbHtml(p,mi){
     sug.map(function(r){ var nm=(adaptarRecCl(r)||{}).n||r.n; return '<span class="cc-w"><button class="cc cc-lib" data-a="plLib" data-m="'+mi+'" data-r="'+esc(r.id)+'">'+platoImg(r.img,'cc-im')+'<span class="cc-tag">Sugerencia</span><b>'+esc(nm)+'</b><small>'+(ob?'≈ '+kTxt(ob[0])+' kcal':esc(r.min)+' min')+'</small></button>'+
       '<button class="cc-q" data-a="libOcultar" data-r="'+esc(r.id)+'" aria-label="Quitar «'+esc(nm)+'» de tus sugerencias">'+ic('x')+'</button></span>'; }).join('');
   h+='</div>';
-  if(!ops.length&&(!sug.length||(lib&&c.nq))) h+='<p class="muted sm cb-vac">'+(lib&&c.nq?'Has quitado los platos de esta comida: crea el tuyo, elige una receta o vuelve a poner alguno en «Mis platos».':lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
+  if(!ops.length&&(!sug.length||(lib&&c.nq))) h+='<p class="muted sm cb-vac">'+(lib&&c.nq?'Has quitado los platos de esta comida: crea el tuyo o elige una receta.':lib?'Tu coach no ha puesto platos aquí: apunta lo que tomes o elige de la biblioteca.':'Todavía no hay platos para esta comida.')+'</p>';
   if(S.length) h+='<button class="cb-su" data-a="mnSu" data-m="'+mi+'">'+ic('lista')+'<span><b>'+esc(S.map(function(z){ var zc=sueltoCk(z), cc=cocInfo(zc); return z.n+' '+gTxt(cc?gVista(zc,z.q,ckAl(z.a)||cc.s):z.q); }).join(' · '))+'</b><small>'+(vm?kTxt(sumMac(S.map(macS))[0])+' kcal · ':'')+S.length+(S.length>1?' alimentos sueltos':' alimento suelto')+'</small></span>'+ic('flecha')+'</button>';
   // v52 · lo demás, pequeño y debajo (sin tener que deslizar hasta el final): alimentos sueltos, más de la biblioteca y «Copiar de ayer»
-  var R=repCm(p,mi), ac=(lib?'<button class="cb-ch" data-a="plMios" data-m="'+mi+'">'+ic('ajuste')+'Mis platos'+(c.nq?' · '+c.nq+(c.nq>1?' quitados':' quitado'):'')+'</button>':'')+(lib?'<button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
+  var R=repCm(p,mi), ac=(lib?'<button class="cb-ch" data-a="plMios" data-m="'+mi+'">'+ic('ajuste')+'Mis platos</button>':'')+(lib?'<button class="cb-ch" data-a="dlSuelto" data-m="'+mi+'">'+ic('mas')+'Alimentos sueltos</button><button class="cb-ch" data-a="dvLib45" data-p="'+esc(p.id)+'" data-m="'+mi+'">'+ic('lista')+'Más de la biblioteca</button>':'')+
     (R?'<button class="cb-ch cb-rep" data-a="mnRepCm" data-m="'+mi+'" aria-label="Copiar de ayer: '+esc(R.txt)+'">'+ic('reinicio')+(R.A.f===sumar(hoyStr(),-1)?'Copiar de ayer':'Copiar del '+esc(fCorta(R.A.f)))+'</button>':'');
   if(ac) h+='<div class="cb-ac">'+ac+'</div>';
   if(lib&&c.extra) h+='<button class="link danger cb-q" data-a="dlQuitarCm" data-m="'+mi+'">Quitar esta comida</button>';
@@ -7766,33 +7767,41 @@ A.plAbrir=function(el){
 };
 /* v53.4.32 · las que cuadran su dieta quitan los platos que no quieren (los de su coach y los suyos) y los vuelven a poner cuando
    quieran, uno a uno o todos («Mis platos» de cada comida). Lo de su coach no se borra: solo deja de salirle. */
-var PQ_UNDO=null;
+var PQ_UNDO=null, PQ_SUG=null;
 function plTodosCm(p,mi){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[], T=planesMez(P,true), q=T.filter(function(x){ return x.id===p.id; })[0], c=q&&q.comidas[mi]; return c?c.opciones||[]:[]; }
 A.plOcultar=function(el){ var p=planSelCl(); if(!p) return; var mi=+el.dataset.m, id=el.dataset.o, o=opCm(p,mi,id), c=p.comidas[mi], x=comidoDe(p,mi); if(!o||(x&&x.o===id)) return;
-  qOcCl()[id]=1; PQ_UNDO=[id]; guardarOc(); CL.keep=true; pintarCl();
+  qOcCl()[id]=1; PQ_UNDO=[id]; PQ_SUG=null; guardarOc(); CL.keep=true; pintarCl();
   toastAcc('Quitado de tu '+String(c.nombre).toLowerCase()+': '+nombreOp(o,(c.opciones||[]).indexOf(o)),'Deshacer','plOcDesh'); };
-A.plOcDesh=function(){ var t=document.getElementById('tacc'); if(t) t.className=''; if(!PQ_UNDO) return; var Q=qOcCl(); PQ_UNDO.forEach(function(id){ delete Q[id]; }); PQ_UNDO=null; guardarOc(); CL.keep=true; pintarCl(); toast('Vuelve a salirte','ok'); };
+A.plOcDesh=function(){ var t=document.getElementById('tacc'); if(t) t.className=''; if(!PQ_UNDO) return; var Q=qOcCl(), n=PQ_UNDO.length; PQ_UNDO.forEach(function(id){ delete Q[id]; }); PQ_UNDO=null;
+  if(PQ_SUG){ var pf=prefCl(); if(pf.nsm) delete pf.nsm[PQ_SUG]; PQ_SUG=null; guardarPref(); }
+  guardarOc(); CL.keep=true; pintarCl(); pqPintar(); toast(n>1?'Vuelven a salirte':'Vuelve a salirte','ok'); };
 A.plMios=function(el){ CL.pqM=+el.dataset.m; modal('<div id="pq-box"></div>'); pqPintar(); };
+/* v53.4.64 (Javier: «si se elimina, se elimina y ya»): en «Mis platos» solo salen los que tiene, cada uno con su ✕; lo quitado no vuelve a salir
+   (ni «· 1 quitado» en el botón ni «Ponerlos todos»). Al quitar, «Deshacer» unos segundos por si ha sido sin querer */
 function pqPintar(){
   var b=document.getElementById('pq-box'), p=planSelCl(); if(!b||!p) return; var mi=CL.pqM, c=p.comidas[mi]; if(!c){ cerrarModal(); return; }
-  var Q=qOcCl(), lib=libreCl(), L=plTodosCm(p,mi), x=comidoDe(p,mi), vm=verMac(), pf=prefCl(), nom=String(c.nombre).toLowerCase(), nOc=Object.keys(pf.oc||{}).length, quit=L.filter(function(o){ return Q[o.id]; }).length;
-  var h='<h2>Mis platos · '+esc(c.nombre)+'</h2><p class="muted sm">Quita los que no quieras ver en tu '+esc(nom)+' y vuelve a poner los que quieras. Los de tu coach no se borran: solo dejan de salirte.</p>';
-  if(L.length) h+='<div class="pq-bt"><button class="btn sm sec" data-a="pqTodos" data-v="0"'+(quit>=L.length-(x?1:0)?' disabled':'')+'>Quitar todos</button><button class="btn sm sec" data-a="pqTodos" data-v="1"'+(quit?'':' disabled')+'>Ponerlos todos</button></div>';
-  h+=L.length?'<div class="pq-l">'+L.map(function(o,i){ var on=!Q[o.id], hoy=!!x&&x.o===o.id, m=vm?macOpEf(o):null;
-      return '<div class="fila pq-f'+(on?'':' off')+'"><span>'+platoImg(o.img,'pq-im')+'<span class="pq-t"><b>'+esc(nombreOp(o,i))+'</b><small class="fila-s">'+(o.mio===2?'Tu plato':o.mio===1?'De tu coach, cambiado por ti':'De tu coach')+(m?' · '+kTxt(m[0])+' kcal':'')+(hoy?' · lo tienes hoy':'')+'</small></span></span>'+
-        '<button class="sw'+(on?' on':'')+'" data-a="pqTog" data-o="'+esc(o.id)+'"'+(hoy?' disabled':'')+' aria-pressed="'+on+'" aria-label="«'+esc(nombreOp(o,i))+'» en tu '+esc(nom)+'"><i></i></button></div>'; }).join('')+'</div>':'<p class="muted sm">Todavía no hay platos en esta comida.</p>';
+  var Q=qOcCl(), lib=libreCl(), L=plTodosCm(p,mi), V=L.map(function(o,i){ return {o:o,i:i}; }).filter(function(z){ return !Q[z.o.id]; }), x=comidoDe(p,mi), vm=verMac(), pf=prefCl(), nom=String(c.nombre).toLowerCase();
+  var h='<h2>Mis platos · '+esc(c.nombre)+'</h2><p class="muted sm">Quita los que no quieras ver en tu '+esc(nom)+'. Los de tu coach no se borran de tu dieta: solo dejan de salirte.</p>';
+  if(V.length>1||(V.length===1&&!(x&&x.o===V[0].o.id))) h+='<div class="pq-bt"><button class="btn sm sec" data-a="pqTodos" data-v="0"'+(V.every(function(z){ return x&&x.o===z.o.id; })?' disabled':'')+'>Quitar todos</button></div>';
+  h+=V.length?'<div class="pq-l">'+V.map(function(z){ var o=z.o, hoy=!!x&&x.o===o.id, m=vm?macOpEf(o):null;
+      return '<div class="fila pq-f"><span>'+platoImg(o.img,'pq-im')+'<span class="pq-t"><b>'+esc(nombreOp(o,z.i))+'</b><small class="fila-s">'+(o.mio===2?'Tu plato':o.mio===1?'De tu coach, cambiado por ti':'De tu coach')+(m?' · '+kTxt(m[0])+' kcal':'')+(hoy?' · lo tienes hoy':'')+'</small></span></span>'+
+        '<button class="pq-x" data-a="pqTog" data-o="'+esc(o.id)+'"'+(hoy?' disabled':'')+' aria-label="Quitar «'+esc(nombreOp(o,z.i))+'» de tu '+esc(nom)+'">'+ic('x')+'</button></div>'; }).join('')+'</div>'
+    :'<p class="muted sm">No te queda ningún plato en tu '+esc(nom)+': crea el tuyo o elige una receta.</p>';
   var sOn=!(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi]));
   h+=(lib?'<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en tu '+esc(nom)+' (cambian cada día)</small></span><button class="sw'+(sOn?' on':'')+'" data-a="pqSug" aria-pressed="'+sOn+'" aria-label="Sugerencias de la biblioteca en tu '+esc(nom)+'"><i></i></button></div>':'')+
-    (lib&&nOc?'<button class="link" data-a="pqSugVolver">Volver a poner '+(nOc>1?'las '+nOc+' sugerencias que quitaste':'la sugerencia que quitaste')+'</button>':'')+
     '<button class="btn sec mt" data-a="cerrarModal">Listo</button>';
   b.innerHTML=h;
 }
 function pqHecho(msg){ guardarOc(); CL.keep=true; pintarCl(); pqPintar(); if(msg) toast(msg,'ok'); }
-A.pqTog=function(el){ if(el.disabled) return; var Q=qOcCl(), id=el.dataset.o; if(Q[id]) delete Q[id]; else Q[id]=1; pqHecho(); };
+A.pqTog=function(el){ if(el.disabled) return; var p=planSelCl(), Q=qOcCl(), id=el.dataset.o, c=p&&p.comidas[CL.pqM], o=p&&opCm(p,CL.pqM,id); if(!c||Q[id]) return;
+  Q[id]=1; PQ_UNDO=[id]; PQ_SUG=null; pqHecho(); toastAcc('Quitado de tu '+String(c.nombre).toLowerCase()+(o?': '+nombreOp(o,(c.opciones||[]).indexOf(o)):''),'Deshacer','plOcDesh'); };
 A.pqTodos=function(el){ if(el.disabled) return; var p=planSelCl(); if(!p) return; var mi=CL.pqM, Q=qOcCl(), lib=libreCl(), x=comidoDe(p,mi), L=plTodosCm(p,mi), on=el.dataset.v==='1';
-  L.forEach(function(o){ if(on) delete Q[o.id]; else if(!(x&&x.o===o.id)) Q[o.id]=1; });
-  if(lib){ var pf=prefCl(), k=p.id+'|'+mi; pf.nsm=pf.nsm||{}; if(on){ delete pf.nsm[k]; } else { pf.nsm[k]=1; } guardarPref(); }      // v53.4.34: y las sugerencias de esta comida
-  pqHecho(on?'Vuelven a salirte todos':(x?'Quitados todos (menos el que tienes hoy)':lib?'Quitados todos: añade los tuyos o vuelve a poner los que quieras':'Quitados todos: vuelve a poner los que quieras en «Mis platos»')); };
+  var ya=[]; L.forEach(function(o){ if(on) delete Q[o.id]; else if(!(x&&x.o===o.id)&&!Q[o.id]){ Q[o.id]=1; ya.push(o.id); } });
+  var pf=prefCl(), k=p.id+'|'+mi, sugAntes=!(pf.nsm&&pf.nsm[k]);
+  if(lib){ pf.nsm=pf.nsm||{}; if(on){ delete pf.nsm[k]; } else { pf.nsm[k]=1; } guardarPref(); }      // v53.4.34: y las sugerencias de esta comida
+  if(on) return pqHecho('Vuelven a salirte todos');
+  PQ_UNDO=ya; PQ_SUG=lib&&sugAntes?k:null; pqHecho();      // v53.4.64: con «Deshacer»
+  toastAcc(x?'Quitados todos (menos el que tienes hoy)':'Quitados todos: crea el tuyo o elige una receta','Deshacer','plOcDesh'); };
 A.pqSug=function(){ var p=planSelCl(); if(!p) return; var pf=prefCl(), k=p.id+'|'+CL.pqM; pf.nsm=pf.nsm||{};
   if(pf.ns||pf.nsm[k]){ if(pf.ns){ delete pf.ns; } delete pf.nsm[k]; } else pf.nsm[k]=1;      // v53.4.34: por comida
   guardarPref(); CL.keep=true; pintarCl(); pqPintar(); };
@@ -14252,7 +14261,7 @@ function miaResumenHtml(){
   }); });
   P.forEach(function(p){ (p.comidas||[]).forEach(function(c,mi){      // v53.4.32: los platos tuyos que ha quitado de su app
     var Lq=(c.opciones||[]).map(function(o,oi){ return M.q&&M.q[o.id]?(o.nombre||'Opción '+(oi+1)):null; }).filter(Boolean);
-    if(Lq.length) F.push('<div class="mia-r"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+(c.nombre||'Comida'))+'</b><span>Ha quitado de su app: '+esc(Lq.join(' · '))+'</span><small>No se borran de tu dieta: '+cG('ella','él')+' los puede volver a poner</small></div>'); }); });
+    if(Lq.length) F.push('<div class="mia-r"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+(c.nombre||'Comida'))+'</b><span>Ha quitado de su app: '+esc(Lq.join(' · '))+'</span><small>No se borran de tu dieta: solo dejan de salirle</small></div>'); }); });
   P.forEach(function(p){ var nb=(p.comidas||[]).length; ((M.cm&&M.cm[p.id])||[]).forEach(function(x,j){      // v38: comidas que ha añadido ella
     var L=(M.add&&M.add[p.id+'|'+(nb+j)])||[];
     F.push('<div class="mia-r nuevo"><b>'+esc((P.length>1?(p.nombre||'Plan')+' · ':'')+'Comida añadida: '+x.n+(x.h?' · '+x.h:''))+'</b><span>'+esc(L.length?L.map(function(y){ return '«'+(y.nombre||'Mi plato')+'» '+kTxt((sumMac((y.items||[]).map(macIt))||[0])[0])+' kcal'; }).join(' · '):'sin platos todavía')+'</span></div>'); }); });
