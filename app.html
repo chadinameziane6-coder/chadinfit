@@ -2929,7 +2929,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.79';
+var APP_V = 'v53.4.80';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11502,8 +11502,11 @@ A.opAjustar=function(el){
   var p=planActual(), c=p.comidas[+el.dataset.m], o=c.opciones[+el.dataset.o], ob=objCm(p,c), m=macOp(o);
   if(!ob||ob[0]==null||!m||!(m[0]>0)) return; var f=ob[0]/m[0];
   if(o.tanda){ var k0=num(o.tanda.k)||1, k=Math.max(0.5,Math.min(o.tanda.r,Math.round(k0*f*2)/2)); (o.items||[]).forEach(function(it){ it.q=String(Math.round((num(it.q)||0)*k/k0*10)/10); }); o.tanda.k=k; marcarDie(); repintar(); return toast('Ahora toma '+racTxt(k)+' de '+o.tanda.r+' (lo más cerca de '+kTxt(ob[0])+' kcal)','ok'); }
-  var como=cuadrarItems(o.items,ob); marcarDie(); repintar();      // v53.4.78: con la proteína, los hidratos y la grasa, no solo las kcal
-  toast(como==='m'?'Gramos ajustados a la proteína, los hidratos y la grasa de '+String(c.nombre||'esta comida').toLowerCase():'Gramos ×'+fN(f,2)+' para llegar a '+kTxt(ob[0])+' kcal. Retoca los que quieras.','ok');
+  var como=cuadrarItems(o.items,ob), cu=cuadraOp(p,c,o), nom=String(c.nombre||'esta comida').toLowerCase(); marcarDie(); repintar();      // v53.4.78: con la proteína, los hidratos y la grasa, no solo las kcal
+  if(como==='m'){ var m2=macOp(o), roles=o.items.map(function(it){ var a=CO.nutM[it.a]||it; return ROL_X[it.x||a.x]||''; }), fal=[];      // v53.4.80: de un toque; si no cuadra, qué falta
+    [['p',1,'proteína (pollo, pavo, huevo, whey…)'],['c',2,'hidratos (pan, arroz, avena, fruta…)'],['g',3,'grasa (aceite, frutos secos, aguacate…)']].forEach(function(z){ var d=m2[z[1]]-ob[z[1]]; if(roles.indexOf(z[0])<0&&Math.abs(d)>Math.max(3,ob[z[1]]*0.06)) fal.push(z[2]); });
+    toast(cu&&cu.ok?'Cuadrado con su '+nom+': proteína, hidratos y grasa':fal.length?'Le falta un alimento de '+listaY(fal)+' para cuadrar su '+nom+'.':'Es lo más cerca que se puede con estos alimentos. Cambia o añade alguno para cuadrar su '+nom+'.',cu&&cu.ok?'ok':''); }
+  else toast('Gramos ×'+fN(f,2)+' para llegar a '+kTxt(ob[0])+' kcal. Retoca los que quieras.','ok');
 };
 /* recetas dentro de la dieta */
 A.recAdd=function(el){ CO.recMi=+el.dataset.m; modalRecetas(''); };
@@ -11527,8 +11530,13 @@ function modalRecetas(q){
 function cuadrarItems(items,ob){
   if(!items||!items.length||!ob||ob[0]==null) return false;
   var ok=ob[1]!=null&&ob[2]!=null&&ob[3]!=null&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; });
-  if(ok){ var x={ing:items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,rol:ROL_X[it.x||a.x]||''}; })};
-    if(x.ing.some(function(z){ return z.rol; })){ var r=cuadrarReceta(x,ob); items.forEach(function(it,i){ if(x.ing[i].rol) it.q=r[i].q; }); return 'm'; } }      // v53.4.78: los que no se ajustan (verdura…) ni se redondean
+  if(ok&&items.some(function(it){ var a=CO.nutM[it.a]; return ROL_X[it.x||a.x]; })){
+    for(var v=0;v<3;v++){      // v53.4.80: de un toque (antes ×3,5 como mucho por toque: había que darle varias veces); se repite con los gramos ya redondeados hasta que no cambian
+      var x={ing:items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,rol:ROL_X[it.x||a.x]||''}; })}, r=cuadrarReceta(x,ob,[0.02,25]);
+      var nuevo=items.map(function(it,i){ return x.ing[i].rol?r[i].q:it.q; });
+      if(!(errMac(macItems(items.map(function(it,i){ return {a:it.a,q:nuevo[i]}; })),ob)<errMac(macItems(items),ob)-0.01)) break;      // solo si mejora: dar otra vez al botón ya no mueve nada
+      items.forEach(function(it,i){ it.q=nuevo[i]; }); }
+    return 'm'; }      // v53.4.80: de un toque (antes ×3,5 como mucho por toque: había que darle varias veces)      // v53.4.78: los que no se ajustan (verdura…) ni se redondean
   var m=macItems(items); if(!m||!(m[0]>0)) return false; var f=ob[0]/m[0]; items.forEach(function(it){ it.q=String(redG((num(it.q)||0)*f)); }); return 'k';
 }
 var ROL_X={prot:'p',lac:'p',hc:'c',fruta:'c',grasa:'g'};      // qué macro mueve cada grupo al cuadrar un plato
@@ -13851,16 +13859,18 @@ function sinAlcTxt(t){ return String(t||'').replace(/, el vino y el agua/g,' y e
 function txtLib(r,sa){ var t=(r.ex?'Además: '+r.ex+'\n\n':'')+r.pasos; return sa?sinAlcTxt(t):t; }
 function notasAdap(us){ var v={}; return (us||[]).map(function(id){ var f=famDe(id); if(NOTA_ALT[f]&&!v[f]){ v[f]=1; return NOTA_ALT[f]; } return ''; }).filter(Boolean); }
 /* gramos para que la receta dé la proteína, los hidratos y la grasa de esa comida (mínimos cuadrados con límites) */
-function cuadrarReceta(x,obj){
-  var roles=['p','c','g'], M=[[0,0,0],[0,0,0],[0,0,0]], F=[0,0,0];
+function cuadrarReceta(x,obj,lim){
+  var roles=['p','c','g'], M=[[0,0,0],[0,0,0],[0,0,0]], F=[0,0,0], lo=lim?lim[0]:0.3, hi=lim?lim[1]:3.5;      // v53.4.80: límites de cuánto sube o baja cada papel (las recetas de la biblioteca, ×0,3 a ×3,5)
   x.ing.forEach(function(it){ var b=it.a.b; for(var m=0;m<3;m++){ var v=(b[m+1]||0)*it.q/100; var k=roles.indexOf(it.rol); if(k>=0) M[m][k]+=v; else F[m]+=v; } });
   var R=[Math.max(0,obj[1]-F[0]),Math.max(0,obj[2]-F[1]),Math.max(0,obj[3]-F[2])], W=R.map(function(v,i){ var b=Math.max(v,[8,12,4][i]); return 1/(b*b); }), s=[1,1,1];
-  for(var it=0;it<250;it++){
+  for(var it=0;it<3000;it++){      // v53.4.80: hasta que no cambia (antes 250 vueltas: con alimentos que llevan de todo no llegaba)
+    var cambio=0;
     for(var j=0;j<3;j++){
       var num_=0, den=0;
       for(var m=0;m<3;m++){ var resto=R[m]; for(var k=0;k<3;k++) if(k!==j) resto-=M[m][k]*s[k]; num_+=W[m]*M[m][j]*resto; den+=W[m]*M[m][j]*M[m][j]; }
-      if(den>0) s[j]=Math.max(0.3,Math.min(3.5,num_/den));
+      if(den>0){ var nv=Math.max(lo,Math.min(hi,num_/den)); cambio=Math.max(cambio,Math.abs(nv-s[j])); s[j]=nv; }
     }
+    if(cambio<1e-7) break;
   }
   var items=x.ing.map(function(it){
     var k=roles.indexOf(it.rol), q=it.q*(k>=0?s[k]:1);
