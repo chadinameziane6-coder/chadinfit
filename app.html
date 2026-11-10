@@ -39,6 +39,10 @@ body.coach .wrap.coachw{max-width:940px;padding-bottom:60px}
 .link{background:none;border:0;color:var(--mg);font:600 13.5px Plus Jakarta Sans,sans-serif;padding:8px 0;cursor:pointer;text-align:left}
 .link.danger{color:var(--bad)}
 .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+/* v53.4.58 · nada se pone azul al tocar sin querer (Javier): no se selecciona el texto de la app ni sale el destello al tocar.
+   Sí se puede seleccionar donde se escribe y el texto de los mensajes del chat (para copiarlo) */
+html,body{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+input,textarea,select,[contenteditable],[contenteditable] *,.msj-t,.msj-t *{-webkit-user-select:text;user-select:text}
 input,textarea,select{width:100%;background:var(--card2);border:1px solid var(--line);border-radius:10px;color:var(--tx);padding:11px 12px;font:inherit;font-size:16px;outline:none;-webkit-appearance:none;appearance:none}
 textarea{resize:vertical;line-height:1.4}
 select{background-image:linear-gradient(45deg,transparent 50%,var(--mu) 50%),linear-gradient(135deg,var(--mu) 50%,transparent 50%);background-position:calc(100% - 18px) 50%,calc(100% - 13px) 50%;background-size:5px 5px;background-repeat:no-repeat;padding-right:34px}
@@ -2852,7 +2856,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.57';
+var APP_V = 'v53.4.58';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
