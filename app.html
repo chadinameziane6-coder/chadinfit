@@ -2845,7 +2845,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.55';
+var APP_V = 'v53.4.56';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -16550,7 +16550,7 @@ function pushClCard(){
   }
   return h+'</div>';
 }
-/* v53.4.55 · un interruptor de la lista de avisos (en la cuenta nº 1, cada uno elige cuáles quiere) */
+/* v53.4.55 · un interruptor de la lista de avisos (cada uno elige cuáles quiere; v53.4.56: en todas las cuentas) */
 function pushFila(a,k,t,sub,v){ return '<div class="fila dsc-f"><span>'+t+'<small class="fila-s">'+sub+'</small></span><button class="sw'+(v?' on':'')+'" data-a="'+a+'"'+(k?' data-k="'+k+'"':'')+' aria-label="'+esc(t)+'" aria-pressed="'+v+'"><i></i></button></div>'; }
 A.pushTipo=function(el){ if(el.disabled) return; el.disabled=true;
   var k=el.dataset.k, cfg=(CL.d.clienta&&CL.d.clienta.push)||{off:{}}, estaba=!!(cfg.off||{})[k], o={}; o[k]=estaba?0:1;
