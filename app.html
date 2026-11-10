@@ -2890,7 +2890,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.65';
+var APP_V = 'v53.4.66';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11665,15 +11665,14 @@ function vAlimentos(){
   var L=CO.nut.alimentos, f=CO.nf, casa=alCasa(), prop=L.filter(function(a){ return esMioAl(a); }).length, nsup=L.filter(function(a){ return a.sup; }).length, nmo=L.filter(function(a){ return a.mo||a.moV; }).length, oc=(!casa&&CO.nut.moOcultos)||[];
   var h='<p class="muted sm">Valores <b>por 100 g</b>. Los de <b>referencia</b> son medias de tablas de composición (USDA/BEDCA) para cuadrar rápido; los de <b>supermercado</b> llevan los datos de su etiqueta (Mercadona, Lidl). Para otra marca, créalo con los datos de su etiqueta. Solo tú ves esta pantalla.</p>'+
     (casa?'<p class="muted sm">Al guardar un alimento nuevo eliges si va también a <b>MOOD ON</b> (lo ven los demás entrenadores y sus clientes) o solo para ti. Los compartidos llevan la etiqueta <span class="pill mo">MOOD ON</span>.</p>'
-      :(nmo?'<p class="muted sm">Los que llevan <span class="pill mo">MOOD ON</span> te llegan de MOOD ON y se mantienen al día. Si cambias uno, se guarda <b>tu versión</b> (solo para ti y tus clientes).</p>':'')+
-       (oc.length?'<p class="muted sm">Has quitado de tu banco '+oc.length+(oc.length===1?' alimento':' alimentos')+' de MOOD ON. <button class="link" data-a="moOcultosVer">Ver y volver a ponerlos</button></p>':''))+
+      :(oc.length?'<p class="muted sm">Has quitado de tu banco '+oc.length+(oc.length===1?' alimento':' alimentos')+'. <button class="link" data-a="moOcultosVer">Ver y volver a ponerlos</button></p>':''))+   // v53.4.66: los demás entrenadores lo ven todo junto, por categorías (sin «Míos» ni «MOOD ON»)
     '<div class="row nut-bar"><input data-k="buscaNut" id="busca-nut" value="'+esc(f.q)+'" placeholder="Buscar alimento o marca…" aria-label="Buscar alimento"><button class="btn sm" data-a="alNuevo">'+ic('mas')+'Desde etiqueta</button></div>'+
-    '<div class="tipos"><button class="'+(!f.c&&!f.mios&&!f.sup?'on':'')+'" data-a="nutF" data-c="">Todos</button>'+(nsup?'<button class="'+(f.sup?'on':'')+'" data-a="nutF" data-c="_sup">'+ic('compra')+'Supermercado · '+nsup+'</button>':'')+'<button class="'+(f.mios?'on':'')+'" data-a="nutF" data-c="_mios">Míos · '+prop+'</button>'+(nmo?'<button class="'+(f.mo?'on':'')+'" data-a="nutF" data-c="_mo">MOOD ON · '+nmo+'</button>':'')+
+    '<div class="tipos"><button class="'+(!f.c&&!f.mios&&!f.sup?'on':'')+'" data-a="nutF" data-c="">Todos</button>'+(nsup?'<button class="'+(f.sup?'on':'')+'" data-a="nutF" data-c="_sup">'+ic('compra')+'Supermercado · '+nsup+'</button>':'')+(casa?'<button class="'+(f.mios?'on':'')+'" data-a="nutF" data-c="_mios">Míos · '+prop+'</button>'+(nmo?'<button class="'+(f.mo?'on':'')+'" data-a="nutF" data-c="_mo">MOOD ON · '+nmo+'</button>':''):'')+
     PAS_O.filter(function(c){ return L.some(function(a){ return a.c===c; }); }).map(function(c){ return '<button class="'+(f.c===c?'on':'')+'" data-a="nutF" data-c="'+c+'">'+esc(PAS_L[c])+'</button>'; }).join('')+'</div>'+
     (f.sup?'<div class="row nut-sup"><p class="muted sm">Productos con los datos de su etiqueta. ¿Falta alguno? Créalo con su supermercado y saldrá aquí, en tus dietas y en el banco de tus clientes.</p><button class="btn sm sec" data-a="alNuevoSup">'+ic('mas')+'Producto de supermercado</button></div><div class="tipos nut-ti">'+[['','Todas las tiendas',nsup]].concat(tiendasDe(L)).map(function(t){ return '<button class="'+((f.ti||'')===t[0]?'on':'')+'" data-a="nutTi" data-v="'+esc(t[0])+'">'+esc(t[1]&&t.length===3?t[1]:t[0])+' · '+(t.length===3?t[2]:t[1])+'</button>'; }).join('')+'</div>':'');
   PAS_O.forEach(function(c){
     if(f.c&&f.c!==c) return;
-    var G=L.filter(function(a){ return (PAS_L[a.c]?a.c:'otros')===c&&(!f.mios||esMioAl(a))&&(!f.mo||a.mo||a.moV)&&(!f.sup||a.sup)&&(!f.sup||!f.ti||tiendaDe(a)===f.ti); }).sort(function(a,b){ return (a.base?1:0)-(b.base?1:0)||(a.sup?0:1)-(b.sup?0:1)||String(a.n).localeCompare(String(b.n),'es'); });
+    var G=L.filter(function(a){ return (PAS_L[a.c]?a.c:'otros')===c&&(!casa||!f.mios||esMioAl(a))&&(!casa||!f.mo||a.mo||a.moV)&&(!f.sup||a.sup)&&(!f.sup||!f.ti||tiendaDe(a)===f.ti); }).sort(function(a,b){ return (a.base?1:0)-(b.base?1:0)||(a.sup?0:1)-(b.sup?0:1)||String(a.n).localeCompare(String(b.n),'es'); });
     if(G.length) h+='<div class="bgrp nut-g"><h3>'+esc(PAS_L[c])+'</h3>'+G.map(alFila).join('')+'</div>';
   });
   return h+'<p class="muted mt hidden" id="nut-nada">No hay ningún alimento con ese nombre. <button class="link" data-a="alNuevoBusca">Créalo desde su etiqueta</button></p>';
@@ -11682,9 +11681,10 @@ function alFila(a){
   var g=grDe(a.x);
   return '<div class="ej-row al-row'+(a.sup?' al-sup':'')+'" data-a="alVer" data-id="'+esc(a.id)+'" data-n="'+esc(clave(a.n+' '+(a.m||'')+' '+(a.e||'')))+'">'+(a.sup||a.img?alImg(a,'al-th'):'')+'<span class="ej-rt"><b>'+esc(a.n)+(a.e?' <span class="muted">· '+esc(a.e)+'</span>':'')+'</b>'+
     '<small>'+esc([a.m,kTxt(a.b[0])+' kcal · P '+fN(a.b[1])+' · HC '+fN(a.b[2])+' · G '+fN(a.b[3]),g?'Intercambio: '+grCorto(g):''].filter(Boolean).join(' · '))+'</small></span>'+(a.deN?'<span class="pill de-cl">De '+esc(String(a.deN).split(' ')[0])+'</span>':'')+
-    (a.sup?'<span class="pill sup">'+esc(tiendaDe(a))+(a.base||a.deN||!esMioAl(a)?'':' · tuyo')+'</span>'+moPill(a):a.base?'<span class="pill">Referencia</span>':(moPill(a)||'<span class="pill ok">Propio</span>'))+'</div>';
+    (a.sup?'<span class="pill sup">'+esc(tiendaDe(a))+(a.base||a.deN||!esMioAl(a)||!alCasa()?'':' · tuyo')+'</span>'+moPill(a):a.base?'<span class="pill">Referencia</span>':(moPill(a)||(alCasa()?'<span class="pill ok">Propio</span>':'')))+'</div>';
 }
-function moPill(a){ return a.mo&&!a.base?'<span class="pill mo">MOOD ON</span>':a.moV?'<span class="pill mo2">Tu versión</span>':''; }
+/* v53.4.66 · la etiqueta MOOD ON solo la ve la nº 1 (en los que comparte); los demás entrenadores ven su banco sin distinguir de dónde viene */
+function moPill(a){ if(!alCasa()) return ''; return a.mo&&!a.base?'<span class="pill mo">MOOD ON</span>':a.moV?'<span class="pill mo2">Tu versión</span>':''; }
 function filtrarNut(){
   var q=clave(CO.nf&&CO.nf.q), W=q?q.split(' '):[], vis=0;
   document.querySelectorAll('.nut-g').forEach(function(g){ var n=0; g.querySelectorAll('.al-row').forEach(function(r){ var ok=W.every(function(w){ return r.dataset.n.indexOf(w)>=0; }); r.style.display=ok?'':'none'; if(ok) n++; }); g.style.display=n?'':'none'; vis+=n; });
