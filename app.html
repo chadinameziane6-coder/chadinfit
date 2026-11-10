@@ -1672,6 +1672,9 @@ body.ancho .dk-cols.lado>.dk-col:first-child{position:sticky;top:128px;max-heigh
 .die-pref{background:var(--card2);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:12.5px;color:var(--tx2);display:flex;flex-direction:column;gap:3px}.die-pref .ic{width:12px;height:12px;margin:0 3px 0 0;fill:var(--mg);color:var(--mg)}
 body.ancho .comida-ed{display:block}
 body.ancho .op-low{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}body.ancho .op-low .op-r>.f:first-child{margin-top:10px}
+.dop{margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}.dop-t{font-size:12.5px;font-weight:600;color:var(--tx2);margin-bottom:8px}.dop-g{display:grid;gap:8px}body.ancho .dop-g{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dop-b{display:flex;align-items:center;gap:12px;width:100%;min-height:62px;text-align:left;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:11px 12px;cursor:pointer;font:inherit;color:var(--tx);-webkit-tap-highlight-color:transparent}.dop-b:hover{background:#ECECF0;border-color:#D6D6DB}.dop-b:active{transform:scale(.99)}.dop-b:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
+.dop-i{flex:0 0 38px;width:38px;height:38px;border-radius:11px;background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center}.dop-i .ic{width:20px;height:20px;vertical-align:0}.dop-x{display:flex;flex-direction:column;min-width:0;flex:1}.dop-x b{font:700 14px Plus Jakarta Sans,sans-serif;line-height:1.3;color:var(--tx)}.dop-x small{font-size:12.5px;line-height:1.35;color:var(--tx2);margin-top:2px}.dop-ch{width:18px;height:18px;color:var(--mu);flex:0 0 auto}      /* v53.4.68 */
 body.ancho .die-dk{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
 body.ancho .die-side{position:sticky;top:124px;display:flex;flex-direction:column;gap:0}
 body.ancho .it-r{grid-template-columns:minmax(0,1.3fr) 92px minmax(0,1.4fr) 44px 34px;grid-template-areas:"n q m x d"}
@@ -2890,7 +2893,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.67';
+var APP_V = 'v53.4.68';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11340,6 +11343,17 @@ function prefResumen(){
   if(!fav.length&&!top.length&&!sw) return '';
   return '<div class="die-pref">'+(fav.length?'<div><b>'+ic('corazon')+'Favoritos:</b> '+esc(fav.slice(0,6).join(', '))+'</div>':'')+(top.length?'<div><b>Lo que más elige:</b> '+esc(top.join(', '))+'</div>':'')+(sw?'<div><b>Cambios de alimento:</b> '+sw+'</div>':'')+'</div>';
 }
+/* v53.4.68 · «Más opciones de esta dieta»: botones con icono, nombre y una frase (antes, enlaces de texto que no se veían); en ordenador, de dos en dos */
+function dieOpcHtml(){
+  var b=function(a,i,t,s){ return '<button class="dop-b" data-a="'+a+'"><span class="dop-i">'+ic(i)+'</span><span class="dop-x"><b>'+t+'</b><small>'+s+'</small></span>'+ic('flecha','dop-ch')+'</button>'; };
+  var L=[];
+  if(CO.d.dieta) L.push(b('nuevaDieta','docMas','Empezar una dieta nueva','La actual se guarda en el historial'),b('bdGuardarAbrir','marcador','Guardar en tu banco de dietas','Para ponérsela a otros clientes'),b('bdAbrir','libros','Poner una de tu banco','La actual se guarda en el historial'));
+  if(CO.d.otras.length) L.push(b('copiarDieta','copiar','Copiar dieta','Traer la de otro cliente o llevar esta a otro'));
+  return L.length?'<div class="dop"><div class="dop-t">Más opciones de esta dieta</div><div class="dop-g">'+L.join('')+'</div></div>':'';
+}
+ICONS.docMas='<path d="M14 3.5H7.5a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2V8z"/><path d="M14 3.5V8h4.5"/><path d="M12 11v6M9 14h6"/>';
+ICONS.marcador='<path d="M7.5 3.5h9a1 1 0 0 1 1 1v16l-5.5-3.6-5.5 3.6v-16a1 1 0 0 1 1-1z"/>';
+ICONS.libros='<path d="M4.5 4.5h4v15h-4z"/><path d="M8.5 4.5h4v15h-4z"/><path d="M14.4 5.6l3.9-1 3.2 14.4-3.9 1z"/>';
 function vDietaPlan(){
   var otras=CO.d.otras.length?'<button class="btn sec mt" data-a="copiarDieta">'+ic('copiar')+'Copiar dieta…</button>':'';     // v32: traer o llevar, con «De → A»
   if(!CO.die) return '<div class="card"><h2>Sin dieta todavía</h2><p class="muted">Crea su plan: objetivos de kcal y macros y las comidas del día, cada una con varios platos hechos con alimentos y gramos (o recetas tuyas) y foto si quieres.</p><button class="btn mt" data-a="crearDieta">Crear dieta</button><button class="btn sec mt" data-a="bdAbrir">'+ic('lista')+'Desde tu banco de dietas</button>'+otras+'</div>';
@@ -11352,8 +11366,7 @@ function vDietaPlan(){
     '<div class="lab">Vigencia de esta dieta</div><div class="grid2"><label class="f" style="margin-top:0">Empieza<input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'"></label><label class="f" style="margin-top:0">Termina<input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'"></label></div>'+
     '<div class="muted sm mt6" id="die-dur">'+duracionDieta()+'</div>'+
     (CO.d.dieta?'<div class="die-pdf mt"><button class="btn sm sec" data-a="diePdf">'+ic('descargar')+'Descargar en PDF</button><button class="btn sm sec" data-a="dieMail">'+ic('enviar')+'Enviársela por email</button></div>':'')+      // v53.4.47
-    (CO.d.dieta?'<button class="link mt" data-a="nuevaDieta">Empezar una dieta nueva (esta queda guardada en el historial)</button>':'')+
-    (CO.d.dieta?'<button class="link mt6" data-a="bdGuardarAbrir">'+ic('lista')+'Guardar en tu banco de dietas</button><button class="link mt6" data-a="bdAbrir">'+ic('lista')+'Poner una de tu banco (esta queda en el historial)</button>':'')+(CO.d.otras.length?'<button class="link mt6" data-a="copiarDieta">'+ic('copiar')+'Copiar dieta: traer la de otro cliente o llevar esta a otra</button>':'')+'</div>';
+    dieOpcHtml()+'</div>';
   var ve='<div class="card"><div class="card-t">Lo que ve '+nom+'</div>'+verKmHtml(true)+
     libreFilaHtml()+prefResumen()+'<button class="link" data-a="abrirNutri">'+ic('dieta')+'Alimentos, recetas e intercambios</button></div>'+miaResumenHtml();
   var obj='<div class="card"><div class="grid2"><label class="f">Nombre del plan<input data-pk="nombre" value="'+esc(p.nombre)+'" placeholder="Día de entreno"></label><label class="f">Para los días<select data-pk="tipo">'+Object.keys(TIPOS_PLAN).map(function(k){ return '<option value="'+k+'"'+(p.tipo===k?' selected':'')+'>'+TIPOS_PLAN[k]+'</option>'; }).join('')+'</select></label></div>'+
