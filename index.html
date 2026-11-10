@@ -176,11 +176,11 @@ if (/(^|[#&])t=/.test(location.hash)) {
        Solo se la damos a la app que va dentro de esta página. */
     if ((d.pideSes || d.guarda) && deAqui(e)) {
       if (d.guarda && SES[d.guarda.k]) { try { if (d.guarda.v) localStorage.setItem(SES[d.guarda.k], JSON.stringify(d.guarda.v)); else localStorage.removeItem(SES[d.guarda.k]); } catch (er) {} }
-      if (d.pideSes) { var r = {}; Object.keys(SES).forEach(function (k) { try { var v = localStorage.getItem(SES[k]); if (v) r[k] = JSON.parse(v); } catch (er) {} }); try { e.source.postMessage({ chadinfit: 1, sesiones: r, cap: ['compartir'] }, o); } catch (er) {} }
+      if (d.pideSes) { var r = {}; Object.keys(SES).forEach(function (k) { try { var v = localStorage.getItem(SES[k]); if (v) r[k] = JSON.parse(v); } catch (er) {} }); try { e.source.postMessage({ chadinfit: 1, sesiones: r, cap: ['compartir', 'fotos'] }, o); } catch (er) {} }
     }
     /* v32: después de crear la contraseña (o con un enlace ya usado) se quita ?alta= / ?reset= de la dirección: si la fija en el inicio del móvil, no vuelve a abrir el enlace */
     if (d.limpia && deAqui(e)) { try { var u = new URL(location.href); ['alta', 'reset', 'clienta'].forEach(function (k) { u.searchParams.delete(k); }); history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (er) {} }
-    if (d.compartir && deAqui(e) && /^data:image\/png;base64,/.test(String(d.compartir.img || ''))) compartir(d.compartir);
+    if (d.compartir && deAqui(e) && /^data:image\/(png|jpeg);base64,/.test(String(d.compartir.img || ''))) compartir(d.compartir);
     if (typeof d.noLeidos === 'number') {
       document.title = (d.noLeidos ? '(' + d.noLeidos + ') ' : '') + 'MOOD ON';
       try { if (navigator.setAppBadge) { if (d.noLeidos) navigator.setAppBadge(d.noLeidos); else navigator.clearAppBadge(); } } catch (er) {}
@@ -191,27 +191,29 @@ if (/(^|[#&])t=/.test(location.hash)) {
   });
 
   /* v31: compartir el entreno (historias de Instagram, WhatsApp…), guardar la imagen o copiarla para pegarla encima de tu foto */
+  /* v53.4.61: también la comparativa de fotos (JPEG, con su botón y su texto: c.boton, c.titulo, c.tip) */
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (m) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]; }); }
   function compartir(c) {
     var ov = document.getElementById('sh'); if (ov) ov.parentNode.removeChild(ov);
     ov = document.createElement('div'); ov.id = 'sh';
-    ov.innerHTML = '<div class="sh-b"></div><div class="sh-c"><div class="sh-img' + (c.modo === 'trans' ? ' tr' : '') + '"><img alt="Tu entreno"></div>' +
-      '<div class="sh-acc"><button id="sh-s">Compartir en historias</button><button id="sh-c" class="sec">Copiar para pegar en tu historia</button><a id="sh-d" class="sec" download>Guardar imagen</a><button id="sh-x" class="sec">Cerrar</button></div><p id="sh-t"></p></div>';
+    ov.innerHTML = '<div class="sh-b"></div><div class="sh-c"><div class="sh-img' + (c.modo === 'trans' ? ' tr' : '') + '"><img alt="' + esc(c.titulo || 'Tu entreno') + '"></div>' +
+      '<div class="sh-acc"><button id="sh-s">' + esc(c.boton || 'Compartir en historias') + '</button><button id="sh-c" class="sec">Copiar para pegar en tu historia</button><a id="sh-d" class="sec" download>Guardar imagen</a><button id="sh-x" class="sec">Cerrar</button></div><p id="sh-t"></p></div>';
     document.body.appendChild(ov);
     var tip = function (t) { ov.querySelector('#sh-t').textContent = t; };
     var cerrar = function () { if (ov.parentNode) ov.parentNode.removeChild(ov); };
     ov.querySelector('.sh-b').onclick = cerrar; ov.querySelector('#sh-x').onclick = cerrar;
     fetch(c.img).then(function (r) { return r.blob(); }).then(function (b) {
       var u = URL.createObjectURL(b), f = null, nom = String(c.nombre || 'MOOD_ON.png').replace(/[^\w.\-]/g, '_');
-      try { f = new File([b], nom, { type: 'image/png' }); } catch (er) {}
+      try { f = new File([b], nom, { type: b.type || 'image/png' }); } catch (er) {}
       ov.querySelector('img').src = u;
       var dl = ov.querySelector('#sh-d'); dl.href = u; dl.setAttribute('download', nom);
       var sb = ov.querySelector('#sh-s'), cb = ov.querySelector('#sh-c');
       var puede = false; try { puede = !!(f && navigator.canShare && navigator.canShare({ files: [f] })); } catch (er) {}
       if (!puede) sb.style.display = 'none';
       if (!(c.modo === 'trans' && navigator.clipboard && window.ClipboardItem)) cb.style.display = 'none';
-      sb.onclick = function () { navigator.share({ files: [f], title: 'Mi entreno', text: '#MOODON' }).catch(function () {}); };
+      sb.onclick = function () { navigator.share(c.titulo ? { files: [f], title: c.titulo } : { files: [f], title: 'Mi entreno', text: '#MOODON' }).catch(function () {}); };
       cb.onclick = function () { navigator.clipboard.write([new ClipboardItem({ 'image/png': b })]).then(function () { tip('Copiada. En Instagram: crea tu historia con tu foto del gimnasio, mantén pulsado y elige «Pegar».'); }, function () { tip('No se ha podido copiar: guárdala y añádela en tu historia.'); }); };
-      tip(puede ? 'Elige Instagram → Historia (o WhatsApp). Si no te sale, guarda la imagen y súbela desde tus fotos.' : 'Mantén pulsada la imagen y elige «Guardar» o «Compartir», o toca «Guardar imagen».');
+      tip(puede ? (c.tip || 'Elige Instagram → Historia (o WhatsApp). Si no te sale, guarda la imagen y súbela desde tus fotos.') : 'Mantén pulsada la imagen y elige «Guardar» o «Compartir», o toca «Guardar imagen».');
       if (c.acc === 'compartir' && puede) { try { if (navigator.userActivation && navigator.userActivation.isActive) sb.click(); } catch (er) {} }
     }).catch(function () { tip('No se ha podido preparar la imagen.'); });
   }
