@@ -2896,7 +2896,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.71';
+var APP_V = 'v53.4.72';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7178,7 +7178,7 @@ function usoTipo(n,x,c){
     return ['gua'];
   }
   if(x==='prot'){
-    if(c==='suplementos'||/en polvo|whey|proteina vegetal|isolate|caseina/.test(n)) return ['sup'];
+    if(c==='suplementos'||/en polvo|whey|proteina vegetal|isolate|caseina/.test(n)) return ['sup','>fia','>hue'].concat(/vegetal|guisante|soja|vegan|arroz|canamo/.test(n)?['>veg']:[]);      // v53.4.72: también por fiambre magro, claras o atún al natural (y la vegetal, por tofu, seitán…)
     var f=c==='huevos'||/^(huevo|claras)/.test(n)?'hue':c==='pescados'||RX_PES.test(n)?'pes':/huevo|claras/.test(n)?'hue':RX_VEG.test(n)||c==='legumbres'?'veg':'car';
     if(reb) return ['reb'];
     if(pre) return ['pre'];
@@ -7222,20 +7222,24 @@ function usoTipo(n,x,c){
   }
   return [x||'-'];
 }
-function usoOkAl(a,b){ var A=usoAl(a), B=usoAl(b); return A.some(function(t){ return B.indexOf(t)>=0; }); }
+/* v53.4.72: una familia con «>» delante es solo de ida (la proteína en polvo se cambia por fiambre, pero el fiambre no por proteína en polvo) */
+function usoOkAl(a,b){ var A=usoAl(a), B=usoAl(b).filter(function(t){ return t.charAt(0)!=='>'; }); return A.some(function(t){ return B.indexOf(t.replace('>',''))>=0; }); }
 /* A, B: [kcal, P, HC, G] por 100 g · m: macro de su grupo → r (g de B por g de A), err (diferencia de macros en kcal / kcal de A) y si es «muy parecido» */
-function eqPar(A,B,m){
+function lxPar(a,b){ return a.x==='lac'&&usoAl(a).indexOf('lec')>=0&&usoAl(b).indexOf('lec')>=0; }      // leches y bebidas entre sí
+/* lx (v53.4.72, leches y bebidas): basta con que cuadren la proteína y las kcal (la bebida de soja = la leche desnatada, aunque reparta distinto hidratos y grasa) */
+function eqPar(A,B,m,lx){
   if(!A||!B) return null;
   var a=[A[1]*4,A[2]*4,A[3]*9], b=[B[1]*4,B[2]*4,B[3]*9], ka=a[0]+a[1]+a[2]||Number(A[0])||0, kb=b[0]+b[1]+b[2], r, i;
   if(!(ka>0)||!(Number(B[0])>0)) return null;
   if(m==='kc') r=Number(A[0])/Number(B[0]);
+  else if(lx&&Number(B[MK_EQ[m]])>0&&Number(A[MK_EQ[m]])>0) r=Number(A[MK_EQ[m]])/Number(B[MK_EQ[m]]);      // lácteos: los gramos que dan la misma proteína
   else { var k=MK_EQ[m]-1, w=[1,1,1], nu=0, de=0; w[k]=3; for(i=0;i<3;i++){ nu+=w[i]*a[i]*b[i]; de+=w[i]*b[i]*b[i]; } if(!(de>0)) return null; r=nu/de; }
   if(!(r>0)||!isFinite(r)) return null;
   var e=0; for(i=0;i<3;i++) e+=Math.abs(r*b[i]-a[i]);
   var kl=Math.abs(r*B[0]-A[0]), err=e/ka, dk=Math.max(kb>0?Math.abs(r*kb-ka)/ka:1,kl/Math.max(Number(A[0]),1)), em=m==='kc'?dk:Math.abs(r*B[MK_EQ[m]]-A[MK_EQ[m]])/Math.max(A[MK_EQ[m]],0.5);
   e=Math.max(e,kl);      // las kcal de la etiqueta (con la fibra) también tienen que cuadrar
-  var s=m==='kc'?(r>=0.5&&r<=2):(r>=0.15&&r<=7&&err<=0.25&&dk<=0.15&&em<=0.15);      // v53.4.67: 0,12 → 0,15 (ya solo entre alimentos de la misma familia: 150 g de pollo = 145 g de pavo)
-  var ok=s||(m!=='kc'&&r>=0.15&&r<=7&&err<=0.6&&dk<=0.4&&em<=0.3);
+  var s=m==='kc'?(r>=0.5&&r<=2):(r>=0.15&&r<=7&&(err<=0.25||lx)&&dk<=0.15&&em<=0.15);      // v53.4.67: 0,12 → 0,15 (ya solo entre alimentos de la misma familia: 150 g de pollo = 145 g de pavo)
+  var ok=s||(m!=='kc'&&r>=0.15&&r<=7&&(err<=0.6||lx)&&dk<=(lx?0.3:0.4)&&em<=0.3);
   return ok?{r:r,err:err,e:e,s:s}:null;
 }
 /* con la cantidad que lleva: «muy parecido», o en cantidades pequeñas una diferencia de menos de 20 kcal (un chorrito de leche) */
@@ -7259,7 +7263,7 @@ function altsDe(it,tabla,grupos){
     tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!usoOkAl(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
     orden.forEach(function(f){
       var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];
-      var x=eqPar(A,a.b,g.m); if(!x) return; var q=redG(qo*x.r); if(!eqVale(x,qo,q)) return;
+      var x=eqPar(A,a.b,g.m,lxPar(me,a)); if(!x) return; var q=redG(qo*x.r); if(!eqVale(x,qo,q)) return;
       var m=a.b.map(function(v){ return v*q/100; });
       out.push({a:a,q:q,m:m,d:mo?m.map(function(v,j){ return v-mo[j]; }):null,err:x.err+(x.s?0:1),cls:clsEst(a.e)===clsEst(it.e)?0:1});
     });
