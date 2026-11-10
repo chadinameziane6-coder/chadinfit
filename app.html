@@ -1884,6 +1884,7 @@ body.ancho .wrap.hm{padding-top:28px}
 .gen-r{display:grid;grid-template-columns:minmax(0,1fr) repeat(4,52px);gap:6px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line)}.gen-r:last-of-type{border-bottom:0}
 .gen-r>span{display:flex;flex-direction:column;gap:4px;min-width:0}.gen-r>span small{color:var(--mu);font-size:11.5px}
 .gen-r input,.gen-r select{padding:8px 6px;font-size:14px;border-radius:10px;min-width:0}.gen-r>input{text-align:center}
+.gen-tp{display:block;margin:0;min-width:0}.gen-tp>span{display:block;font-size:10.5px;color:var(--mu);margin:0 0 2px 2px}.gen-r .gen-tp select{display:block;width:100%;padding:4px 17px 4px 7px;font-size:11px;letter-spacing:-.1px;font-weight:600;border-radius:99px;background-color:#fff;background-position:calc(100% - 10px) 50%,calc(100% - 5px) 50%;border:1px dashed #C7C7CC;color:var(--tx2);min-width:0;text-overflow:ellipsis}      /* v53.4.76: el tipo de platos, que no parezca otra comida */
 .gen-h{font-size:11.5px;font-weight:700;color:var(--mu);text-transform:none}.gen-h span{text-align:center}.gen-h span:first-child{text-align:left}
 .bad-t{color:var(--bad)}.warn-t{color:var(--warn)}.ok-t{color:var(--ok)}
 .lib-l{max-height:46vh;overflow:auto}
@@ -2923,7 +2924,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.75';
+var APP_V = 'v53.4.76';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -13847,23 +13848,41 @@ function pintarGen(){
     '<div class="lab">Objetivo del día</div><div class="grid4"><label class="f" style="margin-top:0">Proteína (g)<input data-gn="o1" inputmode="numeric" value="'+esc(g.obj[1]==null?'':g.obj[1])+'"></label><label class="f" style="margin-top:0">Hidratos (g)<input data-gn="o2" inputmode="numeric" value="'+esc(g.obj[2]==null?'':g.obj[2])+'"></label><label class="f" style="margin-top:0">Grasa (g)<input data-gn="o3" inputmode="numeric" value="'+esc(g.obj[3]==null?'':g.obj[3])+'"></label><div class="gen-k"><span>Kcal</span><b id="gen-k">'+(ob?kTxt(ob[0]):'–')+'</b></div></div>'+
     '<div class="lab">Comidas al día</div><div class="tipos">'+[3,4,5,6].map(function(k){ return '<button class="'+(g.n===k?'on':'')+'" data-a="genN" data-v="'+k+'">'+k+'</button>'; }).join('')+'</div>'+
     '<div class="lab">Reparto (% del día)</div><div class="gen-t"><div class="gen-r gen-h"><span>Comida</span><span>Kcal</span><span>Prot.</span><span>Hidr.</span><span>Grasa</span></div>'+
-      g.cm.map(function(c,i){ var gr=ob?' <small>'+['p','c','g'].map(function(k,j){ return Math.round(ob[j+1]*(num(c[k])||0)/100)+'g'; }).join(' · ')+'</small>':'';
-        return '<div class="gen-r"><span><input data-gn="nom" data-i="'+i+'" value="'+esc(c.nombre)+'" aria-label="Nombre"><select data-gn="tipo" data-i="'+i+'" aria-label="Tipo de comida">'+Object.keys(TIPO_CM).map(function(t){ return '<option value="'+t+'"'+(c.tipo===t?' selected':'')+'>'+TIPO_CM[t]+'</option>'; }).join('')+'</select>'+gr+'</span>'+
-          ['k','p','c','g'].map(function(k){ return '<input data-gn="'+k+'" data-i="'+i+'" inputmode="numeric" value="'+esc(c[k])+'" aria-label="% de '+k+'">'; }).join('')+'</div>'; }).join('')+
-      '<p class="muted sm '+(aviso.length?'bad-t':'')+'" id="gen-av">'+(aviso.length?'Revisa: '+aviso.join(', ')+' (tiene que sumar 100).':'Cambia solo la columna de proteína, hidratos o grasa si quieres, por ejemplo, más hidratos en la comida de después de entrenar.')+'</p></div>'+
+      g.cm.map(function(c,i){ var gr=ob?' <small id="gen-g-'+i+'">'+genGr(ob,c)+'</small>':'';
+        return '<div class="gen-r"><span><input data-gn="nom" data-i="'+i+'" value="'+esc(c.nombre)+'" aria-label="Nombre"><label class="gen-tp"><span>Platos de</span><select data-gn="tipo" data-i="'+i+'" aria-label="Qué platos pone en '+esc(c.nombre)+'">'+Object.keys(TIPO_CM).map(function(t){ return '<option value="'+t+'"'+(c.tipo===t?' selected':'')+'>'+({d:'desayuno',m:'tentempié',c:'comida/cena'})[t]+'</option>'; }).join('')+'</select></label>'+gr+'</span>'+
+          ['k','p','c','g'].map(function(k){ return '<input data-gn="'+k+'" data-c="genRep" data-i="'+i+'" inputmode="numeric" value="'+esc(c[k])+'" aria-label="% de '+k+'">'; }).join('')+'</div>'; }).join('')+
+      '<p class="muted sm '+(aviso.length?'bad-t':'')+'" id="gen-av">'+(aviso.length?'Revisa: '+aviso.join(', ')+' (tiene que sumar 100).':'Si cambias un %, lo que sobra o falta se reparte solo entre las demás comidas. Por ejemplo, más hidratos en la comida de después de entrenar o un pre-entreno con poca grasa.')+'</p></div>'+
     '<div class="lab">Platos por comida</div><div class="tipos">'+[1,2,3,4].map(function(k){ return '<button class="'+(g.opc===k?'on':'')+'" data-a="genOpc" data-v="'+k+'">'+k+'</button>'; }).join('')+'</div>'+
     (planActual().comidas.some(function(c){ return c.opciones.some(function(o){ return (o.items&&o.items.length)||o.texto; }); })?'<p class="sm warn-t mt">Se sustituyen las comidas de «'+esc(planActual().nombre||'este plan')+'». Hasta que pulses Guardar, puedes deshacerlo saliendo sin guardar.</p>':'')+
     '<button class="btn mt" data-a="genOk">Generar platos</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
 }
 function inGen(t){
   var g=CO.gen, k=t.dataset.gn, i=+t.dataset.i;
-  if(/^o\d$/.test(k)){ g.obj[+k.slice(1)]=t.value; var ob=genObj(), e=document.getElementById('gen-k'); if(e) e.textContent=ob?kTxt(ob[0]):'–'; return; }
+  if(/^o\d$/.test(k)){ g.obj[+k.slice(1)]=t.value; var ob=genObj(), e=document.getElementById('gen-k'); if(e) e.textContent=ob?kTxt(ob[0]):'–'; genActualizar(t); return; }
   if(k==='nom'){ g.cm[i].nombre=t.value; return; }
   if(k==='tipo'){ g.cm[i].tipo=t.value; return; }
-  var v=t.value, c=g.cm[i]; if(k==='k'&&String(c.p)===String(c[k])&&String(c.c)===String(c[k])&&String(c.g)===String(c[k])){ c.p=c.c=c.g=v; }
-  c[k]=v; var y=window.scrollY; var foco=t.dataset.gn+'|'+t.dataset.i;
-  clearTimeout(CO.genT); CO.genT=setTimeout(function(){ var bx=document.querySelector('#modal .mbox'), st=bx?bx.scrollTop:0; pintarGen(); var bx2=document.querySelector('#modal .mbox'); if(bx2) bx2.scrollTop=st; var f=foco.split('|'), el=document.querySelector('#modal [data-gn="'+f[0]+'"][data-i="'+f[1]+'"]'); if(el){ el.focus(); try{ var L=el.value.length; el.setSelectionRange(L,L); }catch(e){} } },500);
+  var v=t.value, c=g.cm[i]; if(k==='k') ['p','c','g'].forEach(function(x){ if(String(c[x])===String(c.k)) c[x]=v; });      // el % de kcal arrastra los de su comida que iban igual
+  c[k]=v; genActualizar(t);      // v53.4.76: sin repintar la ventana mientras escribe (el reparto, al salir de la casilla: CH.genRep)
 }
+function genGr(ob,c){ return ['p','c','g'].map(function(k,j){ return Math.round(ob[j+1]*(num(c[k])||0)/100)+'g'; }).join(' · '); }
+/* pone en su sitio los % de cada comida, sus gramos y el aviso, sin rehacer la ventana (para no perder el toque en «Generar platos») */
+function genActualizar(salvo){
+  var g=CO.gen, ob=genObj();
+  g.cm.forEach(function(c,i){ ['k','p','c','g'].forEach(function(k){ var e=document.querySelector('#modal [data-gn="'+k+'"][data-i="'+i+'"]'); if(e&&e!==salvo&&String(e.value)!==String(c[k])) e.value=c[k]; });
+    var s2=document.getElementById('gen-g-'+i); if(s2&&ob) s2.textContent=genGr(ob,c); });
+  var av=['k','p','c','g'].map(function(k){ var t=Math.round(g.cm.reduce(function(a,c){ return a+(num(c[k])||0); },0)); return t!==100?({k:'kcal',p:'proteína',c:'hidratos',g:'grasa'})[k]+' suma '+t+' %':''; }).filter(Boolean);
+  var e2=document.getElementById('gen-av'); if(e2){ e2.className='muted sm'+(av.length?' bad-t':''); e2.textContent=av.length?'Revisa: '+av.join(', ')+' (tiene que sumar 100).':'Si cambias un %, lo que sobra o falta se reparte solo entre las demás comidas. Por ejemplo, más hidratos en la comida de después de entrenar o un pre-entreno con poca grasa.'; }
+}
+/* v53.4.76 · «Generar con sus macros», igual que «Dieta nueva»: al cambiar un % (al salir de la casilla), lo que sobra o falta en esa columna se reparte
+   solo entre las demás comidas (Javier: «si aumento hidratos en una comida, que se ajuste solo en el resto»); el % de kcal arrastra los de su comida que iban igual */
+CH.genRep=function(t){
+  var g=CO.gen; if(!g) return; clearTimeout(CO.genT); var i=+t.dataset.i, k=t.dataset.gn, v=num(t.value), c=g.cm[i];
+  if(v!=null){ v=Math.max(0,Math.min(100,Math.round(v)));
+    var cols=[k]; if(k==='k') ['p','c','g'].forEach(function(x){ if(num(c[x])===num(c.k)) cols.push(x); });
+    cols.forEach(function(x){ c[x]=v; var r=repartir(g.cm.filter(function(z,j){ return j!==i; }).map(function(z){ return num(z[x])||0; }),100-v), q=0; g.cm.forEach(function(z,j){ if(j!==i) z[x]=r[q++]; }); });
+  }
+  genActualizar(null);
+};
 A.irFichaAlim=function(){ siCambios(function(){ fabAb('alim'); CO.fab.alim=1; CO.sub='enlace'; pintarClienta(true); setTimeout(function(){ var e=document.getElementById('alim-card'); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); },60); }); };
 A.genN=function(el){ var n=+el.dataset.v; CO.gen.n=n; CO.gen.cm=CM_PRESET[n].map(function(x){ return {nombre:x[0],tipo:x[1],hora:x[2],k:x[3],p:x[3],c:x[3],g:x[3]}; }); pintarGen(); };
 A.genOpc=function(el){ CO.gen.opc=+el.dataset.v; pintarGen(); };
