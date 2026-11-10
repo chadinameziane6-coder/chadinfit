@@ -2929,7 +2929,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.78';
+var APP_V = 'v53.4.79';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11303,7 +11303,10 @@ function hidratarDie(){ if(!CO.die||!CO.nutM) return; CO.die.planes.forEach(func
 
 /* objetivos del día y de cada comida (por su % del día) */
 function objDia(p){ var v=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)]; return v.some(function(x){ return x!=null; })?v:null; }
-function objCm(p,c){ var o=objDia(p), pc=num(c.pct), rp=c.rp; return o&&pc?o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }):null; }      // v53.4.70: con su reparto por macros (c.rp), si lo tiene
+function objCm(p,c){ var o=objDia(p), pc=num(c.pct), rp=c.rp; return o&&pc?kcalRp(o,o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }),rp):null; }
+/* v53.4.79: con reparto por macros, las kcal de la comida salen de sus macros (su parte de las kcal del día), no del % de kcal: si no, un desayuno
+   con poca grasa pedía 599 kcal para 31 g de proteína, 74 de hidratos y 3 de grasa (447 kcal) y salía en rojo aunque el plato cuadrara */
+function kcalRp(o,r,rp){ if(!rp||r[0]==null||r[1]==null||r[2]==null||r[3]==null||o[1]==null||o[2]==null||o[3]==null) return r; var d=4*o[1]+4*o[2]+9*o[3]; if(d>0) r[0]=o[0]*(4*r[1]+4*r[2]+9*r[3])/d; return r; }      // v53.4.70: con su reparto por macros (c.rp), si lo tiene
 function opVisI(mi){ var c=planActual().comidas[mi], i=CO.opVis[CO.planI+'|'+mi]||0; return Math.max(0,Math.min(i,c.opciones.length-1)); }
 function totDia(p){ return sumMac(p.comidas.map(function(c,mi){ return macOp(c.opciones[opVisI(mi)]); })); }
 function cmpTabla(obj,plan,tit){
@@ -11534,6 +11537,11 @@ var ROL_X={prot:'p',lac:'p',hc:'c',fruta:'c',grasa:'g'};      // qué macro muev
 function cuadraOp(p,c,o){
   if(!o||o.tanda||!(o.items||[]).length) return null;
   var ob=objCm(p,c), m=macOp(o); if(!ob||ob[0]==null||!m) return null;
+  var r=cuadraMac(m,ob); if(r.ok||r.leve) return r;
+  var fijos=o.items.filter(function(it){ var a=CO.nutM[it.a]||it; return !ROL_X[it.x||a.x]; }).map(function(it){ var a=CO.nutM[it.a]||it; return a.n||it.n||''; }).filter(Boolean);
+  r.fijos=fijos; return r;
+}
+function cuadraMac(m,ob){
   var F=[], S=[], N=['','proteína','hidratos','grasa'];
   var mac=ob[1]!=null&&ob[2]!=null&&ob[3]!=null;      // con macros cuentan ellos (las kcal de las etiquetas no salen exactas de los macros: fibra, redondeo)
   var mal=false;      // fuera del margen: en verde (cuadra) · un poco fuera (ámbar en la tabla): solo el botón · claramente fuera (rojo): aviso
@@ -11542,8 +11550,7 @@ function cuadraOp(p,c,o){
   if(!F.length&&!S.length) return {ok:true};
   if(!mal) return {ok:false,leve:true};
   var t=(F.length?'faltan '+listaY(F):'')+(F.length&&S.length?' · ':'')+(S.length?'sobran '+listaY(S):'');
-  var fijos=o.items.filter(function(it){ var a=CO.nutM[it.a]||it; return !ROL_X[it.x||a.x]; }).map(function(it){ var a=CO.nutM[it.a]||it; return a.n||it.n||''; }).filter(Boolean);
-  return {ok:false,txt:t.charAt(0).toUpperCase()+t.slice(1),fijos:fijos};
+  return {ok:false,txt:t.charAt(0).toUpperCase()+t.slice(1),fijos:[]};
 }
 function opAccHtml(p,c,mi,oi){
   var o=c.opciones[oi], at=' data-m="'+mi+'" data-o="'+oi+'"', ob=objCm(p,c), m=macOp(o), cu=cuadraOp(p,c,o), nom=esc(String(c.nombre||'comida').toLowerCase());
@@ -12031,7 +12038,7 @@ function ndGenerarPlatos(gen){
     if(ob[0]==null) ob[0]=4*ob[1]+4*ob[2]+9*ob[3];
     usadasG={};
     p.comidas=G.rep.map(function(c){
-      var o=[ob[0]*c.k/100,ob[1]*c.p/100,ob[2]*c.c/100,ob[3]*c.g/100], R=recetasPara(c.tipo,o,al,usadasG,G.opc);
+      var o=kcalRp(ob,[ob[0]*c.k/100,ob[1]*c.p/100,ob[2]*c.c/100,ob[3]*c.g/100],!(c.p===c.k&&c.c===c.k&&c.g===c.k)), R=recetasPara(c.tipo,o,al,usadasG,G.opc);
       if(!R.length) sin.push(c.nombre);
       var cm={nombre:c.nombre,hora:c.hora,pct:String(c.k),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
       if(!(c.p===c.k&&c.c===c.k&&c.g===c.k)) cm.rp={p:c.p,c:c.c,g:c.g};
@@ -13869,7 +13876,8 @@ function recetasPara(tipo,obj,al,usadas,n){
   var C=libTodas().filter(function(r){ return r.t.indexOf(tipo)>=0; }).map(function(r){
     var x=adaptarReceta(r,al); if(!x) return null;
     var pt=r.tanda?porcionTanda(x,obj):null, items=pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
-    return {x:x,items:items,k:pt?pt.k:null,m:m,score:fav*1.2-errMac(m,obj)*2-(usadas[r.id]?6:0)-(r.tanda?0.8:0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
+    var cu=!pt&&m?cuadraMac(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
+    return {x:x,items:items,k:pt?pt.k:null,m:m,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?0.8:0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
   }).filter(Boolean).sort(function(a,b){ return b.score-a.score; });
   return C.slice(0,n);
 }
@@ -13952,10 +13960,12 @@ A.genOk=function(){
   usadasG={};
   p.proteina=String(num(g.obj[1])); p.carbohidratos=String(num(g.obj[2])); p.grasa=String(num(g.obj[3])); p.kcal=String(Math.round(ob[0]));
   p.comidas=g.cm.map(function(c){
-    var o=[ob[0]*num(c.k)/100,ob[1]*num(c.p)/100,ob[2]*num(c.c)/100,ob[3]*num(c.g)/100];
+    var o=kcalRp(ob,[ob[0]*num(c.k)/100,ob[1]*num(c.p)/100,ob[2]*num(c.c)/100,ob[3]*num(c.g)/100],!(num(c.p)===num(c.k)&&num(c.c)===num(c.k)&&num(c.g)===num(c.k)));
     var R=recetasPara(c.tipo,o,al,usadasG,g.opc);
     if(!R.length) sinNada.push(c.nombre);
-    return {nombre:c.nombre,hora:c.hora,pct:String(num(c.k)),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
+    var cm={nombre:c.nombre,hora:c.hora,pct:String(num(c.k)),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
+    if(!(num(c.p)===num(c.k)&&num(c.c)===num(c.k)&&num(c.g)===num(c.k))) cm.rp={p:num(c.p),c:num(c.c),g:num(c.g)};      // v53.4.79: su reparto por macros se queda en la comida (si no, el objetivo de la comida salía con el % de kcal y los platos, cuadrados con el reparto, «no cuadraban»)
+    return cm;
   });
   CO.opVis={}; marcarDie(); cerrarModal(); repintar();
   toast(sinNada.length?'No hay recetas que pueda comer para: '+sinNada.join(', ')+'. Añade platos a mano.':'Listo: revisa los platos y retoca los gramos que quieras. Pulsa Guardar para publicarla.',sinNada.length?'err':'ok');
@@ -14657,7 +14667,7 @@ function planesMez(P,todos){
   CL._mez=out; CL._mezP=P; CL._mezV=CL.mezV; CL._mezK=kq; return out;
 }
 function pctCm(c){ return num(c&&c.pctM!=null?c.pctM:c&&c.pct); }
-function objCmCl(p,c){ var o=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)], pc=pctCm(c), rp=c&&c.pctM==null?c.rp:null; return o[0]!=null&&pc?o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }):null; }      // v53.4.70: con el reparto por macros de su coach (si no lo ha cambiado ella)
+function objCmCl(p,c){ var o=[num(p.kcal),num(p.proteina),num(p.carbohidratos),num(p.grasa)], pc=pctCm(c), rp=c&&c.pctM==null?c.rp:null; return o[0]!=null&&pc?kcalRp(o,o.map(function(v,i){ var q=i&&rp?num(rp[['','p','c','g'][i]]):null; return v==null?null:v*(q!=null?q:pc)/100; }),rp):null; }      // v53.4.70: con el reparto por macros de su coach (si no lo ha cambiado ella)
 /* el plato que se puede tocar: si es de su coach, se copia (con sus cambios de alimento ya puestos) */
 function opEditable(o){
   var M=miaCl();
