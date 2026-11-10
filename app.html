@@ -58,6 +58,10 @@ label.f input,label.f textarea,label.f select{margin-top:5px}
 .grid4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 8px}
 .pill{display:inline-block;font:700 10.5px Plus Jakarta Sans,sans-serif;letter-spacing:.06em;padding:4px 8px;border-radius:99px;background:var(--card2);color:var(--tx2);border:1px solid var(--line);text-transform:uppercase}
 .pill.ok{background:rgba(19,145,90,.09);border-color:rgba(19,145,90,.35);color:var(--ok)}
+.pill.mo{background:#111;border-color:#111;color:#fff}.pill.mo2{background:#fff;border-color:#111;color:#111}
+.mo-q{margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:14px;background:var(--card2)}.mo-qt{font-weight:700;font-size:15px;margin:0 0 2px}
+.mo-q .btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;margin-top:8px}.mo-q .btn small{font-weight:500;font-size:12px;opacity:.78;line-height:1.3}
+.mo-q .btn.sec{border-color:#111}.mo-q .btn.mo-del{background:#fff;border-color:var(--bad);color:var(--bad)}
 .pill.warn{background:rgba(178,106,0,.08);border-color:rgba(178,106,0,.35);color:var(--warn)}
 .fila{display:flex;justify-content:space-between;align-items:center;gap:12px}
 /* interruptor */
@@ -2886,7 +2890,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.64';
+var APP_V = 'v53.4.65';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11658,15 +11662,18 @@ function pintarNutri(arriba){
 }
 /* ---------- alimentos ---------- */
 function vAlimentos(){
-  var L=CO.nut.alimentos, f=CO.nf, prop=L.filter(function(a){ return !a.base; }).length, nsup=L.filter(function(a){ return a.sup; }).length;
+  var L=CO.nut.alimentos, f=CO.nf, casa=alCasa(), prop=L.filter(function(a){ return esMioAl(a); }).length, nsup=L.filter(function(a){ return a.sup; }).length, nmo=L.filter(function(a){ return a.mo||a.moV; }).length, oc=(!casa&&CO.nut.moOcultos)||[];
   var h='<p class="muted sm">Valores <b>por 100 g</b>. Los de <b>referencia</b> son medias de tablas de composición (USDA/BEDCA) para cuadrar rápido; los de <b>supermercado</b> llevan los datos de su etiqueta (Mercadona, Lidl). Para otra marca, créalo con los datos de su etiqueta. Solo tú ves esta pantalla.</p>'+
+    (casa?'<p class="muted sm">Al guardar un alimento nuevo eliges si va también a <b>MOOD ON</b> (lo ven los demás entrenadores y sus clientes) o solo para ti. Los compartidos llevan la etiqueta <span class="pill mo">MOOD ON</span>.</p>'
+      :(nmo?'<p class="muted sm">Los que llevan <span class="pill mo">MOOD ON</span> te llegan de MOOD ON y se mantienen al día. Si cambias uno, se guarda <b>tu versión</b> (solo para ti y tus clientes).</p>':'')+
+       (oc.length?'<p class="muted sm">Has quitado de tu banco '+oc.length+(oc.length===1?' alimento':' alimentos')+' de MOOD ON. <button class="link" data-a="moOcultosVer">Ver y volver a ponerlos</button></p>':''))+
     '<div class="row nut-bar"><input data-k="buscaNut" id="busca-nut" value="'+esc(f.q)+'" placeholder="Buscar alimento o marca…" aria-label="Buscar alimento"><button class="btn sm" data-a="alNuevo">'+ic('mas')+'Desde etiqueta</button></div>'+
-    '<div class="tipos"><button class="'+(!f.c&&!f.mios&&!f.sup?'on':'')+'" data-a="nutF" data-c="">Todos</button>'+(nsup?'<button class="'+(f.sup?'on':'')+'" data-a="nutF" data-c="_sup">'+ic('compra')+'Supermercado · '+nsup+'</button>':'')+'<button class="'+(f.mios?'on':'')+'" data-a="nutF" data-c="_mios">Míos · '+prop+'</button>'+
+    '<div class="tipos"><button class="'+(!f.c&&!f.mios&&!f.sup?'on':'')+'" data-a="nutF" data-c="">Todos</button>'+(nsup?'<button class="'+(f.sup?'on':'')+'" data-a="nutF" data-c="_sup">'+ic('compra')+'Supermercado · '+nsup+'</button>':'')+'<button class="'+(f.mios?'on':'')+'" data-a="nutF" data-c="_mios">Míos · '+prop+'</button>'+(nmo?'<button class="'+(f.mo?'on':'')+'" data-a="nutF" data-c="_mo">MOOD ON · '+nmo+'</button>':'')+
     PAS_O.filter(function(c){ return L.some(function(a){ return a.c===c; }); }).map(function(c){ return '<button class="'+(f.c===c?'on':'')+'" data-a="nutF" data-c="'+c+'">'+esc(PAS_L[c])+'</button>'; }).join('')+'</div>'+
     (f.sup?'<div class="row nut-sup"><p class="muted sm">Productos con los datos de su etiqueta. ¿Falta alguno? Créalo con su supermercado y saldrá aquí, en tus dietas y en el banco de tus clientes.</p><button class="btn sm sec" data-a="alNuevoSup">'+ic('mas')+'Producto de supermercado</button></div><div class="tipos nut-ti">'+[['','Todas las tiendas',nsup]].concat(tiendasDe(L)).map(function(t){ return '<button class="'+((f.ti||'')===t[0]?'on':'')+'" data-a="nutTi" data-v="'+esc(t[0])+'">'+esc(t[1]&&t.length===3?t[1]:t[0])+' · '+(t.length===3?t[2]:t[1])+'</button>'; }).join('')+'</div>':'');
   PAS_O.forEach(function(c){
     if(f.c&&f.c!==c) return;
-    var G=L.filter(function(a){ return (PAS_L[a.c]?a.c:'otros')===c&&(!f.mios||!a.base)&&(!f.sup||a.sup)&&(!f.sup||!f.ti||tiendaDe(a)===f.ti); }).sort(function(a,b){ return (a.base?1:0)-(b.base?1:0)||(a.sup?0:1)-(b.sup?0:1)||String(a.n).localeCompare(String(b.n),'es'); });
+    var G=L.filter(function(a){ return (PAS_L[a.c]?a.c:'otros')===c&&(!f.mios||esMioAl(a))&&(!f.mo||a.mo||a.moV)&&(!f.sup||a.sup)&&(!f.sup||!f.ti||tiendaDe(a)===f.ti); }).sort(function(a,b){ return (a.base?1:0)-(b.base?1:0)||(a.sup?0:1)-(b.sup?0:1)||String(a.n).localeCompare(String(b.n),'es'); });
     if(G.length) h+='<div class="bgrp nut-g"><h3>'+esc(PAS_L[c])+'</h3>'+G.map(alFila).join('')+'</div>';
   });
   return h+'<p class="muted mt hidden" id="nut-nada">No hay ningún alimento con ese nombre. <button class="link" data-a="alNuevoBusca">Créalo desde su etiqueta</button></p>';
@@ -11674,14 +11681,19 @@ function vAlimentos(){
 function alFila(a){
   var g=grDe(a.x);
   return '<div class="ej-row al-row'+(a.sup?' al-sup':'')+'" data-a="alVer" data-id="'+esc(a.id)+'" data-n="'+esc(clave(a.n+' '+(a.m||'')+' '+(a.e||'')))+'">'+(a.sup||a.img?alImg(a,'al-th'):'')+'<span class="ej-rt"><b>'+esc(a.n)+(a.e?' <span class="muted">· '+esc(a.e)+'</span>':'')+'</b>'+
-    '<small>'+esc([a.m,kTxt(a.b[0])+' kcal · P '+fN(a.b[1])+' · HC '+fN(a.b[2])+' · G '+fN(a.b[3]),g?'Intercambio: '+grCorto(g):''].filter(Boolean).join(' · '))+'</small></span>'+(a.deN?'<span class="pill de-cl">De '+esc(String(a.deN).split(' ')[0])+'</span>':'')+(a.sup?'<span class="pill sup">'+esc(tiendaDe(a))+(a.base?'':a.deN?'':' · tuyo')+'</span>':a.base?'<span class="pill">Referencia</span>':'<span class="pill ok">Propio</span>')+'</div>';
+    '<small>'+esc([a.m,kTxt(a.b[0])+' kcal · P '+fN(a.b[1])+' · HC '+fN(a.b[2])+' · G '+fN(a.b[3]),g?'Intercambio: '+grCorto(g):''].filter(Boolean).join(' · '))+'</small></span>'+(a.deN?'<span class="pill de-cl">De '+esc(String(a.deN).split(' ')[0])+'</span>':'')+
+    (a.sup?'<span class="pill sup">'+esc(tiendaDe(a))+(a.base||a.deN||!esMioAl(a)?'':' · tuyo')+'</span>'+moPill(a):a.base?'<span class="pill">Referencia</span>':(moPill(a)||'<span class="pill ok">Propio</span>'))+'</div>';
 }
+function moPill(a){ return a.mo&&!a.base?'<span class="pill mo">MOOD ON</span>':a.moV?'<span class="pill mo2">Tu versión</span>':''; }
 function filtrarNut(){
   var q=clave(CO.nf&&CO.nf.q), W=q?q.split(' '):[], vis=0;
   document.querySelectorAll('.nut-g').forEach(function(g){ var n=0; g.querySelectorAll('.al-row').forEach(function(r){ var ok=W.every(function(w){ return r.dataset.n.indexOf(w)>=0; }); r.style.display=ok?'':'none'; if(ok) n++; }); g.style.display=n?'':'none'; vis+=n; });
   var z=document.getElementById('nut-nada'); if(z) z.classList.toggle('hidden',!!vis);
 }
-A.nutF=function(el){ var c=el.dataset.c; CO.nf.mios=c==='_mios'; CO.nf.sup=c==='_sup'; CO.nf.c=c==='_mios'||c==='_sup'?'':c; CO.nf.ti=''; pintarNutri(false); };
+A.nutF=function(el){ var c=el.dataset.c; CO.nf.mios=c==='_mios'; CO.nf.sup=c==='_sup'; CO.nf.mo=c==='_mo'; CO.nf.c=c==='_mios'||c==='_sup'||c==='_mo'?'':c; CO.nf.ti=''; pintarNutri(false); };
+/* v53.4.65 · alimentos de MOOD ON: la cuenta nº 1 comparte los que quiere con todos los entrenadores */
+function alCasa(){ return CO.nut?CO.nut.casa!==false:CO.casa!==false; }
+function esMioAl(a){ return !a.base&&!(a.mo&&!alCasa()); }      // en los demás, los de MOOD ON no son «suyos» (su versión, sí)
 A.nutTi=function(el){ CO.nf.ti=el.dataset.v; pintarNutri(false); };
 A.alVer=function(el){ var a=CO.nutM[el.dataset.id]; if(!a) return; if(a.sup&&a.base) modalAlSup(a); else if(a.base) modalAlBase(a); else modalAlForm(a); };
 A.alNuevo=function(){ modalAlForm({}); };
@@ -11725,7 +11737,11 @@ A.alT=function(el){ el.classList.toggle('on'); };
 function modalAlForm(a,pend){
   a=a||{}; CO.alEd=a; CO.alPend=pend||null;
   var b=a.b||['','','',''], E=CO.nut.estados||['','crudo','cocido'];
+  var casa=alCasa(), comp=casa&&a.id&&a.mo, nuevoCasa=casa&&!a.id, otroMo=!casa&&a.mo&&!a.moV, otroV=!casa&&a.moV;      // v53.4.65
   modal('<h2>'+(a.id?'Editar alimento':'Alimento desde etiqueta')+'</h2>'+
+    (comp?'<p class="tip">Lo compartes con <b>MOOD ON</b>: lo ven también los demás entrenadores y sus clientes.'+(a.moMia?' Tienes tu versión: ellos siguen viendo la de antes.':'')+'</p>':
+     otroMo?'<p class="tip">Es un alimento de <b>MOOD ON</b>. Si lo cambias, se guarda <b>tu versión</b>: solo para ti y tus clientes. El de MOOD ON no cambia.</p>':
+     otroV?'<p class="tip">Es <b>tu versión</b> de un alimento de MOOD ON: solo la ves tú y tus clientes.</p>':'')+
     (a.id?'':rellenoHtml())+
     '<p class="muted sm">Copia de la etiqueta los valores <b>por 100 g</b> (o 100 ml) y elige el estado en el que se pesa: crudo, cocido, escurrido…</p>'+
     '<label class="f">Nombre<input id="al-n" value="'+esc(a.n||'')+'" placeholder="Pan de molde 100 % integral"></label>'+
@@ -11737,7 +11753,16 @@ function modalAlForm(a,pend){
     '<div class="lab">Unidad (opcional)</div><div class="grid2"><label class="f" style="margin-top:0">Nombre<input id="al-un" value="'+esc(a.u?a.u[0]:'')+'" placeholder="rebanada, lata, yogur…"></label><label class="f" style="margin-top:0">Gramos de 1<input id="al-ug" inputmode="decimal" value="'+esc(a.u?fN(a.u[1]):'')+'"></label></div>'+
     grupoSel(a)+'<div class="lab">Contiene <small class="muted">(así no se lo pone a quien no puede comerlo)</small></div><div class="chips" id="al-t">'+CONTIENE.map(function(x){ return '<button type="button" class="chip'+((','+(a.t||'')+',').indexOf(','+x[0]+',')>=0?' on':'')+'" data-a="alT" data-v="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div><p class="muted sm">Si no lleva nada de esto, déjalo sin marcar.</p>'+
     '<label class="f">Fuente<input id="al-f" value="'+esc(a.f||'Etiqueta')+'"></label>'+
-    '<button class="btn mt" data-a="alGuardar">'+(pend?'Guardar y añadir al plato':'Guardar alimento')+'</button>'+(a.id?'<button class="link danger mt" data-a="alBorrar">Borrar alimento</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+    (nuevoCasa?'<div class="mo-q"><div class="mo-qt">¿Añadir también a MOOD ON o solo para ti?</div>'+
+        '<button class="btn sec" data-a="alGuardar" data-mo="todos">'+(pend?'Para todos (MOOD ON) y añadir al plato':'Para todos (MOOD ON)')+'<small>También lo verán los demás entrenadores y sus clientes</small></button>'+
+        '<button class="btn sec" data-a="alGuardar" data-mo="yo">'+(pend?'Solo para mí y añadir al plato':'Solo para mí')+'<small>Solo tú y tus clientes</small></button></div>'
+     :comp?'<div class="mo-q"><div class="mo-qt">¿Corregirlo para todos o solo para ti?</div>'+
+        '<button class="btn sec" data-a="alGuardar" data-mo="todos">Corregir para todos<small>Así lo verán también los demás entrenadores y sus clientes</small></button>'+
+        '<button class="btn sec" data-a="alGuardar" data-mo="yo">Solo para mí<small>Los demás siguen viendo '+(a.moMia?'el que ya veían':'el de antes')+'</small></button></div>'
+     :'<button class="btn mt" data-a="alGuardar">'+(pend?'Guardar y añadir al plato':otroMo?'Guardar mi versión':'Guardar alimento')+'</button>')+
+    (casa&&a.id&&!a.de?(comp?'<button class="link mt" data-a="alDejarMo">Dejar de compartirlo con MOOD ON</button>':'<button class="link mt" data-a="alCompartir">Compartir con MOOD ON</button>'):'')+
+    (otroV?'<button class="link mt" data-a="alVolverMo">Volver al de MOOD ON</button>':'')+
+    (otroMo||otroV?'<button class="link danger mt" data-a="alQuitarMo">Quitar de tu banco</button>':a.id?'<button class="link danger mt" data-a="alBorrar">Borrar alimento</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
   setTimeout(function(){ var i=document.getElementById(a.n?'al-k':'al-n'); if(i) i.focus(); },60);
 }
 function alChkHtml(){
@@ -11752,19 +11777,72 @@ A.alGuardar=function(el){
   var T=[].slice.call(document.querySelectorAll('#al-t .chip.on')).map(function(b){ return b.dataset.v; }); o.t=T.length?T.join(','):'nada';
   if(!o.n) return toast('Ponle nombre al alimento');
   if(o.b.some(function(v){ return num(v)==null; })) return toast('Rellena kcal, proteínas, hidratos y grasas por 100 g');
-  if(el.disabled) return; el.disabled=true;
+  var mo=el.dataset.mo||''; if(mo) o.mo=mo;      // v53.4.65: «Para todos (MOOD ON)» / «Solo para mí»
+  var era=CO.alEd||{}, msg=mo==='todos'?(era.id?'Corregido para todos':'Guardado también en MOOD ON: lo ven todos'):mo==='yo'?(era.id?'Guardado solo para ti: los demás siguen viendo el de antes':'Guardado solo para ti'):(!alCasa()&&era.mo&&!era.moV?'Guardada tu versión (solo para ti y tus clientes)':'Alimento guardado');
+  if(el.disabled) return; document.querySelectorAll('[data-a=alGuardar]').forEach(function(b){ b.disabled=true; });
   cargando(api('coachGuardarAlimento',CO.pin,o)).then(function(r){
     var x=r.alimento, L=CO.nut.alimentos, i, pend=CO.alPend; for(i=0;i<L.length;i++) if(L[i].id===x.id) break; L[i]=x; CO.nutM[x.id]=x;
     cerrarModal(); CO.alPend=null; hidratarDie();
-    if(pend){ ponerAl(pend,x); toast('Alimento creado y añadido','ok'); }
-    else { toast('Alimento guardado','ok'); if(CO.vista==='nutri') pintarNutri(false); }
-  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+    if(pend){ ponerAl(pend,x); toast(mo==='todos'?'Creado para todos (MOOD ON) y añadido':'Alimento creado y añadido','ok'); }
+    else { toast(msg,'ok'); if(CO.vista==='nutri') pintarNutri(false); }
+  },function(e){ document.querySelectorAll('[data-a=alGuardar]').forEach(function(b){ b.disabled=false; }); toast(limpiaErr(e),'err'); });
 };
 A.alBorrar=function(){
   var a=CO.alEd; if(!a||!a.id) return;
+  if(alCasa()&&a.mo) return modal('<h2>¿Dejar de compartirlo o borrarlo del todo?</h2><p class="muted sm">«'+esc(a.n)+'» lo ven ahora también los demás entrenadores y sus clientes.</p>'+
+    '<div class="mo-q"><button class="btn" data-a="alBorrarMo" data-m="dejar">Dejar de compartirlo<small>Sigue en tu banco; los demás ya no lo ven</small></button>'+
+    '<button class="btn mo-del" data-a="alBorrarMo" data-m="todo">Borrarlo del todo<small>Desaparece para todos. Los platos que ya lo usan conservan sus valores</small></button></div>'+
+    '<button class="btn sec mt" data-a="alEdVolver">Cancelar</button>');
   confirmar('¿Borrar «'+a.n+'»? Los platos que ya lo usan conservan sus valores.','Borrar',function(){
     cargando(api('coachBorrarAlimento',CO.pin,a.id)).then(function(){ CO.nut.alimentos=CO.nut.alimentos.filter(function(x){ return x.id!==a.id; }); delete CO.nutM[a.id]; toast('Alimento borrado'); pintarNutri(false); },function(e){ toast(limpiaErr(e),'err'); });
   });
+};
+/* v53.4.65 · alimentos de MOOD ON */
+function alPoner(x){ var L=CO.nut.alimentos, i; for(i=0;i<L.length;i++) if(L[i].id===x.id) break; L[i]=x; CO.nutM[x.id]=x; }
+function alQuitarL(id){ CO.nut.alimentos=CO.nut.alimentos.filter(function(x){ return x.id!==id; }); delete CO.nutM[id]; }
+A.alEdVolver=function(){ var a=CO.alEd; if(a) modalAlForm(a,CO.alPend); else cerrarModal(); };
+A.alBorrarMo=function(el){
+  var a=CO.alEd, m=el.dataset.m; if(!a||!a.id||el.disabled) return; el.disabled=true;
+  cargando(api('coachBorrarAlimento',CO.pin,a.id,m)).then(function(r){ cerrarModal();
+    if(r.dejado&&r.alimento){ alPoner(r.alimento); toast('Ya no lo compartes: sigue en tu banco','ok'); }
+    else { alQuitarL(a.id); toast('Borrado del todo'); }
+    hidratarDie(); if(CO.vista==='nutri') pintarNutri(false);
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+};
+A.alCompartir=function(){
+  var a=CO.alEd; if(!a||!a.id) return;
+  confirmar('¿Compartir «'+a.n+'» con MOOD ON? Lo verán también los demás entrenadores y sus clientes. Puedes dejar de compartirlo cuando quieras.','Compartir con MOOD ON',function(){
+    cargando(api('coachCompartirAlimento',CO.pin,a.id,true)).then(function(r){ alPoner(r.alimento); toast('Compartido con MOOD ON: ya lo ven todos','ok'); if(CO.vista==='nutri') pintarNutri(false); },function(e){ toast(limpiaErr(e),'err'); });
+  });
+};
+A.alDejarMo=function(){
+  var a=CO.alEd; if(!a||!a.id) return;
+  confirmar('¿Dejar de compartir «'+a.n+'»? Sigue en tu banco; los demás entrenadores y sus clientes ya no lo verán (los platos que ya lo usan conservan sus valores).','Dejar de compartirlo',function(){
+    cargando(api('coachCompartirAlimento',CO.pin,a.id,false)).then(function(r){ alPoner(r.alimento); toast('Ya no lo compartes: sigue en tu banco','ok'); if(CO.vista==='nutri') pintarNutri(false); },function(e){ toast(limpiaErr(e),'err'); });
+  });
+};
+A.alQuitarMo=function(){
+  var a=CO.alEd; if(!a||!a.id) return;
+  confirmar('¿Quitar «'+a.n+'» de tu banco? Solo deja de salirte a ti y a tus clientes; los platos que ya lo usan conservan sus valores. Puedes volver a ponerlo cuando quieras.','Quitar de mi banco',function(){
+    cargando(api('coachBorrarAlimento',CO.pin,a.id,'quitar')).then(function(){ alQuitarL(a.id); (CO.nut.moOcultos=CO.nut.moOcultos||[]).push({id:a.id,n:a.n,m:a.m||''}); hidratarDie(); toast('Quitado de tu banco'); if(CO.vista==='nutri') pintarNutri(false); },function(e){ toast(limpiaErr(e),'err'); });
+  });
+};
+A.alVolverMo=function(){
+  var a=CO.alEd; if(!a||!a.id) return;
+  confirmar('¿Volver al de MOOD ON? Se borra tu versión de «'+a.n+'» y en tu banco y en las dietas de tus clientes vuelve a salir el de MOOD ON.','Volver al de MOOD ON',function(){
+    cargando(api('coachBorrarAlimento',CO.pin,a.id,'volver')).then(function(r){ if(r.alimento) alPoner(r.alimento); else alQuitarL(a.id); hidratarDie(); toast('Vuelve a ser el de MOOD ON','ok'); if(CO.vista==='nutri') pintarNutri(false); },function(e){ toast(limpiaErr(e),'err'); });
+  });
+};
+A.moOcultosVer=function(){
+  var L=CO.nut.moOcultos||[];
+  if(!L.length){ cerrarModal(); return; }
+  modal('<h2>Quitados de tu banco</h2><p class="muted sm">Alimentos de MOOD ON que has quitado. Vuelve a ponerlos y saldrán otra vez en tu banco y en el de tus clientes.</p>'+
+    L.map(function(x){ return '<div class="ej-row"><span class="ej-rt"><b>'+esc(x.n)+'</b>'+(x.m?'<small>'+esc(x.m)+'</small>':'')+'</span><button class="btn sm sec" data-a="moPoner" data-id="'+esc(x.id)+'">Volver a ponerlo</button></div>'; }).join('')+
+    (L.length>1?'<button class="btn mt" data-a="moPoner" data-id="todos">Ponerlos todos</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+};
+A.moPoner=function(el){
+  var id=el.dataset.id; if(el.disabled) return; el.disabled=true;
+  cargando(api('coachMoPoner',CO.pin,id)).then(function(r){ ponerNut(r); hidratarDie(); toast(id==='todos'?'Vuelven a estar en tu banco':'Vuelve a estar en tu banco','ok'); if((r.moOcultos||[]).length) A.moOcultosVer(); else cerrarModal(); if(CO.vista==='nutri') pintarNutri(false); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 /* ---------- recetas ---------- */
 function totRecHtml(){ var r=CO.recEd, m=macOp(r), n=Math.max(1,num(r.raciones)||1); return m?'<b>Total</b><span>'+macLinea(m)+'</span>'+(n>1?'<b>Por ración (1 de '+n+')</b><span>'+macLinea(m.map(function(v){ return v/n; }))+'</span>':''):''; }
@@ -14021,8 +14099,12 @@ function modalAlCl(cfg){
     '<label class="f">Se pesa<select id="al-e"><option value="">Tal cual</option><option value="crudo">En crudo</option><option value="cocido">Cocido</option></select></label>'+
     '<div class="lab">Por 100 g</div><div class="grid4">'+[['k','Kcal'],['p','Proteínas'],['h','Hidratos'],['g','Grasas']].map(function(x){ return '<label class="f" style="margin-top:0">'+x[1]+'<input id="al-'+x[0]+'" data-v29="alChk2" inputmode="decimal"></label>'; }).join('')+'</div>'+
     '<div class="sm mt6" id="al-chk">'+alChkHtml()+'</div>'+
-    (CL.d&&CL.d.alMood?'<div id="al-ft">'+alFotoClHtml()+'</div><label class="chk-l mo-chk"><input type="checkbox" id="al-mood"><span><b>Añadir también a MOOD ON</b>: entra en el banco de alimentos de todos tus clientes</span></label>':'')+
-    '<button class="btn mt" data-a="alClGuardar">Guardar y añadir al plato</button><button class="btn sec mt" data-a="alClVolver">Volver al banco</button>');
+    (CL.d&&CL.d.alMood?'<div id="al-ft">'+alFotoClHtml()+'</div>'+      // v53.4.65: la dueña elige siempre (sin nada marcado de antemano)
+      '<div class="mo-q"><div class="mo-qt">¿Añadir también a MOOD ON o solo para ti?</div>'+
+      '<button class="btn sec" data-a="alClGuardar" data-mo="todos">Para todos (MOOD ON)<small>Lo verán tus clientes y los demás entrenadores con los suyos</small></button>'+
+      '<button class="btn sec" data-a="alClGuardar" data-mo="yo">Solo para mí<small>Solo en tu perfil</small></button></div>'
+     :'<button class="btn mt" data-a="alClGuardar">Guardar y añadir al plato</button>')+
+    '<button class="btn sec mt" data-a="alClVolver">Volver al banco</button>');
 }
 /* v46 · perfil de la dueña: foto del producto */
 function alFotoClHtml(){ var im=(CL.alEd||{}).img;
@@ -14038,14 +14120,15 @@ CH.alFotoCl=function(t){
 IN29.alChk2=function(){ var c=document.getElementById('al-chk'); if(c) c.innerHTML=alChkHtml(); };
 A.alClVolver=function(){ var cfg=CL.alCfg; cerrarModal(); if(cfg) bancoModal(cfg); };
 A.alClGuardar=function(el){
-  var ed=CL.alEd||{}, mo=document.getElementById('al-mood'), o={n:val('al-n'),m:val('al-m'),tienda:val('al-ti'),e:val('al-e'),b:[val('al-k'),val('al-p'),val('al-h'),val('al-g')],ean:ed.ean||'',d:ed.d||null,img:ed.img||'',t:ed.t||'',f:ed.f||'',mood:!!(mo&&mo.checked)};
+  var ed=CL.alEd||{}, mo=el.dataset.mo||'', o={n:val('al-n'),m:val('al-m'),tienda:val('al-ti'),e:val('al-e'),b:[val('al-k'),val('al-p'),val('al-h'),val('al-g')],ean:ed.ean||'',d:ed.d||null,img:ed.img||'',t:ed.t||'',f:ed.f||'',mood:mo==='todos'};
+  if(mo) o.mo=mo;      // v53.4.65
   if(!o.n) return toast('Ponle nombre al producto');
   if(o.b.some(function(v){ return num(v)==null; })) return toast('Rellena kcal, proteínas, hidratos y grasas por 100 g');
-  if(el.disabled) return; el.disabled=true;
+  if(el.disabled) return; var bs=document.querySelectorAll('[data-a=alClGuardar]'); bs.forEach(function(b){ b.disabled=true; });
   cargando(api('guardarAlimentoCl',BOOT.token,o)).then(function(r){
     var a=r.alimento; CL.bancoL.push(a); CL.bancoM[a.id]=a; var cfg=CL.alCfg; cerrarModal();
-    if(cfg&&cfg.pick) cfg.pick(a); toast(o.mood?'«'+a.n+'» guardado en MOOD ON (para todos) y añadido':'«'+a.n+'» guardado en tus productos y añadido','ok');
-  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+    if(cfg&&cfg.pick) cfg.pick(a); toast(o.mood?'«'+a.n+'» guardado para todos (MOOD ON) y añadido':'«'+a.n+'» guardado en tus productos y añadido','ok');
+  },function(e){ bs.forEach(function(b){ b.disabled=false; }); toast(limpiaErr(e),'err'); });
 };
 A.banNuevo=function(){ var cfg=BAN&&BAN.cfg; if(!cfg||!cfg.nuevo) return; BAN=null; cfg.nuevo(cfg); };
 A.banCrear=function(){ var cfg=BAN&&BAN.cfg; if(!cfg||!cfg.crear) return; var c=cfg.crear; BAN=null; cerrarModal(); A.dvCrear({dataset:{p:c.p,m:c.m}}); };      // v52
@@ -15562,7 +15645,11 @@ function moPintar(){
       '<label class="f">Minutos <span class="muted">(opcional)</span><input id="mo-min" inputmode="numeric" value="'+esc(x.min||'')+'"></label>'
       :(m.c100?'<div class="mo-al"><div><span>Por 100 g</span><b>'+kTxt(m.c100[0])+' kcal</b><small>P '+fN(m.c100[1],1)+' · HC '+fN(m.c100[2],1)+' · G '+fN(m.c100[3],1)+'</small></div><div><span>1 '+esc(m.u[0])+'</span><b>'+fN(m.u[1],0)+' g</b><small>'+kTxt(m.c100[0]*m.u[1]/100)+' kcal</small></div></div>':'')+
         '<p class="muted sm">'+(x.peso>0?'Calculado con lo que pesa ya hecha ('+fN(x.peso,0)+' g).':'Calculado con los gramos de sus alimentos ('+fN(m.g,0)+' g).')+' Entra en «Despensa y conservas» como «Casero».</p>')+
-    '<button class="btn mt" data-a="moOk">'+(R?'Añadir a la biblioteca':'Añadir al banco de alimentos')+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
+    (R?'<button class="btn mt" data-a="moOk">Añadir a la biblioteca</button>'
+      :'<div class="mo-q"><div class="mo-qt">¿Añadir también a MOOD ON o solo para ti?</div>'+      // v53.4.65: siempre se elige
+        '<button class="btn sec" data-a="moOk" data-mo="todos">Para todos (MOOD ON)<small>Lo verán tus clientes y los demás entrenadores con los suyos</small></button>'+
+        '<button class="btn sec" data-a="moOk" data-mo="yo">Solo para ti<small>Solo tú y tus clientes</small></button></div>')+
+    '<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
   if(typeof pintarImgs==='function') pintarImgs();
 }
 /* v40 · la foto del plato o del alimento: se sube al elegirla y se guarda con lo que añadas */
@@ -15587,11 +15674,12 @@ A.moOk=function(el){
   if(x.como==='receta'&&!Object.keys(x.tipos).length) return toast('Elige al menos una comida');
   if(el.disabled) return; el.disabled=true;
   var q={como:x.como,nombre:n,tipos:Object.keys(x.tipos).join(''),min:val('mo-min')||x.min||'',img:x.img||'',texto:x.texto||''};
+  if(x.como==='alimento') q.mo=el.dataset.mo==='todos'?'todos':'yo';      // v53.4.65
   if(x.mr) q.mr=x.mr; else q.items=x.items.map(function(it){ return {a:it.a,q:it.q}; });
   cargando(api('anadirMood',BOOT.token,q)).then(function(r){ MO=null; cerrarModal();
     if(r.lista&&CL.d) CL.d.recetasMood=r.lista;                     // ya sale en «De la biblioteca» sin recargar
     if(r.como==='alimento'){ CL.bancoP=null; CL.bancoL=null; }     // y el alimento, en su banco la próxima vez que lo abra
-    toast(r.como==='receta'?'Añadida a MOOD ON: «'+r.nombre+'» ya está en tus recetas y en la biblioteca':'Añadido a MOOD ON: «'+r.nombre+'» ya está en tu banco de alimentos','ok'); },
+    toast(r.como==='receta'?'Añadida a MOOD ON: «'+r.nombre+'» ya está en tus recetas y en la biblioteca':r.mo?'«'+r.nombre+'» ya está en tu banco y lo ven todos (MOOD ON)':'«'+r.nombre+'» ya está en tu banco de alimentos (solo para ti y tus clientes)','ok'); },
     function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 
