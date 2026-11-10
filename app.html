@@ -2890,7 +2890,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.66';
+var APP_V = 'v53.4.67';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7141,26 +7141,80 @@ var MK_EQ={kc:0,pr:1,hc:2,gs:3};
 function sinTil(t){ return String(t||'').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,''); }
 function usoAl(a){
   if(a._uso&&a._uso.x===a.x) return a._uso.u;
-  var n=sinTil(a.n)+' '+sinTil(a.id), x=a.x, c=a.c||'', u;
-  if(x==='hc'){
-    if(/harina|maicena|pan rallado|almidon/.test(n)) u=['har'];
-    else if(/hamburguesa|burger|wrap|tortilla(s)? de (trigo|maiz|avena)|tortilla_|tortillas|pan de pita|\bpita\b/.test(n)) u=['pan'];
-    else if(/\bpan\b|pan_|biscote|picos|regana|tostas|tostadas|tortitas de (arroz|maiz)|tortitas_/.test(n)) u=['pan','des'];
-    else if(/avena|corn flakes|copos|cereal|muesli|granola/.test(n)) u=['des'];
-    else u=['gua'];
-  } else if(x==='prot'){
-    if(c==='suplementos'||/en polvo|whey|proteina vegetal/.test(n)) u=['sup'];
-    else if(/fiambre|jamon|lomo embuchado|lonchas/.test(n)) u=['fia'];
-    else if(/lata|natural en|en aceite/.test(n)) u=['pla','fia'];
-    else u=['pla'];
-  } else if(x==='lac'){
-    var liq=/leche|bebida|batido de|kefir|yogur/.test(n); u=(liq?['liq']:[]).concat(!/leche|bebida/.test(n)||/kefir/.test(n)?['cuc']:[]);
-  } else if(x==='grasa'){
-    u=/aceite|mantequilla|ghee|margarina/.test(n)?['coc']:/aguacate|aceituna/.test(n)?['coc','fs']:['fs'];
-  } else if(x==='verd'&&/triturado|tomate frito|salsa/.test(n)) u=['sal'];
-  else u=[x||'-'];
+  var u=usoTipo(sinTil(a.n)+' '+sinTil(a.id),a.x,a.c||'');
   try{ a._uso={x:a.x,u:u}; }catch(e){}
   return u;
+}
+/* v53.4.67 · los intercambios, con sentido: cada alimento solo se cambia por los de su misma «familia» (el pollo por otra carne,
+   el yogur por otro yogur, la crema de cacahuete por frutos secos, la pizza por otro plato preparado…) y además con los macros
+   muy parecidos (eqPar). La misma cuenta en el servidor: usoTipo_ (Code.gs). */
+var RX_PRE=/pizza|lasa[nñ]a|lasagna|canelon|ensaladilla|ensalada|poke|listo para comer|tres delicias|teriyaki|yakisoba|tortilla de patata|girasoles|medialunas|tortellini|ravioli|noquis rellenos|gnocchi con|pasta con|pasta fresca rellena|sandwich|bocadillo|wrap de|plato preparado|guiso|potaje|cocido madrileno|fabada|lentejas con|garbanzos con|paella|fideua|con verduras|con arroz/;
+var RX_REB=/rebozad|empanad|a la romana|tempura|enharinad|crispy|crunchy chicken|nuggets|san jacobo|cachopo|varitas|fingers|palitos de merluza|delicias de (pollo|pavo|merluza)|figuritas|rollitos|torpedos|caballitos|lagrimitas|tortillitas|fritura|rabas|croqueta|tigre|muslitos de surimi|bomba de/;
+var RX_PES=/merluza|salmon|atun|bacalao|dorada|lubina|trucha|sardin|caballa|melva|boqueron|anchoa|gamba|langostino|camaron|calamar|sepia|pulpo|mejillon|almeja|berberecho|surimi|pescad|marisco|\brape\b|emperador|pez espada|bonito|panga|lenguado|rodaballo|\bpota\b|poton|chipiron|cigala|bogavante|necora|buey de mar|\bgallos?\b|bacaladilla|gallineta|corvina|tintorera|abadejo|caviar|huevas|navaja|ostra|zamburi|vieira|palometa|perca|tilapia|carabinero|cangrejo|jibia|chopito|puntilla|ventresca/;
+var RX_VEG=/tofu|tempeh|seitan|soja texturizada|heura|proteina de soja|edamame|vegetal|vegano|veggie/;
+var RX_FIA=/fiambre|\bjamon\b|embuchado|lonchas|pavo cocid|pechuga de pavo (reducido|finas)|salchichon|chorizo|longaniza|mortadela|chopped|cecina|bresaola|pastrami|salami|fuet|sobrasada|cabeza de jabali|\bpate\b|bacon|panceta ahumada|tocino|lacon|morcilla|butifarra|chistorra|compango/;
+var RX_QUE=/queso|requeson|cottage|mozzarella|burgos|havarti|parmesano|ricotta|mascarpone|\bfeta\b|emmental|gouda|\bedam\b|manchego|\bbrie\b|camembert|philadelphia|grana padano|provolone|cheddar|gorgonzola|roquefort|torta del casar|idiazabal|tetilla/;
+function usoTipo(n,x,c){
+  n=String(n).replace(/_/g,' ').replace(/(sin|0 ?%?|cero|bajo en|reducido en)( de)? azucar\w*( a\w*)?|azucares a\w*/g,' ');
+  var pl=x!=='verd'&&x!=='fruta'&&x!=='lac'&&!/placas|laminas|aceituna|barquillo|preparado de|para paella|para arroz/.test(n), reb=pl&&RX_REB.test(n), pre=pl&&!reb&&RX_PRE.test(n);
+  if(x==='hc'){
+    if(reb) return ['reb'];
+    if(pre) return ['pre'];
+    if(/harina|maicena|pan rallado|almidon|levadura|semola/.test(n)) return ['har'];
+    if(/\bmiel\b|azucar|mermelada|confitura|sirope|panela|membrillo|cacao soluble|colacao|cola cao|nesquik/.test(n)) return ['dul'];
+    if(/galleta|digestive|\bmaria\b|barquillo|cookie|biscuit/.test(n)) return ['gal','des'];
+    if(/hamburguesa|burger|wrap|tortilla(s)? de (trigo|maiz|avena)|tortilla_|tortillas|pan de pita|\bpita\b|perrito/.test(n)) return ['pan'];
+    if(/\bpan\b|pan_|biscote|picos|regana|tostas|tostadas|picatoste|rosquilleta|crackers?|tortitas|hogaza|baguette|chapata|panecillo|mollete|barra de/.test(n)) return ['pan','des'];
+    if(/avena|corn flakes|copos|cereal|muesli|granola|special k|crema de arroz|espelta|inflado|chocapic|fitness/.test(n)) return ['des'];
+    if(/helado|bolleria|bizcocho|magdalena|croissant|napolitana|donut|tarta|chocolate|turron|polvoron|mazapan|golosina|caramelo|barrita/.test(n)) return ['dul'];
+    if(RX_FIA.test(n)) return ['fia'];
+    if(RX_PES.test(n)||/pollo|cerdo|vacuno|ternera|pavo/.test(n)) return ['reb'];
+    return ['gua'];
+  }
+  if(x==='prot'){
+    if(c==='suplementos'||/en polvo|whey|proteina vegetal|isolate|caseina/.test(n)) return ['sup'];
+    var f=c==='huevos'||/^(huevo|claras)/.test(n)?'hue':c==='pescados'||RX_PES.test(n)?'pes':/huevo|claras/.test(n)?'hue':RX_VEG.test(n)||c==='legumbres'?'veg':'car';
+    if(reb) return ['reb'];
+    if(pre) return ['pre'];
+    if(/higado|corazon|molleja|rinon|callos|oreja|morro|manitas|carcasa|hueso|espinazo|lengua de/.test(n)) return ['vis'];
+    if(/fresc/.test(n)&&RX_FIA.test(n)) return ['car'];
+    if(f==='car'&&/hamburguesa|burger|brocheta|pincho|albondiga/.test(n)) return ['car'];
+    if(RX_QUE.test(n)) return ['que'];
+    if(RX_FIA.test(n)) return ['fia'];
+    if(/\blata\b|natural en|en aceite|escabeche|al natural|conserva|en salmuera/.test(n)) return f==='pes'?['pes','fia']:['fia'];
+    return [f];
+  }
+  if(x==='lac'){
+    if(/helado/.test(n)) return ['hel'];
+    if(/queso (fresco )?batido|requeson|cottage|burgos|quark|cuajada/.test(n)) return ['yog','que'];
+    if(RX_QUE.test(n)) return ['que'];
+    if(/kefir|liquido|bebible/.test(n)) return ['lec','yog'];
+    if(/leche|bebida|batido|horchata/.test(n)) return ['lec'];
+    return ['yog'];
+  }
+  if(x==='grasa'){
+    if(reb) return ['reb'];
+    if(pre) return ['pre'];
+    if(/^aceite|aceite de|mantequilla|ghee|margarina|manteca|\bnata\b|leche de coco|crema de coco/.test(n)&&!/en aceite|aceituna/.test(n)) return ['coc'];
+    if(/chocolate|cacao|bombon|nocilla|nutella|choco gotas/.test(n)) return ['cho'];
+    if(/mayonesa|alioli|allioli|pesto|salsa|vinagreta/.test(n)) return ['sal'];
+    if(/hummus|guacamole|tzatziki|tsatsiki|\bpate\b|untable|queso crema|philadelphia/.test(n)) return ['unt'];
+    if(/aguacate|aceituna/.test(n)) return ['coc','fs'];
+    if(/higado|corazon|molleja|rinon|callos|oreja|morro|manitas|carcasa|hueso|espinazo|foie/.test(n)) return ['vis'];
+    if(RX_FIA.test(n)&&!/fresc/.test(n)) return ['fia'];
+    if(RX_QUE.test(n)) return ['que'];
+    if(c==='pescados'||RX_PES.test(n)) return ['pes'];
+    if(c==='huevos'||/huevo/.test(n)) return ['hue'];
+    if(c==='carnes'||/cerdo|vacuno|ternera|pollo|pavo|cordero|pato|conejo|costilla|hamburguesa|burger|albondiga/.test(n)) return ['car'];
+    return ['fs'];
+  }
+  if(x==='fruta') return /zumo|smoothie|nectar/.test(n)?['zum']:['fru'];
+  if(x==='verd'){
+    if(/triturado|tomate frito|salsa|sofrito|tomate natural|concentrado/.test(n)) return ['sal'];
+    if(/caldo|sopa|crema de|pure|gazpacho|salmorejo/.test(n)) return ['cre'];
+    return ['ver'];
+  }
+  return [x||'-'];
 }
 function usoOkAl(a,b){ var A=usoAl(a), B=usoAl(b); return A.some(function(t){ return B.indexOf(t)>=0; }); }
 /* A, B: [kcal, P, HC, G] por 100 g · m: macro de su grupo → r (g de B por g de A), err (diferencia de macros en kcal / kcal de A) y si es «muy parecido» */
@@ -7174,7 +7228,7 @@ function eqPar(A,B,m){
   var e=0; for(i=0;i<3;i++) e+=Math.abs(r*b[i]-a[i]);
   var kl=Math.abs(r*B[0]-A[0]), err=e/ka, dk=Math.max(kb>0?Math.abs(r*kb-ka)/ka:1,kl/Math.max(Number(A[0]),1)), em=m==='kc'?dk:Math.abs(r*B[MK_EQ[m]]-A[MK_EQ[m]])/Math.max(A[MK_EQ[m]],0.5);
   e=Math.max(e,kl);      // las kcal de la etiqueta (con la fibra) también tienen que cuadrar
-  var s=m==='kc'?(r>=0.5&&r<=2):(r>=0.15&&r<=7&&err<=0.25&&dk<=0.12&&em<=0.12);
+  var s=m==='kc'?(r>=0.5&&r<=2):(r>=0.15&&r<=7&&err<=0.25&&dk<=0.15&&em<=0.15);      // v53.4.67: 0,12 → 0,15 (ya solo entre alimentos de la misma familia: 150 g de pollo = 145 g de pavo)
   var ok=s||(m!=='kc'&&r>=0.15&&r<=7&&err<=0.6&&dk<=0.4&&em<=0.3);
   return ok?{r:r,err:err,e:e,s:s}:null;
 }
