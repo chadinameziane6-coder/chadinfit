@@ -180,6 +180,7 @@ details.ses[open] summary b{color:var(--mg)}
 .fo-slot b{display:block;font-size:12px;margin-top:6px}
 .fo-big{position:relative;margin-top:6px;min-height:120px}.fo-big img{width:100%;border-radius:12px;display:block;max-height:68vh;object-fit:contain;background:var(--card2)}
 .fo-big .spin{position:absolute;top:50%;left:50%;margin:-19px 0 0 -19px}
+.fo-big{cursor:zoom-in}.fo-zoom{position:absolute;right:10px;bottom:10px;display:flex;align-items:center;gap:5px;background:rgba(17,17,17,.72);color:#fff;font-size:12.5px;font-weight:600;padding:6px 10px;border-radius:999px;pointer-events:none}.fo-zoom .ic{width:14px;height:14px}      /* v53.4.59 */
 .cmp{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
 .cmp img{width:100%;aspect-ratio:3/4;object-fit:cover;border-radius:10px;display:block;margin-top:4px;background:var(--card2)}
 .cmp-no{aspect-ratio:3/4;border-radius:10px;background:var(--card2);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:13px;margin-top:4px}
@@ -2292,6 +2293,7 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .fc-tip{color:#9A9AA0}.fc-pair img[data-a=fzAbrir]{cursor:zoom-in}
 #fzoom{position:fixed;inset:0;z-index:90;background:#000;color:#fff;display:none;flex-direction:column}#fzoom.open{display:flex}
 .fz-top{display:flex;align-items:center;gap:10px;padding:max(12px,env(safe-area-inset-top)) 12px 10px}.fz-seg{flex:1;display:flex;gap:4px;background:#1C1C1E;border-radius:999px;padding:4px;overflow-x:auto}
+.fz-seg:empty{background:none}
 .fz-seg button{flex:1;white-space:nowrap;border:0;background:none;color:#C7C7CC;font:600 12.5px Plus Jakarta Sans,sans-serif;padding:8px 10px;border-radius:999px}.fz-seg button.on{background:#fff;color:#000}
 #fzoom .ico-x{color:#fff;background:#1C1C1E;border-radius:50%;width:38px;height:38px;flex:none}
 .fz-st{flex:1;display:flex;overflow:hidden;touch-action:none;user-select:none}.fz-w{flex:1;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;min-width:0}.fz-st.dos .fz-w+.fz-w{border-left:1px solid #2C2C2E}
@@ -2856,7 +2858,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.58';
+var APP_V = 'v53.4.59';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -3179,7 +3181,11 @@ window.addEventListener('scroll',function(){ if(tipMarca) tipOcultar(); },{passi
 function regDe(r){ r=r||{}; return {peso:r.peso!==false,medidas:r.medidas!==false,fotos:r.fotos!==false,diario:!!r.diario&&r.peso!==false}; }
 function regCl(){ return regDe(CL.d&&CL.d.registra); }
 /* v46: además del peso, la gráfica de cada medida por separado (cintura, cadera, muslo, brazo) */
-var MED_COLS=[['cintura','Cintura'],['cadera','Cadera'],['muslo','Muslo'],['brazo','Brazo']];
+/* v53.4.59 · y por los dos lados: muslo, brazo, gemelo y antebrazo, izquierdo y derecho (Javier). El «muslo» y el «brazo» de antes son el derecho.
+   [clave, nombre, abreviado para tablas estrechas] */
+var MED_COLS=[['cintura','Cintura','Cint.'],['cadera','Cadera','Cad.'],['muslo_i','Muslo izq.','Muslo I'],['muslo','Muslo dcho.','Muslo D'],['brazo_i','Brazo izq.','Brazo I'],['brazo','Brazo dcho.','Brazo D'],
+  ['gemelo_i','Gemelo izq.','Gem. I'],['gemelo_d','Gemelo dcho.','Gem. D'],['antebrazo_i','Antebrazo izq.','Anteb. I'],['antebrazo_d','Antebrazo dcho.','Anteb. D']];
+var MED_CM=MED_COLS.map(function(c){ return c[0]; });
 function medSelDe(){ return (BOOT.mode==='clienta'?CL:CO).medSel||''; }
 A.medSel=function(el){ var st=BOOT.mode==='clienta'?CL:CO; st.medSel=el.dataset.v; if(BOOT.mode==='clienta'){ CL.keep=true; pintarCl(); } else repintar(); };
 function medGraf(m,k,nom){
@@ -3212,7 +3218,7 @@ function pesoCard(med,boton,reg){
       }
     } else h+='<p class="muted">Aún no hay registros de peso.</p>';
   }
-  var cols=[['cintura','Cintura'],['cadera','Cadera'],['muslo','Muslo'],['brazo','Brazo']];
+  var cols=MED_COLS;
   var cm=reg.medidas?m.filter(function(x){ return cols.some(function(c){ return num(x[c[0]])!=null; }); }):[];
   if(cm.length){
     var a=cm[0], b=cm[cm.length-1], dos=cm.length>1;
@@ -4198,7 +4204,7 @@ function fotoCompleta(st,id){
 }
 A.verFoto=function(el){
   var st=est(), x=(st.fotos||[]).filter(function(f){ return f.id===el.dataset.id; })[0]; if(!x) return;
-  modal('<div class="card-t">'+esc(TIPO[x.tipo]||'')+' · '+fMedia(x.fecha)+'</div><div class="fo-big"><img id="fo-img" src="'+esc(x.mini)+'" alt=""><div class="spin" id="fo-spin"></div></div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button><button class="link danger mt" data-a="borrarFoto" data-id="'+esc(x.id)+'">Borrar esta foto</button>');
+  modal('<div class="card-t">'+esc(TIPO[x.tipo]||'')+' · '+fMedia(x.fecha)+'</div><div class="fo-big" data-a="fzFoto" data-cap="'+esc((TIPO[x.tipo]||'Foto')+' · '+fMedia(x.fecha))+'"><img id="fo-img" src="'+esc(x.mini)+'" alt=""><div class="spin" id="fo-spin"></div><span class="fo-zoom">'+ic('lupa')+'Toca para ampliar</span></div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button><button class="link danger mt" data-a="borrarFoto" data-id="'+esc(x.id)+'">Borrar esta foto</button>');
   fotoCompleta(st,x.id).then(function(src){ var i=document.getElementById('fo-img'); if(i) i.src=src; var s=document.getElementById('fo-spin'); if(s) s.remove(); },
     function(e){ var s=document.getElementById('fo-spin'); if(s) s.remove(); toast(limpiaErr(e),'err'); });
 };
@@ -4703,11 +4709,13 @@ A.cmpTramo=function(el){ var c=est().cmp; c.a=el.dataset.x; c.b=el.dataset.y; c.
 /* v38 · foto a pantalla completa con zoom (pellizcar, doble toque o rueda) y cambiar entre antes, después o las dos */
 var FZ=null;
 A.fzAbrir=function(el){ FZ={t:el.dataset.t,m:el.dataset.k,s:1,x:0,y:0}; pintarFz(); };
-function fzSrc(k){ var i=document.getElementById('fc-'+k+'-'+FZ.t); return i?i.src:''; }
+/* v53.4.59 · una sola foto (la que se abre al tocarla en «Fotos de progreso»), también con zoom: el cliente no podía ampliarla */
+A.fzFoto=function(el){ var i=document.getElementById('fo-img'); if(!i||!i.src) return; FZ={uno:i.src,cap:el.dataset.cap||'',m:'u',s:1,x:0,y:0}; pintarFz(); };
+function fzSrc(k){ if(FZ.uno) return k==='u'?FZ.uno:''; var i=document.getElementById('fc-'+k+'-'+FZ.t); return i?i.src:''; }
 function pintarFz(){
-  var c=est().cmp, v=document.getElementById('fzoom'); if(!v){ v=document.createElement('div'); v.id='fzoom'; document.body.appendChild(v); }
-  var cap=function(k){ return (k==='a'?'Antes':'Después')+' · '+fCorta(c[k]); }, ks=FZ.m==='dos'?['a','b']:[FZ.m];
-  v.innerHTML='<div class="fz-top"><div class="fz-seg">'+[['a',cap('a')],['b',cap('b')],['dos','Las dos']].filter(function(o){ return o[0]==='dos'||fzSrc(o[0]); }).map(function(o){ return '<button class="'+(FZ.m===o[0]?'on':'')+'" data-a="fzModo" data-m="'+o[0]+'">'+esc(o[1])+'</button>'; }).join('')+'</div><button class="ico-x" data-a="fzCerrar" aria-label="Cerrar">'+ic('x')+'</button></div>'+
+  var c=est().cmp||{}, v=document.getElementById('fzoom'); if(!v){ v=document.createElement('div'); v.id='fzoom'; document.body.appendChild(v); }
+  var cap=function(k){ return FZ.uno?FZ.cap:(k==='a'?'Antes':'Después')+' · '+fCorta(c[k]); }, ks=FZ.uno?['u']:FZ.m==='dos'?['a','b']:[FZ.m];
+  v.innerHTML='<div class="fz-top"><div class="fz-seg">'+(FZ.uno?[]:[['a',cap('a')],['b',cap('b')],['dos','Las dos']]).filter(function(o){ return o[0]==='dos'||fzSrc(o[0]); }).map(function(o){ return '<button class="'+(FZ.m===o[0]?'on':'')+'" data-a="fzModo" data-m="'+o[0]+'">'+esc(o[1])+'</button>'; }).join('')+'</div><button class="ico-x" data-a="fzCerrar" aria-label="Cerrar">'+ic('x')+'</button></div>'+
     '<div class="fz-st'+(ks.length>1?' dos':'')+'" id="fz-st">'+ks.map(function(k){ var src=fzSrc(k); return '<div class="fz-w">'+(src?'<img src="'+esc(src)+'" alt="'+esc(cap(k))+'" draggable="false">':'<span class="fz-no">Sin foto</span>')+'<span class="fz-c">'+esc(cap(k))+'</span></div>'; }).join('')+'</div>'+
     '<p class="fz-h">Pellizca o toca dos veces para ampliar'+(ks.length>1?' (las dos a la vez)':'')+'</p>';
   v.className='open'; fzAplicar(); fzGestos(document.getElementById('fz-st'));
@@ -5614,7 +5622,7 @@ function revEstado(){
   var rv=CL.d.clienta&&CL.d.clienta.revision; if(!rv||!rv.fecha) return null;
   var med=CL.d.medidas||[], hecho={fotos:!!(CL.d.ultFoto&&CL.d.ultFoto>=rv.desde),
     peso:med.some(function(m){ return m.fecha>=rv.desde&&num(m.peso)!=null; }),
-    medidas:med.some(function(m){ return m.fecha>=rv.desde&&['cintura','cadera','muslo','brazo'].some(function(k){ return num(m[k])!=null; }); })};
+    medidas:med.some(function(m){ return m.fecha>=rv.desde&&MED_CM.some(function(k){ return num(m[k])!=null; }); })};
   var L=(rv.pide||[]).map(function(k){ return {k:k,ok:hecho[k]}; });
   // v26: "todo" = ya ha apuntado lo que le pides (si no pides nada, al menos su peso o medidas)
   return {rv:rv,L:L,todo:L.length?L.every(function(x){ return x.ok; }):(hecho.peso||hecho.medidas)};
@@ -7919,11 +7927,11 @@ A.medidas=function(){
   var hoy=hoyStr(), R=regCl(), P=R.peso||!R.medidas, M=R.medidas;
   modal('<h2>'+(P&&M?'Peso y medidas':P?'Tu peso':'Tus medidas')+'</h2><p class="muted sm">'+(P?'Mejor en ayunas y a la misma hora. ':'')+(M?'Medidas en cm. Rellena solo lo que tengas.':'')+'</p>'+
     '<label class="f">Fecha<input type="date" id="m-fecha" value="'+hoy+'" max="'+hoy+'"></label>'+
-    '<div class="grid2">'+(P?'<label class="f">Peso (kg)<input id="m-peso" inputmode="decimal"></label>':'')+(M?'<label class="f">Cintura<input id="m-cintura" inputmode="decimal"></label><label class="f">Cadera<input id="m-cadera" inputmode="decimal"></label><label class="f">Muslo<input id="m-muslo" inputmode="decimal"></label><label class="f">Brazo<input id="m-brazo" inputmode="decimal"></label>':'')+'</div>'+
+    (P?'<label class="f">Peso (kg)<input id="m-peso" inputmode="decimal"></label>':'')+(M?'<div class="grid2">'+MED_COLS.map(function(c){ return '<label class="f">'+c[1]+'<input id="m-'+c[0]+'" inputmode="decimal"></label>'; }).join('')+'</div>':'')+      // v53.4.59: los dos lados
     '<label class="f">Notas<input id="m-notas" placeholder="Opcional"></label>'+
     '<button class="btn mt" data-a="guardarMedidas">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
 };
-var MED_K=['peso','cintura','cadera','muslo','brazo'];
+var MED_K=['peso'].concat(MED_CM);      // v53.4.59: con los dos lados
 /* v46: se guarda al momento en su pantalla y se envía por detrás (sin esperar a Google; si no hay conexión, se reintenta solo) */
 A.guardarMedidas=function(){
   var p={fecha:val('m-fecha')||hoyStr(),notas:val('m-notas')};
@@ -7965,7 +7973,7 @@ A.medLista=function(){ modal(medListaHtml(medDatos(),BOOT.mode!=='clienta')); };
 A.medEditar=function(el){
   var f=el.dataset.f, x=medDatos().filter(function(y){ return String(y.fecha).slice(0,10)===f; })[0]; if(!x) return;
   var inp=function(k,nom){ return '<label class="f">'+nom+'<input id="me-'+k+'" inputmode="decimal" value="'+(num(x[k])!=null?esc(fN(x[k])):'')+'"></label>'; };
-  modal('<h2>'+esc(fMedia(f))+'</h2><p class="muted sm">Corrige lo que haga falta. Si borras un dato, se quita de ese día.</p><div class="grid2">'+inp('peso','Peso (kg)')+MED_COLS.map(function(c){ return inp(c[0],c[1]+' (cm)'); }).join('')+'</div>'+
+  modal('<h2>'+esc(fMedia(f))+'</h2><p class="muted sm">Corrige lo que haga falta. Si borras un dato, se quita de ese día.</p>'+inp('peso','Peso (kg)')+'<div class="grid2">'+MED_COLS.map(function(c){ return inp(c[0],c[1]+' (cm)'); }).join('')+'</div>'+
     '<label class="f">Notas<input id="me-notas" value="'+esc(x.notas||'')+'" placeholder="Opcional"></label>'+
     '<button class="btn mt" data-a="medEdOk" data-f="'+esc(f)+'">Guardar cambios</button><button class="btn sec mt danger-t" data-a="medBorrar" data-f="'+esc(f)+'">Borrar este registro</button><button class="link mt" data-a="medLista">Volver</button>');
 };
@@ -8349,7 +8357,8 @@ function cuerpoCard(d){
 /* sus registros, en una tabla (con «Corregir o borrar») */
 A.medTabla=function(){
   var m=((CO.d&&CO.d.medidas)||[]).slice().sort(function(a,b){ return a.fecha<b.fecha?1:-1; });
-  modal('<h2>Sus registros de peso y medidas</h2><div class="tbl-w"><table class="tbl"><tr><th>Fecha</th><th>Peso</th><th>Cint.</th><th>Cad.</th><th>Muslo</th><th>Brazo</th></tr>'+m.slice(0,120).map(function(x){ return '<tr><td>'+fCorta(x.fecha)+'</td><td>'+fN(x.peso)+'</td><td>'+fN(x.cintura)+'</td><td>'+fN(x.cadera)+'</td><td>'+fN(x.muslo)+'</td><td>'+fN(x.brazo)+'</td></tr>'+(x.notas?'<tr><td></td><td colspan="5" class="muted sm">'+esc(x.notas)+'</td></tr>':''); }).join('')+'</table></div>'+
+  var MC=MED_COLS.filter(function(c){ return m.some(function(x){ return num(x[c[0]])!=null; }); });      // v53.4.59: solo las medidas que ha apuntado alguna vez
+  modal('<h2>Sus registros de peso y medidas</h2><div class="tbl-w"><table class="tbl"><tr><th>Fecha</th><th>Peso</th>'+MC.map(function(c){ return '<th>'+esc(c[2])+'</th>'; }).join('')+'</tr>'+m.slice(0,120).map(function(x){ return '<tr><td>'+fCorta(x.fecha)+'</td><td>'+fN(x.peso)+'</td>'+MC.map(function(c){ return '<td>'+fN(x[c[0]])+'</td>'; }).join('')+'</tr>'+(x.notas?'<tr><td></td><td colspan="'+(MC.length+1)+'" class="muted sm">'+esc(x.notas)+'</td></tr>':''); }).join('')+'</table></div>'+
     '<button class="btn sec mt" data-a="medLista">'+ic('lapiz')+'Corregir o borrar</button><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
   var bx=document.querySelector('#modal .mbox'); if(bx) bx.classList.add('mbox-an');
 };
@@ -9346,7 +9355,7 @@ function ultMedida(fn){ var u=''; (CO.d.medidas||[]).forEach(function(m){ if(fn(
 function resumenFicha(){
   var d=CO.d, c=d.clienta, q=d.cuestionario;
   return {id:c.id,nombre:c.nombre,plan:c.plan,planDet:c.plan_det,planHasta:c.plan_hasta,planEstado:c.plan_estado,rev:c.rev||{},fotos:c.fotos||{},
-    recibido:{fotos:d.ultFoto||'',peso:ultMedida(function(m){ return num(m.peso)!=null; }),medidas:ultMedida(function(m){ return ['cintura','cadera','muslo','brazo'].some(function(k){ return num(m[k])!=null; }); })},
+    recibido:{fotos:d.ultFoto||'',peso:ultMedida(function(m){ return num(m.peso)!=null; }),medidas:ultMedida(function(m){ return MED_CM.some(function(k){ return num(m[k])!=null; }); })},
     dietaHasta:d.dieta&&d.dieta.hasta,rutFin:d.rutinas.map(function(r){ return {nombre:r.nombre,desde:r.desde,hasta:r.hasta,dias:r.dias}; }),
     tareas:(d.actuaciones||[]).filter(function(a){ return a.estado==='pendiente'; }).map(function(a){ return {id:a.id,titulo:a.titulo,prevista:a.prevista,nota:a.nota}; }),
     cuest:q?{estado:q.estado,visto:!!q.visto,creado:String(q.creado||'').slice(0,10),respondido:String(q.respondido||'').slice(0,10)}:null,
@@ -12207,7 +12216,7 @@ function resumenEntreFotos(a,b){
   // rutinas
   h+='<div class="fr-b"><div class="fr-t">'+ic('pesa')+'Rutinas que hizo</div>'+(rs.length?rs.map(function(r){ return '<div class="fr-r"><span>'+esc(r.n)+'</span><b>'+r.v+' entreno'+(r.v===1?'':'s')+'</b></div>'; }).join(''):'<p class="fr-n">No registró entrenos en esas fechas.</p>')+'</div>';
   // medidas
-  var cols=[['cintura','Cintura'],['cadera','Cadera'],['muslo','Muslo'],['brazo','Brazo']], ma=pa&&pa.x, mb=pb&&pb.x, md=[];
+  var cols=MED_COLS, ma=pa&&pa.x, mb=pb&&pb.x, md=[];
   if(ma&&mb) cols.forEach(function(c){ var x=num(ma[c[0]]), y=num(mb[c[0]]); if(x!=null&&y!=null) md.push('<span>'+c[1]+' <b>'+(y-x>0?'+':'')+fN(y-x)+' cm</b></span>'); });
   if(md.length) h+='<div class="fr-b"><div class="fr-t">'+ic('medidas')+'Medidas</div><div class="fr-m">'+md.join('')+'</div></div>';
   // v35: si hay fotos entre medias, lo que hizo en cada tramo (de foto a foto)
@@ -17010,7 +17019,7 @@ function logrosDe(d,o){
     if(h>=7){ zN++; [[30,'m'],[100,'l']].forEach(function(y){ if(zN===y[0]) add('zn'+y[0],y[0]+' noches de buen descanso','De 7 horas o más','luna',f,y[1]); }); } });
   /* medidas: la constancia al revisarlas (3 y 12 revisiones) */
   var nMed=0; (d.medidas||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }).forEach(function(md){ var f=String(md.fecha).slice(0,10);
-    if(['cintura','cadera','muslo','brazo'].some(function(k){ return num(md[k]); })){ nMed++; [[3,'m'],[12,'l']].forEach(function(y){ if(nMed===y[0]) add('wm'+y[0],y[0]+' revisiones de medidas','Cintura, cadera, muslo y brazo','medidas',f,y[1]); }); } });
+    if(MED_CM.some(function(k){ return num(md[k]); })){ nMed++; [[3,'m'],[12,'l']].forEach(function(y){ if(nMed===y[0]) add('wm'+y[0],y[0]+' revisiones de medidas','Cintura, cadera, muslo y brazo','medidas',f,y[1]); }); } });
   /* medallas: las del mismo tipo juntas (la última manda) */
   var G={}, ok=[];
   I.forEach(function(x){ var g=G[x.gid]; if(!g){ g=G[x.gid]={id:x.gid,t:x.t,sub:x.sub,ic:x.ic,f:x.f,n:0,ids:[],o:x.o,pl:x.pl,ok:true,last:x}; ok.push(g); } g.n++; g.ids.push(x.id); if(x.f>=g.f){ g.f=x.f; g.sub=x.sub; g.last=x; } });
