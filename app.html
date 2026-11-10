@@ -2893,7 +2893,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.68';
+var APP_V = 'v53.4.69';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7185,7 +7185,7 @@ function usoTipo(n,x,c){
     if(RX_QUE.test(n)) return ['que'];
     if(RX_FIA.test(n)) return ['fia'];
     if(/\blata\b|natural en|en aceite|escabeche|al natural|conserva|en salmuera/.test(n)) return f==='pes'?['pes','fia']:['fia'];
-    return [f];
+    return f==='hue'?['hue','car','pes']:[f];      // v53.4.69: el huevo y las claras, también por carne o pescado de macros parecidos
   }
   if(x==='lac'){
     if(/helado/.test(n)) return ['hel'];
@@ -7207,7 +7207,7 @@ function usoTipo(n,x,c){
     if(RX_FIA.test(n)&&!/fresc/.test(n)) return ['fia'];
     if(RX_QUE.test(n)) return ['que'];
     if(c==='pescados'||RX_PES.test(n)) return ['pes'];
-    if(c==='huevos'||/huevo/.test(n)) return ['hue'];
+    if(c==='huevos'||/huevo/.test(n)) return ['hue','car','pes'];
     if(c==='carnes'||/cerdo|vacuno|ternera|pollo|pavo|cordero|pato|conejo|costilla|hamburguesa|burger|albondiga/.test(n)) return ['car'];
     return ['fs'];
   }
