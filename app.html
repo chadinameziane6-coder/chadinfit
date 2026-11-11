@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.81';
+var APP_V = 'v53.4.82';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11663,9 +11663,9 @@ A.recPon=function(el){
     CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.indexOf(o); cerrarModal(); marcarDie(); repintar();
     return toast('Añadida: '+pzTxt(o,n0,s0)+(bt?', lo que encaja con esta comida':'')+'. En su app elige cuántas se come.','ok');
   }
-  if(n>1){ var tot=macOp(r), ob=objCm(planActual(),c), k=1;          // v29: ella ve la receta entera y pesa la tanda para saber su ración
-    if(tot&&tot[0]>0&&ob&&ob[0]>0) k=Math.max(0.5,Math.min(Math.min(n,4),Math.round(ob[0]/(tot[0]/n)*2)/2));      // v48: su parte, la que cuadra con esta comida
-    if(k!==1) (o.items||[]).forEach(function(it){ it.q=String(Math.round((num(it.q)||0)*k*10)/10); });
+  if(n>1){ var u1=macOp(o), ob=objCm(planActual(),c), k=1;          // v29: ella ve la receta entera y pesa la tanda para saber su ración
+    if(u1&&u1[0]>0&&ob&&ob[0]>0) k=Math.max(0.5,Math.min(Math.min(n,4),Math.round(ob[0]/u1[0]*2)/2));      // v48: su parte, la que cuadra con esta comida · v53.4.82: con las kcal de una ración ya con sus valores (la receta guardada no los trae de los alimentos de la base: salía «4 raciones de 7», 1129 kcal para una comida de 694)
+    (o.items||[]).forEach(function(it){ it.q=String(Math.round((num(it.q)||0)*k)); });
     o.tanda={r:n,k:k,c:''}; }
   var cuadro=!o.tanda&&cuadrarItems(o.items,objCm(planActual(),c));      // v53.4.77: tus recetas también entran cuadradas a los macros de esta comida
   var vacia=c.opciones.length===1&&!c.opciones[0].nombre&&!c.opciones[0].texto&&!c.opciones[0].img&&!(c.opciones[0].items||[]).length;
