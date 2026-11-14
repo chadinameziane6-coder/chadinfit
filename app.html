@@ -2956,7 +2956,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.96';
+var APP_V = 'v53.4.97';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -14683,7 +14683,9 @@ var BIB_DIARIO=[
     ing:[['avena.cr',200,'f',['avena_sin_gluten.cr']],['yogur_natural',250,'f',['yogur_sin_lactosa','yogur_soja']],['huevo',165,'f'],['miel',50,'f',['eritritol']],['limon',20,'f',null,1]]}
 ];
 var BIB_PC={b101:1500,b102:1700,b103:1700,b104:1650,b105:2000,b106:2150,b107:2000,b108:1250,b109:1200,b110:1750,b111:1450,b112:1250,b113:950,b114:900,b117:600};      // v53.4.95: lo que pesa, más o menos, todo lo cocinado (ella lo pesa y se recalcula)
+var BIB_IMG={b2:[34514397,'pexels-photo-34514397/free-photo-of-sliced-heirloom-tomatoes-on-artisan-bread.jpeg'],b4:[13995329],b7:[20422125,'pexels-photo-20422125/free-photo-of-egg-and-bread-on-plate.jpeg'],b10:[1795567],b11:[13392726],b12:[39600317,'pexels-photo-39600317/free-photo-of-iberian-ham-baguette-and-beachside-dining-experience.jpeg'],b16:[10785009],b19:[8805113],b30:[8963370],b31:[35663668,'pexels-photo-35663668/free-photo-of-healthy-granola-yogurt-bowl-with-banana-slices.jpeg'],b33:[16797806,'pexels-photo-16797806/free-photo-of-food-with-bananas-on-plate.jpeg'],b35:[12183142],b37:[36255420,'pexels-photo-36255420/free-photo-of-refreshing-orange-yogurt-served-in-orange-cups.jpeg'],b38:[103566],b39:[7508114],b40:[29935499,'pexels-photo-29935499/free-photo-of-bowl-of-fresh-edamame-with-salt-on-wooden-table.jpeg'],b41:[20175008,'pexels-photo-20175008/free-photo-of-a-smoothie-bowl-with-fruit-and-nuts-on-top.jpeg'],b42:[4114119],b44:[7715698],b45:[35419377,'pexels-photo-35419377/free-photo-of-healthy-snack-bowl-with-nuts-and-fresh-fruit.jpeg'],b52:[18663959,'pexels-photo-18663959/free-photo-of-fish-with-lemon.jpeg'],b54:[30512725,'pexels-photo-30512725/free-photo-of-savory-beef-and-vegetable-medley-with-rice.jpeg'],b55:[39853057,'pexels-photo-39853057/free-photo-of-delicious-penne-pasta-with-fresh-tomatoes.jpeg'],b56:[9760210],b58:[6896393],b61:[9397764],b62:[9218614],b64:[7664382],b67:[35685909,'pexels-photo-35685909/free-photo-of-colorful-asian-tofu-stir-fry-with-rice.jpeg'],b68:[8934919],b69:[9213997],b70:[33659839,'pexels-photo-33659839/free-photo-of-delicious-grilled-calamari-with-potatoes.jpeg'],b71:[26180136,'pexels-photo-26180136/free-photo-of-fries-with-egg-ad-tomato-salad.jpeg'],b113:[5190684]};      // v53.4.97 (nº 1, Javier: «busca las imágenes sin derechos»): una foto de Pexels de cada plato, en vez de la de una receta parecida
 BIB_DIARIO.forEach(function(r){ r.bd=1; if(BIB_PC[r.id]) r.pc=BIB_PC[r.id]; r.pasos=r.pasos||''; r.cat=r.cat||(/c/.test(r.t)?'c':'d');
+  if(BIB_IMG[r.id]) r.img=PX(BIB_IMG[r.id][0],BIB_IMG[r.id][1]);
   if(r.imgDe&&!r.img){ var o=RECETAS_LIB.filter(function(x){ return x.id===r.imgDe; })[0]; r.img=o&&o.img||''; } });
 function casaLib(){ return BOOT.mode==='clienta'?!!(CL.d&&CL.d.casa):!!(CO.nut&&CO.nut.casa); }
 
