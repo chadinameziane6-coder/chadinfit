@@ -2954,7 +2954,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.91';
+var APP_V = 'v53.4.92';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8205,7 +8205,7 @@ A.ltOllaAbrir=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lot
 A.ltFNo=function(){ var f=document.getElementById('lt-f'); if(f) f.classList.add('hidden'); PL.ltF=null; };
 A.ltFOk=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var o=V.o, L=o.lote, i=document.getElementById('lt-in'), v=Math.round(num(i&&String(i.value).replace(',','.')));
   if(PL.ltF==='olla'){ var pf=prefCl(); pf.n=pf.n||{}; var k='ol|'+rcKey(o);
-    if(!v){ delete pf.n[k]; guardarPref(); plPintar(); return toast(L.pc?'Vuelvo al peso de la receta':'Quitado el peso de tu olla'); }
+    if(!v){ delete pf.n[k]; guardarPref(); plPintar(); return toast(L.pc?'Vuelvo al peso de la receta':'Quitado el peso de lo que cocinaste'); }
     if(v<50||v>50000) return toast('Pon el peso en gramos de todo lo cocinado (sin la olla ni el molde)');
     pf.n[k]=v; guardarPref(); plPintar(); return toast('Hecho: tu ración ahora va con lo que has cocinado ('+gTxt(v)+')','ok'); }
   var base=ltOlla(o)||L.pc; if(!(v>0)) return toast('Pon cuántos gramos has comido'); if(v>base) return toast('No puede ser más de lo que pesa todo lo cocinado ('+gTxt(base)+')');
@@ -11916,12 +11916,12 @@ function ltFalta(o,ob){ var m=macOp(o); if(!m||!ob||ob[1]==null||ob[2]==null||ob
 function rcEdCasa(o,at,ob){
   var L=o.lote, pe=rcU(o)==='peso'&&L.pc, f=rcF(o), g=Math.round(f*(L.pc||0)), fal=ltFalta(o,ob), hoy=rcHoyCo(o);
   var ing=(o.items||[]).filter(function(it){ return L.b[it.i]!=null; }).map(function(it){ var a=CO.nutM&&CO.nutM[it.a]||it; return '<li><span>'+esc(alNom(a))+'</span><b>'+gTxt(L.b[it.i])+'</b></li>'; }).join('');
-  return '<div class="rc2"><div class="rc2-h">'+ic('dieta')+'<span>Receta para <b>'+L.rac+' raciones</b>'+(L.pc?' · hecha pesa ≈ '+gTxt(L.pc):'')+'</span></div>'+
+  return '<div class="rc2"><div class="rc2-h">'+ic('dieta')+'<span>Receta para <b>'+L.rac+' raciones</b>'+(L.pc?' · todo lo cocinado pesa ≈ '+gTxt(L.pc):'')+'</span></div>'+
     '<div class="rc2-r"><span>Su ración</span><div class="rc2-st"><button class="btn sm sec" data-a="rcCo" data-d="-1"'+at+' aria-label="Menos">−</button><b>'+(pe?gTxt(g):rcRac(f*L.rac))+'</b><button class="btn sm sec" data-a="rcCo" data-d="1"'+at+' aria-label="Más">+</button></div><small>'+(pe?rcRac(f*L.rac):L.pc?'≈ '+gTxt(g):'')+'</small></div>'+
     (hoy!=null&&Math.abs(hoy-f)>0.004?'<small class="lt-hoy">'+ic('ok')+'Hoy ha comido '+rcTxt(o,hoy)+'</small>':'')+
     (fal?'<p class="rc2-f">'+esc(fal)+'</p>':'')+
     '<details class="rc2-i"><summary>Ingredientes de la receta entera</summary><ul>'+ing+'</ul></details>'+
-    '<p class="muted sm rc2-n">'+(pe?'En su app: pesa la olla entera (si pesa distinto, lo pone y se recalcula) y apunta su ración en gramos o en raciones.':'En su app apunta su ración en raciones'+(o.pz?' o en piezas':'')+'. Si pones en la receta cuánto pesa hecha, va en gramos.')+'</p></div>';
+    '<p class="muted sm rc2-n">'+(pe?'En su app: si pesa todo lo que ha cocinado (sin la olla ni el molde) y pesa distinto, lo pone y su ración se recalcula. La apunta en gramos o en raciones.':'En su app apunta su ración en raciones'+(o.pz?' o en piezas':'')+'. Si pones en la receta cuánto pesa hecha, va en gramos.')+'</p></div>';
 }
 function rcEdHtml(o,at,ob){
   if(CO.nut&&CO.nut.casa) return rcEdCasa(o,at,ob);
@@ -12794,7 +12794,7 @@ function vRecetas(){
   var h='<p class="tip">Guarda tus platos con ingredientes, gramos, elaboración, raciones y foto, y añádelos a cualquier dieta como un plato más de una comida.</p><div class="row"><button class="btn sm" data-a="recNueva">'+ic('mas')+'Nueva receta</button></div>';
   if(!R.length) return h+'<div class="card mt"><p class="muted">Aún no tienes recetas. También puedes guardar cualquier plato de una dieta con «Guardar como receta».</p></div>';
   return h+'<div class="pl-grid rec-g">'+R.map(function(r){ var m=macOp(r), n=Math.max(1,num(r.raciones)||1), rc=m?m.map(function(v){ return v/n; }):null;
-    return '<button class="pl-c" data-a="recEditar" data-id="'+esc(r.id)+'">'+platoImg(r.img)+'<span class="pl-t"><b>'+esc(r.nombre)+'</b><small>'+[n>1?n+' raciones':'1 ración',r.lote&&r.lote.pc?'olla de '+gTxt(r.lote.pc):'',r.pz?r.pz.tot+' '+pzPl(r.pz.nom):'',r.min?r.min+' min':'',rc?kTxt(rc[0])+' kcal/ración':''].filter(Boolean).join('<i>·</i>')+'</small>'+(rc?'<small>P '+kTxt(rc[1])+' · HC '+kTxt(rc[2])+' · G '+kTxt(rc[3])+'</small>':'')+(r.tipos?'<small class="rec-bib">'+ic('lista')+'Biblioteca'+(r.autor?' · de '+esc(String(r.autor).split(' ')[0]):'')+'</small>':'')+'</span></button>'; }).join('')+'</div>';
+    return '<button class="pl-c" data-a="recEditar" data-id="'+esc(r.id)+'">'+platoImg(r.img)+'<span class="pl-t"><b>'+esc(r.nombre)+'</b><small>'+[n>1?n+' raciones':'1 ración',r.lote&&r.lote.pc?'cocinada pesa '+gTxt(r.lote.pc):'',r.pz?r.pz.tot+' '+pzPl(r.pz.nom):'',r.min?r.min+' min':'',rc?kTxt(rc[0])+' kcal/ración':''].filter(Boolean).join('<i>·</i>')+'</small>'+(rc?'<small>P '+kTxt(rc[1])+' · HC '+kTxt(rc[2])+' · G '+kTxt(rc[3])+'</small>':'')+(r.tipos?'<small class="rec-bib">'+ic('lista')+'Biblioteca'+(r.autor?' · de '+esc(String(r.autor).split(' ')[0]):'')+'</small>':'')+'</span></button>'; }).join('')+'</div>';
 }
 A.recNueva=function(){ CO.recEd={id:'',nombre:'',raciones:'1',min:'',img:'',texto:'',etiquetas:'',items:[]}; CO.recSucia=false; CO.nv='recEd'; pintarNutri(true); };
 A.recEditar=function(el){ var r=(CO.nut.recetas||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return; CO.recEd=copia(r); CO.recEd.items.forEach(hidratarIt); CO.recSucia=false; CO.nv='recEd'; pintarNutri(true); };
@@ -14846,7 +14846,7 @@ function libHtml(q){
   var L=libParaComida(c).filter(function(z){ return (!q||clave((z.x.n||'')+' '+z.r.n).indexOf(clave(q))>=0)&&(!f||(f==='t'?!!z.r.tanda:libCat(z.r)===f)); });
   return '<div class="lab">Biblioteca MOOD ON <small class="muted">'+(ob?'entran con los gramos de esta comida':'pon el % del día de esta comida para cuadrarlas')+'</small></div>'+
     '<div class="tipos lib-f">'+LIB_CAT.map(function(x){ return '<button class="'+(f===x[0]?'on':'')+'" data-a="libF" data-v="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div>'+
-    '<div class="rec-l lib-l">'+(L.length?L.map(function(z){ return '<button class="rec-o" data-a="libPon" data-id="'+z.r.id+'">'+platoImg(z.r.img,'rec-im')+'<span><b>'+esc(z.x.n||z.r.n)+'</b><small>'+esc([z.r.min+' min'].concat(z.r.tanda?[(z.r.bd?'receta de olla: ':'por tandas: ')+z.r.tanda.r+' raciones']:z.r.pz?['por '+pzPl(z.r.pz.nom)]:[]).concat(z.x.cambios.length?['adaptada: '+z.x.cambios.map(function(k){ return k[1]; }).join(', ')]:[]).join(' · '))+'</small></span></button>'; }).join(''):'<p class="muted">Ninguna con ese nombre.</p>')+'</div>';
+    '<div class="rec-l lib-l">'+(L.length?L.map(function(z){ return '<button class="rec-o" data-a="libPon" data-id="'+z.r.id+'">'+platoImg(z.r.img,'rec-im')+'<span><b>'+esc(z.x.n||z.r.n)+'</b><small>'+esc([z.r.min+' min'].concat(z.r.tanda?[(z.r.bd?'receta para ':'por tandas: ')+z.r.tanda.r+' raciones']:z.r.pz?['por '+pzPl(z.r.pz.nom)]:[]).concat(z.x.cambios.length?['adaptada: '+z.x.cambios.map(function(k){ return k[1]; }).join(', ')]:[]).join(' · '))+'</small></span></button>'; }).join(''):'<p class="muted">Ninguna con ese nombre.</p>')+'</div>';
 }
 A.libF=function(el){ CO.libF=el.dataset.v; var b=document.querySelector('#modal .mbox'), st=b?b.scrollTop:0, i=document.querySelector('#modal [data-k=buscaRecM]'); modalRecetas(i?i.value:''); var b2=document.querySelector('#modal .mbox'); if(b2) b2.scrollTop=st; };
 function libParaComida(c){
