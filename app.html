@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.86';
+var APP_V = 'v53.4.87';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7876,7 +7876,8 @@ function libSugCm(p,mi){
   if(!CL.bancoM){ if(!bancoBg){ bancoBg=true; cargarBancoCl().then(function(){ if(CL.tab==='dieta'){ CL.keep=true; pintarCl(); } },function(){}); } return []; }
   var c=p.comidas[mi], cat=catCm(c), M=miaCl(), mios=(M.add[p.id+'|'+mi]||[]).map(function(x){ return x.lib; });
   var pf=prefCl(), oc=pf.oc||{}; if(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi])) return [];      // v53.4.26: las que ha quitado · v53.4.34: sin sugerencias en esta comida (o en ninguna)
-  var L=libTodas().filter(function(r){ return !r.tanda&&libCat(r)===cat&&mios.indexOf(r.id)<0&&adaptarRecCl(r); }); if(!L.length) return [];
+  var tp=casaLib()?tipoCmDe(c.nombre):'';      // v53.4.87: en el nº 1, cada comida con lo suyo (desayuno, media mañana o merienda, comida o cena)
+  var L=libTodas().filter(function(r){ return !r.tanda&&(tp?r.t.indexOf(tp)>=0:libCat(r)===cat)&&mios.indexOf(r.id)<0&&adaptarRecCl(r); }); if(!L.length) return [];
   var k=(diaAno()*7+mi*3)%L.length; return L.slice(k).concat(L.slice(0,k)).slice(0,3).filter(function(r){ return !oc[r.id]; });      // cambian cada día; v53.4.34: si quita una, no sale otra en su lugar
 }
 function cbHtml(p,mi){
@@ -11695,6 +11696,9 @@ function modalRecetas(q){
 function cuadrarItems(items,ob){
   if(!items||!items.length||!ob||ob[0]==null) return false;
   var ok=ob[1]!=null&&ob[2]!=null&&ob[3]!=null&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; });
+  if(CO.nut&&CO.nut.casa&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; })){      // v53.4.87 (nº 1): cada alimento con lo que tiene sentido (1 o 2 yogures, el plátano de medio en medio, el aceite de 5 en 5…)
+    var LB=items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,R:ROL_X[it.x||a.x]?bdRegla(a):null}; });
+    if(LB.some(function(z){ return z.R; })){ var QB=bdOpt(LB,ob); items.forEach(function(it,i){ if(LB[i].R) it.q=String(QB[i]); }); return ok?'m':'k'; } }
   if(ok&&items.some(function(it){ var a=CO.nutM[it.a]; return ROL_X[it.x||a.x]; })){
     for(var v=0;v<3;v++){      // v53.4.80: de un toque (antes ×3,5 como mucho por toque: había que darle varias veces); se repite con los gramos ya redondeados hasta que no cambian
       var x={ing:items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,rol:ROL_X[it.x||a.x]||''}; })}, r=cuadrarReceta(x,ob,[0.02,25]);
@@ -14073,6 +14077,292 @@ RECETAS_LIB=RECETAS_LIB.concat([
 ]);
 RECETAS_LIB.forEach(function(r){ if(r.imgDe&&!r.img){ var o=RECETAS_LIB.filter(function(x){ return x.id===r.imgDe; })[0]; r.img=o&&o.img||''; } if(/^n([1-9]|[12]\d|3[0-8]|5[89]|60)$/.test(r.id)) r.vg=1; });     // vg: pensadas para veganas
 var TIPO_CM={d:'Desayuno',m:'Media mañana o merienda',c:'Comida o cena'};
+/* =====================================================================
+   v53.4.87 · BIBLIOTECA «DE DIARIO» Y MOTOR REALISTA (solo panel nº 1, de momento)
+   Javier: «las recetas de la biblioteca no me cuadran… platos sencillos, combinaciones sencillas que se comen a diario», «nunca 600 g de yogur
+   ni 20 g de plátano», «en el desayuno no arroz con pollo», «solo pasos cuando es una receta elaborada».
+   · BIB_DIARIO: platos de todos los días (tostadas, yogur con fruta, pollo con arroz…) sin pasos, y unas pocas recetas de olla (lentejas,
+     tortilla de patata…) con sus pasos, que van por raciones. ing: [alimento, gramos de base, papel, alternativas, opcional, {lo,hi,st}]
+   · bdRegla: lo que tiene sentido de cada alimento (de 1 a 2 yogures, el plátano de medio en medio, el aceite de 5 en 5 g, el pan por rebanadas…)
+   · bdOpt: busca, dentro de esos pasos, los gramos que mejor cuadran la comida (kcal y macros), sin alejarse mucho del plato de base
+   ===================================================================== */
+var BIB_DIARIO=[
+  /* ---------- desayunos ---------- */
+  {id:'b1',n:'Tostadas con tomate, aceite y jamón serrano',t:'d',min:5,imgDe:'d9',nv:{pavo_fiambre:'Tostadas con tomate, aceite y pavo'},
+    ing:[['pan_integral',60,'c',['pan_sin_gluten']],['tomate',60,'f'],['aceite_oliva',5,'g'],['jamon_serrano',45,'p',['pavo_fiambre']]]},
+  {id:'b2',n:'Tostadas con tomate y pavo',t:'d',min:5,imgDe:'d9',
+    ing:[['pan_integral',60,'c',['pan_sin_gluten']],['tomate',60,'f'],['aceite_oliva',5,'g'],['pavo_fiambre',60,'p']]},
+  {id:'b3',n:'Tostadas con aguacate y huevo',t:'d',min:10,imgDe:'d3',
+    ing:[['pan_integral',60,'c',['pan_sin_gluten']],['aguacate',35,'g'],['huevo',100,'p']]},
+  {id:'b4',n:'Tostadas con queso fresco y tomate',t:'d',min:5,imgDe:'d29',
+    ing:[['pan_integral',60,'c',['pan_sin_gluten']],['queso_burgos0',100,'p'],['tomate',60,'f'],['aceite_oliva',5,'g',null,1]]},
+  {id:'b5',n:'Tostadas con crema de cacahuete y plátano',t:'dm',min:5,imgDe:'d10',
+    ing:[['pan_integral',60,'c',['pan_sin_gluten']],['crema_cacahuete',15,'g'],['platano',60,'c']]},
+  {id:'b6',n:'Huevos revueltos con tostada',t:'d',min:10,imgDe:'d24',
+    ing:[['huevo',100,'p'],['claras',60,'p',null,1],['pan_integral',60,'c',['pan_sin_gluten']],['aceite_oliva',5,'g']]},
+  {id:'b7',n:'Tortilla francesa con tostada y tomate',t:'d',min:10,imgDe:'d24',
+    ing:[['huevo',100,'p'],['pan_integral',60,'c',['pan_sin_gluten']],['tomate',60,'f'],['aceite_oliva',5,'g']]},
+  {id:'b8',n:'Skyr con avena y fresas',nv:{yogur_soja:'Yogur de soja con avena y fresas',yogur_sin_lactosa:'Yogur sin lactosa con avena y fresas'},t:'dm',min:5,imgDe:'d1',
+    ing:[['skyr',150,'p',['yogur_soja','yogur_sin_lactosa']],['avena.cr',40,'c',['avena_sin_gluten.cr']],['fresas',100,'c']]},
+  {id:'b9',n:'Porridge de avena con plátano',t:'d',min:10,imgDe:'d2',
+    pasos:'Calienta la leche con la avena a fuego medio 4-5 minutos, removiendo, hasta que espese. Sírvelo con el plátano en rodajas y la crema de cacahuete por encima.',
+    ing:[['avena.cr',50,'c',['avena_sin_gluten.cr']],['leche_desnatada',250,'p',['leche_sin_lactosa','bebida_soja']],['platano',60,'c'],['crema_cacahuete',10,'g',null,1]]},
+  {id:'b10',n:'Cereales con leche y plátano',nv:{bebida_soja:'Cereales con bebida de soja y plátano'},t:'d',min:5,imgDe:'d20',
+    ing:[['corn_flakes',40,'c'],['leche_desnatada',250,'p',['leche_sin_lactosa','bebida_soja']],['platano',60,'c']]},
+  {id:'b11',n:'Tortitas de arroz con pavo y queso fresco',t:'dm',min:5,imgDe:'m2',
+    ing:[['tortitas_arroz',24,'c'],['pavo_fiambre',48,'p'],['queso_burgos0',50,'p']]},
+  {id:'b12',n:'Bocadillo de jamón serrano con tomate',t:'dm',min:5,imgDe:'d9',nv:{pavo_fiambre:'Bocadillo de pavo con tomate'},
+    ing:[['pan_barra',80,'c',['pan_sin_gluten']],['jamon_serrano',45,'p',['pavo_fiambre']],['tomate',40,'f'],['aceite_oliva',5,'g']]},
+  {id:'b13',n:'Sándwich de pavo y queso',t:'dm',min:5,imgDe:'d21',
+    ing:[['pan_molde_integral',60,'c',['pan_sin_gluten']],['pavo_fiambre',48,'p'],['queso_lonchas_light',20,'p'],['tomate',40,'f',null,1]]},
+  {id:'b14',n:'Batido de proteína con plátano y avena',t:'dm',min:5,imgDe:'d8',
+    pasos:'Tritura todo en la batidora 30 segundos. Si te gusta más frío, añade unos cubitos.',
+    ing:[['leche_desnatada',250,'p',['leche_sin_lactosa','bebida_soja']],['whey',30,'p',['proteina_vegetal']],['platano',120,'c'],['avena.cr',30,'c',['avena_sin_gluten.cr']]]},
+  {id:'b15',n:'Tortitas de avena y claras',t:'d',min:15,imgDe:'d11',
+    pasos:'Tritura la avena con las claras y medio plátano. En una sartén antiadherente a fuego medio, con unas gotas de aceite, haz tortitas pequeñas: 1-2 minutos por cada lado, hasta que se doren. Sírvelas con el resto del plátano.',
+    ing:[['avena.cr',40,'c',['avena_sin_gluten.cr']],['claras',150,'p'],['platano',60,'c'],['aceite_oliva',5,'g']]},
+  {id:'b16',n:'Café con leche y tostada con tomate',nv:{bebida_soja:'Café con bebida de soja y tostada con tomate'},t:'d',min:5,imgDe:'d9',
+    ing:[['leche_semi',200,'p',['leche_sin_lactosa','bebida_soja']],['pan_barra',60,'c',['pan_sin_gluten']],['tomate',60,'f'],['aceite_oliva',5,'g']]},
+  {id:'b17',n:'Queso batido con avena y plátano',nv:{yogur_soja:'Yogur de soja con avena y plátano',yogur_sin_lactosa:'Yogur sin lactosa con avena y plátano'},t:'dm',min:5,imgDe:'d28',
+    ing:[['queso_batido0',200,'p',['yogur_soja','yogur_sin_lactosa']],['avena.cr',40,'c',['avena_sin_gluten.cr']],['platano',60,'c']]},
+  {id:'b18',n:'Revuelto de tofu con tostada',t:'d',min:10,imgDe:'d6',vg:1,
+    ing:[['tofu',150,'p'],['pan_integral',60,'c',['pan_sin_gluten']],['tomate',60,'f'],['aceite_oliva',5,'g']]},
+  {id:'b19',n:'Yogur de soja con avena y plátano',t:'dm',min:5,imgDe:'m5',vg:1,
+    ing:[['yogur_soja',250,'p'],['avena.cr',30,'c',['avena_sin_gluten.cr']],['platano',60,'c'],['nueces',10,'g',null,1]]},
+  {id:'b20',n:'Kéfir con avena y frutos rojos',nv:{yogur_soja:'Yogur de soja con avena y frutos rojos'},t:'dm',min:5,imgDe:'d1',
+    ing:[['kefir',250,'p',['yogur_soja']],['avena.cr',30,'c',['avena_sin_gluten.cr']],['frutos_rojos',80,'c']]},
+
+  /* ---------- media mañana y merienda ---------- */
+  {id:'b30',n:'Manzana con almendras',t:'m',min:1,imgDe:'m5',
+    ing:[['manzana',150,'c'],['almendras',15,'g']]},
+  {id:'b31',n:'Skyr con plátano',nv:{yogur_soja:'Yogur de soja con plátano',yogur_sin_lactosa:'Yogur sin lactosa con plátano'},t:'m',min:2,imgDe:'d19',
+    ing:[['skyr',150,'p',['yogur_soja','yogur_sin_lactosa']],['platano',60,'c']]},
+  {id:'b32',n:'Queso fresco con pera',t:'m',min:2,imgDe:'m6',
+    ing:[['queso_burgos0',100,'p'],['pera',160,'c']]},
+  {id:'b33',n:'Tortitas de arroz con crema de cacahuete',t:'m',min:2,imgDe:'m2',
+    ing:[['tortitas_arroz',16,'c'],['crema_cacahuete',15,'g']]},
+  {id:'b34',n:'Hummus con zanahoria y pepino',t:'m',min:5,imgDe:'m4',
+    ing:[['hummus',60,'g'],['zanahoria',70,'f'],['pepino',80,'f']]},
+  {id:'b35',n:'Bocadillo pequeño de pavo',t:'m',min:3,imgDe:'d21',
+    ing:[['pan_barra',40,'c',['pan_sin_gluten']],['pavo_fiambre',36,'p']]},
+  {id:'b36',n:'Kéfir con frutos rojos',nv:{yogur_soja:'Yogur de soja con frutos rojos'},t:'m',min:2,imgDe:'d1',
+    ing:[['kefir',250,'p',['yogur_soja']],['frutos_rojos',80,'c']]},
+  {id:'b37',n:'Yogur con mandarina',nv:{yogur_soja:'Yogur de soja con mandarina'},t:'m',min:2,imgDe:'d19',
+    ing:[['yogur_desnatado',125,'p',['yogur_sin_lactosa','yogur_soja']],['mandarina',70,'c']]},
+  {id:'b38',n:'Batido de proteína con fresas',t:'m',min:3,imgDe:'m3',
+    ing:[['whey',30,'p',['proteina_vegetal']],['leche_desnatada',200,'p',['leche_sin_lactosa','bebida_soja']],['fresas',100,'c']]},
+  {id:'b39',n:'Queso batido con fresas',nv:{yogur_soja:'Yogur de soja con fresas',yogur_sin_lactosa:'Yogur sin lactosa con fresas'},t:'m',min:2,imgDe:'d28',
+    ing:[['queso_batido0',150,'p',['yogur_soja','yogur_sin_lactosa']],['fresas',100,'c']]},
+  {id:'b40',n:'Edamame',t:'m',min:5,imgDe:'m4',vg:1,
+    ing:[['edamame',100,'p']]},
+  {id:'b41',n:'Yogur de soja con kiwi y nueces',t:'m',min:2,imgDe:'m5',vg:1,
+    ing:[['yogur_soja',125,'p'],['kiwi',75,'c'],['nueces',10,'g']]},
+  {id:'b42',n:'Plátano con nueces',t:'m',min:1,imgDe:'m5',
+    ing:[['platano',120,'c'],['nueces',15,'g']]},
+  {id:'b43',n:'Tostada con aguacate y tomate',t:'m',min:5,imgDe:'d3',
+    ing:[['pan_integral',30,'c',['pan_sin_gluten']],['aguacate',35,'g'],['tomate',40,'f']]},
+  {id:'b44',n:'Requesón con miel y nueces',t:'m',min:2,imgDe:'m6',
+    ing:[['requeson',100,'p'],['miel',7,'c'],['nueces',10,'g']]},
+  {id:'b45',n:'Naranja y un puñado de almendras',t:'m',min:1,imgDe:'m5',
+    ing:[['naranja',150,'c'],['almendras',15,'g']]},
+
+  /* ---------- comidas y cenas ---------- */
+  {id:'b50',n:'Pollo a la plancha con arroz y ensalada',nv:{tofu:'Tofu a la plancha con arroz y ensalada'},t:'c',min:25,imgDe:'c1',
+    ing:[['pollo_pechuga.cr',150,'p',['tofu']],['arroz_blanco.cr',70,'c'],['lechuga',50,'f'],['tomate',80,'f'],['aceite_oliva',10,'g']]},
+  {id:'b51',n:'Pollo con patata asada y verduras',t:'c',min:40,imgDe:'c56',
+    ing:[['pollo_pechuga.cr',150,'p'],['patata.cr',200,'c'],['calabacin',100,'f'],['pimiento_rojo',50,'f'],['aceite_oliva',10,'g']]},
+  {id:'b52',n:'Merluza con patata cocida y judías verdes',t:'c',min:25,imgDe:'c3',
+    ing:[['merluza.cr',180,'p'],['patata.cr',200,'c'],['judias_verdes',150,'f'],['aceite_oliva',10,'g']]},
+  {id:'b53',n:'Salmón con patata y espárragos',t:'c',min:25,imgDe:'c2',
+    ing:[['salmon.cr',130,'p'],['patata.cr',200,'c'],['esparragos',120,'f'],['aceite_oliva',5,'g']]},
+  {id:'b54',n:'Ternera a la plancha con arroz y pimientos',t:'c',min:25,imgDe:'c7',
+    ing:[['ternera_filete.cr',150,'p'],['arroz_blanco.cr',70,'c'],['pimiento_rojo',80,'f'],['pimiento_verde',50,'f'],['aceite_oliva',10,'g']]},
+  {id:'b55',n:'Pasta con atún y tomate',t:'c',min:15,imgDe:'c47',
+    ing:[['pasta.cr',80,'c',['pasta_sin_gluten.cr']],['atun_natural',104,'p'],['tomate_triturado',100,'f'],['cebolla',40,'f',null,1],['aceite_oliva',10,'g']]},
+  {id:'b56',n:'Pasta con pollo y verduras',t:'c',min:20,imgDe:'c82',
+    ing:[['pasta.cr',80,'c',['pasta_sin_gluten.cr']],['pollo_pechuga.cr',130,'p'],['calabacin',100,'f'],['pimiento_rojo',50,'f'],['aceite_oliva',10,'g']]},
+  {id:'b57',n:'Ensalada de garbanzos con atún y huevo',t:'c',min:10,imgDe:'c33',
+    ing:[['garbanzos.co',150,'c'],['atun_natural',52,'p'],['huevo',50,'p',null,1],['tomate',100,'f'],['pepino',80,'f'],['cebolla',30,'f',null,1],['aceite_oliva',10,'g']]},
+  {id:'b58',n:'Ensalada de pasta con atún',t:'c',min:15,imgDe:'c10',
+    ing:[['pasta.cr',70,'c',['pasta_sin_gluten.cr']],['atun_natural',104,'p'],['tomate',80,'f'],['maiz_dulce',40,'f',null,1],['aceite_oliva',10,'g']]},
+  {id:'b59',n:'Arroz con huevo y tomate',t:'c',min:20,imgDe:'c36',
+    ing:[['arroz_blanco.cr',70,'c'],['huevo',100,'p'],['tomate_frito',45,'f'],['aceite_oliva',5,'g']]},
+  {id:'b60',n:'Hamburguesa de ternera con patatas al horno y ensalada',nv:{soja_texturizada:'Hamburguesa vegetal de soja con patatas y ensalada'},t:'c',min:35,imgDe:'c74',
+    ing:[['ternera_picada5.cr',150,'p',['soja_texturizada.cr']],['patata.cr',200,'c'],['lechuga',50,'f'],['tomate',80,'f'],['aceite_oliva',10,'g']]},
+  {id:'b61',n:'Pavo a la plancha con quinoa y verduras',t:'c',min:25,imgDe:'c5',
+    ing:[['pavo_pechuga.cr',150,'p'],['quinoa.cr',60,'c'],['brocoli',120,'f'],['zanahoria',70,'f'],['aceite_oliva',10,'g']]},
+  {id:'b62',n:'Lomo a la plancha con boniato y brócoli',t:'c',min:30,imgDe:'c19',nv:{pavo_pechuga:'Pavo a la plancha con boniato y brócoli'},
+    ing:[['cerdo_lomo.cr',150,'p',['pavo_pechuga.cr']],['boniato.cr',200,'c'],['brocoli',150,'f'],['aceite_oliva',5,'g']]},
+  {id:'b63',n:'Tortilla francesa con ensalada y pan',t:'c',min:10,imgDe:'c11',
+    ing:[['huevo',150,'p'],['pan_integral',60,'c',['pan_sin_gluten']],['lechuga',60,'f'],['tomate',100,'f'],['aceite_oliva',10,'g']]},
+  {id:'b64',n:'Revuelto de gambas y champiñones con pan',t:'c',min:15,imgDe:'c13',
+    ing:[['gambas.cr',120,'p'],['huevo',100,'p'],['champinones',150,'f'],['pan_integral',60,'c',['pan_sin_gluten']],['aceite_oliva',10,'g']]},
+  {id:'b65',n:'Bacalao al horno con patata y pimientos',t:'c',min:35,imgDe:'c3',
+    ing:[['bacalao.cr',180,'p'],['patata.cr',200,'c'],['pimiento_rojo',100,'f'],['cebolla',60,'f'],['aceite_oliva',10,'g']]},
+  {id:'b66',n:'Wrap de pollo con verduras',t:'c',min:15,imgDe:'c69',
+    ing:[['tortilla_trigo',80,'c',['tortilla_maiz']],['pollo_pechuga.cr',130,'p'],['lechuga',40,'f'],['tomate',60,'f'],['pimiento_rojo',50,'f'],['aceite_oliva',5,'g']]},
+  {id:'b67',n:'Tofu salteado con arroz y verduras',t:'c',min:20,imgDe:'c5',vg:1,
+    ing:[['tofu',150,'p'],['arroz_blanco.cr',70,'c'],['brocoli',100,'f'],['pimiento_rojo',60,'f'],['aceite_oliva',10,'g']]},
+  {id:'b68',n:'Ensalada de lentejas',t:'c',min:10,imgDe:'c27',vg:1,
+    ing:[['lentejas.co',200,'c'],['tomate',100,'f'],['pimiento_verde',50,'f'],['cebolla',30,'f',null,1],['aceite_oliva',10,'g']]},
+  {id:'b69',n:'Patata asada rellena de atún',t:'c',min:40,imgDe:'c10',
+    ing:[['patata.cr',250,'c'],['atun_natural',104,'p'],['maiz_dulce',40,'f',null,1],['aceite_oliva',5,'g']]},
+  {id:'b70',n:'Sepia a la plancha con patata y ensalada',t:'c',min:25,imgDe:'c13',
+    ing:[['calamar.cr',200,'p'],['patata.cr',200,'c'],['lechuga',50,'f'],['aceite_oliva',10,'g']]},
+  {id:'b71',n:'Huevos con patatas al horno y pimientos',t:'c',min:35,imgDe:'c18',
+    ing:[['huevo',100,'p'],['patata.cr',200,'c'],['pimiento_verde',80,'f'],['aceite_oliva',10,'g']]},
+  {id:'b72',n:'Ensalada de pollo con aguacate y maíz',t:'c',min:20,imgDe:'c17',
+    ing:[['pollo_pechuga.cr',130,'p'],['lechuga',80,'f'],['tomate',80,'f'],['maiz_dulce',60,'c'],['aguacate',35,'g'],['pan_integral',60,'c',['pan_sin_gluten'],1]]},
+  {id:'b73',n:'Pollo con cuscús y verduras',t:'c',min:20,imgDe:'c22',
+    ing:[['pollo_pechuga.cr',150,'p'],['cuscus.cr',60,'c',['quinoa.cr']],['calabacin',100,'f'],['pimiento_rojo',50,'f'],['aceite_oliva',10,'g']]},
+  {id:'b74',n:'Salmón con arroz y brócoli',t:'c',min:25,imgDe:'c2',
+    ing:[['salmon.cr',130,'p'],['arroz_blanco.cr',70,'c'],['brocoli',150,'f'],['aceite_oliva',5,'g',null,1]]},
+
+  /* ---------- recetas de olla (por raciones, con sus pasos) ---------- */
+  {id:'b101',n:'Lentejas estofadas con verduras',t:'c',min:45,imgDe:'c9',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52],['pan_integral',30]],
+    pasos:'Pica la cebolla, el pimiento y la zanahoria y sofríelos 8 minutos con el aceite a fuego medio. Añade el tomate y deja 3 minutos más. Echa las lentejas lavadas y la patata en trozos, cubre con litro y medio de agua, sal y una hoja de laurel, y cuece a fuego suave 35-40 minutos, hasta que estén tiernas. Si espesan mucho, añade un poco de agua.',
+    ing:[['lentejas.cr',320,'f'],['patata.cr',300,'f'],['zanahoria',140,'f'],['pimiento_rojo',100,'f'],['cebolla',120,'f'],['tomate_triturado',150,'f'],['aceite_oliva',30,'f']]},
+  {id:'b102',n:'Tortilla de patata',t:'c',min:45,imgDe:'c59',tanda:{r:4,c:'sartén de 24 cm'},ac:[['atun_natural',52],['pan_integral',30]],
+    pasos:'Pela y corta las patatas en láminas finas y la cebolla en tiras. Póchalas a fuego suave con el aceite y sal, tapadas, unos 20 minutos, hasta que estén tiernas, y escúrrelas. Bate los huevos con sal, mézclalos con la patata y deja reposar 5 minutos. Cuaja en una sartén antiadherente a fuego medio 3-4 minutos por cada lado, dándole la vuelta con un plato.',
+    ing:[['patata.cr',600,'f'],['huevo',400,'f'],['cebolla',150,'f',null,1],['aceite_oliva',40,'f']]},
+  {id:'b103',n:'Garbanzos con espinacas',t:'c',min:30,imgDe:'c6',tanda:{r:4,c:'cazuela'},ac:[['huevo',50],['pan_integral',30]],
+    pasos:'Sofríe la cebolla picada y 2 dientes de ajo con el aceite 5 minutos. Añade las espinacas y saltéalas hasta que se reduzcan. Incorpora el tomate, una cucharadita de comino y otra de pimentón, y cocina 5 minutos. Añade los garbanzos escurridos y un vaso de agua, y deja a fuego suave 10 minutos. Sírvelos con el huevo cocido en cuartos.',
+    ing:[['garbanzos.co',800,'f'],['espinacas',400,'f'],['cebolla',100,'f'],['tomate_triturado',200,'f'],['aceite_oliva',30,'f'],['huevo',200,'f',null,1]]},
+  {id:'b104',n:'Arroz con pollo',t:'c',min:45,imgDe:'c39',tanda:{r:4,c:'cazuela'},ac:[['pollo_pechuga.cr',80]],
+    pasos:'Trocea el pollo, salpimiéntalo y dóralo en una cazuela con el aceite; retíralo. En el mismo aceite sofríe la cebolla y el pimiento picados 8 minutos, añade el tomate y cocina 3 minutos. Incorpora el arroz, rehógalo 1 minuto, vuelve a poner el pollo con los guisantes y añade el caldo caliente. Cuece 18 minutos a fuego medio y deja reposar 5 minutos tapado.',
+    ing:[['arroz_blanco.cr',320,'f'],['pollo_pechuga.cr',500,'f'],['pimiento_rojo',150,'f'],['cebolla',100,'f'],['guisantes',150,'f'],['tomate_triturado',150,'f'],['aceite_oliva',30,'f'],['caldo_pollo',900,'f']]},
+  {id:'b105',n:'Pollo al horno con patatas',t:'c',min:60,imgDe:'c56',tanda:{r:4,c:'bandeja de horno'},ac:[['pan_integral',30]],
+    pasos:'Precalienta el horno a 200 °C. Pon en una bandeja las patatas en rodajas gruesas y la cebolla y el pimiento en tiras, con la mitad del aceite y sal, y hornea 20 minutos. Coloca encima los contramuslos salpimentados con el resto del aceite, ajo, tomillo y el zumo del limón, y hornea 35-40 minutos más, dándoles la vuelta a mitad, hasta que estén dorados.',
+    ing:[['pollo_muslo.cr',800,'f'],['patata.cr',800,'f'],['cebolla',150,'f'],['pimiento_verde',100,'f'],['aceite_oliva',30,'f'],['limon',50,'f',null,1]]},
+  {id:'b106',n:'Macarrones con carne y tomate',nv:{soja_texturizada:'Macarrones con boloñesa de soja'},t:'c',min:30,imgDe:'c47',tanda:{r:4,c:'olla y sartén'},ac:[['pollo_pechuga.cr',80]],
+    pasos:'Cuece la pasta en agua con sal el tiempo del paquete. Mientras, sofríe la cebolla picada con el aceite 5 minutos, añade la carne con sal y pimienta y dórala desmenuzándola. Echa el tomate y un poco de orégano y deja 10 minutos a fuego suave. Mézclalo con la pasta escurrida y, si quieres, gratina con el queso por encima.',
+    ing:[['pasta.cr',320,'f',['pasta_sin_gluten.cr']],['ternera_picada5.cr',400,'f',['soja_texturizada.cr*0.3']],['tomate_triturado',400,'f'],['cebolla',100,'f'],['aceite_oliva',20,'f'],['mozzarella_light',60,'f',null,1]]},
+  {id:'b107',n:'Crema de calabacín',t:'c',min:30,imgDe:'c65',tanda:{r:4,c:'olla mediana'},ac:[['huevo',100],['pollo_pechuga.cr',120],['pan_integral',60]],
+    pasos:'Trocea el puerro, la patata y los calabacines (con piel) y rehógalos 5 minutos con el aceite. Cubre justo con el caldo, sala y cuece 20 minutos. Añade el queso crema y tritura hasta que quede fina. Si la quieres más ligera, añade un poco más de caldo.',
+    ing:[['calabacin',1000,'f'],['patata.cr',200,'f'],['puerro',150,'f'],['queso_crema_light',80,'f',null,1],['aceite_oliva',20,'f'],['caldo_verduras',500,'f']]},
+  {id:'b108',n:'Ternera guisada con patatas',t:'c',min:90,imgDe:'c57',tanda:{r:4,c:'olla grande'},ac:[['pan_integral',30]],
+    pasos:'Trocea la carne en dados, salpimiéntala y dórala a fuego fuerte con el aceite en una olla; retírala. Sofríe en el mismo aceite la cebolla y la zanahoria picadas 8 minutos, añade el tomate y vuelve a poner la carne. Cubre con agua o caldo, añade laurel y cuece tapado a fuego suave 1 hora. Incorpora las patatas en trozos y los guisantes y cuece 25 minutos más, hasta que la patata esté tierna.',
+    ing:[['ternera_filete.cr',600,'f'],['patata.cr',600,'f'],['zanahoria',200,'f'],['cebolla',150,'f'],['guisantes',100,'f'],['tomate_triturado',150,'f'],['aceite_oliva',30,'f']]},
+  {id:'b109',n:'Merluza en salsa verde con patatas',t:'c',min:30,imgDe:'c3',tanda:{r:4,c:'cazuela baja'},ac:[['pan_integral',30]],
+    pasos:'Corta las patatas en rodajas de 1 cm y cuécelas en agua con sal 12 minutos; escúrrelas. En una cazuela baja, dora 3 dientes de ajo picados con el aceite, añade la harina, remueve 1 minuto y vierte poco a poco el caldo sin dejar de remover. Añade los guisantes y perejil picado, coloca la merluza salpimentada y las patatas, y cocina 5-6 minutos moviendo la cazuela para que ligue la salsa.',
+    ing:[['merluza.cr',720,'f'],['patata.cr',600,'f'],['guisantes',100,'f'],['harina_trigo',15,'f',['maicena']],['aceite_oliva',30,'f'],['caldo_verduras',400,'f']]},
+  {id:'b110',n:'Pisto con huevo',t:'c',min:45,imgDe:'c38',tanda:{r:4,c:'sartén grande'},ac:[['pan_integral',60],['atun_natural',52]],
+    pasos:'Pica la cebolla y los pimientos y póchalos con el aceite a fuego suave 10 minutos. Añade el calabacín y la berenjena en dados y cocina 15 minutos más, removiendo de vez en cuando. Incorpora el tomate y sal, y deja 10 minutos. Al servir, pon encima los huevos a la plancha (o cuájalos sobre el pisto, tapado, 4 minutos).',
+    ing:[['calabacin',500,'f'],['berenjena',300,'f'],['pimiento_rojo',200,'f'],['pimiento_verde',150,'f'],['cebolla',200,'f'],['tomate_triturado',400,'f'],['aceite_oliva',40,'f'],['huevo',400,'f']]},
+  {id:'b111',n:'Albóndigas en salsa de tomate',nv:{soja_texturizada:'Albóndigas de soja en salsa de tomate'},t:'c',min:50,imgDe:'c53',tanda:{r:4,c:'cazuela'},ac:[['arroz_blanco.cr',60],['patata.cr',150],['pan_integral',30]],
+    pasos:'Mezcla la carne con el huevo, el pan rallado, ajo y perejil picados y sal. Forma albóndigas del tamaño de una nuez y dóralas en una sartén con la mitad del aceite; resérvalas. En una cazuela, pocha la cebolla picada con el resto del aceite 8 minutos, añade el tomate y cocina 10 minutos. Incorpora las albóndigas y un poco de agua, y cuece tapado 15 minutos a fuego suave.',
+    ing:[['ternera_picada5.cr',500,'f',['soja_texturizada.cr*0.3']],['huevo',50,'f'],['pan_rallado',40,'f',['harina_sin_gluten']],['tomate_triturado',400,'f'],['cebolla',150,'f'],['aceite_oliva',25,'f']]},
+  {id:'b112',n:'Paella de pollo y verduras',t:'c',min:50,imgDe:'c34',tanda:{r:4,c:'paellera'},ac:[['pollo_pechuga.cr',80]],
+    pasos:'En una paellera, dora el pollo troceado y salado con el aceite y apártalo a los lados. Sofríe en el centro las judías verdes y el pimiento troceados 5 minutos, añade el tomate y cocina 3 minutos más. Echa el arroz, mézclalo todo, vierte el caldo caliente con unas hebras de azafrán y sal, y cuece sin remover 18-20 minutos: los primeros 10 a fuego fuerte y el resto a fuego medio. Deja reposar 5 minutos tapada con un paño.',
+    ing:[['arroz_blanco.cr',320,'f'],['pollo_pechuga.cr',400,'f'],['judias_verdes',200,'f'],['pimiento_rojo',150,'f'],['tomate_triturado',150,'f'],['aceite_oliva',30,'f'],['caldo_pollo',1000,'f']]},
+  {id:'b113',n:'Alubias con verduras',t:'c',min:30,imgDe:'c32',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52],['pan_integral',30]],
+    pasos:'Pica la cebolla, el puerro, la zanahoria y el pimiento y sofríelos con el aceite 10 minutos. Añade el tomate y una cucharadita de pimentón y remueve. Incorpora las alubias escurridas y lavadas y cubre con agua o caldo. Cuece a fuego suave 15 minutos y chafa unas cuantas alubias para que espese el caldo.',
+    ing:[['alubias.co',800,'f'],['zanahoria',150,'f'],['pimiento_rojo',100,'f'],['cebolla',120,'f'],['puerro',100,'f'],['tomate_triturado',150,'f'],['aceite_oliva',30,'f']]},
+  {id:'b114',n:'Sopa de pollo con fideos',t:'c',min:40,imgDe:'c67',tanda:{r:4,c:'olla grande'},ac:[['huevo',50],['pan_integral',30]],
+    pasos:'Pon en una olla el pollo, la zanahoria y el puerro troceados con el caldo y cuece 25 minutos a fuego suave. Saca el pollo, desmenúzalo y vuelve a echarlo. Añade los fideos y cuece el tiempo del paquete (4-5 minutos). Prueba de sal y sirve con un chorrito de aceite.',
+    ing:[['pollo_pechuga.cr',400,'f'],['pasta.cr',160,'f',['pasta_sin_gluten.cr']],['zanahoria',150,'f'],['puerro',100,'f'],['caldo_pollo',1500,'f'],['aceite_oliva',10,'f']]},
+  {id:'b115',n:'Ensaladilla rusa',t:'c',min:40,imgDe:'c79',tanda:{r:4,c:'fuente'},ac:[['atun_natural',52]],
+    pasos:'Cuece las patatas y las zanahorias peladas y en dados en agua con sal 15 minutos; añade los guisantes los 3 últimos. Cuece los huevos 10 minutos y pícalos. Deja enfriar todo, mézclalo con el atún escurrido y la mayonesa, y adorna con las aceitunas. Guárdala en la nevera hasta servir.',
+    ing:[['patata.cr',800,'f'],['zanahoria',150,'f'],['guisantes',150,'f'],['huevo',200,'f'],['atun_natural',156,'f'],['mayonesa',60,'f'],['aceitunas',40,'f',null,1]]},
+  {id:'b116',n:'Crema de calabaza',t:'c',min:35,imgDe:'c65',tanda:{r:4,c:'olla mediana'},ac:[['huevo',100],['pollo_pechuga.cr',120],['pan_integral',60]],
+    pasos:'Trocea la calabaza, la zanahoria, la cebolla y la patata y rehógalas 5 minutos con el aceite. Cubre justo con el caldo, añade sal y una pizca de nuez moscada, y cuece 20-25 minutos. Tritura hasta que quede fina y ajusta el espesor con un poco más de caldo.',
+    ing:[['calabaza',1000,'f'],['zanahoria',200,'f'],['cebolla',150,'f'],['patata.cr',200,'f'],['aceite_oliva',20,'f'],['caldo_verduras',500,'f']]},
+  {id:'b117',n:'Bizcocho de avena y yogur',t:'dm',cat:'p',min:50,imgDe:'p1',tanda:{r:8,c:'molde de 20 cm'},
+    pasos:'Precalienta el horno a 180 °C. Tritura la avena hasta que quede como harina. Bate los huevos con el yogur, el edulcorante y la ralladura de limón; añade la avena y un sobre de levadura y mezcla sin batir de más. Vierte en un molde forrado con papel y hornea 35-40 minutos, hasta que al pinchar salga limpio. Déjalo enfriar antes de cortarlo.',
+    ing:[['avena.cr',200,'f',['avena_sin_gluten.cr']],['yogur_desnatado',250,'f',['yogur_sin_lactosa','yogur_soja']],['huevo',200,'f'],['eritritol',40,'f'],['limon',50,'f',null,1]]}
+];
+BIB_DIARIO.forEach(function(r){ r.bd=1; r.pasos=r.pasos||''; r.cat=r.cat||(/c/.test(r.t)?'c':'d');
+  if(r.imgDe&&!r.img){ var o=RECETAS_LIB.filter(function(x){ return x.id===r.imgDe; })[0]; r.img=o&&o.img||''; } });
+function casaLib(){ return BOOT.mode==='clienta'?!!(CL.d&&CL.d.casa):!!(CO.nut&&CO.nut.casa); }
+
+/* lo que tiene sentido de cada alimento: [mínimo, máximo, de cuánto en cuánto] en gramos (null: se queda como está) */
+var BD_R={aceite_oliva:[5,20,5],mantequilla:[5,15,5],mayonesa:[10,30,5],almendras:[10,30,5],nueces:[10,30,5],cacahuetes:[10,30,5],pistachos:[10,30,5],anacardos:[10,30,5],avellanas:[10,30,5],
+  crema_cacahuete:[10,30,5],chia:[10,20,5],hummus:[20,100,20],chocolate85:[10,30,10],aguacate:[35,140,35],aceitunas:[15,45,15],queso_crema_light:[20,60,10],pesto:[15,30,15],
+  whey:[15,45,15],proteina_vegetal:[15,45,15],huevo:[50,200,50],claras:[60,300,30],
+  yogur_natural:[125,250,125],yogur_desnatado:[125,250,125],yogur_griego:[125,250,125],yogur_griego0:[125,250,125],yogur_soja:[125,250,125],yogur_sin_lactosa:[125,250,125],skyr:[150,300,150],kefir:[125,250,125],
+  queso_batido0:[100,250,25],requeson:[50,200,25],queso_burgos:[50,150,25],queso_burgos0:[50,150,25],mozzarella:[30,125,25],mozzarella_light:[20,60,10],queso_semicurado:[20,40,10],queso_lonchas_light:[20,60,20],parmesano:[5,15,5],
+  jamon_serrano:[30,90,15],jamon_cocido:[30,90,15],pavo_fiambre:[36,108,12],atun_natural:[52,156,52],atun_aceite:[52,156,52],sardinas_aceite:[60,120,60],bacon:[15,45,15],chorizo:[20,40,10],
+  avena:[30,90,10],avena_sin_gluten:[30,90,10],corn_flakes:[25,60,5],tortitas_arroz:[16,48,8],tortilla_trigo:[40,120,40],tortilla_maiz:[30,90,30],pan_hamburguesa:[60,60,60],pan_barra:[40,120,20],
+  guisantes:[50,150,25],maiz_dulce:[40,120,20],miel:[7,21,7],tomate_frito:[15,60,15],
+  platano:[60,240,60],manzana:[150,300,150],pera:[160,320,160],naranja:[150,300,150],melocoton:[150,300,150],mandarina:[70,210,70],kiwi:[75,225,75],datiles:[8,32,8],fresas:[100,300,25],arandanos:[50,150,25],
+  frambuesas:[50,150,25],frutos_rojos:[80,200,20],uva:[80,200,20],cerezas:[80,200,20],pasas:[15,30,15],melon:[150,350,50],sandia:[150,350,50],pina:[100,250,25],mango:[100,250,25],
+  tofu:[80,200,10],tempeh:[80,200,10],seitan:[80,200,10],soja_texturizada:[30,70,10],edamame:[60,150,10]};
+function bdRegla(a){
+  if(!a) return null; var id=String(a.id||''), f=famDe(id), co=/\.co$/.test(id), R=BD_R[f];
+  if(R) return R;
+  if(/^(arroz|pasta|quinoa|cuscus|noodles|fideos)/.test(f)) return co?[100,300,25]:[40,140,10];
+  if(/^(patata|boniato)/.test(f)) return [100,350,25];
+  if(/^(lentejas|garbanzos|alubias)/.test(f)) return co?[120,280,20]:[50,110,10];
+  if(/^pan_/.test(f)) return [30,120,30];
+  if(/^(pollo|pavo_pechuga|ternera|cerdo_lomo|cerdo_solomillo|merluza|bacalao|salmon|atun_fresco|gambas|calamar)/.test(f)) return co?[60,180,10]:[80,220,10];
+  if(/^(leche|bebida)/.test(f)) return [100,300,50];
+  var x=a.x||'', k=num(a.b&&a.b[0])||0, u=a.u&&num(a.u[1])>=40?num(a.u[1]):0;      // alimentos propios: por su grupo, sus unidades y lo que pesan sus kcal
+  if(!ROL_X[x]) return null;
+  if(u){ var st=x==='fruta'&&u>=100?u/2:u; return [st,u*(u>=100?2:3),st]; }
+  if(x==='grasa') return k>450?[5,30,5]:[20,100,10];
+  if(x==='hc') return k>=300?[20,120,10]:k>=200?[30,120,10]:[80,300,20];
+  if(x==='prot') return k>=300?[15,45,15]:[60,220,10];
+  if(x==='lac') return k>=200?[20,60,10]:k<=90?[100,300,25]:[50,200,25];
+  if(x==='fruta') return k>=200?[10,40,10]:[80,250,20];
+  return null;
+}
+/* lo que se puede añadir si hace falta para llegar (y si no, no sale): pan con la comida o la cena, una pieza de fruta en el desayuno */
+function altF(g,id){ if(id===g[0]) return 1; var s=(g[3]||[]).filter(function(x){ return String(x).split('*')[0]===id; })[0]; return +String(s||'').split('*')[1]||1; }
+function bdExtras(r,out,de){
+  if(!r||!r.bd||r.tanda) return []; var F=out.map(function(z){ return famDe(z.a.id); }), E=[];
+  var tiene=function(rx){ return F.some(function(f){ return rx.test(f); }); };
+  if(/c/.test(r.t)&&!tiene(/^(pan|tortilla_|tortitas)/)){ var p=de('pan_integral')||de('pan_sin_gluten'); if(p) E.push({a:p,q:0,R:[0,60,30]}); }
+  if(r.t==='d'&&!tiene(/^(platano|manzana|pera|naranja|mandarina|kiwi|fresas|frutos_rojos|arandanos)$/)){ var f=de('kiwi')||de('naranja'); if(f) E.push({a:f,q:0,R:f.id==='kiwi'?[0,150,75]:[0,150,150]}); }
+  return E;
+}
+function bdCands(R){ var C=[]; for(var g=R[0];g<=R[1]+1e-9;g+=R[2]) C.push(Math.round(g*10)/10); return C; }
+function bdCoste(m,ob,Q,B){
+  var o0=ob[0]!=null?ob[0]:4*(ob[1]||0)+4*(ob[2]||0)+9*(ob[3]||0), dk=(m[0]-o0)/Math.max(o0,1), e=Math.abs(dk)*(dk>0?1.3:1);      // pasarse de kcal cuenta algo más que quedarse corto
+  if(ob[1]!=null&&ob[2]!=null&&ob[3]!=null) e+=errMac(m,ob);
+  for(var i=0;i<Q.length;i++){ if(B[i]>0&&Q[i]>0) e+=0.04*Math.abs(Math.log(Q[i]/B[i])); else if(!B[i]&&Q[i]>0) e+=0.06; }      // sin alejarse mucho del plato de base (y lo añadido, solo si ayuda)
+  return e;
+}
+/* L: [{a:alimento, q:gramos de base, R:[mín, máx, paso] o null si se queda}] → gramos de cada uno (búsqueda por pasos: uno a uno y de dos en dos) */
+function bdOpt(L,ob){
+  var V=L.map(function(z){ var C=z.R?bdCands(z.R):[]; return C.length?C:[num(z.q)||0]; }), B=L.map(function(z){ return num(z.q)||0; }), A=L.map(function(z){ return (z.a&&z.a.b)||[0,0,0,0]; });
+  var I=V.map(function(C,i){ var b=B[i], k=0; C.forEach(function(c,j){ if(Math.abs(c-b)<Math.abs(C[k]-b)) k=j; }); return k; });
+  var Q=function(){ return I.map(function(k,i){ return V[i][k]; }); };
+  var mac=function(q){ var m=[0,0,0,0]; for(var i=0;i<q.length;i++) for(var j=0;j<4;j++) m[j]+=(+A[i][j]||0)*q[i]/100; return m; };
+  var coste=function(){ var q=Q(); return bdCoste(mac(q),ob,q,B); }, cur=coste(), i, j;
+  for(var r=0;r<40;r++){
+    var mej=false;
+    for(i=0;i<V.length;i++){ if(V[i].length<2) continue; for(var k=0;k<V[i].length;k++){ if(k===I[i]) continue; var k0=I[i]; I[i]=k; var c=coste(); if(c<cur-1e-9){ cur=c; mej=true; } else I[i]=k0; } }
+    for(i=0;i<V.length;i++) for(j=i+1;j<V.length;j++){ if(V[i].length<2||V[j].length<2) continue;
+      for(var d=0;d<4;d++){ var di=[1,-1,1,-1][d], dj=[-1,1,1,-1][d], a0=I[i], b0=I[j], a1=a0+di, b1=b0+dj; if(a1<0||b1<0||a1>=V[i].length||b1>=V[j].length) continue;
+        I[i]=a1; I[j]=b1; var c2=coste(); if(c2<cur-1e-9){ cur=c2; mej=true; } else { I[i]=a0; I[j]=b0; } } }
+    if(!mej) break;
+  }
+  return Q();
+}
+/* una receta de la biblioteca de diario (adaptada: x de adaptarReceta o adaptarRecCl) con los gramos que cuadran la comida */
+function bdItems(x,ob){
+  var I=x.ing.concat(x.ex||[]), L=I.map(function(it){ return {a:it.a,q:it.q,R:it.rol==='f'?null:(it.R||bdRegla(it.a))}; }), Q=bdOpt(L,ob);
+  return I.map(function(it,k){ return {i:'i'+rand(5),a:it.a.id,q:String(Q[k]),x:it.a.x||''}; }).filter(function(it,k){ return k<x.ing.length||Q[k]>0; });
+}
+/* coach · una receta de olla de la biblioteca en un plato por raciones: la olla entera, su ración (de ½ en ½) y, si le falta, un acompañamiento
+   (un huevo, una lata de atún, pan…) que la ayude a llegar a su comida */
+function libOpCasa(x,ob,al){
+  var r=x.r, n=r.tanda.r, o={items:x.ing.map(function(z){ return hidratarIt({i:'i'+rand(5),a:z.a.id,q:String(z.q),x:z.a.x||''}); })};
+  o.lote={pc:0,rac:n,b:{},u:'rac'}; o.items.forEach(function(it,k){ o.lote.b[it.i]=x.ing[k].q; });
+  if(!ob||ob[0]==null){ rcPonF(o,1/n); return o; }
+  var mx=ob[1]!=null&&ob[2]!=null&&ob[3]!=null, K=[]; for(var k=0.5;k<=Math.min(n,3)+1e-9;k+=0.5) K.push(k/n);
+  var AC=[[]]; if(mx){ var S=[]; (r.ac||[]).forEach(function(z){ var a=CO.nutM[z[0]]; if(!a||(al&&prohibidoAl(a,al))) return; var R=bdRegla(a)||[z[1],z[1],z[1]];
+      [z[1],z[1]*2].filter(function(q,i){ return !i||q<=R[1]; }).forEach(function(q){ S.push([a,q]); }); });
+    S.forEach(function(s){ AC.push([s]); }); S.forEach(function(s,i){ S.forEach(function(t,j){ if(j>i&&t[0]!==s[0]) AC.push([s,t]); }); }); }
+  var o0=ob[0], best=null;
+  K.forEach(function(f){ var m0=rcMac(o,f); if(!m0) return;
+    AC.forEach(function(ac){ var m=m0.slice(); ac.forEach(function(s){ for(var j=0;j<4;j++) m[j]+=(+s[0].b[j]||0)*s[1]/100; });
+      var dk=(m[0]-o0)/Math.max(o0,1), e=Math.abs(dk)*(dk>0?1.3:1)+(mx?0.6*errMac(m,ob):0)+0.06*ac.length;
+      if(!best||e<best.e-1e-9) best={e:e,f:f,ac:ac}; }); });
+  rcPonF(o,best?best.f:1/n);
+  (best?best.ac:[]).forEach(function(s){ o.items.push(hidratarIt({i:'i'+rand(5),a:s[0].id,q:String(s[1]),x:s[0].x||''})); });
+  return o;
+}
 
 /* adapta una receta a lo que puede comer: cambia lo que no puede por su alternativa o la descarta */
 function adaptarReceta(r,al){
@@ -14081,15 +14371,15 @@ function adaptarReceta(r,al){
     var g=r.ing[i], a=CO.nutM[g[0]];
     if(!a) return null;
     if(prohibidoAl(a,al)){
-      var alt=(g[3]||[]).map(function(id){ return CO.nutM[id]; }).filter(function(x){ return x&&!prohibidoAl(x,al); })[0];
+      var alt=(g[3]||[]).map(function(id){ return CO.nutM[String(id).split('*')[0]]; }).filter(function(x){ return x&&!prohibidoAl(x,al); })[0];
       if(alt){ cambios.push([a.n,alt.n]); us.push(alt.id); pen+=g[2]==='p'?1.5:0.3; a=alt; }
       else if(g[4]){ qu.push(g[0]); pen+=0.2; continue; }
       else return null;
     }
-    out.push({a:a,q:g[1],rol:g[2]});
+    out.push({a:a,q:g[1]*altF(g,a.id),rol:g[2],R:a.id===g[0]?g[5]||null:null});      // v53.4.87: sus límites (biblioteca de diario) y, en las de olla, cuánto va de la alternativa ('soja_texturizada.cr*0.3': 120 g de carne → 36 g de soja en seco)
   }
   var sa=(al.alergias||[]).indexOf('halal')>=0&&/vino/i.test((r.ex||'')+r.pasos);
-  return {r:r,ing:out,cambios:cambios,n:nombreAdap(r,us,qu),notas:notasAdap(us),pen:pen,sa:sa};
+  return {r:r,ing:out,cambios:cambios,n:nombreAdap(r,us,qu),notas:notasAdap(us),pen:pen,sa:sa,ex:bdExtras(r,out,function(id){ var a=CO.nutM[id]; return a&&!prohibidoAl(a,al)?a:null; })};
 }
 /* v48: la receta adaptada con su nombre (la boloñesa con soja es «Boloñesa de soja») y, si hace falta, cómo se usa lo que cambia */
 var NOTA_ALT={soja_texturizada:'Con soja texturizada: hidrátala 10 minutos en agua caliente o caldo de verduras, escúrrela apretando bien y úsala como la carne picada, con un poco más de especias. Para albóndigas o hamburguesas, mézclala con 1 cucharada de maicena y aplástala bien.',
@@ -14102,6 +14392,7 @@ function txtLib(r,sa){ var t=(r.ex?'Además: '+r.ex+'\n\n':'')+r.pasos; return s
 function notasAdap(us){ var v={}; return (us||[]).map(function(id){ var f=famDe(id); if(NOTA_ALT[f]&&!v[f]){ v[f]=1; return NOTA_ALT[f]; } return ''; }).filter(Boolean); }
 /* gramos para que la receta dé la proteína, los hidratos y la grasa de esa comida (mínimos cuadrados con límites) */
 function cuadrarReceta(x,obj,lim){
+  if(x.r&&x.r.bd&&!x.r.tanda) return bdItems(x,obj);      // v53.4.87: la biblioteca de diario, por pasos que tienen sentido
   var roles=['p','c','g'], M=[[0,0,0],[0,0,0],[0,0,0]], F=[0,0,0], lo=lim?lim[0]:0.3, hi=lim?lim[1]:3.5;      // v53.4.80: límites de cuánto sube o baja cada papel (las recetas de la biblioteca, ×0,3 a ×3,5)
   x.ing.forEach(function(it){ var b=it.a.b; for(var m=0;m<3;m++){ var v=(b[m+1]||0)*it.q/100; var k=roles.indexOf(it.rol); if(k>=0) M[m][k]+=v; else F[m]+=v; } });
   var R=[Math.max(0,obj[1]-F[0]),Math.max(0,obj[2]-F[1]),Math.max(0,obj[3]-F[2])], W=R.map(function(v,i){ var b=Math.max(v,[8,12,4][i]); return 1/(b*b); }), s=[1,1,1];
@@ -14127,15 +14418,20 @@ function errMac(m,obj){ if(!m) return 9; var e=0; for(var i=1;i<4;i++){ var o=Ma
 function recetasPara(tipo,obj,al,usadas,n){
   var C=libTodas().filter(function(r){ return r.t.indexOf(tipo)>=0; }).map(function(r){
     var x=adaptarReceta(r,al); if(!x) return null;
-    var pt=r.tanda?porcionTanda(x,obj):null, items=pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
+    var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
+    var pt=r.tanda&&!lc?porcionTanda(x,obj):null, items=lc?lc.items:pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
     var cu=!pt&&m?cuadraMac(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
-    return {x:x,items:items,k:pt?pt.k:null,m:m,ob:obj,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?0.8:0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
+    return {x:x,items:items,k:pt?pt.k:null,op:lc,m:m,ob:obj,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?(lc?0.4:0.8):0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
   }).filter(Boolean).sort(function(a,b){ return b.score-a.score; });
-  return C.slice(0,n);
+  if(!(CO.nut&&CO.nut.casa)) return C.slice(0,n);
+  var out=[], fam=function(z){ var q=z.x.ing.filter(function(it){ return it.rol==='p'; })[0]||z.x.ing[0]; return q?famDe(q.a.id):''; };      // v53.4.87 (nº 1): en una misma comida, platos distintos (no dos de kéfir o dos de pollo)
+  while(out.length<n&&C.length){ C.forEach(function(z){ z.s2=z.score-(out.some(function(o){ return fam(o)===fam(z); })?2.5:0); }); C.sort(function(a,b){ return b.s2-a.s2; }); out.push(C.shift()); }
+  return out;
 }
 function opcionDeReceta(c){
   var r=c.x.r; r && (usadasG[r.id]=1);
-  var o={id:'o'+rand(6),nombre:c.x.n||r.n,texto:txtLib(r,c.x.sa)+(c.x.cambios.length?' (Adaptada: '+c.x.cambios.map(function(z){ return z[0]+' → '+z[1]; }).join(', ')+'.)':'')+((c.x.notas||[]).length?'\n\n'+c.x.notas.join('\n'):''),img:r.img,min:r.min,items:c.items.map(hidratarIt),lib:r.id};
+  var o={id:'o'+rand(6),nombre:c.x.n||r.n,texto:(txtLib(r,c.x.sa)+(c.x.cambios.length?' (Adaptada: '+c.x.cambios.map(function(z){ return z[0]+' → '+z[1]; }).join(', ')+'.)':'')+((c.x.notas||[]).length?'\n\n'+c.x.notas.join('\n'):'')).trim(),img:r.img,min:r.min,items:c.items.map(hidratarIt),lib:r.id};
+  if(c.op){ o.items=c.op.items; o.lote=c.op.lote; return o; }      // v53.4.87: receta de olla por raciones (nº 1)
   if(r.tanda) o.tanda={r:r.tanda.r,k:c.k||1,c:r.tanda.c||''};
   var rp=r.src&&CO.nut&&CO.nut.casa?(CO.nut.recetas||[]).filter(function(y){ return y.id===r.src&&(y.pz||num(y.lote&&y.lote.pc)>=50||num(y.raciones)>1); })[0]:null;      // v53.4.83 · v53.4.86: por piezas, peso o raciones
   if(rp){ o.rec=rp.id; delete o.lib; rcOpRec(rp,o,c.ob||null); }
@@ -14240,13 +14536,14 @@ function libMood(L,M){
         if(a.u&&num(a.u[1])>=40) rol='f'; return [it.a,td?num(it.q)||0:Math.round((num(it.q)||0)/rac*10)/10,rol]; })};
   });
 }
-function libTodas(){ return RECETAS_LIB.concat(BOOT.mode==='clienta'?libMood(CL.d&&CL.d.recetasMood,CL.bancoM||{}):libMood(CO.nut&&CO.nut.recetas,CO.nutM||{})); }
+function libTodas(){ return (casaLib()?BIB_DIARIO:RECETAS_LIB).concat(      // v53.4.87: en el panel nº 1, la biblioteca de diario
+BOOT.mode==='clienta'?libMood(CL.d&&CL.d.recetasMood,CL.bancoM||{}):libMood(CO.nut&&CO.nut.recetas,CO.nutM||{})); }
 function libHtml(q){
   var c=planActual().comidas[CO.recMi], al=alimCl(), ob=objCm(planActual(),c), f=CO.libF||'';
   var L=libParaComida(c).filter(function(z){ return (!q||clave((z.x.n||'')+' '+z.r.n).indexOf(clave(q))>=0)&&(!f||(f==='t'?!!z.r.tanda:libCat(z.r)===f)); });
   return '<div class="lab">Biblioteca MOOD ON <small class="muted">'+(ob?'entran con los gramos de esta comida':'pon el % del día de esta comida para cuadrarlas')+'</small></div>'+
     '<div class="tipos lib-f">'+LIB_CAT.map(function(x){ return '<button class="'+(f===x[0]?'on':'')+'" data-a="libF" data-v="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div>'+
-    '<div class="rec-l lib-l">'+(L.length?L.map(function(z){ return '<button class="rec-o" data-a="libPon" data-id="'+z.r.id+'">'+platoImg(z.r.img,'rec-im')+'<span><b>'+esc(z.x.n||z.r.n)+'</b><small>'+esc([z.r.min+' min'].concat(z.r.tanda?['por tandas: '+z.r.tanda.r+' raciones']:z.r.pz?['por '+pzPl(z.r.pz.nom)]:[]).concat(z.x.cambios.length?['adaptada: '+z.x.cambios.map(function(k){ return k[1]; }).join(', ')]:[]).join(' · '))+'</small></span></button>'; }).join(''):'<p class="muted">Ninguna con ese nombre.</p>')+'</div>';
+    '<div class="rec-l lib-l">'+(L.length?L.map(function(z){ return '<button class="rec-o" data-a="libPon" data-id="'+z.r.id+'">'+platoImg(z.r.img,'rec-im')+'<span><b>'+esc(z.x.n||z.r.n)+'</b><small>'+esc([z.r.min+' min'].concat(z.r.tanda?[(z.r.bd?'receta de olla: ':'por tandas: ')+z.r.tanda.r+' raciones']:z.r.pz?['por '+pzPl(z.r.pz.nom)]:[]).concat(z.x.cambios.length?['adaptada: '+z.x.cambios.map(function(k){ return k[1]; }).join(', ')]:[]).join(' · '))+'</small></span></button>'; }).join(''):'<p class="muted">Ninguna con ese nombre.</p>')+'</div>';
 }
 A.libF=function(el){ CO.libF=el.dataset.v; var b=document.querySelector('#modal .mbox'), st=b?b.scrollTop:0, i=document.querySelector('#modal [data-k=buscaRecM]'); modalRecetas(i?i.value:''); var b2=document.querySelector('#modal .mbox'); if(b2) b2.scrollTop=st; };
 function libParaComida(c){
@@ -14257,6 +14554,12 @@ A.libPon=function(el){
   var p=planActual(), c=p.comidas[CO.recMi], al=alimCl(), r=libTodas().filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r||!c) return;
   if(r.pz&&r.src&&CO.nut&&CO.nut.casa) return A.recPon({dataset:{id:r.src}});      // v53.4.83
   var x=adaptarReceta(r,al); if(!x) return toast('No puede comer algo de esta receta');
+  if(r.bd&&r.tanda&&CO.nut&&CO.nut.casa){      // v53.4.87: receta de olla de la biblioteca de diario → por raciones, con lo que encaja con su comida
+    if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
+    var ob1=objCm(p,c), lc=libOpCasa(x,ob1,al), op1=opcionDeReceta({x:x,items:lc.items,op:lc}), v1=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
+    if(v1) c.opciones=[op1]; else c.opciones.push(op1); CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.length-1; cerrarModal(); marcarDie(); repintar();
+    var ac1=op1.items.filter(function(it){ return op1.lote.b[it.i]==null; });
+    return toast('Añadida: su ración es '+rcRac(rcF(op1)*op1.lote.rac)+' de '+op1.lote.rac+(ac1.length?', con '+listaY(ac1.map(function(it){ return gTxt(it.q)+' de '+alNom(it).toLowerCase(); })):'')+'. En su app la apunta por ración o por peso.','ok'); }
   var ob=objCm(p,c), pt=r.tanda?porcionTanda(x,ob):null, items=pt?pt.items:ob&&ob[1]!=null&&ob[2]!=null&&ob[3]!=null?cuadrarReceta(x,ob):x.ing.map(function(it){ return {i:'i'+rand(5),a:it.a.id,q:String(it.q),x:it.a.x||''}; });
   if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
   var vacia=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
@@ -15009,9 +15312,9 @@ A.dvCrear=function(el){ var x=nuevoPlato(el.dataset.p,+el.dataset.m,{nombre:'Mi 
 function adaptarRecCl(r){
   var M=CL.bancoM||{}, out=[], cambios=[], us=[], qu=[];
   for(var i=0;i<r.ing.length;i++){ var g=r.ing[i], a=M[g[0]];
-    if(!a){ var alt=(g[3]||[]).map(function(id){ return M[id]; }).filter(Boolean)[0]; if(alt){ cambios.push(alt.n); us.push(alt.id); a=alt; } else if(g[4]){ qu.push(g[0]); continue; } else return null; }
-    out.push({a:a,q:g[1],rol:g[2]}); }
-  return {r:r,ing:out,cambios:cambios,n:nombreAdap(r,us,qu),notas:notasAdap(us),sa:!!(CL.d&&CL.d.halal)&&/vino/i.test((r.ex||'')+r.pasos)};
+    if(!a){ var alt=(g[3]||[]).map(function(id){ return M[String(id).split('*')[0]]; }).filter(Boolean)[0]; if(alt){ cambios.push(alt.n); us.push(alt.id); a=alt; } else if(g[4]){ qu.push(g[0]); continue; } else return null; }
+    out.push({a:a,q:g[1]*altF(g,a.id),rol:g[2],R:a.id===g[0]?g[5]||null:null}); }
+  return {r:r,ing:out,cambios:cambios,n:nombreAdap(r,us,qu),notas:notasAdap(us),sa:!!(CL.d&&CL.d.halal)&&/vino/i.test((r.ex||'')+r.pasos),ex:bdExtras(r,out,function(id){ return M[id]||null; })};
 }
 A.dvLib=function(el){ CL.libSel={p:el.dataset.p,m:+el.dataset.m}; conBanco(function(){ CL.libF=''; pintarLibCl(''); }); };
 function pintarLibCl(q){
