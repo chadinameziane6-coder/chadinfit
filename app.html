@@ -2964,7 +2964,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.105';
+var APP_V = 'v53.4.106';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -12485,7 +12485,7 @@ function ndGenerarPlatos(gen){
     if(ob[0]==null) ob[0]=4*ob[1]+4*ob[2]+9*ob[3];
     usadasG={};
     p.comidas=G.rep.map(function(c){
-      var o=kcalRp(ob,[ob[0]*c.k/100,ob[1]*c.p/100,ob[2]*c.c/100,ob[3]*c.g/100],!(c.p===c.k&&c.c===c.k&&c.g===c.k)), R=recetasPara(c.tipo,o,al,usadasG,G.opc);
+      var o=kcalRp(ob,[ob[0]*c.k/100,ob[1]*c.p/100,ob[2]*c.c/100,ob[3]*c.g/100],!(c.p===c.k&&c.c===c.k&&c.g===c.k)), R=recetasPara(c.tipo,o,al,usadasG,G.opc,cafeCm(c.nombre));
       if(!R.length) sin.push(c.nombre);
       var cm={nombre:c.nombre,hora:c.hora,pct:String(c.k),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
       if(!(c.p===c.k&&c.c===c.k&&c.g===c.k)) cm.rp={p:c.p,c:c.c,g:c.g};
@@ -14878,11 +14878,12 @@ function bdItems(x,ob){
 }
 /* coach · una receta de olla de la biblioteca en un plato por raciones: la olla entera, su ración (de ½ en ½) y, si le falta, un acompañamiento
    (un huevo, una lata de atún, pan…) que la ayude a llegar a su comida */
-function libOpCasa(x,ob,al){
+function libOpCasa(x,ob,al,cafe){
   var r=x.r, n=r.tanda.r, o={items:x.ing.map(function(z){ return hidratarIt({i:'i'+rand(5),a:z.a.id,q:String(z.q),x:z.a.x||''}); })};
   var pc=num(r.pc)||0; o.lote={pc:pc,rac:n,b:{},u:pc?'peso':'rac'}; o.items.forEach(function(it,k){ o.lote.b[it.i]=x.ing[k].q; });      // v53.4.91: en gramos de lo cocinado (y en su app también por raciones)
   rcPonF(o,pc?Math.round(pc/n/25)*25/pc:1/n);
   (r.ens||[]).forEach(function(z){ var a=CO.nutM[z[0]]; if(a&&!(al&&prohibidoAl(a,al))) o.items.push(hidratarIt({i:'i'+rand(5),a:a.id,q:String(z[1]),x:a.x||''})); });      // v53.4.98: su ensalada
+  if(cafe&&!tieneLeche(x.ing)){ var lk=lecheCafe(al); if(lk) o.items.push(hidratarIt({i:'i'+rand(5),a:lk.id,q:'150',x:lk.x||''})); }      // v53.4.106: la leche del café
   if(ob&&ob[0]!=null) rcCuadrar(o,ob,al,rcPoolPan((r.ac&&r.ac.length?r.ac:RC_POOL[/c/.test(r.t||'')?'c':'dm']).concat(/c/.test(r.t||'')?RC_POSTRE:[]),r.n));      // v53.4.94: su ración y, si le falta algo, el acompañamiento, solos
   return o;
 }
@@ -14911,7 +14912,7 @@ function rcCuadrar(o,ob,al,pool){
   if(!K.length) K.push(f0);
   var LT=(o.items||[]).filter(function(it){ return L.b[it.i]!=null; });
   var mLote=function(f){ return sumMac(LT.map(function(it){ return macIt(Object.assign({},it,{q:L.b[it.i]*f})); })); };
-  var E=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }).map(function(it){ var q=num(it.q)||0, a=CO.nutM&&CO.nutM[it.a], b=it.b||(a&&a.b)||[0,0,0,0], vd=(it.x||a&&a.x)==='verd', R=a&&mx&&!vd?bdRegla(a):null, Q=[q];
+  var E=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }).map(function(it){ var q=num(it.q)||0, a=CO.nutM&&CO.nutM[it.a], b=it.b||(a&&a.b)||[0,0,0,0], vd=(it.x||a&&a.x)==='verd'||/^(leche|bebida_)/.test(famDe(it.a)), R=a&&mx&&!vd?bdRegla(a):null, Q=[q];      // v53.4.106: la leche del café, fija (como la ensalada)
     if(R){ Q=[]; for(var x=R[0];x<=R[1]+1e-9;x+=R[2]) Q.push(Math.round(x*10)/10); if(Q.length>8){ var st=Math.ceil(Q.length/8); Q=Q.filter(function(v,z){ return z%st===0; }); } if(q>0&&Q.indexOf(q)<0&&!(a.x==='fruta'&&q>R[1])) Q.push(q); }      // la fruta, nunca más de una pieza
     return {it:it,b:b,Q:Q,vd:vd}; });
   var nE=E.filter(function(e){ return !e.vd; }).length;      // la ensalada no cuenta
@@ -14990,10 +14991,16 @@ function cuadrarReceta(x,obj,lim){
 function macItems(items){ return sumMac(items.map(function(it){ var a=CO.nutM[it.a]; return a?a.b.map(function(v){ return v*(num(it.q)||0)/100; }):null; })); }
 function errMac(m,obj){ if(!m) return 9; var e=0; for(var i=1;i<4;i++){ var o=Math.max(obj[i],[0,10,15,5][i]); e+=Math.abs(m[i]-obj[i])/o; } return e; }
 /* elige las recetas de una comida: puede comerlas, sus favoritos primero, que cuadren y sin repetir */
-function recetasPara(tipo,obj,al,usadas,n){
+/* v53.4.106 (nº 1, Javier: «para el desayuno añade siempre 150 ml de leche, que la mayoría toma café… y en la merienda igual») */
+function cafeCm(nombre){ return !!(CO.nut&&CO.nut.casa)&&/desayun|merienda/.test(sinTil(nombre||'')); }
+function lecheCafe(al){ return ['leche_semi','leche_sin_lactosa','bebida_soja','bebida_avena'].map(function(id){ return CO.nutM&&CO.nutM[id]; }).filter(function(a){ return a&&!(al&&prohibidoAl(a,al)); })[0]||null; }
+function tieneLeche(ing){ return (ing||[]).some(function(it){ return /^(leche|bebida_|cafe)/.test(famDe((it.a&&it.a.id)||it.a||'')); }); }
+function conCafe(x,al){ if(!x||tieneLeche(x.ing)) return x; var a=lecheCafe(al); if(!a) return x;
+  return Object.assign({},x,{ing:x.ing.concat([{a:a,q:150,rol:'f'}]),notas:(x.notas||[]).concat(['Con 150 ml de '+(a.id==='bebida_soja'?'bebida de soja':a.id==='bebida_avena'?'bebida de avena':'leche')+' para el café (o para tomarla sola).'])}); }
+function recetasPara(tipo,obj,al,usadas,n,cafe){
   var C=libTodas().filter(function(r){ return r.t.indexOf(tipo)>=0; }).map(function(r){
-    var x=adaptarReceta(r,al); if(!x) return null;
-    var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
+    var x=adaptarReceta(r,al); if(!x) return null; if(cafe&&!r.tanda) x=conCafe(x,al);
+    var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al,cafe):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
     var pt=r.tanda&&!lc?porcionTanda(x,obj):null, items=lc?lc.items:pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
     var cu=!pt&&m?cuadraMacE(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
     return {x:x,items:items,k:pt?pt.k:null,op:lc,m:m,ob:obj,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?(lc?0.4:0.8):0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
@@ -15086,7 +15093,7 @@ A.genOk=function(){
   p.proteina=String(num(g.obj[1])); p.carbohidratos=String(num(g.obj[2])); p.grasa=String(num(g.obj[3])); p.kcal=String(Math.round(ob[0]));
   p.comidas=g.cm.map(function(c){
     var o=kcalRp(ob,[ob[0]*num(c.k)/100,ob[1]*num(c.p)/100,ob[2]*num(c.c)/100,ob[3]*num(c.g)/100],!(num(c.p)===num(c.k)&&num(c.c)===num(c.k)&&num(c.g)===num(c.k)));
-    var R=recetasPara(c.tipo,o,al,usadasG,g.opc);
+    var R=recetasPara(c.tipo,o,al,usadasG,g.opc,cafeCm(c.nombre));
     if(!R.length) sinNada.push(c.nombre);
     var cm={nombre:c.nombre,hora:c.hora,pct:String(num(c.k)),opciones:R.length?R.map(opcionDeReceta):[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]};
     if(!(num(c.p)===num(c.k)&&num(c.c)===num(c.k)&&num(c.g)===num(c.k))) cm.rp={p:num(c.p),c:num(c.c),g:num(c.g)};      // v53.4.79: su reparto por macros se queda en la comida (si no, el objetivo de la comida salía con el % de kcal y los platos, cuadrados con el reparto, «no cuadraban»)
@@ -15131,10 +15138,11 @@ A.libPon=function(el){
   var x=adaptarReceta(r,al); if(!x) return toast('No puede comer algo de esta receta');
   if(r.bd&&r.tanda&&CO.nut&&CO.nut.casa){      // v53.4.87: receta de olla de la biblioteca de diario → por raciones, con lo que encaja con su comida
     if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
-    var ob1=objCm(p,c), lc=libOpCasa(x,ob1,al), op1=opcionDeReceta({x:x,items:lc.items,op:lc}), v1=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
+    var ob1=objCm(p,c), lc=libOpCasa(x,ob1,al,cafeCm(c.nombre)), op1=opcionDeReceta({x:x,items:lc.items,op:lc}), v1=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
     if(v1) c.opciones=[op1]; else c.opciones.push(op1); CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.length-1; cerrarModal(); marcarDie(); repintar();
     var ac1=op1.items.filter(function(it){ return op1.lote.b[it.i]==null; });
     var cq1=cuadraOp(p,c,op1); return toast('Añadida'+(cq1&&cq1.ok?' y cuadrada':'')+': '+(op1.lote.pc?rcTxt(op1,rcF(op1))+' ya cocinado':rcTxt(op1,rcF(op1))+' de '+op1.lote.rac)+(ac1.length?', con '+rcAcTxt(ac1):'')+'.','ok'); }      // v53.4.94
+  if(!r.tanda&&cafeCm(c.nombre)) x=conCafe(x,al);      // v53.4.106
   var ob=objCm(p,c), pt=r.tanda?porcionTanda(x,ob):null, items=pt?pt.items:ob&&ob[1]!=null&&ob[2]!=null&&ob[3]!=null?cuadrarReceta(x,ob):x.ing.map(function(it){ return {i:'i'+rand(5),a:it.a.id,q:String(it.q),x:it.a.x||''}; });
   if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
   var vacia=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
