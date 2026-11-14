@@ -3137,7 +3137,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.117';
+var APP_V = 'v53.4.118';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -13959,7 +13959,7 @@ function ladoHtml(){
     '<div class="sd-h">Clientes <span>'+act.length+'</span></div>'+(act.length>1?cliBuscaHtml('sd-q'):'')+'<div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0;
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+(cliVa(c)?'':' h')+'" data-a="sdCli" data-id="'+esc(c.id)+'" data-n="'+esc(sinTil(c.nombre))+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="sd-cn">'+esc(c.nombre)+'</span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
-    }).join('')+'<p class="cli-nada'+(act.some(cliVa)?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
+    }).join('')+'<p class="cli-nada'+(act.some(cliVa)||!act.length?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
     '<div class="sd-pie">'+(CO.casa===false?'<button class="sd-i" data-a="coLogo">'+ic('foto')+'<span>Tu logo</span>'+(CO.logoV?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="pushCo">'+ic('campana')+'<span>Avisos</span>'+(pushNuevo(PUSH.est)?'<b class="sd-new">Nuevo</b>':'')+'</button>'+'<button class="sd-i" data-a="segCfg">'+ic('candado')+'<span>Seguridad y acceso</span>'+(CO.seg&&CO.seg.conPass?'':'<b class="sd-new">Revisar</b>')+'</button>'+(CO.casa!==false?'<button class="sd-i" data-a="appCfg">'+ic('enlace')+'<span>Página de inicio</span>'+(CO.appUrl?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="vistaMovil">'+ic('movil')+'<span>Vista móvil</span></button><button class="sd-i" data-a="salirCoach">'+ic('atras')+'<span>Salir</span></button><small>MOOD ON · '+APP_V+'</small></div>';
 }
 /* v53.4.116 · menú lateral del diseño D (v53.4.117: todos los entrenadores; «Modo prueba» y «Página de inicio», solo la nº 1; «Tu logo», los demás): lo del día a día arriba; tu biblioteca; tus clientes con un punto de color
@@ -13992,7 +13992,7 @@ function ladoHtml2(act,v,urg,it){
     '<div class="sd-h">Tus clientes <span>'+act.length+'</span></div>'+(act.length>1?cliBuscaHtml('sd-q'):'')+'<div class="sd-cl">'+act.map(function(c){
       var n=(c.chat&&c.chat.noLeidos)||0, e=estadoCli(c), k=e.c==='aldia'?'ok':e.c==='bad'?'bad':'warn';
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+(cliVa(c)?'':' h')+'" data-a="sdCli" data-id="'+esc(c.id)+'" data-n="'+esc(sinTil(c.nombre))+'"><span class="sd-aw">'+avCo(c.id,c.nombre,'sd-av')+'<i class="sd-st '+k+'"></i></span><span class="sd-cn">'+esc(c.nombre)+'<span class="sd-vh"> · '+esc(e.t)+'</span></span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
-    }).join('')+'<p class="cli-nada'+(act.some(cliVa)?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
+    }).join('')+'<p class="cli-nada'+(act.some(cliVa)||!act.length?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
     '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm"><span class="sd-av sd-cav">'+(nom==='Tu cuenta'?ic('user'):esc(iniciales(nom)))+'</span><span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
 }
 function sdCuPoner(ab){ CO.cuAb=ab; var w=document.querySelector('#side .sd-cu'); if(!w) return; w.classList.toggle('ab',ab); var m=document.getElementById('sd-cm'), b=w.querySelector('.sd-cb'); if(m) m.hidden=!ab; if(b) b.setAttribute('aria-expanded',ab); }
@@ -18924,6 +18924,7 @@ A.segPassCod=function(el){
 };
 /* aviso en tu inicio mientras falte algo */
 function avisoSeg(){
+  if(DEMO) return '';      // v53.4.118: el entrenador de prueba no tiene contraseña ni accesos que reforzar
   var s=CO.seg||{};
   if(!s.conPass) return '<button class="hm-seg" data-a="segCfg">'+ic('candado')+'<span><b>Refuerza tu acceso</b>Crea tu contraseña (con código por email) y dale a cada cliente su usuario.</span>'+ic('flecha','hm-ch')+'</button>';
   var f=(CO.lista||[]).filter(function(c){ return c.activa&&c.acceso!=='activa'; }).length;

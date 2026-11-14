@@ -238,6 +238,10 @@ fieldset.marcas .casilla{margin:0;font-size:14.5px}
 .demo-op button span{font-size:13px;color:#6E6E73}
 .demo-op button:disabled{opacity:.5;cursor:default}
 .demo-ya{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+.demo-2{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.demo-c{border:1px solid #E5E5EA;background:#fff;border-radius:16px;padding:16px 18px;display:flex;flex-direction:column;gap:6px}
+.demo-c>b{font-size:15.5px}.demo-c>span{font-size:13.5px;color:#6E6E73;line-height:1.45;flex:1}
+.demo-b{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
 .demo-ya .q{flex:1;min-width:200px;font-size:14px}
 .demo-ya .q div{color:#6E6E73;font-size:13px}
 #invitar .txt{flex:1 1 300px;min-width:0}
@@ -401,7 +405,7 @@ td.fin{text-align:right;white-space:nowrap}
       </section>
       <section id="demo" aria-labelledby="t-demo">
         <h2 id="t-demo">Ver como entrenador</h2>
-        <p class="sub">Un entrenador de prueba solo para ti: abre su panel en otra pestaña y lo ves tal cual lo verá quien invites. No sale en la lista ni cuenta en tus números, no envía emails y no se cobra.</p>
+        <p class="sub">Dos entrenadores de prueba solo para ti: abre su panel en otra pestaña y lo ves tal cual lo verá quien invites. No salen en la lista ni cuentan en tus números, no envían emails y no se cobran.</p>
         <div id="demo-acc"></div>
         <div id="demo-err" class="msg err h" role="alert" style="margin:12px 0 0"></div>
       </section>
@@ -708,37 +712,36 @@ td.fin{text-align:right;white-space:nowrap}
     b = e.target.closest('button[data-reenv]'); if (b) reenviar(b.getAttribute('data-reenv'), b);
   });
   /* ---------- v53.4.40 · ver como entrenador (el entrenador de prueba) ---------- */
-  var demoElegir = false;
+  // v53.4.118 · dos entrenadores de prueba a la vez: «que empieza» (vacío) y «con 20 clientes» (se pone al día solo cada día)
   function pintarDemo() {
-    var D = R && R.d && R.d.demo, el = $('demo-acc'); if (!el) return;
-    var ops = '<div class="demo-op"><button type="button" data-demo="vacio"><b>Como el primer día</b><span>Vacío, con su copia de la biblioteca: lo que ve nada más entrar.</span></button>' +
-      '<button type="button" data-demo="ejemplos"><b>Con clientes de ejemplo</b><span>Una clienta de ejemplo con 12 semanas de datos y otros 4 clientes inventados, dos con mensajes sin leer.</span></button></div>';
-    if (!D || demoElegir) { el.innerHTML = (D ? '<p class="sub" style="margin:0 0 10px">Se borra el de ahora y se crea otro:</p>' : '') + ops + (D ? '<p style="margin:10px 0 0"><button class="chip-b peq" type="button" id="demo-no">Cancelar</button></p>' : ''); }
-    else el.innerHTML = '<div class="demo-ya"><div class="q"><b>Tu entrenador de prueba</b><div>' + (D.modo === 'ejemplos' ? 'Con clientes de ejemplo' : 'Empezó vacío') + (D.creado ? ' · creado el ' + esc(fecha(D.creado)) : '') + '. Lo que hagas en él se queda hasta que empieces de cero.</div></div>' +
-      '<button class="chip-b neg" type="button" id="demo-abrir">Abrir su panel</button><button class="chip-b" type="button" id="demo-cero">Empezar de cero</button><button class="chip-b" type="button" id="demo-borrar">Borrarlo</button></div>';
-    var no = $('demo-no'); if (no) no.addEventListener('click', function () { demoElegir = false; pintarDemo(); });
-    var ab = $('demo-abrir'); if (ab) ab.addEventListener('click', function () { abrirDemo({}, this); });
-    var ce = $('demo-cero'); if (ce) ce.addEventListener('click', function () { demoElegir = true; pintarDemo(); });
-    var bo = $('demo-borrar'); if (bo) bo.addEventListener('click', function () {
-      if (!window.confirm('¿Borrar el entrenador de prueba y todo lo que has hecho en él?')) return;
-      var b = this, t = b.textContent; ocupado(b, true, 'Borrando…'); $('demo-err').classList.add('h');
-      llamar({ acc: 'demo_borrar', ses: lee(K.ses) }).then(function (r) { demoElegir = false; nuevoR(r); hechoEn('ent-msg', 'Entrenador de prueba borrado.'); })
-        .catch(function (er) { if (!fallo(er)) { ocupado(b, false, t); $('demo-err').textContent = er.message; $('demo-err').classList.remove('h'); } });
-    });
+    var D = (R && R.d && R.d.demo) || {}, el = $('demo-acc'); if (!el) return;
+    var V = D.vacio, L = D.lleno;
+    el.innerHTML = '<div class="demo-2">' +
+      '<div class="demo-c"><b>Entrenador que empieza</b><span>Sin clientes: lo que ve el primer día, con sus «Primeros pasos» y su copia de la biblioteca.' + (V ? ' Lo que hagas en él se queda hasta que lo dejes como nuevo.' : '') + '</span>' +
+        '<div class="demo-b"><button class="chip-b neg" type="button" data-demo="vacio">Abrir su panel</button>' + (V ? '<button class="chip-b peq" type="button" data-demo-nuevo="vacio">Dejarlo como nuevo</button>' : '') + '</div></div>' +
+      '<div class="demo-c"><b>Entrenador con 20 clientes</b><span>Clientes inventados que ya entrenan: entrenos registrados, mensajes sin leer, revisiones atrasadas, planes por renovar, pagos y videollamadas. Cada día se pone al día solo.</span>' +
+        '<div class="demo-b"><button class="chip-b neg" type="button" data-demo="lleno">Abrir su panel</button></div></div>' +
+      '</div>';
     Array.prototype.forEach.call(el.querySelectorAll('button[data-demo]'), function (b) {
-      b.addEventListener('click', function () { abrirDemo({ modo: b.getAttribute('data-demo'), nuevo: !!(R && R.d && R.d.demo) }, b); });
+      b.addEventListener('click', function () { abrirDemo({ tipo: b.getAttribute('data-demo') }, b); });
+    });
+    Array.prototype.forEach.call(el.querySelectorAll('button[data-demo-nuevo]'), function (b) {
+      b.addEventListener('click', function () {
+        if (!window.confirm('¿Dejarlo como nuevo? Se borra lo que hayas hecho en él.')) return;
+        abrirDemo({ tipo: b.getAttribute('data-demo-nuevo'), nuevo: true }, b);
+      });
     });
   }
   // la pestaña se abre ya (si no, el navegador la bloquea) y se le pone la dirección cuando llega el pase
   function abrirDemo(o, b) {
     var w = window.open('', '_blank'), bs = $('demo-acc').querySelectorAll('button'), t = b.innerHTML;
     Array.prototype.forEach.call(bs, function (x) { x.disabled = true; });
-    if (o.modo) b.innerHTML = '<b>Preparándolo…</b><span>' + (o.modo === 'ejemplos' ? 'Creando los clientes de ejemplo (unos segundos).' : 'Un momento.') + '</span>'; else b.textContent = 'Abriendo…';
+    b.textContent = o.tipo === 'lleno' ? 'Preparándolo (unos segundos)…' : 'Abriendo…';
     $('demo-err').classList.add('h');
     if (w) { try { w.document.title = 'MOOD ON · Entrenador de prueba'; w.document.body.innerHTML = '<p style="font:15px -apple-system,sans-serif;color:#6E6E73;text-align:center;margin-top:30vh">Preparando el entrenador de prueba…</p>'; } catch (e) { } }
-    llamar({ acc: 'demo_abrir', ses: lee(K.ses), modo: o.modo || '', nuevo: !!o.nuevo }).then(function (r) {
+    llamar({ acc: 'demo_abrir', ses: lee(K.ses), tipo: o.tipo || '', nuevo: !!o.nuevo }).then(function (r) {
       var url = new URL('app.html?demo=' + encodeURIComponent(r.pase), location.href).href;
-      demoElegir = false; nuevoR(r);
+      nuevoR(r);
       if (w) { try { w.opener = null; } catch (e) { } w.location.href = url; }
       else { $('demo-err').innerHTML = 'Tu navegador ha bloqueado la pestaña nueva. <a href="' + esc(url) + '" target="_blank" rel="noopener">Ábrela aquí</a> (vale 10 minutos).'; $('demo-err').classList.remove('h'); }
     }).catch(function (er) {
