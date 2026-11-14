@@ -1665,7 +1665,7 @@ body.ancho .dk-cols.lado>.dk-col:first-child{position:sticky;top:128px;max-heigh
 .mac-t th,.mac-t td{padding:5px 4px;text-align:right;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums}
 .mac-t th:first-child{text-align:left;width:30%;color:var(--mu);font-weight:600;font-size:11.5px}
 .mac-t tr:first-child th{color:var(--mu);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
-.mac-t tr.dif td{font-weight:700}.mac-t td.ok{color:var(--ok)}.mac-t td.warn{color:var(--warn)}.mac-t td.bad{color:var(--bad)}.mac-t td.dp{color:var(--muted,#8a8a8a)}.rep-s{margin:6px 0 2px}.in-u{display:flex;align-items:center;gap:8px}.in-u input{flex:1;min-width:0}.in-u>span{color:var(--mu);font-weight:600}.lt-fal{color:#8A5300;font-weight:700}.lt-l+.lt-hoy{margin:8px 2px 0;font-size:13px}.lt-res{background:#F4F4F2;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.6;margin-top:10px}.lt-ed{flex-wrap:wrap}.lt-ed .lt-n{flex:1 1 100%;font-size:12px}.lt-hoy{display:block;color:#1B7A3D;font-size:12px;margin-top:2px}.lt-hoy .ic{width:13px;height:13px;margin:0 3px 0 0}.lt-g{min-width:64px;text-align:center}.lt-ac{font-size:13px;margin:8px 2px;color:#444}.lt-otra,.lt-olla{display:block;margin:8px 0 0;font-size:13px}.lt-f{background:#F4F4F2;border-radius:12px;padding:10px 12px;margin-top:8px}.lt-f .f small{display:block;margin-top:4px}.cu-dp{display:block;flex:1 1 100%;font-size:12px;color:#6b6b6b;margin-top:2px}
+.mac-t tr.dif td{font-weight:700}.mac-t td.ok{color:var(--ok)}.mac-t td.warn{color:var(--warn)}.mac-t td.bad{color:var(--bad)}.mac-t td.dp{color:var(--muted,#8a8a8a)}.rep-s{margin:6px 0 2px}.in-u{display:flex;align-items:center;gap:8px}.in-u input{flex:1;min-width:0}.in-u>span{color:var(--mu);font-weight:600}.lt-fal{color:#8A5300;font-weight:700}.rc-md{margin:0 0 10px}.rc-o{border-top:1px solid #EFEFEC;padding:10px 0 2px;margin-top:8px}.rc-o>b{display:block}.rc-o>small{display:block;margin-top:2px}.rc-o .card-t{margin:0}.lt-l+.lt-hoy{margin:8px 2px 0;font-size:13px}.lt-res{background:#F4F4F2;border-radius:12px;padding:10px 12px;font-size:13px;line-height:1.6;margin-top:10px}.lt-ed{flex-wrap:wrap}.lt-ed .lt-n{flex:1 1 100%;font-size:12px}.lt-hoy{display:block;color:#1B7A3D;font-size:12px;margin-top:2px}.lt-hoy .ic{width:13px;height:13px;margin:0 3px 0 0}.lt-g{min-width:64px;text-align:center}.lt-ac{font-size:13px;margin:8px 2px;color:#444}.lt-otra,.lt-olla{display:block;margin:8px 0 0;font-size:13px}.lt-f{background:#F4F4F2;border-radius:12px;padding:10px 12px;margin-top:8px}.lt-f .f small{display:block;margin-top:4px}.cu-dp{display:block;flex:1 1 100%;font-size:12px;color:#6b6b6b;margin-top:2px}
 .mac-t tr:last-child th,.mac-t tr:last-child td{border-bottom:0}
 .op-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.op-acc .btn{margin:0;display:inline-flex;align-items:center;gap:6px;width:auto}.op-acc .ic{width:15px;height:15px;margin:0}
 .die-res .dia-m{margin-top:10px}
@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.85';
+var APP_V = 'v53.4.86';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7192,18 +7192,28 @@ function pzDeRec(r){ var P={nom:r.pz.nom,tot:r.pz.tot,g:r.pz.g,cu:r.pz.cu,masa:(
 /* v53.4.83: el plato de una receta por piezas, con las piezas y cucharadas que encajan con ob (si no hay ob, lo de una ración) */
 function pzPonGr(o,rac,ob){ var bt=pzMejor(o,ob), n0=bt?bt.n:Math.max(1,Math.round(o.pz.tot/rac)), s0=bt?bt.s:(pzHaySalsa(o)?Math.max(1,Math.round(o.pz.cu/rac)):0), g0=pzGr(o,n0,s0);
   o.items.forEach(function(it){ if(g0[it.i]!=null) it.q=String(g0[it.i]); }); return {n:n0,s:s0,bt:bt}; }
-/* v53.4.85 · recetas por lotes (Javier: «sistema inteligente de porciones de recetas»; solo panel nº 1). o.lote = {pc: peso de la olla cocinada,
-   rac: raciones, enc: lo que se añade después de cocinar, b: gramos de la receta entera, g: la ración en gramos}. El agua cambia el peso, no las kcal:
-   la ración de g gramos lleva g/pc de cada ingrediente. Los alimentos del plato que no son de la receta (acompañamiento) quedan tal cual. */
-function ltDeRec(r){ var L={pc:num(r.lote.pc)||0,rac:Math.max(1,num(r.raciones)||1),enc:(r.lote.enc||[]).slice(),b:{}}; (r.items||[]).forEach(function(it){ L.b[it.i]=num(it.q)||0; }); return L; }
-function ltGq(L,its){ var best=null, q=0; (its||[]).forEach(function(it){ var b=L.b[it.i]; if(b>0&&L.enc.indexOf(it.i)<0&&(!best||b>L.b[best])){ best=it.i; q=num(it.q)||0; } }); return best?Math.round(q*L.pc/L.b[best]):0; }
-function ltGrs(L,g){ var r={}; Object.keys(L.b).forEach(function(i){ r[i]=Math.round(L.b[i]*g/L.pc*10)/10; }); return r; }
-function ltMac(o,g){ var L=o.lote; return sumMac((o.items||[]).map(function(it){ var b=L.b[it.i]; return macIt(Object.assign({},it,{q:b!=null?b*g/L.pc:(num(it.q)||0)})); })); }
+/* v53.4.85 · v53.4.86 · recetas por raciones, peso o piezas (Javier: «sistema inteligente de porciones de recetas» y «que lo elija la clienta»; solo panel nº 1).
+   El plato de una receta lleva o.lote = {pc: peso de la olla cocinada (0 si no se ha pesado), rac: raciones, b: gramos de la receta entera, u: cómo lo pauta el entrenador
+   (peso, rac o pz)}. Todo es una fracción f de la receta entera: cada ingrediente lleva b × f. El agua cambia el peso, no las kcal. Los alimentos del plato que no son de
+   la receta (acompañamiento) quedan tal cual. Si además va por piezas (o.pz), la fracción sale de la masa. */
+function rcU(o){ var L=o.lote; return L.u||(o.pz?'pz':L.pc?'peso':'rac'); }
+function rcF(o,its){ var L=o.lote; its=its||o.items||[]; if(!L) return 0;
+  if(o.pz){ var P=o.pz, mi=null; its.forEach(function(it){ if(mi==null&&pzEsMasa(P,it.i)&&P.b[it.i]>0) mi=it; }); return mi?(num(mi.q)||0)/P.b[mi.i]:0; }
+  var best=null, q=0; its.forEach(function(it){ var b=L.b[it.i]; if(b>0&&(!best||b>L.b[best])){ best=it.i; q=num(it.q)||0; } }); return best?q/L.b[best]:0; }
+function rcGrs(L,f){ var r={}; Object.keys(L.b).forEach(function(i){ r[i]=Math.round(L.b[i]*f*10)/10; }); return r; }
+function rcMac(o,f){ var L=o.lote; return sumMac((o.items||[]).map(function(it){ var b=L.b[it.i]; return macIt(Object.assign({},it,{q:b!=null?b*f:(num(it.q)||0)})); })); }
 function ltErr(m,ob){ if(!m) return 9; return ob[1]!=null&&ob[2]!=null&&ob[3]!=null?errMac(m,ob):Math.abs(m[0]-ob[0])/Math.max(ob[0],1); }
-function ltMejor(o,ob){ if(!ob||ob[0]==null||!o.lote) return null; var L=o.lote, gr=L.pc/L.rac, lo=Math.max(25,Math.round(gr*0.5/25)*25), hi=Math.max(lo,Math.min(L.pc,Math.floor(gr*1.5/25)*25)), best=null;      // entre media ración y ración y media
-  for(var g=lo;g<=hi;g+=25){ var m=ltMac(o,g); if(!m) continue; var e=Math.abs(m[0]-ob[0])/Math.max(ob[0],1)+0.3*ltErr(m,ob); if(!best||e<best.e-1e-9) best={g:g,e:e}; } return best; }      // las kcal de la comida primero: lo que falte de un macro, con un acompañamiento
-function ltPon(o,g){ var G=ltGrs(o.lote,g); o.lote.g=g; (o.items||[]).forEach(function(it){ if(G[it.i]!=null) it.q=String(G[it.i]); }); }
-function ltOpRec(r,o,ob){ o.items=copia(r.items||[]).map(hidratarIt); o.lote=ltDeRec(r); delete o.tanda; delete o.pz; var bt=ltMejor(o,ob), g=bt?bt.g:Math.max(25,Math.round(o.lote.pc/o.lote.rac/25)*25); ltPon(o,g); return {g:g,bt:bt}; }      // coach
+function rcMejor(o,ob,u){ if(!ob||ob[0]==null||!o.lote) return null; var L=o.lote, C=[], best=null; u=u||rcU(o);      // peso: de 25 en 25 g, entre media ración y ración y media · raciones: de ½ en ½
+  if(u==='peso'&&L.pc){ var gr=L.pc/L.rac; for(var g=Math.max(25,Math.round(gr*0.5/25)*25);g<=Math.max(25,Math.min(L.pc,Math.floor(gr*1.5/25)*25));g+=25) C.push(g/L.pc); }
+  else for(var k=0.5;k<=Math.min(L.rac,3)+1e-9;k+=0.5) C.push(k/L.rac);
+  C.forEach(function(f){ var m=rcMac(o,f); if(!m) return; var e=Math.abs(m[0]-ob[0])/Math.max(ob[0],1)+0.3*ltErr(m,ob); if(!best||e<best.e-1e-9) best={f:f,e:e}; }); return best; }      // las kcal de la comida primero: lo que falte de un macro, con un acompañamiento
+function rcPonF(o,f){ var G=rcGrs(o.lote,f); (o.items||[]).forEach(function(it){ if(G[it.i]!=null) it.q=String(G[it.i]); }); }
+function rcRac(k){ var r=Math.max(0.5,Math.round(k*2)/2), t=racTxt(r); if(r<1) t=t.replace(' raciones',' ración'); return (Math.abs(k-r)>0.06?'≈ ':'')+t; }
+function rcTxt(o,f,u,base){ var L=o.lote; u=u||rcU(o); base=base||L.pc; return u==='peso'&&base?gTxt(Math.round(f*base)):u==='pz'&&o.pz?pzTxt(o,Math.round(f*o.pz.tot),pzN(o,o.items).s):rcRac(f*L.rac); }
+function rcOpRec(r,o,ob){ var n=Math.max(1,num(r.raciones)||1), pc=num(r.lote&&r.lote.pc)||0;      // coach: la receta en un plato, con lo que encaja con su comida
+  if(r.pz){ var z=pzOpRec(r,o,ob); o.lote={pc:pc,rac:n,b:copia(o.pz.b),u:'pz'}; return {u:'pz',n:z.n,s:z.s,bt:z.bt}; }
+  o.items=copia(r.items||[]).map(hidratarIt); delete o.tanda; delete o.pz; o.lote={pc:pc,rac:n,b:{},u:pc?'peso':'rac'}; (r.items||[]).forEach(function(it){ o.lote.b[it.i]=num(it.q)||0; });
+  var bt=rcMejor(o,ob), f=bt?bt.f:1/n; rcPonF(o,f); return {u:o.lote.u,f:f,bt:bt}; }
 function pzOpRec(r,o,ob){ o.items=copia(r.items||[]).map(hidratarIt); o.pz=pzDeRec(r); delete o.tanda; return pzPonGr(o,Math.max(1,num(r.raciones)||1),ob); }      // coach
 function libPzPlato(r,x,ob){      // clienta: la receta de la biblioteca por piezas (r de libMood, x de adaptarRecCl)
   if(!r.pz||!x||x.ing.length!==r.ing.length) return null; var P={nom:r.pz.nom,tot:r.pz.tot,g:r.pz.g,cu:r.pz.cu,masa:[],b:{}};
@@ -7492,7 +7502,7 @@ function diaClHtml(p){
       return '<div class="mbar"><span>'+x[0]+'</span><div class="mbar-b"><i style="width:'+pc+'%"></i></div><b>'+(v!=null?kTxt(v):'–')+(o!=null?' / '+kTxt(o):'')+' g</b></div>'; }).join('')+'</div></div>';
 }
 function vPlato(p,mi,o){
-  var c=p.comidas[mi], pf=prefCl(), el=pf.elec[keyCm(p,mi)]===o.id, fav=!!pf.fav[o.id], m=macOpEf(o), oi=c.opciones.indexOf(o), its=o.items||[], lib=libreCl()&&!o.tanda;
+  var c=p.comidas[mi], pf=prefCl(), el=pf.elec[keyCm(p,mi)]===o.id, fav=!!pf.fav[o.id], m=macOpEf(o), oi=c.opciones.indexOf(o), its=o.items||[], lib=libreCl()&&!o.tanda&&!o.lote;
   var h='<button class="link dv-back" data-a="dvVolver">'+ic('atras')+esc(c.nombre)+'</button>'+platoImg(o.img,'pd-im')+
     '<h1 class="tit pd-n">'+esc(nombreOp(o,oi))+(o.mio?' <span class="pill mio">'+(o.mio===2?'Tu plato':'Cambiado por ti')+'</span>':'')+'</h1><div class="pd-meta">'+(o.min?'<span>'+ic('reloj')+esc(o.min)+' min</span>':'')+'<span>'+esc(c.nombre)+(c.hora?' · '+esc(c.hora):'')+'</span></div>';
   if(m||lib) h+='<div class="macros'+(soloK()?' solo-k':'')+'" id="pd-mac">'+macroCajas(m)+'</div>';
@@ -7505,6 +7515,7 @@ function vPlato(p,mi,o){
   if(CL.d.alMood&&o.mio===2) h+=moodPlatoHtml(p,mi,o);      // v52: su plato, con foto y «Añadir a MOOD ON» (para todos)
   else if(CL.d.alMood&&its.length) h+='<button class="mo-b" data-a="moAbrir">'+ic('mas')+'<span><b>Añadir a MOOD ON</b><small>Como receta de tu biblioteca o alimento de tu banco</small></span></button>';      // v39
   if(its.length&&o.tanda) h+=tandaClHtml(o);
+  else if(its.length&&o.lote) h+=rcRecetaHtml(o);      // v53.4.86: para cocinarla, la receta entera
   else if(lib){                                          // v33: lo cuadra ella
     if(ajHoy(o)) h+='<div class="pd-hoy">'+ic('ajuste')+'<span><b>Gramos ajustados solo para hoy</b><small>Para cuadrar tu día. Mañana vuelve a lo de siempre.</small></span><button class="link" data-a="dlQuitarAj">Quitar</button></div>';
     h+='<div class="card"><div class="card-t">Ingredientes <span class="muted sm">cambia los gramos, quita o añade</span></div>'+ckHint(o)+its.map(function(it){ return ingFilaLibre(o,it); }).join('')+
@@ -7971,7 +7982,7 @@ function plMacT(V){ return V.m; }
 function plAjustar(p,auto){
   if(!libreCl()||!verMac()) return false; var ob=objCmAuto(p,PL.m); if(!ob||ob[0]==null) return false;
   var o0=PL.lib?{id:'',items:PL.lib.base,pz:PL.lib.pz||null}:opCm(p,PL.m,PL.o); if(!o0||!o0.items||!o0.items.length) return false;
-  if(o0.lote&&!PL.lib){ var bl=ltMejor(o0,ob); if(!bl) return false; var GL=ltGrs(o0.lote,bl.g); Object.keys(GL).forEach(function(i){ plPonG(p,i,GL[i],false); }); PL.aj=true; return true; }      // v53.4.85
+  if(o0.lote&&!PL.lib&&!(o0.pz&&rcModo(o0)==='pz')){ var md0=rcModo(o0), bl=rcMejor(o0,ob,md0==='peso'&&!o0.lote.pc?'rac':md0); if(!bl) return false; var GL=rcGrs(o0.lote,bl.f); Object.keys(GL).forEach(function(i){ plPonG(p,i,GL[i],false); }); PL.aj=true; return true; }      // v53.4.85 · v53.4.86
   if(o0.pz){      // v53.4.81: por piezas → las piezas y cucharadas enteras que mejor encajan
     var bt=pzMejor(o0,ob); if(!bt) return false;
     if(PL.lib){ var gl=pzGr(o0,bt.n,bt.s); PL.lib.items=PL.lib.base.map(function(z){ return Object.assign({},z,{q:gl[z.i]!=null?gl[z.i]:z.q}); }); PL.antes={}; PL.aj=true; return true; }      // v53.4.83
@@ -8034,8 +8045,8 @@ function plPintar(){
   h+=plObjHtml(V,ob,c);
   if(PL.lib&&PL.lib.pt) h+='<p class="muted sm">Receta por tandas: haces '+esc(String(PL.lib.r.tanda.r))+' raciones y esta es tu parte ('+esc(racTxt(PL.lib.pt.k))+').</p>';
   if(edit&&vm&&ob&&V.m&&!(PL.lib&&PL.lib.pt)) h+=PL.aj?'<div class="pl-aj">'+ic('ok')+'<span>Ajustado a tu objetivo de '+esc(cn)+(V.lib?'':' (solo hoy)')+'</span><button class="link" data-a="plAjNo">Gramos de siempre</button></div>':'<button class="btn sm sec" data-a="plAj">'+ic('ajuste')+'Ajustar a mi objetivo</button>';
-  if(V.o&&V.o.pz&&V.ef.length) h+=pzClHtml(V,edit);      // v53.4.81 · v53.4.83: también las de la biblioteca
-  else if(V.o&&V.o.lote&&V.ef.length) h+=ltClHtml(V,edit);      // v53.4.85: por peso
+  if(V.o&&V.o.lote&&V.ef.length&&!V.lib) h+=rcClHtml(V,edit);      // v53.4.86: por ración, peso o piezas, como ella quiera
+  else if(V.o&&V.o.pz&&V.ef.length) h+=pzClHtml(V,edit);      // v53.4.81 · v53.4.83: también las de la biblioteca
   else h+='<div class="pl-its">'+(V.ef.length?V.ef.map(function(e,k){ return plItHtml(V,e,k,edit); }).join(''):V.o&&V.o.texto?'<div class="cm-c">'+br(V.o.texto)+'</div>':'<p class="muted sm">Este plato no tiene alimentos apuntados.</p>')+'</div>';
   if(edit&&!V.lib&&V.ef.length&&!V.o.pz&&!V.o.lote) h+='<p class="muted sm pl-hoyx">'+(V.xe&&(Object.keys(V.xe.q||{}).length||Object.keys(V.xe.w||{}).length)?ic('ok')+'Tus cambios son solo para hoy: el plato de siempre no cambia y mañana vuelve tal cual.':'Toca ✕ para quitar un alimento o «Cambiar» para poner otro. Es solo para hoy: el plato de siempre no cambia.')+'</p>';      // v52
   if(CL.d.alMood&&!V.lib&&V.o&&V.o.id) h+=moodPlatoHtml(p,PL.m,V.o);      // v46
@@ -8052,38 +8063,53 @@ function pzClHtml(V,edit){
     (hs?fila('s','gota','Salsa','cucharadas soperas · '+kTxt(c.s*U.S[0])+' kcal',c.s,0,P.cu):'')+'</div>'+
     '<details class="pz-ing"><summary>Lo que lleva tu ración</summary>'+V.ef.filter(function(e){ return e.q>0; }).map(function(e){ return '<div class="pz-i"><span>'+esc(alNom(e.a))+'</span><b>'+gTxt(e.q)+'</b></div>'; }).join('')+'</details>';
 }
-/* v53.4.85: la ración por peso en su app. Ve su ración en gramos; si cuadra ella su dieta, la cambia con − +; si no, «He comido otra cantidad».
-   Si ha pesado su olla, su ración se pasa a su olla (mismas kcal): pref.n['ol|'+receta] */
-function ltOlla(o){ var pf=prefCl(), v=pf&&pf.n?num(pf.n['ol|'+(o.rec||o.id)]):0; return v>=50?v:0; }
-function ltClHtml(V,edit){
-  var o=V.o, L=o.lote, its=V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }), g=ltGq(L,its), ol=ltOlla(o), base=ol||L.pc, gv=Math.round(g*base/L.pc), gp=Math.round(ltGq(L,o.items)*base/L.pc);      // gp: la pautada · gv: la de hoy
-  var me=sumMac(V.ef.filter(function(e){ return L.b[e.it.i]!=null; }).map(function(e){ return e.m; })), ac=V.ef.filter(function(e){ return L.b[e.it.i]==null&&e.q>0; });
-  var h='<div class="pz-l lt-l"><div class="pz-f"><span class="pz-ic">'+ic('dieta')+'</span><span class="pz-t"><b>Tu ración</b><small>'+(edit&&gp!==gv?'pautada: '+gTxt(gp)+' · ':me&&gp===gv?kTxt(me[0])+' kcal · ':'')+'de una olla de '+gTxt(base)+'</small></span>'+
-    (edit?'<span class="pz-st"><button class="pz-b" data-a="ltMas" data-d="-25"'+(gv<=25?' disabled':'')+' aria-label="25 g menos">−</button><b class="pz-n lt-g" id="lt-g">'+gTxt(gv)+'</b><button class="pz-b" data-a="ltMas" data-d="25"'+(gv>=base?' disabled':'')+' aria-label="25 g más">+</button></span>':'<b class="pz-n lt-g" id="lt-g">'+gTxt(gp)+'</b>')+'</div></div>';
-  if(!edit&&gv!==gp) h+='<div class="lt-hoy" id="lt-hoy">'+ic('ok')+(V.on?'Hoy has comido ':'Al elegirlo se apunta: ')+gTxt(gv)+(me?' · '+kTxt(me[0])+' kcal':'')+'</div>';
+/* v53.4.86: su ración en su app. Elige cómo apuntarla: por ración, por peso o por piezas (pref.n['md|'+receta]: 1, 2 o 3). Si cuadra ella su dieta, − y +;
+   si no, «He comido otra cantidad». Si ha pesado su olla, el peso va con su olla (mismas kcal): pref.n['ol|'+receta] */
+function rcKey(o){ return o.rec||o.id; }
+function ltOlla(o){ var pf=prefCl(), v=pf&&pf.n?num(pf.n['ol|'+rcKey(o)]):0; return v>=50?v:0; }
+function rcModos(o){ var M=[]; if(o.lote.rac>1) M.push('rac'); M.push('peso'); if(o.pz) M.push('pz'); return M; }
+function rcModo(o){ var M=rcModos(o), v=num((prefCl().n||{})['md|'+rcKey(o)]), m=['','rac','peso','pz'][v||0]; if(M.indexOf(m)>=0) return m; m=rcU(o); return M.indexOf(m)>=0?m:M[0]; }
+function rcClHtml(V,edit){
+  var o=V.o, L=o.lote, its=V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }), f=rcF(o,its), fp=rcF(o,o.items), md=rcModo(o), M=rcModos(o), ol=ltOlla(o), base=ol||L.pc, ed=edit||PL.rcOtra;
+  var me=sumMac(V.ef.filter(function(e){ return L.b[e.it.i]!=null; }).map(function(e){ return e.m; })), ac=V.ef.filter(function(e){ return L.b[e.it.i]==null&&e.q>0; }), dif=Math.abs(f-fp)>0.004;
+  var h=M.length>1?'<div class="seg rc-md">'+M.map(function(m){ return '<button class="'+(m===md?'on':'')+'" data-a="rcModo" data-v="'+m+'">'+{rac:'Por ración',peso:'Por peso',pz:'Por piezas'}[m]+'</button>'; }).join('')+'</div>':'';
+  if(md==='pz'&&o.pz){ h+=pzClHtml(V,ed); }
+  else if(md==='peso'&&!base){ h+='<div class="pz-l lt-l"><div class="pz-f"><span class="pz-ic">'+ic('dieta')+'</span><span class="pz-t"><b>Tu ración</b><small>Para apuntarla por peso, pesa lo que has cocinado</small></span></div></div>'; }
+  else {
+    var val=md==='peso'?gTxt(Math.round(f*base)):rcRac(f*L.rac), valp=md==='peso'?gTxt(Math.round(fp*base)):rcRac(fp*L.rac), sub=md==='peso'?'de '+gTxt(base)+' cocinados':'de '+L.rac+' raciones'+(base?' · '+gTxt(Math.round((edit?f:fp)*base)):'');
+    h+='<div class="pz-l lt-l"><div class="pz-f"><span class="pz-ic">'+ic('dieta')+'</span><span class="pz-t"><b>Tu ración</b><small>'+(ed&&dif?'pautada: '+valp+' · ':me&&!dif?kTxt(me[0])+' kcal · ':'')+esc(sub)+'</small></span>'+
+      (ed&&md==='rac'?'<span class="pz-st"><button class="pz-b" data-a="rcMas" data-d="-1"'+(f*L.rac<=0.5+1e-6?' disabled':'')+' aria-label="Media ración menos">−</button><b class="pz-n lt-g" id="lt-g">'+val+'</b><button class="pz-b" data-a="rcMas" data-d="1"'+(f>=1-1e-6?' disabled':'')+' aria-label="Media ración más">+</button></span>':
+       edit&&md==='peso'?'<span class="pz-st"><button class="pz-b" data-a="rcMas" data-d="-1"'+(f*base<=25?' disabled':'')+' aria-label="25 g menos">−</button><b class="pz-n lt-g" id="lt-g">'+val+'</b><button class="pz-b" data-a="rcMas" data-d="1"'+(f>=1-1e-6?' disabled':'')+' aria-label="25 g más">+</button></span>':
+       '<b class="pz-n lt-g" id="lt-g">'+(edit?val:valp)+'</b>')+'</div></div>';
+  }
+  if(!edit&&dif&&!(md==='pz'&&PL.rcOtra)) h+='<div class="lt-hoy" id="lt-hoy">'+ic('ok')+(V.on?'Hoy has comido ':'Al elegirlo se apunta: ')+rcTxt(o,f,md,base)+(me?' · '+kTxt(me[0])+' kcal':'')+'</div>';
   if(ac.length) h+='<div class="lt-ac"><b>Con</b> '+esc(ac.map(function(e){ return alNom(e.a)+' '+gTxt(e.q); }).join(' · '))+'</div>';
-  if(!edit) h+='<button class="link lt-otra" data-a="ltOtra">'+(gv!==gp?'Cambiar lo que he comido':'He comido otra cantidad')+'</button>';
+  if(!edit) h+=PL.rcOtra&&md!=='peso'?'<button class="link lt-otra" data-a="rcOtraOk">Listo</button>':'<button class="link lt-otra" data-a="ltOtra">'+(dif?'Cambiar lo que he comido':'He comido otra cantidad')+'</button>';
   h+='<div class="lt-f hidden" id="lt-f"><label class="f" id="lt-fl"></label><div class="row"><button class="btn sm" data-a="ltFOk">Guardar</button><button class="link" data-a="ltFNo">Cancelar</button></div></div>';
-  h+='<details class="pz-ing"><summary>Lo que lleva tu ración</summary>'+V.ef.filter(function(e){ return e.q>0; }).map(function(e){ return '<div class="pz-i"><span>'+esc(alNom(e.a))+'</span><b>'+gTxt(e.q)+'</b></div>'; }).join('')+'</details>';
-  h+='<button class="link lt-olla" data-a="ltOllaAbrir">'+(ol?'Tu olla pesa '+gTxt(ol)+' · cambiar':'¿Has pesado tu olla? Pon lo que pesa y ajusto tu ración')+'</button>';
+  if(md!=='pz') h+='<details class="pz-ing"><summary>Lo que lleva tu ración</summary>'+V.ef.filter(function(e){ return e.q>0; }).map(function(e){ return '<div class="pz-i"><span>'+esc(alNom(e.a))+'</span><b>'+gTxt(e.q)+'</b></div>'; }).join('')+'</details>';
+  if(md==='peso') h+='<button class="link lt-olla" data-a="ltOllaAbrir">'+(ol?'Lo que has cocinado pesa '+gTxt(ol)+' · cambiar':base?'¿Has pesado lo que has cocinado? Pon lo que pesa y ajusto tu ración':'Pesar lo que he cocinado')+'</button>';
   return h;
 }
-function ltClPon(p,V,g){ var G=ltGrs(V.o.lote,g); Object.keys(G).forEach(function(i){ plPonG(p,i,G[i],false); }); }
-A.ltMas=function(el){ var p=plPlan(); if(!p) return; var V=plVista(p); if(!V||!V.o||!V.o.lote) return; var L=V.o.lote, ol=ltOlla(V.o), base=ol||L.pc;
-  var gv=Math.round(ltGq(L,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }))*base/L.pc), n=Math.max(25,Math.min(base,Math.round((gv+(+el.dataset.d))/25)*25));
-  ltClPon(p,V,n*L.pc/base); PL.aj=false; plPintar(); if(V.on){ CL.keep=true; refrescarLibDia(); } };
-A.ltOtra=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var L=V.o.lote, base=ltOlla(V.o)||L.pc, gv=Math.round(ltGq(L,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }))*base/L.pc);
-  PL.ltF='q'; setH('lt-fl','¿Cuánto has comido?<span class="in-u"><input id="lt-in" inputmode="numeric" value="'+gv+'" aria-label="Gramos que has comido"><span>g</span></span>'); var f=document.getElementById('lt-f'); if(f) f.classList.remove('hidden'); var i=document.getElementById('lt-in'); if(i){ i.focus(); i.select(); } };
+function rcClPon(p,V,f){ var G=rcGrs(V.o.lote,f); Object.keys(G).forEach(function(i){ plPonG(p,i,G[i],false); }); }
+A.rcModo=function(el){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var pf=prefCl(); pf.n=pf.n||{}; pf.n['md|'+rcKey(V.o)]={rac:1,peso:2,pz:3}[el.dataset.v]; guardarPref(); PL.rcOtra=false; plPintar(); };
+A.rcMas=function(el){ var p=plPlan(); if(!p) return; var V=plVista(p); if(!V||!V.o||!V.o.lote) return; var o=V.o, L=o.lote, md=rcModo(o), base=ltOlla(o)||L.pc, f=rcF(o,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; })), n;
+  if(md==='peso'&&base){ n=Math.max(25,Math.min(base,Math.round(f*base/25)*25+25*(+el.dataset.d))); f=n/base; } else { n=Math.max(0.5,Math.min(L.rac,Math.round(f*L.rac*2)/2+0.5*(+el.dataset.d))); f=n/L.rac; }
+  rcClPon(p,V,f); PL.aj=false; plPintar(); if(V.on){ CL.keep=true; refrescarLibDia(); } };
+A.rcOtraOk=function(){ PL.rcOtra=false; plPintar(); };
+A.ltOtra=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var o=V.o, md=rcModo(o);
+  if(md!=='peso'){ PL.rcOtra=true; return plPintar(); }      // por ración o por piezas: − y + 
+  var base=ltOlla(o)||o.lote.pc, gv=Math.round(rcF(o,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }))*base);
+  PL.ltF='q'; setH('lt-fl','¿Cuánto has comido?<span class="in-u"><input id="lt-in" inputmode="numeric" value="'+gv+'" aria-label="Gramos que has comido"><span>g</span></span>'); var fm=document.getElementById('lt-f'); if(fm) fm.classList.remove('hidden'); var i=document.getElementById('lt-in'); if(i){ i.focus(); i.select(); } };
 A.ltOllaAbrir=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var ol=ltOlla(V.o);
-  PL.ltF='olla'; setH('lt-fl','¿Cuánto pesa tu olla cocinada? <small class="muted">(sin la olla)</small><span class="in-u"><input id="lt-in" inputmode="numeric" value="'+(ol||'')+'" placeholder="'+V.o.lote.pc+'" aria-label="Peso de tu olla en gramos"><span>g</span></span><small class="muted">Así tu ración lleva lo mismo aunque te haya quedado más o menos caldosa.</small>'); var f=document.getElementById('lt-f'); if(f) f.classList.remove('hidden'); var i=document.getElementById('lt-in'); if(i) i.focus(); };
+  PL.ltF='olla'; setH('lt-fl','¿Cuánto pesa todo lo cocinado? <small class="muted">(sin la olla ni el molde)</small><span class="in-u"><input id="lt-in" inputmode="numeric" value="'+(ol||'')+'" placeholder="'+(V.o.lote.pc||1500)+'" aria-label="Peso de tu olla en gramos"><span>g</span></span><small class="muted">Así tu ración lleva lo mismo aunque te haya quedado más o menos caldosa.</small>'); var f=document.getElementById('lt-f'); if(f) f.classList.remove('hidden'); var i=document.getElementById('lt-in'); if(i) i.focus(); };
 A.ltFNo=function(){ var f=document.getElementById('lt-f'); if(f) f.classList.add('hidden'); PL.ltF=null; };
-A.ltFOk=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var L=V.o.lote, i=document.getElementById('lt-in'), v=Math.round(num(i&&String(i.value).replace(',','.')));
-  if(PL.ltF==='olla'){ var pf=prefCl(); pf.n=pf.n||{}; var k='ol|'+(V.o.rec||V.o.id);
-    if(!v){ delete pf.n[k]; guardarPref(); plPintar(); return toast('Vuelvo al peso de la receta'); }
-    if(v<50||v>50000) return toast('Pon el peso en gramos de lo que hay en la olla (sin la olla)');
-    pf.n[k]=v; guardarPref(); plPintar(); return toast('Hecho: tu ración ahora es para tu olla de '+gTxt(v),'ok'); }
-  var base=ltOlla(V.o)||L.pc; if(!(v>0)) return toast('Pon cuántos gramos has comido'); if(v>base) return toast('No puede ser más de lo que pesa la olla ('+gTxt(base)+')');
-  ltClPon(p,V,v*L.pc/base); PL.ltF=null; PL.aj=false; plPintar(); if(V.on){ CL.keep=true; refrescarLibDia(); }
+A.ltFOk=function(){ var p=plPlan(), V=p&&plVista(p); if(!V||!V.o||!V.o.lote) return; var o=V.o, L=o.lote, i=document.getElementById('lt-in'), v=Math.round(num(i&&String(i.value).replace(',','.')));
+  if(PL.ltF==='olla'){ var pf=prefCl(); pf.n=pf.n||{}; var k='ol|'+rcKey(o);
+    if(!v){ delete pf.n[k]; guardarPref(); plPintar(); return toast(L.pc?'Vuelvo al peso de la receta':'Quitado el peso de tu olla'); }
+    if(v<50||v>50000) return toast('Pon el peso en gramos de todo lo cocinado (sin la olla ni el molde)');
+    pf.n[k]=v; guardarPref(); plPintar(); return toast('Hecho: tu ración ahora va con lo que has cocinado ('+gTxt(v)+')','ok'); }
+  var base=ltOlla(o)||L.pc; if(!(v>0)) return toast('Pon cuántos gramos has comido'); if(v>base) return toast('No puede ser más de lo que pesa todo lo cocinado ('+gTxt(base)+')');
+  rcClPon(p,V,v/base); PL.ltF=null; PL.aj=false; plPintar(); if(V.on){ CL.keep=true; refrescarLibDia(); }
   toast(V.on?'Apuntado: has comido '+gTxt(v):'Apuntado: '+gTxt(v)+'. Elige el plato para que cuente en tu día.','ok'); };
 A.pzMas=function(el){
   var p=plPlan(); if(!p) return; var V=plVista(p); if(!V||!V.o||!V.o.pz) return; var o=V.o, c=pzN(o,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }));
@@ -10631,7 +10657,7 @@ function inCoach(t){
   if(t.dataset.ik!=null){ inItem(t); return; }
   if(t.dataset.rk!=null&&CO.recEd){ CO.recEd[t.dataset.rk]=t.value; sucio('r'); if(t.dataset.rk==='raciones') setH('rec-tot',totRecHtml()); return; }
   if(t.dataset.pz!=null&&CO.recEd&&CO.recEd.pz){ CO.recEd.pz[t.dataset.pz]=t.value; sucio('r'); setH('rec-pz-r',recPzRes()); return; }      // v53.4.81
-  if(t.dataset.lt!=null&&CO.recEd&&CO.recEd.lote){ CO.recEd.lote[t.dataset.lt]=t.value; sucio('r'); setH('rec-lt-r',recLoteRes()); return; }      // v53.4.85
+  if(t.dataset.lt!=null&&CO.recEd){ CO.recEd.lote=CO.recEd.lote||{}; CO.recEd.lote[t.dataset.lt]=t.value; sucio('r'); setH('rec-lt-r',recLoteRes()); return; }      // v53.4.85
   if(k==='bpBusca'){ bpFiltrar(); return; }
   if(k==='buscaPick'){ filtrarPick(); return; }
   if(t.dataset.r!=null){
@@ -11482,7 +11508,7 @@ function opEdHtml(p,c,mi,oi){
     '<label class="op-min" title="Minutos de preparación"><input data-ok="min"'+at+' inputmode="numeric" value="'+esc(o.min||'')+'" placeholder="–" aria-label="Minutos"><span>min</span></label>'+
     (c.opciones.length>1?'<button class="op-del" data-a="delOp"'+at+' aria-label="Quitar este plato">'+ic('papelera')+'</button>':'')+'</div>'+
     (rec?'<div class="muted sm mt6">'+ic('lista')+' De tu receta «'+esc(rec.nombre)+'»</div>':'')+
-    (o.pz?pzEdHtml(o,at):'')+(o.lote?ltEdHtml(o,at,ob):'')+
+    (o.pz?pzEdHtml(o,at):'')+(o.lote&&rcU(o)!=='pz'?rcEdHtml(o,at,ob):'')+
     (o.tanda?'<div class="tnd-ed"><span>'+ic('lista')+' Por tandas: toma <b>'+racTxt(o.tanda.k)+' de '+o.tanda.r+'</b>'+(o.tanda.c?' <small class="muted">('+esc(o.tanda.c)+')</small>':'')+'</span><span class="tnd-b"><button class="btn sm sec" data-a="tandaK" data-v="-0.5"'+at+(o.tanda.k<=0.5?' disabled':'')+' aria-label="Media ración menos">−½</button><button class="btn sm sec" data-a="tandaK" data-v="0.5"'+at+(o.tanda.k>=o.tanda.r?' disabled':'')+' aria-label="Media ración más">+½</button></span><small class="muted">Los gramos de abajo son su parte. '+cG('Ella','Él')+' ve la receta entera y, al pesar la tanda hecha, la app le dice cuánto pesa su ración.</small></div>':'')+
     itemsEdHtml(o,ax,'ot-'+mi,totOpHtml(o))+
     '<div class="op-low"><div class="op-l"><div id="mt-'+mi+'">'+cmpCm(p,c,o)+'</div>'+
@@ -11638,7 +11664,7 @@ A.tandaK=function(el){
 A.opAjustar=function(el){
   var p=planActual(), c=p.comidas[+el.dataset.m], o=c.opciones[+el.dataset.o], ob=objCm(p,c), m=macOp(o);
   if(!ob||ob[0]==null||!m||!(m[0]>0)) return; var f=ob[0]/m[0];
-  if(o.lote){ var bl=ltMejor(o,ob); if(!bl) return; ltPon(o,bl.g); marcarDie(); repintar(); var cl=cuadraOp(p,c,o); var fl=ltFalta(o,ob); return toast('Su ración: '+gTxt(bl.g)+(cl&&cl.ok?'. Cuadra con su '+String(c.nombre||'comida').toLowerCase()+'.':fl?'. '+fl:'.'),'ok'); }      // v53.4.85: la calculadora inversa
+  if(o.lote&&rcU(o)!=='pz'){ var bl=rcMejor(o,ob); if(!bl) return; rcPonF(o,bl.f); marcarDie(); repintar(); var cl=cuadraOp(p,c,o), fl=ltFalta(o,ob); return toast('Su ración: '+rcTxt(o,bl.f)+(cl&&cl.ok?'. Cuadra con su '+String(c.nombre||'comida').toLowerCase()+'.':fl?'. '+fl:'.'),'ok'); }      // v53.4.85: la calculadora inversa
   if(o.pz){ var bz=pzMejor(o,ob); if(!bz) return; var gz=pzGr(o,bz.n,bz.s); (o.items||[]).forEach(function(it){ if(gz[it.i]!=null) it.q=String(gz[it.i]); }); marcarDie(); repintar(); return toast('Ahora toma '+pzTxt(o,bz.n,bz.s)+' (lo que más se acerca a su '+String(c.nombre||'comida').toLowerCase()+')','ok'); }      // v53.4.81: piezas enteras
   if(o.tanda){ var k0=num(o.tanda.k)||1, k=Math.max(0.5,Math.min(o.tanda.r,Math.round(k0*f*2)/2)); (o.items||[]).forEach(function(it){ it.q=String(Math.round((num(it.q)||0)*k/k0*10)/10); }); o.tanda.k=k; marcarDie(); repintar(); return toast('Ahora toma '+racTxt(k)+' de '+o.tanda.r+' (lo más cerca de '+kTxt(ob[0])+' kcal)','ok'); }
   var como=cuadrarItems(o.items,ob), cu=cuadraOp(p,c,o), nom=String(c.nombre||'esta comida').toLowerCase(); marcarDie(); repintar();      // v53.4.78: con la proteína, los hidratos y la grasa, no solo las kcal
@@ -11657,7 +11683,7 @@ function modalRecetas(q){
     '<input data-k="buscaRecM" value="'+esc(q)+'" placeholder="Buscar receta… (bizcocho, lentejas, tortitas…)">'+
     libHtml(q)+'<div class="lab">Tus recetas</div>'+
     (CO.nut.recetas.length?'<div class="rec-l">'+R.map(function(r){ var m=macOp(r), rc=m?m.map(function(v){ return v/r.raciones; }):null;
-      return '<button class="rec-o" data-a="recPon" data-id="'+esc(r.id)+'">'+platoImg(r.img,'rec-im')+'<span><b>'+esc(r.nombre)+'</b><small>'+esc([rc?macLinea(rc)+' por ración':'',r.raciones>1?'por tandas: '+r.raciones+' raciones':'',r.min?r.min+' min':''].filter(Boolean).join(' · '))+'</small></span></button>'; }).join('')+(R.length?'':'<p class="muted">'+(q?'Ninguna con ese nombre.':'Ninguna que pueda comer.')+'</p>')+'</div>'+
+      return '<button class="rec-o" data-a="recPon" data-id="'+esc(r.id)+'">'+platoImg(r.img,'rec-im')+'<span><b>'+esc(r.nombre)+'</b><small>'+esc([rc?macLinea(rc)+' por ración':'',r.pz&&CO.nut.casa?r.pz.tot+' '+pzPl(r.pz.nom):'',r.raciones>1?(CO.nut.casa?r.raciones+' raciones':'por tandas: '+r.raciones+' raciones'):'',r.lote&&r.lote.pc&&CO.nut.casa?'sale '+gTxt(r.lote.pc):'',r.min?r.min+' min':''].filter(Boolean).join(' · '))+'</small></span></button>'; }).join('')+(R.length?'':'<p class="muted">'+(q?'Ninguna con ese nombre.':'Ninguna que pueda comer.')+'</p>')+'</div>'+
       (ocu?'<p class="muted sm">'+ocu+(ocu===1?' receta tuya oculta':' recetas tuyas ocultas')+' por su alimentación ('+esc(alimResumen(al))+').</p>':'')
       :'<p class="muted">Todavía no tienes recetas. Créalas en <b>Alimentos y recetas</b> o guarda cualquier plato con «Guardar como receta».</p>')+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
@@ -11731,19 +11757,13 @@ A.recPon=function(el){
   var c=planActual().comidas[CO.recMi], n=Math.max(1,num(r.raciones)||1);
   if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
   var o={id:'o'+rand(6),nombre:r.nombre,texto:r.texto||'',img:r.img||'',min:r.min||'',rec:r.id,items:copia(r.items||[]).map(function(it){ it.q=String(Math.round((num(it.q)||0)/n*10)/10); return hidratarIt(it); })};
-  if(r.pz&&CO.nut&&CO.nut.casa){      // v53.4.81: por piezas (las que encajan con esta comida)
-    var z0=pzOpRec(r,o,objCm(planActual(),c)), bt=z0.bt, n0=z0.n, s0=z0.s;
+  if(CO.nut&&CO.nut.casa&&(r.pz||num(r.lote&&r.lote.pc)>=50||n>1)){      // v53.4.81 · v53.4.85 · v53.4.86: por piezas, por peso o por raciones (lo que encaja con esta comida)
+    var z=rcOpRec(r,o,objCm(planActual(),c));
     var vz=c.opciones.length===1&&!c.opciones[0].nombre&&!c.opciones[0].texto&&!c.opciones[0].img&&!(c.opciones[0].items||[]).length;
     if(vz) c.opciones[0]=o; else c.opciones.push(o);
     CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.indexOf(o); cerrarModal(); marcarDie(); repintar();
-    return toast('Añadida: '+pzTxt(o,n0,s0)+(bt?', lo que encaja con esta comida':'')+'. En su app elige cuántas se come.','ok');
-  }
-  if(r.lote&&!r.pz&&CO.nut&&CO.nut.casa&&num(r.lote.pc)>0){      // v53.4.85: por peso (la ración que encaja con esta comida)
-    var zl=ltOpRec(r,o,objCm(planActual(),c));
-    var vl=c.opciones.length===1&&!c.opciones[0].nombre&&!c.opciones[0].texto&&!c.opciones[0].img&&!(c.opciones[0].items||[]).length;
-    if(vl) c.opciones[0]=o; else c.opciones.push(o);
-    CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.indexOf(o); cerrarModal(); marcarDie(); repintar();
-    return toast('Añadida: su ración es de '+gTxt(zl.g)+(zl.bt?', lo que encaja con esta comida':'')+'. Si le falta algo, añade un acompañamiento al plato.','ok');
+    if(z.u==='pz') return toast('Añadida: '+pzTxt(o,z.n,z.s)+(z.bt?', lo que encaja con esta comida':'')+'. En su app elige cuántas se come.','ok');
+    return toast('Añadida: su ración es '+(z.u==='peso'?'de ':'')+rcTxt(o,z.f)+(z.bt?', lo que encaja con esta comida':'')+'. Si le falta algo, añade un acompañamiento al plato.','ok');
   }
   if(n>1){ var u1=macOp(o), ob=objCm(planActual(),c), k=1;          // v29: ella ve la receta entera y pesa la tanda para saber su ración
     if(u1&&u1[0]>0&&ob&&ob[0]>0) k=Math.max(0.5,Math.min(Math.min(n,4),Math.round(ob[0]/u1[0]*2)/2));      // v48: su parte, la que cuadra con esta comida · v53.4.82: con las kcal de una ración ya con sus valores (la receta guardada no los trae de los alimentos de la base: salía «4 raciones de 7», 1129 kcal para una comida de 694)
@@ -11756,20 +11776,23 @@ A.recPon=function(el){
 };
 function ltFalta(o,ob){ var m=macOp(o); if(!m||!ob||ob[1]==null||ob[2]==null||ob[3]==null) return ''; var N=['','proteína','hidratos','grasa'], F=[];
   for(var i=1;i<4;i++){ var d=ob[i]-m[i]; if(d>limMac(i,ob)) F.push(Math.round(d)+' g de '+N[i]); } return F.length?'Le faltan '+listaY(F)+': añade un acompañamiento ('+(F[0].indexOf('proteína')>0?'1 huevo, una lata de atún, pollo…':F[0].indexOf('hidratos')>0?'pan, fruta…':'aceite en crudo, aguacate…')+').':''; }
-function ltEdHtml(o,at,ob){
-  var L=o.lote, g=ltGq(L,o.items), gr=Math.round(L.pc/L.rac), ac=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }), hoy=ltHoyCo(o), fal=ltFalta(o,ob);
-  return '<div class="pz-ed lt-ed"><span>'+ic('dieta')+' Por peso: su ración, <b>'+gTxt(g)+'</b> <small class="muted">· 1 ración = '+gTxt(gr)+' · olla de '+gTxt(L.pc)+'</small>'+
-    (hoy?'<small class="lt-hoy">'+ic('ok')+'Hoy ha comido '+gTxt(hoy)+'</small>':'')+'</span>'+
-    '<span class="tnd-b"><button class="btn sm sec" data-a="ltCo" data-d="-25"'+at+(g<=25?' disabled':'')+'>−25 g</button><button class="btn sm sec" data-a="ltCo" data-d="25"'+at+(g>=L.pc?' disabled':'')+'>+25 g</button></span>'+
-    '<small class="muted lt-n">'+(ac.length?'Acompañamiento: '+esc(listaY(ac.map(function(it){ return alNom(it); })))+'. ':'')+(fal?'<b class="lt-fal">'+esc(fal)+'</b> ':'')+'Los acompañamientos se añaden con «Añadir alimento».</small></div>';
+function rcEdHtml(o,at,ob){
+  var L=o.lote, u=rcU(o), f=rcF(o), ac=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }), hoy=rcHoyCo(o), fal=ltFalta(o,ob), pe=u==='peso'&&L.pc;
+  var otra=pe?'≈ '+rcRac(f*L.rac).replace('≈ ',''):L.pc?'≈ '+gTxt(Math.round(f*L.pc)):'';
+  return '<div class="pz-ed lt-ed"><span>'+ic('dieta')+' '+(pe?'Por peso':'Por raciones')+': su ración, <b>'+(pe?gTxt(Math.round(f*L.pc)):rcRac(f*L.rac))+'</b> <small class="muted">· '+(pe?'1 ración = '+gTxt(Math.round(L.pc/L.rac))+' · olla de '+gTxt(L.pc):'de '+L.rac+' raciones')+(otra?' · '+otra:'')+'</small>'+
+    (hoy!=null&&Math.abs(hoy-f)>0.004?'<small class="lt-hoy">'+ic('ok')+'Hoy ha comido '+rcTxt(o,hoy)+'</small>':'')+'</span>'+
+    '<span class="tnd-b"><button class="btn sm sec" data-a="rcCo" data-d="-1"'+at+'>'+(pe?'−25 g':'−½')+'</button><button class="btn sm sec" data-a="rcCo" data-d="1"'+at+'>'+(pe?'+25 g':'+½')+'</button></span>'+
+    '<small class="muted lt-n">'+(ac.length?'Acompañamiento: '+esc(listaY(ac.map(function(it){ return alNom(it); })))+'. ':'')+(fal?'<b class="lt-fal">'+esc(fal)+'</b> ':'')+'Los acompañamientos se añaden con «Añadir alimento». En su app elige si lo apunta por ración, por peso'+(o.pz?' o por piezas':'')+'.</small></div>';
 }
-function ltHoyCo(o){ var pf=CO.d&&CO.d.clienta&&CO.d.clienta.dietaPref, d=pf&&pf.dia; if(!d||d.f!==hoyStr()||!d.g||!d.g[o.id]) return 0; var G=d.g[o.id], its=Object.keys(G).map(function(i){ return {i:i,q:G[i]}; }); return ltGq(o.lote,its); }
-A.ltCo=function(el){ var o=opDe(el); if(!o||!o.lote) return; var g=Math.max(25,Math.min(o.lote.pc,ltGq(o.lote,o.items)+(+el.dataset.d))); ltPon(o,g); marcarDie(); repintar(); };
+function rcHoyCo(o){ var pf=CO.d&&CO.d.clienta&&CO.d.clienta.dietaPref, d=pf&&pf.dia; if(!d||d.f!==hoyStr()||!d.g||!d.g[o.id]) return null; var G=d.g[o.id], its=Object.keys(G).map(function(i){ return {i:i,q:G[i]}; }); return rcF(o,its); }
+A.rcCo=function(el){ var o=opDe(el); if(!o||!o.lote) return; var L=o.lote, f=rcF(o), d=+el.dataset.d;
+  if(rcU(o)==='peso'&&L.pc){ var g=Math.max(25,Math.min(L.pc,Math.round(f*L.pc/25)*25+25*d)); f=g/L.pc; } else { var k=Math.max(0.5,Math.min(L.rac,Math.round(f*L.rac*2)/2+0.5*d)); f=k/L.rac; }
+  rcPonF(o,f); marcarDie(); repintar(); };
 /* v53.4.83 (Javier: «en el perfil como coach me sale como un uno partido de dos»): los platos que ya estaban puestos de una receta que ahora va por piezas pasan a piezas */
 function pzMigrar(){
   if(!CO.die||!(CO.nut&&CO.nut.casa)) return []; var R={}, L=[]; (CO.nut.recetas||[]).forEach(function(r){ if(r.pz) R[r.id]=r; });
   CO.die.planes.forEach(function(p){ p.comidas.forEach(function(c){ c.opciones.forEach(function(o){ var r=o.rec&&R[o.rec]; if(!r||o.pz) return;
-    var z=pzOpRec(r,o,objCm(p,c)); if(r.texto) o.texto=r.texto; L.push('«'+(o.nombre||r.nombre)+'», '+pzTxt(o,z.n,z.s)); }); }); });
+    var z=rcOpRec(r,o,objCm(p,c)); if(r.texto) o.texto=r.texto; L.push('«'+(o.nombre||r.nombre)+'», '+pzTxt(o,z.n,z.s)); }); }); });
   return L;
 }
 function recDeOp(o){ return o&&o.rec&&CO.nut?(CO.nut.recetas||[]).filter(function(r){ return r.id===o.rec; })[0]:null; }
@@ -12468,7 +12491,7 @@ function vRecetas(){
   var h='<p class="tip">Guarda tus platos con ingredientes, gramos, elaboración, raciones y foto, y añádelos a cualquier dieta como un plato más de una comida.</p><div class="row"><button class="btn sm" data-a="recNueva">'+ic('mas')+'Nueva receta</button></div>';
   if(!R.length) return h+'<div class="card mt"><p class="muted">Aún no tienes recetas. También puedes guardar cualquier plato de una dieta con «Guardar como receta».</p></div>';
   return h+'<div class="pl-grid rec-g">'+R.map(function(r){ var m=macOp(r), n=Math.max(1,num(r.raciones)||1), rc=m?m.map(function(v){ return v/n; }):null;
-    return '<button class="pl-c" data-a="recEditar" data-id="'+esc(r.id)+'">'+platoImg(r.img)+'<span class="pl-t"><b>'+esc(r.nombre)+'</b><small>'+[r.pz?r.pz.tot+' '+pzPl(r.pz.nom):r.lote&&r.lote.pc?'por peso · olla de '+gTxt(r.lote.pc):n>1?n+' raciones':'1 ración',r.min?r.min+' min':'',rc?kTxt(rc[0])+' kcal/ración':''].filter(Boolean).join('<i>·</i>')+'</small>'+(rc?'<small>P '+kTxt(rc[1])+' · HC '+kTxt(rc[2])+' · G '+kTxt(rc[3])+'</small>':'')+(r.tipos?'<small class="rec-bib">'+ic('lista')+'Biblioteca'+(r.autor?' · de '+esc(String(r.autor).split(' ')[0]):'')+'</small>':'')+'</span></button>'; }).join('')+'</div>';
+    return '<button class="pl-c" data-a="recEditar" data-id="'+esc(r.id)+'">'+platoImg(r.img)+'<span class="pl-t"><b>'+esc(r.nombre)+'</b><small>'+[n>1?n+' raciones':'1 ración',r.lote&&r.lote.pc?'olla de '+gTxt(r.lote.pc):'',r.pz?r.pz.tot+' '+pzPl(r.pz.nom):'',r.min?r.min+' min':'',rc?kTxt(rc[0])+' kcal/ración':''].filter(Boolean).join('<i>·</i>')+'</small>'+(rc?'<small>P '+kTxt(rc[1])+' · HC '+kTxt(rc[2])+' · G '+kTxt(rc[3])+'</small>':'')+(r.tipos?'<small class="rec-bib">'+ic('lista')+'Biblioteca'+(r.autor?' · de '+esc(String(r.autor).split(' ')[0]):'')+'</small>':'')+'</span></button>'; }).join('')+'</div>';
 }
 A.recNueva=function(){ CO.recEd={id:'',nombre:'',raciones:'1',min:'',img:'',texto:'',etiquetas:'',items:[]}; CO.recSucia=false; CO.nv='recEd'; pintarNutri(true); };
 A.recEditar=function(el){ var r=(CO.nut.recetas||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return; CO.recEd=copia(r); CO.recEd.items.forEach(hidratarIt); CO.recSucia=false; CO.nv='recEd'; pintarNutri(true); };
@@ -12493,44 +12516,29 @@ function recPzRes(){
   return '<p class="sm"><b>1 '+esc(P.nom)+' ≈ '+kTxt(U.A[0])+' kcal</b> · P '+fN(U.A[1],1)+' · HC '+fN(U.A[2],1)+' · G '+fN(U.A[3],1)+(hs?'<br><b>1 cucharada sopera de salsa ≈ '+kTxt(U.S[0])+' kcal</b> · P '+fN(U.S[1],1)+' · HC '+fN(U.S[2],1)+' · G '+fN(U.S[3],1):'')+'</p>'+
     (gm?'<p class="muted sm">La masa pesa '+gTxt(gm)+': sale a unos '+Math.round(gm/P.tot)+' g por '+esc(P.nom)+(P.g&&Math.abs(gm/P.tot-P.g)>P.g*0.15?' (has puesto '+P.g+' g: revisa qué va en la masa)':'')+'.</p>':'');
 }
-/* v53.4.85: «Cómo se reparte»: por raciones, por peso (la olla cocinada) o por piezas (solo panel nº 1) */
-function recModo(r){ return r.pz?'pz':r.lote?'peso':'rac'; }
+/* v53.4.86 (Javier: «que lo elija la clienta» y sin «por encima»): la receta dice cómo se puede apuntar. Por raciones siempre; por peso si pones lo que pesa la olla;
+   por piezas si se come por piezas. La clienta elige en su app; en la dieta se pauta por piezas, si no por peso y si no por raciones. Solo panel nº 1. */
 function recRepHtml(r){
   if(!(CO.nut&&CO.nut.casa)) return '';
-  var m=recModo(r), n=Math.max(1,num(r.raciones)||1);
-  var h='<div class="card" id="rec-pz"><div class="card-t">'+ic('dieta')+'Cómo se reparte</div><div class="seg rep-s">'+[['rac','Por raciones'],['peso','Por peso'],['pz','Por piezas']].map(function(x){ return '<button class="'+(m===x[0]?'on':'')+'" data-a="recRep" data-v="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div>';
-  if(m==='rac') return h+'<p class="muted sm mt6">'+(n>1?'Salen '+n+' raciones: en la dieta se pone la parte que le toca.':'Es para una ración. Si la cocinas para varios días, elige «Por peso».')+'</p></div>';
-  if(m==='peso') return h+recLoteHtml(r)+'</div>';
-  return h+recPzHtml(r)+'</div>';
-}
-function recLoteHtml(r){
-  var L=r.lote;
-  return '<p class="muted sm mt6">Para guisos y platos que haces de una vez: lentejas, tortilla, arroz al horno… Su ración va en gramos.</p>'+
-    '<label class="f">Peso total cocinado <small class="muted">(sin la olla)</small><span class="in-u"><input data-lt="pc" inputmode="numeric" value="'+esc(L.pc||'')+'" placeholder="1800" aria-label="Peso total cocinado en gramos"><span>g</span></span></label>'+
-    '<p class="muted sm">Pesa la olla llena y réstale lo que pesa vacía. El agua que se evapora o absorbe cambia el peso, no las kcal.</p>'+
-    '<div class="lab">Qué va en la olla</div><div class="rpz-l">'+(r.items||[]).map(function(it){ var e=(L.enc||[]).indexOf(it.i)>=0; hidratarIt(it);
-      return '<div class="rpz-f"><span>'+esc(alNom(it))+' <small class="muted">'+gTxt(it.q)+'</small></span><span class="seg rpz-s"><button class="'+(e?'':'on')+'" data-a="recLtE" data-i="'+esc(it.i)+'" data-v="0">En la olla</button><button class="'+(e?'on':'')+'" data-a="recLtE" data-i="'+esc(it.i)+'" data-v="1">Por encima</button></span></div>'; }).join('')+'</div>'+
-    '<p class="muted sm">«Por encima»: lo que se añade después de cocinar (aceite en crudo, queso rallado…). Cuenta en la ración, pero no en lo que pesa la olla.</p>'+
-    '<div id="rec-lt-r">'+recLoteRes()+'</div>';
+  var n=Math.max(1,num(r.raciones)||1), L=r.lote||{}, on=!!r.pz;
+  return '<div class="card" id="rec-pz"><div class="card-t">'+ic('dieta')+'Cómo puede apuntarlo la clienta</div><p class="muted sm">Ella elige en su app: por ración, por peso o por piezas. Tú se lo pautas en la dieta y la app lo pasa de una forma a otra.</p>'+
+    '<div class="rc-o"><b>Por ración</b><small class="muted">'+(n>1?'Salen '+n+' raciones (arriba).':'Pon arriba cuántas raciones salen.')+'</small></div>'+
+    '<div class="rc-o"><b>Por peso</b> <small class="muted">(opcional)</small> <label class="f">Peso total cocinado <small class="muted">(sin la olla ni el molde)</small><span class="in-u"><input data-lt="pc" inputmode="numeric" value="'+esc(L.pc||'')+'" placeholder="1800" aria-label="Peso total cocinado en gramos"><span>g</span></span></label><div id="rec-lt-r">'+recLoteRes()+'</div></div>'+
+    '<div class="rc-o"><div class="card-t rpz-t"><span><b>Por piezas</b> <small class="muted">(albóndigas, croquetas…)</small></span><button class="sw'+(on?' on':'')+'" data-a="recPzOn" aria-pressed="'+on+'" aria-label="Se come por piezas"><i></i></button></div>'+(on?recPzHtml(r):'')+'</div></div>';
 }
 function recLoteRes(){
-  var r=CO.recEd; if(!r||!r.lote) return ''; var pc=num(r.lote.pc), n=Math.max(1,num(r.raciones)||1); if(!(pc>0)) return '<p class="muted sm">Pon cuánto pesa la olla cocinada.</p>';
-  var enc=r.lote.enc||[], its=(r.items||[]).map(hidratarIt), T=sumMac(its.map(macIt)), Tol=sumMac(its.filter(function(it){ return enc.indexOf(it.i)<0; }).map(macIt)), crudo=its.filter(function(it){ return enc.indexOf(it.i)<0; }).reduce(function(a,it){ return a+(num(it.q)||0); },0);
-  if(!T||!Tol) return '';
+  var r=CO.recEd; if(!r) return ''; var pc=num(r.lote&&r.lote.pc), n=Math.max(1,num(r.raciones)||1); if(!(pc>0)) return '<p class="muted sm">Pesa la olla o el molde lleno y réstale lo que pesa vacío. Con este peso, tu clienta puede apuntarlo en gramos.</p>';
+  var its=(r.items||[]).map(hidratarIt), T=sumMac(its.map(macIt)), crudo=its.reduce(function(a,it){ return a+(num(it.q)||0); },0);
+  if(!T) return '';
   var raro=crudo>0&&(pc<crudo*0.5||pc>crudo*4);
-  return '<div class="lt-res"><div><b>Por 100 g:</b> '+macLinea(Tol.map(function(v){ return v/pc*100; }))+'</div><div><b>1 ración ('+gTxt(pc/n)+'):</b> '+macLinea(T.map(function(v){ return v/n; }))+'</div></div>'+
-    (raro?'<p class="cu-no sm">'+ic('alerta')+'¿Seguro? Lo de la olla pesa '+gTxt(crudo)+' en crudo y has puesto que cocinado pesa '+gTxt(pc)+'.</p>':'')+
-    '<p class="muted sm">En un guiso es aproximado: cada plato no lleva siempre lo mismo de cada cosa.</p>';
+  return '<div class="lt-res"><div><b>Por 100 g:</b> '+macLinea(T.map(function(v){ return v/pc*100; }))+'</div><div><b>1 ración ('+gTxt(pc/n)+'):</b> '+macLinea(T.map(function(v){ return v/n; }))+'</div></div>'+
+    (raro?'<p class="cu-no sm">'+ic('alerta')+'¿Seguro? Los ingredientes pesan '+gTxt(crudo)+' en crudo y has puesto que cocinado pesa '+gTxt(pc)+'.</p>':'')+
+    '<p class="muted sm">El agua que se evapora o absorbe cambia el peso, no las kcal. En un guiso es aproximado: cada plato no lleva siempre lo mismo de cada cosa.</p>';
 }
-A.recRep=function(el){ var r=CO.recEd; if(!r) return; var v=el.dataset.v;
-  if(v==='rac'){ r.pz=null; r.lote=null; }
-  else if(v==='peso'){ r.pz=null; r.lote=r.lote||{pc:'',enc:[]}; }
-  else { r.lote=null; r.pz=r.pz||{nom:'',tot:'',g:'',cu:'',masa:(r.items||[]).map(function(it){ return it.i; })}; }
-  sucio('r'); var e=document.getElementById('rec-pz'); if(e) e.outerHTML=recRepHtml(r); };
-A.recLtE=function(el){ var r=CO.recEd; if(!r||!r.lote) return; var i=el.dataset.i, E=(r.lote.enc||[]).filter(function(x){ return x!==i; }); if(el.dataset.v==='1') E.push(i); r.lote.enc=E; sucio('r'); var e=document.getElementById('rec-pz'); if(e) e.outerHTML=recRepHtml(r); };
+A.recPzOn=function(){ var r=CO.recEd; if(!r) return; r.pz=r.pz?null:{nom:'',tot:'',g:'',cu:'',masa:(r.items||[]).map(function(it){ return it.i; })}; sucio('r'); var e=document.getElementById('rec-pz'); if(e) e.outerHTML=recRepHtml(r); };
 function recPzHtml(r){
   var P=r.pz, h='';
-  h+='<p class="muted sm mt6">Para albóndigas, croquetas, hamburguesas, tortitas… En su app se apunta cuántas se come (y la salsa, a cucharadas soperas) y los gramos se calculan solos.</p><div class="grid3"><label class="f">Pieza<input data-pz="nom" value="'+esc(P.nom||'')+'" placeholder="albóndiga"></label><label class="f">Cuántas salen<input data-pz="tot" inputmode="numeric" value="'+esc(P.tot||'')+'"></label><label class="f">En crudo, cada una (g)<input data-pz="g" inputmode="numeric" value="'+esc(P.g||'')+'"></label></div>'+
+  h+='<div class="grid3"><label class="f">Pieza<input data-pz="nom" value="'+esc(P.nom||'')+'" placeholder="albóndiga"></label><label class="f">Cuántas salen<input data-pz="tot" inputmode="numeric" value="'+esc(P.tot||'')+'"></label><label class="f">En crudo, cada una (g)<input data-pz="g" inputmode="numeric" value="'+esc(P.g||'')+'"></label></div>'+
     '<label class="f">Salsa: cucharadas soperas que salen <small class="muted">(0 si no lleva)</small><input data-pz="cu" inputmode="numeric" value="'+esc(P.cu||'')+'"></label>'+
     '<div class="rpz-l">'+(r.items||[]).map(function(it){ var m=pzEsMasa(P,it.i); hidratarIt(it);
       return '<div class="rpz-f"><span>'+esc(alNom(it))+' <small class="muted">'+gTxt(it.q)+'</small></span><span class="seg rpz-s"><button class="'+(m?'on':'')+'" data-a="recPzM" data-i="'+esc(it.i)+'" data-v="1">Masa</button><button class="'+(m?'':'on')+'" data-a="recPzM" data-i="'+esc(it.i)+'" data-v="0">Salsa</button></span></div>'; }).join('')+'</div>'+
@@ -12545,11 +12553,11 @@ A.recGuardar=function(el){
   if(el.disabled) return; el.disabled=true;
   if(r.pz&&!(num(r.pz.tot)>0)) { el.disabled=false; return toast('Pon cuántas piezas salen (o quita «Se come por piezas»)'); }
   if(r.pz&&!(r.pz.masa||[]).some(function(i){ return (r.items||[]).some(function(it){ return it.i===i; }); })) { el.disabled=false; return toast('Marca qué ingredientes van en la masa'); }
-  if(r.lote&&!(num(r.lote.pc)>=50)) { el.disabled=false; return toast('Pon cuánto pesa la olla cocinada (o elige otra forma de repartir)'); }      // v53.4.85
+  if(r.lote&&String(r.lote.pc||'').trim()!==''&&!(num(r.lote.pc)>=50)) { el.disabled=false; return toast('El peso de la olla cocinada va en gramos (o déjalo vacío)'); }      // v53.4.85
   if(CO.nut&&CO.nut.casa){ var vis={}, dup=null, cero=null; (r.items||[]).forEach(function(it){ if(vis[it.a]&&!dup) dup=it; vis[it.a]=1; if(!(num(it.q)>0)&&!cero) cero=it; });      // v53.4.85: sin repetidos ni cantidades vacías
     if(dup){ el.disabled=false; return toast('«'+alNom(dup)+'» está dos veces: déjalo en una sola línea con la suma'); }
     if(cero){ el.disabled=false; return toast('Pon la cantidad de «'+alNom(cero)+'» (o quítalo)'); } }
-  cargando(api('coachGuardarReceta',CO.pin,{id:r.id,nombre:r.nombre,raciones:r.raciones,min:r.min,img:r.img,texto:r.texto,etiquetas:r.etiquetas,items:r.items,tipos:r.tipos||'',pz:r.pz?{nom:String(r.pz.nom||'').trim()||'pieza',tot:num(r.pz.tot),g:num(r.pz.g)||0,cu:num(r.pz.cu)||0,masa:r.pz.masa}:null,lote:r.lote&&!r.pz?{pc:num(r.lote.pc),enc:r.lote.enc||[]}:null})).then(function(x){ CO.nut.recetas=x.recetas; CO.recSucia=false; CO.recEd=null; CO.nv='rec'; pintarNutri(true); toast('Receta guardada','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+  cargando(api('coachGuardarReceta',CO.pin,{id:r.id,nombre:r.nombre,raciones:r.raciones,min:r.min,img:r.img,texto:r.texto,etiquetas:r.etiquetas,items:r.items,tipos:r.tipos||'',pz:r.pz?{nom:String(r.pz.nom||'').trim()||'pieza',tot:num(r.pz.tot),g:num(r.pz.g)||0,cu:num(r.pz.cu)||0,masa:r.pz.masa}:null,lote:r.lote&&num(r.lote.pc)>=50?{pc:num(r.lote.pc)}:null})).then(function(x){ CO.nut.recetas=x.recetas; CO.recSucia=false; CO.recEd=null; CO.nv='rec'; pintarNutri(true); toast('Receta guardada','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
 A.recBorrar=function(){
   var r=CO.recEd; if(!r||!r.id) return;
@@ -14129,8 +14137,8 @@ function opcionDeReceta(c){
   var r=c.x.r; r && (usadasG[r.id]=1);
   var o={id:'o'+rand(6),nombre:c.x.n||r.n,texto:txtLib(r,c.x.sa)+(c.x.cambios.length?' (Adaptada: '+c.x.cambios.map(function(z){ return z[0]+' → '+z[1]; }).join(', ')+'.)':'')+((c.x.notas||[]).length?'\n\n'+c.x.notas.join('\n'):''),img:r.img,min:r.min,items:c.items.map(hidratarIt),lib:r.id};
   if(r.tanda) o.tanda={r:r.tanda.r,k:c.k||1,c:r.tanda.c||''};
-  var rp=(r.pz||r.lt)&&r.src&&CO.nut&&CO.nut.casa?(CO.nut.recetas||[]).filter(function(y){ return y.id===r.src&&(y.pz||y.lote); })[0]:null;      // v53.4.83: por piezas · v53.4.85: por peso
-  if(rp){ o.rec=rp.id; delete o.lib; if(rp.pz) pzOpRec(rp,o,c.ob||null); else ltOpRec(rp,o,c.ob||null); }
+  var rp=r.src&&CO.nut&&CO.nut.casa?(CO.nut.recetas||[]).filter(function(y){ return y.id===r.src&&(y.pz||num(y.lote&&y.lote.pc)>=50||num(y.raciones)>1); })[0]:null;      // v53.4.83 · v53.4.86: por piezas, peso o raciones
+  if(rp){ o.rec=rp.id; delete o.lib; rcOpRec(rp,o,c.ob||null); }
   return o;
 }
 /* v29: qué parte de la tanda cuadra con las kcal de la comida (de media en media ración) y los gramos de esa parte */
@@ -14227,7 +14235,7 @@ function libMood(L,M){
     if(r.pz&&r.pz.tot&&(r.items||[]).length&&(r.items||[]).every(function(it){ return it.i; })){ pz={nom:r.pz.nom,tot:r.pz.tot,g:r.pz.g,cu:r.pz.cu,rac:rac,mi:[],bt:[]};      // v53.4.83: por piezas (panel nº 1)
       r.items.forEach(function(it,k){ if((r.pz.masa||[]).indexOf(it.i)>=0) pz.mi.push(k); pz.bt.push(num(it.q)||0); }); if(!pz.mi.length) pz=null; }
     var td=rac>=3&&!pz;     // v48: de 3 raciones o más (un bizcocho), por tandas
-    return {id:'x'+r.id,src:r.id,pz:pz,lt:!pz&&!!(r.lote&&r.lote.pc),n:r.nombre,t:t.replace('p',''),cat:/p/.test(t)&&!/[dmc]/.test(t)?'p':/[dm]/.test(t)?'d':/c/.test(t)?'c':'p',min:num(r.min)||0,img:r.img||'',pasos:r.texto||'',mood:r.autor||'MOOD ON',tanda:td?{r:rac,c:''}:null,
+    return {id:'x'+r.id,src:r.id,pz:pz,n:r.nombre,t:t.replace('p',''),cat:/p/.test(t)&&!/[dmc]/.test(t)?'p':/[dm]/.test(t)?'d':/c/.test(t)?'c':'p',min:num(r.min)||0,img:r.img||'',pasos:r.texto||'',mood:r.autor||'MOOD ON',tanda:td?{r:rac,c:''}:null,
       ing:(r.items||[]).map(function(it){ var a=M[it.a]||it, b=a.b||[0,0,0,0], P=(+b[1]||0)*4, C=(+b[2]||0)*4, G=(+b[3]||0)*9, mx=Math.max(P,C,G), rol=!mx?'f':mx===P?'p':mx===C?'c':'g';
         if(a.u&&num(a.u[1])>=40) rol='f'; return [it.a,td?num(it.q)||0:Math.round((num(it.q)||0)/rac*10)/10,rol]; })};
   });
@@ -16270,6 +16278,14 @@ IN29.tandaPeso=function(t){
   clearTimeout(IN29.tt); IN29.tt=setTimeout(function(){ if(v>0) pf.n[t.dataset.k]=Math.min(99999,Math.round(v)); else delete pf.n[t.dataset.k]; guardarPref(); },900);
 };
 
+/* v53.4.86 · la receta entera para cocinarla (el plato de una receta por raciones, peso o piezas) */
+function rcRecetaHtml(o){
+  var L=o.lote, md=rcModo(o), f=rcF(o), base=ltOlla(o)||L.pc;
+  return '<div class="card"><div class="card-t">Ingredientes <span class="muted sm">receta entera · '+L.rac+' raciones'+(L.pc?' · sale '+gTxt(L.pc):'')+(o.pz?' · '+o.pz.tot+' '+esc(pzPl(o.pz.nom)):'')+'</span></div>'+
+    (o.items||[]).filter(function(it){ return L.b[it.i]!=null; }).map(function(it){ var e=itemEf(o,it), a=e.a, q=L.b[it.i];
+      return '<div class="ing"><div class="ing-n"><b>'+esc(a.n||'Alimento')+'</b>'+(alSub(a)?'<small>'+esc(alSub(a))+'</small>':'')+'</div><div class="ing-q"><b>'+gTxt(redG(q))+'</b>'+(unidTxt(a.u,q)?'<small>'+esc(unidTxt(a.u,q))+'</small>':'')+'</div><span></span></div>'; }).join('')+
+    '<p class="sm mt6">Tu ración: <b>'+esc(rcTxt(o,f,md,base))+'</b>. Al tocar el plato en tu menú eliges si la apuntas por ración, por peso'+(o.pz?' o por piezas':'')+'.</p></div>';
+}
 /* ---------- mis recetas: los macros de su trozo de cualquier receta casera ---------- */
 function mrTot(r){ return sumMac((r.items||[]).map(function(it){ return it.b?it.b.map(function(v){ return v*(num(it.q)||0)/100; }):null; })); }
 function vMisRecetas(){
