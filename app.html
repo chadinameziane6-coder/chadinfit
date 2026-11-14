@@ -1669,6 +1669,7 @@ body.ancho .dk-cols.lado>.dk-col:first-child{position:sticky;top:128px;max-heigh
 .mac-t tr:last-child th,.mac-t tr:last-child td{border-bottom:0}
 .op-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.op-acc .btn{margin:0;display:inline-flex;align-items:center;gap:6px;width:auto}.op-acc .ic{width:15px;height:15px;margin:0}
 .die-res .dia-m{margin-top:10px}
+.ing-t tr.ing-hoy th small{font-weight:500;color:var(--mu)}.ing-t tr.ing-hoy td{color:var(--mu)}
 .die-pref{background:var(--card2);border-radius:10px;padding:8px 10px;margin:8px 0;font-size:12.5px;color:var(--tx2);display:flex;flex-direction:column;gap:3px}.die-pref .ic{width:12px;height:12px;margin:0 3px 0 0;fill:var(--mg);color:var(--mg)}
 body.ancho .comida-ed{display:block}
 body.ancho .op-low{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}body.ancho .op-low .op-r>.f:first-child{margin-top:10px}
@@ -2956,7 +2957,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.99';
+var APP_V = 'v53.4.100';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7366,7 +7367,8 @@ function famOkCasa(a,b){      // a: el que lleva el plato · b: el candidato
   var con=function(T){ return T.indexOf('pes')>=0&&T.indexOf('fia')>=0; };
   if(a.x==='prot'){
     if(pa==='sup') return usoOkAl(a,b);
-    if(con(A)||con(B)) return con(A)&&con(B);      // una lata (atún, sardinas…) por otra lata
+    if(con(A)) return con(B)||pb==='car'||pb==='pes';      // una lata (atún, sardinas…) por otra lata, o por pollo, pavo o pescado (v53.4.100, Javier: «faltan intercambiables de atún natural»)
+    if(con(B)) return false;
     if(pa==='fia') return B.indexOf('fia')>=0;      // el jamón, por otro fiambre (nunca por pollo ni sardinas)
     if(pa==='car'||pa==='pes') return pb==='car'||pb==='pes';      // la carne o el pescado del plato, por carne o pescado
     return pa===pb;
@@ -7388,7 +7390,7 @@ function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
   var porF={}, orden=[], out=[], k=MK_EQ[g.m]||0;
   tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!famOkCasa(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
   orden.forEach(function(f){
-    var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];
+    var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0||it.e==='escurrido'?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];      // v53.4.100: el atún escurrido, por pollo ya hecho
     var peso=eqPesoCasa(me,a), r=eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;
     var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*1.25&&kb-ka>25)||kb<ka*0.4)) return;
     var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
@@ -7423,11 +7425,12 @@ function fatOk(cx,src){ if(cx.coc&&!cx.pan&&(src==='ac'||src==='acs')) return ['
 function varKey(a){ var w=clave(String(a.n||'')).replace(/\b(de|del|la|el|al|con|en|y)\b/g,' ').trim().split(/\s+/), k=w[0]||'';
   if(/^(crema|aceite|pan|queso|yogur|leche|bebida|pechuga|tortitas|tortilla|tortillas|arroz|pasta|copos|harina|fiambre|jamon|semillas|proteina|filete|carne)$/.test(k)&&w[1]) k+=' '+w[1];
   return k.replace(/z$/,'c').replace(/(es|s)$/,''); }
+var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pechuga|pavo_pechuga|ternera_filete|merluza|atun_natural|huevo|yogur_natural|leche_semi|platano|manzana|aceite_oliva)$/;      // v53.4.100: los básicos, siempre entre los 6
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
   if(cx&&me.x==='grasa'){ var ok=fatOk(cx,fatTipo(me)); out=out.filter(function(z){ return ok.indexOf(fatTipo(z.a))>=0; }); }
   if(cx&&cx.coc&&!cx.pan&&me.x==='hc'&&/avena|harina/.test(clave((me.n||'')+' '+me.id))) out=out.filter(function(z){ return /avena|harina/.test(clave((z.a.n||'')+' '+z.a.id)); });
-  var pri=function(z){ return /^al/.test(z.a.id)?0:/^sup_/.test(z.a.id)?2:1; };      // los tuyos, luego los de siempre y luego los de marca
+  var pri=function(z){ return /^al/.test(z.a.id)?0:RX_BAS.test(famDe(z.a.id))?1:/^sup_/.test(z.a.id)?3:2; };      // los tuyos, luego los básicos (v53.4.100: la patata con el arroz), los de siempre y los de marca
   out=out.map(function(z,i){ z._o=i; return z; }).sort(function(a,b){ return pri(a)-pri(b)||a._o-b._o; });
   var G={}, orden=[]; out.forEach(function(z){ var k=varKey(z.a); if(!G[k]){ G[k]=z; orden.push(k); } });      // una de cada (no cuatro almendras de marcas distintas)
   var L=orden.map(function(k){ return G[k]; });
@@ -7509,8 +7512,19 @@ function prefCl(){
   return (CL.pref=prefNorm(p));
 }
 var prefT=null;
+/* v53.4.100 (Javier: «que le salga al entrenador las calorías ingeridas al día según opciones elegidas y la media semanal»): cada día, los platos
+   que ha sumado a su día (y, si ve sus macros, lo que suman con lo suelto). Se guardan las 6 últimas semanas */
+function hkAct(pf){
+  var D=pf.dia; if(!D||!D.f||typeof D.c!=='object'||!D.c) return; var ids=[], m=[0,0,0,0];
+  Object.keys(D.c).forEach(function(k){ var x=D.c[k]||{}; if(x.o) ids.push(String(x.o)); m[0]+=+x.k||0; m[1]+=+x.p||0; m[2]+=+x.h||0; m[3]+=+x.g||0; });
+  Object.keys(D.s||{}).forEach(function(k){ (D.s[k]||[]).forEach(function(a){ if(a&&a.b) for(var i=0;i<4;i++) m[i]+=(+a.b[i]||0)*(+a.q||0)/100; }); });
+  var H=pf.hk&&typeof pf.hk==='object'?pf.hk:(pf.hk={});
+  if(!ids.length&&!(m[0]>0)){ delete H[D.f]; return; }
+  var h={o:ids.slice(0,24)}; if(verMac()&&m[0]>0) h.m=m.map(r1); H[D.f]=h;
+  Object.keys(H).sort().reverse().slice(42).forEach(function(f){ delete H[f]; });
+}
 function guardarPref(){
-  clearTimeout(prefT); var p=prefCl(); LS.set(prefK(),{p:p,b:CL.prefB||{},v:CL.prefV||0});
+  clearTimeout(prefT); var p=prefCl(); try{ if(BOOT.mode==='clienta'&&CL.d) hkAct(p); }catch(e){} LS.set(prefK(),{p:p,b:CL.prefB||{},v:CL.prefV||0});
   prefT=setTimeout(function(){ prefT=null; enviarPref(); },700);
 }
 function enviarPref(){
@@ -11568,6 +11582,12 @@ function totDia(p){ return sumMac(p.comidas.map(function(c,mi){ return macOp(c.o
 function mrgCasa(){ return !!(CO.nut&&CO.nut.casa); }
 function limMac(i,ob){ var c=mrgCasa(); return i?Math.max(c?(i===3?3:5):3,ob[i]*(c?0.10:0.06)):Math.max(25,ob[i]*(c?0.10:0.04)); }
 function mrgMal(){ return mrgCasa()?2.5:2.2; }
+/* v53.4.100 (nº 1, Javier: «quitar ese aviso de no cuadra… habrá días que se quede corta y otros que sí llegue, es imposible cuadrar al milímetro, mientras el margen sea leve»):
+   el aviso rojo solo si se va de verdad: kcal ±20 %, proteína que falte más del 25 %, hidratos ±40 % o grasa ±50 % (y unos gramos como poco). Lo demás, ámbar: «Cuadrar» a mano si quiere */
+var MAL_ESTR=false;      // al buscar el cuadre (rcCuadrar, recetasPara): el margen de antes, para que siga buscando lo que cuadra del todo
+function cuadraMacE(m,ob){ MAL_ESTR=true; try{ return cuadraMac(m,ob); } finally { MAL_ESTR=false; } }
+function limMalMac(i,ob,d){ var lm=limMac(i,ob)*mrgMal(); if(!mrgCasa()||MAL_ESTR) return lm; var o=+ob[i]||0;
+  return Math.max(lm,!i?Math.max(60,0.20*o):i===1?(d<0?Math.max(8,0.25*o):Math.max(15,0.6*o)):i===2?Math.max(15,0.40*o):Math.max(8,0.5*o)); }
 function dePaso(i,ob,m){
   if(!mrgCasa()||!i||!m||ob[i]==null||!(m[i]>ob[i])) return false;
   var K=ob[0]!=null?ob[0]:4*(ob[1]||0)+4*(ob[2]||0)+9*(ob[3]||0), T=0.10*K/(i===3?9:4);
@@ -11580,7 +11600,7 @@ function cmpTabla(obj,plan,tit){
     if(obj[i]==null) return '<td>–</td>';
     var d=plan[i]-obj[i], t=Math.abs(d), lim=limMac(i,obj), mac=obj[1]!=null&&obj[2]!=null&&obj[3]!=null;
     if(dePaso(i,obj,plan)||(i===0&&mac&&mrgCasa()&&[1,2,3].every(function(k){ return Math.abs(plan[k]-obj[k])<=limMac(k,obj)||dePaso(k,obj,plan); }))) return '<td class="'+(t<=lim?'ok':'dp')+'" title="De paso: lo traen los alimentos, no es un error">'+dTxt(d)+'</td>';      // v53.4.84
-    return '<td class="'+(t<=lim?'ok':t<=lim*mrgMal()?'warn':'bad')+'">'+dTxt(d)+'</td>'; }).join('')+'</tr>':'';
+    return '<td class="'+(t<=lim?'ok':t<=limMalMac(i,obj,d)?'warn':'bad')+'">'+dTxt(d)+'</td>'; }).join('')+'</tr>':'';
   return '<table class="mac-t"><tr><th></th>'+col.map(function(c){ return '<th>'+c+'</th>'; }).join('')+'</tr>'+fila('Objetivo',obj)+fila(tit||'Plan',plan)+dif+'</table>';
 }
 function resDiaHtml(){
@@ -11593,6 +11613,33 @@ function resDiaHtml(){
   if(pcs&&pcs!==100) h+='<p class="sm" style="color:var(--warn);margin:8px 0 0">El reparto de las comidas suma '+pcs+' % (debería ser 100 %).</p>';
   else if(!pcs&&o) h+='<p class="muted sm" style="margin:8px 0 0">Pon en cada comida qué % del día lleva y verás su objetivo.</p>';
   return h+'</div>';
+}
+/* v53.4.100 · lo que come cada día según los platos que elige en su app, y la media de la semana (solo panel nº 1) */
+function ingDias(){
+  var pf=CO.d&&CO.d.clienta&&CO.d.clienta.dietaPref||{}, H={}, P=(CO.die&&CO.die.planes)||[], porId={};
+  P.forEach(function(p){ p.comidas.forEach(function(c){ (c.opciones||[]).forEach(function(o){ porId[o.id]={o:o,p:p}; }); }); });
+  Object.keys(pf.hk||{}).forEach(function(f){ H[f]=pf.hk[f]; });
+  var dc=function(d){ var c=d&&d.c&&typeof d.c==='object'?d.c:{}, ids=Object.keys(c).map(function(k){ return c[k]&&c[k].o; }).filter(Boolean), m=[0,0,0,0];
+    Object.keys(c).forEach(function(k){ m[0]+=+c[k].k||0; m[1]+=+c[k].p||0; m[2]+=+c[k].h||0; m[3]+=+c[k].g||0; }); return ids.length?(m[0]>0?{o:ids,m:m}:{o:ids}):null; };
+  if(pf.dia&&pf.dia.f&&!H[pf.dia.f]){ var x=dc(pf.dia); if(x) H[pf.dia.f]=x; }      // de antes de esta versión: lo de hoy y lo de ayer
+  if(pf.ant&&pf.ant.f&&!H[pf.ant.f]){ var y=dc(pf.ant); if(y) H[pf.ant.f]=y; }
+  var hoy=hoyStr(), out=[];
+  for(var i=0;i<7;i++){ var f=sumar(hoy,-i), h=H[f]; if(!h) continue;
+    var L=(h.o||[]).map(function(id){ return porId[id]; }).filter(Boolean), k=h.m&&+h.m[0]>0?+h.m[0]:L.reduce(function(a,z){ var m=macOp(z.o); return a+(m?m[0]:0); },0);
+    var pl=L.length?L[0].p:planActual(), ob=pl?objDia(pl):null;
+    if(k>0) out.push({f:f,k:k,ob:ob&&ob[0]!=null?ob[0]:null,n:(h.o||[]).length}); }
+  return out;
+}
+function ingHtml(){
+  if(!mrgCasa()||!(CO.d&&CO.d.clienta)) return '';
+  var D=ingDias(), hoy=hoyStr(), cls=function(k,o){ var pc=o?Math.abs(k-o)/o:0; return !o?'':pc<=0.10?'ok':pc<=0.20?'warn':'bad'; };
+  var h='<div class="card ing-res"><div class="card-t">Lo que come <span class="muted sm">según los platos que elige en su app</span></div>';
+  if(!D.length) return h+'<p class="muted sm">Aquí verás las kcal de cada día según los platos que '+cG('ella','él')+' suma a su día en la app, y la media de la semana. Aún no hay días con platos elegidos.</p></div>';
+  var fila=function(l,k,o,ex){ return '<tr'+(ex||'')+'><th>'+l+'</th><td>'+kTxt(k)+'</td><td>'+(o?kTxt(o):'–')+'</td><td class="'+cls(k,o)+'">'+(o?(k>=o?'+':'−')+Math.round(Math.abs(k-o)/o*100)+' %':'–')+'</td></tr>'; };
+  var lab=function(f){ return f===hoy?'Hoy':f===sumar(hoy,-1)?'Ayer':diaSemC(aDate(f))+' '+aDate(f).getDate(); };
+  var C=D.filter(function(z){ return z.f!==hoy; }), Ko=C.filter(function(z){ return z.ob; }), mk=C.length?C.reduce(function(a,z){ return a+z.k; },0)/C.length:0, mo=Ko.length?Ko.reduce(function(a,z){ return a+z.ob; },0)/Ko.length:null;      // hoy, aún a medias: no cuenta en la media
+  h+='<table class="mac-t ing-t"><tr><th></th><th>Kcal</th><th>Objetivo</th><th>Dif.</th></tr>'+D.map(function(z){ return z.f===hoy?'<tr class="ing-hoy"><th>Hoy <small>(a medias)</small></th><td>'+kTxt(z.k)+'</td><td>'+(z.ob?kTxt(z.ob):'–')+'</td><td>–</td></tr>':fila(lab(z.f),z.k,z.ob); }).join('')+(C.length?fila('Media',mk,mo,' class="dif"'):'')+'</table>';
+  return h+'<p class="muted sm mt6">'+(C.length?'Media de '+(C.length===1?'1 día':C.length+' días')+' con platos elegidos (de los 6 anteriores a hoy). Un día puede quedarse corto y otro pasarse: lo que cuenta es la media.':'La media de la semana sale a partir de mañana.')+'</p></div>';
 }
 function totOpHtml(o){ var m=macOp(o); return m?'<b>Total del plato</b><span>'+macLinea(m)+'</span>':''; }
 function cmpCm(p,c,o){
@@ -11706,8 +11753,8 @@ function vDietaPlan(){
   var cms=p.comidas.map(function(c,mi){ return cmEdHtml(p,c,mi); }).join('')+'<button class="btn sec sm" data-a="addCm">+ Comida</button>';
   var pie='<div class="card"><div class="card-t">Indicaciones generales (para todos los planes)</div><textarea data-dk="notas" rows="4" placeholder="Hidratación, suplementación, comidas libres, qué hacer en días de periodo…">'+esc(CO.die.notas)+'</textarea></div>'+
     '<button class="btn" data-a="guardarDieta">Guardar y publicar dieta</button>'+(gdOn()?'':otras)+dietasAntCard();
-  if(vistaAncha()) return '<div class="die-dk"><div class="die-main">'+cab+obj+cms+pie+'</div><aside class="die-side">'+resDiaHtml()+ve+'</aside></div>';
-  return cab+ve+obj+resDiaHtml()+cms+resDiaHtml()+pie;
+  if(vistaAncha()) return '<div class="die-dk"><div class="die-main">'+cab+obj+cms+pie+'</div><aside class="die-side">'+resDiaHtml()+ingHtml()+ve+'</aside></div>';
+  return cab+ve+ingHtml()+obj+resDiaHtml()+cms+resDiaHtml()+pie;
 }
 /* recalcula sin repintar (para no perder el cursor al escribir los gramos) */
 function setH(id,h){ var e=document.getElementById(id); if(e) e.innerHTML=h; }
@@ -11860,9 +11907,10 @@ function cuadraMac(m,ob){
   var DP=[];      // v53.4.84: lo que va «de paso»
   for(var i=mac?1:0;i<(mac?4:1);i++){ var d=m[i]-ob[i], lim=limMac(i,ob); if(Math.abs(d)<=lim) continue;
     if(dePaso(i,ob,m)){ DP.push(Math.round(m[i])+' g de '+N[i]); continue; }
-    if(Math.abs(d)>lim*mrgMal()) mal=true;
+    if(Math.abs(d)>limMalMac(i,ob,d)) mal=true;
     (d<0?F:S).push(Math.round(Math.abs(d))+(i?' g de '+N[i]:' kcal')); }
   if(!F.length&&!S.length) return {ok:true,dp:DP};
+  if(mac&&mrgCasa()&&ob[0]!=null&&Math.abs(m[0]-ob[0])>limMalMac(0,ob,m[0]-ob[0])) mal=true;      // v53.4.100: y las kcal, con su margen
   if(!mal) return {ok:false,leve:true};
   var t=(F.length?'faltan '+listaY(F):'')+(F.length&&S.length?' · ':'')+(S.length?'sobran '+listaY(S):'');
   return {ok:false,txt:t.charAt(0).toUpperCase()+t.slice(1),fijos:[]};
@@ -14654,19 +14702,19 @@ var BIB_DIARIO=[
   /* ---------- recetas de olla (por raciones, con sus pasos) ---------- */
   /* ---------- v53.4.95 (nº 1, Javier: «elimina las recetas por tandas… sustituye por las de libros o web de Mambo, Thermomix… prioridad a platos de cuchara, españoles y mediterráneos»):
      cantidades y raciones de recetas publicadas de Thermomix (enlace en fu); los pasos, con palabras propias y para olla normal ---------- */
-  {id:'b101',n:'Lentejas estofadas',t:'c',min:50,imgDe:'c9',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52,2],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/lentejas-estofadas--una-deliciosa-forma-de-comer-legumbre-',
+  {id:'b101',n:'Lentejas estofadas',t:'c',min:50,imgDe:'c9',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/lentejas-estofadas--una-deliciosa-forma-de-comer-legumbre-',
     pasos:'Deja las lentejas en remojo 3 horas (o la noche antes) y escúrrelas. Pon en una olla todas las verduras troceadas, el chorizo en rodajas, el jamón en dados, el aceite, una cucharadita de pimentón y otra de sal. Añade las lentejas y 1,1 litros de agua o caldo. Cuando hierva, baja el fuego y cuece tapado y a fuego suave 40-45 minutos, removiendo de vez en cuando, hasta que estén tiernas. Si se quedan secas, añade un poco de agua caliente.',
     ing:[['lentejas.cr',350,'f'],['pimiento_rojo',50,'f'],['pimiento_verde',50,'f'],['zanahoria',50,'f'],['cebolla',50,'f'],['aceite_oliva',25,'f'],['chorizo',50,'f',null,1],['jamon_serrano',50,'f',null,1]]},
-  {id:'b102',n:'Lentejas con verduras',t:'c',min:45,imgDe:'c27',tanda:{r:6,c:'olla grande'},ac:[['huevo',50],['atun_natural',52,2],['pan_integral',30]],fn:'Thermomix · Bea Corazón de Caramelo',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/beagala/preparar-lentejas-verduras-thermomix',
+  {id:'b102',n:'Lentejas con verduras',t:'c',min:45,imgDe:'c27',tanda:{r:6,c:'olla grande'},ac:[['huevo',50,2],['pollo_pechuga.cr',80,2],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Bea Corazón de Caramelo',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/beagala/preparar-lentejas-verduras-thermomix',
     pasos:'Pon las lentejas en remojo 2 horas y escúrrelas. En una olla, sofríe la cebolla y 2 dientes de ajo picados con el aceite 6 minutos a fuego medio; añade una cucharadita de pimentón dulce y remueve 1 minuto sin que se queme. Incorpora las lentejas, la zanahoria y la patata en dados, el tomate pelado y troceado (y un nabo, si te gusta), una hoja de laurel, 1 litro de agua y sal. Cuece a fuego suave 30-35 minutos, hasta que las lentejas estén tiernas.',
     ing:[['lentejas.cr',250,'f'],['patata.cr',300,'f'],['zanahoria',140,'f'],['tomate',200,'f'],['cebolla',80,'f'],['aceite_oliva',60,'f']]},
-  {id:'b103',n:'Potaje de garbanzos, espinacas y bacalao',t:'c',min:35,imgDe:'c30',tanda:{r:6,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52,2],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/potaje-vigilia-Thermomix',
+  {id:'b103',n:'Potaje de garbanzos, espinacas y bacalao',t:'c',min:35,imgDe:'c30',tanda:{r:6,c:'olla mediana'},ac:[['huevo',50,2],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/potaje-vigilia-Thermomix',
     pasos:'Pica fina la cebolla con 2 dientes de ajo y sofríela con el aceite 8 minutos a fuego medio (la original lleva 100 g de aceite; con 50 g queda igual de rico y más ligero). Añade una cucharada de pimentón dulce, remueve unos segundos y echa un puñado de garbanzos aplastados con un tenedor (espesan el caldo). Vierte 700 ml de agua o caldo de pescado, las espinacas descongeladas y escurridas y una hoja de laurel, y cuece 6 minutos. Incorpora el resto de los garbanzos y el bacalao desalado en migas y deja 8 minutos más a fuego suave. Prueba de sal (el bacalao ya sala) y sirve con el huevo cocido en rodajas.',
     ing:[['garbanzos.co',400,'f'],['espinacas',250,'f'],['bacalao.cr',250,'f'],['cebolla',200,'f'],['aceite_oliva',50,'f'],['huevo',110,'f',null,1]]},
-  {id:'b104',n:'Potaje de verduras y garbanzos',t:'c',min:35,imgDe:'c68',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52,2],['pollo_pechuga.cr',80]],fn:'Thermomix',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/potaje-verduras-garbanzos-thermomix',
+  {id:'b104',n:'Potaje de verduras y garbanzos',t:'c',min:35,imgDe:'c68',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',80,2],['pan_integral',30]],fn:'Thermomix',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/potaje-verduras-garbanzos-thermomix',
     pasos:'Pica la zanahoria, el puerro y un diente de ajo y sofríelos con el aceite 5 minutos (la original lleva 50 g; con 30 g basta). Añade la patata en trozos, las espinacas, el caldo, sal y pimienta, y cuece a fuego suave 30 minutos. Al final, incorpora los garbanzos escurridos y lavados y deja que se calienten 2 minutos.',
     ing:[['garbanzos.co',200,'f'],['zanahoria',250,'f'],['espinacas',250,'f'],['puerro',150,'f'],['patata.cr',150,'f'],['aceite_oliva',30,'f'],['caldo_pollo',800,'f',['caldo_verduras']]]},
-  {id:'b105',n:'Guiso de alubias con verduras',t:'c',min:30,imgDe:'c32',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50],['atun_natural',52,2],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-guiso-judias-verduras-thermomix',
+  {id:'b105',n:'Guiso de alubias con verduras',t:'c',min:30,imgDe:'c32',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',80,2],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-guiso-judias-verduras-thermomix',
     pasos:'Pica el tomate, el pimiento, la cebolla, el calabacín, el puerro y la zanahoria, y sofríelos con el aceite 8-10 minutos a fuego medio. Añade el jamón en taquitos, un par de cucharadas de alubias aplastadas, el caldo, una hoja de laurel y sal, y cuece 20 minutos a fuego suave. Incorpora el resto de las alubias (escurridas y lavadas) y deja 3 minutos más.',
     ing:[['alubias.co',800,'f'],['zanahoria',150,'f'],['puerro',150,'f'],['calabacin',100,'f'],['tomate',150,'f'],['pimiento_verde',70,'f'],['cebolla',70,'f'],['aceite_oliva',50,'f'],['jamon_serrano',100,'f',null,1],['caldo_verduras',600,'f']]},
   {id:'b106',n:'Patatas guisadas con magro',t:'c',min:55,imgDe:'c80',tanda:{r:4,c:'olla grande'},ac:[['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/patatas-con-magro-recetas-de-lluvia',
@@ -14681,16 +14729,16 @@ var BIB_DIARIO=[
   {id:'b109',n:'Albóndigas en salsa de tomate',nv:{soja_texturizada:'Albóndigas de soja en salsa de tomate'},t:'c',min:70,imgDe:'c53',tanda:{r:4,c:'cazuela'},ac:[['arroz_blanco.cr',60],['patata.cr',150],['pan_integral',30]],fn:'Thermomix (Cookidoo)',fu:'https://cookidoo.thermomix.com/recipes/recipe/en-us/r936746',
     pasos:'Remoja el pan en la leche y aplástalo. Mézclalo con la carne, los huevos, un diente de ajo y perejil picados, sal y pimienta. Forma albóndigas del tamaño de una nuez. Para la salsa, sofríe la cebolla picada y un diente de ajo con el aceite 8 minutos, añade el tomate, sal y pimienta y deja 10 minutos. Echa las albóndigas en la salsa y cuécelas tapadas a fuego suave 20-25 minutos, moviendo la cazuela de vez en cuando (si quieres, dóralas antes en la sartén).',
     ing:[['ternera_picada10.cr',400,'f',['soja_texturizada.cr*0.3']],['huevo',110,'f',null,1],['pan_barra',40,'f',['pan_sin_gluten']],['leche_semi',50,'f',['leche_sin_lactosa','bebida_soja']],['tomate_triturado',600,'f'],['cebolla',200,'f'],['aceite_oliva',20,'f']]},
-  {id:'b110',n:'Crema de calabacín',t:'c',min:35,imgDe:'c66',tanda:{r:4,c:'olla mediana'},ac:[['huevo',100],['pollo_pechuga.cr',120],['pan_integral',60]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/como-preparar-crema-de-calabacin-en-thermomix',
+  {id:'b110',n:'Crema de calabacín',t:'c',min:35,imgDe:'c66',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',120],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/como-preparar-crema-de-calabacin-en-thermomix',
     pasos:'Trocea los calabacines (con piel) y el puerro y rehógalos con el aceite 10 minutos. Añade la patata en trozos, el caldo y sal, y cuece 20 minutos. Incorpora los quesitos (o el queso crema) y tritura hasta que quede fina. Prueba de sal.',
     ing:[['calabacin',1000,'f'],['caldo_verduras',500,'f'],['patata.cr',150,'f'],['puerro',100,'f'],['queso_crema_light',60,'f',null,1],['aceite_oliva',30,'f']]},
-  {id:'b111',n:'Crema de calabaza y puerro',t:'c',min:50,imgDe:'c65',tanda:{r:6,c:'olla mediana'},ac:[['huevo',100],['pollo_pechuga.cr',120],['pan_integral',60]],fn:'Thermomix · Bea Corazón de Caramelo',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/beagala/crema-calabaza-puerro-thermomix',
+  {id:'b111',n:'Crema de calabaza y puerro',t:'c',min:50,imgDe:'c65',tanda:{r:6,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',120],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Bea Corazón de Caramelo',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/beagala/crema-calabaza-puerro-thermomix',
     pasos:'Rehoga la cebolla y el puerro troceados con el aceite 7 minutos a fuego medio. Añade la calabaza, la patata y las zanahorias peladas y en trozos, el agua y sal, y cuece tapado a fuego suave 30 minutos. Tritura hasta que quede fina; si la quieres más ligera, añade un poco más de agua.',
     ing:[['calabaza',600,'f'],['zanahoria',280,'f'],['patata.cr',150,'f'],['puerro',100,'f'],['cebolla',80,'f'],['aceite_oliva',20,'f']]},
   {id:'b112',n:'Arroz cremoso de pollo y verduras',t:'c',min:30,imgDe:'c35',tanda:{r:4,c:'cazuela'},ac:[['pollo_pechuga.cr',80]],fn:'Thermomix',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/arroz-cremoso-de-pollo-y-verduras',
     pasos:'Pica el ajo, la cebolla y los pimientos y sofríelos con el aceite 8 minutos. Añade el pollo en trozos y dóralo 3 minutos. Incorpora el arroz, una cucharada de pimentón y sal, remueve y vierte el caldo caliente. Cuece 15-17 minutos a fuego medio, removiendo de vez en cuando para que quede cremoso; a mitad, añade el calabacín en dados y los champiñones en cuartos. Deja reposar 5 minutos antes de servir.',
     ing:[['arroz_blanco.cr',200,'f'],['pollo_muslo.cr',300,'f'],['caldo_pollo',650,'f'],['calabacin',100,'f'],['champinones',100,'f'],['cebolla',100,'f'],['pimiento_rojo',50,'f'],['pimiento_verde',50,'f'],['aceite_oliva',50,'f']]},
-  {id:'b113',n:'Pisto',t:'c',min:40,tanda:{r:4,c:'sartén grande'},ac:[['huevo',50],['pan_integral',30],['atun_natural',52,2]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-pisto-thermomix',
+  {id:'b113',n:'Pisto',t:'c',min:40,tanda:{r:4,c:'sartén grande'},ac:[['huevo',50,2],['atun_natural',52,2],['arroz_blanco.cr',40,3],['patata.cr',150,2],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-pisto-thermomix',
     pasos:'Pica el calabacín, la cebolla y los pimientos en trozos pequeños. Póchalos con el aceite a fuego medio-suave 15 minutos, removiendo de vez en cuando. Añade el tomate y sal y cocina 20 minutos más, hasta que espese. Queda muy bien con un huevo a la plancha o frito por encima.',
     ing:[['tomate_triturado',500,'f'],['calabacin',300,'f'],['cebolla',300,'f'],['pimiento_verde',150,'f'],['pimiento_rojo',150,'f'],['aceite_oliva',50,'f']]},
   {id:'b114',n:'Tortilla de patata',t:'c',min:45,imgDe:'c59',tanda:{r:4,c:'sartén de 24 cm'},ens:[['lechuga',80],['tomate',120]],ac:[['pan_integral',30],['atun_natural',52,2]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-tortilla-patata-thermomix',
@@ -14722,7 +14770,7 @@ var BD_R={aceite_oliva:[5,20,5],aceite_coco:[5,20,5],mantequilla:[5,15,5],mayone
   jamon_serrano:[30,90,15],jamon_cocido:[30,90,15],pavo_fiambre:[36,108,12],atun_natural:[52,156,52],atun_aceite:[52,156,52],sardinas_aceite:[60,120,60],bacon:[15,45,15],chorizo:[20,40,10],
   avena:[30,90,10],avena_sin_gluten:[30,90,10],corn_flakes:[25,60,5],tortitas_arroz:[16,48,8],tortilla_trigo:[40,120,40],tortilla_maiz:[30,90,30],pan_hamburguesa:[60,60,60],pan_barra:[40,120,20],
   guisantes:[50,150,25],maiz_dulce:[40,120,20],miel:[7,21,7],tomate_frito:[15,60,15],tomate_frito_sa:[15,90,15],noquis:[100,300,25],
-  platano:[60,240,60],manzana:[150,300,150],pera:[160,320,160],naranja:[150,300,150],melocoton:[150,300,150],mandarina:[70,210,70],kiwi:[75,225,75],datiles:[8,32,8],fresas:[100,300,25],arandanos:[50,150,25],
+  platano:[60,120,60],manzana:[150,150,150],pera:[160,160,160],naranja:[150,150,150],melocoton:[150,150,150],mandarina:[70,70,70],kiwi:[75,75,75],datiles:[8,32,8],fresas:[100,300,25],arandanos:[50,150,25],
   frambuesas:[50,150,25],frutos_rojos:[80,200,20],uva:[80,200,20],cerezas:[80,200,20],pasas:[15,30,15],melon:[150,350,50],sandia:[150,350,50],pina:[100,300,25],mango:[100,250,25],
   tofu:[80,200,10],tempeh:[80,200,10],seitan:[80,200,10],soja_texturizada:[30,70,10],edamame:[60,150,10]};
 function bdRegla(a){
@@ -14738,7 +14786,7 @@ function bdRegla(a){
   if(!ROL_X[x]) return null;
   if(x==='hc'&&u1>=20&&u1<40) return [u1,u1*4,u1];      // v53.4.91: el pan por rebanadas, las tortillas por unidades
   if(!k&&!u) return null;      // sin sus macros (en la app de quien no los ve): sin pasos
-  if(u){ var st=x==='fruta'&&u>=100?u/2:u; return [st,u*(u>=100?2:3),st]; }
+  if(u){ var st=x==='fruta'&&u>=100?u/2:u; return [st,x==='fruta'?u:u*(u>=100?2:3),st]; }      // v53.4.100: la fruta, una pieza como mucho
   if(x==='grasa') return k>450?[5,30,5]:[20,100,10];
   if(x==='hc') return k>=300?[20,120,10]:k>=200?[30,120,10]:[80,300,20];
   if(x==='prot') return k>=300?[15,45,15]:[60,220,10];
@@ -14754,7 +14802,7 @@ function bdExtras(r,out,de){
   if(/c/.test(r.t)&&!r.np&&!tiene(/^(pan|tortilla_|tortitas)/)){      // np (v53.4.99): platos que no van con pan (los ñoquis)
     var p=de('pan_integral')||de('pan_sin_gluten'); if(p) E.push({a:p,q:0,R:[0,60,30]}); }
   if(r.po&&!tiene(/^(platano|manzana|pera|naranja|mandarina|kiwi)$/)){ var f2=de('platano')||de('manzana'); if(f2) E.push({a:f2,q:0,R:f2.id==='platano'?[0,120,120]:[0,150,150]}); }      // po (v53.4.99): una pieza de fruta de postre, si le falta (la César, la pizza de tortilla)
-  if(r.t==='d'&&!tiene(/^(platano|manzana|pera|naranja|mandarina|kiwi|fresas|frutos_rojos|arandanos)$/)){ var f=de('kiwi')||de('naranja'); if(f) E.push({a:f,q:0,R:f.id==='kiwi'?[0,150,75]:[0,150,150]}); }
+  if(r.t==='d'&&!tiene(/^(platano|manzana|pera|naranja|mandarina|kiwi|fresas|frutos_rojos|arandanos)$/)){ var f=de('kiwi')||de('naranja'); if(f) E.push({a:f,q:0,R:f.id==='kiwi'?[0,75,75]:[0,150,150]}); }
   return E;
 }
 function bdCands(R){ var C=[]; for(var g=R[0];g<=R[1]+1e-9;g+=R[2]) C.push(Math.round(g*10)/10); return C; }
@@ -14799,7 +14847,7 @@ function libOpCasa(x,ob,al){
 /* v53.4.94 (nº 1, Javier: «sigo sin entender las recetas por tandas… más fácil el cuadre de receta… lo más automatizado posible»): cuadra una receta
    de un toque: su ración (de 25 en 25 g de lo cocinado, o de ½ en ½ ración, hasta 4 raciones), los gramos de lo que ya lleva al lado y, si aun así
    le falta algo, un acompañamiento de los que van con ese plato o con esa comida (dos si no lleva ninguno) */
-var RC_POOL={dm:[['skyr',150],['leche_semi',250],['leche_desnatada',250],['huevo',50],['platano',120],['nueces',20]],c:[['huevo',50,2],['atun_natural',52,2],['pollo_pechuga.cr',80,2],['pan_integral',30],['aceite_oliva',10,2]]}, RC_POSTRE=[['manzana',150,1],['platano',120,1]];      // v53.4.98: fruta de postre en comida y cena
+var RC_POOL={dm:[['skyr',150],['leche_semi',250],['leche_desnatada',250],['huevo',50],['platano',120],['nueces',20]],c:[['huevo',50,2],['pollo_pechuga.cr',80,2],['arroz_blanco.cr',40,3],['patata.cr',150,2],['pan_integral',30],['aceite_oliva',10,2]]}, RC_POSTRE=[['manzana',150,1],['platano',120,1]];      // v53.4.98: fruta de postre en comida y cena · v53.4.100 (Javier: «si te quedas corto de hidratos, arroz, pan, batata…»; el atún, solo donde pega)
 function rcAcTxt(L){ var v={}, out=[]; (L||[]).forEach(function(it){ var a=CO.nutM[it.a]||it, t=(it.x||a.x)==='verd'?'ensalada':String(alNom(a)).split(' (')[0].replace(/ al natural en lata| o mezcla de hojas/,'').toLowerCase(); if(!v[t]){ v[t]=1; out.push(t); } }); return listaY(out); }      // v53.4.98: «con ensalada, pan integral, atún y plátano»
 function rcLib(o){ return libTodas().filter(function(x){ return o.lib?x.id===o.lib:x.bd&&x.tanda&&x.n===o.nombre; })[0]||null; }      // v53.4.98: también por el nombre (al recargar, el plato no guarda de qué receta sale)
 function rcPool(o,c){ var r=rcLib(o);
@@ -14817,21 +14865,22 @@ function rcCuadrar(o,ob,al,pool){
   var LT=(o.items||[]).filter(function(it){ return L.b[it.i]!=null; });
   var mLote=function(f){ return sumMac(LT.map(function(it){ return macIt(Object.assign({},it,{q:L.b[it.i]*f})); })); };
   var E=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }).map(function(it){ var q=num(it.q)||0, a=CO.nutM&&CO.nutM[it.a], b=it.b||(a&&a.b)||[0,0,0,0], vd=(it.x||a&&a.x)==='verd', R=a&&mx&&!vd?bdRegla(a):null, Q=[q];
-    if(R){ Q=[]; for(var x=R[0];x<=R[1]+1e-9;x+=R[2]) Q.push(Math.round(x*10)/10); if(Q.length>8){ var st=Math.ceil(Q.length/8); Q=Q.filter(function(v,z){ return z%st===0; }); } if(q>0&&Q.indexOf(q)<0) Q.push(q); }
+    if(R){ Q=[]; for(var x=R[0];x<=R[1]+1e-9;x+=R[2]) Q.push(Math.round(x*10)/10); if(Q.length>8){ var st=Math.ceil(Q.length/8); Q=Q.filter(function(v,z){ return z%st===0; }); } if(q>0&&Q.indexOf(q)<0&&!(a.x==='fruta'&&q>R[1])) Q.push(q); }      // la fruta, nunca más de una pieza
     return {it:it,b:b,Q:Q,vd:vd}; });
   var nE=E.filter(function(e){ return !e.vd; }).length;      // la ensalada no cuenta
   var EQ=[[]]; E.forEach(function(e,i){ var Q=!e.vd&&E.slice(0,i).filter(function(z){ return !z.vd; }).length<2?e.Q:[num(e.it.q)||0], N=[]; EQ.forEach(function(c){ Q.forEach(function(q){ N.push(c.concat([q])); }); }); EQ=N; });
   var ya={}; (o.items||[]).forEach(function(it){ if(L.b[it.i]==null) ya[it.a]=1; });      // lo que ya lleva al lado (que la receta lleve huevo no quita un huevo al lado)
-  var S=[]; if(mx) (pool||[]).forEach(function(z){ var a=CO.nutM&&CO.nutM[z[0]]; if(!a||ya[a.id]||(al&&prohibidoAl(a,al))) return; var R=bdRegla(a)||[z[1],z[1]*2,z[1]];
+  var frE=E.some(function(e){ var a=CO.nutM&&CO.nutM[e.it.a]; return (e.it.x||a&&a.x)==='fruta'; }), esF=function(a){ return a.x==='fruta'; };      // v53.4.100 (Javier: «no me pongas dos frutas por comida, siempre solo una»)
+  var S=[]; if(mx) (pool||[]).forEach(function(z){ var a=CO.nutM&&CO.nutM[z[0]]; if(!a||ya[a.id]||(frE&&esF(a))||(al&&prohibidoAl(a,al))) return; var R=bdRegla(a)||[z[1],z[1]*2,z[1]];
       [1,2,3].slice(0,z[2]||3).map(function(k){ return z[1]*k; }).filter(function(q,i){ return !i||q<=R[1]+1e-9; }).forEach(function(q){ S.push([a,q]); }); });      // z[2]: cuántas unidades como mucho (la fruta, una)
   var AC=[[]]; S.forEach(function(s){ AC.push([s]); });
-  if(nE<2) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j>i&&t[0]!==s[0]) AC.push([s,t]); }); });
-  if(!nE) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j<=i||t[0]===s[0]) return; S.forEach(function(u,l){ if(l>j&&u[0]!==s[0]&&u[0]!==t[0]) AC.push([s,t,u]); }); }); });
+  if(nE<2) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j>i&&t[0]!==s[0]&&!(esF(s[0])&&esF(t[0]))) AC.push([s,t]); }); });
+  if(!nE) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j<=i||t[0]===s[0]||(esF(s[0])&&esF(t[0]))) return; S.forEach(function(u,l){ if(l>j&&u[0]!==s[0]&&u[0]!==t[0]&&!(esF(u[0])&&(esF(s[0])||esF(t[0])))) AC.push([s,t,u]); }); }); });
   var o0=ob[0], best=null;
   K.forEach(function(f){ var m0=mLote(f)||[0,0,0,0];
     EQ.forEach(function(eq){ var m1=m0.slice(); E.forEach(function(e,i){ for(var j=0;j<4;j++) m1[j]+=(+e.b[j]||0)*eq[i]/100; });
       AC.forEach(function(ac){ var m=m1.slice(); ac.forEach(function(s){ for(var j=0;j<4;j++) m[j]+=(+s[0].b[j]||0)*s[1]/100; });
-        var dk=(m[0]-o0)/Math.max(o0,1), er=Math.abs(dk)*(dk>0?1.3:1)+(mx?0.6*errMac(m,ob):0), cq=rcEstado(m,ob), n=ac.length;
+        var dk=(m[0]-o0)/Math.max(o0,1), er=Math.abs(dk)*(dk>0?1.3:1)+(mx?0.6*errMac(m,ob):0), cq=mx?cuadraMacE(m,ob):rcEstado(m,ob), n=ac.length;
         var e=cq.ok?n+er:cq.leve?3+0.4*n+er:6+0.15*n+2*er;      // primero que cuadre, con lo menos posible al lado; si no, lo que más se acerque (también en macros)
         if(!best||e<best.e-1e-9) best={e:e,f:f,eq:eq,ac:ac}; }); }); });
   if(!best) return null;
@@ -14899,7 +14948,7 @@ function recetasPara(tipo,obj,al,usadas,n){
     var x=adaptarReceta(r,al); if(!x) return null;
     var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
     var pt=r.tanda&&!lc?porcionTanda(x,obj):null, items=lc?lc.items:pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
-    var cu=!pt&&m?cuadraMac(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
+    var cu=!pt&&m?cuadraMacE(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
     return {x:x,items:items,k:pt?pt.k:null,op:lc,m:m,ob:obj,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?(lc?0.4:0.8):0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
   }).filter(Boolean).sort(function(a,b){ return b.score-a.score; });
   if(!(CO.nut&&CO.nut.casa)) return C.slice(0,n);
