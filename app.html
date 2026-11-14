@@ -2957,7 +2957,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.101';
+var APP_V = 'v53.4.102';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7375,6 +7375,7 @@ function famOkCasa(a,b){      // a: el que lleva el plato · b: el candidato
   }
   if(a.x==='fruta'&&a.b&&b.b&&(+a.b[0]>=200)!==(+b.b[0]>=200)) return false;      // la fruta fresca, por fruta fresca (no por pasas ni dátiles)
   var raro=/leche de coco|crema de coco|\bnata\b|placas|laminas|canelon|gelatina/, na=sinTil(a.n||a.id), nb=sinTil(b.n||b.id); if(raro.test(nb)&&!raro.test(na)) return false;
+  if(a.x==='hc'&&pa==='pan'&&pb==='gua') return /^(arroz|patata|boniato|pasta|cuscus|quinoa)/.test(famDe(b.id));      // v53.4.102 (Javier: «que el pan pueda cambiarse por arroz, patata, boniato…»): lo filtra el plato (altsCtx)
   if(a.x==='hc'||a.x==='fruta') return pa===pb;      // el pan por pan; el arroz, la pasta o la patata entre sí; la fruta por fruta
   if(a.x==='grasa') return B.some(function(t){ return ['coc','fs','unt','cho'].indexOf(t)>=0; });      // v53.4.91: entre grasas, lo decide el plato (altsCtx)
   return usoOkAl(a,b);
@@ -7425,9 +7426,11 @@ function fatOk(cx,src){ if(cx.coc&&!cx.pan&&(src==='ac'||src==='acs')) return ['
 function varKey(a){ var w=clave(String(a.n||'')).replace(/\b(de|del|la|el|al|con|en|y)\b/g,' ').trim().split(/\s+/), k=w[0]||'';
   if(/^(crema|aceite|pan|queso|yogur|leche|bebida|pechuga|tortitas|tortilla|tortillas|arroz|pasta|copos|harina|fiambre|jamon|semillas|proteina|filete|carne)$/.test(k)&&w[1]) k+=' '+w[1];
   return k.replace(/z$/,'c').replace(/(es|s)$/,''); }
+function panBase(o){ return /(tostad|tosta\b|bocadillo|sandwich|sandwic|wrap|montadito|\bpan con|pizza|hamburguesa|burrito|fajita|mollete|pita|torrija)/.test(clave(String(o&&o.nombre||''))); }      // v53.4.102: platos en los que el pan es la base
 var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pechuga|pavo_pechuga|ternera_filete|merluza|atun_natural|huevo|yogur_natural|leche_semi|platano|manzana|aceite_oliva)$/;      // v53.4.100: los básicos, siempre entre los 6
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
+  if(me.x==='hc'&&usoAl(me)[0]==='pan'&&(!o||panBase(o)||/^(tortilla_|pan_hamburguesa)/.test(famDe(me.id||me.a)))) out=out.filter(function(z){ return usoAl(z.a)[0]==='pan'; });      // v53.4.102: en tostadas, bocadillos o wraps, el pan solo por pan
   if(cx&&me.x==='grasa'){ var ok=fatOk(cx,fatTipo(me)); out=out.filter(function(z){ return ok.indexOf(fatTipo(z.a))>=0; }); }
   if(cx&&cx.coc&&!cx.pan&&me.x==='hc'&&/avena|harina/.test(clave((me.n||'')+' '+me.id))) out=out.filter(function(z){ return /avena|harina/.test(clave((z.a.n||'')+' '+z.a.id)); });
   var pri=function(z){ return /^al/.test(z.a.id)?0:RX_BAS.test(famDe(z.a.id))?1:/^sup_/.test(z.a.id)?3:2; };      // los tuyos, luego los básicos (v53.4.100: la patata con el arroz), los de siempre y los de marca
@@ -14854,7 +14857,7 @@ function libOpCasa(x,ob,al){
   var pc=num(r.pc)||0; o.lote={pc:pc,rac:n,b:{},u:pc?'peso':'rac'}; o.items.forEach(function(it,k){ o.lote.b[it.i]=x.ing[k].q; });      // v53.4.91: en gramos de lo cocinado (y en su app también por raciones)
   rcPonF(o,pc?Math.round(pc/n/25)*25/pc:1/n);
   (r.ens||[]).forEach(function(z){ var a=CO.nutM[z[0]]; if(a&&!(al&&prohibidoAl(a,al))) o.items.push(hidratarIt({i:'i'+rand(5),a:a.id,q:String(z[1]),x:a.x||''})); });      // v53.4.98: su ensalada
-  if(ob&&ob[0]!=null) rcCuadrar(o,ob,al,(r.ac&&r.ac.length?r.ac:RC_POOL[/c/.test(r.t||'')?'c':'dm']).concat(/c/.test(r.t||'')?RC_POSTRE:[]));      // v53.4.94: su ración y, si le falta algo, el acompañamiento, solos
+  if(ob&&ob[0]!=null) rcCuadrar(o,ob,al,rcPoolPan((r.ac&&r.ac.length?r.ac:RC_POOL[/c/.test(r.t||'')?'c':'dm']).concat(/c/.test(r.t||'')?RC_POSTRE:[]),r.n));      // v53.4.94: su ración y, si le falta algo, el acompañamiento, solos
   return o;
 }
 /* v53.4.94 (nº 1, Javier: «sigo sin entender las recetas por tandas… más fácil el cuadre de receta… lo más automatizado posible»): cuadra una receta
@@ -14864,7 +14867,12 @@ var RC_POOL={dm:[['skyr',150],['leche_semi',250],['leche_desnatada',250],['huevo
 function rcAcTxt(L){ var v={}, out=[]; (L||[]).forEach(function(it){ var a=CO.nutM[it.a]||it, t=(it.x||a.x)==='verd'?'ensalada':String(alNom(a)).split(' (')[0].replace(/ al natural en lata| o mezcla de hojas/,'').toLowerCase(); if(!v[t]){ v[t]=1; out.push(t); } }); return listaY(out); }      // v53.4.98: «con ensalada, pan integral, atún y plátano»
 function rcLib(o){ return libTodas().filter(function(x){ return o.lib?x.id===o.lib:x.bd&&x.tanda&&x.n===o.nombre; })[0]||null; }      // v53.4.98: también por el nombre (al recargar, el plato no guarda de qué receta sale)
 function rcPool(o,c){ var r=rcLib(o);
-  var cm=c?tipoCmDe(c.nombre||'')==='c':/c/.test(r&&r.t||''); return (r&&r.ac&&r.ac.length?r.ac:RC_POOL[cm?'c':'dm']).concat(cm?RC_POSTRE:[]); }
+  var cm=c?tipoCmDe(c.nombre||'')==='c':/c/.test(r&&r.t||''); return rcPoolPan((r&&r.ac&&r.ac.length?r.ac:RC_POOL[cm?'c':'dm']).concat(cm?RC_POSTRE:[]),r?r.n:o.nombre); }
+/* v53.4.102 (nº 1, Javier: «los platos de cuchara, si sobran macros, mejor pan, que a la gente le gusta mojar»): en los de cuchara (y con salsa), el pan primero */
+function esCuchara(n){ return /(lenteja|garbanzo|alubia|judias|potaje|guiso|guisad|estofad|crema de|sopa|caldo|cocido|fabada|albondiga|en salsa|tikka|masala|curry|pisto)/.test(clave(n||'')); }
+function rcPoolPan(pool,n){ if(!esCuchara(n)) return pool;
+  var P=pool.map(function(z){ return /^pan_/.test(z[0])?[z[0],z[1],z[2]||3,0.5]:/^(arroz|patata|boniato|pasta)/.test(z[0])?[z[0],z[1],z[2]||3,1.3]:z; });
+  if(!P.some(function(z){ return /^pan_/.test(z[0]); })) P.push(['pan_integral',30,3,0.5]); return P; }
 /* v53.4.98 (nº 1, Javier: «he puesto tortilla y no me cuadra automáticamente… el entrenador no puede estar ajustando a mano… se puede meter un cacho de tortilla
    acompañado de una ensalada o verduras, pan…»): busca también con dos o tres cosas al lado (pan, atún, fruta de postre…) y en más cantidades (pan de 30 a 90 g…);
    si nada cuadra del todo, lo que más se acerca en proteína, hidratos y grasa, no solo en kcal. La ensalada de la receta (ens) va siempre y no cuenta como «algo más». */
@@ -14885,7 +14893,7 @@ function rcCuadrar(o,ob,al,pool){
   var ya={}; (o.items||[]).forEach(function(it){ if(L.b[it.i]==null) ya[it.a]=1; });      // lo que ya lleva al lado (que la receta lleve huevo no quita un huevo al lado)
   var frE=E.some(function(e){ var a=CO.nutM&&CO.nutM[e.it.a]; return (e.it.x||a&&a.x)==='fruta'; }), esF=function(a){ return a.x==='fruta'; };      // v53.4.100 (Javier: «no me pongas dos frutas por comida, siempre solo una»)
   var S=[]; if(mx) (pool||[]).forEach(function(z){ var a=CO.nutM&&CO.nutM[z[0]]; if(!a||ya[a.id]||(frE&&esF(a))||(al&&prohibidoAl(a,al))) return; var R=bdRegla(a)||[z[1],z[1]*2,z[1]];
-      [1,2,3].slice(0,z[2]||3).map(function(k){ return z[1]*k; }).filter(function(q,i){ return !i||q<=R[1]+1e-9; }).forEach(function(q){ S.push([a,q]); }); });      // z[2]: cuántas unidades como mucho (la fruta, una)
+      [1,2,3].slice(0,z[2]||3).map(function(k){ return z[1]*k; }).filter(function(q,i){ return !i||q<=R[1]+1e-9; }).forEach(function(q){ S.push([a,q,z[3]||1]); }); });      // z[3]: lo que «cuesta» ponerlo (en los de cuchara, el pan menos)      // z[2]: cuántas unidades como mucho (la fruta, una)
   var AC=[[]]; S.forEach(function(s){ AC.push([s]); });
   if(nE<2) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j>i&&t[0]!==s[0]&&!(esF(s[0])&&esF(t[0]))) AC.push([s,t]); }); });
   if(!nE) S.forEach(function(s,i){ S.forEach(function(t,j){ if(j<=i||t[0]===s[0]||(esF(s[0])&&esF(t[0]))) return; S.forEach(function(u,l){ if(l>j&&u[0]!==s[0]&&u[0]!==t[0]&&!(esF(u[0])&&(esF(s[0])||esF(t[0])))) AC.push([s,t,u]); }); }); });
@@ -14893,7 +14901,7 @@ function rcCuadrar(o,ob,al,pool){
   K.forEach(function(f){ var m0=mLote(f)||[0,0,0,0];
     EQ.forEach(function(eq){ var m1=m0.slice(); E.forEach(function(e,i){ for(var j=0;j<4;j++) m1[j]+=(+e.b[j]||0)*eq[i]/100; });
       AC.forEach(function(ac){ var m=m1.slice(); ac.forEach(function(s){ for(var j=0;j<4;j++) m[j]+=(+s[0].b[j]||0)*s[1]/100; });
-        var dk=(m[0]-o0)/Math.max(o0,1), er=Math.abs(dk)*(dk>0?1.3:1)+(mx?0.6*errMac(m,ob):0), cq=mx?cuadraMacE(m,ob):rcEstado(m,ob), n=ac.length;
+        var dk=(m[0]-o0)/Math.max(o0,1), er=Math.abs(dk)*(dk>0?1.3:1)+(mx?0.6*errMac(m,ob):0), cq=mx?cuadraMacE(m,ob):rcEstado(m,ob), n=ac.reduce(function(t,s){ return t+(s[2]||1); },0);
         var e=cq.ok?n+er:cq.leve?3+0.4*n+er:6+0.15*n+2*er;      // primero que cuadre, con lo menos posible al lado; si no, lo que más se acerque (también en macros)
         if(!best||e<best.e-1e-9) best={e:e,f:f,eq:eq,ac:ac}; }); }); });
   if(!best) return null;
