@@ -2964,7 +2964,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.106';
+var APP_V = 'v53.4.107';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7399,12 +7399,13 @@ function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
   tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!famOkCasa(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
   orden.forEach(function(f){
     var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0||it.e==='escurrido'?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];      // v53.4.100: el atún escurrido, por pollo ya hecho
-    var peso=eqPesoCasa(me,a), r=eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;
-    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*1.25&&kb-ka>25)||kb<ka*0.4)) return;
+    var peso=eqPesoCasa(me,a), pc=protDia(me,a), r=pc&&+A[1]>0&&+a.b[1]>0?(A[1]/a.b[1]+A[0]/a.b[0])/2:eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;      // v53.4.107: carne o pescado de diario, a medias entre la proteína y las kcal (el salmón, algo menos)
+    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*(pc?1.6:1.25)&&kb-ka>25)||kb<ka*(pc?0.6:0.4))) return;
     var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
     var Rb=bdRegla(a), stM=Rb?(+a.b[k]||0)*Rb[2]/100*0.6:0;
     var cz=usoAl(me)[0]==='pan'&&usoAl(a)[0]==='gua';      // v53.4.103: el pan por arroz, patata… (con algo más de margen)
-    if(k&&!peso&&Math.abs(mb-ma)>Math.max(ma*(cz?0.35:0.25),k===3?2:3,stM)) return;      // el macro de su grupo, con margen (y medio paso: una rebanada entera)
+    if(pc){ if(mb<ma*0.7||mb>ma*1.6) return; }      // carne o pescado: que no baje mucho la proteína (subir, algo, vale: el pollo por el salmón)
+    else if(k&&!peso&&Math.abs(mb-ma)>Math.max(ma*(cz?0.35:0.25),k===3?2:3,stM)) return;      // el macro de su grupo, con margen (y medio paso: una rebanada entera)
     var m=a.b.map(function(v){ return v*q/100; });
     out.push({a:a,q:q,m:m,d:mo?m.map(function(v,j){ return v-mo[j]; }):null,err:Math.abs(kb-ka)/Math.max(ka,1)+(kb>ka?0.2:0),cls:clsEst(a.e)===clsEst(it.e)?0:1});
   });
@@ -7438,8 +7439,14 @@ function tipoOp(o){ var P=BOOT.mode==='clienta'?(typeof planesCl==='function'?pl
   P.forEach(function(p){ (p.comidas||[]).forEach(function(c){ if(!n&&(c.opciones||[]).some(function(x){ return x===o||(o.id&&x.id===o.id); })) n=c.nombre||''; }); }); return n?tipoCmDe(n):''; }
 function panBase(o){ return /(tostad|tosta\b|bocadillo|sandwich|sandwic|wrap|montadito|\bpan con|pizza|hamburguesa|burrito|fajita|mollete|pita|torrija)/.test(clave(String(o&&o.nombre||''))); }      // v53.4.102: platos en los que el pan es la base
 var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pechuga|pavo_pechuga|ternera_filete|merluza|atun_natural|huevo|yogur_natural|leche_semi|platano|manzana|aceite_oliva)$/;      // v53.4.100: los básicos, siempre entre los 6
+/* v53.4.107 (nº 1, Javier: «en carnes, pescado, pollo o carne se puedan intercambiar unas con otras: contramuslo de pollo, salmón, filete de cerdo, filete de ternera,
+   filetes de pollo… no rodaballo ni sepia todos los días porque es carísimo; una opción como calamares, pero no tantas»): la carne o el pescado, por los de diario */
+var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','ternera_picada5','salmon','merluza','bacalao','calamar'];
+function protTag(a){ var T=usoAl(a).filter(function(t){ return t.charAt(0)!=='>'; }); return T.indexOf('fia')>=0?'':T[0]==='car'||T[0]==='pes'?T[0]:''; }
+function protDia(me,a){ return me.x==='prot'&&a.x==='prot'&&!!protTag(me)&&!!protTag(a)&&PROT_DIA.indexOf(famDe(a.id))>=0; }
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
+  if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,8); }
   var esPan=me.x==='hc'&&usoAl(me)[0]==='pan', tc=o?tipoOp(o):'';
   if(esPan&&(!o||tc!=='c'||panBase(o)||/^(tortilla_|pan_hamburguesa)/.test(famDe(me.id||me.a)))) out=out.filter(function(z){ return usoAl(z.a)[0]==='pan'; });      // v53.4.102: en tostadas, bocadillos o wraps, el pan solo por pan · v53.4.103: y en desayunos y meriendas, tampoco
   if(cx&&me.x==='grasa'){ var ok=fatOk(cx,fatTipo(me)); out=out.filter(function(z){ return ok.indexOf(fatTipo(z.a))>=0; }); }
