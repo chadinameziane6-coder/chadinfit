@@ -3054,7 +3054,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.114';
+var APP_V = 'v53.4.115';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8141,7 +8141,7 @@ function libSugCm(p,mi){
    media mañana o merienda, comida o cena), con su foto; la que elige entra ajustada a lo que le toca en esa comida (como al generar la
    dieta) y es solo para ese día: va en dieta_pref.dia.l (una por comida) y sale en su comida como un plato más («De la biblioteca»).
    ===================================================================== */
-function masLibCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.casa&&CL.d.dn)&&!libreCl(); }
+function masLibCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.dn)&&!libreCl(); }      // v53.4.115: en todos los paneles
 function libHoy(){ var d=prefCl().dia; return d&&d.f===hoyStr()&&d.l&&typeof d.l==='object'&&Object.keys(d.l).length?d.l:null; }
 function conLibHoy(P){
   var L=libHoy(); if(!L) return P;
