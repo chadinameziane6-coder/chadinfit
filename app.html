@@ -2911,7 +2911,7 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .lg-vac{flex-direction:row;justify-content:center;color:var(--mu);font-size:13.5px;padding:22px 14px}
 /* =====================================================================
    v53.4.112 · JERARQUÍA VISUAL (Javier: «mantener el blanco, negro y grises, pero que se distinga qué es importante,
-   qué se puede pulsar y qué requiere atención»). De momento solo en el panel nº 1 (body.ui2): si le cuadra, a todos.
+   qué se puede pulsar y qué requiere atención»). Primero en el panel nº 1 (v53.4.112); desde la v53.4.117, en todos los paneles de entrenador (body.ui2).
    Capas: fondo gris (#ECECF0) · tarjetas blancas con borde y sombra suave · bloques internos gris claro (#F4F4F6) ·
    campos con borde visible · botón principal negro · secundario blanco con borde · seleccionado en negro.
    Color solo con significado: verde hecho/pagado, ámbar atención, rojo atrasado/pendiente/error.
@@ -2994,7 +2994,7 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .ui2 :where(.tbl th){color:var(--mu)}
 .ui2 .ag-d{border-color:var(--line)}.ui2 .ag-d.con{background:var(--card2)}
 /* =====================================================================
-   v53.4.116 · INICIO Y MENÚ DEL DISEÑO D (panel nº 1, body.ui2)
+   v53.4.116 · INICIO Y MENÚ DEL DISEÑO D (body.ui2; v53.4.117: todos los entrenadores)
    ===================================================================== */
 /* atajos de color */
 .ui2 .h2-ts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:0 0 18px}
@@ -3063,7 +3063,7 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .ui2 .sd-cb{display:flex;align-items:center;gap:10px;width:100%;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:8px 10px;font:inherit;color:var(--tx);cursor:pointer;text-align:left;position:relative}
 .ui2 .sd-cb:hover,.ui2 .sd-cu.ab .sd-cb{border-color:#B8B8C0;background:#EEEEF2}.ui2 .sd-cb.on{border-color:#111}
 .ui2 .sd-cb:focus-visible{outline:3px solid rgba(17,17,17,.28);outline-offset:2px}
-.ui2 .sd-cav{width:34px;height:34px;background:#111;color:#fff;font-size:12px}
+.ui2 .sd-cav{width:34px;height:34px;background:#111;color:#fff;font-size:12px}.ui2 .sd-cav .ic{width:17px;height:17px;margin:0}
 .ui2 .sd-ct{flex:1;min-width:0;display:flex;flex-direction:column}.ui2 .sd-ct b{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ui2 .sd-ct small{font-size:12px;color:var(--mu);font-weight:600}
 .ui2 .sd-cc{width:16px;height:16px;margin:0;color:var(--mu);transform:rotate(-90deg);transition:transform .15s}.ui2 .sd-cu.ab .sd-cc{transform:rotate(90deg)}
 .ui2 .sd-cdot{position:absolute;left:34px;top:8px;width:10px;height:10px;border-radius:50%;background:#E5322D;box-shadow:0 0 0 2px var(--card2)}
@@ -3137,7 +3137,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.116';
+var APP_V = 'v53.4.117';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8937,7 +8937,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=CO.casa===true&&!BOOT.ui1; document.body.classList.toggle('ui2',u2); LS.set('chadin_ui2',u2?1:0);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
+function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
   CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
@@ -9919,7 +9919,7 @@ function estadoCli(c){
   if(!c.activa) return {t:'En pausa',c:''};
   if(c.sinAcceso) return {t:'Sin acceso · plan vencido',c:'bad'};
   var T=tareasDe(c), hoy=CO.hoy||hoyStr(), atr=T.filter(function(t){ return t.g==='atr'&&!t.info; }).length;
-  if(ui2On()&&domRef()<hoy&&semanalPend().indexOf(c)>=0) atr++;      // v53.4.116: en el panel nº 1, su revisión semanal sin hacer también cuenta como atrasada
+  if(ui2On()&&domRef()<hoy&&semanalPend().indexOf(c)>=0) atr++;      // v53.4.116: su revisión semanal sin hacer también cuenta como atrasada
   if(atr) return {t:atr===1?'1 cosa atrasada':atr+' cosas atrasadas',c:'bad'};
   if(c.plan!=='dieta'&&c.rutinas){ var dd=c.ultimoEntreno?diff(c.ultimoEntreno,hoy):null;
     if(dd==null) return {t:'Aún no ha entrenado',c:'warn'};
@@ -9997,7 +9997,7 @@ A.ppOcultar=function(){ LS.set('moodon_pp_off',1); if(CO.vista==='lista') pintar
    v53.4.116 · INICIO NUEVO (diseño D, elegido por Javier): «solo lo que hay que hacer».
    Atajos de color (atrasado · para hoy · sin leer · por renovar) · Hoy, con lo atrasado en rojo y su botón ·
    próximos días con la fecha grande · cada cliente con su estado y lo siguiente que toca.
-   De momento solo en el panel nº 1 (body.ui2): si le cuadra, a todos.
+   Primero en el panel nº 1 (v53.4.116); desde la v53.4.117, en todos los paneles de entrenador (body.ui2).
    ===================================================================== */
 function ui2On(){ return BOOT.mode==='coach'&&document.body.classList.contains('ui2'); }
 function datosIni(){
@@ -13949,7 +13949,7 @@ function ladoHtml(){
   var act=(CO.lista||[]).filter(function(c){ return c.activa; }), v=CO.vista, urg=0;
   try{ urg=tareasTodas().filter(function(t){ return !t.info&&(t.g==='atr'||t.g==='hoy'); }).length+(semanalPend().length?1:0); }catch(e){}
   function it(a,i,t,on,extra){ return '<button class="sd-i'+(on?' on':'')+'" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+(extra||'')+'</button>'; }
-  if(ui2On()) return ladoHtml2(act,v,urg,it);      // v53.4.116: menú del diseño D (panel nº 1)
+  if(ui2On()) return ladoHtml2(act,v,urg,it);      // v53.4.116: menú del diseño D (v53.4.117: todos los entrenadores)
   return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid)+it('sdCal','cal','Calendario',v==='agenda')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
@@ -13962,7 +13962,7 @@ function ladoHtml(){
     }).join('')+'<p class="cli-nada'+(act.some(cliVa)?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
     '<div class="sd-pie">'+(CO.casa===false?'<button class="sd-i" data-a="coLogo">'+ic('foto')+'<span>Tu logo</span>'+(CO.logoV?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="pushCo">'+ic('campana')+'<span>Avisos</span>'+(pushNuevo(PUSH.est)?'<b class="sd-new">Nuevo</b>':'')+'</button>'+'<button class="sd-i" data-a="segCfg">'+ic('candado')+'<span>Seguridad y acceso</span>'+(CO.seg&&CO.seg.conPass?'':'<b class="sd-new">Revisar</b>')+'</button>'+(CO.casa!==false?'<button class="sd-i" data-a="appCfg">'+ic('enlace')+'<span>Página de inicio</span>'+(CO.appUrl?'':'<b class="sd-new">Nuevo</b>')+'</button>':'')+'<button class="sd-i" data-a="vistaMovil">'+ic('movil')+'<span>Vista móvil</span></button><button class="sd-i" data-a="salirCoach">'+ic('atras')+'<span>Salir</span></button><small>MOOD ON · '+APP_V+'</small></div>';
 }
-/* v53.4.116 · menú lateral del diseño D (panel nº 1): lo del día a día arriba; tu biblioteca; tus clientes con un punto de color
+/* v53.4.116 · menú lateral del diseño D (v53.4.117: todos los entrenadores; «Modo prueba» y «Página de inicio», solo la nº 1; «Tu logo», los demás): lo del día a día arriba; tu biblioteca; tus clientes con un punto de color
    (rojo atrasado, ámbar pendiente, verde al día) y sus mensajes sin leer; y abajo un solo botón «Cuenta y ajustes»
    con lo que antes eran 8 filas (avisos, seguridad, página de inicio, vista móvil, modo prueba, feedback, ayuda y salir). */
 function ladoHtml2(act,v,urg,it){
@@ -13993,7 +13993,7 @@ function ladoHtml2(act,v,urg,it){
       var n=(c.chat&&c.chat.noLeidos)||0, e=estadoCli(c), k=e.c==='aldia'?'ok':e.c==='bad'?'bad':'warn';
       return '<button class="sd-c'+(v==='clienta'&&CO.cid===c.id?' on':'')+(cliVa(c)?'':' h')+'" data-a="sdCli" data-id="'+esc(c.id)+'" data-n="'+esc(sinTil(c.nombre))+'"><span class="sd-aw">'+avCo(c.id,c.nombre,'sd-av')+'<i class="sd-st '+k+'"></i></span><span class="sd-cn">'+esc(c.nombre)+'<span class="sd-vh"> · '+esc(e.t)+'</span></span>'+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>';
     }).join('')+'<p class="cli-nada'+(act.some(cliVa)?' h':'')+'">Ningún cliente se llama así</p></div><button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+
-    '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm"><span class="sd-av sd-cav">'+esc(iniciales(nom)||'·')+'</span><span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
+    '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm"><span class="sd-av sd-cav">'+(nom==='Tu cuenta'?ic('user'):esc(iniciales(nom)))+'</span><span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
 }
 function sdCuPoner(ab){ CO.cuAb=ab; var w=document.querySelector('#side .sd-cu'); if(!w) return; w.classList.toggle('ab',ab); var m=document.getElementById('sd-cm'), b=w.querySelector('.sd-cb'); if(m) m.hidden=!ab; if(b) b.setAttribute('aria-expanded',ab); }
 A.sdCuenta=function(){ sdCuPoner(!CO.cuAb); if(CO.cuAb){ var f=document.querySelector('#sd-cm .sd-i'); if(f) f.focus(); } };
@@ -14023,7 +14023,7 @@ function repintarVista(){
 A.vistaMovil=function(){ LS.set('chadin_vista','movil'); repintarVista(); toast('Vista móvil. La vuelves a cambiar arriba, en "Vista ordenador".'); };
 A.vistaOrd=function(){ LS.set('chadin_vista','ordenador'); repintarVista(); };
 if(BOOT.mode==='coach'){
-  if(LS.get('chadin_ui2')===1&&!BOOT.ui1) document.body.classList.add('ui2');      // (BOOT.ui1: solo el servidor de pruebas, para probar el panel de siempre)      // v53.4.112: desde el principio (sin parpadeo) si este navegador ya estuvo en el panel nº 1
+  if(!BOOT.ui1) document.body.classList.add('ui2');      // v53.4.117: la interfaz nueva en todos los paneles de entrenador, desde el principio (BOOT.ui1: solo el servidor de pruebas, para probar el panel de antes)
   new MutationObserver(function(){ ladoCo(); navVer(); }).observe(app,{childList:true});
   window.addEventListener('scroll',function(){ if(NAV.cur&&!NAV.atras) NAV.cur.y=window.scrollY; },{passive:true});
   app.addEventListener('input',function(e){ var t=e.target; if(NAV.cur&&t&&t.id&&/^sv-n-/.test(t.id)) (NAV.cur.campos=NAV.cur.campos||{})[t.id]=t.value; });
