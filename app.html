@@ -2509,7 +2509,7 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .cb-mas{width:30px;height:30px;border-radius:50%;border:1.5px solid #111;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer;padding:0}.cb-mas .ic{width:16px;height:16px;margin:0}.cb-mas:active{background:#111;color:#fff}
 #modal .mbox.mas-mb{max-width:720px}.mas-f{margin:10px 0 2px}.mas-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:12px}@media(min-width:600px){.mas-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
 .mas-c{display:flex;flex-direction:column;align-items:stretch;gap:4px;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:6px 6px 10px;cursor:pointer;font:inherit;color:var(--tx);min-width:0}
-.mas-c .mas-im{width:100%;aspect-ratio:1/1;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#E6E6EA,#F1F1F5);display:flex;align-items:center;justify-content:center}.mas-c .mas-im img{width:100%;height:100%;object-fit:cover;display:block}
+.mas-c .mas-im{position:relative;width:100%;height:0;padding-top:100%;border-radius:12px;overflow:hidden;background:linear-gradient(135deg,#E6E6EA,#F1F1F5)}.mas-c .mas-im>*{position:absolute;inset:0;width:100%;height:100%;margin:auto}.mas-c .mas-im img{object-fit:cover;display:block}.mas-c .mas-im .spin,.mas-c .mas-im .pl-ph{width:28px;height:28px;display:flex;align-items:center;justify-content:center}
 .mas-c b{font-size:13.5px;line-height:1.25;padding:2px 4px 0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.mas-c small{font-size:11.5px;color:var(--mu);padding:0 4px}
 .rec-mo{display:inline-block!important;margin-top:4px;padding:2px 8px;border-radius:99px;background:#F2F2F5;color:#2C2C2E!important;font-weight:700;font-size:11px!important}
 .rec-bib{display:inline-flex!important;align-items:center;gap:4px;font-weight:700;color:#000!important}.rec-bib .ic{width:13px;height:13px;margin:0}
@@ -3054,7 +3054,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.113';
+var APP_V = 'v53.4.114';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8177,20 +8177,21 @@ function libPlatoMas(r,p,mi){
 }
 A.cmMas=function(el){
   var p=planSelCl(); if(!p) return; var mi=+el.dataset.m;
-  if(libreCl()) return A.dvLib45({dataset:{p:p.id,m:mi}});      // con autorregulación, su «Más de la biblioteca» de siempre
-  CL.masSel={p:p.id,m:mi}; CL.masF='';
+  CL.masSel={p:p.id,m:mi}; CL.masF='';      // v53.4.114: también con autorregulación (antes, su lista de siempre, con fotos pequeñas)
   cargando(cargarBancoCl()).then(function(){ pintarMasCl(''); },function(e){ toast('No se ha podido abrir la biblioteca: '+limpiaErr(e),'err'); });
 };
 function masLista(p,mi,q,f){
   var c=p.comidas[mi], tp=tipoCmDe(c.nombre), ya={}; (c.opciones||[]).forEach(function(o){ if(o.lib&&o.mio!==3) ya[o.lib]=1; });
   return libTodas().filter(function(r){ return r.t&&r.t.indexOf(tp)>=0&&!ya[r.id]; }).map(function(r){ var x=adaptarRecCl(r); return x?{r:r,n:x.n||r.n}:null; }).filter(function(z){
     if(!z) return false; if(q&&clave(z.n+' '+z.r.n).indexOf(clave(q))<0) return false;
-    return !f||(f==='rap'?(num(z.r.min)||99)<=10:f==='olla'?!!z.r.tanda:f==='ligero'?!z.r.tanda&&!/pasta|pizza|noquis|hamburguesa|lasa/.test(clave(z.r.n)):true); });
+    return !f||(f==='rap'?(num(z.r.min)||99)<=10:f==='olla'?!!z.r.tanda:f==='bas'?platoBasico(z.r):true); });
 }
+/* v53.4.114 (Javier: «lo de ligeras no me gusta, pon platos básicos»): carne, pescado o huevo con arroz, patata, boniato, quinoa, cuscús o pan, a la plancha, al horno o cocido */
+function platoBasico(r){ var n=clave(r.n||''); return !r.tanda&&!/pasta|pizza|noqui|wrap|hamburguesa|ensalada (de|cesar)|tofu|revuelto|rellena|lasa/.test(n)&&/(pollo|pavo|ternera|lomo|merluza|salmon|bacalao|sepia|calamar|huevo|tortilla francesa|atun)/.test(n)&&/(arroz|patata|boniato|quinoa|cuscus|pan\b)/.test(n); }
 function pintarMasCl(q){
   var S=CL.masSel, p=S&&planesCl().filter(function(x){ return x.id===S.p; })[0], c=p&&p.comidas[S.m]; if(!c) return;
   var f=CL.masF||'', L=masLista(p,S.m,q,f), cn=String(c.nombre).toLowerCase(), tp=tipoCmDe(c.nombre), st=document.querySelector('#modal .mbox'), top=st&&st.querySelector('.mas-g')?st.scrollTop:0;
-  var F=[['','Todas'],['rap','Rápidas']].concat(tp==='c'?[['olla','De olla y cuchara'],['ligero','Ligeras']]:[]);
+  var F=[['','Todas']].concat(tp==='c'?[['bas','Básicos']]:[],[['rap','Rápidas']],tp==='c'?[['olla','De olla y cuchara']]:[]);
   modal('<div class="mh-sh"><div><small>'+esc(c.nombre)+'</small><h2>Más platos para tu '+esc(cn)+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+
     '<p class="muted sm">Elige el que te apetezca hoy: entra con las cantidades de tu '+esc(cn)+'.</p>'+
     '<input class="ban-q" data-v29="masQ" placeholder="Buscar: tortilla, lentejas, tostadas…" value="'+esc(q||'')+'" autocomplete="off" aria-label="Buscar plato">'+
@@ -8205,7 +8206,7 @@ A.masF=function(el){ CL.masF=el.dataset.v; var i=document.querySelector('#modal 
 A.masPon=function(el){
   var S=CL.masSel, p=S&&planesCl().filter(function(x){ return x.id===S.p; })[0], r=libTodas().filter(function(x){ return x.id===el.dataset.id; })[0]; if(!p||!r) return;
   var Z=libPlatoMas(r,p,S.m); if(!Z||!Z.items||!Z.items.length) return toast('Hay algo en este plato que no puedes comer');
-  cerrarModal(); plAbrirCon({pid:p.id,m:S.m,lib:{r:r,items:Z.items,base:Z.items.map(function(z){ return Object.assign({},z); }),pz:Z.pz||null,lote:Z.lote||null,tanda:Z.tanda||null,n:Z.x.n,notas:Z.x.notas,sa:Z.x.sa,mas:1},antes:null,aj:!!Z.ob});
+  cerrarModal(); plAbrirCon({pid:p.id,m:S.m,lib:{r:r,items:Z.items,base:Z.items.map(function(z){ return Object.assign({},z); }),pz:Z.pz||null,lote:Z.lote||null,tanda:Z.tanda||null,pt:Z.tanda&&libreCl()?{k:Z.tanda.k}:null,n:Z.x.n,notas:Z.x.notas,sa:Z.x.sa,mas:masLibCl()?1:0},antes:null,aj:!!Z.ob});
 };
 /* lo elegido con el «+», en su comida de hoy (uno por comida: si elige otro, cambia) */
 function ponLibHoy(p,mi){
