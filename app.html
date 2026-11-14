@@ -2904,6 +2904,90 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .logo-top .lco-w,.logo-side .lco-w,.logo-cq .lco-w{justify-content:flex-start}
 .lg-pv{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px 14px 12px;margin:10px 0 4px;display:flex;flex-direction:column;align-items:center;gap:10px;color:#111}.lg-pv .lco{height:46px;max-width:55%}.lg-pv svg{width:110px;height:auto;display:block}.lg-pv small{color:var(--mu);font-size:12px}
 .lg-vac{flex-direction:row;justify-content:center;color:var(--mu);font-size:13.5px;padding:22px 14px}
+/* =====================================================================
+   v53.4.112 · JERARQUÍA VISUAL (Javier: «mantener el blanco, negro y grises, pero que se distinga qué es importante,
+   qué se puede pulsar y qué requiere atención»). De momento solo en el panel nº 1 (body.ui2): si le cuadra, a todos.
+   Capas: fondo gris (#ECECF0) · tarjetas blancas con borde y sombra suave · bloques internos gris claro (#F4F4F6) ·
+   campos con borde visible · botón principal negro · secundario blanco con borde · seleccionado en negro.
+   Color solo con significado: verde hecho/pagado, ámbar atención, rojo atrasado/pendiente/error.
+   Las reglas van con :where() para pesar como las de base: cambian lo general sin pisar lo especial de cada pantalla.
+   ===================================================================== */
+html:has(body.ui2){background:#ECECF0}
+body.ui2{--bg:#ECECF0;--card:#FFFFFF;--card2:#F4F4F6;--line:#DEDEE4;--line2:#EAEAEE;--tx:#111111;--tx2:#38383C;--mu:#6A6A70;
+  --ok:#0F7A47;--warn:#9A5800;--bad:#C42E2E;--okS:#E7F4EC;--warnS:#FFF3DC;--badS:#FCEBEB;--campo:#ADADB5;
+  --sh:0 1px 2px rgba(16,16,24,.05),0 4px 14px rgba(16,16,24,.045);background:var(--bg)}
+/* --- capas --- */
+.ui2 .top{background:rgba(236,236,240,.94)}
+.ui2 .subtabs{background:rgba(236,236,240,.96)}
+body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
+.ui2 :where(.card){background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.ui2 :where(.card .card){box-shadow:none}
+.ui2 :where(.kpi,.pg-k){background:#fff;border:1px solid var(--line);box-shadow:var(--sh)}
+.ui2 #modal .mb{background:rgba(16,16,22,.48)}
+/* --- títulos y texto --- */
+.ui2 .tit{font-size:30px;font-weight:800;letter-spacing:-.03em}
+.ui2 .top-n{font-weight:800;color:var(--tx)}
+.ui2 :where(.card-t){font-size:16.5px;font-weight:800;letter-spacing:-.015em;color:var(--tx)}
+.ui2 :where(#modal h2){font-size:22px;font-weight:800;letter-spacing:-.02em}
+.ui2 .hm-h,.ui2 .px-gt,.ui2 .ag-h,.ui2 .tk-gh,.ui2 .sv-sec,.ui2 .li-sec,.ui2 .sd-h{font-family:Plus Jakarta Sans,sans-serif;font-size:11.5px!important;font-weight:700!important;letter-spacing:.08em!important;text-transform:uppercase;color:var(--mu)!important}
+.ui2 .muted{color:var(--mu)}
+/* --- cifras importantes --- */
+.ui2 .kpi .v{font-size:30px;font-weight:800;letter-spacing:-.025em;color:var(--tx)}
+.ui2 .kpi .l,.ui2 .pg-k span{font-size:12px;font-weight:600;letter-spacing:0;text-transform:none;color:var(--mu)}
+.ui2 .pg-k b{font-size:28px;letter-spacing:-.02em}
+.ui2 .pg-k.ok b,.ui2 .kpi .v.ok{color:var(--ok)}
+.ui2 .pg-k.warn{background:var(--warnS);border-color:rgba(154,88,0,.35)}.ui2 .pg-k.bad{background:var(--badS);border-color:rgba(196,46,46,.35)}
+/* --- botones --- */
+.ui2 :where(.btn){background:#111;border-color:#111;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.16),0 3px 8px rgba(0,0,0,.07)}
+.ui2 :where(.btn):hover{background:#2B2B30;border-color:#2B2B30}
+.ui2 :where(.btn).sec{background:#fff;border:1px solid #B8B8C0;color:#111;box-shadow:0 1px 1px rgba(0,0,0,.03)}
+.ui2 :where(.btn).sec:hover{background:var(--card2);border-color:#7A7A82}
+.ui2 :where(.btn):focus-visible,.ui2 :where(.tipos button,.seg button,.subtabs button,.sd-i):focus-visible{outline:3px solid rgba(17,17,17,.28);outline-offset:2px}
+.ui2 .px-g.g-sem .btn.sm:not(.sec),.ui2 .px-g.g-mas .btn.sm:not(.sec){background:#fff;color:#111;border:1.5px solid #111;box-shadow:none}      /* lo que no corre prisa: se ve, pero no compite con lo atrasado */
+.ui2 .px-g.g-sem .btn.sm:not(.sec):hover,.ui2 .px-g.g-mas .btn.sm:not(.sec):hover{background:var(--card2)}
+.ui2 :where(.link){color:#111;font-weight:700}
+.ui2 :where(.link):hover{text-decoration:underline;text-underline-offset:3px}
+/* --- seleccionado: siempre negro --- */
+.ui2 .tipos button{background:#fff;border:1px solid #D2D2D9;color:#2C2C30;box-shadow:none}
+.ui2 .tipos button:hover{border-color:#7A7A82}
+.ui2 .tipos button.on{background:#111;border-color:#111;color:#fff}
+.ui2 .seg,.ui2 .die-dias,.ui2 .an-tabs,.ui2 .ps-seg{background:#E1E1E7;box-shadow:none;border:0}
+.ui2 .die-dias button,.ui2 .an-tabs button,.ui2 .ps-seg button{color:#3A3A3E}.ui2 .die-dias button.on,.ui2 .an-tabs button.on,.ui2 .ps-seg button.on{background:#111;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22)}
+.ui2 .seg button{color:#3A3A3E}
+.ui2 .seg button.on{background:#111;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.22)}
+.ui2 .subtabs button{color:#3A3A3E}
+.ui2 .subtabs button:hover{background:rgba(17,17,17,.07);color:#111}
+.ui2 .subtabs button.on{background:#111;color:#fff}
+.ui2 :where(.sd-i){color:#2C2C30}
+.ui2 .sd-i:not(.on):hover{background:#F0F0F3}
+.ui2 .sd-c:not(.on):hover{background:#F4F4F6}
+/* --- campos editables: borde visible y fondo blanco; lo que no se edita, sin caja --- */
+.ui2 :where(input:not([type=checkbox],[type=radio],[type=range],[type=file],[type=color]),textarea,select){background-color:#fff;border:1px solid var(--campo)}
+.ui2 :where(input:not([type=checkbox],[type=radio],[type=range],[type=file],[type=color]),textarea,select):hover{border-color:#6E6E76}
+.ui2 :where(input,textarea,select):focus{border-color:#111;box-shadow:0 0 0 3px rgba(17,17,17,.12)}
+.ui2 :where(input,textarea)::placeholder{color:#9C9CA2}
+.ui2 :where(input[readonly],input:disabled,textarea[readonly],textarea:disabled,select:disabled){background-color:var(--card2);border-color:transparent;color:var(--mu)}
+.ui2 :where(label.f),.ui2 :where(.lab){color:#3A3A3E;font-size:12.5px;font-weight:700}
+/* --- ayudas y avisos: lo que explica, en gris; el color, solo cuando importa --- */
+.ui2 .tip{background:#F6F6F8;color:var(--tx2);border:1px solid var(--line);border-left:3px solid #B8B8C0}
+.ui2 .gu-ban{background:#F6F6F8;color:var(--tx2);border:1px solid var(--line);border-left:3px solid #B8B8C0}.ui2 .gu-ban .link{color:#111}
+.ui2 .tip b{color:#111}.ui2 .tip .link,.ui2 .tip button.link{color:#111}
+.ui2 :where(.pill){background:var(--card2);color:var(--tx2)}
+.ui2 :where(.pill).ok{background:var(--okS);color:var(--ok)}
+.ui2 :where(.pill).warn{background:var(--warnS);color:var(--warn)}
+.ui2 :where(.pill).bad{background:var(--badS);color:var(--bad)}
+/* --- Seguimiento: lo atrasado se ve, lo de hoy también --- */
+.ui2 .px-g.g-atr{background:var(--badS);border-radius:16px;padding:8px 12px 4px;margin:6px -12px 10px}
+.ui2 .px-g.g-atr .px-gt{color:var(--bad)!important}
+.ui2 .px-g.g-atr .px-r{border-top-color:rgba(196,46,46,.15)}
+.ui2 .px-g.g-hoy .px-gt{color:#111!important}
+/* --- listas: filas que se notan pulsables --- */
+.ui2 .ag-r:hover{background:#F7F7F9}
+.ui2 .hm-r.atr{box-shadow:inset 3px 0 0 var(--bad)}
+.ui2 .aldia{color:var(--ok)!important;font-weight:600}.ui2 small.bad,.ui2 .cl-tx small .bad{color:var(--bad)!important;font-weight:600}.ui2 small.warn,.ui2 .cl-tx small .warn{color:var(--warn)!important;font-weight:600}
+.ui2 .hm-l{border:1px solid var(--line);overflow:hidden}.ui2 .hm-r{padding:13px 16px;margin:0 -16px;width:calc(100% + 32px)}.ui2 .hm-r:hover{background:#F7F7F9}
+.ui2 :where(.tbl th){color:var(--mu)}
+.ui2 .ag-d{border-color:var(--line)}.ui2 .ag-d.con{background:var(--card2)}
 </style>
 </head>
 <body>
@@ -2965,7 +3049,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.111';
+var APP_V = 'v53.4.112';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8676,7 +8760,8 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
+function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; document.body.classList.toggle('ui2',CO.casa===true); LS.set('chadin_ui2',CO.casa===true?1:0);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
+  CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
@@ -9663,7 +9748,7 @@ function estadoCli(c){
     if(dd>5) return {t:dd+' días sin entrenar',c:'warn'}; }
   var PRI=['verRut','dietaTab','progRev','progFotos'], sin=T.filter(function(t){ return t.g==='sin'; }).sort(function(a,b){ return PRI.indexOf(a.a)-PRI.indexOf(b.a); })[0];
   if(sin) return {t:{verRut:'Sin rutina',dietaTab:'Sin dieta',progRev:'Falta programar su revisión',progFotos:'Falta programar sus fotos'}[sin.a]||sin.tit,c:''};
-  return {t:'Al día',c:''};
+  return {t:'Al día',c:'aldia'};      // v53.4.112: en verde con la jerarquía nueva (body.ui2)
 }
 function tileCli(c){
   var n=(c.chat&&c.chat.noLeidos)||0, e=estadoCli(c);
@@ -13637,6 +13722,7 @@ function repintarVista(){
 A.vistaMovil=function(){ LS.set('chadin_vista','movil'); repintarVista(); toast('Vista móvil. La vuelves a cambiar arriba, en "Vista ordenador".'); };
 A.vistaOrd=function(){ LS.set('chadin_vista','ordenador'); repintarVista(); };
 if(BOOT.mode==='coach'){
+  if(LS.get('chadin_ui2')===1) document.body.classList.add('ui2');      // v53.4.112: desde el principio (sin parpadeo) si este navegador ya estuvo en el panel nº 1
   new MutationObserver(function(){ ladoCo(); navVer(); }).observe(app,{childList:true});
   window.addEventListener('scroll',function(){ if(NAV.cur&&!NAV.atras) NAV.cur.y=window.scrollY; },{passive:true});
   app.addEventListener('input',function(e){ var t=e.target; if(NAV.cur&&t&&t.id&&/^sv-n-/.test(t.id)) (NAV.cur.campos=NAV.cur.campos||{})[t.id]=t.value; });
