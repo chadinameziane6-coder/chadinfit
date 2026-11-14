@@ -2954,7 +2954,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.92';
+var APP_V = 'v53.4.93';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -12389,7 +12389,7 @@ function ndEnviar(el,opt,gen){
 }
 /* con la dieta ya cargada (y los alimentos y recetas): pone en cada plan los platos de la biblioteca cuadrados a su reparto */
 function ndGenerarPlatos(gen){
-  if(!CO.die) return; var al=alimCl(), sin=[];
+  if(!CO.die) return; var al=alimGen(), sin=[];
   CO.die.planes.forEach(function(p,pi){
     var G=gen[pi]; if(!G) return;
     if(G.mano){ p.comidas=G.rep.map(function(c){ var cm={nombre:c.nombre,hora:c.hora,pct:String(c.k),opciones:[{id:'o'+rand(6),nombre:'',texto:'',img:'',items:[]}]}; if(!(c.p===c.k&&c.c===c.k&&c.g===c.k)) cm.rp={p:c.p,c:c.c,g:c.g}; return cm; }); return; }      // v53.4.90: «Los pongo yo»: las comidas con su objetivo, vacías
@@ -12414,7 +12414,7 @@ function ndGenerarPlatos(gen){
    Cuatro pasos, uno cada vez: 1 Objetivo · 2 Sus gustos · 3 Comidas · 4 Platos; lo que casi nunca hace falta, plegado («Más opciones»).
    Usa lo de «Dieta nueva» (CO.nd: calculadora, objetivo del día y reparto). Si aún no tiene dieta, la crea aquí (sin guardar hasta «Guardar y publicar»).
    ===================================================================== */
-var GD_PASOS=['Objetivo','Sus gustos','Comidas','Platos'];
+var GD_PASOS=['Objetivo','Comidas','Platos'];      // v53.4.93 (Javier): sin «Sus gustos» (ya están en su ficha, desde el cuestionario; si cambian, en su ficha)
 var nuevaDieta0=A.nuevaDieta, crearDieta0=A.crearDieta, ndPintar0=ndPintar, ndCalcAct0=CH.ndCalcAct;
 function gdOn(){ return CO.casa===true&&LS.get('chadin_sin_guia')!==1; }      // la ventana de antes: localStorage chadin_sin_guia = 1 (las pruebas de antes)
 A.nuevaDieta=function(){ if(!gdOn()) return nuevaDieta0(); if(CO.dieSucia) return toast('Guarda primero los cambios de la dieta actual'); gdEmpezar(); };
@@ -12425,7 +12425,7 @@ function gdEmpezar(){
   CO.nd={desde:CO.hoy||hoyStr(),hasta:'',modo:'gen',paso:1,pi:0,guia:true,sin:sin,mk:'calc',
     planes:P.map(function(p){ return {nombre:p.nombre||'Plan',ahora:ND_K.map(function(k){ return p[k]==null?'':String(p[k]); }),obj:ND_K.map(function(k){ return p[k]==null?'':String(p[k]); }),rep:ndRepDe(p),opc:Math.min(3,Math.max(1,(p.comidas||[]).reduce(function(a,c){ return Math.max(a,(c.opciones||[]).length); },0)||3))}; })};
   CO.nd.calcOn=CO.nd.planes.every(function(p){ return p.obj.every(function(x){ return x===''; }); });      // sin kcal todavía: las de la calculadora
-  if(!CO.nut) cargarNut().then(function(){ if(CO.nd&&CO.nd.guia&&CO.nd.paso===2){ CO.nd.mismo=true; ndPintar(); } },function(){});
+  if(!CO.nut) cargarNut().then(function(){},function(){});
   ndPintar();
 }
 function gdCalcAplica(){ var r=calcRes(calcEstado()); if(!r||!(r.ch>0)) return false; CO.nd.planes.forEach(function(p){ p.obj=[String(r.kcal),String(r.pr),String(r.ch),String(r.gr)]; }); return true; }
@@ -12438,9 +12438,9 @@ CH.ndCalcAct=function(t){ ndCalcAct0(t); gdCalcVivo(); };
 function gdCalcVivo(){ var N=CO.nd; if(!N||!N.guia||N.paso!==1||N.mk!=='calc') return; N.calcOn=true; if(gdCalcAplica()) mcRefrescar('nd0'); var e=document.getElementById('gd-man'); if(e){ var r=calcRes(calcEstado()); e.textContent=r?'Gasta unas '+kTxt(r.get)+' kcal al día':''; } }
 function gdHtml(){
   var N=CO.nd, n=N.paso, nom=esc(primerNombre(CO.d.clienta.nombre||''));
-  return '<div class="gd-cab"><span class="muted sm">Paso '+n+' de 4</span><div class="gd-pr">'+GD_PASOS.map(function(t,i){ var k=i+1;
+  return '<div class="gd-cab"><span class="muted sm">Paso '+n+' de 3</span><div class="gd-pr">'+GD_PASOS.map(function(t,i){ var k=i+1;
       return k<n?'<button class="ok" data-a="gdIr" data-v="'+k+'"><i>✓</i>'+t+'</button>':'<span class="'+(k===n?'on':'')+'"><i>'+k+'</i>'+t+'</span>'; }).join('')+'</div></div>'+
-    [gdPaso1,gdPaso2,gdPaso3,gdPaso4][n-1](nom);
+    [gdPaso1,gdPaso3,gdPaso4][n-1](nom);
 }
 function gdSeg(ops,a,cur){ return '<div class="tipos nd-seg">'+ops.map(function(o){ return '<button class="'+(cur===o[0]?'on':'')+'" data-a="'+a+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>'; }
 function gdOp(a,v,on,t,s){ return '<button class="mo-op'+(on?' on':'')+'" data-a="'+a+'" data-v="'+v+'"><span class="mo-rd"></span><span><b>'+t+'</b><small>'+s+'</small></span></button>'; }
@@ -12462,7 +12462,7 @@ function gdPaso1(nom){
     '<div class="mt6">'+(N.planes.length>1&&N.mk!=='calc'?'<div class="lab" style="margin-top:0">'+esc(N.planes[0].nombre)+'</div>':'')+(mcMano()?gdManoHtml(0):mcHtml('nd0'))+'</div>'+otros+
     '<details class="gd-mas"'+(N.masAb?' open':'')+'><summary>Más opciones</summary><div class="grid2"><label class="f">Empieza<input type="date" id="nd-desde" value="'+esc(N.desde)+'"></label><label class="f">Termina (opcional)<input type="date" id="nd-hasta" value="'+esc(N.hasta)+'"></label></div>'+
       (D?'<p class="muted sm">La dieta de ahora se guarda en su historial y termina el día antes.</p>':'')+'</details>'+
-    '<button class="btn mt" data-a="gdSig">Siguiente: sus gustos</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
+    '<button class="btn mt" data-a="gdSig">Siguiente: sus comidas</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
 }
 function gdManoHtml(pi){ var p=CO.nd.planes[pi]; return '<div class="grid4">'+[['Kcal',0],['Proteína (g)',1],['Hidratos (g)',2],['Grasa (g)',3]].map(function(z){ return '<label class="f" style="margin-top:0">'+z[0]+'<input data-k="nd" data-f="o" data-p="'+pi+'" data-i="'+z[1]+'" inputmode="numeric" value="'+esc(p.obj[z[1]])+'"></label>'; }).join('')+'</div>'+(pi===0?'<button class="link" data-a="mcMano" data-v="0">'+ic('calc')+'Por gramos por kilo (los hidratos, solos)</button>':''); }
 /* 2 · sus gustos: lo de su ficha (se cambia aquí mismo) y lo que contestó en el cuestionario, con un toque para pasarlo a su ficha */
@@ -12518,7 +12518,7 @@ function gdRepHtml(){
 /* 4 · los platos: generarlos, mantener los de ahora o ponerlos ella */
 function gdPaso4(nom){
   var N=CO.nd, D=CO.d.dieta, al=alimCl(), ob=ndObjPlan(0), c=calcEstado(), p=N.planes[0];
-  var res='<div class="gd-res"><div><span>Objetivo</span><b>'+esc(({def:'Perder grasa',mant:'Mantener',sup:'Ganar músculo'})[c.obj]||'—')+'</b></div><div><span>Al día</span><b>'+(ob[0]!=null?kTxt(ob[0])+' kcal':'—')+'</b>'+(ob[1]!=null?'<small>P '+ob[1]+' · HC '+ob[2]+' · G '+ob[3]+'</small>':'')+'</div><div><span>Comidas</span><b>'+p.rep.length+' × '+p.opc+'</b><small>'+(p.opc>1?'platos para elegir':'plato')+'</small></div><div><span>Come</span><b>'+esc(alimResumen(al)||'De todo')+'</b></div></div>';
+  var res='<div class="gd-res"><div><span>Objetivo</span><b>'+esc(({def:'Perder grasa',mant:'Mantener',sup:'Ganar músculo'})[c.obj]||'—')+'</b></div><div><span>Al día</span><b>'+(ob[0]!=null?kTxt(ob[0])+' kcal':'—')+'</b>'+(ob[1]!=null?'<small>P '+ob[1]+' · HC '+ob[2]+' · G '+ob[3]+'</small>':'')+'</div><div><span>Comidas</span><b>'+p.rep.length+' × '+p.opc+'</b><small>'+(p.opc>1?'platos para elegir':'plato')+'</small></div><div><span>Come</span><b>'+esc(alimResumen(al)||'De todo')+'</b><small>De su ficha y su cuestionario · <button class="link" data-a="gdFicha" style="padding:0;font-size:inherit">cambiar</button></small></div></div>';
   return '<h2>¿Cómo hago los platos?</h2>'+res+
     gdOp('gdModo','gen',N.modo==='gen','Generar los platos','Platos de diario con los gramos ya cuadrados a cada comida y respetando sus gustos. Luego cambias lo que quieras.')+
     (D?gdOp('gdModo','copiar',N.modo==='copiar','Mantener los platos de ahora','Los mismos platos, con los gramos ajustados a las kcal nuevas.'):'')+
@@ -12526,6 +12526,10 @@ function gdPaso4(nom){
     '<button class="btn mt" data-a="gdHacer">Hacer la dieta</button><button class="btn sec mt" data-a="gdAtras">Atrás</button>'+
     '<p class="muted sm mt6 center">Después la revisas y pulsas «Guardar y publicar dieta»: hasta entonces '+nom+(D?' sigue con la de antes.':' no la ve.')+'</p>';
 }
+A.gdFicha=function(){ cerrarModal(); CO.nd=null; A.irFichaAlim(); };
+/* lo que dijo en su cuestionario que no le gusta (el hígado, las aceitunas…) tampoco sale al generar sus platos, aunque no esté en su ficha */
+function alimGen(){ var al=alimCl(); if(CO.casa!==true||!CO.nut) return al; var q=gdCq(), no=q&&q.preferencias&&q.preferencias.no; if(!no) return al;
+  var x=copia(al), S=gdSugAl(no,x); if(!S.length) return al; x.noGusta=(x.noGusta||[]).concat(S.map(function(a){ return a.id; })); return x; }
 A.gdIr=function(el){ CO.nd.paso=+el.dataset.v; ndPintar(); };
 A.gdAtras=function(){ ndLeerFechas(); CO.nd.paso=Math.max(1,CO.nd.paso-1); ndPintar(); };
 A.gdSig=function(){
@@ -12535,8 +12539,8 @@ A.gdSig=function(){
     if(N.planes.some(function(p){ return num(p.obj[0])==null&&ndKcalMac(p.obj)==null; })) return toast(N.mk==='calc'?'Pon su edad, altura y peso para calcular sus kcal':'Pon sus kcal','err');
     if(N.mk==='calc'&&N.calcOn) calcGuardar().then(function(){},function(){});      // queda también en su calculadora
   }
-  if(N.paso===3&&N.planes.some(function(p){ return ['k','p','c','g'].some(function(k){ return p.rep.reduce(function(a,c){ return a+(c[k]||0); },0)!==100; }); })) return toast('Cada columna del reparto tiene que sumar 100 %','err');
-  N.paso=Math.min(4,N.paso+1); ndPintar();
+  if(N.paso===2&&N.planes.some(function(p){ return ['k','p','c','g'].some(function(k){ return p.rep.reduce(function(a,c){ return a+(c[k]||0); },0)!==100; }); })) return toast('Cada columna del reparto tiene que sumar 100 %','err');
+  N.paso=Math.min(3,N.paso+1); ndPintar();
   var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=0;
 };
 A.gdObj=function(el){ var c=calcEstado(); c.obj=el.dataset.v; c.pct=String(OBJ_C[c.obj][1]); c.objFase=false; CO.nd.calcOn=CO.nd.mk==='calc'; ndLeerFechas(); CO.nd.mismo=true; ndPintar(); };
@@ -14809,7 +14813,7 @@ A.genOk=function(){
   var g=CO.gen, ob=genObj(); if(!ob) return toast('Pon proteína, hidratos y grasa del día');
   var bad=['k','p','c','g'].filter(function(k){ return Math.round(g.cm.reduce(function(a,c){ return a+(num(c[k])||0); },0))!==100; });
   if(bad.length) return toast('Cada columna del reparto tiene que sumar 100 %','err');
-  var p=planActual(), al=alimCl(), sinNada=[];
+  var p=planActual(), al=alimGen(), sinNada=[];
   usadasG={};
   p.proteina=String(num(g.obj[1])); p.carbohidratos=String(num(g.obj[2])); p.grasa=String(num(g.obj[3])); p.kcal=String(Math.round(ob[0]));
   p.comidas=g.cm.map(function(c){
