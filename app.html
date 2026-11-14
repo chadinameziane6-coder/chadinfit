@@ -1665,7 +1665,7 @@ body.ancho .dk-cols.lado>.dk-col:first-child{position:sticky;top:128px;max-heigh
 .mac-t th,.mac-t td{padding:5px 4px;text-align:right;border-bottom:1px solid var(--line2);font-variant-numeric:tabular-nums}
 .mac-t th:first-child{text-align:left;width:30%;color:var(--mu);font-weight:600;font-size:11.5px}
 .mac-t tr:first-child th{color:var(--mu);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700}
-.mac-t tr.dif td{font-weight:700}.mac-t td.ok{color:var(--ok)}.mac-t td.warn{color:var(--warn)}.mac-t td.bad{color:var(--bad)}
+.mac-t tr.dif td{font-weight:700}.mac-t td.ok{color:var(--ok)}.mac-t td.warn{color:var(--warn)}.mac-t td.bad{color:var(--bad)}.mac-t td.dp{color:var(--muted,#8a8a8a)}.cu-dp{display:block;flex:1 1 100%;font-size:12px;color:#6b6b6b;margin-top:2px}
 .mac-t tr:last-child th,.mac-t tr:last-child td{border-bottom:0}
 .op-acc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}.op-acc .btn{margin:0;display:inline-flex;align-items:center;gap:6px;width:auto}.op-acc .ic{width:15px;height:15px;margin:0}
 .die-res .dia-m{margin-top:10px}
@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.83';
+var APP_V = 'v53.4.84';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11372,13 +11372,25 @@ function objCm(p,c){ var o=objDia(p), pc=num(c.pct), rp=c.rp; return o&&pc?kcalR
 function kcalRp(o,r,rp){ if(!rp||r[0]==null||r[1]==null||r[2]==null||r[3]==null||o[1]==null||o[2]==null||o[3]==null) return r; var d=4*o[1]+4*o[2]+9*o[3]; if(d>0) r[0]=o[0]*(4*r[1]+4*r[2]+9*r[3])/d; return r; }      // v53.4.70: con su reparto por macros (c.rp), si lo tiene
 function opVisI(mi){ var c=planActual().comidas[mi], i=CO.opVis[CO.planI+'|'+mi]||0; return Math.max(0,Math.min(i,c.opciones.length-1)); }
 function totDia(p){ return sumMac(p.comidas.map(function(c,mi){ return macOp(c.opciones[opVisI(mi)]); })); }
+/* v53.4.84 (Javier: «un margen de error, no súper grande, pero algo», y lo que los alimentos traen «de paso» no es un error). Solo panel nº 1:
+   ±10 % en cada macro (como poco 5 g de proteína o hidratos y 3 g de grasa; kcal ±10 %, como poco 25), rojo solo si se pasa claramente (×2,5),
+   y si un macro tiene objetivo 0 o muy bajo, lo que traen los alimentos hasta el 10 % de las kcal de esa comida va «de paso». */
+function mrgCasa(){ return !!(CO.nut&&CO.nut.casa); }
+function limMac(i,ob){ var c=mrgCasa(); return i?Math.max(c?(i===3?3:5):3,ob[i]*(c?0.10:0.06)):Math.max(25,ob[i]*(c?0.10:0.04)); }
+function mrgMal(){ return mrgCasa()?2.5:2.2; }
+function dePaso(i,ob,m){
+  if(!mrgCasa()||!i||!m||ob[i]==null||!(m[i]>ob[i])) return false;
+  var K=ob[0]!=null?ob[0]:4*(ob[1]||0)+4*(ob[2]||0)+9*(ob[3]||0), T=0.10*K/(i===3?9:4);
+  return ob[i]<=T&&m[i]<=T;
+}
 function cmpTabla(obj,plan,tit){
   var col=['Kcal','Prot.','Hidr.','Grasa'];
   var fila=function(l,v){ return '<tr><th>'+l+'</th>'+[0,1,2,3].map(function(i){ return '<td>'+(v&&v[i]!=null?kTxt(v[i]):'–')+'</td>'; }).join('')+'</tr>'; };
   var dif=obj&&plan?'<tr class="dif"><th>Diferencia</th>'+[0,1,2,3].map(function(i){
     if(obj[i]==null) return '<td>–</td>';
-    var d=plan[i]-obj[i], t=Math.abs(d), lim=i?Math.max(3,obj[i]*0.06):Math.max(25,obj[i]*0.04);
-    return '<td class="'+(t<=lim?'ok':t<=lim*2.2?'warn':'bad')+'">'+dTxt(d)+'</td>'; }).join('')+'</tr>':'';
+    var d=plan[i]-obj[i], t=Math.abs(d), lim=limMac(i,obj), mac=obj[1]!=null&&obj[2]!=null&&obj[3]!=null;
+    if(dePaso(i,obj,plan)||(i===0&&mac&&mrgCasa()&&[1,2,3].every(function(k){ return Math.abs(plan[k]-obj[k])<=limMac(k,obj)||dePaso(k,obj,plan); }))) return '<td class="'+(t<=lim?'ok':'dp')+'" title="De paso: lo traen los alimentos, no es un error">'+dTxt(d)+'</td>';      // v53.4.84
+    return '<td class="'+(t<=lim?'ok':t<=lim*mrgMal()?'warn':'bad')+'">'+dTxt(d)+'</td>'; }).join('')+'</tr>':'';
   return '<table class="mac-t"><tr><th></th>'+col.map(function(c){ return '<th>'+c+'</th>'; }).join('')+'</tr>'+fila('Objetivo',obj)+fila(tit||'Plan',plan)+dif+'</table>';
 }
 function resDiaHtml(){
@@ -11631,16 +11643,19 @@ function cuadraMac(m,ob){
   var F=[], S=[], N=['','proteína','hidratos','grasa'];
   var mac=ob[1]!=null&&ob[2]!=null&&ob[3]!=null;      // con macros cuentan ellos (las kcal de las etiquetas no salen exactas de los macros: fibra, redondeo)
   var mal=false;      // fuera del margen: en verde (cuadra) · un poco fuera (ámbar en la tabla): solo el botón · claramente fuera (rojo): aviso
-  for(var i=mac?1:0;i<(mac?4:1);i++){ var d=m[i]-ob[i], lim=i?Math.max(3,ob[i]*0.06):Math.max(25,ob[i]*0.04); if(Math.abs(d)<=lim) continue; if(Math.abs(d)>lim*2.2) mal=true;
+  var DP=[];      // v53.4.84: lo que va «de paso»
+  for(var i=mac?1:0;i<(mac?4:1);i++){ var d=m[i]-ob[i], lim=limMac(i,ob); if(Math.abs(d)<=lim) continue;
+    if(dePaso(i,ob,m)){ DP.push(Math.round(m[i])+' g de '+N[i]); continue; }
+    if(Math.abs(d)>lim*mrgMal()) mal=true;
     (d<0?F:S).push(Math.round(Math.abs(d))+(i?' g de '+N[i]:' kcal')); }
-  if(!F.length&&!S.length) return {ok:true};
+  if(!F.length&&!S.length) return {ok:true,dp:DP};
   if(!mal) return {ok:false,leve:true};
   var t=(F.length?'faltan '+listaY(F):'')+(F.length&&S.length?' · ':'')+(S.length?'sobran '+listaY(S):'');
   return {ok:false,txt:t.charAt(0).toUpperCase()+t.slice(1),fijos:[]};
 }
 function opAccHtml(p,c,mi,oi){
   var o=c.opciones[oi], at=' data-m="'+mi+'" data-o="'+oi+'"', ob=objCm(p,c), m=macOp(o), cu=cuadraOp(p,c,o), nom=esc(String(c.nombre||'comida').toLowerCase());
-  return (cu&&cu.ok?'<div class="cu-ok">'+ic('ok')+'Cuadra con su '+nom+'</div>':'')+
+  return (cu&&cu.ok?'<div class="cu-ok">'+ic('ok')+'Cuadra con su '+nom+'</div>'+(cu.dp&&cu.dp.length?'<small class="cu-dp">'+esc(listaY(cu.dp))+' '+(cu.dp.length>1?'van':'va')+' de paso con los alimentos: no '+(cu.dp.length>1?'cuentan':'cuenta')+' como error.</small>':''):'')+
     (noCuadra(cu)?'<div class="cu-no"><b>'+ic('alerta')+'No cuadra con su '+nom+'</b><span>'+esc(cu.txt)+'</span>'+(cu.fijos.length?'<small>No se ajustan solos: '+esc(cu.fijos.join(', '))+'. Revísalos.</small>':'')+'</div>':'')+
     (ob&&m&&!(cu&&cu.ok)?'<button class="btn sm sec" data-a="opAjustar"'+at+'>'+ic('ajuste')+'Ajustar gramos al objetivo</button>':'')+
     (o.items&&o.items.length&&!(CO.nut&&CO.nut.casa&&recDeOp(o))?'<button class="btn sm sec" data-a="recGuardarOp"'+at+'>'+ic('lista')+'Guardar como receta</button>':'');      // v53.4.83: si ya es una receta tuya, no (se duplicaba)
