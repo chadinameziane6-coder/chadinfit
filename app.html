@@ -2964,7 +2964,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.109';
+var APP_V = 'v53.4.110';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7587,7 +7587,7 @@ function enviarPref(){
 function repintarDieCl(){ CL._mez=null; if(BOOT.mode!=='clienta'||!CL.d||(CL.tab!=='dieta'&&CL.tab!=='hoy')) return; repintarLibre(function(){ if(CL.tab==='dieta'||CL.tab==='hoy'){ var y=window.scrollY; CL.keep=true; pintarCl(); window.scrollTo(0,y); } }); }
 function intCl(){ return CL.d.dietaInt||{grupos:[],al:[]}; }
 function verMac(){ return !!CL.d.dietaVer; }
-function verDet(){ return verMac()&&(libreCl()||!(CL.d&&CL.d.casa)); }      // v53.4.91 (nº 1, Javier): sin autorregulación, ni las kcal de cada comida ni las de cada alimento; solo el total del día (si su coach se lo enseña)
+function verDet(){ return verMac()&&(libreCl()||!(CL.d&&CL.d.dn)); }      // v53.4.91 (nº 1, Javier): sin autorregulación, ni las kcal de cada comida ni las de cada alimento; solo el total del día (si su coach se lo enseña)
 function soloK(){ return !!CL.d.dietaSoloK&&!libreCl(); }      // v49: tu coach te enseña las kcal, no los macros
 function macroCajas(m){ return m?macro('Kcal',Math.round(m[0]))+(soloK()?'':macro('Proteína',Math.round(m[1]),'g')+macro('Hidratos',Math.round(m[2]),'g')+macro('Grasa',Math.round(m[3]),'g')):''; }
 function misRecOn(){ return verMac()&&libreCl(); }     // v48: «Mis recetas», solo para las que cuadran su dieta (autorregistro)
@@ -8675,7 +8675,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
+function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
@@ -11629,7 +11629,7 @@ function totDia(p){ return sumMac(p.comidas.map(function(c,mi){ return macOp(c.o
 /* v53.4.84 (Javier: «un margen de error, no súper grande, pero algo», y lo que los alimentos traen «de paso» no es un error). Solo panel nº 1:
    ±10 % en cada macro (como poco 5 g de proteína o hidratos y 3 g de grasa; kcal ±10 %, como poco 25), rojo solo si se pasa claramente (×2,5),
    y si un macro tiene objetivo 0 o muy bajo, lo que traen los alimentos hasta el 10 % de las kcal de esa comida va «de paso». */
-function mrgCasa(){ return !!(CO.nut&&CO.nut.casa); }
+function mrgCasa(){ return !!(CO.nut&&CO.nut.dn); }
 function limMac(i,ob){ var c=mrgCasa(); return i?Math.max(c?(i===3?3:5):3,ob[i]*(c?0.10:0.06)):Math.max(25,ob[i]*(c?0.10:0.04)); }
 function mrgMal(){ return mrgCasa()?2.5:2.2; }
 /* v53.4.100 (nº 1, Javier: «quitar ese aviso de no cuadra… habrá días que se quede corta y otros que sí llegue, es imposible cuadrar al milímetro, mientras el margen sea leve»):
@@ -11710,7 +11710,7 @@ function itFila(it,ii,ax){
     '<button class="it-del" data-a="itDel"'+ax+' data-ii="'+ii+'" aria-label="Quitar '+esc(it.n||'alimento')+'">'+ic('x')+'</button></div>';
 }
 function itemsEdHtml(o,ax,totId,tot){
-  var L=o.items||[]; ALT_O=o; var rc=o.lote&&o.lote.b&&!o.pz&&CO.nut&&CO.nut.casa&&/data-x="d"/.test(ax);      // v53.4.94: la receta, una fila en gramos; debajo, lo que lleva al lado
+  var L=o.items||[]; ALT_O=o; var rc=o.lote&&o.lote.b&&!o.pz&&CO.nut&&CO.nut.dn&&/data-x="d"/.test(ax);      // v53.4.94: la receta, una fila en gramos; debajo, lo que lleva al lado
   return '<div class="it-tab">'+(rc?rcFilaCasa(o,ax):'')+L.map(function(it,ii){ return rc&&o.lote.b[it.i]!=null?'':itFila(it,ii,ax); }).join('')+
     '<div class="al-add">'+ic('mas','al-ic')+'<input class="al-bus" data-k="buscaAl"'+ax+' placeholder="Añadir alimento: arroz, pollo, yogur…" autocomplete="off" aria-label="Buscar alimento para añadir"><button class="al-banco" data-a="banAl"'+ax+'>'+ic('lista')+'Banco</button><div class="al-res"></div></div>'+
     '<div class="op-tot" id="'+totId+'">'+tot+'</div></div>';
@@ -11894,7 +11894,7 @@ A.tandaK=function(el){
 A.opAjustar=function(el){
   var p=planActual(), c=p.comidas[+el.dataset.m], o=c.opciones[+el.dataset.o], ob=objCm(p,c), m=macOp(o);
   if(!ob||ob[0]==null||!m||!(m[0]>0)) return; var f=ob[0]/m[0];
-  if(o.lote&&o.lote.b&&rcU(o)!=='pz'&&CO.nut&&CO.nut.casa){ var rl=rcLib(o), alC=alimCl(); (rl&&rl.ens||[]).forEach(function(z){ var a=CO.nutM[z[0]]; if(a&&!(o.items||[]).some(function(it){ return it.a===a.id; })&&!prohibidoAl(a,alC)) o.items.push(hidratarIt({i:'i'+rand(5),a:a.id,q:String(z[1]),x:a.x||''})); });      // v53.4.98: su ensalada, si no la lleva
+  if(o.lote&&o.lote.b&&rcU(o)!=='pz'&&CO.nut&&CO.nut.dn){ var rl=rcLib(o), alC=alimCl(); (rl&&rl.ens||[]).forEach(function(z){ var a=CO.nutM[z[0]]; if(a&&!(o.items||[]).some(function(it){ return it.a===a.id; })&&!prohibidoAl(a,alC)) o.items.push(hidratarIt({i:'i'+rand(5),a:a.id,q:String(z[1]),x:a.x||''})); });      // v53.4.98: su ensalada, si no la lleva
     var rq=rcCuadrar(o,ob,alC,rcPool(o,c)); if(!rq) return; marcarDie(); repintar(); var cq=cuadraOp(p,c,o);      // v53.4.94: de un toque, con el acompañamiento si hace falta
     return toast('Su ración: '+rcTxt(o,rq.f)+(rq.nu.length?', con '+listaY(rq.nu.map(function(it){ return gTxt(it.q)+' de '+alNom(it).toLowerCase(); })):'')+(cq&&cq.ok?'. Cuadra con su '+String(c.nombre||'comida').toLowerCase()+'.':'. Es lo más cerca que se puede.'),'ok'); }
   if(o.lote&&rcU(o)!=='pz'){ var bl=rcMejor(o,ob); if(!bl) return; rcPonF(o,bl.f); marcarDie(); repintar(); var cl=cuadraOp(p,c,o), fl=ltFalta(o,ob); return toast('Su ración: '+rcTxt(o,bl.f)+(cl&&cl.ok?'. Cuadra con su '+String(c.nombre||'comida').toLowerCase()+'.':fl?'. '+fl:'.'),'ok'); }      // v53.4.85: la calculadora inversa
@@ -11916,7 +11916,7 @@ function modalRecetas(q){
     '<input data-k="buscaRecM" value="'+esc(q)+'" placeholder="Buscar receta… (bizcocho, lentejas, tortitas…)">'+
     libHtml(q)+'<div class="lab">Tus recetas</div>'+
     (CO.nut.recetas.length?'<div class="rec-l">'+R.map(function(r){ var m=macOp(r), rc=m?m.map(function(v){ return v/r.raciones; }):null;
-      return '<button class="rec-o" data-a="recPon" data-id="'+esc(r.id)+'">'+platoImg(r.img,'rec-im')+'<span><b>'+esc(r.nombre)+'</b><small>'+esc([rc?macLinea(rc)+' por ración':'',r.pz&&CO.nut.casa?r.pz.tot+' '+pzPl(r.pz.nom):'',r.raciones>1?(CO.nut.casa?r.raciones+' raciones':'por tandas: '+r.raciones+' raciones'):'',r.lote&&r.lote.pc&&CO.nut.casa?'sale '+gTxt(r.lote.pc):'',r.min?r.min+' min':''].filter(Boolean).join(' · '))+'</small></span></button>'; }).join('')+(R.length?'':'<p class="muted">'+(q?'Ninguna con ese nombre.':'Ninguna que pueda comer.')+'</p>')+'</div>'+
+      return '<button class="rec-o" data-a="recPon" data-id="'+esc(r.id)+'">'+platoImg(r.img,'rec-im')+'<span><b>'+esc(r.nombre)+'</b><small>'+esc([rc?macLinea(rc)+' por ración':'',r.pz&&CO.nut.dn?r.pz.tot+' '+pzPl(r.pz.nom):'',r.raciones>1?(CO.nut.dn?r.raciones+' raciones':'por tandas: '+r.raciones+' raciones'):'',r.lote&&r.lote.pc&&CO.nut.dn?'sale '+gTxt(r.lote.pc):'',r.min?r.min+' min':''].filter(Boolean).join(' · '))+'</small></span></button>'; }).join('')+(R.length?'':'<p class="muted">'+(q?'Ninguna con ese nombre.':'Ninguna que pueda comer.')+'</p>')+'</div>'+
       (ocu?'<p class="muted sm">'+ocu+(ocu===1?' receta tuya oculta':' recetas tuyas ocultas')+' por su alimentación ('+esc(alimResumen(al))+').</p>':'')
       :'<p class="muted">Todavía no tienes recetas. Créalas en <b>Alimentos y recetas</b> o guarda cualquier plato con «Guardar como receta».</p>')+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
@@ -11928,7 +11928,7 @@ function modalRecetas(q){
 function cuadrarItems(items,ob){
   if(!items||!items.length||!ob||ob[0]==null) return false;
   var ok=ob[1]!=null&&ob[2]!=null&&ob[3]!=null&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; });
-  if(CO.nut&&CO.nut.casa&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; })){      // v53.4.87 (nº 1): cada alimento con lo que tiene sentido (1 o 2 yogures, el plátano de medio en medio, el aceite de 5 en 5…)
+  if(CO.nut&&CO.nut.dn&&items.every(function(it){ return CO.nutM[it.a]&&CO.nutM[it.a].b; })){      // v53.4.87 (nº 1): cada alimento con lo que tiene sentido (1 o 2 yogures, el plátano de medio en medio, el aceite de 5 en 5…)
     var LB=items.map(function(it){ var a=CO.nutM[it.a]; return {a:a,q:num(it.q)||0,R:ROL_X[it.x||a.x]?bdRegla(a):null}; });
     if(LB.some(function(z){ return z.R; })){ var QB=bdOpt(LB,ob); items.forEach(function(it,i){ if(LB[i].R) it.q=String(QB[i]); }); return ok?'m':'k'; } }
   if(ok&&items.some(function(it){ var a=CO.nutM[it.a]; return ROL_X[it.x||a.x]; })){
@@ -11969,8 +11969,8 @@ function opAccHtml(p,c,mi,oi){
   var o=c.opciones[oi], at=' data-m="'+mi+'" data-o="'+oi+'"', ob=objCm(p,c), m=macOp(o), cu=cuadraOp(p,c,o), nom=esc(String(c.nombre||'comida').toLowerCase());
   return (cu&&cu.ok?'<div class="cu-ok">'+ic('ok')+'Cuadra con su '+nom+'</div>'+(cu.dp&&cu.dp.length?'<small class="cu-dp">'+esc(listaY(cu.dp))+' '+(cu.dp.length>1?'van':'va')+' de paso con los alimentos: no '+(cu.dp.length>1?'cuentan':'cuenta')+' como error.</small>':''):'')+
     (noCuadra(cu)?'<div class="cu-no"><b>'+ic('alerta')+'No cuadra con su '+nom+'</b><span>'+esc(cu.txt)+'</span>'+(cu.fijos.length?'<small>No se ajustan solos: '+esc(cu.fijos.join(', '))+'. Revísalos.</small>':'')+'</div>':'')+
-    (ob&&m&&!(cu&&cu.ok)?'<button class="btn sm sec" data-a="opAjustar"'+at+'>'+ic('ajuste')+(o.lote&&o.lote.b&&CO.nut&&CO.nut.casa?'Cuadrar: su ración y lo que le falte':'Ajustar gramos al objetivo')+'</button>':'')+
-    (o.items&&o.items.length&&!(CO.nut&&CO.nut.casa&&recDeOp(o))?'<button class="btn sm sec" data-a="recGuardarOp"'+at+'>'+ic('lista')+'Guardar como receta</button>':'');      // v53.4.83: si ya es una receta tuya, no (se duplicaba)
+    (ob&&m&&!(cu&&cu.ok)?'<button class="btn sm sec" data-a="opAjustar"'+at+'>'+ic('ajuste')+(o.lote&&o.lote.b&&CO.nut&&CO.nut.dn?'Cuadrar: su ración y lo que le falte':'Ajustar gramos al objetivo')+'</button>':'')+
+    (o.items&&o.items.length&&!(CO.nut&&CO.nut.dn&&recDeOp(o))?'<button class="btn sm sec" data-a="recGuardarOp"'+at+'>'+ic('lista')+'Guardar como receta</button>':'');      // v53.4.83: si ya es una receta tuya, no (se duplicaba)
 }
 function noCuadra(cu){ return !!(cu&&!cu.ok&&!cu.leve); }
 function tabSm(p,c,x){ var m=macOp(x), cu=cuadraOp(p,c,x); return noCuadra(cu)?'No cuadra'+(m?' · '+kTxt(m[0])+' kcal':''):m?kTxt(m[0])+' kcal':'sin alimentos'; }
@@ -11994,7 +11994,7 @@ A.recPon=function(el){
   var c=planActual().comidas[CO.recMi], n=Math.max(1,num(r.raciones)||1);
   if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
   var o={id:'o'+rand(6),nombre:r.nombre,texto:r.texto||'',img:r.img||'',min:r.min||'',rec:r.id,items:copia(r.items||[]).map(function(it){ it.q=String(Math.round((num(it.q)||0)/n*10)/10); return hidratarIt(it); })};
-  if(CO.nut&&CO.nut.casa&&(r.pz||num(r.lote&&r.lote.pc)>=50||n>1)){      // v53.4.81 · v53.4.85 · v53.4.86: por piezas, por peso o por raciones (lo que encaja con esta comida)
+  if(CO.nut&&CO.nut.dn&&(r.pz||num(r.lote&&r.lote.pc)>=50||n>1)){      // v53.4.81 · v53.4.85 · v53.4.86: por piezas, por peso o por raciones (lo que encaja con esta comida)
     var obR=objCm(planActual(),c), z=rcOpRec(r,o,obR);
     if(z.u!=='pz'&&obR&&obR[0]!=null){ var rq=rcCuadrar(o,obR,alimCl(),rcPool(o,c)); if(rq){ z.f=rq.f; z.nu=rq.nu; } }      // v53.4.94: también las suyas, cuadradas solas
     var vz=c.opciones.length===1&&!c.opciones[0].nombre&&!c.opciones[0].texto&&!c.opciones[0].img&&!(c.opciones[0].items||[]).length;
@@ -12032,7 +12032,7 @@ function rcFilaCasa(o,ax){
 }
 function rcEdCasa(o,at,ob){ return ''; }
 function rcEdHtml(o,at,ob){
-  if(CO.nut&&CO.nut.casa) return rcEdCasa(o,at,ob);
+  if(CO.nut&&CO.nut.dn) return rcEdCasa(o,at,ob);
   var L=o.lote, u=rcU(o), f=rcF(o), ac=(o.items||[]).filter(function(it){ return L.b[it.i]==null; }), hoy=rcHoyCo(o), fal=ltFalta(o,ob), pe=u==='peso'&&L.pc;
   var otra=pe?'≈ '+rcRac(f*L.rac).replace('≈ ',''):L.pc?'≈ '+gTxt(Math.round(f*L.pc)):'';
   return '<div class="pz-ed lt-ed"><span>'+ic('dieta')+' '+(pe?'Por peso':'Por raciones')+': su ración, <b>'+(pe?gTxt(Math.round(f*L.pc)):rcRac(f*L.rac))+'</b> <small class="muted">· '+(pe?'1 ración = '+gTxt(Math.round(L.pc/L.rac))+' · olla de '+gTxt(L.pc):'de '+L.rac+' raciones')+(otra?' · '+otra:'')+'</small>'+
@@ -12049,7 +12049,7 @@ A.rcCo=function(el){ var o=opDe(el); if(!o||!o.lote) return; var L=o.lote, f=rcF
   rcPonF(o,f); marcarDie(); repintar(); };
 /* v53.4.83 (Javier: «en el perfil como coach me sale como un uno partido de dos»): los platos que ya estaban puestos de una receta que ahora va por piezas pasan a piezas */
 function pzMigrar(){
-  if(!CO.die||!(CO.nut&&CO.nut.casa)) return []; var R={}, L=[]; (CO.nut.recetas||[]).forEach(function(r){ if(r.pz) R[r.id]=r; });
+  if(!CO.die||!(CO.nut&&CO.nut.dn)) return []; var R={}, L=[]; (CO.nut.recetas||[]).forEach(function(r){ if(r.pz) R[r.id]=r; });
   CO.die.planes.forEach(function(p){ p.comidas.forEach(function(c){ c.opciones.forEach(function(o){ var r=o.rec&&R[o.rec]; if(!r||o.pz) return;
     var z=rcOpRec(r,o,objCm(p,c)); if(r.texto) o.texto=r.texto; L.push('«'+(o.nombre||r.nombre)+'», '+pzTxt(o,z.n,z.s)); }); }); });
   return L;
@@ -12527,7 +12527,7 @@ function ndGenerarPlatos(gen){
    ===================================================================== */
 var GD_PASOS=['Objetivo','Comidas','Platos'];      // v53.4.93 (Javier): sin «Sus gustos» (ya están en su ficha, desde el cuestionario; si cambian, en su ficha)
 var nuevaDieta0=A.nuevaDieta, crearDieta0=A.crearDieta, ndPintar0=ndPintar, ndCalcAct0=CH.ndCalcAct;
-function gdOn(){ return CO.casa===true&&LS.get('chadin_sin_guia')!==1; }      // la ventana de antes: localStorage chadin_sin_guia = 1 (las pruebas de antes)
+function gdOn(){ return CO.dn===true&&LS.get('chadin_sin_guia')!==1; }      // la ventana de antes: localStorage chadin_sin_guia = 1 (las pruebas de antes)
 A.nuevaDieta=function(){ if(!gdOn()) return nuevaDieta0(); if(CO.dieSucia) return toast('Guarda primero los cambios de la dieta actual'); gdEmpezar(); };
 A.crearDieta=function(){ if(!gdOn()) return crearDieta0(); gdEmpezar(); };
 function gdEmpezar(){
@@ -12906,7 +12906,7 @@ A.moPoner=function(el){
 function totRecHtml(){ var r=CO.recEd, m=macOp(r), n=Math.max(1,num(r.raciones)||1); return m?'<b>Total</b><span>'+macLinea(m)+'</span>'+(n>1?'<b>Por ración (1 de '+n+')</b><span>'+macLinea(m.map(function(v){ return v/n; }))+'</span>':''):''; }
 function vRecetas(){
   var R=CO.nut.recetas||[];
-  var h='<p class="tip">'+(CO.nut.casa?'Pega tus recetas tal cual (de tus posts o tus notas) y se rellenan solas: ingredientes con sus gramos, raciones y pasos. Luego las pones en cualquier dieta como un plato más.':'Guarda tus platos con ingredientes, gramos, elaboración, raciones y foto, y añádelos a cualquier dieta como un plato más de una comida.')+'</p><div class="row"><button class="btn sm" data-a="recNueva">'+ic('mas')+'Nueva receta</button></div>';
+  var h='<p class="tip">'+(CO.nut.dn?'Pega tus recetas tal cual (de tus posts o tus notas) y se rellenan solas: ingredientes con sus gramos, raciones y pasos. Luego las pones en cualquier dieta como un plato más.':'Guarda tus platos con ingredientes, gramos, elaboración, raciones y foto, y añádelos a cualquier dieta como un plato más de una comida.')+'</p><div class="row"><button class="btn sm" data-a="recNueva">'+ic('mas')+'Nueva receta</button></div>';
   if(!R.length) return h+'<div class="card mt"><p class="muted">Aún no tienes recetas. También puedes guardar cualquier plato de una dieta con «Guardar como receta».</p></div>';
   return h+'<div class="pl-grid rec-g">'+R.map(function(r){ var m=macOp(r), n=Math.max(1,num(r.raciones)||1), rc=m?m.map(function(v){ return v/n; }):null;
     return '<button class="pl-c" data-a="recEditar" data-id="'+esc(r.id)+'">'+platoImg(r.img)+'<span class="pl-t"><b>'+esc(r.nombre)+'</b><small>'+[n>1?n+' raciones':'1 ración',r.lote&&r.lote.pc?'cocinada pesa '+gTxt(r.lote.pc):'',r.pz?r.pz.tot+' '+pzPl(r.pz.nom):'',r.min?r.min+' min':'',rc?kTxt(rc[0])+' kcal/ración':''].filter(Boolean).join('<i>·</i>')+'</small>'+(rc?'<small>P '+kTxt(rc[1])+' · HC '+kTxt(rc[2])+' · G '+kTxt(rc[3])+'</small>':'')+(r.tipos?'<small class="rec-bib">'+ic('lista')+'Biblioteca'+(r.autor?' · de '+esc(String(r.autor).split(' ')[0]):'')+'</small>':'')+'</span></button>'; }).join('')+'</div>';
@@ -12986,7 +12986,7 @@ A.recLeer=function(){
 };
 A.recPegarOtra=function(){ CO.recLeida=null; CO.recPegar=true; pintarNutri(false); var t=document.getElementById('rec-pg'); if(t) t.focus(); };
 function recPegaHtml(r){
-  if(!(CO.nut&&CO.nut.casa)) return '';
+  if(!(CO.nut&&CO.nut.dn)) return '';
   var Ld=CO.recLeida;
   if(Ld) return '<div class="card rec-pg ok"><div class="card-t">'+ic('ok')+'Receta leída: '+Ld.n+' ingrediente'+(Ld.n>1?'s':'')+'</div>'+
     (Ld.faltan.length?'<p class="sm"><b>Por revisar</b> (no están en tu banco o no tienen cantidad; añádelos abajo si cuentan): '+esc(Ld.faltan.join(' · '))+'</p>':'')+
@@ -13014,7 +13014,7 @@ function vRecEdCasa(){
     (r.id?'<button class="link danger mt" data-a="recBorrar">Borrar receta</button>':'')+'<button class="btn sec mt" data-a="recSalir">Volver a recetas</button>';
 }
 function vRecEd(){
-  if(CO.nut&&CO.nut.casa) return vRecEdCasa();      // v53.4.96
+  if(CO.nut&&CO.nut.dn) return vRecEdCasa();      // v53.4.96
   var r=CO.recEd, ax=' data-x="r"';
   return '<div class="tit-row"><h1 class="tit">'+(r.id?'Editar receta':'Nueva receta')+'</h1><span class="pill warn'+(CO.recSucia?'':' hidden')+'" id="rec-s">Sin guardar</span></div>'+
     '<div class="card"><label class="f" style="margin-top:0">Nombre<input data-rk="nombre" value="'+esc(r.nombre)+'" placeholder="Bowl de pollo teriyaki"></label>'+
@@ -13038,7 +13038,7 @@ function recPzRes(){
 /* v53.4.86 (Javier: «que lo elija la clienta» y sin «por encima»): la receta dice cómo se puede apuntar. Por raciones siempre; por peso si pones lo que pesa la olla;
    por piezas si se come por piezas. La clienta elige en su app; en la dieta se pauta por piezas, si no por peso y si no por raciones. Solo panel nº 1. */
 function recRepHtml(r){
-  if(!(CO.nut&&CO.nut.casa)) return '';
+  if(!(CO.nut&&CO.nut.dn)) return '';
   var L=r.lote||{}, on=!!r.pz;      // v53.4.96: solo el peso de lo cocinado (opcional) y, si se come por piezas, las piezas
   return '<div class="card" id="rec-pz"><div class="card-t">'+ic('dieta')+'Peso de todo lo cocinado <small class="muted">(opcional)</small></div>'+
     '<label class="f" style="margin-top:0"><span class="in-u"><input data-lt="pc" inputmode="numeric" value="'+esc(L.pc||'')+'" placeholder="1800" aria-label="Peso de todo lo cocinado en gramos"><span>g</span></span><small class="muted">Sin la olla ni el molde. Así tu clienta puede apuntar su ración en gramos; si no, la apunta en raciones.</small></label><div id="rec-lt-r">'+recLoteRes()+'</div>'+
@@ -13072,7 +13072,7 @@ A.recGuardar=function(el){
   if(r.pz&&!(num(r.pz.tot)>0)) { el.disabled=false; return toast('Pon cuántas piezas salen (o quita «Se come por piezas»)'); }
   if(r.pz&&!(r.pz.masa||[]).some(function(i){ return (r.items||[]).some(function(it){ return it.i===i; }); })) { el.disabled=false; return toast('Marca qué ingredientes van en la masa'); }
   if(r.lote&&String(r.lote.pc||'').trim()!==''&&!(num(r.lote.pc)>=50)) { el.disabled=false; return toast('El peso de la olla cocinada va en gramos (o déjalo vacío)'); }      // v53.4.85
-  if(CO.nut&&CO.nut.casa){ var vis={}, dup=null, cero=null; (r.items||[]).forEach(function(it){ if(vis[it.a]&&!dup) dup=it; vis[it.a]=1; if(!(num(it.q)>0)&&!cero) cero=it; });      // v53.4.85: sin repetidos ni cantidades vacías
+  if(CO.nut&&CO.nut.dn){ var vis={}, dup=null, cero=null; (r.items||[]).forEach(function(it){ if(vis[it.a]&&!dup) dup=it; vis[it.a]=1; if(!(num(it.q)>0)&&!cero) cero=it; });      // v53.4.85: sin repetidos ni cantidades vacías
     if(dup){ el.disabled=false; return toast('«'+alNom(dup)+'» está dos veces: déjalo en una sola línea con la suma'); }
     if(cero){ el.disabled=false; return toast('Pon la cantidad de «'+alNom(cero)+'» (o quítalo)'); } }
   cargando(api('coachGuardarReceta',CO.pin,{id:r.id,nombre:r.nombre,raciones:r.raciones,min:r.min,img:r.img,texto:r.texto,etiquetas:r.etiquetas,items:r.items,tipos:r.tipos||'',pz:r.pz?{nom:String(r.pz.nom||'').trim()||'pieza',tot:num(r.pz.tot),g:num(r.pz.g)||0,cu:num(r.pz.cu)||0,masa:r.pz.masa}:null,lote:r.lote&&num(r.lote.pc)>=50?{pc:num(r.lote.pc)}:null})).then(function(x){ CO.nut.recetas=x.recetas; CO.recSucia=false; CO.recEd=null; CO.recLeida=null; if(el.dataset.otra){ A.recNueva(); return toast('Receta guardada. Pega la siguiente','ok'); } CO.nv='rec'; pintarNutri(true); toast('Receta guardada','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });      // v53.4.96: «Guardar y meter otra»
@@ -14822,7 +14822,7 @@ var BIB_IMG={b103:[39224706,'pexels-photo-39224706/free-photo-of-delicious-turki
 BIB_DIARIO.forEach(function(r){ r.bd=1; if(BIB_PC[r.id]) r.pc=BIB_PC[r.id]; r.pasos=r.pasos||''; r.cat=r.cat||(/c/.test(r.t)?'c':'d');
   if(BIB_IMG[r.id]) r.img=PX(BIB_IMG[r.id][0],BIB_IMG[r.id][1]);
   if(r.imgDe&&!r.img){ var o=RECETAS_LIB.filter(function(x){ return x.id===r.imgDe; })[0]; r.img=o&&o.img||''; } });
-function casaLib(){ return BOOT.mode==='clienta'?!!(CL.d&&CL.d.casa):!!(CO.nut&&CO.nut.casa); }
+function casaLib(){ return BOOT.mode==='clienta'?!!(CL.d&&CL.d.dn):!!(CO.nut&&CO.nut.dn); }      // v53.4.110: la dieta del nº 1, en todos los paneles (dn = «dieta nueva»; casa sigue siendo solo la cuenta nº 1: marca, alimentos de MOOD ON…)
 
 /* lo que tiene sentido de cada alimento: [mínimo, máximo, de cuánto en cuánto] en gramos (null: se queda como está) */
 var BD_R={aceite_oliva:[5,20,5],aceite_coco:[5,20,5],mantequilla:[5,15,5],mayonesa:[10,30,5],almendras:[10,30,5],nueces:[10,30,5],cacahuetes:[10,30,5],pistachos:[10,30,5],anacardos:[10,30,5],avellanas:[10,30,5],
@@ -15015,13 +15015,13 @@ function macItems(items){ return sumMac(items.map(function(it){ var a=CO.nutM[it
 function errMac(m,obj){ if(!m) return 9; var e=0; for(var i=1;i<4;i++){ var o=Math.max(obj[i],[0,10,15,5][i]); e+=Math.abs(m[i]-obj[i])/o; } return e; }
 /* elige las recetas de una comida: puede comerlas, sus favoritos primero, que cuadren y sin repetir */
 /* v53.4.106 (nº 1, Javier: «para el desayuno añade siempre 150 ml de leche, que la mayoría toma café… y en la merienda igual») */
-function cafeCm(nombre){ return !!(CO.nut&&CO.nut.casa)&&/desayun|merienda/.test(sinTil(nombre||'')); }
+function cafeCm(nombre){ return !!(CO.nut&&CO.nut.dn)&&/desayun|merienda/.test(sinTil(nombre||'')); }
 function lecheCafe(al){ return ['leche_semi','leche_sin_lactosa','bebida_soja','bebida_avena'].map(function(id){ return CO.nutM&&CO.nutM[id]; }).filter(function(a){ return a&&!(al&&prohibidoAl(a,al)); })[0]||null; }
 function tieneLeche(ing){ return (ing||[]).some(function(it){ return /^(leche|bebida_|cafe)/.test(famDe((it.a&&it.a.id)||it.a||'')); }); }
 function conCafe(x,al){ if(!x||tieneLeche(x.ing)) return x; var a=lecheCafe(al); if(!a) return x;
   return Object.assign({},x,{ing:x.ing.concat([{a:a,q:150,rol:'f'}]),notas:(x.notas||[]).concat(['Con 150 ml de '+(a.id==='bebida_soja'?'bebida de soja':a.id==='bebida_avena'?'bebida de avena':'leche')+' para el café (o para tomarla sola).'])}); }
 /* v53.4.109 (nº 1, Javier: «en comidas y cenas que se cocinan en sartén, horno o freidora de aire, mete 10 ml de aceite de oliva, que la gente cocina con él») */
-function conAceite(x){ if(!x||!x.r||x.r.tanda||!(CO.nut&&CO.nut.casa)) return x;
+function conAceite(x){ if(!x||!x.r||x.r.tanda||!(CO.nut&&CO.nut.dn)) return x;
   var cook=x.ing.some(function(it){ return /\.cr$/.test(it.a.id)&&it.a.x==='prot'; })||/(plancha|horno|asad|saltead|frit|freidora|revuelto|tortilla|pizza|noquis|wrap|hamburguesa)/.test(clave(x.r.n||''));
   if(!cook) return x; var k=-1; x.ing.forEach(function(it,i){ if(k<0&&it.a.id==='aceite_oliva') k=i; });
   if(k>=0){ var it=x.ing[k], I=x.ing.slice(); I[k]=Object.assign({},it,{q:Math.max(10,num(it.q)||0),R:[10,20,5]}); return Object.assign({},x,{ing:I,notas:num(it.q)<10?(x.notas||[]).concat(['Con 10 ml de aceite de oliva (una cucharada) para cocinarlo.']):x.notas}); }
@@ -15030,12 +15030,12 @@ function conAceite(x){ if(!x||!x.r||x.r.tanda||!(CO.nut&&CO.nut.casa)) return x;
 function recetasPara(tipo,obj,al,usadas,n,cafe){
   var C=libTodas().filter(function(r){ return r.t.indexOf(tipo)>=0; }).map(function(r){
     var x=adaptarReceta(r,al); if(!x) return null; if(cafe&&!r.tanda) x=conCafe(x,al); if(tipo==='c'&&!r.tanda) x=conAceite(x);
-    var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al,cafe):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
+    var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.dn?libOpCasa(x,obj,al,cafe):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
     var pt=r.tanda&&!lc?porcionTanda(x,obj):null, items=lc?lc.items:pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
     var cu=!pt&&m?cuadraMacE(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
     return {x:x,items:items,k:pt?pt.k:null,op:lc,m:m,ob:obj,score:fav*1.2-errMac(m,obj)*2-(cu&&!cu.ok?(cu.leve?1:6):0)-(usadas[r.id]?6:0)-(r.tanda?(lc?0.4:0.8):0)-(x.pen||0)-(r.vg&&al.tipo!=='vegana'&&al.tipo!=='vegetariana'?0.9:0)+Math.random()*0.6};     // v48: las pensadas para ella, antes que las adaptadas
   }).filter(Boolean).sort(function(a,b){ return b.score-a.score; });
-  if(!(CO.nut&&CO.nut.casa)) return C.slice(0,n);
+  if(!(CO.nut&&CO.nut.dn)) return C.slice(0,n);
   var out=[], fam=function(z){ var q=z.x.ing.filter(function(it){ return it.rol==='p'; })[0]||z.x.ing[0]; return q?famDe(q.a.id):''; };      // v53.4.87 (nº 1): en una misma comida, platos distintos (no dos de kéfir o dos de pollo)
   while(out.length<n&&C.length){ C.forEach(function(z){ z.s2=z.score-(out.some(function(o){ return fam(o)===fam(z); })?2.5:0); }); C.sort(function(a,b){ return b.s2-a.s2; }); out.push(C.shift()); }
   return out;
@@ -15045,7 +15045,7 @@ function opcionDeReceta(c){
   var o={id:'o'+rand(6),nombre:c.x.n||r.n,texto:(txtLib(r,c.x.sa)+(c.x.cambios.length?' (Adaptada: '+c.x.cambios.map(function(z){ return z[0]+' → '+z[1]; }).join(', ')+'.)':'')+((c.x.notas||[]).length?'\n\n'+c.x.notas.join('\n'):'')).trim(),img:r.img,min:r.min,items:c.items.map(hidratarIt),lib:r.id};
   if(c.op){ o.items=c.op.items; o.lote=c.op.lote; return o; }      // v53.4.87: receta de olla por raciones (nº 1)
   if(r.tanda) o.tanda={r:r.tanda.r,k:c.k||1,c:r.tanda.c||''};
-  var rp=r.src&&CO.nut&&CO.nut.casa?(CO.nut.recetas||[]).filter(function(y){ return y.id===r.src&&(y.pz||num(y.lote&&y.lote.pc)>=50||num(y.raciones)>1); })[0]:null;      // v53.4.83 · v53.4.86: por piezas, peso o raciones
+  var rp=r.src&&CO.nut&&CO.nut.dn?(CO.nut.recetas||[]).filter(function(y){ return y.id===r.src&&(y.pz||num(y.lote&&y.lote.pc)>=50||num(y.raciones)>1); })[0]:null;      // v53.4.83 · v53.4.86: por piezas, peso o raciones
   if(rp){ o.rec=rp.id; delete o.lib; rcOpRec(rp,o,c.ob||null); }
   return o;
 }
@@ -15164,9 +15164,9 @@ function libParaComida(c){
 }
 A.libPon=function(el){
   var p=planActual(), c=p.comidas[CO.recMi], al=alimCl(), r=libTodas().filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r||!c) return;
-  if(r.pz&&r.src&&CO.nut&&CO.nut.casa) return A.recPon({dataset:{id:r.src}});      // v53.4.83
+  if(r.pz&&r.src&&CO.nut&&CO.nut.dn) return A.recPon({dataset:{id:r.src}});      // v53.4.83
   var x=adaptarReceta(r,al); if(!x) return toast('No puede comer algo de esta receta');
-  if(r.bd&&r.tanda&&CO.nut&&CO.nut.casa){      // v53.4.87: receta de olla de la biblioteca de diario → por raciones, con lo que encaja con su comida
+  if(r.bd&&r.tanda&&CO.nut&&CO.nut.dn){      // v53.4.87: receta de olla de la biblioteca de diario → por raciones, con lo que encaja con su comida
     if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
     var ob1=objCm(p,c), lc=libOpCasa(x,ob1,al,cafeCm(c.nombre)), op1=opcionDeReceta({x:x,items:lc.items,op:lc}), v1=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
     if(v1) c.opciones=[op1]; else c.opciones.push(op1); CO.opVis[CO.planI+'|'+CO.recMi]=c.opciones.length-1; cerrarModal(); marcarDie(); repintar();
@@ -17204,7 +17204,7 @@ function rcRecetaHtml(o){
     '<p class="sm mt6">Tu ración: <b>'+esc(rcTxt(o,f,md,base))+'</b>. Al tocar el plato en tu menú eliges si la apuntas por ración, por peso'+(o.pz?' o por piezas':'')+'.</p></div>';
 }
 /* v53.4.103 (nº 1, Javier: «no está claro, los complementos no se aprecian bien ni se ve el paso a paso»): la ficha de una receta para la clienta */
-function casaCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.casa); }
+function casaCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.dn); }
 function rcPlatoHtml(o){
   var L=o.lote, f=rcF(o), md=rcModo(o), base=ltOlla(o)||L.pc, m=verDet()?macOpEf(o):null;
   var su=md==='peso'?'ya cocinado'+(L.rac>1?' · '+racQ(f*L.rac):''):base?'≈ '+gTxt(Math.round(f*base))+' ya cocinado':'';
