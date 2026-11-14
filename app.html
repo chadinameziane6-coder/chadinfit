@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.88';
+var APP_V = 'v53.4.89';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7354,15 +7354,14 @@ function famOkCasa(a,b){      // a: el que lleva el plato · b: el candidato
   }
   if(a.x==='fruta'&&a.b&&b.b&&(+a.b[0]>=200)!==(+b.b[0]>=200)) return false;      // la fruta fresca, por fruta fresca (no por pasas ni dátiles)
   var raro=/leche de coco|crema de coco|\bnata\b|placas|laminas|canelon|gelatina/, na=sinTil(a.n||a.id), nb=sinTil(b.n||b.id); if(raro.test(nb)&&!raro.test(na)) return false;
-  var bun=/hamburguesa|burger|perrito|wrap|tortilla|pita|fajita/;      // el pan de hamburguesa y los wraps, aparte del pan de tostadas o de bocadillo
-  if(a.x==='hc'&&pa==='pan'&&bun.test(na)!==bun.test(nb)) return false;
   if(a.x==='hc'||a.x==='fruta') return pa===pb;      // el pan por pan; el arroz, la pasta o la patata entre sí; la fruta por fruta
   return usoOkAl(a,b);
 }
-function eqPesoCasa(a,b){ return a.x==='lac'&&usoAl(a).indexOf('yog')>=0&&usoAl(b).indexOf('yog')>=0; }      // un yogur por otro yogur (o skyr, kéfir…): peso por peso
+function eqPesoCasa(a,b){ return a.x==='lac'&&usoAl(a).indexOf('yog')>=0&&usoAl(b).indexOf('yog')>=0; }      // un yogur por otro (skyr, kéfir, griego, queso batido…): peso por peso, uno por uno (v53.4.89, Javier: «el skyr, el kéfir y el griego también son yogur»)
 function eqRCasa(A,B,m,peso){      // gramos de B por gramo de A (sin redondear), o 0 si no se parecen
-  if(!A||!B||!(+B[0]>0)||!(+A[0]>0)) return 0; var k=MK_EQ[m]||0; if(peso&&k&&+B[k]<+A[k]*0.7) return 0; var r=peso?1:k&&+B[k]>0&&+A[k]>0?A[k]/B[k]:A[0]/B[0], rk=r*B[0]/A[0];
-  return rk>=0.4&&rk<=(peso?1.9:1.25)?r:0;      // más ligero vale (el huevo, por claras); más calórico, poco
+  if(!A||!B||!(+B[0]>0)||!(+A[0]>0)) return 0; if(peso) return 1;      // un yogur por otro: uno por uno (la diferencia se ve al lado)
+  var k=MK_EQ[m]||0, r=k&&+B[k]>0&&+A[k]>0?A[k]/B[k]:A[0]/B[0], rk=r*B[0]/A[0];
+  return rk>=0.4&&rk<=1.25?r:0;      // más ligero vale (el huevo, por claras); más calórico, poco
 }
 function bdRed(b,q){ var R=bdRegla(b); if(!R) return redG(q); var st=R[2], v=Math.max(R[0],Math.round(q/st)*st); return Math.abs(v-q)>Math.max(q*0.4,st*0.75)?0:Math.round(v*10)/10; }      // en el intercambio: de su paso en su paso (sin tope: si el plato lleva mucho, el cambio también)
 function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
@@ -7371,10 +7370,9 @@ function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
   orden.forEach(function(f){
     var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];
     var peso=eqPesoCasa(me,a), r=eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;
-    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if((kb>ka*(peso?1.9:1.25)&&kb-ka>25)||kb<ka*0.4) return;
+    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*1.25&&kb-ka>25)||kb<ka*0.4)) return;
     var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
     if(k&&!peso&&Math.abs(mb-ma)>Math.max(ma*0.25,k===3?2:3)) return;      // el macro de su grupo, con margen
-    if(k&&peso&&mb<ma*0.7-1) return;      // un yogur por otro: con su proteína (más, vale; el skyr no se cambia por un yogur normal)
     var m=a.b.map(function(v){ return v*q/100; });
     out.push({a:a,q:q,m:m,d:mo?m.map(function(v,j){ return v-mo[j]; }):null,err:Math.abs(kb-ka)/Math.max(ka,1)+(kb>ka?0.2:0),cls:clsEst(a.e)===clsEst(it.e)?0:1});
   });
