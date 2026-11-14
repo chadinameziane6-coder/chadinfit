@@ -3076,6 +3076,15 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .ui2 .sd-cm .sd-out,.ui2 .sd-cm .sd-out .ic{color:#C42E2E}
 .ui2 .sd-cm .sd-new{font-size:0;width:8px;height:8px;min-width:0;padding:0;border-radius:50%;background:#E5322D;margin-left:auto;flex:none}      /* «Revisar», «Nuevo»: un punto (el texto lo lee el lector de pantalla) */
 .ui2 .sd-cm small{display:block;padding:4px 10px 4px;font-size:11.5px;color:var(--mu)}
+.mov-f{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 12px;border:1px dashed var(--line);border-radius:12px;margin:4px 0 8px}.mov-f span{flex:1 1 240px}
+.bk-zona{margin-top:12px}.bk-zona.cam .lab{color:var(--tx)}
+.rb-tx{background:none;border:0;padding:0;text-align:left;font:inherit;color:inherit;cursor:pointer;flex:1;min-width:0}
+.rb-ej{display:flex;align-items:center;gap:10px;width:100%;background:none;border:0;padding:6px 0 0;text-align:left;font:inherit;cursor:pointer}.rb-ej .muted{flex:1;min-width:0}
+.rb-vr{flex:none;display:inline-flex;align-items:center;gap:4px;font:700 13px Plus Jakarta Sans,sans-serif;color:var(--tx)}.rb-vr .ic{width:14px;height:14px;margin:0;transform:rotate(90deg)}
+.rb-det{margin-top:10px;border-top:1px solid var(--line2);padding-top:8px}.rb-r+.rb-r{margin-top:12px}
+.rb-rh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 4px}.rb-rh b{font-size:14.5px}.rb-rh small{color:var(--mu);font-size:12.5px}
+.rb-ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}.rb-ol li{font-size:14px}.rb-ol li b{font-weight:600}.rb-ol li small{display:block;color:var(--mu);font-size:12.5px}.rb-ol .rb-bl{font-style:italic}
+.rb-cerrar{margin-top:8px;font-size:13px}
 </style>
 </head>
 <body>
@@ -3137,7 +3146,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.118';
+var APP_V = 'v53.4.119';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6774,6 +6783,7 @@ function fuerzaCard(e,i,lab){
 function cardioCard(e,i,lab){
   var uv=ultimaVez(e.n), ult=uv?txtUltima(uv):'';
   var h=cabEj(e,i,lab,'Cardio · '+resumenCardio(e)+(num(e.d)>0?' · '+e.d+' s de descanso':''),e.sets.every(function(s){ return s.ok; }),'cardio')+(ult?'<div class="ultima">Última vez · '+fCorta(uv.f)+': <b>'+esc(ult)+'</b></div>':'');
+  h+=ctaBtnHtml(e,i);      // v53.4.119: la cuenta atrás también en el cardio por tiempo
   e.sets.forEach(function(s,j){
     var at=' data-i="'+i+'" data-j="'+j+'"', pv=uv&&uv.porN[j+1]&&uv.porN[j+1].main, px=pv?extraDe(pv):{};
     h+='<div class="cd-set'+(s.ok?' ok':'')+'" id="s-'+i+'-'+j+'"><span class="sn">'+(j+1)+'</span><div class="cd-grid">'+e.m.map(function(k){
@@ -6974,7 +6984,7 @@ function mostrarRest(){
   function tick(){
     var t=document.getElementById('rest-t'); if(!t){ clearInterval(restI); return; }
     var s=Math.ceil((CL.restFin-Date.now())/1000);
-    if(s<=0){ t.textContent='¡Vamos!'; r.classList.add('fin'); if(!CL.restAv){ CL.restAv=true; if(restProgOk()){ vibrar([300,120,300,120,500]); CL.nPit=(CL.nPit||0)+1; } else avisar(); setTimeout(function(){ if(CL.restFin<=Date.now()) ocultarRest(); },2500); } return; }
+    if(s<=0){ t.textContent='¡Vamos!'; r.classList.add('fin'); if(CL.ctaAuto&&CL.ctaAuto.fin===CL.restFin){ var ca=CL.ctaAuto; CL.ctaAuto=null; setTimeout(function(){ ocultarRest(); ctaSigEmpezar(ca.i); },900); } if(!CL.restAv){ CL.restAv=true; if(restProgOk()){ vibrar([300,120,300,120,500]); CL.nPit=(CL.nPit||0)+1; } else avisar(); setTimeout(function(){ if(CL.restFin<=Date.now()) ocultarRest(); },2500); } return; }
     if(s<=3&&CL.restTic!==s+'|'+CL.restFin){ CL.restTic=s+'|'+CL.restFin; if(CL.restProg!==CL.restFin&&descCfg().cta) pitido(660,90,0.45); }      // v44: 3, 2, 1… (v52.6: si no estaban ya programados; v52.7: si la quiere)
     r.classList.remove('fin'); t.textContent=Math.floor(s/60)+':'+pad(s%60);
   }
@@ -6984,7 +6994,7 @@ function ocultarRest(){ clearInterval(restI); if(CL.restFin>Date.now()) restCanc
 function restSonBtn(){ var b=document.getElementById('rest-son'); if(!b) return; var on=descCfg().son; b.innerHTML=ic(on?'son':'mudo'); b.setAttribute('aria-label',on?'Quitar el aviso del descanso':'Poner el aviso del descanso'); b.setAttribute('aria-pressed',String(!on)); b.classList.toggle('off',!on); }
 A.restSon=function(){ var on=!descCfg().son; descGuardar('son',on); if(on){ prepararAudio(); restProgramar(); } else restCancelar(); restSonBtn(); toast(on?'Te avisará al acabar el descanso':'Sin aviso al acabar el descanso','ok'); };
 document.addEventListener('pointerdown',function(){ if(BOOT.mode==='clienta'&&CL.dr) prepararAudio(); },true);
-A.restMas=function(el){ CL.restFin=Math.max(Date.now(),CL.restFin)+(+el.dataset.v)*1000; CL.restAv=false; restCancelar(); mostrarRest(); };
+A.restMas=function(el){ var ca=CL.ctaAuto&&CL.ctaAuto.fin===CL.restFin; CL.restFin=Math.max(Date.now(),CL.restFin)+(+el.dataset.v)*1000; if(ca) CL.ctaAuto.fin=CL.restFin; CL.restAv=false; restCancelar(); mostrarRest(); };
 A.restFin=function(){ ocultarRest(); };
 function prepararAudio(){ try{ if(!CL.ac){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) CL.ac=new AC(); } if(CL.ac&&CL.ac.state==='suspended'){ var pr=CL.ac.resume(); if(pr&&pr.then) pr.then(function(){ if(CL.restFin>Date.now()&&CL.restProg!==CL.restFin) restProgramar(); },function(){}); }
   if(CL.ac&&!CL.acOk){ var b=CL.ac.createBuffer(1,1,22050), x=CL.ac.createBufferSource(); x.buffer=b; x.connect(CL.ac.destination); x.start(0); CL.acOk=1; } }catch(e){} }      // v44: un sonido mudo al tocar para que el móvil deje sonar el aviso
@@ -7009,17 +7019,19 @@ function ctaParse(t,bareSeg){
 }
 function ctaSegSet(e,j){
   var s=e.sets&&e.sets[j]; if(!s||s.t==='aprox') return null;
+  if(e.tipo==='cardio'){ if((e.m||[]).indexOf('tiempo')<0) return null; var mn=num(s.m&&s.m.tiempo); if(mn==null) mn=num(e.obj&&e.obj.tiempo); return mn!=null&&mn>0&&mn<=60?Math.round(mn*60):null; }      // v53.4.119: el cardio por tiempo (minutos)
   var u=uEj(e)==='s', v=null;
   if(u&&num(s.r)!=null) v=num(s.r);
   if(v==null) v=ctaParse(s.ro,u);
   if(v==null&&u){ var ph=num(placeholders(e,j,ultimaVez(e.n)).r); v=ph!=null?ph:30; }
   return v!=null&&v>0&&v<=3600?Math.round(v):null;
 }
-function ctaHay(e){ return !!(e&&e.sets&&e.tipo!=='cardio'&&e.sets.some(function(s,j){ return ctaSegSet(e,j)!=null; })); }
+function ctaHay(e){ return !!(e&&e.sets&&e.tipo!=='bloque'&&e.tipo!=='run'&&e.sets.some(function(s,j){ return ctaSegSet(e,j)!=null; })); }
 function ctaJ(e){ for(var j=0;j<e.sets.length;j++) if(!e.sets[j].ok&&ctaSegSet(e,j)!=null) return j; return -1; }
 function ctaBtnHtml(e,i){
   if(!ctaHay(e)) return ''; var j=ctaJ(e);
-  return '<div class="cta-w" id="cta-w-'+i+'">'+(j<0?'':'<button class="cta-b" data-a="ctaIni" data-i="'+i+'">'+ic('reloj')+'<span><b>Cuenta atrás</b><small>Serie '+(j+1)+' de '+e.sets.filter(function(s){ return s.t!=='aprox'; }).length+'</small></span><em>'+mmss(ctaSegSet(e,j))+'</em>'+ic('play','cta-pl')+'</button>')+'</div>';
+  var nS=e.sets.filter(function(s){ return s.t!=='aprox'; }).length;
+  return '<div class="cta-w" id="cta-w-'+i+'">'+(j<0?'':'<button class="cta-b" data-a="ctaIni" data-i="'+i+'">'+ic('reloj')+'<span><b>Cuenta atrás</b><small>'+(e.tipo==='cardio'&&nS===1?'Te avisa al acabar':'Serie '+(j+1)+' de '+nS)+'</small></span><em>'+mmss(ctaSegSet(e,j))+'</em>'+ic('play','cta-pl')+'</button>')+'</div>';
 }
 function ctaBtnAct(i){ var w=document.getElementById('cta-w-'+i), e=CL.dr&&CL.dr.ej[i]; if(w&&e) w.outerHTML=ctaBtnHtml(e,i); }
 var CTA=null, ctaI=null;
@@ -7061,9 +7073,24 @@ function ctaTerminar(seg,completo){
     if(CTA!==o) return; ctaCerrar();
     if(!o.marca||!CL.dr) return;
     var e=CL.dr.ej[o.i], s=e&&e.sets[o.j], row=document.getElementById('s-'+o.i+'-'+o.j); if(!s||s.ok||!row) return;
-    var inp=row.querySelector('input[data-k=r]'); if(inp){ inp.value=String(seg); inClienta(inp); } else s.r=String(seg);
+    if(e.tipo==='cardio'){ var mn=String(Math.round(seg/6)/10).replace('.',','), ic2=row.querySelector('input[data-cm=tiempo]'); if(ic2){ ic2.value=mn; inClienta(ic2); } else (s.m=s.m||{}).tiempo=mn; }
+    else { var inp=row.querySelector('input[data-k=r]'); if(inp){ inp.value=String(seg); inClienta(inp); } else s.r=String(seg); }
     var ok=row.querySelector('[data-a=setOk]'); if(ok) A.setOk(ok);
+    if(completo&&s.ok) ctaSiguiente(o.i);      // v53.4.119: y la serie siguiente empieza sola (tras el descanso)
   },completo?1100:450);
+}
+/* v53.4.119 · «que te cuente los segundos automáticamente» (Javier): al acabar una serie con la cuenta atrás, la siguiente serie de ese
+   ejercicio empieza sola al terminar el descanso (con su 3, 2, 1, que se puede cancelar); sin descanso, a los 2 s */
+function ctaSigEmpezar(i){
+  var e=CL.dr&&CL.dr.ej[i]; if(!e||CTA) return; var j=ctaJ(e); if(j<0) return;
+  var n=e.sets.filter(function(s){ return s.t!=='aprox'; }).length, w=e.sets.slice(0,j+1).filter(function(s){ return s.t!=='aprox'; }).length;
+  var c=document.getElementById('cta-w-'+i); if(c) c.scrollIntoView({behavior:'smooth',block:'center'});
+  ctaEmpezar({i:i,j:j,seg:ctaSegSet(e,j),tit:e.n,sub:'Serie '+w+' de '+n+' · empieza sola',marca:true});
+}
+function ctaSiguiente(i){
+  var e=CL.dr&&CL.dr.ej[i]; CL.ctaAuto=null; if(!e||ctaJ(e)<0) return;
+  if(CL.restFin>Date.now()) CL.ctaAuto={i:i,fin:CL.restFin};
+  else setTimeout(function(){ ctaSigEmpezar(i); },2000);
 }
 A.ctaFin=function(){
   if(!CTA) return; var now=CTA.pausa||Date.now();
@@ -7629,7 +7656,8 @@ function protTag(a){ var T=usoAl(a).filter(function(t){ return t.charAt(0)!=='>'
 function protDia(me,a){ return me.x==='prot'&&a.x==='prot'&&!!protTag(me)&&!!protTag(a)&&PROT_DIA.indexOf(famDe(a.id))>=0; }
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
-  if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)) return out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }).slice(0,10); out=out.filter(function(z){ return z.a.x==='lac'; }); }      // en un bol, por yogur o queso; en una tostada, por otro queso o fiambre
+  if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)){ var Tq=out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }); if(Tq.length) return Tq.slice(0,10); out=out.filter(function(z){ return z.a.x==='lac'&&usoAl(z.a).indexOf('que')>=0; }); if(out.length) return out.slice(0,10); }      // v53.4.119: si no hay de la lista de la tostada, otro queso (nunca se queda sin poder cambiarlo)
+    out=out.filter(function(z){ return z.a.x==='lac'; }); }      // en un bol, por yogur o queso; en una tostada, por otro queso o fiambre
   if(verdP(me)&&!(o&&panBase(o))){ var Ve=out.filter(function(z){ return VERD_ALT.indexOf(famDe(z.a.id))>=0; }); if(Ve.length>=2) return Ve.sort(function(a,b){ return VERD_ALT.indexOf(famDe(a.a.id))-VERD_ALT.indexOf(famDe(b.a.id)); }).slice(0,10); }
   if(lataP(me)||huevoP(me)){ var LQ=huevoP(me)?HUEVO_ALT:LATA_ALT, La=out.filter(function(z){ return LQ.indexOf(famDe(z.a.id))>=0; }); if(La.length>=2) return La.sort(function(a,b){ return LQ.indexOf(famDe(a.a.id))-LQ.indexOf(famDe(b.a.id)); }).slice(0,10); }
   if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,10); }
@@ -7661,6 +7689,7 @@ function altsDe(it,tabla,grupos,ctx){
   var A=it.b||(yo&&yo.b)||null, qo=num(it.q)||0, mo=macIt(it), permit=it.xs&&it.xs.length?it.xs.map(famDe):null, fam=famDe(it.a), out=[];
   var me={a:it.a,id:it.a,n:it.n||(yo&&yo.n),x:it.x,c:it.c||(yo&&yo.c)};
   var EQ=!A&&typeof intCl==='function'&&CL&&CL.d?(intCl().eq||{})[it.a]:null, casa=casaLib();
+  if(casa&&ctx) me.cx=ctxPlato(ctx);      // v53.4.119: el plato también cuenta sin macros (el queso de una tostada, por otro queso o fiambre; no por yogur)
   if(EQ){      // sin macros en su app: los pares los calcula el servidor
     var porId={}; tabla.forEach(function(a){ porId[a.id]=a; });
     EQ.forEach(function(z){ var a=porId[z[0]]; if(!a||famDe(a.id)===fam||(permit&&permit.indexOf(famDe(a.id))<0)) return;
@@ -7838,6 +7867,7 @@ function diaClHtml(p){
 }
 function vPlato(p,mi,o){
   var c=p.comidas[mi], pf=prefCl(), el=pf.elec[keyCm(p,mi)]===o.id, fav=!!pf.fav[o.id], m=verDet()?macOpEf(o):null, oi=c.opciones.indexOf(o), its=o.items||[], lib=libreCl()&&!o.tanda&&!o.lote;
+  var libEd=lib&&!(casaCl()&&!CL.dv.edIng);      // v53.4.119 (nº 1, Javier en su app de clienta: «que a mí me salga como al resto de clientas, la receta y luego los gramos»): primero como receta; editar, con un botón
   var h='<button class="link dv-back" data-a="dvVolver">'+ic('atras')+esc(c.nombre)+'</button>'+platoImg(o.img,'pd-im')+
     '<h1 class="tit pd-n">'+esc(nombreOp(o,oi))+(o.mio?' <span class="pill mio">'+(o.mio===2?'Tu plato':'Cambiado por ti')+'</span>':'')+'</h1><div class="pd-meta">'+(o.min?'<span>'+ic('reloj')+esc(o.min)+' min</span>':'')+'<span>'+esc(c.nombre)+(c.hora?' · '+esc(c.hora):'')+'</span></div>';
   if(m||lib) h+='<div class="macros'+(soloK()?' solo-k':'')+'" id="pd-mac">'+macroCajas(m)+'</div>';
@@ -7852,17 +7882,19 @@ function vPlato(p,mi,o){
   else if(CL.d.alMood&&its.length) h+='<button class="mo-b" data-a="moAbrir">'+ic('mas')+'<span><b>Añadir a MOOD ON</b><small>Como receta de tu biblioteca o alimento de tu banco</small></span></button>';      // v39
   if(its.length&&o.tanda) h+=tandaClHtml(o);
   else if(its.length&&o.lote) h+=ca?rcCocinaHtml(o):rcRecetaHtml(o);      // v53.4.86: para cocinarla, la receta entera · v53.4.103 (nº 1): para cuántas personas
-  else if(lib){                                          // v33: lo cuadra ella
+  else if(libEd){                                          // v33: lo cuadra ella
     if(ajHoy(o)) h+='<div class="pd-hoy">'+ic('ajuste')+'<span><b>Gramos ajustados solo para hoy</b><small>Para cuadrar tu día. Mañana vuelve a lo de siempre.</small></span><button class="link" data-a="dlQuitarAj">Quitar</button></div>';
     h+='<div class="card"><div class="card-t">Ingredientes <span class="muted sm">cambia los gramos, quita o añade</span></div>'+ckHint(o)+its.map(function(it){ return ingFilaLibre(o,it); }).join('')+
       (its.length?'':'<p class="muted sm">Todavía no tiene alimentos: añádelos del banco.</p>')+
       '<div class="pd-ed"><button class="btn sm" data-a="dvBanco">'+ic('mas')+'Añadir alimento</button>'+(objCmCl(p,c)&&m?'<button class="btn sm sec" data-a="dvCuadrar">'+ic('ajuste')+'Cuadrar este plato</button>':'')+'</div>'+
-      (o.mio===1?'<button class="link" data-a="dvMiaReset">Volver al plato de mi coach</button>':'')+(o.mio===2?'<button class="link danger" data-a="dvMiaBorrar">Borrar este plato</button>':'')+'</div>';
+      (o.mio===1?'<button class="link" data-a="dvMiaReset">Volver al plato de mi coach</button>':'')+(o.mio===2?'<button class="link danger" data-a="dvMiaBorrar">Borrar este plato</button>':'')+(casaCl()?'<button class="link" data-a="dvEdIng">'+ic('ok')+'Listo: verlo como receta</button>':'')+'</div>';
   }
   else if(its.length){
     var hayCambio=its.some(function(it){ return altsDe(it,intCl().al,intCl().grupos).length; });
-    h+='<div class="card"><div class="card-t">Ingredientes <span class="muted sm">1 ración</span></div>'+ckHint(o)+its.map(function(it){ return ingFila(o,it); }).join('')+
-      (hayCambio?'<p class="muted sm mt6">'+ic('lado')+' Si no te apetece algo, pulsa <b>Cambiar</b> y elige otro: te digo cuánto poner.</p>':'')+'</div>';
+    if(lib&&ajHoy(o)) h+='<div class="pd-hoy">'+ic('ajuste')+'<span><b>Gramos ajustados solo para hoy</b><small>Para cuadrar tu día. Mañana vuelve a lo de siempre.</small></span><button class="link" data-a="dlQuitarAj">Quitar</button></div>';
+    h+='<div class="card"><div class="card-t">Ingredientes <span class="muted sm">'+(lib?'tus gramos':'1 ración')+'</span></div>'+ckHint(o)+its.map(function(it){ return ingFila(o,lib?itHoy(o,it):it); }).join('')+
+      (hayCambio?'<p class="muted sm mt6">'+ic('lado')+' Si no te apetece algo, pulsa <b>Cambiar</b> y elige otro: te digo cuánto poner.</p>':'')+
+      (lib?'<div class="pd-ed"><button class="btn sm sec" data-a="dvEdIng">'+ic('lapiz')+'Cambiar gramos o añadir alimentos</button></div>':'')+'</div>';
   }
   if(libreCl()&&verMac()) h+=pdDiaHtml(p,mi,o);      // v38
   if(o.texto) h+=ca&&its.length?pasosHtml(o.texto):'<div class="card"><div class="card-t">'+(its.length?'Cómo se prepara':'Ingredientes y cantidades')+'</div><div class="cm-c">'+br(o.texto)+'</div></div>';
@@ -7886,7 +7918,8 @@ function platoSel(){ var dv=CL.dv, p=planesCl().filter(function(x){ return x.id=
 A.planSel=function(el){ CL.planSel=el.dataset.id; if(CL.dv) CL.dv.det=null; CL.keep=true; pintarCl(); };
 A.dvVista=function(el){ CL.dv.v=el.dataset.v; CL.dv.det=null; pintarCl(); };
 A.dvCm=function(el){ CL.dv.cm[CL.planSel]=+el.dataset.m; CL.keep=true; pintarCl(); if(el.closest('.dl-r')) irCmSec(); };
-A.dvPlato=function(el){ CL.dv.y=CL.dv.det?CL.dv.y:window.scrollY; CL.dv.det={p:el.dataset.p,m:+el.dataset.m,o:el.dataset.o}; CL.dv.cm[el.dataset.p]=+el.dataset.m; CL.dv.alt=null; pintarCl(); };
+A.dvEdIng=function(){ CL.dv.edIng=!CL.dv.edIng; CL.keep=true; pintarCl(); };      // v53.4.119
+A.dvPlato=function(el){ CL.dv.edIng=false; CL.dv.y=CL.dv.det?CL.dv.y:window.scrollY; CL.dv.det={p:el.dataset.p,m:+el.dataset.m,o:el.dataset.o}; CL.dv.cm[el.dataset.p]=+el.dataset.m; CL.dv.alt=null; pintarCl(); };
 A.dvVolver=function(){ var y=CL.dv.y||0; CL.dv.det=null; CL.dv.alt=null; pintarCl(); window.scrollTo(0,y); };
 /* v36 · quien cuadra su dieta: su objetivo, lo que lleva hoy (lo que marca «Lo he comido») y lo que le queda */
 function hoyDia(){ var pf=prefCl(), h=hoyStr(); if(!pf.dia||pf.dia.f!==h||typeof pf.dia.c!=='object'||!pf.dia.c){ var d0=pf.dia; if(diaConAlgo(d0)&&d0.f<h) pf.ant=antDe(d0); pf.dia={f:h,c:{}}; }      /* v43: guarda el menú del último día · v52: con sus alimentos sueltos */ ['s','g','e','st','x'].forEach(function(k){ if(!pf.dia[k]||typeof pf.dia[k]!=='object') pf.dia[k]={}; }); return pf.dia; }
@@ -9395,7 +9428,9 @@ function metricas(d,a,b,M,P){
 }
 function marcasCambios(d,R,tipo,C){
   var porF={};
-  (d.cambios||[]).forEach(function(c){ if(c.tipo!==tipo||!enR(c.fecha,R.desde,R.hasta)) return; (porF[c.fecha]=porF[c.fecha]||[]).push(c.detalle); });
+  (d.cambios||[]).forEach(function(c){ if(c.tipo!==tipo||!enR(c.fecha,R.desde,R.hasta)) return;
+    if(tipo==='rutina'&&!/creada|copiada|renovada/.test(String(c.detalle||''))) return;      // v53.4.119: «Rutina nueva» solo si es nueva (creada, copiada o con la mitad de los ejercicios cambiados), no por un ajuste
+    (porF[c.fecha]=porF[c.fecha]||[]).push(c.detalle); });
   return Object.keys(porF).sort().map(function(f){ var m={f:f,t:tipo==='rutina'?'R':'D',tip:fMedia(f)+'\n'+porF[f].join('\n')}; if(C) m.i=cuboDe(C,f); return m; }).filter(function(m){ return !C||m.i>=0; });
 }
 /* v52.18: Progreso por pestañas; v52.19: solo los grandes bloques, General · Fuerza · Carrera (Hyrox o CrossFit: su fuerza en Fuerza,
@@ -9414,7 +9449,7 @@ function vAnalisis(){
     '<p class="muted sm">Del '+fCorta(R.desde)+' al '+fCorta(R.hasta)+' ('+R.dias+' días). Se compara con los '+R.dias+' días anteriores ('+fCorta(R.aDesde)+' – '+fCorta(R.aHasta)+').</p>'+faseHoyTxt(d);
   // v23: en el móvil una columna; en el ordenador, rejilla (cada pestaña con la suya)
   function bl(k,t,html){ return html?'<div class="an-'+k+' tg-'+t+' dk-i">'+html+'</div>':''; }
-  var PL=(d.clienta.pasosObj||d.clienta.logrosOn)?'<div class="pl-2">'+pasosProgCard()+logrosProgCard()+'</div>':'';
+  var PL=d.clienta.pasosObj?'<div class="pl-2">'+pasosProgCard()+'</div>':'';      // v53.4.119: sin sus medallas
   var GK=[['ses'],DIS.fu?['series','Series de fuerza hechas']:null,DIS.ca?['km']:null,DIS.blq?['bloques']:null,DIS.hy?['cardio']:null,['energia'],['sueno'],['peso']].filter(Boolean);
   h+='<div class="an-g'+(PL?'':' sin-pl')+'" data-t="'+CO.anT+'">'+
     bl('gcm','gen',comparativaCard(d,R,M,P,GK,'Comparativa con el periodo anterior',false,DIS.hy?'Para ver cómo evoluciona un entreno completo (Hyrox, CrossFit, circuitos…), compáralo con otro en <button class="link" data-a="sub" data-t="evolucion">Evolución</button> → Sus entrenos → «Comparar dos».':''))+bl('pl','gen',PL)+bl('pd','gen',pesoDietaCard(d,R))+bl('cam','gen',cambiosCard(d,R))+
@@ -11442,6 +11477,9 @@ var BASICOS=[
   ['CARs de hombro','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','hombro'],
   ['Dislocaciones de hombro con pica','Movilidad','otro','movilidad','principiante','movilidad','accesoria','hombro'],
   ['Ángeles en la pared','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','hombro'],
+  ['Extensión terminal de rodilla con banda','Movilidad','banda','movilidad','principiante','movilidad','accesoria','rodilla'],      // v53.4.119: extensión de la rodilla
+  ['Extensión de rodilla con toalla (sentada)','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','rodilla'],
+  ['Extensión pasiva de rodilla con el talón elevado','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','rodilla'],
   ['Movilidad de cuello','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','cuello'],
   ['Movilidad de muñecas','Movilidad','corporal','movilidad','principiante','movilidad','accesoria','muneca']];
 function basicoObj(x){ return {nombre:x[0],grupo:x[1],equipo:x[2]||'',patron:x[3]||'',nivel:x[4]||'',modalidad:x[5]||'',funcion:x[6]||'',zona:x[7]||''}; }
@@ -11576,6 +11614,9 @@ A.bpOk=function(){
   r._s=true; cerrarModal(); repintar(); undoTick(); toast(B.sel.length+(B.sel.length===1?' ejercicio añadido':' ejercicios añadidos')+' al bloque','ok');
 };
 /* en el banco: los ejercicios nuevos de la biblioteca, para añadirlos de una vez */
+function movFaltan(){ var ya={}; (CO.banco||[]).forEach(function(b){ ya[clave(b.nombre)]=1; }); return BASICOS.filter(function(x){ return x[7]==='rodilla'&&!ya[clave(x[0])]; }); }
+A.movAnadir=function(el){ if(el.disabled) return; el.disabled=true; var L=movFaltan();
+  cargando(api('coachImportarEjercicios',CO.pin,L.map(basicoObj))).then(function(r){ toast(r.anadidos+(r.anadidos===1?' ejercicio añadido':' ejercicios añadidos'),'ok'); CO.bancoR=null; cargarBanco(false); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 function funFaltan(){ var ya={}; (CO.banco||[]).forEach(function(b){ ya[clave(b.nombre)]=1; }); return FUN_LIB.filter(function(x){ return !ya[clave(x[0])]; }); }
 A.funAnadir=function(el){ if(el.disabled) return; el.disabled=true; var L=funFaltan();
   cargando(api('coachImportarEjercicios',CO.pin,L.map(basicoObj))).then(function(r){ toast(r.anadidos+(r.anadidos===1?' ejercicio añadido':' ejercicios añadidos'),'ok'); CO.bancoR=null; cargarBanco(false); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
@@ -11631,7 +11672,7 @@ function pasaFiltro(b,F){
   if(F.g&&gk(b)!==F.g&&(b.g2||[]).indexOf(F.g)<0) return false;      // v40: también por los grupos que trabaja
   if(F.vid==='si'&&!b.video||F.vid==='no'&&b.video) return false;      // v42: con o sin vídeo
   var m=metaEj(b);
-  for(var k in META_L){ if(F[k]&&(k==='zona'?zonasDe(m.zona).indexOf(F[k])<0:m[k]!==F[k])) return false; }
+  for(var k in META_L){ if(F[k]&&(k==='zona'?!zonasDe(F[k]).some(function(z){ return zonasDe(m.zona).indexOf(z)>=0; }):m[k]!==F[k])) return false; }      // v53.4.119: varias zonas (cualquiera)
   if(F.q){ var C=ejCasan([b.nombre],F.q); if(C&&!C.vale(0)) return false; }      // (solo para uno suelto: todas las palabras)
   return true;
 }
@@ -11641,13 +11682,13 @@ function filtrosHtml(F,pref){
   var h='<div class="ff" id="'+pref+'-ff">'+['eq','reg','pat','niv','mod','lat','fn'].map(function(k){
     return '<label class="ff-s'+(F[k]?' on':'')+'"><span>'+META_L[k].t+'</span><select data-c="ffSel" data-p="'+pref+'" data-k="'+k+'" aria-label="'+META_L[k].t+'"><option value="">Todos</option>'+META_L[k].o.map(function(o){ return '<option value="'+o[0]+'"'+(F[k]===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>';
   }).join('')+'</div>';
-  if(esMov) h+='<div class="lab">'+ic('mov')+'Movilidad: ¿qué quieres trabajar?</div><div class="tipos zona" id="'+pref+'-zona"><button class="'+(!F.zona?'on':'')+'" data-a="ffZona" data-p="'+pref+'" data-v="">Todo</button>'+META_L.zona.o.map(function(o){ return '<button class="'+(F.zona===o[0]?'on':'')+'" data-a="ffZona" data-p="'+pref+'" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>';
+  if(esMov) h+='<div class="lab">'+ic('mov')+'Movilidad: ¿qué quieres trabajar?</div><div class="tipos zona" id="'+pref+'-zona"><button class="'+(!F.zona?'on':'')+'" data-a="ffZona" data-p="'+pref+'" data-v="">Todo</button>'+META_L.zona.o.map(function(o){ var on=zonasDe(F.zona).indexOf(o[0])>=0; return '<button class="'+(on?'on':'')+'" data-a="ffZona" data-p="'+pref+'" data-v="'+o[0]+'" aria-pressed="'+on+'">'+o[1]+'</button>'; }).join('')+'</div>';
   if(hayFiltros(F)) h+='<button class="link ff-x" data-a="ffQuitar" data-p="'+pref+'">'+ic('x')+'Quitar filtros</button>';
   return h;
 }
 function stFiltro(pref){ return pref==='pk'?CO.pf:CO.bf; }
 CH.ffSel=function(t){ var F=stFiltro(t.dataset.p); F[t.dataset.k]=t.value; if(t.dataset.k==='mod'&&t.value!=='movilidad'&&F.g!=='Movilidad') F.zona=''; refrescarFiltro(t.dataset.p); };
-A.ffZona=function(el){ var F=stFiltro(el.dataset.p); F.zona=el.dataset.v; refrescarFiltro(el.dataset.p); };
+A.ffZona=function(el){ var F=stFiltro(el.dataset.p), v=el.dataset.v, Z=zonasDe(F.zona); if(!v) Z=[]; else if(Z.indexOf(v)>=0) Z.splice(Z.indexOf(v),1); else Z.push(v); F.zona=Z.join(','); refrescarFiltro(el.dataset.p); };      // v53.4.119: se pueden marcar varias
 A.ffQuitar=function(el){ var F=stFiltro(el.dataset.p), q=F.q, g=F.g; Object.assign(F,filtrosVacios(),{q:q,g:g}); refrescarFiltro(el.dataset.p); };
 function refrescarFiltro(pref){ if(pref==='pk') pintarPick(); else pintarBanco(false); }
 /* línea con sus datos, para la lista */
@@ -11685,7 +11726,10 @@ function pintarBanco(arriba){
     gs.filter(function(g){ return !f.g||g===f.g; }).forEach(function(g){
       var L=B.filter(function(b){ return gk(b)===g&&pasaFiltro(b,F2); }); if(!L.length) return; n+=L.length;
       if(g==='Movilidad'){   // movilidad: agrupada por lo que trabaja
-        h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+META_L.zona.o.map(function(z){ var Z=L.filter(function(b){ return zonasDe(metaEj(b).zona).indexOf(z[0])>=0; }); return Z.length?'<div class="bsub" data-z="'+z[0]+'"><h4>'+esc(z[1])+'</h4>'+Z.map(function(b){ return fila(b,g); }).join('')+'</div>':''; }).join('')+'</div>';
+        var mF=movFaltan();      // v53.4.119: «Extensión de la rodilla», con 3 ejercicios de la biblioteca para añadirlos
+        h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+META_L.zona.o.map(function(z){ var Z=L.filter(function(b){ return zonasDe(metaEj(b).zona).indexOf(z[0])>=0; });
+          if(!Z.length&&z[0]==='rodilla'&&mF.length&&!CO.bsel&&!f.q) return '<div class="bsub" data-z="rodilla"><h4>'+esc(z[1])+'</h4><div class="mov-f"><span class="muted sm">Todavía no tienes ejercicios de extensión de la rodilla. En la biblioteca de MOOD ON hay '+mF.length+': '+esc(listaY(mF.map(function(x){ return x[0]; })))+'.</span><button class="btn sm sec" data-a="movAnadir">'+ic('mas')+'Añadirlos</button></div></div>';
+          return Z.length?'<div class="bsub" data-z="'+z[0]+'"><h4>'+esc(z[1])+'</h4>'+Z.map(function(b){ return fila(b,g); }).join('')+'</div>':''; }).join('')+'</div>';
       } else h+='<div class="bgrp"><h3>'+esc(gNombre(g))+'</h3>'+L.map(function(b){ return fila(b,g); }).join('')+'</div>';
     });
     if(f.g&&f.g!=='_'){      // v40: con un grupo elegido, también los que lo trabajan como secundario
@@ -11704,7 +11748,7 @@ function filtrarBanco(){
   rows.forEach(function(r,i){ r.style.display=!C||C.vale(i)?'':'none'; });
   var par=document.getElementById('ej-par'); if(par) par.hidden=!(C&&C.parecidos);
   document.querySelectorAll('.bgrp').forEach(function(g){ var vis=[].filter.call(g.querySelectorAll('.ej-row'),function(r){ return r.style.display!=='none'; }).length; g.style.display=vis?'':'none';
-    g.querySelectorAll('.bsub').forEach(function(z){ z.style.display=[].some.call(z.querySelectorAll('.ej-row'),function(r){ return r.style.display!=='none'; })?'':'none'; }); });
+    g.querySelectorAll('.bsub').forEach(function(z){ z.style.display=(z.querySelector('.mov-f')&&!C)||[].some.call(z.querySelectorAll('.ej-row'),function(r){ return r.style.display!=='none'; })?'':'none'; }); });      // v53.4.119: «Extensión de la rodilla» sin ejercicios aún (con su «Añadirlos»), visible
 }
 A.filtroVid=function(el){ CO.bf.vid=el.dataset.v; pintarBanco(false); };
 A.filtroG=function(el){ CO.bf.g=el.dataset.g; if(CO.bf.g!=='Movilidad'&&CO.bf.mod!=='movilidad') CO.bf.zona=''; pintarBanco(false); };
@@ -11732,12 +11776,21 @@ function bkOpciones(c){
 A.bkCambiar=function(){
   var n=bkN(); if(!n) return toast('Toca primero los ejercicios que quieres cambiar');
   modal('<div class="bk-ed"><h2>Cambiar '+n+' ejercicio'+(n>1?'s':'')+'</h2><p class="muted sm">Elige solo lo que quieras cambiar. Lo que dejes en «No cambiar» se queda como está en cada uno. El nombre, el vídeo y las indicaciones no se tocan.</p><div class="grid2">'+
-    BK_CAMPOS.map(function(c){ return '<label class="f">'+c[1]+'<select data-bk="'+c[0]+'" data-c="bkCampo"><option value="__">No cambiar</option>'+bkOpciones(c).map(function(o){ return '<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>'; }).join('')+'</select></label>'; }).join('')+
+    BK_CAMPOS.filter(function(c){ return c[0]!=='zona'; }).map(function(c){ return '<label class="f">'+c[1]+'<select data-bk="'+c[0]+'" data-c="bkCampo"><option value="__">No cambiar</option>'+bkOpciones(c).map(function(o){ return '<option value="'+esc(o[0])+'">'+esc(o[1])+'</option>'; }).join('')+'</select></label>'; }).join('')+
+    '</div><div class="f bk-zona"><span class="lab">Movilidad: qué trabaja <span class="muted">(puedes marcar varias; sin marcar, no cambia)</span></span><div class="tipos zona" id="bk-zona" data-v="__">'+META_L.zona.o.map(function(o){ return '<button type="button" data-a="bkZona" data-v="'+o[0]+'" aria-pressed="false">'+esc(o[1])+'</button>'; }).join('')+'<button type="button" data-a="bkZona" data-v="" aria-pressed="false">No es de movilidad</button></div>'+      // v53.4.119
     '</div><button class="btn mt" data-a="bkGuardar">Guardar cambios</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button></div>');
 };
 CH.bkCampo=function(t){ t.parentNode.classList.toggle('cam',t.value!=='__'); };
+A.bkZona=function(el){      // v53.4.119: varias zonas a la vez; «No es de movilidad» quita las demás
+  var w=document.getElementById('bk-zona'); if(!w) return; var v=el.dataset.v, on=!el.classList.contains('on');
+  w.querySelectorAll('button').forEach(function(b){ if(v===''?b!==el:b.dataset.v==='') { b.classList.remove('on'); b.setAttribute('aria-pressed','false'); } });
+  el.classList.toggle('on',on); el.setAttribute('aria-pressed',String(on));
+  var sel=[].slice.call(w.querySelectorAll('button.on')).map(function(b){ return b.dataset.v; });
+  w.dataset.v=!sel.length?'__':sel.indexOf('')>=0?'':sel.join(','); w.parentNode.classList.toggle('cam',w.dataset.v!=='__');
+};
 A.bkGuardar=function(){
   var c={}; document.querySelectorAll('#modal [data-bk]').forEach(function(s){ if(s.value!=='__') c[s.dataset.bk]=s.value; });
+  var bz=document.getElementById('bk-zona'); if(bz&&bz.dataset.v!=='__') c.zona=bz.dataset.v;
   if(!Object.keys(c).length) return toast('Elige al menos un dato para cambiar');
   cargando(api('coachEditarEjercicios',CO.pin,Object.keys(CO.bsel),c)).then(function(r){
     bkLista(r.lista); CO.bsel=null; cerrarModal(); pintarBanco(false);
@@ -11763,7 +11816,7 @@ function modalEjBanco(x){
 /* datos para buscar el ejercicio (si no los tocas, se deducen del nombre) */
 function metaEdHtml(x){
   var m=metaEj(x);
-  return '<details class="be-meta"'+(x.id?'':' open')+'><summary>'+ic('filtro')+'Datos para buscarlo <span class="muted sm">'+esc(metaLinea(x))+'</span></summary><div class="grid2">'+
+  return '<details class="be-meta"'+(x.id&&m.mod!=='movilidad'?'':' open')+'><summary>'+ic('filtro')+'Datos para buscarlo <span class="muted sm">'+esc(metaLinea(x))+'</span></summary><div class="grid2">'+
     ['eq','pat','niv','mod','fn'].map(function(k){ return '<label class="f">'+META_L[k].t+'<select id="be-'+k+'">'+META_L[k].o.map(function(o){ return '<option value="'+o[0]+'"'+(m[k]===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'; }).join('')+
     '<label class="f">Qué apunta<select id="be-reg"><option value=""'+(!x.reg?' selected':'')+'>Según el material (ahora: '+esc((metaTxt('reg',apuntaDe(Object.assign({},x,{reg:''}),x.nombre))||'').toLowerCase())+')</option>'+META_L.reg.o.map(function(o){ return '<option value="'+o[0]+'"'+(x.reg===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'+      // v52.8
     '</div><div class="lab">Movilidad: qué trabaja <span class="muted">(si es de movilidad; puedes marcar varias)</span></div><div class="tipos zona" id="be-zona" data-v="'+esc(zonasDe(m.mod==='movilidad'?m.zona:x.zona).join(','))+'">'+META_L.zona.o.map(function(o){ var on=zonasDe(m.mod==='movilidad'?m.zona:x.zona).indexOf(o[0])>=0; return '<button type="button" class="'+(on?'on':'')+'" data-a="beZona" data-v="'+o[0]+'" aria-pressed="'+on+'">'+o[1]+'</button>'; }).join('')+'</div>'+
@@ -13503,7 +13556,7 @@ function vEnlace(){
   var nA=(al.alergias||[]).length+(al.txt?1:0), nG=(al.noGusta||[]).length;
   var resAl=[al.tipo?((DIETA_T.filter(function(d){ return d[0]===al.tipo; })[0]||[])[1]||al.tipo):'Come de todo',nA?'con alergias o intolerancias':'sin alergias',nG?nG+(nG===1?' cosa que no le gusta':' cosas que no le gustan'):''].filter(Boolean).join(' · ');
   var resApp=[c.dietaMacros?'Ve kcal y macros':c.dietaKcal?'Ve las kcal':'Sin kcal ni macros',c.dietaLibre?'Cuadra su dieta':'',c.entrenoLibre?'Edita sus entrenos':''].filter(Boolean).join(' · ');
-  var resPa=[c.pasosObj?'Pasos: '+fP(c.pasosObj)+' al día':'Pasos apagados',c.logrosOn?'logros activados':'logros apagados'].join(' · ');
+  var resPa=[c.pasosObj?'Pasos: '+fP(c.pasosObj)+' al día':'Pasos apagados',c.logrosOn?'medallas activadas':'medallas apagadas'].join(' · ');
   var resNo=[c.notas?'Con notas':'Sin notas',c.wa?'WhatsApp directo activado':''].filter(Boolean).join(' · ');
   return '<div class="ficha-g"><div class="fg-a">'+accesoCard()+
     (CO.appUrl||window.__moodonBoot?'':'<p class="sm ap-av">'+ic('info')+'<span>Para que no le salga el aviso de Google arriba, <button class="link" data-a="appCfg" style="padding:0">configura tu página de inicio</button>.</span></p>')+
@@ -13518,7 +13571,7 @@ function vEnlace(){
     '<div class="card fab-mas"><div class="card-t">Más ajustes</div>'+
       fabFila('alim','Alimentación',esc(resAl),alimCard())+
       fabFila('app','Qué ve y qué puede hacer en su app',esc(resApp),verKmHtml(false)+libreFilaHtml()+entLibreFilaHtml()+moodFilaHtml())+
-      fabFila('pasos','Pasos y logros',esc(resPa),pasosFichaCard()+logrosFichaCard())+
+      fabFila('pasos','Pasos y medallas',esc(resPa),pasosFichaCard()+logrosFichaCard())+
       fabFila('notas','Notas privadas y WhatsApp directo',esc(resNo),
         '<label class="f" style="margin-top:0">Notas privadas ('+cG('ella','él')+' no las ve)<textarea id="c-notas" rows="4" placeholder="Lesiones, historial, contexto…">'+esc(c.notas)+'</textarea></label>'+
         '<div class="fila mt"><span>WhatsApp directo<small class="fila-s">Junto a cada chat con '+esc(nomCorto(c.nombre))+', un botón para escribirle por WhatsApp. Para tus clientes más cercanos (necesita su móvil, en Sus datos).</small></span><button class="sw'+(CO.waEd?' on':'')+'" data-a="togWa" aria-label="WhatsApp directo" aria-pressed="'+!!CO.waEd+'"><i></i></button></div>'+
@@ -16712,10 +16765,22 @@ function cargarRutBib(arriba){
 }
 function rbLista(V){
   if(!V.length) return '<p class="muted mt">Ninguna rutina con ese nombre o etiqueta.</p>';
-  return V.map(function(m){ return '<div class="card rb-it"><div class="rb-h"><div class="rb-tx"><b>'+esc(m.nombre)+'</b><small>'+mdCuenta(m)+(m.nota?' · '+esc(m.nota):'')+'</small></div><button class="btn sm sec" data-a="rbEditar" data-id="'+esc(m.id)+'">Editar</button></div>'+
-    ((m.etiquetas||[]).length?'<div class="rb-ets">'+mdEtiq(m)+'</div>':'')+'<div class="muted sm rb-ej">'+esc(mdResumen(m))+'</div>'+
+  return V.map(function(m){ var ab=!!(CO.rbAb&&CO.rbAb[m.id]);      // v53.4.119: al tocarla, se despliegan sus ejercicios
+    return '<div class="card rb-it'+(ab?' ab':'')+'"><div class="rb-h"><button class="rb-tx" data-a="rbVer" data-id="'+esc(m.id)+'" aria-expanded="'+ab+'"><b>'+esc(m.nombre)+'</b><small>'+mdCuenta(m)+(m.nota?' · '+esc(m.nota):'')+'</small></button><button class="btn sm sec" data-a="rbEditar" data-id="'+esc(m.id)+'">Editar</button></div>'+
+    ((m.etiquetas||[]).length?'<div class="rb-ets">'+mdEtiq(m)+'</div>':'')+(ab?rbDetalle(m):'<button class="rb-ej" data-a="rbVer" data-id="'+esc(m.id)+'"><span class="muted sm">'+esc(mdResumen(m))+'</span><span class="rb-vr">Ver ejercicios'+ic('flecha')+'</span></button>')+
     '<div class="rb-acc"><button class="link" data-a="rbDuplicar" data-id="'+esc(m.id)+'">'+ic('copiar')+'Duplicar</button><button class="link danger" data-a="rbBorrar" data-id="'+esc(m.id)+'">Borrar</button></div></div>'; }).join('');
 }
+function rbDetalle(m){
+  var R=m.rutinas||[];
+  return '<div class="rb-det">'+R.map(function(r){
+    var d=(r.dias||[]).map(function(k){ return DLARGO[k]||k; });
+    return '<div class="rb-r">'+(R.length>1||r.nombre?'<div class="rb-rh"><b>'+esc(r.nombre||'Rutina')+'</b>'+(d.length?'<small>'+esc(cap(listaY(d)))+'</small>':'')+'</div>':'')+
+      '<ol class="rb-ol">'+(r.ejercicios||[]).map(function(e){ var t=tipoEj(e), n=String(e.n||e.na||'').trim()||(t==='bloque'?nombreBloque(e):t==='run'?runNombre(e):'Ejercicio');
+        var sub=resumenEj(e), dentro=t==='bloque'?(e.ej||[]).map(function(x){ return String(x.n||'').trim()+(x.r?' · '+x.r:''); }).filter(String):[];
+        return '<li><b>'+esc(n)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+(dentro.length?'<small class="rb-bl">'+esc(dentro.join(' / '))+'</small>':'')+'</li>'; }).join('')+'</ol></div>';
+  }).join('')+'<button class="link rb-cerrar" data-a="rbVer" data-id="'+esc(m.id)+'">Ocultar ejercicios</button></div>';
+}
+A.rbVer=function(el){ CO.rbAb=CO.rbAb||{}; var id=el.dataset.id; CO.rbAb[id]=!CO.rbAb[id]; var l=document.getElementById('rb-list'); if(l) l.innerHTML=rbLista(mdFiltrar(CO.modelos,CO.rbQ,CO.rbT)); };
 function pintarRutBib(arriba){
   var y=window.scrollY, L=CO.modelos||[];
   if(CO.rbT&&!(CO.mdEt||[]).some(function(x){ return etLow(x)===etLow(CO.rbT); })) CO.rbT='';
@@ -16836,8 +16901,7 @@ A.irRellenar=function(el){
 function bancoSust(){
   var m={}, out=[];
   function add(b){ if(!b||!b.nombre) return; var k=clave(b.nombre); if(m[k]){ if(b.video&&!m[k].video) m[k].video=b.video; if(b.indicaciones&&!m[k].indicaciones) m[k].indicaciones=b.indicaciones; return; } m[k]=b; out.push(b); }
-  (CL.bancoAll||[]).forEach(add); ((CL.d&&CL.d.banco)||[]).forEach(add);
-  BASICOS.forEach(function(x){ add({nombre:x[0],grupo:x[1],eq:x[2],pat:x[3],niv:x[4],mod:x[5],fn:x[6]}); });
+  (CL.bancoAll||[]).forEach(add); ((CL.d&&CL.d.banco)||[]).forEach(add);      // v53.4.119: solo la biblioteca de su entrenador (antes, también la lista básica de MOOD ON)
   return out;
 }
 function bancoSustDe(n){ var k=clave(n), L=bancoSust(); for(var i=0;i<L.length;i++) if(clave(L[i].nombre)===k) return L[i]; return null; }
@@ -16856,21 +16920,21 @@ A.sustEj=function(el){
   var pinta=function(){ if(CL.sustI!==i) return; var orig=e.sust||e.n, L=alternativasEj(orig), b0=bancoSustDe(orig), pat=b0?metaTxt('pat',metaEj(b0).pat):'';
     modal('<h2>Cambiar «'+esc(e.n)+'»</h2><p class="muted sm">¿No lo tienes en tu gimnasio? Elige otro que trabaje lo mismo'+(pat?' (patrón: '+esc(pat.toLowerCase())+')':'')+'. Mantienes tus series y repeticiones, y tu coach lo verá.</p>'+
       '<div class="sust-l">'+(L.length?L.map(function(x){ var v=okUrl(x.b.video); return '<div class="sust-it"><div><b>'+esc(x.b.nombre)+'</b><small>'+esc([metaTxt('eq',x.m.eq),x.b.grupo].filter(String).join(' · '))+'</small></div>'+(v?'<button class="btn sm sec" data-a="sustVideo" data-n="'+esc(x.b.nombre)+'">'+ic('play')+'Vídeo</button>':'')+'<button class="btn sm" data-a="sustOk" data-n="'+esc(x.b.nombre)+'">Elegir</button></div>'; }).join(''):(entLibre()?'':'<p class="muted">No encuentro ejercicios parecidos. Escribe abajo el que vas a hacer.</p>'))+'</div>'+
-      (entLibre()?'<div class="lab">Cualquier otro de tu banco</div><input id="sust-q" class="ban-q" data-v29="sustQ" placeholder="Buscar: sentadilla, remo, plancha…" autocomplete="off" aria-label="Buscar ejercicio"><div class="sust-l" id="sust-bq">'+bancoBusca('','sustOk',e.n)+'</div>':'')+
-      '<label class="f">¿Otro? Escríbelo<input id="sust-o" maxlength="70" placeholder="Nombre del ejercicio"></label><button class="btn sec mt" data-a="sustOk" data-n="">Usar este</button>'+
+      '<p class="muted sm sust-pie">'+(L.length?'Son los de la biblioteca de tu coach que trabajan lo mismo.':'Tu coach no tiene otro parecido en su biblioteca.')+' Si no te encaja ninguno, <button class="link" data-a="sustChat">escríbele por el chat</button>.</p>'+      // v53.4.119: sin escribir uno nuevo ni buscar en todo el banco: solo de su biblioteca y del mismo patrón
       (e.sust?'<button class="btn sec mt" data-a="sustDeshacer" data-i="'+i+'">Volver a «'+esc(e.sust)+'»</button>':'')+
       '<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); };
   if(CL.bancoAll){ pinta(); return; }
   modal('<h2>Cambiar «'+esc(e.n)+'»</h2><p class="muted">Buscando ejercicios parecidos…</p>');
   api('bancoClienta',BOOT.token).then(function(r){ CL.bancoAll=r.lista||[]; pinta(); },function(){ CL.bancoAll=[]; pinta(); });
 };
+A.sustChat=function(){ cerrarModal(); toast('Escríbele a tu coach qué ejercicio echas en falta (tu entreno se queda guardado)'); A.tab({dataset:{t:'chat'}}); };      // v53.4.119
 A.sustVideo=function(el){ var b=bancoSustDe(el.dataset.n); if(!b||!okUrl(b.video)) return; window.open(b.video,'_blank','noopener'); };
 A.sustOk=function(el){
   var i=CL.sustI, e=CL.dr&&CL.dr.ej[i]; if(!e) return cerrarModal();
-  var n=String(el.dataset.n||val('sust-o')||'').trim(); if(!n) return toast('Escribe el ejercicio que vas a hacer');
+  var n=String(el.dataset.n||'').trim(); if(!n) return cerrarModal();
   if(clave(n)===clave(e.n)) return cerrarModal();
   var de=e.sust||e.n, b=bancoSustDe(n);
-  if(b) n=b.nombre;
+  if(b) n=b.nombre; else if(clave(n)!==clave(de)) return toast('Elige uno de la lista','err');      // v53.4.119: solo de la biblioteca de su coach
   e.sust=clave(n)===clave(de)?'':de; e.n=n; CL.dr.mod=true; e.video=b&&okUrl(b.video)?b.video:''; e.ind=b&&b.indicaciones||'';
   if(e.tipo==='fuerza'){ var ld=b&&b.ld!=null?!!b.ld:RE_UNI.test(n); e.mc=b&&b.mc!=null?!!b.mc:RE_MANC.test(n); e.sk=corporalEj(n); e.lt=apuntaEj(n)==='lastre'; if(ld&&!e.ld) e.sets.forEach(function(s){ if(s.pi==null){ s.pi=''; s.ri=''; } }); e.ld=ld; }
   cerrarModal(); guardarBorrador(true); CL.keep=true; pintarCl();
@@ -16883,7 +16947,7 @@ A.sustDeshacer=function(el){ var e=CL.dr&&CL.dr.ej[+el.dataset.i]; if(!e||!e.sus
 function bancoBusca(q,acc,excl){
   var k=clave(q||''), L=bancoSust().filter(function(b){ return clave(b.nombre)!==clave(excl||'')&&(!k||clave(b.nombre+' '+(b.grupo||'')).indexOf(k)>=0); })
     .sort(function(a,b){ return String(a.nombre).localeCompare(String(b.nombre),'es'); }).slice(0,k?40:25);
-  if(!L.length) return '<p class="muted sm">No hay ninguno con ese nombre. Escríbelo abajo.</p>';
+  if(!L.length) return '<p class="muted sm">No hay ninguno con ese nombre en la biblioteca de tu coach.</p>';
   return L.map(function(b){ return '<div class="sust-it"><div><b>'+esc(b.nombre)+'</b><small>'+esc([b.grupo,metaTxt('eq',metaEj(b).eq)].filter(String).join(' · '))+'</small></div>'+(okUrl(b.video)?'<button class="btn sm sec" data-a="sustVideo" data-n="'+esc(b.nombre)+'">'+ic('play')+'Vídeo</button>':'')+'<button class="btn sm" data-a="'+acc+'" data-n="'+esc(b.nombre)+'">Elegir</button></div>'; }).join('');
 }
 IN29.sustQ=function(t){ clearTimeout(IN29.sq); IN29.sq=setTimeout(function(){ var e=CL.dr&&CL.dr.ej[CL.sustI], b=document.getElementById('sust-bq'); if(b) b.innerHTML=bancoBusca(t.value,'sustOk',e?e.n:''); },120); };
@@ -16904,15 +16968,16 @@ A.exAdd=function(){
   if(!CL.dr||!entLibre()) return;
   var pinta=function(){ modal('<h2>Añadir ejercicio</h2><p class="muted sm">Se añade al final de tu entreno de hoy con 3 series. Al terminar eliges si lo guardas en tu rutina.</p>'+
     '<input id="add-q" class="ban-q" data-v29="addQ" placeholder="Buscar: sentadilla, remo, plancha…" autocomplete="off" aria-label="Buscar ejercicio"><div class="sust-l" id="add-l">'+bancoBusca('','exAddOk','')+'</div>'+
-    '<label class="f">¿No está? Escríbelo<input id="add-o" maxlength="70" placeholder="Nombre del ejercicio"></label><button class="btn sec mt" data-a="exAddOk" data-n="">Añadir este</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); };
+    '<p class="muted sm">Solo los de la biblioteca de tu coach. ¿Echas uno en falta? <button class="link" data-a="sustChat">Escríbele por el chat</button>.</p><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); };      // v53.4.119: sin crear ejercicios nuevos
   if(CL.bancoAll) return pinta();
   modal('<h2>Añadir ejercicio</h2><p class="muted">Cargando tus ejercicios…</p>');
   api('bancoClienta',BOOT.token).then(function(r){ CL.bancoAll=r.lista||[]; pinta(); },function(){ CL.bancoAll=[]; pinta(); });
 };
 A.exAddOk=function(el){
   var dr=CL.dr; if(!dr) return cerrarModal();
-  var n=String(el.dataset.n||val('add-o')||'').trim(); if(!n) return toast('Escribe o elige un ejercicio');
-  var b=bancoSustDe(n), it=itemEntreno({n:b?b.nombre:n,tipo:'fuerza',video:'',d:'90',sets:[0,1,2].map(function(){ return {t:'normal',r:'10',rir:'2',kg:'',det:''}; })});
+  var n=String(el.dataset.n||'').trim(); if(!n) return toast('Elige un ejercicio de la lista');
+  var b=bancoSustDe(n); if(!b) return toast('Elige uno de la lista','err');      // v53.4.119: solo de la biblioteca de su coach
+  var it=itemEntreno({n:b?b.nombre:n,tipo:'fuerza',video:'',d:'90',sets:[0,1,2].map(function(){ return {t:'normal',r:'10',rir:'2',kg:'',det:''}; })});
   it.ri=null; it.nuevo=1; dr.ej.push(it); dr.mod=true;
   var pos=dr.ej.length-1; dr.uab=pos; if(bloquesDr(dr).length>1) dr.blq=blqDeI(pos)||dr.blq;
   cerrarModal(); guardarBorrador(true); CL.keep=true; pintarCl(); irUnidad(pos); toast('Añadido: '+it.n,'ok');
@@ -17074,12 +17139,31 @@ A.stQuitar=function(){ confirmar('Tus clientes dejarán de ver «Pagar ahora». 
 ICONS.descargar='<path d="M12 3.5V15M7.5 10.5 12 15l4.5-4.5"/><path d="M5 17.5v1a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-1"/>';
 /* v33: dibujos de línea fina (Tabler Icons, licencia MIT), más sobrios y elegantes que los emoji; comparaciones con vehículos */
 var LIN={"tank":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 15a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3m4-3l1-5h5l3 5m6-3h-7.8\"/>","plane":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 10h4a2 2 0 0 1 0 4h-4l-4 7H9l2-7H7l-2 2H2l2-4l-2-4h3l2 2h4L9 3h3z\"/>","truck":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m10 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/><path d=\"M5 17H3V6a1 1 0 0 1 1-1h9v12m-4 0h6m4 0h2v-6h-8m0-5h5l3 5\"/></g>","bus":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m12 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/><path d=\"M4 17H2V6a1 1 0 0 1 1-1h14a5 7 0 0 1 5 7v5h-2m-4 0H8\"/><path d=\"m16 5l1.5 7H22M2 10h15M7 5v5m5-5v5\"/></g>","sailboat":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 20a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2-1M4 18l-1-3h18l-1 3m-9-6h7l-7-9zM8 7l-2 5\"/>","helicopter":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 10l1 2h6m2-3a2 2 0 0 0-2 2v3c0 1.1.9 2 2 2h7a2 2 0 0 0 2-2c0-3.31-3.13-5-7-5zm1 0V6M5 6h15\"/><path d=\"M15 9.1V13h5.5M15 19v-3m4 3h-8\"/></g>","car-suv":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 17a2 2 0 1 0 4 0a2 2 0 0 0-4 0m11 0a2 2 0 1 0 4 0a2 2 0 0 0-4 0M5 9l2-4h7.438a2 2 0 0 1 1.94 1.515L17 9h3a2 2 0 0 1 2 2v3M10 9V5M2 7v4\"/><path d=\"M22.001 14.001A5 5 0 0 0 18 12a5 5 0 0 0-4 2h-3a4.998 4.998 0 0 0-8.003.003\"/><path d=\"M5 12V9h13\"/></g>","speedboat":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 17h14.4a3 3 0 0 0 2.5-1.34L22 11h-6.23a4 4 0 0 0-1.49.29l-3.56 1.42a4 4 0 0 1-1.49.29H3.5zm4-4l1.5-5\"/><path d=\"M6 8h8l2 3\"/></g>","car":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M5 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0m10 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/><path d=\"M5 17H3v-6l2-5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0H9m-6-6h15m-6 0V6\"/></g>","jetski":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 5h1.4a1 1 0 0 1 .882.53L14 8.75\"/><path d=\"m3.485 16.94l.136.545A2 2 0 0 0 5.561 19H13a10 10 0 0 0 8-4c0-6-5-8-5-8c-1.889 2.518-5.852 4-9 4H5a2 2 0 0 0-2 2c0 1.328.163 2.652.485 3.94M3.25 15H21\"/></g>","motorbike":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M2 16a3 3 0 1 0 6 0a3 3 0 1 0-6 0m14 0a3 3 0 1 0 6 0a3 3 0 1 0-6 0m-8.5-2h5l4-4H6m1.5 4l4-4\"/><path d=\"M13 6h2l1.5 3l2 4\"/></g>","scooter":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M4 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/><path d=\"M8 17h5a6 6 0 0 1 5-5V7a2 2 0 0 0-2-2h-1\"/></g>","scooter-electric":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M16 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0M4 17a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/><path d=\"M8 17h5a6 6 0 0 1 5-5V7a2 2 0 0 0-2-2h-1m-5-1L8 8h3l-2 4\"/></g>","bike":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 18a3 3 0 1 0 6 0a3 3 0 0 0-6 0m14 0a3 3 0 1 0 6 0a3 3 0 0 0-6 0m-4 1v-4l-3-3l5-4l2 3h3m-5.993-6a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/>","trophy":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 21h8m-4-4v4M7 4h10m0 0v8a5 5 0 0 1-10 0V4M3 9a2 2 0 1 0 4 0a2 2 0 1 0-4 0m14 0a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/>","barbell":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 12h1m3-4H4a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2m0-9v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1m3 5h6m0-5v10a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-1a1 1 0 0 0-1 1m3 1h2a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2m4-4h-1\"/>","run":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M11.007 5a2 2 0 1 0 4 0a2 2 0 1 0-4 0M4 17l5 1l.75-1.5M15 21v-4l-4-3l1-6\"/><path d=\"M7 12V9l5-1l3 3l3 1\"/></g>","ski-jumping":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M17 17.5L12 13V7l5 4M7 17.5l5-4.5\"/><path d=\"m15.103 21.58l6.762-14.502a2 2 0 0 0-.968-2.657m-12 17.159L2.135 7.077a2 2 0 0 1 .968-2.657M7 11l5-4m-1.993-3a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/></g>","kayak":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6.414 6.414a2 2 0 0 0 0-2.828L5 2.172L2.172 5l1.414 1.414a2 2 0 0 0 2.828 0m11.172 11.172a2 2 0 0 0 0 2.828L19 21.828L21.828 19l-1.414-1.414a2 2 0 0 0-2.828 0M6.5 6.5l11 11m4.5-15C12.017 5.101 4.373 10.452 2 22c9.983-2.601 17.627-7.952 20-19.5m-15.5 10l5 5m1-11l5 5\"/>","stairs-up":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M22 6h-5v5h-5v5H7v5H2m4-11V3M3 6l3-3l3 3\"/>","gymnastics":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 7a1 1 0 1 0 2 0a1 1 0 0 0-2 0m6 14l1-9l7-6M3 11h6l5 1m-2.5-3.5L16 5\"/>","stopwatch":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 13a7 7 0 1 0 14 0a7 7 0 0 0-14 0m9.5-2.5L12 13m5-5l1-1m-4-4h-4\"/>","jump-rope":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M6 14V8a3 3 0 1 1 6 0v8a3 3 0 0 0 6 0v-6\"/><path d=\"M16 5a2 2 0 0 1 2-2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2a2 2 0 0 1-2-2zM4 16a2 2 0 0 1 2-2a2 2 0 0 1 2 2v3a2 2 0 0 1-2 2a2 2 0 0 1-2-2z\"/></g>","stretching":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 5a1 1 0 1 0 2 0a1 1 0 1 0-2 0M5 20l5-.5l1-2m7 2.5v-5h-5.5L15 8.5l-5.5 1l1.5 2\"/>","weight":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M9 6a3 3 0 1 0 6 0a3 3 0 1 0-6 0\"/><path d=\"M6.835 9h10.33a1 1 0 0 1 .984.821l1.637 9A1 1 0 0 1 18.802 20H5.198a1 1 0 0 1-.984-1.179l1.637-9A1 1 0 0 1 6.835 9\"/></g>","flame":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 10.941c2.333-3.308.167-7.823-1-8.941c0 3.395-2.235 5.299-3.667 6.706C5.903 10.114 5 12 5 14.294C5 17.998 8.134 21 12 21s7-3.002 7-6.706c0-1.712-1.232-4.403-2.333-5.588c-2.084 3.353-3.257 3.353-4.667 2.235\"/>","treadmill":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M10 3a1 1 0 1 0 2 0a1 1 0 0 0-2 0M3 14l4 1l.5-.5M12 18v-3l-3-2.923L9.75 7\"/><path d=\"M6 10V8l4-1l2.5 2.5l2.5.5m6 12a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1m15-1l1-11l2-1\"/></g>","swimming":"<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 9a1 1 0 1 0 2 0a1 1 0 1 0-2 0m-9 2l4-2l3.5 3l-1.5 2m-9 2.75A2.4 2.4 0 0 0 4 17a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 2-1a2.4 2.4 0 0 1 2-1a2.4 2.4 0 0 1 2 1a2.4 2.4 0 0 0 2 1a2.4 2.4 0 0 0 1-.25\"/>","yoga":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M4 20h4l1.5-3m7.5 3l-1-5h-5l1-7\"/><path d=\"m4 10l4-1l4-1l4 1.5l4 1.5m-9.993-6a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/></g>","karate":"<g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m3 9l4.5 1l3 2.5M13 21v-8l3-5.5\"/><path d=\"m8 4.5l4 2l4 1l4 3.5l-2 3.5M15.007 5a2 2 0 1 0 4 0a2 2 0 1 0-4 0\"/></g>"};
-var OBJ_VOL=[[60000,'un tanque','tanques','tank'],[40000,'un avión','aviones','plane'],[25000,'un camión','camiones','truck'],[12000,'un autobús','autobuses','bus'],
-  [8000,'un velero','veleros','sailboat'],[4000,'un helicóptero','helicópteros','helicopter'],[2500,'un todoterreno','todoterrenos','car-suv'],[1500,'una lancha','lanchas','speedboat'],
-  [1200,'un coche','coches','car'],[400,'una moto de agua','motos de agua','jetski'],[200,'una moto','motos','motorbike'],[110,'un scooter','scooters','scooter'],
+/* v53.4.119 · más dibujos (Tabler Icons, MIT): antes solo había tanque, avión, velero y bici, y casi siempre salía el velero */
+LIN["truck"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5\"/>";
+LIN["bus"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 17h-2v-11a1 1 0 0 1 1 -1h14a5 7 0 0 1 5 7v5h-2m-4 0h-8\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 5l1.5 7l4.5 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 10l15 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 5l0 5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 5l0 5\"/>";
+LIN["helicopter"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 10l1 2h6\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 9a2 2 0 0 0 -2 2v3c0 1.1 .9 2 2 2h7a2 2 0 0 0 2 -2c0 -3.31 -3.13 -5 -7 -5h-2\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 9l0 -3\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 6l15 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 9.1v3.9h5.5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 19l0 -3\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M19 19l-8 0\"/>";
+LIN["car-suv"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 17a2 2 0 1 0 4 0a2 2 0 0 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 9l2 -4h7.438a2 2 0 0 1 1.94 1.515l.622 2.485h3a2 2 0 0 1 2 2v3\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 9v-4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 7v4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M22.001 14.001a4.992 4.992 0 0 0 -4.001 -2.001a4.992 4.992 0 0 0 -4 2h-3a4.998 4.998 0 0 0 -8.003 .003\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 12v-3h13\"/>";
+LIN["speedboat"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 17h14.4a3 3 0 0 0 2.5 -1.34l3.1 -4.66h-6.23a4 4 0 0 0 -1.49 .29l-3.56 1.42a4 4 0 0 1 -1.49 .29h-5.73l-1.5 4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 13l1.5 -5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 8h8l2 3\"/>";
+LIN["car"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17h-2v-6l2 -5h9l4 5h1a2 2 0 0 1 2 2v4h-2m-4 0h-6m-6 -6h15m-6 0v-5\"/>";
+LIN["motorbike"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M2 16a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 16a3 3 0 1 0 6 0a3 3 0 1 0 -6 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7.5 14h5l4 -4h-10.5m1.5 4l4 -4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 6h2l1.5 3l2 4\"/>";
+LIN["scooter"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\"/>";
+LIN["scooter-electric"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M4 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 17h5a6 6 0 0 1 5 -5v-5a2 2 0 0 0 -2 -2h-1\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10 4l-2 4h3l-2 4\"/>";
+LIN["tractor"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 15a4 4 0 1 0 8 0a4 4 0 1 0 -8 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 15l0 .01\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M17 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M10.5 17l6.5 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M20 15.2v-4.2a1 1 0 0 0 -1 -1h-6l-2 -5h-6v6.5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M18 5h-1a1 1 0 0 0 -1 1v4\"/>";
+LIN["ambulance"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 17h-2v-11a1 1 0 0 1 1 -1h9v12m-4 0h6m4 0h2v-6h-8m0 -5h5l3 5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 10h4m-2 -2v4\"/>";
+LIN["train"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M21 13c0 -3.87 -3.37 -7 -10 -7h-8\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 15h16a2 2 0 0 0 2 -2\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 6v5h17.5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 11v4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 11v-5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 11v-4.5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 19h18\"/>";
+LIN["camper"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 18a2 2 0 1 0 4 0a2 2 0 0 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M11 18h7a2 2 0 0 0 2 -2v-7a2 2 0 0 0 -2 -2h-9.5a5.5 5.5 0 0 0 -5.5 5.5v3.5a2 2 0 0 0 2 2h2\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M8 7l7 -3l1 3\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M13 11.5a.5 .5 0 0 1 .5 -.5h2a.5 .5 0 0 1 .5 .5v2a.5 .5 0 0 1 -.5 .5h-2a.5 .5 0 0 1 -.5 -.5l0 -2\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M20 16h2\"/>";
+LIN["firetruck"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M15 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 18h8m4 0h2v-6a5 5 0 0 0 -5 -5h-1l1.5 5h4.5\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 18v-11h3\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 17l0 -5l9 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 9l18 -6\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M6 12l0 -4\"/>";
+LIN["forklift"]="<path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M12 17a2 2 0 1 0 4 0a2 2 0 1 0 -4 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M7 17l5 0\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M3 17v-6h13v6\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M5 11v-4h4\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M9 11v-6h4l3 6\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M22 15h-3v-10\"/><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" d=\"M16 13l3 0\"/>";
+var OBJ_VOL=[[60000,'un tanque','tanques','tank'],[40000,'un avión','aviones','plane'],[30000,'un vagón de tren','vagones de tren','train'],[25000,'un camión','camiones','truck'],
+  [16000,'un camión de bomberos','camiones de bomberos','firetruck'],[12000,'un autobús','autobuses','bus'],[9000,'un tractor','tractores','tractor'],[8000,'un velero','veleros','sailboat'],
+  [4500,'una ambulancia','ambulancias','ambulance'],[4000,'un helicóptero','helicópteros','helicopter'],[3500,'una autocaravana','autocaravanas','camper'],[3000,'una carretilla elevadora','carretillas elevadoras','forklift'],
+  [2500,'un todoterreno','todoterrenos','car-suv'],[1500,'una lancha','lanchas','speedboat'],[1200,'un coche','coches','car'],[200,'una moto','motos','motorbike'],[110,'un scooter','scooters','scooter'],
   [15,'un patinete eléctrico','patinetes eléctricos','scooter-electric'],[9,'una bici','bicis','bike']];
 function compVol(kg){
   kg=num(kg)||0; if(kg<9) return null;
+  var C=OBJ_VOL.filter(function(o){ var n=kg/o[0]; return n>=1&&n<3.5; });      // v53.4.119: entre los que caben de 1 a 3 veces, uno distinto según los kilos (el mismo entreno, el mismo dibujo)
+  if(C.length>1){ var o0=C[Math.round(kg)%C.length], n0=kg/o0[0], u0=n0<1.25, c0=u0?'':fN(Math.round(n0*2)/2,1), m0=u0?o0[1]:o0[2]; return {txt:'Es como levantar '+(c0?c0+' ':'')+m0,cant:c0,nom:m0,img:o0[3]}; }
   for(var i=0;i<OBJ_VOL.length;i++){ var o=OBJ_VOL[i], n=kg/o[0]; if(n>=1){
     var uno=n<1.25, cant=uno?'':(n<10?fN(Math.round(n*2)/2,1):fN(Math.round(n),0)), nom=uno?o[1]:o[2];
     return {txt:'Es como levantar '+(cant?cant+' ':'')+nom,cant:cant,nom:nom,img:o[3]}; } }
@@ -19205,7 +19289,10 @@ A.pasosGuardar=function(){
   var f=val('ps-f')||hoyStr(), n=pasosNum(val('ps-n')), P=CL.d.pasos, antes=(pasosMapa(P.dias)[f]||{p:0}).p;
   if(n==null||n<1||n>150000) return toast('Escribe el número de pasos (por ejemplo, 8.500)');
   pasosEnviar(f,n); cerrarModal(); CL.keep=true; pintarCl();
-  if(f===hoyStr()&&n>=P.obj&&antes<P.obj) return A.pasosFiesta();
+  if(f===hoyStr()&&n>=P.obj&&antes<P.obj){      // v53.4.119: la celebración grande, la primera vez de cada semana; los demás días, un aviso
+    var kF='chadin_psf_'+lkCl(), lu=lunesDe(f); if(LS.get(kF)!==lu){ LS.set(kF,lu); return A.pasosFiesta(); }
+    return toast('¡Objetivo de pasos cumplido! '+fP(n)+' pasos','ok');
+  }
   toast(navigator.onLine===false?'Guardado en tu móvil: se enviará en cuanto vuelva la conexión':'Pasos guardados','ok');
 };
 A.pasosBorrar=function(){ var f=val('ps-f'); if(!f) return; pasosEnviar(f,0); cerrarModal(); CL.keep=true; pintarCl(); toast('Borrados los pasos de ese día','ok'); };
@@ -19439,16 +19526,22 @@ var LG_PASOS=[6000,8000,10000,12000,15000,20000,25000,30000], LG_ENT=[1,10,25,50
    en tres plazos, cada uno se gana una sola vez (salvo «Mes completo», una al mes). Corto plazo (las primeras semanas): primer entreno,
    primera semana completa, 10 entrenos, 7 check-ins seguidos y 7 días seguidos con sus pasos. Medio plazo (1 a 3 meses) y largo plazo
    (6 meses o más). Fuera las de cada día o cada semana (récord de pasos, objetivo doble, día de récords, kilos nuevos en cada ejercicio…). */
-var LG_PL={c:'A corto plazo',m:'A medio plazo',l:'A largo plazo'}, LG_PL_SUB={c:'Para empezar con buen pie',m:'Constancia de semanas y meses',l:'Para los más constantes'};
+/* v53.4.119 · aún menos y más difíciles (Javier: «que sean logros no tan fáciles de alcanzar… que requieran cierta constancia»):
+   corto plazo (el primer mes): primera semana completa, 2 semanas completas seguidas, 14 check-ins seguidos y 14 días seguidos con sus pasos;
+   medio (1 a 3 meses): 4 semanas seguidas, 25 y 50 entrenos, 3 meses seguidos, 30 check-ins o 30 días de pasos seguidos, 25 récords y 3 revisiones de medidas;
+   largo (6 meses o más): 12 y 24 semanas seguidas, 100 y 200 entrenos, 6 y 12 meses seguidos, 100 récords, 1.000 toneladas, 200 check-ins,
+   200 días con sus pasos, un millón de pasos, 100 noches de buen descanso y 12 revisiones de medidas. Fuera: primer entreno, 10 entrenos,
+   mes completo (cada mes), 10 y 50 récords, 100 toneladas, 7 check-ins o 7 días de pasos, 50 días de pasos y 30 noches. */
+var LG_PL={c:'A corto plazo',m:'A medio plazo',l:'A largo plazo'}, LG_PL_SUB={c:'Tu primer mes',m:'Constancia de semanas y meses',l:'Para los más constantes'};
 function logrosDe(d,o){
   o=o||{}; var I=[], hoy=hoyStr(), add=function(id,t,sub,icn,f,pl,gid){ I.push({id:id,gid:gid||id,t:t,sub:sub||'',ic:icn,f:f||'',o:{c:1,m:2,l:3}[pl],pl:pl}); };
   var porF=function(a,b){ return a.fecha<b.fecha?-1:a.fecha>b.fecha?1:0; }, ses=(d.sesiones||[]).slice().sort(porF);
   /* entrenos */
-  var ENT=[[1,'c'],[10,'c'],[25,'m'],[50,'m'],[100,'l'],[200,'l']];
+  var ENT=[[25,'m'],[50,'m'],[100,'l'],[200,'l']];      // v53.4.119: sin «Primer entreno» ni «10 entrenos» (demasiado fáciles)
   ENT.forEach(function(x){ var k=x[0]; if(ses[k-1]) add('e'+k,k===1?'Primer entreno':k+' entrenos',k===1?'¡Has empezado!':'Completados desde que empezaste','pesa',ses[k-1].fecha,x[1]); });
   /* semanas completas: la primera, y las seguidas (4, 12 y 24) */
   var meta=metaSemanal(d.rutinas), por={}; ses.forEach(function(s){ var l=lunesDe(s.fecha); (por[l]=por[l]||[]).push(s.fecha); });
-  var lh=lunesDe(hoy), run=0, best=0, compF={}, fW={}, prim=false, WS=[[4,'m'],[12,'l'],[24,'l']];
+  var lh=lunesDe(hoy), run=0, best=0, compF={}, fW={}, prim=false, WS=[[2,'c'],[4,'m'],[12,'l'],[24,'l']];      // v53.4.119: + 2 seguidas (corto plazo)
   if(ses.length) for(var l=lunesDe(ses[0].fecha);l<=lh;l=sumar(l,7)){
     var F=(por[l]||[]).sort();
     if(F.length>=meta){ run++; if(run>best) best=run; compF[l]=F[meta-1];
@@ -19456,12 +19549,7 @@ function logrosDe(d,o){
       WS.forEach(function(x){ var N=x[0]; if(run===N&&!fW[N]){ fW[N]=1; add('w'+N,N+' semanas completas seguidas','Sin fallar ni una','fuego',F[meta-1],x[1]); } }); }
     else if(l<lh) run=0;
   }
-  /* mes completo (todas las semanas que empiezan ese mes, completas): una al mes */
-  if(ses.length){ var m0=ses[0].fecha.slice(0,7);
-    for(var m=m0;m<=hoy.slice(0,7);m=fechaDe(new Date(+m.slice(0,4),+m.slice(5,7),1)).slice(0,7)){
-      var L1=[], dd=m+'-01'; while(diaSem(dd)!=='lun') dd=sumar(dd,1); for(;dd.slice(0,7)===m;dd=sumar(dd,7)) L1.push(dd);
-      if(L1.length&&L1.every(function(x){ return compF[x]; })&&!(m===m0&&lunesDe(ses[0].fecha)>L1[0])) add('mc'+m.slice(2,4)+m.slice(5,7),'Mes completo','Todas las semanas de '+aDate(m+'-15').toLocaleDateString('es-ES',{month:'long'}),'medalla',compF[L1[L1.length-1]],'m','mc');
-    } }
+  /* v53.4.119: sin «Mes completo» (salía cada mes; la constancia de meses ya la cuentan «3, 6 y 12 meses seguidos») */
   /* meses seguidos entrenando (4 entrenos o más cada mes; el mes en curso no rompe la racha) */
   var pm={}; ses.forEach(function(s){ var k=String(s.fecha).slice(0,7); pm[k]=(pm[k]||0)+1; }); var mRun=0, fMt={}, MS=[[3,'m'],[6,'l'],[12,'l']];
   if(ses.length) for(var mm=ses[0].fecha.slice(0,7);mm<=hoy.slice(0,7);mm=fechaDe(new Date(+mm.slice(0,4),+mm.slice(5,7),1)).slice(0,7)){
@@ -19470,10 +19558,10 @@ function logrosDe(d,o){
   /* récords: cuántos lleva (10, 25, 50 y 100) */
   var M=calcMarcas(d.series||[]), sesF={}, RC=[]; ses.forEach(function(s){ sesF[s.id]=String(s.fecha||''); });
   Object.keys(M).forEach(function(key){ if(key==='_ses') return; var mk=M[key]; if(!mk||mk.t!=='rec') return; var i=key.indexOf('|'), j=key.lastIndexOf('|'), k=key.slice(i+1,j), sid=key.slice(0,i); if(/\|i$/.test(k)) return; var f=sesF[sid]; if(f) RC.push(f); });
-  RC.sort(); var RCS=[[10,'m'],[25,'m'],[50,'l'],[100,'l']], nRec=RC.length;
+  RC.sort(); var RCS=[[25,'m'],[100,'l']], nRec=RC.length;      // v53.4.119: sin 10 ni 50
   RCS.forEach(function(x){ if(nRec>=x[0]) add('rc'+x[0],x[0]+' récords','Batidos desde que empezaste','trofeo',RC[x[0]-1],x[1]); });
   /* kilos levantados en total (kilos × repeticiones de todas sus series) */
-  var accV=0, VT=[[100000,'m'],[1000000,'l']];
+  var accV=0, VT=[[1000000,'l']];      // v53.4.119: solo las 1.000 toneladas
   ses.forEach(function(s){ var v=num(s.volumen)||0; if(v<=0) return; var a0=accV; accV+=v; VT.forEach(function(x){ var t=x[0]; if(a0<t&&accV>=t) add('vt'+(t/1000),fP(t/1000)+' toneladas levantadas','En total, desde que empezaste','trofeo',s.fecha,x[1]); }); });
   /* pasos (si tiene objetivo): días seguidos cumpliendo, días con su objetivo y el millón */
   var obj=o.obj||0, rP=0, accP=0, nPc=0, fS={};
@@ -19481,19 +19569,19 @@ function logrosDe(d,o){
     var P=(d.pasosDias||[]).filter(function(x){ return x.p>0; }).sort(function(a,b){ return a.f<b.f?-1:1; }), st2=0, prev='';
     P.forEach(function(x){
       var p0=accP; accP+=x.p; if(p0<1000000&&accP>=1000000) add('pt1000','Un millón de pasos','En total, desde que empezaste','pasos',x.f,'l');
-      if(x.p>=obj){ nPc++; [[50,'m'],[200,'l']].forEach(function(y){ if(nPc===y[0]) add('pc'+y[0],y[0]+' días con tu objetivo','De '+fP(obj)+' pasos','okc',x.f,y[1]); });
-        st2=prev&&sumar(prev,1)===x.f?st2+1:1; prev=x.f; [[7,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(st2===N&&!fS[N]){ fS[N]=1; add('ps'+N,N+' días seguidos cumpliendo','Tu objetivo de '+fP(obj)+' pasos','fuego',x.f,y[1]); } }); }
+      if(x.p>=obj){ nPc++; [[200,'l']].forEach(function(y){ if(nPc===y[0]) add('pc'+y[0],y[0]+' días con tu objetivo','De '+fP(obj)+' pasos','okc',x.f,y[1]); });
+        st2=prev&&sumar(prev,1)===x.f?st2+1:1; prev=x.f; [[14,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(st2===N&&!fS[N]){ fS[N]=1; add('ps'+N,N+' días seguidos cumpliendo','Tu objetivo de '+fP(obj)+' pasos','fuego',x.f,y[1]); } }); }
     });
     rP=pasosRacha(d.pasosDias||[],obj);
   }
   /* check-ins: 7 y 30 días seguidos, y 200 en total */
   var ck=(d.diario||[]).map(function(x){ return String(x.fecha).slice(0,10); }).filter(function(f,i,a){ return f&&a.indexOf(f)===i; }).sort(), sc=0, pc='', fc={};
-  ck.forEach(function(f,i){ sc=pc&&sumar(pc,1)===f?sc+1:1; pc=f; [[7,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(sc===N&&!fc[N]){ fc[N]=1; add('c'+N,N+' check-ins seguidos','Contándole a tu coach cómo estás','checkin',f,y[1]); } });
+  ck.forEach(function(f,i){ sc=pc&&sumar(pc,1)===f?sc+1:1; pc=f; [[14,'c'],[30,'m']].forEach(function(y){ var N=y[0]; if(sc===N&&!fc[N]){ fc[N]=1; add('c'+N,N+' check-ins seguidos','Contándole a tu coach cómo estás','checkin',f,y[1]); } });
     if(i+1===200) add('ct200','200 check-ins','Desde que empezaste','checkin',f,'l'); });
   var scHoy=pc===hoy||pc===sumar(hoy,-1)?sc:0;
   /* sueño (lo que apunta en su check-in): noches de 7 h o más, 30 y 100 */
   var zN=0, zF=[]; (d.diario||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }).forEach(function(x){ var f=String(x.fecha).slice(0,10), h=num(x.sueno); if(!f||h==null||zF.indexOf(f)>=0) return; zF.push(f);
-    if(h>=7){ zN++; [[30,'m'],[100,'l']].forEach(function(y){ if(zN===y[0]) add('zn'+y[0],y[0]+' noches de buen descanso','De 7 horas o más','luna',f,y[1]); }); } });
+    if(h>=7){ zN++; [[100,'l']].forEach(function(y){ if(zN===y[0]) add('zn'+y[0],y[0]+' noches de buen descanso','De 7 horas o más','luna',f,y[1]); }); } });
   /* medidas: la constancia al revisarlas (3 y 12 revisiones) */
   var nMed=0; (d.medidas||[]).slice().sort(function(a,b){ return String(a.fecha)<String(b.fecha)?-1:1; }).forEach(function(md){ var f=String(md.fecha).slice(0,10);
     if(MED_CM.some(function(k){ return num(md[k]); })){ nMed++; [[3,'m'],[12,'l']].forEach(function(y){ if(nMed===y[0]) add('wm'+y[0],y[0]+' revisiones de medidas','Cintura, cadera, muslo y brazo','medidas',f,y[1]); }); } });
@@ -19503,18 +19591,18 @@ function logrosDe(d,o){
   ok.sort(function(a,b){ return a.f<b.f?1:a.f>b.f?-1:b.o-a.o; });
   /* las siguientes (en gris, con lo que le falta): la próxima de cada tipo */
   var sig=[], nx=function(id,t,sub,icn,val,mt,pl){ sig.push({id:id,t:t,sub:sub,ic:icn,ok:false,val:Math.max(0,Math.min(val,mt)),meta:mt,o:{c:1,m:2,l:3}[pl],pl:pl}); }, semHechos=(por[lh]||[]).length;
-  var ne=ENT.filter(function(x){ return ses.length<x[0]; })[0]; if(ne) nx('ne',ne[0]===1?'Primer entreno':ne[0]+' entrenos','Llevas '+ses.length,'pesa',ses.length,ne[0],ne[1]);
+  var ne=ENT.filter(function(x){ return ses.length<x[0]; })[0]; if(ne) nx('ne',ne[0]+' entrenos','Llevas '+ses.length,'pesa',ses.length,ne[0],ne[1]);
   if(!G.sc1) nx('nsc','Primera semana completa','Esta semana llevas '+semHechos+' de '+meta,'cal',semHechos,meta,'c');
   else { var nw=WS.filter(function(x){ return !fW[x[0]]; })[0]; if(nw) nx('nw',nw[0]+' semanas completas seguidas','Llevas '+run,'fuego',run,nw[0],nw[1]); }
   var nmt=MS.filter(function(x){ return !fMt[x[0]]; })[0]; if(nmt&&ses.length) nx('nmt',nmt[0]+' meses seguidos entrenando','Llevas '+mRun+' · 4 entrenos o más cada mes','cal',mRun,nmt[0],nmt[1]);
   var nrc=RCS.filter(function(x){ return nRec<x[0]; })[0]; if(nrc&&ses.length) nx('nrc',nrc[0]+' récords','Llevas '+nRec,'trofeo',nRec,nrc[0],nrc[1]);
   var nvt=VT.filter(function(x){ return accV<x[0]; })[0]; if(nvt&&ses.length) nx('nvt',fP(nvt[0]/1000)+' toneladas levantadas','Llevas '+fP(Math.round(accV/1000))+' t','trofeo',accV,nvt[0],nvt[1]);
-  var nc=[[7,'c'],[30,'m']].filter(function(x){ return !fc[x[0]]; })[0]; if(nc) nx('nc',nc[0]+' check-ins seguidos','Llevas '+scHoy,'checkin',scHoy,nc[0],nc[1]);
-  if(ck.length<200&&fc[7]) nx('nct','200 check-ins','Llevas '+ck.length,'checkin',ck.length,200,'l');
-  if(obj){ var nps=[[7,'c'],[30,'m']].filter(function(x){ return !fS[x[0]]; })[0]; if(nps) nx('nps',nps[0]+' días seguidos cumpliendo','Llevas '+rP,'fuego',rP,nps[0],nps[1]);
-    var npc=[[50,'m'],[200,'l']].filter(function(x){ return nPc<x[0]; })[0]; if(npc) nx('npc',npc[0]+' días con tu objetivo','Llevas '+nPc,'okc',nPc,npc[0],npc[1]);
+  var nc=[[14,'c'],[30,'m']].filter(function(x){ return !fc[x[0]]; })[0]; if(nc) nx('nc',nc[0]+' check-ins seguidos','Llevas '+scHoy,'checkin',scHoy,nc[0],nc[1]);
+  if(ck.length<200&&fc[14]) nx('nct','200 check-ins','Llevas '+ck.length,'checkin',ck.length,200,'l');
+  if(obj){ var nps=[[14,'c'],[30,'m']].filter(function(x){ return !fS[x[0]]; })[0]; if(nps) nx('nps',nps[0]+' días seguidos cumpliendo','Llevas '+rP,'fuego',rP,nps[0],nps[1]);
+    var npc=[[200,'l']].filter(function(x){ return nPc<x[0]; })[0]; if(npc) nx('npc',npc[0]+' días con tu objetivo','Llevas '+nPc,'okc',nPc,npc[0],npc[1]);
     if(accP<1000000) nx('npt','Un millón de pasos','Llevas '+fP(accP),'pasos',accP,1000000,'l'); }
-  if(zF.length){ var nz=[[30,'m'],[100,'l']].filter(function(x){ return zN<x[0]; })[0]; if(nz) nx('nzn',nz[0]+' noches de buen descanso','Llevas '+zN+' · 7 h o más','luna',zN,nz[0],nz[1]); }
+  if(zF.length){ var nz=[[100,'l']].filter(function(x){ return zN<x[0]; })[0]; if(nz) nx('nzn',nz[0]+' noches de buen descanso','Llevas '+zN+' · 7 h o más','luna',zN,nz[0],nz[1]); }
   if(nMed){ var nm=[[3,'m'],[12,'l']].filter(function(x){ return nMed<x[0]; })[0]; if(nm) nx('nwm',nm[0]+' revisiones de medidas','Llevas '+nMed,'medidas',nMed,nm[0],nm[1]); }
   return {lista:ok.concat(sig), ok:ok, sig:sig, inst:I, racha:run, meta:meta, semHechos:semHechos};
 }
@@ -19525,7 +19613,7 @@ function lgLocK(){ return 'chadin_lgv_'+lkCl(); }
 function logVistos(){ var lg=CL.d&&CL.d.logros; if(!lg||lg.vistos==null) return null; var a=lg.vistos.slice(), loc=LS.get(lgLocK()); (Array.isArray(loc)?loc:[]).forEach(function(k){ if(a.indexOf(k)<0) a.push(k); }); return a; }
 /* los nuevos (sin ver y de las últimas 2 semanas: lo antiguo no se celebra de golpe) */
 function logrosNuevos(){
-  var lg=CL.d&&CL.d.logros, V=logVistos(); if(!lg||V==null||V.indexOf('v53')<0) return [];      // v53.4.29: con las medallas nuevas
+  var lg=CL.d&&CL.d.logros, V=logVistos(); if(!lg||V==null||V.indexOf('v119')<0) return [];      // v53.4.29 · v53.4.119: con las medallas nuevas
   var lim=sumar(hoyStr(),-14);
   return logrosCl().inst.filter(function(x){ return x.f&&x.f>=lim&&V.indexOf(x.id)<0; }).sort(function(a,b){ return a.f<b.f?1:a.f>b.f?-1:b.o-a.o; });
 }
@@ -19536,9 +19624,9 @@ function logrosMarcar(L,avisar){
 }
 /* la primera vez (y al pasar a los logros concretos de la v48): todo lo que ya tenía, visto (sin celebraciones de golpe) */
 function logrosInit(){
-  var lg=CL.d&&CL.d.logros; if(!lg||(lg.vistos!=null&&lg.vistos.indexOf('v53')>=0)||CL.lgIni===lkCl()) return; CL.lgIni=lkCl();      // v53.4.29: al pasar a las medallas nuevas, lo que ya tenía no se celebra de golpe
+  var lg=CL.d&&CL.d.logros; if(!lg||(lg.vistos!=null&&lg.vistos.indexOf('v119')>=0)||CL.lgIni===lkCl()) return; CL.lgIni=lkCl();      // v53.4.29: al pasar a las medallas nuevas, lo que ya tenía no se celebra de golpe
   // v49: también lo de las medallas nuevas; solo hace falta guardar lo de las últimas semanas (lo antiguo ya no se celebra)
-  var lim=sumar(hoyStr(),-21), ids=['v48','v49','v53'].concat(logrosCl_().inst.filter(function(x){ return x.f&&x.f>=lim; }).map(function(x){ return x.id; }));
+  var lim=sumar(hoyStr(),-21), ids=['v48','v49','v53','v119'].concat(logrosCl_().inst.filter(function(x){ return x.f&&x.f>=lim; }).map(function(x){ return x.id; }));
   lg.vistos=(lg.vistos||[]).concat(ids);
   api('logrosVistos',BOOT.token,ids,[]).catch(function(){});
 }
@@ -19594,7 +19682,8 @@ function lgCuenta(R){ return R.ok.reduce(function(a,g){ return a+g.n; },0); }
 function lgCerca(R,k){
   return R.sig.map(function(x,i){ return {x:x,i:i,p:x.meta?x.val/x.meta:0}; }).sort(function(a,b){ return b.p-a.p||a.i-b.i; }).slice(0,k).map(function(y){ return y.x; });
 }
-function logroMini(x){ return '<button class="lg-mini" data-a="lgVer" data-id="'+esc(x.id)+'" aria-label="'+esc(x.t)+'">'+medallaHtml(x.ic,true,'',x.n)+'<small>'+esc(x.t)+'</small></button>'; }
+function lgCorto(t){ return String(t||'').replace(/ completas seguidas$/,' seguidas').replace(/ seguidos (entrenando|cumpliendo)$/,' seguidos').replace(/^(\d+) check-ins seguidos$/,'$1 check\u2011ins').replace(/ revisiones de medidas$/,' revisiones'); }      // v53.4.119: en las pequeñas, el nombre corto (el entero, al tocarla)
+function logroMini(x){ return '<button class="lg-mini" data-a="lgVer" data-id="'+esc(x.id)+'" aria-label="'+esc(x.t)+'">'+medallaHtml(x.ic,true,'',x.n)+'<small>'+esc(lgCorto(x.t))+'</small></button>'; }
 function logroSig(x){ return '<div class="lg-sg">'+medallaHtml(x.ic,false,'sm')+'<div><b>'+esc(x.t)+'</b><span class="lg-pb"><i style="width:'+Math.round(x.val/x.meta*100)+'%"></i></span><small>'+esc(x.sub)+'</small></div></div>'; }
 function logrosCard(){
   var R=logrosCl(), n=lgCuenta(R), S=lgCerca(R,R.ok.length?1:2);
@@ -19680,20 +19769,17 @@ function pasosProgCard(){
   return '<div class="card ps-prog'+(anAb('ps')?'':' an-cerr')+'" id="ps-prog">'+anCab('ps','<span class="ps-tt">'+ic('pasos')+'Sus pasos</span>','Objetivo '+fP(o))+      // v52.18: plegado
     (anAb('ps')?pasosGraf(L,o,true)+'<p class="muted sm">'+res+'</p><button class="link" data-a="psVerCo">'+ic('flecha')+'Ver sus semanas y meses</button>':'<p class="muted sm an-res">'+res+'</p>')+'</div>';
 }
-function logrosFichaCard(){
-  var c=CO.d.clienta, h='<div class="card lg-ficha" id="lg-ficha"><div class="card-t"><span class="ps-tt">'+ic('trofeo')+'Sus logros</span></div>'+
-    '<div class="fila"><span>Logros en su app</span><button class="sw'+(c.logrosOn?' on':'')+'" data-a="lgTog" aria-label="Logros en su app" aria-pressed="'+!!c.logrosOn+'"><i></i></button></div>';
-  if(!c.logrosOn) return h+'<p class="muted sm">Apagado: en su app no ve los logros ni se le celebran.</p></div>';
-  var R=logrosCo(), u=R.ok[0], n=lgCuenta(R);
-  h+='<p class="muted sm">'+n+(n===1?' medalla':' medallas')+(u?' · la última: <b>'+esc(lgTxt(u.last))+'</b>'+(u.f?' ('+esc(fMedia(u.f))+')':''):'')+'. Sus medallas están en <button class="link" data-a="sub" data-t="progreso">Progreso</button>.</p>'+
-    '<div class="fila mt"><span>Avisarte cuando consiga uno</span><button class="sw'+(c.logrosAviso?' on':'')+'" data-a="lgAvisoTog" aria-label="Avisarte cuando consiga uno" aria-pressed="'+!!c.logrosAviso+'"><i></i></button></div>'+
-    '<p class="muted sm">Te sale una tarea en Inicio para '+cG('felicitarla','felicitarle')+'.</p>'+
-    '<button class="link" data-a="frVer" data-k="logros">'+ic('lapiz')+'Tus frases de las medallas</button></div>';      // v49
-  return h;
+function logrosFichaCard(){      // v53.4.119: solo encenderlas o apagarlas (las medallas son para motivarle; a ti no te llegan avisos ni las ves aquí)
+  var c=CO.d.clienta;
+  return '<div class="card lg-ficha" id="lg-ficha"><div class="card-t"><span class="ps-tt">'+ic('trofeo')+'Sus medallas</span></div>'+
+    '<div class="fila"><span>Medallas en su app</span><button class="sw'+(c.logrosOn?' on':'')+'" data-a="lgTog" aria-label="Medallas en su app" aria-pressed="'+!!c.logrosOn+'"><i></i></button></div>'+
+    '<p class="muted sm">'+(c.logrosOn?'Las gana con constancia (semanas completas seguidas, meses entrenando, check-ins…) y le salen en su app, en Progreso. Son para motivar'+cG('la','le')+': a ti no te llegan avisos.':'Apagado: en su app no ve las medallas ni se le celebran.')+'</p>'+
+    (c.logrosOn?'<button class="link" data-a="frVer" data-k="logros">'+ic('lapiz')+'Tus frases de las medallas</button>':'')+'</div>';
 }
 function logrosCo(){ var d=CO.d, c=d.clienta; return logrosDe({sesiones:d.sesiones||[],series:d.series||[],diario:d.diario||[],rutinas:d.rutinas||[],medidas:d.medidas||[],pasosDias:d.pasos||[]},{obj:c.pasosObj||0}); }
 /* v48 · Progreso: sus medallas */
 function logrosProgCard(){
+  return '';      // v53.4.119: el entrenador ya no ve sus medallas (son para motivar al cliente)
   var c=CO.d.clienta; if(!c.logrosOn) return '';
   var R=logrosCo();
   var u=R.ok[0], n=lgCuenta(R);
