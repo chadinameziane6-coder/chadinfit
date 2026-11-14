@@ -2964,7 +2964,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.108';
+var APP_V = 'v53.4.109';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7396,16 +7396,16 @@ function eqRCasa(A,B,m,peso){      // gramos de B por gramo de A (sin redondear)
 function bdRed(b,q){ var R=bdRegla(b); if(!R) return redG(q); var st=R[2], v=Math.max(R[0],Math.round(q/st)*st); return Math.abs(v-q)>Math.max(q*0.4,st*0.75)?0:Math.round(v*10)/10; }      // en el intercambio: de su paso en su paso (sin tope: si el plato lleva mucho, el cambio también)
 function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
   var porF={}, orden=[], out=[], k=MK_EQ[g.m]||0;
-  var tq=tostaQ(me), lq=lataP(me);      // v53.4.108: el queso de una tostada, por otro queso o un fiambre (no por un yogur) · la lata, por lo de diario
-  tabla.forEach(function(a){ if(!a.b) return; var f=famDe(a.id); if(tq?TOSTA_Q.indexOf(f)<0:lq?LATA_ALT.indexOf(f)<0:a.x!==it.x) return; if(f===fam||(permit&&permit.indexOf(f)<0)||(!tq&&!lq&&!famOkCasa(me,a))) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
+  var tq=tostaQ(me), lq=lataP(me)||huevoP(me), LQ=huevoP(me)?HUEVO_ALT:LATA_ALT;      // v53.4.109: el huevo, por claras, fiambre, atún, queso fresco o pollo      // v53.4.108: el queso de una tostada, por otro queso o un fiambre (no por un yogur) · la lata, por lo de diario
+  tabla.forEach(function(a){ if(!a.b) return; var f=famDe(a.id); if(tq?TOSTA_Q.indexOf(f)<0:lq?LQ.indexOf(f)<0:a.x!==it.x) return; if(f===fam||(permit&&permit.indexOf(f)<0)||(!tq&&!lq&&!famOkCasa(me,a))) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
   orden.forEach(function(f){
     var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0||it.e==='escurrido'?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];      // v53.4.100: el atún escurrido, por pollo ya hecho
-    var peso=!tq&&eqPesoCasa(me,a), pc=protDia(me,a)||tq||lq, r=pc&&+A[1]>0&&+a.b[1]>0?(A[1]/a.b[1]+A[0]/a.b[0])/2:eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;      // v53.4.107: carne o pescado de diario, a medias entre la proteína y las kcal (el salmón, algo menos)
+    var vq=verdP(me)&&VERD_ALT.indexOf(famDe(a.id))>=0, peso=vq||(!tq&&eqPesoCasa(me,a)), pc=!vq&&(protDia(me,a)||tq||lq), r=pc&&+A[1]>0&&+a.b[1]>0?(A[1]/a.b[1]+A[0]/a.b[0])/2:eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;      // v53.4.107: carne o pescado de diario, a medias entre la proteína y las kcal (el salmón, algo menos)
     var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*(lq?1.8:pc?1.6:1.25)&&kb-ka>25)||kb<ka*(pc?0.6:0.4))) return;      // la lata, también por salmón (más graso)
     var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
     var Rb=bdRegla(a), stM=Rb?(+a.b[k]||0)*Rb[2]/100*0.6:0;
     var cz=usoAl(me)[0]==='pan'&&usoAl(a)[0]==='gua';      // v53.4.103: el pan por arroz, patata… (con algo más de margen)
-    if(pc){ if(mb<ma*0.7||mb>ma*1.6) return; }      // carne o pescado: que no baje mucho la proteína (subir, algo, vale: el pollo por el salmón)
+    if(pc){ if(mb<ma*0.7||mb>ma*(huevoP(me)?2.1:1.6)) return; }      // carne o pescado: que no baje mucho la proteína (subir, algo, vale: el pollo por el salmón)
     else if(k&&!peso&&Math.abs(mb-ma)>Math.max(ma*(cz?0.35:0.25),k===3?2:3,stM)) return;      // el macro de su grupo, con margen (y medio paso: una rebanada entera)
     var m=a.b.map(function(v){ return v*q/100; });
     out.push({a:a,q:q,m:m,d:mo?m.map(function(v,j){ return v-mo[j]; }):null,err:Math.abs(kb-ka)/Math.max(ka,1)+(kb>ka?0.2:0),cls:clsEst(a.e)===clsEst(it.e)?0:1});
@@ -7444,6 +7444,10 @@ var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pec
    filetes de pollo… no rodaballo ni sepia todos los días porque es carísimo; una opción como calamares, pero no tantas»): la carne o el pescado, por los de diario */
 var TOSTA_Q=['requeson','queso_burgos0','queso_burgos','queso_lonchas_light','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','huevo','queso_semicurado','mozzarella_light'];      // v53.4.108 (Javier: «el queso de Burgos es para untar en la tostada: queso cottage, fiambre de pavo o jamón cocido»)
 var LATA_ALT=['pollo_pechuga','pavo_pechuga','jamon_serrano','jamon_cocido','salmon','merluza','pollo_muslo','ternera_filete','cerdo_lomo','bacalao','atun_aceite'];      // v53.4.108 (Javier: «en la tortilla, el atún sí, pero por pollo, jamón serrano, salmón, un filete… no langostinos ni pulpo, que no se comen a diario»)
+var VERD_ALT=['brocoli','judias_verdes','pipirrana','champinones','calabacin','esparragos','coliflor','espinacas','lechuga','berenjena','repollo'];      // v53.4.109 (Javier: «verduras intercambiables: brócoli, judías verdes, pipirrana, champiñones… como complemento o acompañando a hidratos y proteínas»)
+function verdP(me){ return me.x==='verd'&&VERD_ALT.indexOf(famDe(me.id||me.a||''))>=0; }      // la verdura de acompañamiento (no la cebolla del sofrito ni el tomate de la tostada): por otra, gramo a gramo
+var HUEVO_ALT=['claras','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','queso_burgos0','requeson','pollo_pechuga','pavo_pechuga','queso_lonchas_light','tofu'];      // v53.4.109 (Javier: «el huevo solo pone claras, pero se puede cambiar por más cosas: fiambres…»)
+function huevoP(me){ return famDe(me.id||me.a||'')==='huevo'; }
 function lataP(me){ var T=usoAl(me); return me.x==='prot'&&T.indexOf('pes')>=0&&T.indexOf('fia')>=0; }
 function tostaQ(me){ return me.x==='lac'&&usoAl(me).indexOf('que')>=0&&!!(me.cx&&me.cx.pan); }
 var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','cerdo_solomillo','ternera_picada5','salmon','merluza','bacalao','calamar'];
@@ -7452,7 +7456,8 @@ function protDia(me,a){ return me.x==='prot'&&a.x==='prot'&&!!protTag(me)&&!!pro
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
   if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)) return out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }).slice(0,10); out=out.filter(function(z){ return z.a.x==='lac'; }); }      // en un bol, por yogur o queso; en una tostada, por otro queso o fiambre
-  if(lataP(me)){ var La=out.filter(function(z){ return LATA_ALT.indexOf(famDe(z.a.id))>=0; }); if(La.length>=3) return La.sort(function(a,b){ return LATA_ALT.indexOf(famDe(a.a.id))-LATA_ALT.indexOf(famDe(b.a.id)); }).slice(0,10); }
+  if(verdP(me)&&!(o&&panBase(o))){ var Ve=out.filter(function(z){ return VERD_ALT.indexOf(famDe(z.a.id))>=0; }); if(Ve.length>=2) return Ve.sort(function(a,b){ return VERD_ALT.indexOf(famDe(a.a.id))-VERD_ALT.indexOf(famDe(b.a.id)); }).slice(0,10); }
+  if(lataP(me)||huevoP(me)){ var LQ=huevoP(me)?HUEVO_ALT:LATA_ALT, La=out.filter(function(z){ return LQ.indexOf(famDe(z.a.id))>=0; }); if(La.length>=2) return La.sort(function(a,b){ return LQ.indexOf(famDe(a.a.id))-LQ.indexOf(famDe(b.a.id)); }).slice(0,10); }
   if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,10); }
   var esPan=me.x==='hc'&&usoAl(me)[0]==='pan', tc=o?tipoOp(o):'';
   if(esPan&&(!o||tc!=='c'||panBase(o)||/^(tortilla_|pan_hamburguesa)/.test(famDe(me.id||me.a)))) out=out.filter(function(z){ return usoAl(z.a)[0]==='pan'; });      // v53.4.102: en tostadas, bocadillos o wraps, el pan solo por pan · v53.4.103: y en desayunos y meriendas, tampoco
@@ -7466,11 +7471,15 @@ function altsCtx(out,me,o){
     for(var r=0;L.length<10&&ts.some(function(t){ return T[t].length>r; });r++) ts.forEach(function(t){ if(T[t][r]&&L.length<10) L.push(T[t][r]); }); }
   if(esPan&&L.some(function(z){ return usoAl(z.a)[0]==='gua'; })){      // v53.4.103: en comida y cena, arroz, patata, boniato, quinoa y cuscús primero, y dos panes
     var GO=['arroz_blanco','patata','boniato','quinoa','cuscus','pasta'], gk=function(z){ var i=GO.indexOf(famDe(z.a.id)); return i<0?9:i; };
-    var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,6), Pa=L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; }).slice(0,4);
+    L=L.filter(function(z){ return !/hamburguesa|burger/.test(clave((z.a.n||'')+' '+z.a.id)); }); var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,6), Pa=panOrden(L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; })).slice(0,4);
     return Gu.concat(Pa);
   }
+  if(esPan){ if(!/hamburguesa|burger/.test(clave((me.n||'')+' '+(me.id||me.a||'')))) L=L.filter(function(z){ return !/hamburguesa|burger/.test(clave((z.a.n||'')+' '+z.a.id)); }); L=panOrden(L); }      // el pan de hamburguesa, solo por otro de hamburguesa
   return L.slice(0,10);
 }
+/* v53.4.109 (Javier: «en las opciones del pan integral, añade tortitas de arroz y de maíz»): el pan, primero por estos */
+var PAN_ALT=['pan_barra','tortitas_arroz','tortitas_maiz','pan_molde_integral','pan_integral','pan_sin_gluten','pan_centeno','tortilla_trigo','tortilla_maiz'];
+function panOrden(L){ var k=function(z){ var i=PAN_ALT.indexOf(famDe(z.a.id)); return i<0?99:i; }; return L.map(function(z,i){ z._p=i; return z; }).sort(function(a,b){ return k(a)-k(b)||a._p-b._p; }); }
 function altsDe(it,tabla,grupos,ctx){
   if(!it||!it.x) return [];
   var g=(grupos||[]).filter(function(x){ return x.id===it.x; })[0]; if(!g) return [];
@@ -14758,16 +14767,16 @@ var BIB_DIARIO=[
   {id:'b105',n:'Guiso de alubias con verduras',t:'c',min:30,imgDe:'c32',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',80,2],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/preparar-guiso-judias-verduras-thermomix',
     pasos:'Pica el tomate, el pimiento, la cebolla, el calabacín, el puerro y la zanahoria, y sofríelos con el aceite 8-10 minutos a fuego medio. Añade el jamón en taquitos, un par de cucharadas de alubias aplastadas, el caldo, una hoja de laurel y sal, y cuece 20 minutos a fuego suave. Incorpora el resto de las alubias (escurridas y lavadas) y deja 3 minutos más.',
     ing:[['alubias.co',800,'f'],['zanahoria',150,'f'],['puerro',150,'f'],['calabacin',100,'f'],['tomate',150,'f'],['pimiento_verde',70,'f'],['cebolla',70,'f'],['aceite_oliva',50,'f'],['jamon_serrano',100,'f',null,1],['caldo_verduras',600,'f']]},
-  {id:'b106',n:'Patatas guisadas con magro',t:'c',min:55,imgDe:'c80',tanda:{r:4,c:'olla grande'},ac:[['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/patatas-con-magro-recetas-de-lluvia',
+  {id:'b106',n:'Patatas guisadas con magro',t:'c',min:55,imgDe:'c80',tanda:{r:4,c:'olla grande'},ens:[['lechuga',80],['tomate',120]],ac:[['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/patatas-con-magro-recetas-de-lluvia',
     pasos:'Pica la cebolla, el puerro y 2 dientes de ajo y sofríelos con el aceite 5 minutos. Añade el magro en trozos, el tomate frito, una hoja de laurel y una cucharadita de pimentón, y rehoga 5 minutos. Vierte un chorro de vino blanco (opcional) y deja que se evapore; añade 600 ml de agua o caldo, las patatas chascadas en trozos y la zanahoria en rodajas, y cuece tapado a fuego suave 35-40 minutos. Al final, incorpora los guisantes y deja 3 minutos.',
     ing:[['patata.cr',800,'f'],['cerdo_lomo.cr',400,'f'],['zanahoria',200,'f'],['cebolla',200,'f'],['puerro',100,'f'],['guisantes',100,'f'],['aceite_oliva',50,'f'],['tomate_frito',30,'f']]},
-  {id:'b107',n:'Carne guisada con patatas',t:'c',min:60,imgDe:'c57',tanda:{r:6,c:'olla grande'},ac:[['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/preparar-carne-guisada-thermomix',
+  {id:'b107',n:'Carne guisada con patatas',t:'c',min:60,imgDe:'c57',tanda:{r:6,c:'olla grande'},ens:[['lechuga',80],['tomate',120]],ac:[['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/cristinaferrer/preparar-carne-guisada-thermomix',
     pasos:'Pica la cebolla, 2 dientes de ajo y el pimiento y sofríelos con el aceite 7 minutos. Añade la ternera (morcillo) y el magro de cerdo en trozos y dóralos 5 minutos. Incorpora el tomate, un chorro de vino blanco, una hoja de laurel y una cucharadita de hierbas secas, y deja 3 minutos. Añade 250 ml de caldo o agua, sal y pimienta, y cuece tapado a fuego suave 40-45 minutos, hasta que la carne esté tierna. Mientras, cuece las patatas en dados al vapor (o en la misma olla los últimos 20 minutos) y sírvelas con la carne y su salsa.',
     ing:[['patata.cr',1000,'f'],['ternera_filete.cr',300,'f'],['cerdo_lomo.cr',300,'f'],['tomate_triturado',200,'f'],['cebolla',150,'f'],['pimiento_verde',120,'f'],['aceite_oliva',50,'f']]},
   {id:'b108',n:'Ternera estofada con guisantes',t:'c',min:60,imgDe:'c58',tanda:{r:4,c:'olla mediana'},ac:[['patata.cr',200],['arroz_blanco.cr',60],['pan_integral',30]],fn:'Thermomix',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/estofado-carne-guisantes-thermomix',
     pasos:'Pica la cebolla, 2 dientes de ajo y las zanahorias y sofríelos con el aceite 10 minutos a fuego medio. Salpimienta la carne en dados, pásala por un poco de harina y dórala con el sofrito 4-5 minutos. Añade 100 ml de vino blanco y deja 1 minuto; vierte 350 ml de agua y cuece tapado a fuego suave 45-50 minutos (con morcillo, hasta 1 hora y cuarto). Incorpora los guisantes y deja 10 minutos más. Prueba de sal.',
     ing:[['ternera_filete.cr',800,'f'],['cebolla',150,'f'],['zanahoria',160,'f'],['guisantes',100,'f'],['aceite_oliva',60,'f'],['harina_trigo',20,'f',['maicena']]]},
-  {id:'b109',n:'Albóndigas en salsa de tomate',nv:{soja_texturizada:'Albóndigas de soja en salsa de tomate'},t:'c',min:70,imgDe:'c53',tanda:{r:4,c:'cazuela'},ac:[['arroz_blanco.cr',60],['patata.cr',150],['pan_integral',30]],fn:'Thermomix (Cookidoo)',fu:'https://cookidoo.thermomix.com/recipes/recipe/en-us/r936746',
+  {id:'b109',n:'Albóndigas en salsa de tomate',nv:{soja_texturizada:'Albóndigas de soja en salsa de tomate'},t:'c',min:70,imgDe:'c53',tanda:{r:4,c:'cazuela'},ens:[['lechuga',80],['tomate',120]],ac:[['arroz_blanco.cr',60],['patata.cr',150],['pan_integral',30]],fn:'Thermomix (Cookidoo)',fu:'https://cookidoo.thermomix.com/recipes/recipe/en-us/r936746',
     pasos:'Remoja el pan en la leche y aplástalo. Mézclalo con la carne, los huevos, un diente de ajo y perejil picados, sal y pimienta. Forma albóndigas del tamaño de una nuez. Para la salsa, sofríe la cebolla picada y un diente de ajo con el aceite 8 minutos, añade el tomate, sal y pimienta y deja 10 minutos. Echa las albóndigas en la salsa y cuécelas tapadas a fuego suave 20-25 minutos, moviendo la cazuela de vez en cuando (si quieres, dóralas antes en la sartén).',
     ing:[['ternera_picada10.cr',400,'f',['soja_texturizada.cr*0.3']],['huevo',100,'f',null,1],['pan_barra',40,'f',['pan_sin_gluten']],['leche_semi',50,'f',['leche_sin_lactosa','bebida_soja']],['tomate_triturado',600,'f'],['cebolla',200,'f'],['aceite_oliva',20,'f']]},
   {id:'b110',n:'Crema de calabacín',t:'c',min:35,imgDe:'c66',tanda:{r:4,c:'olla mediana'},ac:[['huevo',50,2],['pollo_pechuga.cr',120],['arroz_blanco.cr',40,3],['pan_integral',30]],fn:'Thermomix · Cristina Ferrer',fu:'https://www.vorwerk.com/es/es/comunidad/noticias/inspiracion-thermomix/recetas/como-preparar-crema-de-calabacin-en-thermomix',
@@ -14795,7 +14804,7 @@ var BIB_DIARIO=[
     pasos:'Precalienta el horno a 180 °C. Tritura la avena hasta que quede como harina (o úsala en copos). Bate los 3 huevos con el yogur, la miel y la ralladura de limón; añade la avena, una cucharadita de levadura química, una de canela y una pizca de sal, y mezcla sin batir de más. Vierte en un molde forrado con papel y hornea 35-40 minutos, hasta que al pinchar salga limpio. Déjalo enfriar antes de cortarlo.',
     ing:[['avena.cr',200,'f',['avena_sin_gluten.cr']],['yogur_natural',250,'f',['yogur_sin_lactosa','yogur_soja']],['huevo',150,'f'],['miel',50,'f',['eritritol']],['limon',20,'f',null,1]]},
   /* ---------- v53.4.101 (nº 1, Javier: «me puedes añadir estas tres recetas también?»): las de su recetario (PDF), con sus cantidades ---------- */
-  {id:'b118',n:'Pollo tikka masala',t:'c',min:50,tanda:{r:2,c:'sartén y freidora de aire'},ac:[['arroz_basmati.cr',60,2],['pan_integral',30]],fn:'Recetario MOOD ON',
+  {id:'b118',n:'Pollo tikka masala',t:'c',min:50,tanda:{r:2,c:'sartén y freidora de aire'},ens:[['brocoli',150]],ac:[['arroz_basmati.cr',60,2],['pan_integral',30]],fn:'Recetario MOOD ON',
     ex:'Para el adobo: 1 diente de ajo rallado, ¼ cucharadita de jengibre en polvo, 1 de pimentón dulce, ½ de comino, ½ de cilantro molido, una pizca de canela, 2 cucharaditas de zumo de limón y sal. Para la salsa: 1 diente de ajo, ¼ de jengibre, ½ de pimentón, ¼ de comino, ½ de cilantro, ¼ de cúrcuma, una pizquita de canela, 1 clavo, pimienta, sal y 100-150 ml de agua. Cilantro fresco para servir (opcional). Versión suave, sin chile.',
     pasos:'Mezcla el yogur con las especias del adobo, el zumo de limón y la sal, añade el pollo en dados de 3 cm y déjalo en la nevera de 30 minutos a 2 horas. Hazlo en la freidora de aire a 190 °C 12-18 minutos, girándolo a mitad (por dentro, 74 °C), y resérvalo. En una sartén, sofríe la cebolla picada con el aceite y el clavo 7-10 minutos; añade el ajo y el jengibre 30 segundos. Echa el resto de las especias, remueve 20 segundos a fuego suave y añade el tomate triturado y el concentrado; cocina 10-15 minutos hasta que espese. Quita el clavo, añade 100 ml de agua y deja 5 minutos (si la quieres fina, tritúrala ahora). Baja el fuego, incorpora la nata, mete el pollo y deja 3-5 minutos más. Va muy bien con arroz basmati (60 g en crudo por persona).',
     ing:[['pollo_pechuga.cr',350,'f'],['yogur_natural',50,'f',['yogur_sin_lactosa','yogur_soja']],['cebolla',75,'f'],['tomate_triturado',180,'f'],['tomate_concentrado',20,'f'],['nata_light',60,'f'],['aceite_oliva',10,'f'],['limon',10,'f',null,1]]},
@@ -14822,7 +14831,7 @@ var BD_R={aceite_oliva:[5,20,5],aceite_coco:[5,20,5],mantequilla:[5,15,5],mayone
   yogur_natural:[125,250,125],yogur_desnatado:[125,250,125],yogur_griego:[125,250,125],yogur_griego0:[125,250,125],yogur_soja:[125,250,125],yogur_sin_lactosa:[125,250,125],skyr:[150,300,150],kefir:[125,250,125],
   queso_batido0:[100,250,25],requeson:[50,200,25],queso_burgos:[50,150,25],queso_burgos0:[50,150,25],mozzarella:[30,125,25],mozzarella_light:[20,60,10],queso_semicurado:[20,40,10],queso_lonchas_light:[20,60,20],parmesano:[5,15,5],
   jamon_serrano:[30,90,15],jamon_cocido:[30,90,15],pavo_fiambre:[36,108,12],atun_natural:[52,156,52],atun_aceite:[52,156,52],sardinas_aceite:[60,120,60],bacon:[15,45,15],chorizo:[20,40,10],
-  avena:[30,90,10],avena_sin_gluten:[30,90,10],corn_flakes:[25,60,5],tortitas_arroz:[16,48,8],tortilla_trigo:[40,120,40],tortilla_maiz:[30,90,30],pan_hamburguesa:[60,60,60],pan_barra:[40,120,20],
+  avena:[30,90,10],avena_sin_gluten:[30,90,10],corn_flakes:[25,60,5],tortitas_arroz:[16,48,8],tortitas_maiz:[18,54,9],tortilla_trigo:[40,120,40],tortilla_maiz:[30,90,30],pan_hamburguesa:[60,60,60],pan_barra:[40,120,20],
   guisantes:[50,150,25],maiz_dulce:[40,120,20],miel:[7,21,7],tomate_frito:[15,60,15],tomate_frito_sa:[15,90,15],noquis:[100,300,25],
   platano:[60,120,60],manzana:[150,150,150],pera:[160,160,160],naranja:[150,150,150],melocoton:[150,150,150],mandarina:[70,70,70],kiwi:[75,75,75],datiles:[8,32,8],fresas:[100,300,25],arandanos:[50,150,25],
   frambuesas:[50,150,25],frutos_rojos:[80,200,20],uva:[80,200,20],cerezas:[80,200,20],pasas:[15,30,15],melon:[150,350,50],sandia:[150,350,50],pina:[100,300,25],mango:[100,250,25],
@@ -15011,9 +15020,16 @@ function lecheCafe(al){ return ['leche_semi','leche_sin_lactosa','bebida_soja','
 function tieneLeche(ing){ return (ing||[]).some(function(it){ return /^(leche|bebida_|cafe)/.test(famDe((it.a&&it.a.id)||it.a||'')); }); }
 function conCafe(x,al){ if(!x||tieneLeche(x.ing)) return x; var a=lecheCafe(al); if(!a) return x;
   return Object.assign({},x,{ing:x.ing.concat([{a:a,q:150,rol:'f'}]),notas:(x.notas||[]).concat(['Con 150 ml de '+(a.id==='bebida_soja'?'bebida de soja':a.id==='bebida_avena'?'bebida de avena':'leche')+' para el café (o para tomarla sola).'])}); }
+/* v53.4.109 (nº 1, Javier: «en comidas y cenas que se cocinan en sartén, horno o freidora de aire, mete 10 ml de aceite de oliva, que la gente cocina con él») */
+function conAceite(x){ if(!x||!x.r||x.r.tanda||!(CO.nut&&CO.nut.casa)) return x;
+  var cook=x.ing.some(function(it){ return /\.cr$/.test(it.a.id)&&it.a.x==='prot'; })||/(plancha|horno|asad|saltead|frit|freidora|revuelto|tortilla|pizza|noquis|wrap|hamburguesa)/.test(clave(x.r.n||''));
+  if(!cook) return x; var k=-1; x.ing.forEach(function(it,i){ if(k<0&&it.a.id==='aceite_oliva') k=i; });
+  if(k>=0){ var it=x.ing[k], I=x.ing.slice(); I[k]=Object.assign({},it,{q:Math.max(10,num(it.q)||0),R:[10,20,5]}); return Object.assign({},x,{ing:I,notas:num(it.q)<10?(x.notas||[]).concat(['Con 10 ml de aceite de oliva (una cucharada) para cocinarlo.']):x.notas}); }
+  var a=CO.nutM&&CO.nutM.aceite_oliva; if(!a) return x;
+  return Object.assign({},x,{ing:x.ing.concat([{a:a,q:10,rol:'f'}]),notas:(x.notas||[]).concat(['Con 10 ml de aceite de oliva (una cucharada) para cocinarlo.'])}); }
 function recetasPara(tipo,obj,al,usadas,n,cafe){
   var C=libTodas().filter(function(r){ return r.t.indexOf(tipo)>=0; }).map(function(r){
-    var x=adaptarReceta(r,al); if(!x) return null; if(cafe&&!r.tanda) x=conCafe(x,al);
+    var x=adaptarReceta(r,al); if(!x) return null; if(cafe&&!r.tanda) x=conCafe(x,al); if(tipo==='c'&&!r.tanda) x=conAceite(x);
     var lc=r.bd&&r.tanda&&CO.nut&&CO.nut.casa?libOpCasa(x,obj,al,cafe):null;      // v53.4.87: las de olla de la biblioteca de diario, por raciones y con acompañamiento si le falta
     var pt=r.tanda&&!lc?porcionTanda(x,obj):null, items=lc?lc.items:pt?pt.items:cuadrarReceta(x,obj), m=macItems(items), fav=x.ing.filter(function(it){ return esFav(it.a,al); }).length;
     var cu=!pt&&m?cuadraMacE(m,obj):null;      // v53.4.79: las que no llegan a cuadrar (por su reparto: un desayuno con muy poca grasa…), al final
@@ -15157,6 +15173,7 @@ A.libPon=function(el){
     var ac1=op1.items.filter(function(it){ return op1.lote.b[it.i]==null; });
     var cq1=cuadraOp(p,c,op1); return toast('Añadida'+(cq1&&cq1.ok?' y cuadrada':'')+': '+(op1.lote.pc?rcTxt(op1,rcF(op1))+' ya cocinado':rcTxt(op1,rcF(op1))+' de '+op1.lote.rac)+(ac1.length?', con '+rcAcTxt(ac1):'')+'.','ok'); }      // v53.4.94
   if(!r.tanda&&cafeCm(c.nombre)) x=conCafe(x,al);      // v53.4.106
+  if(!r.tanda&&tipoCmDe(c.nombre||'')==='c') x=conAceite(x);      // v53.4.109
   var ob=objCm(p,c), pt=r.tanda?porcionTanda(x,ob):null, items=pt?pt.items:ob&&ob[1]!=null&&ob[2]!=null&&ob[3]!=null?cuadrarReceta(x,ob):x.ing.map(function(it){ return {i:'i'+rand(5),a:it.a.id,q:String(it.q),x:it.a.x||''}; });
   if(c.opciones.length>=12) return toast('Máximo 12 platos por comida');
   var vacia=c.opciones.length===1&&!(c.opciones[0].items||[]).length&&!c.opciones[0].texto&&!c.opciones[0].nombre;
