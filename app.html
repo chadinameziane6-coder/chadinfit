@@ -2937,7 +2937,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.87';
+var APP_V = 'v53.4.88';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7337,18 +7337,62 @@ function eqVale(x,qo,qa){ return !!x&&qa>=3&&qa<=700&&(x.s||x.e*qo/100<=20); }
 function clsEst(e){ return e==='crudo'||e==='en seco'?'cr':['cocido','asado','a la plancha','frito'].indexOf(e)>=0?'co':''; }
 /* Equivalentes de un ingrediente: una variante por familia (la del mismo estado si la hay) con sus gramos.
    tabla: alimentos con b (coach y quien ve los macros) o, si no, la tabla de pares que manda el servidor (intCl().eq) */
+/* v53.4.88 · INTERCAMBIOS REALISTAS (solo panel nº 1). Javier: «el jamón serrano del desayuno, por pavo, lomo, jamón cocido…, nunca por pechuga
+   de pollo o sardinas», «con un margen», «el plátano por 1 kiwi, no por 200 g de kiwi». Cada alimento solo se cambia por los de su familia de cocina
+   (fiambre por fiambre; la carne o el pescado del plato, por carne o pescado; una lata por otra lata; el pan por pan; el arroz, la pasta o la patata
+   entre sí; un yogur por otro yogur…), con el macro de su grupo igual (con margen), más ligero vale y más calórico poco, y en unidades enteras. */
+function usoPri(a){ return (usoAl(a)[0]||'').replace('>',''); }
+function famOkCasa(a,b){      // a: el que lleva el plato · b: el candidato
+  var A=usoAl(a), B=usoAl(b).filter(function(t){ return t.charAt(0)!=='>'; }), pa=(A[0]||'').replace('>',''), pb=B[0]||'';
+  var con=function(T){ return T.indexOf('pes')>=0&&T.indexOf('fia')>=0; };
+  if(a.x==='prot'){
+    if(pa==='sup') return usoOkAl(a,b);
+    if(con(A)||con(B)) return con(A)&&con(B);      // una lata (atún, sardinas…) por otra lata
+    if(pa==='fia') return B.indexOf('fia')>=0;      // el jamón, por otro fiambre (nunca por pollo ni sardinas)
+    if(pa==='car'||pa==='pes') return pb==='car'||pb==='pes';      // la carne o el pescado del plato, por carne o pescado
+    return pa===pb;
+  }
+  if(a.x==='fruta'&&a.b&&b.b&&(+a.b[0]>=200)!==(+b.b[0]>=200)) return false;      // la fruta fresca, por fruta fresca (no por pasas ni dátiles)
+  var raro=/leche de coco|crema de coco|\bnata\b|placas|laminas|canelon|gelatina/, na=sinTil(a.n||a.id), nb=sinTil(b.n||b.id); if(raro.test(nb)&&!raro.test(na)) return false;
+  var bun=/hamburguesa|burger|perrito|wrap|tortilla|pita|fajita/;      // el pan de hamburguesa y los wraps, aparte del pan de tostadas o de bocadillo
+  if(a.x==='hc'&&pa==='pan'&&bun.test(na)!==bun.test(nb)) return false;
+  if(a.x==='hc'||a.x==='fruta') return pa===pb;      // el pan por pan; el arroz, la pasta o la patata entre sí; la fruta por fruta
+  return usoOkAl(a,b);
+}
+function eqPesoCasa(a,b){ return a.x==='lac'&&usoAl(a).indexOf('yog')>=0&&usoAl(b).indexOf('yog')>=0; }      // un yogur por otro yogur (o skyr, kéfir…): peso por peso
+function eqRCasa(A,B,m,peso){      // gramos de B por gramo de A (sin redondear), o 0 si no se parecen
+  if(!A||!B||!(+B[0]>0)||!(+A[0]>0)) return 0; var k=MK_EQ[m]||0; if(peso&&k&&+B[k]<+A[k]*0.7) return 0; var r=peso?1:k&&+B[k]>0&&+A[k]>0?A[k]/B[k]:A[0]/B[0], rk=r*B[0]/A[0];
+  return rk>=0.4&&rk<=(peso?1.9:1.25)?r:0;      // más ligero vale (el huevo, por claras); más calórico, poco
+}
+function bdRed(b,q){ var R=bdRegla(b); if(!R) return redG(q); var st=R[2], v=Math.max(R[0],Math.round(q/st)*st); return Math.abs(v-q)>Math.max(q*0.4,st*0.75)?0:Math.round(v*10)/10; }      // en el intercambio: de su paso en su paso (sin tope: si el plato lleva mucho, el cambio también)
+function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
+  var porF={}, orden=[], out=[], k=MK_EQ[g.m]||0;
+  tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!famOkCasa(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
+  orden.forEach(function(f){
+    var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];
+    var peso=eqPesoCasa(me,a), r=eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;
+    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if((kb>ka*(peso?1.9:1.25)&&kb-ka>25)||kb<ka*0.4) return;
+    var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
+    if(k&&!peso&&Math.abs(mb-ma)>Math.max(ma*0.25,k===3?2:3)) return;      // el macro de su grupo, con margen
+    if(k&&peso&&mb<ma*0.7-1) return;      // un yogur por otro: con su proteína (más, vale; el skyr no se cambia por un yogur normal)
+    var m=a.b.map(function(v){ return v*q/100; });
+    out.push({a:a,q:q,m:m,d:mo?m.map(function(v,j){ return v-mo[j]; }):null,err:Math.abs(kb-ka)/Math.max(ka,1)+(kb>ka?0.2:0),cls:clsEst(a.e)===clsEst(it.e)?0:1});
+  });
+  return out;
+}
 function altsDe(it,tabla,grupos){
   if(!it||!it.x) return [];
   var g=(grupos||[]).filter(function(x){ return x.id===it.x; })[0]; if(!g) return [];
   var yo=null, i; for(i=0;i<tabla.length;i++) if(tabla[i].id===it.a){ yo=tabla[i]; break; }
   var A=it.b||(yo&&yo.b)||null, qo=num(it.q)||0, mo=macIt(it), permit=it.xs&&it.xs.length?it.xs.map(famDe):null, fam=famDe(it.a), out=[];
   var me={a:it.a,id:it.a,n:it.n||(yo&&yo.n),x:it.x,c:it.c||(yo&&yo.c)};
-  var EQ=!A&&typeof intCl==='function'&&CL&&CL.d?(intCl().eq||{})[it.a]:null;
+  var EQ=!A&&typeof intCl==='function'&&CL&&CL.d?(intCl().eq||{})[it.a]:null, casa=casaLib();
   if(EQ){      // sin macros en su app: los pares los calcula el servidor
     var porId={}; tabla.forEach(function(a){ porId[a.id]=a; });
     EQ.forEach(function(z){ var a=porId[z[0]]; if(!a||famDe(a.id)===fam||(permit&&permit.indexOf(famDe(a.id))<0)) return;
-      var x={r:z[1],e:z[2],s:!!z[3],err:z[2]/100}, q=redG(qo*x.r); if(!eqVale(x,qo,q)) return; out.push({a:a,q:q,m:null,d:null,err:x.err+(x.s?0:1),cls:clsEst(a.e)===clsEst(it.e)?0:1}); });
-  } else if(A){
+      var x={r:z[1],e:z[2],s:!!z[3],err:z[2]/100}, q=casa&&z[4]?bdRed(a,qo*x.r):redG(qo*x.r); if(!q||(!(casa&&z[4])&&!eqVale(x,qo,q))) return; out.push({a:a,q:q,m:null,d:null,err:x.err+(x.s?0:1),cls:clsEst(a.e)===clsEst(it.e)?0:1}); });      // v53.4.88: los del nº 1 (z[4]), en unidades enteras
+  } else if(A&&casa){ me.b=A; out=altsCasa(it,tabla,g,A,qo,mo,permit,fam,me); }      // v53.4.88 (nº 1)
+  else if(A){
     var porF={}, orden=[];
     tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!usoOkAl(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
     orden.forEach(function(f){
@@ -8275,7 +8319,19 @@ function cuBase(p){      // v42: lo fijo = lo elegido hoy en las comidas que no 
 function macBase(o){ return sumMac((o.items||[]).map(function(it){ return itemEf(o,it).m; })); }
 /* gramos de cada alimento para acercarse a T (kcal, P, HC, G): mínimos cuadrados con límites, sin alejarse mucho del reparto de siempre.
    Los errores se miden en kcal (P y HC ×4, grasa ×9) y las kcal pesan el doble. Lo que va por unidades (un huevo, un yogur) se redondea a media unidad. */
+/* v53.4.88 (nº 1): «Ajustar» y «Cuadrar el resto» de la clienta, con los mismos pasos que el panel (yogures enteros, el plátano de medio en medio…) */
+function cuGramosCasa(o,T){
+  var xh=!o._v&&o.id?xHoy(o):null; if(xh) o={id:o.id,items:itemsHoy(o,xh),_v:1};
+  var its=(o.items||[]).filter(function(it){ return (num(it.q)||0)>0; });
+  var L=its.map(function(it){ var e=itemEf(o,it), a=e.a||{}, q=num(e.q)||0, b=a.b||(e.m&&q?e.m.map(function(v){ return v*100/q; }):null), f={id:a.id||it.a,x:a.x||it.x,u:a.u||it.u,b:b};
+    return {a:f,q:q,k:q>0?(num(it.q)||0)/q:1,R:ROL_X[f.x]&&b?bdRegla(f):null}; });      // k: si lo ha cambiado por otro, sus gramos pasan a los del alimento del plato
+  if(!L.some(function(z){ return z.R; })||L.some(function(z){ return !z.a.b; })) return null;
+  var Q=bdOpt(L,T), g={}; its.forEach(function(it,k){ if(L[k].R) g[it.i]=Math.round(Q[k]*L[k].k*10)/10; });
+  var mt=sumMac((o.items||[]).map(function(it){ var q=num(it.q)||0, A=itemEf(o,it).m; return A&&q?A.map(function(x){ return x*(g[it.i]!=null?g[it.i]:q)/q; }):A; }))||[0,0,0,0];
+  return {g:g,m:mt,m0:macBase(o)||[0,0,0,0]};
+}
 function cuGramos(o,T){
+  if(casaLib()){ var rc=cuGramosCasa(o,T); if(rc) return rc; }
   var xh=!o._v&&o.id?xHoy(o):null; if(xh) o={id:o.id,items:itemsHoy(o,xh),_v:1};      // v52: con lo quitado o cambiado solo hoy
   var its=(o.items||[]).filter(function(it){ return (num(it.q)||0)>0; }), m0=macBase(o)||[0,0,0,0], F0=m0[0]>0&&T[0]!=null?Math.max(0.35,Math.min(2.8,T[0]/m0[0])):1;
   var T0=T[0]!=null?T[0]:(T[1]||0)*4+(T[2]||0)*4+(T[3]||0)*9, Tb=Math.max(T0,80), W=[0,1,2,3].map(function(m){ return T[m]==null?0:[2,16,16,81][m]/(Tb*Tb); });
@@ -14285,7 +14341,7 @@ var BD_R={aceite_oliva:[5,20,5],mantequilla:[5,15,5],mayonesa:[10,30,5],almendra
   avena:[30,90,10],avena_sin_gluten:[30,90,10],corn_flakes:[25,60,5],tortitas_arroz:[16,48,8],tortilla_trigo:[40,120,40],tortilla_maiz:[30,90,30],pan_hamburguesa:[60,60,60],pan_barra:[40,120,20],
   guisantes:[50,150,25],maiz_dulce:[40,120,20],miel:[7,21,7],tomate_frito:[15,60,15],
   platano:[60,240,60],manzana:[150,300,150],pera:[160,320,160],naranja:[150,300,150],melocoton:[150,300,150],mandarina:[70,210,70],kiwi:[75,225,75],datiles:[8,32,8],fresas:[100,300,25],arandanos:[50,150,25],
-  frambuesas:[50,150,25],frutos_rojos:[80,200,20],uva:[80,200,20],cerezas:[80,200,20],pasas:[15,30,15],melon:[150,350,50],sandia:[150,350,50],pina:[100,250,25],mango:[100,250,25],
+  frambuesas:[50,150,25],frutos_rojos:[80,200,20],uva:[80,200,20],cerezas:[80,200,20],pasas:[15,30,15],melon:[150,350,50],sandia:[150,350,50],pina:[100,300,25],mango:[100,250,25],
   tofu:[80,200,10],tempeh:[80,200,10],seitan:[80,200,10],soja_texturizada:[30,70,10],edamame:[60,150,10]};
 function bdRegla(a){
   if(!a) return null; var id=String(a.id||''), f=famDe(id), co=/\.co$/.test(id), R=BD_R[f];
