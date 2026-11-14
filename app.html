@@ -2964,7 +2964,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.107';
+var APP_V = 'v53.4.108';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7396,11 +7396,12 @@ function eqRCasa(A,B,m,peso){      // gramos de B por gramo de A (sin redondear)
 function bdRed(b,q){ var R=bdRegla(b); if(!R) return redG(q); var st=R[2], v=Math.max(R[0],Math.round(q/st)*st); return Math.abs(v-q)>Math.max(q*0.4,st*0.75)?0:Math.round(v*10)/10; }      // en el intercambio: de su paso en su paso (sin tope: si el plato lleva mucho, el cambio también)
 function altsCasa(it,tabla,g,A,qo,mo,permit,fam,me){
   var porF={}, orden=[], out=[], k=MK_EQ[g.m]||0;
-  tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!famOkCasa(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
+  var tq=tostaQ(me), lq=lataP(me);      // v53.4.108: el queso de una tostada, por otro queso o un fiambre (no por un yogur) · la lata, por lo de diario
+  tabla.forEach(function(a){ if(!a.b) return; var f=famDe(a.id); if(tq?TOSTA_Q.indexOf(f)<0:lq?LATA_ALT.indexOf(f)<0:a.x!==it.x) return; if(f===fam||(permit&&permit.indexOf(f)<0)||(!tq&&!lq&&!famOkCasa(me,a))) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
   orden.forEach(function(f){
     var L=porF[f], coc=['cocido','asado','a la plancha','frito'], a=L.filter(function(x){ return x.e===it.e; })[0]||(coc.indexOf(it.e)>=0||it.e==='escurrido'?L.filter(function(x){ return coc.indexOf(x.e)>=0; })[0]:null)||L.filter(function(x){ return it.e==='crudo'&&x.e==='crudo'; })[0]||L[0];      // v53.4.100: el atún escurrido, por pollo ya hecho
-    var peso=eqPesoCasa(me,a), pc=protDia(me,a), r=pc&&+A[1]>0&&+a.b[1]>0?(A[1]/a.b[1]+A[0]/a.b[0])/2:eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;      // v53.4.107: carne o pescado de diario, a medias entre la proteína y las kcal (el salmón, algo menos)
-    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*(pc?1.6:1.25)&&kb-ka>25)||kb<ka*(pc?0.6:0.4))) return;
+    var peso=!tq&&eqPesoCasa(me,a), pc=protDia(me,a)||tq||lq, r=pc&&+A[1]>0&&+a.b[1]>0?(A[1]/a.b[1]+A[0]/a.b[0])/2:eqRCasa(A,a.b,g.m,peso); if(!r) return; var q=bdRed(a,qo*r); if(!q) return;      // v53.4.107: carne o pescado de diario, a medias entre la proteína y las kcal (el salmón, algo menos)
+    var ka=A[0]*qo/100, kb=a.b[0]*q/100; if(!peso&&((kb>ka*(lq?1.8:pc?1.6:1.25)&&kb-ka>25)||kb<ka*(pc?0.6:0.4))) return;      // la lata, también por salmón (más graso)
     var ma=k?A[k]*qo/100:0, mb=k?a.b[k]*q/100:0;
     var Rb=bdRegla(a), stM=Rb?(+a.b[k]||0)*Rb[2]/100*0.6:0;
     var cz=usoAl(me)[0]==='pan'&&usoAl(a)[0]==='gua';      // v53.4.103: el pan por arroz, patata… (con algo más de margen)
@@ -7441,12 +7442,18 @@ function panBase(o){ return /(tostad|tosta\b|bocadillo|sandwich|sandwic|wrap|mon
 var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pechuga|pavo_pechuga|ternera_filete|merluza|atun_natural|huevo|yogur_natural|leche_semi|platano|manzana|aceite_oliva)$/;      // v53.4.100: los básicos, siempre entre los 6
 /* v53.4.107 (nº 1, Javier: «en carnes, pescado, pollo o carne se puedan intercambiar unas con otras: contramuslo de pollo, salmón, filete de cerdo, filete de ternera,
    filetes de pollo… no rodaballo ni sepia todos los días porque es carísimo; una opción como calamares, pero no tantas»): la carne o el pescado, por los de diario */
-var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','ternera_picada5','salmon','merluza','bacalao','calamar'];
+var TOSTA_Q=['requeson','queso_burgos0','queso_burgos','queso_lonchas_light','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','huevo','queso_semicurado','mozzarella_light'];      // v53.4.108 (Javier: «el queso de Burgos es para untar en la tostada: queso cottage, fiambre de pavo o jamón cocido»)
+var LATA_ALT=['pollo_pechuga','pavo_pechuga','jamon_serrano','jamon_cocido','salmon','merluza','pollo_muslo','ternera_filete','cerdo_lomo','bacalao','atun_aceite'];      // v53.4.108 (Javier: «en la tortilla, el atún sí, pero por pollo, jamón serrano, salmón, un filete… no langostinos ni pulpo, que no se comen a diario»)
+function lataP(me){ var T=usoAl(me); return me.x==='prot'&&T.indexOf('pes')>=0&&T.indexOf('fia')>=0; }
+function tostaQ(me){ return me.x==='lac'&&usoAl(me).indexOf('que')>=0&&!!(me.cx&&me.cx.pan); }
+var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','cerdo_solomillo','ternera_picada5','salmon','merluza','bacalao','calamar'];
 function protTag(a){ var T=usoAl(a).filter(function(t){ return t.charAt(0)!=='>'; }); return T.indexOf('fia')>=0?'':T[0]==='car'||T[0]==='pes'?T[0]:''; }
 function protDia(me,a){ return me.x==='prot'&&a.x==='prot'&&!!protTag(me)&&!!protTag(a)&&PROT_DIA.indexOf(famDe(a.id))>=0; }
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
-  if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,8); }
+  if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)) return out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }).slice(0,10); out=out.filter(function(z){ return z.a.x==='lac'; }); }      // en un bol, por yogur o queso; en una tostada, por otro queso o fiambre
+  if(lataP(me)){ var La=out.filter(function(z){ return LATA_ALT.indexOf(famDe(z.a.id))>=0; }); if(La.length>=3) return La.sort(function(a,b){ return LATA_ALT.indexOf(famDe(a.a.id))-LATA_ALT.indexOf(famDe(b.a.id)); }).slice(0,10); }
+  if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,10); }
   var esPan=me.x==='hc'&&usoAl(me)[0]==='pan', tc=o?tipoOp(o):'';
   if(esPan&&(!o||tc!=='c'||panBase(o)||/^(tortilla_|pan_hamburguesa)/.test(famDe(me.id||me.a)))) out=out.filter(function(z){ return usoAl(z.a)[0]==='pan'; });      // v53.4.102: en tostadas, bocadillos o wraps, el pan solo por pan · v53.4.103: y en desayunos y meriendas, tampoco
   if(cx&&me.x==='grasa'){ var ok=fatOk(cx,fatTipo(me)); out=out.filter(function(z){ return ok.indexOf(fatTipo(z.a))>=0; }); }
@@ -7456,13 +7463,13 @@ function altsCtx(out,me,o){
   var G={}, orden=[]; out.forEach(function(z){ var k=varKey(z.a); if(!G[k]){ G[k]=z; orden.push(k); } });      // una de cada (no cuatro almendras de marcas distintas)
   var L=orden.map(function(k){ return G[k]; });
   if(me.x==='grasa'){ var T={}, ts=[]; L.forEach(function(z){ var t=fatTipo(z.a); if(!T[t]){ T[t]=[]; ts.push(t); } T[t].push(z); }); L=[];      // de cada tipo, por turnos (aceite, frutos secos, aceitunas…)
-    for(var r=0;L.length<6&&ts.some(function(t){ return T[t].length>r; });r++) ts.forEach(function(t){ if(T[t][r]&&L.length<6) L.push(T[t][r]); }); }
+    for(var r=0;L.length<10&&ts.some(function(t){ return T[t].length>r; });r++) ts.forEach(function(t){ if(T[t][r]&&L.length<10) L.push(T[t][r]); }); }
   if(esPan&&L.some(function(z){ return usoAl(z.a)[0]==='gua'; })){      // v53.4.103: en comida y cena, arroz, patata, boniato, quinoa y cuscús primero, y dos panes
     var GO=['arroz_blanco','patata','boniato','quinoa','cuscus','pasta'], gk=function(z){ var i=GO.indexOf(famDe(z.a.id)); return i<0?9:i; };
-    var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,5), Pa=L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; }).slice(0,2);
+    var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,6), Pa=L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; }).slice(0,4);
     return Gu.concat(Pa);
   }
-  return L.slice(0,6);
+  return L.slice(0,10);
 }
 function altsDe(it,tabla,grupos,ctx){
   if(!it||!it.x) return [];
@@ -7475,7 +7482,7 @@ function altsDe(it,tabla,grupos,ctx){
     var porId={}; tabla.forEach(function(a){ porId[a.id]=a; });
     EQ.forEach(function(z){ var a=porId[z[0]]; if(!a||famDe(a.id)===fam||(permit&&permit.indexOf(famDe(a.id))<0)) return;
       var x={r:z[1],e:z[2],s:!!z[3],err:z[2]/100}, q=casa&&z[4]?bdRed(a,qo*x.r):redG(qo*x.r); if(!q||(!(casa&&z[4])&&!eqVale(x,qo,q))) return; out.push({a:a,q:q,m:null,d:null,err:x.err+(x.s?0:1),cls:clsEst(a.e)===clsEst(it.e)?0:1}); });      // v53.4.88: los del nº 1 (z[4]), en unidades enteras
-  } else if(A&&casa){ me.b=A; out=altsCasa(it,tabla,g,A,qo,mo,permit,fam,me); }      // v53.4.88 (nº 1)
+  } else if(A&&casa){ me.b=A; me.cx=ctx?ctxPlato(ctx):null; out=altsCasa(it,tabla,g,A,qo,mo,permit,fam,me); }      // v53.4.88 (nº 1)
   else if(A){
     var porF={}, orden=[];
     tabla.forEach(function(a){ if(a.x!==it.x||!a.b) return; var f=famDe(a.id); if(f===fam||(permit&&permit.indexOf(f)<0)||!usoOkAl(me,a)) return; if(!porF[f]){ porF[f]=[]; orden.push(f); } porF[f].push(a); });
