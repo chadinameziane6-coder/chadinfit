@@ -78,6 +78,11 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
 .cargando,.nada{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:30px;text-align:center;color:#4A4A50}
 .nada h1{font-size:26px;color:#111;letter-spacing:-.5px}.spin{width:28px;height:28px;border-radius:50%;border:3px solid #E2E2E8;border-top-color:#111;animation:g 1s linear infinite}@keyframes g{to{transform:rotate(360deg)}}
 .err{color:#B3261E;font-size:13px;text-align:center;min-height:0}
+/* v53.4.132 · vista previa desde el panel (?vista=1): lo mismo, con los datos sin guardar; «solo» = un apartado */
+.vt{position:fixed;left:50%;top:14px;transform:translate(-50%,-160%);background:#111;color:#fff;font-size:13px;font-weight:700;padding:10px 14px;border-radius:14px;z-index:20;transition:transform .2s;max-width:90%;text-align:center}.vt.ver{transform:translate(-50%,0)}
+.flash{animation:fl 1.6s ease-out}@keyframes fl{0%,35%{box-shadow:inset 0 0 0 3px #E0A100}100%{box-shadow:inset 0 0 0 3px rgba(224,161,0,0)}}
+.v-solo body,body.v-solo{background:#fff}.v-solo .pg{min-height:0;box-shadow:none;max-width:none}.v-solo .cu{padding:26px 20px}
+.vacio{padding:26px 20px;text-align:center;color:#6A6A70;font-size:14px;line-height:1.45;background:#F7F7F9}
 </style>
 </head>
 <body>
@@ -89,56 +94,63 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
   var API=LOCAL?location.origin+'/api':'https://spmibfqbhgbcomfqlvlc.supabase.co/functions/v1/api';
   var partes=location.pathname.replace(/^\/+|\/+$/g,'').split('/'), slug=String((partes[0]==='landing'?partes[1]:partes[0])||'').toLowerCase();
   var pg=document.getElementById('pg'), P=null, sel=-1;
+  var Q=new URLSearchParams(location.search), VISTA=Q.get('vista')==='1'&&window.parent!==window, SOLO=VISTA?String(Q.get('solo')||''):'';
   function esc(t){ return String(t==null?'':t).replace(/[&<>"']/g,function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
   var IC={ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',wa:'<path d="M4 20l1.2-3.6A8 8 0 1 1 8 19z"/><path d="M9 9.5c.3 1.8 1.8 3.8 4 4.7l1.2-1.1 1.8.9"/>',fl:'<path d="M5 12h14M13 6l6 6-6 6"/>',mas:'<path d="M12 5v14M5 12h14"/>',est:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',ig:'<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>'};
   function ic(n,f){ return '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true"'+(f?' style="fill:currentColor;stroke:none"':'')+'>'+IC[n]+'</svg>'; }
   function eur(v){ v=Number(v)||0; return (Math.round(v*100)%100?v.toFixed(2).replace('.',','):String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,'.'))+' €'; }
   function nada(t){ document.title='Página no encontrada'; pg.innerHTML='<div class="nada"><h1>'+esc(t||'Esta página no existe')+'</h1><p>Revisa el enlace o pídeselo otra vez a tu entrenador.</p><a class="btn" style="max-width:280px" href="/">Ir a MOOD ON</a></div>'; }
-  if(!/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/.test(slug)) return nada();
-  function ev(e){ try{ fetch(API+'/pagina/evento',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({s:slug,e:e}),keepalive:true}).catch(function(){}); }catch(er){} }
+  if(!VISTA&&!/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/.test(slug)) return nada();
+  function ev(e){ if(VISTA) return; try{ fetch(API+'/pagina/evento',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({s:slug,e:e}),keepalive:true}).catch(function(){}); }catch(er){} }
   function lum(h){ var c=parseInt(String(h).slice(1),16); if(isNaN(c)) return 0; var r=(c>>16)&255,g=(c>>8)&255,b=c&255; return (0.299*r+0.587*g+0.114*b)/255; }
-  function img(k,v){ return API+'/pagina/img?s='+encodeURIComponent(slug)+'&k='+k+'&v='+v; }
+  function img(k,v){ if(VISTA) return (P._img&&P._img[k])||''; return API+'/pagina/img?s='+encodeURIComponent(slug)+'&k='+k+'&v='+v; }
   function waUrl(plan){ var t=P.waMsg||''; if(plan) t+=(t?' ':'')+'Me interesa el plan «'+plan+'».'; return 'https://wa.me/'+P.wa+(t?'?text='+encodeURIComponent(t):''); }
-  function marca(cls){ if(P.logoV) return '<span class="logo '+(cls||'')+'"><img src="'+img('logo',P.logoV)+'" alt="'+esc(P.nombre)+'"></span>';
+  function marca(cls){ if(P.logoV&&img('logo',P.logoV)) return '<span class="logo '+(cls||'')+'"><img src="'+img('logo',P.logoV)+'" alt="'+esc(P.nombre)+'"></span>';
     return '<span class="marca"><b>'+esc(P.nombre||'')+'</b>'+(P.lema?'<span>'+esc(P.lema)+'</span>':'')+'</span>'; }
   function porMes(p){ return p.meses>1?eur(p.precio/p.meses)+' al mes':'al mes'; }
   function pintar(){
-    var S=P.sec||{}, h='', claro=P.diseno==='claro', planes=P.planes||[];
+    var S=P.sec||{}, X={}, claro=P.diseno==='claro', planes=P.planes||[];
     document.title=(P.nombre||'Entrenamiento personal')+(P.lema?' · '+P.lema:'');
     document.documentElement.style.setProperty('--acc',P.color||'#111111');
     document.documentElement.style.setProperty('--acc-t',lum(P.color||'#111111')>0.62?'#111':'#fff');
-    if(sel<0){ sel=0; planes.forEach(function(p,i){ if(p.id===P.destacado) sel=i; }); if(!P.destacado&&planes.length===3) sel=1; }
+    if(sel<0||sel>=planes.length){ sel=0; planes.forEach(function(p,i){ if(p.id===P.destacado) sel=i; }); if(!P.destacado&&planes.length===3) sel=1; }
     var esc1=P.wa?'<a class="esc" href="'+esc(waUrl(''))+'" data-ev="wa" target="_blank" rel="noopener">'+ic('wa')+'Escríbeme</a>':'';
-    var ft='<div class="ft">'+(P.fotoV?'<img src="'+img('foto',P.fotoV)+'" alt="'+esc(P.nombre)+'">':'')+(claro&&P.cifras&&P.cifras[0]?'<span class="chip-v">'+ic('est',1)+esc(P.cifras[0].n+' '+P.cifras[0].t)+'</span>':'')+'</div>';
-    h+='<section class="hero">'+ft+'<div class="top">'+marca()+esc1+'</div><div class="hc">'+
+    var ft='<div class="ft">'+(P.fotoV&&img('foto',P.fotoV)?'<img src="'+img('foto',P.fotoV)+'" alt="'+esc(P.nombre)+'">':'')+(claro&&P.cifras&&P.cifras[0]?'<span class="chip-v">'+ic('est',1)+esc(P.cifras[0].n+' '+P.cifras[0].t)+'</span>':'')+'</div>';
+    X.hero='<section class="hero" id="v-hero">'+ft+'<div class="top">'+marca()+esc1+'</div><div class="hc">'+
       (P.plazas?'<span class="pill"><i></i>'+esc(P.plazas)+'</span>':'')+(P.eyebrow?'<span class="eye">'+esc(P.eyebrow)+'</span>':'')+
       '<h1>'+esc(P.frase)+'</h1>'+(P.sub?'<p>'+esc(P.sub)+'</p>':'')+
       '<a class="btn'+(claro?'':' bl')+'" href="#empezar" data-ir="empezar">Quiero empezar'+ic('fl')+'</a></div></section>';
-    if(S.cifras!==false&&(P.cifras||[]).length&&!claro) h+='<div class="cif">'+P.cifras.map(function(c){ return '<div><b>'+esc(c.n)+'</b><span>'+esc(c.t)+'</span></div>'; }).join('')+'</div>';
-    var c='';
-    if(S.para!==false&&(P.para||[]).length) c+='<section class="sec"><h2>Esto es para ti si…</h2>'+P.para.map(function(t){ return '<div class="chk"><i>'+ic('ok')+'</i><span>'+esc(t)+'</span></div>'; }).join('')+'</section>';
-    if(S.sobre!==false&&P.sobre&&(P.sobre.cita||P.sobre.texto)) c+='<section class="sec"><span class="eyb">Sobre mí</span>'+(P.sobre.cita?'<p class="cita">«'+esc(P.sobre.cita.replace(/^[«"]+|[»"]+$/g,''))+'»</p>':'')+(P.sobre.texto?'<p class="txt">'+esc(P.sobre.texto)+'</p>':'')+((P.sobre.chips||[]).length?'<div class="chips">'+P.sobre.chips.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>':'')+'</section>';
-    if(S.pasos!==false&&(P.pasos||[]).length) c+='<section class="sec"><h2>Así trabajamos</h2><div>'+P.pasos.map(function(p,i){ var u=i===P.pasos.length-1; return '<div class="paso"><div class="n"><b>'+(i+1)+'</b>'+(u?'':'<i></i>')+'</div><div><span class="t"><b>'+esc(p.t)+'</b>'+(p.cu?'<small>'+esc(p.cu)+'</small>':'')+'</span>'+(p.d?'<p>'+esc(p.d)+'</p>':'')+'</div></div>'; }).join('')+'</div></section>';
-    if(S.app!==false) c+='<section class="sec app"><h2>Todo, en tu móvil</h2><p class="sub">Trabajo con una app en la que tienes tu plan, tu menú y a mí.</p><div class="tira">'+
+    if(S.cifras!==false&&(P.cifras||[]).length&&!claro) X.cifras='<div class="cif" id="v-cifras">'+P.cifras.map(function(c){ return '<div><b>'+esc(c.n)+'</b><span>'+esc(c.t)+'</span></div>'; }).join('')+'</div>';
+    if(S.para!==false&&(P.para||[]).length) X.para='<section class="sec" id="v-para"><h2>Esto es para ti si…</h2>'+P.para.map(function(t){ return '<div class="chk"><i>'+ic('ok')+'</i><span>'+esc(t)+'</span></div>'; }).join('')+'</section>';
+    if(S.sobre!==false&&P.sobre&&(P.sobre.cita||P.sobre.texto)) X.sobre='<section class="sec" id="v-sobre"><span class="eyb">Sobre mí</span>'+(P.sobre.cita?'<p class="cita">«'+esc(P.sobre.cita.replace(/^[«"]+|[»"]+$/g,''))+'»</p>':'')+(P.sobre.texto?'<p class="txt">'+esc(P.sobre.texto)+'</p>':'')+((P.sobre.chips||[]).length?'<div class="chips">'+P.sobre.chips.map(function(t){ return '<span>'+esc(t)+'</span>'; }).join('')+'</div>':'')+'</section>';
+    if(S.pasos!==false&&(P.pasos||[]).length) X.pasos='<section class="sec" id="v-pasos"><h2>Así trabajamos</h2><div>'+P.pasos.map(function(p,i){ var u=i===P.pasos.length-1; return '<div class="paso"><div class="n"><b>'+(i+1)+'</b>'+(u?'':'<i></i>')+'</div><div><span class="t"><b>'+esc(p.t)+'</b>'+(p.cu?'<small>'+esc(p.cu)+'</small>':'')+'</span>'+(p.d?'<p>'+esc(p.d)+'</p>':'')+'</div></div>'; }).join('')+'</div></section>';
+    if(S.app!==false) X.app='<section class="sec app" id="v-app"><h2>Todo, en tu móvil</h2><p class="sub">Trabajo con una app en la que tienes tu plan, tu menú y a mí.</p><div class="tira">'+
       [['m_plano_series','Tu entreno, serie a serie','Con vídeo, lo que levantaste la última vez y tus récords.',''],['m_plata_dieta','Tu menú','Lo que te queda por comer hoy y tu lista de la compra.',' an'],['m_plano_fin','Lo celebras','Al terminar, tu resumen listo para compartir.','']].map(function(x){ return '<div class="tel'+x[3]+'"><div class="im"><img src="/bienvenida/img/'+x[0]+'.webp" alt="'+esc(x[1])+'" loading="lazy"></div><b>'+x[1]+'</b><small>'+x[2]+'</small></div>'; }).join('')+
       '</div><div class="ven">'+['Chat directo conmigo, sin perderte en WhatsApp','Tu peso, medidas y fotos de progreso en un sitio','Funciona sin cobertura en el gimnasio'].map(function(t){ return '<div><i>'+ic('ok')+'</i>'+t+'</div>'; }).join('')+'</div></section>';
-    if(S.opi!==false&&(P.opi||[]).length) c+='<section class="sec"><h2>Lo que dicen quienes ya entrenan conmigo</h2><div class="opis">'+P.opi.map(function(o){ return '<div class="opi'+(P.opi.length===1?' solo':'')+'">'+(o.cifra?'<div><b class="c">'+esc(o.cifra)+'</b>'+(o.que?'<br><small>'+esc(o.que)+'</small>':'')+'</div>':'')+'<p>«'+esc(o.frase)+'»</p>'+(o.nombre?'<span class="q">'+esc(o.nombre)+'</span>':'')+'</div>'; }).join('')+'</div></section>';
+    if(S.opi!==false&&(P.opi||[]).length) X.opi='<section class="sec" id="v-opi"><h2>Lo que dicen quienes ya entrenan conmigo</h2><div class="opis">'+P.opi.map(function(o){ return '<div class="opi'+(P.opi.length===1?' solo':'')+'">'+(o.cifra?'<div><b class="c">'+esc(o.cifra)+'</b>'+(o.que?'<br><small>'+esc(o.que)+'</small>':'')+'</div>':'')+'<p>«'+esc(o.frase)+'»</p>'+(o.nombre?'<span class="q">'+esc(o.nombre)+'</span>':'')+'</div>'; }).join('')+'</div></section>';
     if(S.planes!==false&&planes.length){
       var p0=planes[sel]||planes[0];
-      c+='<section class="sec" id="planes"><h2>Planes</h2><div style="display:flex;flex-direction:column;gap:12px">'+planes.map(function(p,i){
+      X.planes='<section class="sec" id="planes"><h2>Planes</h2><div style="display:flex;flex-direction:column;gap:12px">'+planes.map(function(p,i){
         var tag=p.id===P.destacado?'El más elegido':p.meses>1?p.meses+' meses':'Mensual';
         return '<button class="plan'+(i===sel?' on':'')+'" data-plan="'+i+'" aria-pressed="'+(i===sel)+'"><span class="h"><b>'+esc(p.nombre)+'</b><span class="tg">'+esc(tag)+'</span></span><span class="pr"><b>'+eur(p.precio)+'</b><span>'+esc(porMes(p))+'</span></span>'+(p.descripcion?'<p>'+esc(p.descripcion)+'</p>':'')+'</button>'; }).join('')+'</div>'+
         '<button class="btn" data-empezar="plan">'+(P.cuest?'Empezar con '+esc(p0.nombre):'Preguntar por '+esc(p0.nombre))+ic('fl')+'</button></section>';
     }
-    if(S.faq!==false&&(P.faq||[]).length) c+='<section class="sec faq"><h2>Preguntas</h2><div>'+P.faq.map(function(f,i){ return '<button class="q" aria-expanded="'+(i===0)+'" data-faq="'+i+'">'+esc(f.q)+ic('mas')+'</button><p class="a" id="fa'+i+'"'+(i===0?'':' hidden')+'>'+esc(f.a)+'</p>'; }).join('')+'</div></section>';
-    h+='<div class="cu">'+c+'</div>';
-    h+='<section class="fin" id="empezar"><span class="eyb">Sin compromiso</span><h2>¿Empezamos?</h2><p>'+(P.cuest?'Rellena el cuestionario, son 5 minutos. Lo leo yo y te contesto lo antes posible.':'Escríbeme y te cuento cómo trabajaríamos juntos.')+'</p>'+
+    if(S.faq!==false&&(P.faq||[]).length) X.faq='<section class="sec faq" id="v-faq"><h2>Preguntas</h2><div>'+P.faq.map(function(f,i){ return '<button class="q" aria-expanded="'+(i===0)+'" data-faq="'+i+'">'+esc(f.q)+ic('mas')+'</button><p class="a" id="fa'+i+'"'+(i===0?'':' hidden')+'>'+esc(f.a)+'</p>'; }).join('')+'</div></section>';
+    X.fin='<section class="fin" id="empezar"><span class="eyb">Sin compromiso</span><h2>¿Empezamos?</h2><p>'+(P.cuest?'Rellena el cuestionario, son 5 minutos. Lo leo yo y te contesto lo antes posible.':'Escríbeme y te cuento cómo trabajaríamos juntos.')+'</p>'+
       (P.cuest?'<button class="btn bl" data-empezar="cuest" style="margin-top:6px">Rellenar el cuestionario'+ic('fl')+'</button>':'')+
       (P.wa?'<a class="btn out" href="'+esc(waUrl(''))+'" data-ev="wa" target="_blank" rel="noopener">'+ic('wa')+(P.cuest?'Prefiero hablar por WhatsApp':'Escríbeme por WhatsApp')+'</a>':'')+
       '<p class="err" id="err"></p><div class="pie">'+marca()+'<span style="display:flex;gap:14px">'+(P.insta?'<a href="https://instagram.com/'+encodeURIComponent(P.insta)+'" target="_blank" rel="noopener">Instagram</a>':'')+'</span></div><span class="hecho">Hecho con MOOD ON</span></section>';
-    h+='<div class="barra" id="barra"><button class="btn" data-empezar="'+(P.cuest?'barra':'wa')+'">'+(P.cuest?'Quiero empezar':'Escríbeme')+'</button>'+(P.wa&&P.cuest?'<a class="wa" href="'+esc(waUrl(''))+'" data-ev="wa" target="_blank" rel="noopener" aria-label="WhatsApp">'+ic('wa')+'</a>':'')+'</div>';
+    var h;
+    if(SOLO){      // un apartado, para el «Así se verá» del editor
+      var k={marca:'hero',diseno:'hero',portada:'hero',empezar:'fin'}[SOLO]||SOLO, x=X[k];
+      h=x?(/^(para|sobre|pasos|app|opi|planes|faq)$/.test(k)?'<div class="cu">'+x+'</div>':x):'<div class="vacio">'+(k==='cifras'&&claro?'Con el diseño «Claro», la primera cifra sale en la foto de la portada.':'Así no sale en tu página: está vacío o apagado.')+'</div>';
+    } else {
+      h=(X.hero||'')+(X.cifras||'')+'<div class="cu">'+['para','sobre','pasos','app','opi','planes','faq'].map(function(k){ return X[k]||''; }).join('')+'</div>'+X.fin+
+        '<div class="barra" id="barra"><button class="btn" data-empezar="'+(P.cuest?'barra':'wa')+'">'+(P.cuest?'Quiero empezar':'Escríbeme')+'</button>'+(P.wa&&P.cuest?'<a class="wa" href="'+esc(waUrl(''))+'" data-ev="wa" target="_blank" rel="noopener" aria-label="WhatsApp">'+ic('wa')+'</a>':'')+'</div>';
+    }
     pg.className='pg t-'+(claro?'claro':'oscuro'); pg.innerHTML=h;
     document.querySelector('meta[name=theme-color]').setAttribute('content',claro?'#FFFFFF':'#0B0B0C');
+    if(SOLO) alto();
   }
   function empezar(planIdx){
     var p=planIdx!=null?(P.planes||[])[planIdx]:null, e=document.getElementById('err');
@@ -149,7 +161,9 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
       bs.forEach(function(b){ b.disabled=false; }); if(e) e.textContent=(j&&j.error)||'No se ha podido abrir el cuestionario. Prueba otra vez.';
     },function(){ bs.forEach(function(b){ b.disabled=false; }); if(e) e.textContent='Sin conexión. Prueba otra vez.'; });
   }
+  function aviso(t){ var a=document.getElementById('vt'); if(!a){ a=document.createElement('div'); a.id='vt'; a.className='vt'; document.body.appendChild(a); } a.textContent=t; a.classList.add('ver'); clearTimeout(aviso.t); aviso.t=setTimeout(function(){ a.classList.remove('ver'); },1800); }
   document.addEventListener('click',function(e){
+    if(VISTA){ var z=e.target.closest('[data-empezar],[data-ev],a[target]'); if(z){ e.preventDefault(); aviso('En la vista previa los botones no hacen nada'); return; } }
     var t=e.target.closest('[data-plan],[data-faq],[data-empezar],[data-ir],[data-ev]'); if(!t) return;
     if(t.dataset.ev){ ev(t.dataset.ev); return; }
     if(t.dataset.ir){ e.preventDefault(); var d=document.getElementById(t.dataset.ir); if(d) d.scrollIntoView({behavior:'smooth'}); return; }
@@ -163,6 +177,23 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
   });
   function verBarra(){ var b=document.getElementById('barra'), f=document.getElementById('empezar'); if(!b||!f) return; var r=f.getBoundingClientRect(); b.classList.toggle('ver',window.scrollY>520&&r.top>window.innerHeight*0.6); }
   addEventListener('scroll',verBarra,{passive:true}); addEventListener('resize',verBarra);
+  /* vista previa: los datos (sin guardar) llegan del panel, que está en la misma dirección; no cuenta visitas ni abre nada */
+  function alto(){ try{ parent.postMessage({tipo:'mo-vista-alto',solo:SOLO,h:Math.ceil(pg.getBoundingClientRect().height)},location.origin); }catch(er){} }
+  function ir(k){ var id={marca:'v-hero',diseno:'v-hero',portada:'v-hero',cifras:'v-cifras',para:'v-para',sobre:'v-sobre',pasos:'v-pasos',app:'v-app',opi:'v-opi',planes:'planes',faq:'v-faq',empezar:'empezar'}[k], d=id&&document.getElementById(id);
+    if(!d) return; window.scrollTo({top:Math.max(0,d.getBoundingClientRect().top+window.scrollY-(k==='cifras'?60:8)),behavior:'smooth'}); d.classList.remove('flash'); void d.offsetWidth; d.classList.add('flash'); }
+  if(VISTA){
+    if(SOLO) document.documentElement.classList.add('v-solo');
+    addEventListener('message',function(e){
+      if(e.source!==window.parent||e.origin!==location.origin||!e.data||e.data.tipo!=='mo-vista') return;
+      if(e.data.p){ var y=window.scrollY, ant=P; P=e.data.p; if(!P._img&&ant&&ant._img) P._img=ant._img; if(!ant||ant.destacado!==P.destacado||(ant.planes||[]).length!==(P.planes||[]).length) sel=-1; pintar(); window.scrollTo(0,y); verBarra(); }
+      if(e.data.ir&&P) setTimeout(function(){ ir(e.data.ir); },60);
+    });
+    addEventListener('load',function(){ if(SOLO) alto(); });
+    if(SOLO&&window.ResizeObserver) new ResizeObserver(function(){ alto(); }).observe(pg);
+    document.addEventListener('load',function(e){ if(SOLO&&e.target&&e.target.tagName==='IMG') alto(); },true);
+    try{ parent.postMessage({tipo:'mo-vista-lista',solo:SOLO},location.origin); }catch(er){}
+    return;
+  }
   fetch(API+'/pagina?s='+encodeURIComponent(slug)).then(function(r){ return r.json(); }).then(function(j){
     if(!j||!j.ok||!j.p) return nada();
     P=j.p; pintar(); verBarra();
