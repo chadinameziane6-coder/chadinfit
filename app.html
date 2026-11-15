@@ -131,6 +131,7 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-vpa{padding:7px 14px;font-size:12px;font-weight:700;text-align:center;background:var(--card2);color:var(--tx2)}.pag-vpa.sucia{background:#FFF3DC;color:#8A5300}.pag-vpa i{display:inline-block;width:7px;height:7px;border-radius:4px;background:#E0A100;margin-right:6px;vertical-align:1px}
 .pag-vp iframe{flex:1;width:100%;min-height:0;border:0;display:block;background:#E9E9EC}
 .pag-vpb{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}.pag-vpb .btn{flex:1;margin:0;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.pag-gt{display:flex;align-items:flex-start;gap:10px;margin:-2px 0 12px}.pag-gt .pag-int{flex:1;margin:0}.pag-gt .gu-btn{flex:none}
 .pqx-f{margin:12px 0;gap:12px}.pqx-f>span{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;flex:1;min-width:0;font-weight:700;font-size:14.5px}.pqx-f .fila-s{display:block;font-weight:400}
 .pg-volv{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:0;border-radius:16px;background:#111;color:#fff;font:inherit;text-align:left;cursor:pointer;margin:4px 0 12px}.pg-volv .pag-at small{color:#D8D8DE}.pg-volv>.ic{width:18px;height:18px;flex:none}
 /* interruptor */
@@ -3344,7 +3345,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.135';
+var APP_V = 'v53.4.136';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -18779,7 +18780,8 @@ function pagEdPintar(){ var e=document.getElementById('pag-ed'); if(!e||CO.vista
 function pagEdHtml(){
   var P=CO.pag, E=CO.pagEd, lado=CO.pagLadoOn, pub=P.on&&!!P.slug, url=P.slug?pagUrl(P.slug):'', dn=PAG_AP.filter(function(a){ return pagEst(a[0])[0]!=='falta'; }).length;
   var h='<div class="tit-row"><h1 class="tit">Tu página</h1><span class="pill'+(CO.pagSucia?' warn':pub?' ok':'')+'" id="pag-est">'+(CO.pagSucia?'Cambios sin guardar':pub?'Publicada':'Sin publicar')+'</span></div>'+
-    '<p class="muted sm pag-int">Para mandar a quien te pregunta precios o cómo trabajas. Es <b>tu marca</b>: tu foto, tu logo, tus textos y tus planes.</p>';
+    '<div class="pag-gt"><p class="muted sm pag-int">Para mandar a quien te pregunta precios o cómo trabajas. Es <b>tu marca</b>: tu foto, tu logo, tus textos y tus planes.</p><button class="gu-btn" data-a="pagGuia">'+ic('ayuda')+'¿Cómo funciona?</button></div>'+
+    (LS.get('chadin_guia_pag')?'':'<div class="gu-ban pag-gb">'+ic('idea')+'<span><b>¿Primera vez?</b> Mira cómo funciona en 1 minuto: compartirla, qué ve quien la abre y qué te llega.</span><button class="link" data-a="pagGuia">Ver guía</button><button class="link" data-a="pagGuiaNo">No volver a mostrar</button></div>');
   h+=pagLlegaHtml();
   h+='<div class="card pag-link"><label class="f">El nombre de tu enlace<span class="pag-sl"><span>moodonapp.com/</span><input data-v29="pagCampo" data-k="slug" value="'+esc(E.slug||'')+'" maxlength="30" autocomplete="off" autocapitalize="off" placeholder="tu-nombre" aria-label="El nombre de tu enlace"></span>'+
       '<small class="muted">Quedará así: moodonapp.com/<b id="pag-slp">'+esc(pagSlugLimpio(E.slug)||'tu-nombre')+'</b> · letras, números y guiones</small></label>'+
@@ -21510,6 +21512,20 @@ A.plnTec=function(el){
    ===================================================================== */
 var NOV_IMG='https://moodonapp.com/novedades/';
 var NOVEDADES=[
+  {id:'v53.4.130',f:'2026-11-15',t:'Tu página: para mandar a posibles clientes',sub:'Tu marca, tus planes y tu cuestionario, en un enlace.',ir:'pagina',
+    r:['En «Tu página» (debajo de Pagos) tienes tu propia página en moodonapp.com/tu-nombre, con tu foto, tu logo, tus textos y tus planes.',
+      'La rellenas por apartados y ves al momento cómo queda: en el ordenador, al lado; en el móvil, con «Ver cómo queda mi página».',
+      'Ponla en la biografía de Instagram o mándala por WhatsApp. Quien la abre puede rellenar tu cuestionario o escribirte.',
+      'Lo que rellenan te llega a «Lo que llega»: no entran en tu app hasta que tú le das a «Pasar a cliente» (plan, acceso y primer pago, en un paso).'],
+    img:[['v53_4_130_1.jpg','La rellenas por apartados y la ves al lado mientras escribes'],['v53_4_130_2.jpg','Lo que ve quien abre tu enlace: tu marca y tus planes'],
+      ['v53_4_130_3.jpg','Lo que te llega y «Pasar a cliente» en un paso']]},
+  {id:'v53.4.129',f:'2026-11-15',t:'Comunidad: un mensaje para todos tus clientes',sub:'Escribes una vez y les llega a todos. Ellos solo leen.',ir:'comunidad',
+    r:['En Mensajes, fija arriba, «Comunidad»: lo que escribas (texto, foto, vídeo o nota de voz) les llega a todos tus clientes activos.',
+      'Ellos lo leen en su app, en Chat, pero no pueden contestar. Tú ves «Visto por» en cada mensaje.',
+      'Prográmalo para el día y la hora que quieras con «Programar».',
+      'En «Miembros» quitas o vuelves a meter a quien quieras (no se le avisa) y decides si los clientes nuevos entran solos.'],
+    img:[['v53_4_129_1.jpg','Fija arriba en Mensajes: escribes una vez y les llega a todos'],['v53_4_129_2.jpg','«Programar»: el día y la hora que quieras'],
+      ['v53_4_129_3.jpg','«Miembros»: quita o vuelve a meter a quien quieras'],['v53_4_129_4.jpg','En la app de tus clientes: lo leen, no pueden contestar']]},
   {id:'v53.4.122',f:'2026-11-15',t:'Prepara el plan de tus clientes en 3 toques',sub:'Entreno y dieta automáticos, con tu banco y a tu manera.',ir:'plan',
     r:['Nueva pestaña «Plan» en cada cliente: eliges lo que quieres (objetivo, días, prioridades, cardio, técnicas…) y la app prepara entreno y dieta con tu banco de ejercicios.',
       'Lo revisas y lo retocas antes de ponérselo: no le llega nada hasta que pulsas «Aprobar y ponérsela».',
@@ -21551,12 +21567,42 @@ function novPintar(){
 A.novPaso=function(el){ CO.novI=(CO.novI||0)+(+el.dataset.v); novPintar(); };
 A.novIr=function(el){
   var n=NOVEDADES.filter(function(x){ return x.id===el.dataset.id; })[0]; cerrarModal(); if(!n) return;
+  if(n.ir==='pagina') return siCambiosOk(function(){ cargarPagina(true); });      // v53.4.136
+  if(n.ir==='comunidad'){ A.mcLista(); return setTimeout(function(){ try{ mcAbrir('__com'); }catch(e){} },350); }
   if(n.ir==='plan'){
     var L=(CO.lista||[]).filter(function(c){ return c.activa&&c.nombre!==EJEMPLO; }), c=L.filter(function(x){ return !x.rutinas; })[0]||L[0];
     if(!c) return toast('Crea tu primer cliente: en su ficha tienes la pestaña «Plan»');
     abrirClienta(c.id,'plan').then(function(){ toast('Esta es la pestaña «Plan» de '+primerNombre(c.nombre)+': empieza por «Hacer el pedido»','ok'); });
   }
 };
+
+/* v53.4.136 · GUÍA RÁPIDA DE «TU PÁGINA» (Javier: «como en Plan, que el entrenador sepa que el enlace se puede poner en redes, qué pasa cuando un
+   cliente lo abre y rellena el cuestionario, dónde aparece después y que no se le envía el acceso por email»). Botón «¿Cómo funciona?» arriba y,
+   la primera vez, un aviso gris. Se abre en el mismo panel que las otras guías. */
+function guiaPagHtml(){
+  var hl=function(h){ return h.replace(/^<(\w+)(?: class="([^"]*)")?/,function(m,tg,cl){ return '<'+tg+' class="'+(cl?cl+' ':'')+'gu-hl"'; }); };
+  var P=[
+    ['Rellénala','Toca cada apartado, de arriba abajo, como se verá. <b>Verde</b>: lista. <b>Ámbar</b>: falta rellenar. <b>Gris</b>: oculta. Lo vacío o apagado no sale.','<span style="display:flex;gap:6px;flex-wrap:wrap">'+pagChip('ok')+pagChip('falta')+pagChip('oculta')+'</span>'],
+    ['Mira cómo queda','En el móvil, «Ver cómo queda mi página» o «Así se verá» dentro de cada apartado. En el ordenador, la tienes al lado. Siempre con lo que aún no has guardado.',hl('<span class="btn sm">'+ic('ojo')+'Ver cómo queda mi página</span>')],
+    ['Publícala','Elige el nombre de tu enlace (moodonapp.com/tu-nombre), enciende «Publicada» y toca «Guardar». Hasta entonces nadie la ve.',hl('<span class="btn sm">Guardar</span>')],
+    ['Compártela','«Copiar enlace» y ponlo en la <b>biografía de Instagram</b>, en tus historias, en TikTok o mándalo por WhatsApp a quien te pregunte precios o cómo trabajas.',hl('<span class="btn sm sec">'+ic('enlace')+'Copiar enlace</span>')],
+    ['Lo que ve quien la abre','Tu marca, cómo trabajas, tus planes y, al final, «¿Empezamos?»: rellenar tu cuestionario (con el plan que eligió ya apuntado) o escribirte por WhatsApp.',''],
+    ['Rellena tu cuestionario','El de siempre. Al enviarlo ve «¡Muchas gracias! Lo leo yo y te contesto lo antes posible». Todavía <b>no entra en la app ni se le crea ficha</b>.',''],
+    ['Dónde te llega','Te llega un aviso y lo ves aquí arriba, en <b>«Lo que llega desde tu página»</b>: su nombre, el plan que eligió, lo que quiere y «Sin leer». Con «Ver respuestas» y su WhatsApp para hablar.','<span class="pill bad">Sin leer</span>'],
+    ['Ojo: no le llega el acceso solo','A diferencia de tus clientes de siempre, <b>no se le manda el email con su acceso</b> hasta que tú lo decidas. Así nadie entra en tu app sin que lo digas tú.',''],
+    ['Pasar a cliente','Cuando os pongáis de acuerdo: se crea su ficha con su cuestionario y, en el mismo paso, su plan, <b>«Mandarle ya su acceso a la app»</b> y «Apuntar su primer pago».',hl('<span class="btn sm sec">Pasar a cliente</span>')],
+    ['Tus planes','Salen de Pagos → Tus planes: primero lo que sale al mes y, debajo, lo que incluye en puntos (un punto por línea). «Editar mis planes» te lleva y vuelves con un toque.',hl('<span class="btn sm sec">'+ic('lapiz')+'Editar mis planes</span>')],
+    ['Lo que cuenta','En «Lo que llega»: cuántos la abrieron, tocaron WhatsApp y rellenaron tu cuestionario esta semana. Sin cookies ni datos de quién la mira.','']
+  ];
+  return '<div class="gu-h"><b>Guía rápida: tu página</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">De rellenarla a tener un cliente nuevo.</p>'+
+    P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p>'+(x[2]?'<div class="gu-im" inert>'+x[2]+'</div>':'')+'</div>'; }).join('');
+}
+A.pagGuia=function(){
+  LS.set('chadin_guia_pag',1); var b=document.querySelector('.gu-ban.pag-gb'); if(b) b.remove();
+  var g=document.getElementById('guia-die'); if(!g){ g=document.createElement('aside'); g.id='guia-die'; document.body.appendChild(g); }
+  g.setAttribute('aria-label','Guía rápida de tu página'); g.innerHTML=guiaPagHtml(); g.scrollTop=0; requestAnimationFrame(function(){ g.classList.add('open'); });
+};
+A.pagGuiaNo=function(){ LS.set('chadin_guia_pag',1); var b=document.querySelector('.gu-ban.pag-gb'); if(b) b.remove(); };
 
 /* v53.4.123 · GUÍA RÁPIDA DE PLAN Y ENTRENOS (Javier: «un apartado de instrucciones, como el de la dieta: el paso a paso, que la rutina automatizada
    aparece en Entrenos, que el entreno de antes se queda en el historial, qué pasa si lo borras o lo archivas…»). Botón «¿Cómo funciona?» en Plan y en
