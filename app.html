@@ -3266,7 +3266,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.127';
+var APP_V = 'v53.4.128';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -13651,10 +13651,10 @@ A.recDetQuitar=function(){
   var r=CO.recEd, d=CO.recLeida&&CO.recLeida.det[CO.recDetI]; if(!r||!d) return;
   r.items=(r.items||[]).filter(function(x){ return x.i!==d.i; }); CO.recLeida.det.splice(CO.recDetI,1); cerrarModal(); sucio('r'); pintarNutri(false);
 };
-/* v53.4.127 · BUSCAR FUERA (solo panel nº 1). Javier: «si no aparece en el banco de alimentos, que lo busque en algún supermercado, vea su valor
+/* v53.4.127 · BUSCAR FUERA (v53.4.128: todos los entrenadores). Javier: «si no aparece en el banco de alimentos, que lo busque en algún supermercado, vea su valor
    nutricional y lo meta». Lo que no está en tu banco se busca solo en Open Food Facts (productos de supermercados de España), uno detrás de otro;
    «Usar este» lo guarda en tu banco (solo para ti) y lo pone en la receta. Si no aparece: código de barras, foto de la etiqueta o a mano. */
-function recFueraSi(){ return CO.casa===true; }
+function recFueraSi(){ return true; }      // v53.4.128: todos los entrenadores (antes solo la nº 1)
 function recFueraQ(d){ return recDetNom(d).replace(/\s+(de|del|con|y|al|a la)$/i,'').trim(); }
 function recFueraBuscar(q){
   var k=clave(q); CO.rfC=CO.rfC||{}; if(CO.rfC[k]) return Promise.resolve(CO.rfC[k]);
