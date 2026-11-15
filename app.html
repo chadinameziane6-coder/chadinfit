@@ -2498,7 +2498,15 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .rd-f.ok .rd-ic{color:var(--ok,#13915A)}.rd-f.aprox,.rd-f.sinq{background:var(--warnS,#FFF3DC);border-radius:8px}.rd-f.aprox .rd-ic,.rd-f.sinq .rd-ic,.rd-f.aprox small,.rd-f.sinq small{color:var(--warn,#B26A00)}
 .rd-f.no{background:var(--badS,#FCEBEB);border-radius:8px}.rd-f.no .rd-ic,.rd-f.no small,.rd-f.no .link{color:var(--bad,#D13B3B)}
 .rd-n{display:flex;flex-direction:column;min-width:0}.rd-n b{font-weight:600;overflow-wrap:anywhere}.rd-n small{font-size:12px;color:var(--mu)}.rd-q{font-weight:600;white-space:nowrap}.rd-f .link{font-size:13px;white-space:nowrap}
-.rd-esp{font-size:13px;color:var(--mu);padding:8px 6px;border-top:1px solid var(--line2)}.rd-alts{display:flex;flex-direction:column;gap:2px;margin:6px 0}.al-o.on{background:var(--card2)}
+.rd-esp{font-size:13px;color:var(--mu);padding:8px 6px;border-top:1px solid var(--line2)}
+.rz{display:flex;flex-direction:column;gap:8px;margin:2px 0 8px 30px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--card,#fff)}.rz-c{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--mu)}.rz-c .ic{width:16px;height:16px}
+.rz-p{display:flex;gap:10px;align-items:flex-start}.rz-t{display:flex;flex-direction:column;gap:1px;min-width:0}.rz-t b{font-size:14px;overflow-wrap:anywhere}.rz-t small{font-size:12px;color:var(--mu)}
+.rz-ck{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;margin-top:2px}.rz-ck .ic{width:14px;height:14px}.rz-ck.si{color:var(--ok,#13915A)}.rz-ck.no{color:var(--warn,#B26A00)}
+.rz-b{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.rz-b .btn.sm{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;font-size:13px}.rz-b .btn.sm .ic{width:15px;height:15px}
+.rz-qf{display:flex;gap:6px;align-items:stretch;margin:4px 0}.rz-qf input{flex:1;min-width:0}.rz-qf .btn.sm{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}.rz-qf .btn.sm .ic{width:15px;height:15px}
+.rz-bq{display:flex;flex-direction:column;gap:4px;margin-top:10px}.rz-bq>span{font-size:13px;font-weight:600}
+.rz-l{display:flex;flex-direction:column;gap:6px;margin:6px 0}.rz-o{display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid var(--line);border-radius:12px}.rz-o .btn.sm{align-self:flex-start}
+.rz-ti{display:flex;gap:6px;overflow-x:auto;padding:4px 0 6px;scrollbar-width:none}.rz-ti .chip{flex:none}.rz-h{font-size:13px;font-weight:700;margin:10px 0 2px}.rd-alts{display:flex;flex-direction:column;gap:2px;margin:6px 0}.al-o.on{background:var(--card2)}
 .rec-fotos-c{margin-top:12px}.rf-h{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:8px}.rf-g{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin-bottom:4px}
 .rf-o{aspect-ratio:1;border-radius:10px;overflow:hidden;border:1px solid var(--line);padding:0;background:var(--card2);cursor:pointer}.rf-o img{width:100%;height:100%;object-fit:cover;display:block}.rf-o:hover{outline:2px solid #111;outline-offset:1px}
 .rf-sk{animation:rfSk 1.2s ease-in-out infinite;cursor:default}@keyframes rfSk{50%{opacity:.5}}@media (max-width:520px){.rf-g{grid-template-columns:repeat(3,minmax(0,1fr))}}
@@ -3258,7 +3266,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.126';
+var APP_V = 'v53.4.127';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -13576,7 +13584,7 @@ A.recLeer=function(){
   var vis={}; (r.items||[]).forEach(function(it){ vis[it.a]=it; });
   x.det.forEach(function(d){ if(!d.a) return; var it=vis[d.a]; if(it){ if(d.q>0) it.q=String(d.q); } else { it=itDeBanco(CO.nutM[d.a]); it.q=d.q>0?String(d.q):''; r.items.push(it); vis[d.a]=it; } d.i=it.i; });
   if(x.pasos.length) r.texto=(r.texto?r.texto+'\n\n':'')+x.pasos.join('\n');
-  CO.recLeida={det:x.det,esp:x.esp}; CO.alTras=null; sucio('r'); pintarNutri(false); recFtPedir(true);
+  CO.recLeida={det:x.det,esp:x.esp}; CO.alTras=null; sucio('r'); pintarNutri(false); recFtPedir(true); recFueraTodos();      // v53.4.127
   var rev=x.det.filter(function(d){ return d.st!=='ok'; }).length, nA=x.det.filter(function(d){ return d.a; }).length;
   toast('Leída: '+nA+' ingrediente'+(nA!==1?'s':'')+(rev?' · '+rev+' por revisar (en ámbar o rojo)':'')+'. Revisa y guarda.','ok');
 };
@@ -13585,7 +13593,9 @@ function recDetFila(d,i){
   var a=d.a&&CO.nutM[d.a], nom=a?a.n:recDetNom(d), q=d.q>0?gTxt(d.q):'—', ori=a&&clave(d.tx||'')!==clave(a.n)?'«'+d.t+'»':'';
   var sub=d.st==='aprox'?(d.nota||'¿Es esto? Has puesto '+ori):d.st==='sinq'?'Sin cantidad: ponle los gramos abajo':d.st==='no'?'No está en tu banco · has puesto «'+d.t+'»':ori;
   var bt=d.st==='no'?'Añadir':d.st==='aprox'?'Elegir':'Cambiar';
-  return '<div class="rd-f '+d.st+'">'+ic(d.st==='ok'?'ok':d.st==='no'?'x':'alerta','rd-ic')+'<span class="rd-n"><b>'+esc(nom)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><b class="rd-q">'+q+'</b><button class="link" data-a="recDetCambiar" data-d="'+i+'">'+bt+'</button></div>';
+  if(d.fu&&d.st!=='no') sub='Buscado fuera'+(d.fu.m||d.fu.tienda?' · '+[d.fu.m,d.fu.tienda].filter(Boolean).join(' · '):'')+(d.st==='sinq'?' · ponle los gramos abajo':'');      // v53.4.127
+  if(d.st==='no'&&d.fuera&&recFueraSi()) sub='No estaba en tu banco · has puesto «'+d.t+'»';
+  return '<div class="rd-f '+d.st+'">'+ic(d.st==='ok'?'ok':d.st==='no'?'x':'alerta','rd-ic')+'<span class="rd-n"><b>'+esc(nom)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span><b class="rd-q">'+q+'</b><button class="link" data-a="recDetCambiar" data-d="'+i+'">'+bt+'</button></div>'+recFueraHtml(d,i);
 }
 function recPegaHtml(r){
   if(!(CO.nut&&CO.nut.dn)) return '';
@@ -13594,7 +13604,7 @@ function recPegaHtml(r){
     return '<div class="card rec-det"><div class="rd-h"><div class="card-t">'+ic('ok')+'Ingredientes detectados</div><small class="muted">'+[nA+' ingrediente'+(nA!==1?'s':''),(r.raciones||1)+' '+(+r.raciones===1?'ración':'raciones'),r.min?r.min+' min':''].filter(String).join(' · ')+'</small></div>'+
       Ld.det.map(recDetFila).join('')+
       (Ld.esp.length?'<div class="rd-esp">No cuentan: '+esc(Ld.esp.join(' · '))+'</div>':'')+
-      '<p class="muted sm">'+(rev?'Revisa lo que está en ámbar o rojo. ':'')+'Los gramos los puedes cambiar abajo, en Ingredientes, y los pasos en «Cómo se hace».</p>'+
+      '<p class="muted sm">'+(rev?'Revisa lo que está en ámbar o rojo. ':'')+'Los gramos los puedes cambiar abajo, en Ingredientes, y los pasos en «Cómo se hace».'+(recFueraSi()&&Ld.det.some(function(d){ return d.fuera||d.fu; })?' Lo que uses de fuera se guarda solo en tu banco: luego eliges si lo compartes.':'')+'</p>'+
       '<button class="link" data-a="recPegarOtra">Pegar otra vez</button></div>'; }
   if(!CO.recPegar&&(r.items||[]).length) return '<button class="link rec-pg-l" data-a="recPegarOtra">'+ic('lista')+'Pegar una receta</button>';
   return '<div class="card rec-pg"><div class="card-t">'+ic('lista')+'Pega tu receta</div><p class="muted sm">Cópiala de tu post o de tus notas, tal cual: el nombre, los ingredientes con sus cantidades (uno por línea o seguidos con comas) y los pasos. La leo y relleno todo, y te propongo fotos.</p>'+
@@ -13608,6 +13618,7 @@ A.recDetCambiar=function(el){
   modal('<h2>¿Qué alimento es?</h2><p class="muted sm">Has puesto «'+esc(d.t)+'»'+(d.q>0?' · '+gTxt(d.q):'')+'.</p>'+
     (al.length?'<div class="rd-alts">'+al.map(function(id){ var a=CO.nutM[id]; return '<button class="al-o'+(id===d.a?' on':'')+'" data-a="recDetPon" data-id="'+esc(id)+'"><span><b>'+esc(a.n)+'</b><small>'+kTxt(a.b[0])+' kcal · P '+fN(a.b[1],1)+' · HC '+fN(a.b[2],1)+' · G '+fN(a.b[3],1)+' por 100 g</small></span></button>'; }).join('')+'</div>':'')+
     '<label class="f">Buscar en tu banco<input id="rd-q" data-v29="recDetQ" placeholder="Ej.: queso, vino, sésamo" autocomplete="off"></label><div id="rd-res" class="rd-alts"></div>'+
+    (recFueraSi()?'<div class="f rz-bq"><span>Buscar en supermercados</span><div class="rz-qf"><input id="rd-fq" value="'+esc(recFueraQ(d))+'" autocomplete="off" aria-label="Buscar en supermercados"><button class="btn sm" data-a="recFueraBusca">'+ic('lupa')+'Buscar</button></div></div><div id="rd-fu" class="rz-l"></div>':'')+      // v53.4.127
     '<button class="btn sec mt" data-a="recDetCrear">'+ic('mas')+'Crear «'+esc(recDetNom(d))+'» en tu banco</button>'+
     (d.a?'<button class="link danger mt" data-a="recDetQuitar">Quitarlo de la receta</button>':'')+
     '<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
@@ -13629,14 +13640,108 @@ function recDetAplicar(id){
   cerrarModal(); sucio('r'); pintarNutri(false); toast('Cambiado: '+a.n,'ok');
 }
 A.recDetPon=function(el){ recDetAplicar(el.dataset.id); };
-A.recDetCrear=function(){
-  var d=CO.recLeida&&CO.recLeida.det[CO.recDetI]; if(!d) return; var I=CO.recDetI;
+A.recDetCrear=function(el){
+  if(el&&el.dataset&&el.dataset.d!=null&&el.dataset.d!=='') CO.recDetI=+el.dataset.d;      // v53.4.127: desde la fila («No lo encuentro fuera»)
+  var d=CO.recLeida&&CO.recLeida.det[CO.recDetI]; if(!d) return; var I=CO.recDetI, m=el&&el.dataset&&el.dataset.m;
   CO.alTras=function(x){ if(CO.nv!=='recEd'||!CO.recLeida) return; CO.recDetI=I; recDetAplicar(x.id); };
   modalAlForm({n:recDetNom(d)});
+  if(m==='cod') A.arelEscanear(); else if(m==='foto'){ var f=document.querySelector('#modal input[data-c=arelEtq]'); if(f) f.click(); }
 };
 A.recDetQuitar=function(){
   var r=CO.recEd, d=CO.recLeida&&CO.recLeida.det[CO.recDetI]; if(!r||!d) return;
   r.items=(r.items||[]).filter(function(x){ return x.i!==d.i; }); CO.recLeida.det.splice(CO.recDetI,1); cerrarModal(); sucio('r'); pintarNutri(false);
+};
+/* v53.4.127 · BUSCAR FUERA (solo panel nº 1). Javier: «si no aparece en el banco de alimentos, que lo busque en algún supermercado, vea su valor
+   nutricional y lo meta». Lo que no está en tu banco se busca solo en Open Food Facts (productos de supermercados de España), uno detrás de otro;
+   «Usar este» lo guarda en tu banco (solo para ti) y lo pone en la receta. Si no aparece: código de barras, foto de la etiqueta o a mano. */
+function recFueraSi(){ return CO.casa===true; }
+function recFueraQ(d){ return recDetNom(d).replace(/\s+(de|del|con|y|al|a la)$/i,'').trim(); }
+function recFueraBuscar(q){
+  var k=clave(q); CO.rfC=CO.rfC||{}; if(CO.rfC[k]) return Promise.resolve(CO.rfC[k]);
+  return api('coachBuscarFuera',CO.pin,q).then(function(r){ var L=(r&&r.lista)||[]; CO.rfC[k]=L; return L; });
+}
+function pintarRecDet(){      // solo la tarjeta de detectados: no toca lo que estás escribiendo en el resto de la receta
+  var el=document.querySelector('.card.rec-det'); if(!el||CO.nv!=='recEd'||!CO.recEd) return;
+  var t=document.createElement('div'); t.innerHTML=recPegaHtml(CO.recEd); if(t.firstElementChild) el.replaceWith(t.firstElementChild);
+}
+function recFueraUno(d,q){
+  var Ld=CO.recLeida; d.fuera={est:'cargando',L:[]}; pintarRecDet();
+  return recFueraBuscar(q||recFueraQ(d)).then(function(L){ if(CO.recLeida!==Ld) return; d.fuera={est:L.length?'ok':'nada',L:L,sel:0}; pintarRecDet(); },
+    function(e){ if(CO.recLeida!==Ld) return; d.fuera={est:'err',L:[],e:limpiaErr(e)}; pintarRecDet(); });
+}
+function recFueraTodos(){
+  var Ld=CO.recLeida; if(!recFueraSi()||!Ld) return;
+  var cola=Ld.det.filter(function(d){ return d.st==='no'&&!d.fuera; }).slice(0,12);
+  cola.forEach(function(d){ d.fuera={est:'cargando',L:[]}; }); if(cola.length) pintarRecDet();
+  var sig=function(){ var d=cola.shift(); if(!d||CO.recLeida!==Ld) return; recFueraUno(d).then(sig); }; sig();
+}
+function rfProd(p){
+  var m=[p.m,p.tienda,p.cant].filter(Boolean).join(' · ');
+  return '<div class="rz-p">'+(p.img?'<img class="al-th" src="'+esc(p.img)+'" alt="" loading="lazy" referrerpolicy="no-referrer">':'<span class="al-th sin">'+ic('dieta')+'</span>')+
+    '<span class="rz-t"><b>'+esc(p.n)+'</b>'+(m?'<small>'+esc(m)+'</small>':'')+'<small>Por 100 g: '+kTxt(p.b[0])+' kcal · P '+fN(p.b[1],1)+' · HC '+fN(p.b[2],1)+' · G '+fN(p.b[3],1)+'</small>'+
+    '<span class="rz-ck '+(p.cuadra?'si':'no')+'">'+ic(p.cuadra?'ok':'alerta')+(p.cuadra?'Las kcal cuadran con los macros':'Revisa: las kcal no cuadran con los macros')+'</span></span></div>';
+}
+function rfCrearHtml(i){ return '<div class="rz-b">'+[['cod','codigo','Código de barras'],['foto','foto','Foto de la etiqueta'],['mano','lapiz','Meter a mano']].map(function(x){ return '<button class="btn sec sm" data-a="recDetCrear" data-d="'+i+'" data-m="'+x[0]+'">'+ic(x[1])+x[2]+'</button>'; }).join('')+'</div>'; }
+function recFueraHtml(d,i){
+  var f=d.fuera; if(!f||!recFueraSi()||d.st!=='no') return '';
+  if(f.est==='cargando') return '<div class="rz"><span class="rz-c">'+ic('lupa')+'Buscando «'+esc(recFueraQ(d))+'» en supermercados…</span></div>';
+  if(f.est==='err') return '<div class="rz"><span class="rz-c">'+esc(f.e||'No he podido buscarlo ahora.')+'</span><div class="rz-b"><button class="btn sec sm" data-a="recFueraOtra" data-d="'+i+'">'+ic('reinicio')+'Reintentar</button></div></div>';
+  if(f.est==='nada') return '<div class="rz"><span class="rz-c">No lo encuentro en supermercados. Créalo tú:</span>'+rfCrearHtml(i)+'</div>';
+  var k=f.sel||0, p=f.L[k]; if(!p) return '';
+  return '<div class="rz">'+rfProd(p)+'<div class="rz-b"><button class="btn sm" data-a="recFueraUsar" data-d="'+i+'" data-k="'+k+'">'+ic('ok')+'Usar este</button>'+
+    (f.L.length>1?'<button class="btn sec sm" data-a="recFueraVer" data-d="'+i+'">Ver otros ('+(f.L.length-1)+')</button>':'')+'<button class="link" data-a="recFueraVer" data-d="'+i+'" data-m="crear">No es este</button></div></div>';
+}
+A.recFueraOtra=function(el){ var d=CO.recLeida&&CO.recLeida.det[+el.dataset.d]; if(!d) return; if(CO.rfC) delete CO.rfC[clave(recFueraQ(d))]; recFueraUno(d); };
+function recFueraModal(i,ti){
+  var d=CO.recLeida&&CO.recLeida.det[i], f=d&&d.fuera; if(!f) return; CO.recDetI=i; CO.rfTi=ti||'';
+  var L=f.L||[], T=[]; L.forEach(function(p){ if(p.tienda&&T.indexOf(p.tienda)<0) T.push(p.tienda); });
+  var Lf=CO.rfTi?L.filter(function(p){ return p.tienda===CO.rfTi; }):L;
+  modal('<h2>Buscar fuera de tu banco</h2><p class="muted sm">Para «'+esc(d.t)+'»'+(d.q>0?' · '+gTxt(d.q):'')+'</p>'+
+    '<div class="rz-qf"><input id="rd-fq" value="'+esc(f.q||recFueraQ(d))+'" autocomplete="off" aria-label="Buscar en supermercados"><button class="btn sm" data-a="recFueraBusca">'+ic('lupa')+'Buscar</button></div>'+
+    (T.length>1?'<div class="rz-ti">'+[''].concat(T).map(function(t){ return '<button class="chip'+(CO.rfTi===t?' on':'')+'" data-a="recFueraTi" data-t="'+esc(t)+'">'+esc(t||'Todas')+'</button>'; }).join('')+'</div>':'')+
+    '<div id="rd-fu" class="rz-l">'+rfListaHtml(i,L,Lf)+'</div>'+
+    '<p class="muted sm">Valores por 100 g de la etiqueta del producto. Fuente: Open Food Facts, una base de datos abierta. Si puedes, compruébalos con el envase.</p>'+
+    '<div class="rz-h">¿No está? Créalo tú</div>'+rfCrearHtml(i)+
+    '<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+}
+function rfListaHtml(i,L,Lf){
+  if(!L.length) return '<p class="muted sm">No encuentro nada con ese nombre. Prueba con menos palabras o con la marca.</p>';
+  return Lf.map(function(p){ return '<div class="rz-o">'+rfProd(p)+'<button class="btn sm" data-a="recFueraUsar" data-d="'+i+'" data-k="'+L.indexOf(p)+'">Usar este</button></div>'; }).join('');
+}
+A.recFueraVer=function(el){ recFueraModal(+el.dataset.d,''); };
+A.recFueraTi=function(el){ recFueraModal(CO.recDetI,el.dataset.t||''); };
+A.recFueraBusca=function(el){
+  var i=CO.recDetI, d=CO.recLeida&&CO.recLeida.det[i], q=val('rd-fq'), box=document.getElementById('rd-fu'); if(!d||!box) return;
+  if(q.length<3) return toast('Escribe al menos 3 letras');
+  box.innerHTML='<p class="muted sm">Buscando «'+esc(q)+'» en supermercados…</p>'; if(el) el.disabled=true;
+  recFueraBuscar(q).then(function(L){ d.fuera={est:L.length?'ok':'nada',L:L,sel:0,q:q}; var b=document.getElementById('rd-fu'); if(b) b.innerHTML=rfListaHtml(i,L,L); if(el) el.disabled=false; pintarRecDet(); },
+    function(e){ var b=document.getElementById('rd-fu'); if(b) b.innerHTML='<p class="muted sm">'+esc(limpiaErr(e))+'</p>'; if(el) el.disabled=false; });
+};
+function recFueraPasillo(p){
+  var n=' '+clave(p.n+' '+(p.m||''))+' ', t=function(re){ return re.test(n); };
+  if(t(/\b(tomate (frito|triturado|concentrado|natural)|salsa|caldo|conserva|especias?|sazonador|vinagre|mostaza|ketchup|mayonesa|levadura|cacao|chocolate|azucar|miel|edulcorante|sirope)\b/)) return 'despensa';
+  if(t(/\b(proteina whey|whey|creatina|aislado de proteina|batido de proteinas?)\b/)) return 'suplementos';
+  if(t(/\b(aceite|aceitunas?|almendras?|nuez|nueces|cacahuetes?|crema de (cacahuete|almendra|anacardo)|semillas?|chia|sesamo|pipas|anacardos?|avellanas?|pistachos?|aguacate|tahini|mantequilla de)\b/)) return 'grasas';
+  if(t(/\b(leche|yogur|yogures|queso|quesos|kefir|nata|mantequilla|skyr|cuajada|requeson|bebida (de|vegetal))\b/)) return 'lacteos';
+  if(t(/\b(huevos?|claras?)\b/)) return 'huevos';
+  if(t(/\b(atun|salmon|merluza|bacalao|gambas?|langostinos?|sardinas?|caballa|mejillones|pescado|surimi|calamar|pulpo|bonito|anchoas?|boquerones?)\b/)) return 'pescados';
+  if(t(/\b(pollo|pavo|ternera|cerdo|jamon|lomo|chorizo|salchichas?|hamburguesas?|carne|bacon|beicon|fiambre|pechuga|solomillo|cordero|conejo)\b/)) return 'carnes';
+  if(t(/\b(garbanzos?|lentejas?|alubias?|judias blancas|soja texturizada|hummus|edamame|guisantes?)\b/)) return 'legumbres';
+  if(t(/\b(pan|panes|pasta|arroz|avena|harina|cereales?|tortitas?|wraps?|cuscus|quinoa|copos|galletas?|macarrones|espaguetis|fideos|tostadas?|biscotes|patatas?|gnocchi|noquis)\b/)) return 'cereales';
+  if(t(/\b(fruta|frutas|manzanas?|platanos?|fresas?|arandanos?|frambuesas?|mango|pina|melocoton|peras?|uvas?|naranjas?|limon|kiwi|datiles|pasas)\b/)) return 'frutas';
+  if(t(/\b(verduras?|tomates?|pimientos?|cebollas?|calabacin|berenjena|espinacas|brocoli|judias verdes|champinones|setas|lechuga|zanahorias?|pepino|esparragos|alcachofas?|coliflor|puerros?|ensalada|menestra|ajos?)\b/)) return 'verduras';
+  return 'despensa';
+}
+A.recFueraUsar=function(el){
+  var Ld=CO.recLeida, i=+el.dataset.d, d=Ld&&Ld.det[i], f=d&&d.fuera, p=f&&f.L[+el.dataset.k||0]; if(!p||el.disabled) return;
+  var fin=function(x){ CO.recDetI=i; d.fu={m:p.m||'',tienda:p.tienda||''}; d.fuera=null; recDetAplicar(x.id); };
+  var ya=p.ean&&(CO.nut.alimentos||[]).filter(function(a){ return a.ean===p.ean; })[0]; if(ya) return fin(ya);      // ya lo tenías (mismo código de barras)
+  var o={n:p.n,m:p.m||'',e:'',c:recFueraPasillo(p),b:p.b.slice(0,4),x:'',f:'Open Food Facts',tienda:p.tienda||'',ean:p.ean||'',d:p.d||{},img:p.img||'',mo:'yo'};
+  if(p.t) o.t=p.t;
+  document.querySelectorAll('[data-a=recFueraUsar]').forEach(function(b){ b.disabled=true; });
+  cargando(api('coachGuardarAlimento',CO.pin,o)).then(function(r){
+    var x=r.alimento, L=CO.nut.alimentos, j; for(j=0;j<L.length;j++) if(L[j].id===x.id) break; L[j]=x; CO.nutM[x.id]=x; hidratarDie(); fin(x);
+  },function(e){ document.querySelectorAll('[data-a=recFueraUsar]').forEach(function(b){ b.disabled=false; }); toast(limpiaErr(e),'err'); });
 };
 /* 5 fotos propuestas (sin derechos, de Pexels) por el nombre y los ingredientes; «Otras 5», «Buscar otra» o «Subir la mía» */
 function recFtQ(r){ return clave(r.nombre||'').replace(/\(.*?\)/g,' ').replace(/[^a-zñ0-9 ]/g,' ').replace(/\b(\d+|raciones?|personas?|fit|light|saludables?|proteic[oa]s?|healthy|caser[oa]s?|faciles?|facil|rapid[oa]s?|express|sin horno|receta|mi|mis|super|mejor|en \d+ minutos?)\b/g,' ').replace(/\s+/g,' ').trim(); }
