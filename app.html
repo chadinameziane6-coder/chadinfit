@@ -3085,6 +3085,11 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .rb-rh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin:2px 0 4px}.rb-rh b{font-size:14.5px}.rb-rh small{color:var(--mu);font-size:12.5px}
 .rb-ol{margin:0;padding-left:22px;display:flex;flex-direction:column;gap:6px}.rb-ol li{font-size:14px}.rb-ol li b{font-weight:600}.rb-ol li small{display:block;color:var(--mu);font-size:12.5px}.rb-ol .rb-bl{font-style:italic}
 .rb-cerrar{margin-top:8px;font-size:13px}
+.bd-f.ab{flex-wrap:wrap}.bd-f .bd-det{flex-basis:100%}.bd-tx{display:flex;flex-direction:column;align-items:flex-start;gap:2px}.bd-vr{padding-top:4px}
+.bd-cm{display:grid;grid-template-columns:110px 1fr;gap:4px 14px;padding:8px 0;border-top:1px solid var(--line2)}.bd-cm:first-child{border-top:0}
+.bd-cmh{display:flex;flex-direction:column}.bd-cmh b{font-size:14px;font-weight:600}.bd-cmh small{color:var(--mu);font-size:12.5px}
+.bd-ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:3px;font-size:14px}
+@media(max-width:560px){.bd-cm{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -3146,7 +3151,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.119';
+var APP_V = 'v53.4.120';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7791,7 +7796,7 @@ function enviarPref(){
 /* después de juntar lo de otro móvil: se repinta la dieta (o Hoy) cuando no esté escribiendo */
 function repintarDieCl(){ CL._mez=null; if(BOOT.mode!=='clienta'||!CL.d||(CL.tab!=='dieta'&&CL.tab!=='hoy')) return; repintarLibre(function(){ if(CL.tab==='dieta'||CL.tab==='hoy'){ var y=window.scrollY; CL.keep=true; pintarCl(); window.scrollTo(0,y); } }); }
 function intCl(){ var I=CL.d.dietaInt||{grupos:[],al:[]}; if(!(CL.bancoL&&CL.grMas&&masLibCl()&&libHoy())) return I;      // v53.4.113: con platos del «+» hoy, su banco entero (los suyos los cambia igual)
-  if(CL._ib&&CL._ibI===I&&CL._ibB===CL.bancoL) return CL._ib; var ya={}, al=I.al.slice(); I.al.forEach(function(a){ ya[a.id]=1; }); CL.bancoL.forEach(function(a){ if(!ya[a.id]&&a.x) al.push(a); });
+  if(CL._ib&&CL._ibI===I&&CL._ibB===CL.bancoL) return CL._ib; var ya={}, bm=CL.bancoM||{}, al=I.al.map(function(a){ ya[a.id]=1; var z=bm[a.id]; return !a.b&&z&&z.b?Object.assign({},a,{b:z.b}):a; }); CL.bancoL.forEach(function(a){ if(!ya[a.id]&&a.x) al.push(a); });      // v53.4.120 (Javier, cliente de Miguel: «no puede sustituir alimentos de algunas opciones»): los de su dieta llegan sin macros (no los ve); los platos del «+» los necesitan para calcular el cambio
   var gy={}, gr=I.grupos.slice(); I.grupos.forEach(function(g){ gy[g.id]=1; }); CL.grMas.forEach(function(g){ if(!gy[g.id]) gr.push(g); }); CL._ib={grupos:gr,al:al,eq:I.eq}; CL._ibI=I; CL._ibB=CL.bancoL; return CL._ib; }
 function verMac(){ return !!CL.d.dietaVer; }
 function verDet(){ return verMac()&&(libreCl()||!(CL.d&&CL.d.dn)); }      // v53.4.91 (nº 1, Javier): sin autorregulación, ni las kcal de cada comida ni las de cada alimento; solo el total del día (si su coach se lo enseña)
@@ -16572,10 +16577,21 @@ A.traerOk=function(){
 function bdCargar(){ return CO.bd?Promise.resolve(CO.bd):api('coachBancoDietas',CO.pin).then(function(r){ CO.bd=r.lista||[]; return CO.bd; }); }
 function bdMac(x){ return [x.kcal!==''&&x.kcal!=null?fN(x.kcal)+' kcal':'',x.p!==''&&x.p!=null?'P '+fN(x.p):'',x.h!==''&&x.h!=null?'H '+fN(x.h):'',x.g!==''&&x.g!=null?'G '+fN(x.g):''].filter(Boolean).join(' · '); }
 function bdFila(x){
-  var pl=(x.planes||[]).map(function(p){ return esc(p.nombre)+' · '+p.comidas+(p.comidas===1?' comida':' comidas'); }).join(' / ');
-  return '<div class="bd-f" data-n="'+esc(sinTil(x.nombre+' '+(x.etiquetas||[]).join(' ')))+'"><div class="bd-t"><b>'+esc(x.nombre)+'</b><small>'+esc(bdMac(x))+(pl?' · '+pl:'')+'</small>'+((x.etiquetas||[]).length?'<span class="bd-et">'+x.etiquetas.map(function(e){ return '<i>'+esc(e)+'</i>'; }).join('')+'</span>':'')+(x.nota?'<small class="muted">'+esc(x.nota)+'</small>':'')+'</div>'+
-    '<div class="bd-b"><button class="btn sm" data-a="bdUsar" data-id="'+esc(x.id)+'">Usar</button><button class="ico-r" data-a="bdBorrar" data-id="'+esc(x.id)+'" aria-label="Borrar de tu banco">'+ic('papelera')+'</button></div></div>';
+  var pl=(x.planes||[]).map(function(p){ return esc(p.nombre)+' · '+p.comidas+(p.comidas===1?' comida':' comidas'); }).join(' / '), hay=(x.planes||[]).some(function(p){ return (p.cm||[]).length; }), ab=hay&&!!(CO.bdAb&&CO.bdAb[x.id]);
+  return '<div class="bd-f'+(ab?' ab':'')+'" data-n="'+esc(sinTil(x.nombre+' '+(x.etiquetas||[]).join(' ')))+'"><div class="bd-t">'+(hay?'<button class="rb-tx bd-tx" data-a="bdVer" data-id="'+esc(x.id)+'" aria-expanded="'+ab+'">':'')+'<b>'+esc(x.nombre)+'</b><small>'+esc(bdMac(x))+(pl?' · '+pl:'')+'</small>'+(hay?'</button>':'')+((x.etiquetas||[]).length?'<span class="bd-et">'+x.etiquetas.map(function(e){ return '<i>'+esc(e)+'</i>'; }).join('')+'</span>':'')+(x.nota?'<small class="muted">'+esc(x.nota)+'</small>':'')+
+    (hay&&!ab?'<button class="rb-ej bd-vr" data-a="bdVer" data-id="'+esc(x.id)+'"><span class="rb-vr">Ver platos'+ic('flecha')+'</span></button>':'')+'</div>'+
+    '<div class="bd-b"><button class="btn sm" data-a="bdUsar" data-id="'+esc(x.id)+'">Usar</button><button class="ico-r" data-a="bdBorrar" data-id="'+esc(x.id)+'" aria-label="Borrar de tu banco">'+ic('papelera')+'</button></div>'+(ab?bdDetalle(x):'')+'</div>';
 }
+/* v53.4.120 (Javier: «el banco de rutinas se abre si le das a alguna; el de dietas faltaría»): al tocarla, sus comidas y sus platos */
+function bdDetalle(x){
+  var P=(x.planes||[]).filter(function(p){ return (p.cm||[]).length; });
+  return '<div class="rb-det bd-det">'+P.map(function(p){
+    return '<div class="rb-r">'+(P.length>1?'<div class="rb-rh"><b>'+esc(p.nombre||'Plan')+'</b>'+(p.kcal?'<small>'+fN(p.kcal)+' kcal</small>':'')+'</div>':'')+
+      p.cm.map(function(c){ return '<div class="bd-cm"><div class="bd-cmh"><b>'+esc(c.n||'Comida')+'</b>'+(c.h?'<small>'+esc(c.h)+'</small>':'')+'</div>'+
+        (c.o.length?'<ul class="bd-ol">'+c.o.map(function(n){ return '<li>'+esc(n)+'</li>'; }).join('')+'</ul>':'<p class="muted sm">Sin platos</p>')+'</div>'; }).join('')+'</div>';
+  }).join('')+'<button class="link rb-cerrar" data-a="bdVer" data-id="'+esc(x.id)+'">Ocultar platos</button></div>';
+}
+A.bdVer=function(el){ CO.bdAb=CO.bdAb||{}; var id=el.dataset.id; CO.bdAb[id]=!CO.bdAb[id]; if(CO.vista==='bancodie'&&document.querySelector('.bd-pg')) pintarBancoDie(false); else bdPintar(); };
 /* el banco de dietas en el menú: ver, buscar, borrar y ponérsela a un cliente */
 A.sdBancoDie=function(){ siCambiosOk(function(){ cargarBancoDie(true); }); };
 A.mnBancoDie=function(){ cerrarModal(); cargarBancoDie(true); };
