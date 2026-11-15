@@ -269,6 +269,23 @@ h2{margin:0 0 6px;font-size:20px;font-weight:800}
 .pend{position:fixed;right:12px;top:calc(8px + env(safe-area-inset-top));margin:0;background:#F2B33D;color:#3D2A00;font-size:12px;font-weight:700;border-radius:10px;padding:4px 10px;z-index:7}
 @media (min-width:700px){body{background:#E9E9EE}#app{background:#F2F2F5;box-shadow:0 0 0 1px #E2E2E8}}
 
+/* condiciones, «Antes de empezar» y borrar la cuenta */
+.chks{display:flex;flex-direction:column;gap:12px;padding:12px;border-radius:16px;background:#fff;border:1px solid #E2E2E8}
+.chks a{color:#111;font-weight:700}
+.av-l{display:flex;flex-direction:column;gap:10px;margin-top:10px}
+.av-f{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:18px;background:#fff;border:1px solid #E2E2E8}
+.av-f>i{width:38px;height:38px;border-radius:19px;background:#F2F2F5;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.av-f>span{display:flex;flex-direction:column;gap:3px}.av-f b{font-size:15px}.av-f small{font-size:13.5px;line-height:1.45;color:#4A4A50}
+.pie-fijo .link.center{display:block;text-align:center;text-decoration:underline}
+.tit-sec{display:block;font-size:12px;letter-spacing:1px;color:#6A6A70;margin:14px 4px 6px;font-weight:800}
+a.fila-b{color:#111;text-decoration:none}
+.fila-b.rojo b{color:#C62828}
+.borra-l{display:flex;flex-direction:column;gap:8px;padding:12px;border-radius:14px;background:#FDECEC}
+.borra-l>span{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.4}
+.borrada{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:28px;max-width:420px;margin:0 auto}
+.borrada .ok{width:64px;height:64px;border-radius:32px;background:#E7F5EE;display:flex;align-items:center;justify-content:center}
+.borrada .btn{margin-top:14px}
+
 </style>
 </head>
 <body>
@@ -766,7 +783,8 @@ function runBl(r,d,du,p,rec,rt){ return {r:r||'1',d:d||'',du:du||'',p:p||'',rec:
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-0.1';
+var YO_V = 'yo-0.2';
+var COND_V = '2026-11-15';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
 
@@ -798,7 +816,7 @@ var IC = {
   compartir: '<path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>', descargar: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
   foto: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
   papelera: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', grip: '<circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/>',
-  cambiar: '<path d="M7 7h12l-3-3M17 17H5l3 3"/>', ojo: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
+  cambiar: '<path d="M7 7h12l-3-3M17 17H5l3 3"/>', robot: '<rect x="5" y="8" width="14" height="11" rx="3"/><path d="M12 4v4M9 13h.01M15 13h.01"/>', pesa: '<path d="M6 7v10M18 7v10M3 10v4M21 10v4M6 12h12"/>', escudo: '<path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/>', ojo: '<path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>'
 };
 function ic(k, s, c, w) { return '<svg class="ic" width="' + (s || 22) + '" height="' + (s || 22) + '" viewBox="0 0 24 24" fill="none" stroke="' + (c || 'currentColor') + '" stroke-width="' + (w || 2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (IC[k] || '') + '</svg>'; }
 var LOGO_D = 'M392 221.3C349.1 216.7 314.3 192.6 296.9 155.5C292.8 146.9 288 130.2 288 124.9L288 122L306.4 122L324.8 122L326.4 128.5C329.8 142.2 336.2 154.3 345.2 164.2C353.9 173.7 367 181.7 381 186.2C387.4 188.1 390.6 188.5 402.5 188.5C418.5 188.5 425.7 186.8 439 179.9C458.3 169.9 473.4 150.7 478.7 129.5C481.3 119 481 100.8 478.1 90.6C470.4 63.1 448.9 42 421.6 35C410.8 32.3 394.2 32.3 383.5 35C367.7 39 352 48.9 341.9 61.3C335.7 68.9 328.7 83.1 326.4 92.8L324.7 100L306.4 100L288 100L288 97.1C288 89.3 293 73.8 299.4 61.3C330.3 1.9 409.3 -18.2 466.7 18.9C487.8 32.5 503.6 52.1 511.6 74.5C530.5 127.5 506.6 184.1 454.6 209.5C435.1 219 411.8 223.4 392 221.3ZM650.5 221.4C629.9 218.6 621.3 216.2 607.2 209.3C574.4 193.4 550.9 161.7 545.5 126.2L544.8 122L563.8 122L582.8 122L583.5 126.7C584.5 133.6 589.4 145.8 594.1 153C625.1 201 694.9 201 725.9 153C734.8 139.3 738.6 124.4 737.7 106.6C736.8 86 729.7 70.5 714.6 55.4C706.9 47.8 703.9 45.5 696 41.6C683.2 35.3 673.4 33 660 33C646.6 33 636.8 35.3 624 41.6C616 45.6 613.2 47.7 605.5 55.4C593.3 67.7 586.3 80.1 583.6 94.2L582.5 100L563.7 100L544.8 100L545.5 95.4C549.2 70.6 563.2 45.1 581.8 29.4C600.2 13.7 619 5.2 643 1.5C683.1 -4.7 726 11.6 750.9 42.5C778.1 76.4 783.2 119.2 764.6 157.5C745.8 195.9 708.6 219.6 664.2 221.4C658.3 221.6 652.1 221.6 650.5 221.4ZM1218.1 221C1191.6 217.6 1164.7 204.1 1146.8 185.1C1131.9 169.3 1121.2 147.9 1118.2 127.8L1117.3 122L1136 122L1154.6 122L1156.3 129.2C1161.5 151 1177 170.4 1197 180.5C1209.7 186.9 1216.9 188.5 1232.5 188.5C1244.4 188.5 1247.6 188.1 1254 186.2C1285.3 176.3 1306.2 151.4 1310.1 119.3C1314.5 83.5 1291.9 48.3 1256.8 36.5C1244.9 32.5 1226.2 31.8 1214 34.9C1197.5 39.1 1181.4 49.2 1171.5 61.8C1165.3 69.6 1158.6 83.2 1156.4 92.4L1154.6 100L1135.8 100L1117 100L1117.6 96.8C1122.2 71.1 1131 53.3 1148 35.6C1192 -10.2 1267.3 -11.8 1313.5 32.1C1317.7 36.1 1323.4 42.3 1326.1 45.9C1333.2 55.3 1341.6 72.7 1344.7 84.5C1347.1 93.4 1347.4 96.3 1347.4 111C1347.4 125.7 1347.1 128.6 1344.7 137.5C1333.4 179.4 1298.6 211.1 1254.8 219.5C1244.3 221.5 1227.7 222.1 1218.1 221ZM0 110.9C0 28 0.3 4 1.2 4.6C1.9 5 31.2 27.1 66.4 53.7C105.6 83.3 130.8 101.6 131.4 101.1C146.5 89.6 258.9 5.2 259.8 4.6C260.7 4 261 25.6 261 110.9L261 218L242 218L223 218L222.8 147.5L222.5 77.1L177 111.5C152 130.4 131.1 145.9 130.5 145.9C129.9 146 109 130.5 84 111.5C59 92.6 38.2 77.1 37.8 77C37.3 77 37 108.7 37 147.5L37 218L18.5 218L0 218L0 110.9ZM802 202.1L802 186.1L878.2 185.8L954.5 185.5L961.5 183.1C994.5 172.1 1014.5 142.5 1012.7 107.1C1012.1 94.1 1010.3 87.2 1004.5 75.4C996.3 58.7 981.5 45.6 963.5 39.3L955.5 36.5L878.8 36.2L802 35.9L802 20L802 4L878.4 4C960.7 4 962.1 4.1 977.6 9.4C1024.7 25.4 1055 72.1 1050 121C1045.3 166 1014.1 202.8 970.1 214.8L960.5 217.5L881.2 217.8L802 218.1L802 202.1ZM1375 110.9C1375 25.3 1375.3 4 1376.2 4.8C1381.6 9 1562.2 145 1562.5 145C1562.8 145 1563 113.3 1563 74.5L1563 4L1581.5 4L1600 4L1600 111.1C1600 196.7 1599.7 218 1598.8 217.2C1593.1 212.7 1412.8 77 1412.4 77C1412.2 77 1412 108.7 1412 147.5L1412 218L1393.5 218L1375 218L1375 110.9Z';
@@ -864,6 +882,13 @@ function cargar() {
     var ec = leeEnCurso() || d.en_curso;
     if (ec && ec.ej) { S.ses = ec; }
     S.v = !S.perfil || !S.perfil.listo ? 'empezar' : 'app';
+    // las condiciones: si las aceptó al crear la cuenta, se apuntan ahora (hora del servidor); si no, se le piden antes de seguir
+    S.aceptada = (d.acepta && d.acepta.v) || '';
+    if (S.aceptada !== COND_V) {
+      var md = (S.user && S.user.user_metadata && S.user.user_metadata.acepta) || null;
+      if (md && md.v === COND_V && md.salud) { guardar('yo_aceptar', { v: COND_V, salud: true }, 'acepta'); S.aceptada = COND_V; }
+      else { S.vTras = S.v; S.v = 'aceptar'; S.acp = {}; }
+    }
     pintar(); colaEnviar();
   }, function (e) { S.v = 'error'; S.err = (e && e.message) || 'No se ha podido cargar'; pintar(); });
 }
@@ -912,6 +937,9 @@ function pintar() {
   if (S.v === 'cargando') h = '<div class="carga">' + logo(200) + '<i></i></div>';
   else if (S.v === 'error') h = '<div class="carga"><p>' + esc(S.err) + '</p><button class="btn" data-a="reintentar">Reintentar</button></div>';
   else if (S.v === 'acceso') h = vAcceso();
+  else if (S.v === 'aceptar') h = vAceptar();
+  else if (S.v === 'antes') h = vAntes();
+  else if (S.v === 'borrada') h = vBorrada();
   else if (S.v === 'empezar') h = vEmpezar();
   else if (S.v === 'preg') h = vPreg();
   else if (S.v === 'plan') h = vTuPlan();
@@ -967,15 +995,40 @@ function vAcceso() {
   if (alta) h += '<label class="f">Tu nombre<input id="a-nom" autocomplete="given-name" maxlength="40" placeholder="Cómo quieres que te llamemos" value="' + esc(a.nom || '') + '"></label>';
   if (!nueva) h += '<label class="f">Email<input id="a-em" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="tu@email.com" value="' + esc(a.em || '') + '"></label>';
   if (!rec) h += '<label class="f">' + (nueva ? 'Nueva contraseña' : 'Contraseña') + '<span class="pw"><input id="a-pw" type="password" autocomplete="' + (alta || nueva ? 'new-password' : 'current-password') + '" placeholder="' + (alta || nueva ? 'Mínimo 8 caracteres' : '') + '" value="' + esc(a.pw || '') + '"><button type="button" class="pw-v" data-a="verPw" aria-label="Ver la contraseña">' + ic('ojo', 20) + '</button></span></label>';
-  if (alta) h += '<label class="chk"><input type="checkbox" id="a-ok"' + (a.okP ? ' checked' : '') + '><span>He leído y acepto la <a href="../privacidad.html" target="_blank" rel="noopener">política de privacidad</a></span></label>';
+  if (alta) h += '<div class="chks">' + chksAcepta(a) + '</div>';
   if (a.err) h += '<p class="msg err" role="alert">' + esc(a.err) + '</p>';
   if (a.msg) h += '<p class="msg ok" role="status">' + esc(a.msg) + '</p>';
-  h += '<button class="btn" type="submit" id="a-go">' + (alta ? 'Crear mi cuenta' : rec ? 'Enviar el email' : nueva ? 'Guardar contraseña' : 'Entrar') + '</button></form>';
+  h += '<button class="btn" type="submit" id="a-go">' + (alta ? 'Crear mi cuenta' : rec ? 'Enviar el email' : nueva ? 'Guardar contraseña' : 'Entrar') + '</button>' + (alta ? '<p class="mut sm center">Las dos casillas son obligatorias para crear la cuenta.</p>' : '') + '</form>';
   if (!alta && !rec && !nueva) h += '<button class="link" data-a="accModo" data-v="rec">¿Has olvidado tu contraseña?</button>';
   if (rec) h += '<button class="link" data-a="accModo" data-v="entrar">Volver a entrar</button>';
   h += '<p class="mut sm center acc-pie">¿Tienes entrenador? Entra desde <a href="../">moodonapp.com</a> → Entrar → Soy cliente.</p></div>';
   return h;
 }
+/* las dos casillas: condiciones y privacidad, y la declaración de salud (las dos obligatorias) */
+function chksAcepta(a) {
+  return '<label class="chk"><input type="checkbox" id="a-ok"' + (a.okP ? ' checked' : '') + '><span>He leído y acepto las <a href="../condiciones.html" target="_blank" rel="noopener">Condiciones de uso</a> y la <a href="../privacidad.html#yo" target="_blank" rel="noopener">Política de privacidad</a>.</span></label>' +
+    '<label class="chk"><input type="checkbox" id="a-salud"' + (a.okS ? ' checked' : '') + '><span>Confirmo que puedo hacer ejercicio físico y que, si tengo alguna lesión o enfermedad, tomo medicación o estoy embarazada, he consultado antes con un médico.</span></label>';
+}
+/* si la cuenta no ha aceptado la versión de ahora (cuentas de antes de las condiciones, o condiciones nuevas) */
+S.acp = {};
+function vAceptar() {
+  var a = S.acp, antes = S.aceptada;
+  var h = '<div class="acc"><div class="acc-top">' + logo(170) + '<h1>' + (antes ? 'Hemos cambiado las condiciones' : 'Antes de seguir') + '</h1>' +
+    '<p class="mut">' + (antes ? 'Hemos actualizado las Condiciones de uso de «Entreno por mi cuenta». Léelas y acéptalas para seguir usando la app.' : 'Ya están publicadas las Condiciones de uso de «Entreno por mi cuenta». Léelas y acéptalas para seguir usando la app.') + '</p></div>';
+  h += '<form class="acc-f" data-f="aceptar" novalidate><div class="chks">' + chksAcepta(a) + '</div>';
+  if (a.err) h += '<p class="msg err" role="alert">' + esc(a.err) + '</p>';
+  h += '<button class="btn" type="submit" id="acp-go">Aceptar y seguir</button></form>';
+  h += '<button class="link" data-a="salirSi">Cerrar sesión</button></div>';
+  return h;
+}
+F.aceptar = function () {
+  var a = S.acp; a.okP = !!($('#a-ok') && $('#a-ok').checked); a.okS = !!($('#a-salud') && $('#a-salud').checked);
+  if (!a.okP) { a.err = 'Para seguir tienes que aceptar las condiciones de uso y la política de privacidad.'; return pintar(); }
+  if (!a.okS) { a.err = 'Para seguir tienes que confirmar que puedes hacer ejercicio.'; return pintar(); }
+  var b = $('#acp-go'); b.disabled = true; b.textContent = 'Un momento…';
+  rpc('yo_aceptar', { v: COND_V, salud: true }).then(function () { S.acp = {}; S.aceptada = COND_V; S.v = S.vTras || 'app'; arriba(); pintar(); },
+    function (e) { a.err = accErr(e); pintar(); });
+};
 A.accModo = function (el) { var o = S.acc || {}; S.acc = { modo: el.dataset.v, msg: '', err: '', em: o.em, nom: o.nom }; pintar(); };
 A.verPw = function () { var i = $('#a-pw'); if (i) i.type = i.type === 'password' ? 'text' : 'password'; };
 function accErr(e) {
@@ -991,15 +1044,16 @@ function accErr(e) {
 F.acc = function () {
   var a = S.acc, em = ($('#a-em') || {}).value, pw = ($('#a-pw') || {}).value, nom = (($('#a-nom') || {}).value || '').trim();
   em = String(em || '').trim().toLowerCase();
-  a.em = em; a.nom = nom; a.pw = pw || ''; a.okP = !!($('#a-ok') && $('#a-ok').checked);
+  a.em = em; a.nom = nom; a.pw = pw || ''; a.okP = !!($('#a-ok') && $('#a-ok').checked); a.okS = !!($('#a-salud') && $('#a-salud').checked);
   var mal = function (t) { a.err = t; a.msg = ''; pintar(); };
   if (a.modo !== 'nueva' && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)) return mal('Escribe un email válido.');
   if ((a.modo === 'alta' || a.modo === 'nueva') && String(pw || '').length < 8) return mal('La contraseña necesita al menos 8 caracteres.');
   if (a.modo === 'alta' && !nom) return mal('Escribe tu nombre.');
-  if (a.modo === 'alta' && !$('#a-ok').checked) return mal('Para crear la cuenta tienes que aceptar la política de privacidad.');
+  if (a.modo === 'alta' && !a.okP) return mal('Para crear la cuenta tienes que aceptar las condiciones de uso y la política de privacidad.');
+  if (a.modo === 'alta' && !a.okS) return mal('Para crear la cuenta tienes que confirmar que puedes hacer ejercicio.');
   var b = $('#a-go'); b.disabled = true; b.textContent = 'Un momento…';
   var url = location.origin + location.pathname;
-  var p = a.modo === 'alta' ? SB.auth.signUp({ email: em, password: pw, options: { data: { nombre: nom }, emailRedirectTo: url } })
+  var p = a.modo === 'alta' ? SB.auth.signUp({ email: em, password: pw, options: { data: { nombre: nom, acepta: { v: COND_V, salud: true, f: new Date().toISOString() } }, emailRedirectTo: url } })
     : a.modo === 'entrar' ? SB.auth.signInWithPassword({ email: em, password: pw })
     : a.modo === 'rec' ? SB.auth.resetPasswordForEmail(em, { redirectTo: url })
     : SB.auth.updateUser({ password: pw });
@@ -1089,7 +1143,7 @@ A.pregAtras = function () { if ((S.paso || 1) > 1) { S.paso--; arriba(); return 
 A.pregSig = function () {
   if (S.paso === 3 && S.perfil.q.dias.length < 2) return toast('Elige al menos 2 días para el plan');
   if ((S.paso || 1) < 6) { S.paso++; arriba(); return pintar(); }
-  hacerPlan(0);
+  antesDe(function () { hacerPlan(0); }, 'plan');
 };
 
 /* ---------- el plan (con el motor del panel) ---------- */
@@ -1421,9 +1475,10 @@ function vProgramas() {
       var P = p.P; return '<button class="prog-f" data-a="verProg" data-v="' + p.id + '"><span class="pd"><b>' + (P.dCarr ? P.dias : P.dias) + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, '#9A9AA3') + '</button>'; }).join('') + '</section>';
 }
 A.progF = function (el) { S.x.pf = el.dataset.v; pintar(); };
-A.verProg = function (el) { var p = PROGRAMAS.filter(function (x) { return x.id === el.dataset.v; })[0]; if (!p) return; var P = JSON.parse(JSON.stringify(p.P)), est = P.est; delete P.est;
+A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProgSi(id); }, 'prog'); };
+function verProgSi(id) { var p = PROGRAMAS.filter(function (x) { return x.id === id; })[0]; if (!p) return; var P = JSON.parse(JSON.stringify(p.P)), est = P.est; delete P.est;
   S.x.plan = null; var D; try { D = plnEntreno(P, { seed: plnHash(p.id) * 100 | 0, est: est }); } catch (e) { console.error(e); return toast('No he podido preparar el programa'); }
-  S.x.plan = { D: D, P: P, seed: plnHash(p.id) * 100 | 0, ab: 0, origen: p, est: est }; S.v = 'plan'; arriba(); pintar(); };
+  S.x.plan = { D: D, P: P, seed: plnHash(p.id) * 100 | 0, ab: 0, origen: p, est: est }; S.v = 'plan'; arriba(); pintar(); }
 
 ;
 /* ---------- el entreno en curso (como lo ven los clientes de los entrenadores) ---------- */
@@ -1452,6 +1507,7 @@ function objetivoHoy(e) {
 
 function empezarSes(r) {
   if (S.ses) return A.abrirSes();
+  if (!avisoVisto()) return antesDe(function () { empezarSes(r); }, 'ses');
   var ej = r ? JSON.parse(JSON.stringify(r.ejercicios || [])).map(function (e) { (e.sets || []).forEach(function (s) { s.rirO = s.rir || ''; s.kg = ''; s.reps = ''; s.rir = ''; s.ok = false; }); e.hecho = false; return e; }) : [];
   S.ses = { id: nuevoId(), rid: r ? r.id : '', nombre: r ? r.nombre : 'Entreno libre', libre: !r, inicio: Date.now(), ej: ej, ab: ej.findIndex(function (e) { return !e.cal; }) };
   if (S.ses.ab < 0) S.ses.ab = 0;
@@ -1697,10 +1753,66 @@ VISTAS.perfil = function () {
   var h = '<div class="pant pad">' + cab('Tu perfil');
   h += '<label class="f">Tu nombre<input data-in="pfNom" maxlength="40" value="' + esc(P.nombre || '') + '"></label><p class="mut sm">Email: ' + esc(em) + '</p>';
   h += '<section class="card"><button class="fila-b" data-a="pedirPlan"><b>Rehacer mi plan</b><small>Vuelve a responder las preguntas</small></button><button class="fila-b" data-a="semana"><b>Mi semana</b><small>Qué rutina toca cada día</small></button></section>';
+  h += '<b class="tit-sec">TU CUENTA Y TUS DATOS</b><section class="card">' +
+    '<a class="fila-b" href="../condiciones.html" target="_blank" rel="noopener"><b>Condiciones de uso</b><small>Lo que aceptaste al crear tu cuenta</small></a>' +
+    '<a class="fila-b" href="../privacidad.html#yo" target="_blank" rel="noopener"><b>Política de privacidad</b><small>Qué guardamos y para qué</small></a>' +
+    '<button class="fila-b rojo" data-a="borrarCuenta"><b>Borrar mi cuenta</b><small>Se borra todo, para siempre</small></button></section>';
   h += '<button class="btn sec" data-a="salir">Cerrar sesión</button><p class="mut sm center">MOOD ON · ' + YO_V + '</p></div>';
   return h;
 };
 var pfT; IN.pfNom = function (t) { S.perfil.nombre = t.value.trim(); clearTimeout(pfT); pfT = setTimeout(guardaPerfil, 900); };
+
+/* ---------- «Borrar mi cuenta»: se borra la cuenta y todo lo suyo, al momento (yo_borrar_cuenta, solo la propia) ---------- */
+A.borrarCuenta = function () {
+  hoja('<h2>¿Borrar tu cuenta para siempre?</h2><p class="mut">Se borra todo al momento y <b>no se puede recuperar</b>:</p><div class="borra-l">' +
+    ['Tu perfil, tu nombre y tu email', 'Tus rutinas y tu semana', 'Todos tus entrenos, tus récords y tu progreso'].map(function (t) { return '<span>' + ic('x', 15, '#C62828', 2.6) + '<span>' + t + '</span></span>'; }).join('') +
+    '</div><label class="chk"><input type="checkbox" id="bc-ok" data-ch="bcOk"><span>Entiendo que no se puede deshacer</span></label>' +
+    '<button class="btn rojo" id="bc-go" data-a="borrarCuentaSi" disabled>Borrar mi cuenta para siempre</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+};
+CH.bcOk = function (t) { var b = $('#bc-go'); if (b) b.disabled = !t.checked; };
+A.borrarCuentaSi = function (el) {
+  if (!$('#bc-ok') || !$('#bc-ok').checked || el.disabled) return;
+  el.disabled = true; el.textContent = 'Borrando…';
+  rpc('yo_borrar_cuenta').then(function () {
+    var id = S.user && S.user.id;
+    try { localStorage.removeItem(COLA_K + '_' + id); localStorage.removeItem('yo_encurso_' + id); localStorage.removeItem('yo_nombre'); } catch (e) { }
+    clearTimeout(ecT); clearTimeout(pfT); cerrarHoja();
+    S = Object.assign(S, { user: null, perfil: null, rutinas: [], sesiones: [], cargado: false, ses: null, pant: null, pila: [], x: {}, v: 'borrada' });
+    arriba(); pintar();
+    try { SB.auth.signOut({ scope: 'local' }).catch(function () { }); } catch (e) { }
+  }, function () { el.disabled = false; el.textContent = 'Borrar mi cuenta para siempre'; toast('No se ha podido borrar. Comprueba la conexión y vuelve a probar.'); });
+};
+function vBorrada() {
+  return '<div class="borrada"><span class="ok">' + ic('check', 30, '#13915A', 2.6) + '</span><h1 class="t1">Tu cuenta se ha borrado</h1>' +
+    '<p class="mut">Hemos borrado tu perfil, tus rutinas y tus entrenos. Si algún día vuelves, tendrás que crear una cuenta nueva.</p><a class="btn" href="../">Ir a MOOD ON</a></div>';
+}
+
+/* ---------- «Antes de empezar»: la primera vez que pide un plan, abre un programa o empieza a entrenar (queda apuntado en su perfil) ---------- */
+function avisoVisto() { return !!(S.perfil && S.perfil.aviso); }
+function antesDe(fn, ctx) {
+  if (avisoVisto()) return fn();
+  S.x.antes = { fn: fn, ctx: ctx, v: S.v }; S.v = 'antes'; arriba(); pintar();
+}
+function vAntes() {
+  var c = (S.x.antes || {}).ctx || 'plan';
+  var P = [[c === 'ses' ? 'usuario' : 'robot', c === 'plan' ? 'Tu plan lo prepara la app, no un entrenador' : c === 'prog' ? 'Los programas los prepara la app, no un entrenador' : 'Entrenas sin entrenador',
+      c === 'plan' ? 'Es una propuesta general con tus respuestas. Nadie la revisa para ti.' : c === 'prog' ? 'Son propuestas generales. Nadie los revisa para ti.' : 'Nadie revisa tu entreno ni tu técnica por ti.'],
+    ['pesa', 'Los pesos los eliges tú', 'Empieza suave y sube poco a poco. Las cifras de la app son orientativas.'],
+    ['ojo', 'Cuida la técnica', 'Si no conoces un ejercicio, pide ayuda a un profesional o cámbialo por otro.'],
+    ['info', 'Si algo no va bien, para', 'Dolor en el pecho, mareo, falta de aire o un dolor raro: deja de entrenar y consulta a un médico.']];
+  return '<div class="pant pad con-pie"><div class="preg-cab"><button class="redondo" data-a="antesAtras" aria-label="Volver">' + ic('atras', 20) + '</button><span></span></div>' +
+    '<h1 class="t1">Antes de empezar</h1><p class="mut">Entrenas por tu cuenta. Tenlo en cuenta:</p><div class="av-l">' +
+    P.map(function (x) { return '<div class="av-f"><i>' + ic(x[0], 19) + '</i><span><b>' + x[1] + '</b><small>' + x[2] + '</small></span></div>'; }).join('') + '</div>' +
+    '<div class="pie-fijo"><button class="btn" data-a="antesOk">' + (c === 'plan' ? 'Entendido, prepárame el plan' : c === 'prog' ? 'Entendido, ver el programa' : 'Entendido, empezar') + '</button>' +
+    '<a class="link center" href="../condiciones.html" target="_blank" rel="noopener">Leer las Condiciones de uso</a></div></div>';
+}
+A.antesOk = function () {
+  var x = S.x.antes; if (!x) return;
+  if (!S.perfil) S.perfil = perfilNuevo();
+  S.perfil.aviso = new Date().toISOString(); guardaPerfil();
+  S.x.antes = null; S.v = x.v; x.fn();
+};
+A.antesAtras = function () { var x = S.x.antes; S.x.antes = null; S.v = (x && x.v) || 'app'; pintar(); };
 
 arrancar();
 </script>
