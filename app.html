@@ -3343,7 +3343,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.132';
+var APP_V = 'v53.4.133';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -18719,7 +18719,7 @@ function pagPlSel(){ var E=CO.pagEd, L=CO.pag.planes||[]; return (E.planes||[]).
 /* lo que verá quien abra el enlace, con lo que hay escrito ahora (lo mismo que paginaPublica_ en Code.gs) */
 function pagPub(conImg){ var E=CO.pagEd, P=CO.pag, I=CO.pagImg||{}, S=pagPlSel(), wa='';
   if(E.wa){ var d=String(E.waNum||'').replace(/[^\d+]/g,''); if(/^\d{9}$/.test(d)) d='34'+d; d=d.replace(/^\+/,'').replace(/^00/,''); if(/^\d{9,15}$/.test(d)) wa=d; }
-  var o={slug:E.slug, diseno:E.diseno==='claro'?'claro':'oscuro', color:E.color||'#111111', nombre:pagTx(E.nombre)||'Tu nombre', lema:pagTx(E.lema), eyebrow:pagTx(E.eyebrow), plazas:pagTx(E.plazas),
+  var o={slug:E.slug, diseno:E.diseno==='claro'?'claro':'oscuro', color:E.color||'#111111', nomLogo:!!E.nomLogo, nombre:pagTx(E.nombre)||'Tu nombre', lema:pagTx(E.lema), eyebrow:pagTx(E.eyebrow), plazas:pagTx(E.plazas),
     frase:pagTx(E.frase)||'Tu frase, aquí', sub:pagTx(E.sub),
     cifras:(E.cifras||[]).filter(function(c){ return c&&pagTx(c.n); }).map(function(c){ return {n:pagTx(c.n),t:pagTx(c.t)}; }),
     para:(E.para||[]).map(pagTx).filter(Boolean),
@@ -18861,7 +18861,7 @@ A.pagMas=function(el){ var l=el.dataset.v, E=CO.pagEd, L=E[l]=E[l]||[]; if(!L.le
   var x=document.querySelectorAll('#pag-ap-'+l+' [data-gl="'+l+'"]'); var u=[].slice.call(x).filter(function(e){ return +e.dataset.gi===L.length-1; })[0]; if(u) u.focus(); };
 A.pagMenos=function(el){ var l=el.dataset.v, E=CO.pagEd, L=E[l]||[]; L.splice(+el.dataset.i,1); pagSucio(); pagApPintar(l); };
 A.pagEj=function(el){ var l=el.dataset.v, E=CO.pagEd; E[l]=l==='cifras'?JSON.parse(JSON.stringify(PAG_EJ.cifras)):PAG_EJ.para.slice(0,3); pagSucio(); pagApPintar(l); };
-A.pagVerEn=function(el){ var k=el.dataset.v; if(CO.pagLadoOn) return pagIr(k); pagVerAbrir(k); };
+A.pagVerEn=function(el){ pagVerAbrir(el.dataset.v); };      // también en el ordenador: en grande, ya bajada a ese apartado (al lado sigue el móvil)
 A.pagVer=function(){ pagVerAbrir(''); };
 /* la vista previa a pantalla completa (móvil, o un ordenador estrecho) */
 function pagVerAbrir(k){ pagVerCerrar(); var E=CO.pagEd, d=document.createElement('div'); d.id='pag-vp'; d.className='pag-vp'; d.setAttribute('role','dialog'); d.setAttribute('aria-modal','true'); d.setAttribute('aria-label','Vista previa de tu página');
@@ -18882,10 +18882,12 @@ function pagMarcaHtml(){
   return '<div id="pag-marca" class="pag-marca"><div class="pag-m">'+
     '<div class="pag-ft">'+(I.foto?'<img src="'+esc(I.foto)+'" alt="Tu foto">':P.fotoV?'<div class="spin"></div>':'<span>'+ic('foto')+'Tu foto</span>')+'<label class="btn sm sec">'+ic('foto')+(P.fotoV?'Cambiar foto':'Subir tu foto')+'<input type="file" accept="image/*" data-c="pagFoto" hidden></label></div>'+
     '<div class="pag-lg">'+(I.logo?'<img src="'+esc(I.logo)+'" alt="Tu logo">':P.logoV?'<div class="spin"></div>':'<b>'+esc((E.nombre||'Tu nombre').toUpperCase())+'</b>')+'<label class="btn sm sec">'+(P.logoV?'Cambiar logo':'Subir logo')+'<input type="file" accept="image/png,image/jpeg,image/webp" data-c="pagLogo" hidden></label>'+(P.logoV?'<button class="link danger sm" data-a="pagLogoQuitar">Quitar</button>':'')+'</div></div>'+
-    pagCampo('nombre','Tu nombre o tu marca',E.nombre,{max:40})+pagCampo('lema','Debajo de tu nombre',E.lema,{max:60,ph:'Entrenamiento y nutrición'})+'</div>';
+    pagCampo('nombre','Tu nombre o tu marca',E.nombre,{max:40})+pagCampo('lema','Debajo de tu nombre',E.lema,{max:60,ph:'Entrenamiento y nutrición'})+
+    (P.logoV?'<div class="fila"><span>Que salga también tu nombre<small class="fila-s">'+(E.nomLogo?'Arriba, tu logo y a su lado tu nombre y lo de debajo.':'Ahora sale solo tu logo (si ya lleva tu nombre, déjalo así).')+'</small></span><button class="sw'+(E.nomLogo?' on':'')+'" data-a="pagNomLogo" aria-pressed="'+(!!E.nomLogo)+'" aria-label="Que salga también tu nombre junto al logo"><i></i></button></div>':'')+'</div>';
 }
 function pagMarcaRefrescar(){ var b=document.getElementById('pag-marca'); if(b) b.outerHTML=pagMarcaHtml(); pagVivo(true); }
 A.pagNoPub=function(){ var E=CO.pagEd; toast(E.on?'Primero toca «Guardar»: así tu enlace ya funciona':'Primero publícala: enciende «Publicada» y toca «Guardar»','err'); };
+A.pagNomLogo=function(){ CO.pagEd.nomLogo=!CO.pagEd.nomLogo; pagSucio(); pagMarcaRefrescar(); if(CO.pagLadoOn) pagIr('marca'); };
 A.pagOn=function(){ var E=CO.pagEd; E.on=!E.on; if(E.on&&!pagSlugLimpio(E.slug)){ E.on=false; return toast('Elige primero el nombre de tu enlace','err'); } pagSucio(); pagEdPintar(); };
 A.pagDis=function(el){ pagSet('diseno',el.dataset.v); pagApPintar('diseno'); if(CO.pagAb==='diseno'&&CO.pagLadoOn) pagIr('portada'); };
 A.pagCol=function(el){ pagSet('color',el.dataset.v); pagApPintar('diseno'); };
