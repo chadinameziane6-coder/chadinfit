@@ -3249,7 +3249,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.124';
+var APP_V = 'v53.4.125';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -20380,9 +20380,11 @@ function plnChecks(D,P){
   if(cv||fins) C.push({t:'ok',tit:'Cardio',x:(cv?cv+(cv>1?' días':' día')+' de cardio'+(fins?' y ':''):'')+(fins?'cardio al acabar en '+fins+(fins>1?' sesiones':' sesión'):'')+' a la semana.'});
   var LES_EN={rodilla:'la rodilla',hombro:'el hombro',lumbar:'la zona lumbar',cadera:'la cadera',muneca:'la muñeca',tobillo:'el tobillo',cuello:'el cuello'};
   (P.les||[]).forEach(function(l){ C.push({t:'warn',tit:'Molestia en '+(LES_EN[l]||plnL(PLN_LES,l).toLowerCase()),x:(PLN_EVITA[l]?PLN_EVITA[l][1].charAt(0).toUpperCase()+PLN_EVITA[l][1].slice(1):'Revísalo')+'. Revísalo y, si tiene dolor o un diagnóstico, que lo valore un profesional sanitario.'}); });
-  var PN={sentadilla:'sentadilla',bisagra:'peso muerto o similar',puente:'glúteo',zancada:'una pierna',empuje_h:'pecho',empuje_v:'hombro',tiron_h:'espalda (remo)',tiron_v:'espalda (jalón)',cardio:'cardio'};
-  (D.faltan||[]).forEach(function(f){ C.push({t:'warn',tit:'Falta un ejercicio de '+(PN[f]||f),x:'Con su material no hay ninguno en tu banco: ponlo a mano o añade material en el pedido.'}); });
-  if((D.porLes||[]).length) C.push({t:'ok',tit:'Sin '+listaY(D.porLes.map(function(f){ return PN[f]||f; })),x:'Por su molestia: lo cubre el resto de la sesión.'});
+  /* v53.4.125 (Javier: «Sin una pierna… no lo entiendo»): dicho con los ejercicios de cada tipo */
+  var PN={sentadilla:'sentadillas ni prensa',bisagra:'peso muerto ni similares',puente:'hip thrust ni puentes de glúteo',zancada:'zancadas, búlgaras ni step-up',empuje_h:'press de pecho ni flexiones',empuje_v:'press de hombro',tiron_h:'remos',tiron_v:'jalones ni dominadas',cardio:'cardio'};
+  var PF={sentadilla:'una sentadilla o prensa',bisagra:'un peso muerto o similar',puente:'un hip thrust o puente de glúteo',zancada:'una zancada, búlgara o step-up',empuje_h:'un press de pecho',empuje_v:'un press de hombro',tiron_h:'un remo',tiron_v:'un jalón o dominada',cardio:'cardio'};
+  (D.faltan||[]).forEach(function(f){ C.push({t:'warn',tit:'Falta '+(PF[f]||f),x:'Con su material no hay ninguno en tu banco: ponlo a mano o añade material en el pedido.'}); });
+  if((D.porLes||[]).length){ C.push({t:'ok',tit:'Sin '+listaY(D.porLes.map(function(f){ return PN[f]||f; })),x:'Por su molestia en '+listaY((P.les||[]).map(function(l){ return LES_EN[l]||plnL(PLN_LES,l).toLowerCase(); }))+', no le conviene ninguno de tu banco. Esa zona se trabaja igual con los demás ejercicios de la sesión.'}); }
   var tot=0, rep=0; R.forEach(function(r){ r.ejercicios.forEach(function(e){ if(e._p&&e._p.mov) return; tot++; if((D.prev||{})[clave(e.n)]) rep++; }); });
   if(Object.keys(D.prev||{}).length) C.push({t:'ok',tit:'Distinto de lo anterior',x:(tot-rep)+' de '+tot+' ejercicios son nuevos'+(rep?'. Siguen '+rep+', para que siga progresando en ellos':'')+'.'});
   (P.atencion||[]).filter(function(a){ return a.bloq!=='dieta'; }).forEach(function(a){ C.push({t:'bad',tit:'Antes de aprobar',x:a.t}); });
