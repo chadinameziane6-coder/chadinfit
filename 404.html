@@ -67,7 +67,8 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
 .plan{display:flex;flex-direction:column;gap:10px;text-align:left;padding:18px;border-radius:22px;cursor:pointer;background:#fff;color:#111;border:1px solid #DADAE0;width:100%}
 .plan.on{background:var(--acc);color:var(--acc-t);border:2px solid var(--acc)}.plan .h{display:flex;justify-content:space-between;align-items:center;gap:8px}.plan .h b{font-size:18px;font-weight:800}
 .plan .tg{font-size:11px;font-weight:800;height:24px;padding:0 10px;border-radius:12px;display:flex;align-items:center;background:#F2F2F5;color:#4A4A50;white-space:nowrap}.plan.on .tg{background:rgba(255,255,255,.92);color:#111}
-.plan .pr{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}.plan .pr b{font-size:34px;font-weight:800;letter-spacing:-1px}.plan .pr span{font-size:13px;opacity:.75}.plan p{margin:0;font-size:14px;line-height:1.5;opacity:.9;white-space:pre-line}
+.plan .pr{display:flex;align-items:baseline;gap:4px;flex-wrap:wrap}.plan .pr b{font-size:36px;font-weight:800;letter-spacing:-1px;line-height:1}.plan .pr span{font-size:15px;font-weight:700;opacity:.75}.plan .pr2{display:block;font-size:13px;font-weight:600;opacity:.75;margin-top:-6px}
+.plan .pts{display:flex;flex-direction:column;gap:7px;margin-top:2px}.plan .pts>span{display:flex;gap:8px;align-items:flex-start;font-size:14px;line-height:1.4}.plan .pts .ic{width:15px;height:15px;stroke-width:2.6;margin-top:2px;flex:none}
 .faq .q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 0;background:none;border:0;border-bottom:1px solid #E2E2E8;cursor:pointer;text-align:left;font-size:15px;font-weight:700;color:#111}
 .faq .q .ic{transition:transform .2s}.faq .q[aria-expanded=true] .ic{transform:rotate(45deg)}.faq .a{margin:0;padding:0 0 16px;font-size:14px;line-height:1.55;color:#3A3A3C;border-bottom:1px solid #E2E2E8;white-space:pre-line}.faq .q[aria-expanded=true]{border-bottom:0}
 .fin{background:#0B0B0C;color:#fff;padding:40px 20px calc(30px + env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}.fin h2{font-size:32px;letter-spacing:-.9px}.fin p{margin:0;font-size:15px;line-height:1.55;color:#D8D8DE}
@@ -83,6 +84,7 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
 .flash{position:relative}.flash:after{content:"";position:absolute;inset:0;border:4px solid #E0A100;pointer-events:none;z-index:6;animation:fl 2s ease-out forwards}@keyframes fl{0%,45%{opacity:1}100%{opacity:0}}
 .marca-l{display:flex;align-items:center;gap:10px;min-width:0;max-width:72%}.marca-l .logo{max-width:none;flex:none}.marca-l .logo img{max-height:40px;max-width:90px}.marca-l .marca{min-width:0}.marca-l .marca b{font-size:15px;letter-spacing:2px}.marca-l .marca span{font-size:8.5px;letter-spacing:.7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.t-claro .hero:has(.marca-l){padding-top:calc(76px + env(safe-area-inset-top))}
 .v-solo body,body.v-solo{background:#fff}.v-solo .pg{min-height:0;box-shadow:none;max-width:none}.v-solo .cu{padding:26px 20px}
+.v-drag{cursor:grab}.v-drag body{-webkit-user-select:none;user-select:none}.v-drag img{-webkit-user-drag:none}.v-drag.arrastra,.v-drag.arrastra *{cursor:grabbing!important}
 .vacio{padding:26px 20px;text-align:center;color:#6A6A70;font-size:14px;line-height:1.45;background:#F7F7F9}
 </style>
 </head>
@@ -109,7 +111,19 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
   function marca(cls){ if(P.logoV&&img('logo',P.logoV)){ var lg='<span class="logo '+(cls||'')+'"><img src="'+img('logo',P.logoV)+'" alt="'+esc(P.nombre)+'"></span>';
       return P.nomLogo&&P.nombre?'<span class="marca-l">'+lg+'<span class="marca"><b>'+esc(P.nombre)+'</b>'+(P.lema?'<span>'+esc(P.lema)+'</span>':'')+'</span></span>':lg; }
     return '<span class="marca"><b>'+esc(P.nombre||'')+'</b>'+(P.lema?'<span>'+esc(P.lema)+'</span>':'')+'</span>'; }
-  function porMes(p){ return p.meses>1?eur(p.precio/p.meses)+' al mes':'al mes'; }
+  /* v53.4.134 · el precio: primero lo que sale al mes (en grande) y debajo lo que se paga en cada periodo */
+  function periodo(m){ return m===1?'al mes':m===3?'al trimestre':m===6?'al semestre':m===12?'al año':'cada '+m+' meses'; }
+  function precioHtml(p){ var m=Math.max(1,parseInt(p.meses,10)||1), v=Number(p.precio)||0;
+    if(!v) return '<span class="pr"><b>Gratis</b>'+(m>1?'<span>'+m+' meses</span>':'')+'</span>';
+    return '<span class="pr"><b>'+eur(v/m)+'</b><span>/mes</span></span>'+(m>1?'<span class="pr2">'+eur(v)+' '+periodo(m)+'</span>':''); }
+  /* lo que incluye, en puntos: un punto por línea; si viene en un párrafo, por frases y (si son largas) por comas */
+  function puntos(t){ t=String(t||'').replace(/\r/g,'').trim(); if(!t) return [];
+    var L=t.split(/\n+/).map(function(x){ return x.replace(/^\s*[-•*·✓✔]+\s*/,'').trim(); }).filter(Boolean);
+    if(L.length===1){ var F=[]; L[0].replace(/([.!?])\s+(?=[A-ZÁÉÍÓÚÑ¿¡0-9])/g,'$1\n').split('\n').forEach(function(f){ f=f.replace(/[.;]+$/,'').trim(); if(!f) return;
+        var dp=f.indexOf(': '); if(dp>0&&dp<70){ F.push(f.slice(0,dp)); f=f.slice(dp+2); }
+        if(f.length>90&&f.indexOf(', ')>0){ var P=[]; f.split(', ').forEach(function(x){ x=x.trim(); if(P.length&&(x.length<12||x.split(' ').length<2)) P[P.length-1]+=', '+x; else P.push(x); }); F=F.concat(P); } else F.push(f); });
+      L=F; }
+    return L.slice(0,10).map(function(x){ x=x.replace(/[.;]+$/,''); return x.charAt(0).toUpperCase()+x.slice(1); }); }
   function pintar(){
     var S=P.sec||{}, X={}, claro=P.diseno==='claro', planes=P.planes||[];
     document.title=(P.nombre||'Entrenamiento personal')+(P.lema?' · '+P.lema:'');
@@ -133,8 +147,9 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
     if(S.planes!==false&&planes.length){
       var p0=planes[sel]||planes[0];
       X.planes='<section class="sec" id="planes"><h2>Planes</h2><div style="display:flex;flex-direction:column;gap:12px">'+planes.map(function(p,i){
-        var tag=p.id===P.destacado?'El más elegido':p.meses>1?p.meses+' meses':'Mensual';
-        return '<button class="plan'+(i===sel?' on':'')+'" data-plan="'+i+'" aria-pressed="'+(i===sel)+'"><span class="h"><b>'+esc(p.nombre)+'</b><span class="tg">'+esc(tag)+'</span></span><span class="pr"><b>'+eur(p.precio)+'</b><span>'+esc(porMes(p))+'</span></span>'+(p.descripcion?'<p>'+esc(p.descripcion)+'</p>':'')+'</button>'; }).join('')+'</div>'+
+        var pt=puntos(p.descripcion);
+        return '<button class="plan'+(i===sel?' on':'')+'" data-plan="'+i+'" aria-pressed="'+(i===sel)+'"><span class="h"><b>'+esc(p.nombre)+'</b>'+(p.id===P.destacado?'<span class="tg">El más elegido</span>':'')+'</span>'+precioHtml(p)+
+          (pt.length?'<span class="pts">'+pt.map(function(x){ return '<span>'+ic('ok')+'<span>'+esc(x)+'</span></span>'; }).join('')+'</span>':'')+'</button>'; }).join('')+'</div>'+
         '<button class="btn" data-empezar="plan">'+(P.cuest?'Empezar con '+esc(p0.nombre):'Preguntar por '+esc(p0.nombre))+ic('fl')+'</button></section>';
     }
     if(S.faq!==false&&(P.faq||[]).length) X.faq='<section class="sec faq" id="v-faq"><h2>Preguntas</h2><div>'+P.faq.map(function(f,i){ return '<button class="q" aria-expanded="'+(i===0)+'" data-faq="'+i+'">'+esc(f.q)+ic('mas')+'</button><p class="a" id="fa'+i+'"'+(i===0?'':' hidden')+'>'+esc(f.a)+'</p>'; }).join('')+'</div></section>';
@@ -192,6 +207,15 @@ h1{margin:0;font-size:38px;line-height:1.04;font-weight:800;letter-spacing:-1.2p
     });
     addEventListener('load',function(){ if(SOLO) alto(); });
     if(SOLO&&window.ResizeObserver) new ResizeObserver(function(){ alto(); }).observe(pg);
+    if(!SOLO){      // en el ordenador, el móvil de ejemplo también se desliza arrastrando con el ratón (como con el dedo)
+      var dg=null, html=document.documentElement; html.classList.add('v-drag');
+      addEventListener('dragstart',function(e){ e.preventDefault(); },true);
+      addEventListener('pointerdown',function(e){ if(e.pointerType!=='mouse'||e.button!==0) return; dg={y:e.clientY,sy:window.scrollY,mov:false}; },true);
+      addEventListener('pointermove',function(e){ if(!dg) return; if(!e.buttons){ dg=null; html.classList.remove('arrastra'); return; }
+        var dy=e.clientY-dg.y; if(!dg.mov&&Math.abs(dy)>5){ dg.mov=true; html.classList.add('arrastra'); } if(dg.mov){ window.scrollTo(0,dg.sy-dy); e.preventDefault(); } },true);
+      addEventListener('pointerup',function(){ if(dg&&dg.mov){ var f=function(ev){ ev.stopPropagation(); ev.preventDefault(); }; addEventListener('click',f,true); setTimeout(function(){ removeEventListener('click',f,true); },60); }
+        dg=null; html.classList.remove('arrastra'); },true);
+    }
     document.addEventListener('load',function(e){ if(SOLO&&e.target&&e.target.tagName==='IMG') alto(); },true);
     try{ parent.postMessage({tipo:'mo-vista-lista',solo:SOLO},location.origin); }catch(er){}
     return;

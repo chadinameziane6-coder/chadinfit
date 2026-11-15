@@ -3343,7 +3343,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.133';
+var APP_V = 'v53.4.134';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -18803,7 +18803,7 @@ function pagApIntro(k){ var t={
     cifras:'Por ejemplo, a cuántas personas has acompañado, tus años de experiencia o tu valoración. <b>Lo que dejes vacío no sale.</b>'+(CO.pagEd.diseno==='claro'?' Con el diseño «Claro», la primera sale en la foto de la portada.':''),
     para:'Las frases en las que tu posible cliente se reconoce. Hasta 6.', sobre:'Quién eres y cómo trabajas, en pocas líneas.', pasos:'Del primer contacto al seguimiento. Hasta 4 pasos.',
     app:'<b>No tienes que rellenar nada.</b> Salen capturas de la app con la que trabajas (tu entreno, tu menú y el resumen al terminar) y lo que tiene: el chat contigo, el peso y las medidas, y que funciona sin cobertura.',
-    planes:'Salen tus planes de Pagos, con su precio. Elige cuáles enseñas y cuál destacas.', faq:'Las dudas que te hacen siempre. Hasta 8.', empezar:'Lo que pasa cuando tocan «Quiero empezar». Deja al menos uno.'}[k];
+    planes:'Salen tus planes de Pagos: primero lo que sale al mes y debajo lo que se paga en cada periodo, y lo que incluye en puntos. Elige cuáles enseñas y cuál destacas.', faq:'Las dudas que te hacen siempre. Hasta 8.', empezar:'Lo que pasa cuando tocan «Quiero empezar». Deja al menos uno.'}[k];
   if(k==='opi') return '<div class="pag-avi">'+ic('info')+'<span><b>Solo con el permiso por escrito de tu cliente.</b> Basta con su nombre (o sus iniciales) y su edad.</span></div>';
   return t?'<p class="pag-int2">'+t+'</p>':''; }
 function pagAsiHtml(k){ var h=(CO.pagAsiH||{})[k]||180;
@@ -19209,7 +19209,7 @@ function pgPlanModal(p){
   modal('<h2>'+(p.id?'Editar plan':'Nuevo plan')+'</h2><label class="f">Nombre<input id="pl-nm" maxlength="60" value="'+esc(p.nombre)+'" placeholder="Entreno + Dieta trimestral"></label>'+
     '<div class="grid3"><label class="f">Modalidad<select id="pl-mo">'+[['entreno','Entreno solo'],['entreno_dieta','Entreno + Dieta'],['dieta','Solo dieta'],['otro','Otro']].map(function(x){ return '<option value="'+x[0]+'"'+(p.modalidad===x[0]?' selected':'')+'>'+x[1]+'</option>'; }).join('')+'</select></label>'+
     '<label class="f">Duración (meses)<input id="pl-me" inputmode="numeric" value="'+esc(p.meses)+'"></label><label class="f">Precio (€)<input id="pl-pr" inputmode="decimal" value="'+esc(String(p.precio).replace('.',','))+'"></label></div>'+
-    '<label class="f">Descripción <span class="muted">(opcional, la ven tus clientes)</span><input id="pl-de" maxlength="300" value="'+esc(p.descripcion)+'" placeholder="Rutina y dieta personalizadas, revisión cada 20 días…"></label>'+
+    '<label class="f">Qué incluye <span class="muted">(opcional, lo ven tus clientes)</span><textarea id="pl-de" maxlength="300" rows="4" placeholder="Rutina y dieta personalizadas&#10;Revisión cada 20 días&#10;Chat conmigo">'+esc(p.descripcion)+'</textarea><small class="muted">Un punto por línea: en tu página sale en forma de lista.</small></label>'+
     '<label class="f">Enlace de pago <span class="muted">(opcional: Stripe, PayPal…)</span><input id="pl-en" maxlength="300" value="'+esc(p.enlace)+'" placeholder="https://…"></label>'+
     (p.id?'<label class="chk-l"><input type="checkbox" id="pl-ac"'+(p.activo?' checked':'')+'><span>Activo (lo ven tus clientes al renovar)</span></label>':'')+
     '<button class="btn mt" data-a="pgPlanOk">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
