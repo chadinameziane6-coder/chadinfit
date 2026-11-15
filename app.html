@@ -1761,7 +1761,8 @@ body.ancho .comida-ed{display:block}
 body.ancho .op-low{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 18px;align-items:start}body.ancho .op-low .op-r>.f:first-child{margin-top:10px}
 .die-top{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:12px 0 0}.die-top .die-seg{margin:0}
 .gu-btn{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid #111;color:#111;border-radius:99px;padding:8px 14px;font:700 13px Plus Jakarta Sans,sans-serif;cursor:pointer}.gu-btn .ic{width:17px;height:17px}
-.gu-ban{display:flex;align-items:center;gap:10px;flex-wrap:wrap;background:#FFF6DC;border:1px solid #F1D48A;border-radius:14px;padding:10px 12px;margin-top:10px;font-size:13.5px;color:#3A2C00}.gu-ban>.ic{width:20px;height:20px;flex:none}.gu-ban b{font-weight:700}.gu-ban .link{color:#3A2C00;text-decoration:underline;text-underline-offset:2px;padding:2px 0}
+.gu-ban>span{flex:1 1 calc(100% - 34px);min-width:0;line-height:1.4}.gu-ban>.ic{align-self:flex-start;margin-top:1px}.gu-ban>span+.link{margin-left:30px}
+.gu-ban{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;background:#FFF6DC;border:1px solid #F1D48A;border-radius:14px;padding:10px 12px;margin-top:10px;font-size:13.5px;color:#3A2C00}.gu-ban>.ic{width:20px;height:20px;flex:none}.gu-ban b{font-weight:700}.gu-ban .link{color:#3A2C00;text-decoration:underline;text-underline-offset:2px;padding:2px 0}
 #guia-die{position:fixed;z-index:70;background:#fff;overflow-y:auto;overscroll-behavior:contain;padding:16px 16px 28px;box-shadow:0 10px 40px rgba(0,0,0,.18);transition:transform .25s ease;left:0;right:0;bottom:0;max-height:86vh;border-radius:22px 22px 0 0;transform:translateY(105%)}#guia-die.open{transform:none}
 body.ancho #guia-die{left:auto;top:0;bottom:0;right:0;width:400px;max-height:none;border-radius:0;transform:translateX(105%);border-left:1px solid var(--line)}body.ancho #guia-die.open{transform:none}
 .gu-h{display:flex;align-items:center;justify-content:space-between;gap:8px;position:sticky;top:-16px;background:#fff;padding:4px 0 6px;z-index:1}.gu-h b{font:800 18px Plus Jakarta Sans,sans-serif}.gu-x{width:36px;height:36px;font-size:16px;display:flex;align-items:center;justify-content:center}
@@ -3070,8 +3071,8 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .ui2 :where(input[readonly],input:disabled,textarea[readonly],textarea:disabled,select:disabled){background-color:var(--card2);border-color:transparent;color:var(--mu)}
 .ui2 :where(label.f),.ui2 :where(.lab){color:#3A3A3E;font-size:12.5px;font-weight:700}
 /* --- ayudas y avisos: lo que explica, en gris; el color, solo cuando importa --- */
-.ui2 .tip{background:#F6F6F8;color:var(--tx2);border:1px solid var(--line);border-left:3px solid #B8B8C0}
-.ui2 .gu-ban{background:#F6F6F8;color:var(--tx2);border:1px solid var(--line);border-left:3px solid #B8B8C0}.ui2 .gu-ban .link{color:#111}
+.ui2 .tip{background:#FFF6E0;color:#5C3B00;border:1px solid #F3D9A0;border-left:3px solid #E0A100}.ui2 .tip a,.ui2 .tip .link{color:#5C3B00}      /* v53.4.137: los avisos y consejos, en ámbar */
+.ui2 .gu-ban{background:#FFF6E0;color:#5C3B00;border:1px solid #F3D9A0;border-left:3px solid #E0A100}.ui2 .gu-ban .link{color:#5C3B00;font-weight:700}.ui2 .gu-ban>.ic{color:#B37800}      /* v53.4.137: «¿Primera vez?», en ámbar (aviso) */
 .ui2 .tip b{color:#111}.ui2 .tip .link,.ui2 .tip button.link{color:#111}
 .ui2 :where(.pill){background:var(--card2);color:var(--tx2)}
 .ui2 :where(.pill).ok{background:var(--okS);color:var(--ok)}
@@ -3345,7 +3346,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.136';
+var APP_V = 'v53.4.137';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
