@@ -131,6 +131,7 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-vpa{padding:7px 14px;font-size:12px;font-weight:700;text-align:center;background:var(--card2);color:var(--tx2)}.pag-vpa.sucia{background:#FFF3DC;color:#8A5300}.pag-vpa i{display:inline-block;width:7px;height:7px;border-radius:4px;background:#E0A100;margin-right:6px;vertical-align:1px}
 .pag-vp iframe{flex:1;width:100%;min-height:0;border:0;display:block;background:#E9E9EC}
 .pag-vpb{display:flex;gap:8px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));border-top:1px solid var(--line)}.pag-vpb .btn{flex:1;margin:0;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.pqx-f{margin:12px 0;gap:12px}.pqx-f>span{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:2px;flex:1;min-width:0;font-weight:700;font-size:14.5px}.pqx-f .fila-s{display:block;font-weight:400}
 .pg-volv{display:flex;align-items:center;gap:10px;width:100%;padding:12px 14px;border:0;border-radius:16px;background:#111;color:#fff;font:inherit;text-align:left;cursor:pointer;margin:4px 0 12px}.pg-volv .pag-at small{color:#D8D8DE}.pg-volv>.ic{width:18px;height:18px;flex:none}
 /* interruptor */
 .sw{width:52px;height:30px;border-radius:99px;background:#D5D5D9;border:0;position:relative;cursor:pointer;flex:none;transition:background .2s}
@@ -3343,7 +3344,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.134';
+var APP_V = 'v53.4.135';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -14205,14 +14206,14 @@ var RESTR=[['halal','Sin cerdo ni alcohol (halal)']];     // v48: por religión 
 var ALERG=[['gluten','Gluten'],['lactosa','Lactosa'],['leche','Proteína de la leche'],['huevo','Huevo'],['pescado','Pescado'],['crustaceos','Marisco'],['moluscos','Moluscos'],['frutos_secos','Frutos secos'],['cacahuete','Cacahuete'],['soja','Soja'],['sesamo','Sésamo'],['apio','Apio'],['mostaza','Mostaza'],['sulfitos','Sulfitos'],['altramuces','Altramuces']];
 function cqFijos(n,sinAlim){
   var al=CQ.r._alim||{}, A=al.alergias||[];
-  if(sinAlim){ n--; return '<section class="cq-s" id="cq-_email"><div class="cq-h"><span class="cq-n">'+(n+2)+'</span><h2>Tu email</h2></div><p class="cq-p">Será tu usuario para entrar en tu app. Te llegará un email para que crees tu contraseña, que solo sabrás tú.</p>'+
+  if(sinAlim){ n--; return '<section class="cq-s" id="cq-_email"><div class="cq-h"><span class="cq-n">'+(n+2)+'</span><h2>Tu email</h2></div><p class="cq-p">'+(CQ.d&&CQ.d.pagina?'Para que pueda contestarte. Si empezamos, será tu usuario para entrar en tu app.':'Será tu usuario para entrar en tu app. Te llegará un email para que crees tu contraseña, que solo sabrás tú.')+'</p>'+
     '<label class="f">Email<input type="email" inputmode="email" autocomplete="email" autocapitalize="off" data-cqx="email" value="'+esc(CQ.r._email||'')+'" placeholder="tu@email.com"></label></section>'+cqPrivHtml(n+3); }
   return '<section class="cq-s" id="cq-_alim"><div class="cq-h"><span class="cq-n">'+(n+1)+'</span><h2>Tu alimentación</h2></div>'+cqPreg('¿Sigues alguna de estas formas de comer?')+
     '<div class="tipos cq-ops" id="cqa-tipo">'+DIETA_T.map(function(d){ return '<button class="'+(al.tipo!=null&&al.tipo===d[0]?'on':'')+'" data-a="cqAlTipo" data-v="'+d[0]+'">'+d[1]+'</button>'; }).join('')+'</div>'+
     cqPreg('¿No comes cerdo ni nada con alcohol (por religión o costumbre)?')+'<div class="chips" id="cqa-rs">'+RESTR.map(function(a){ return '<button class="chip'+(A.indexOf(a[0])>=0?' on':'')+'" data-a="cqAlAl" data-v="'+a[0]+'">'+a[1]+'</button>'; }).join('')+'</div>'+
     cqPreg('¿Tienes alguna alergia o intolerancia? Márcala y no aparecerá nunca en tu dieta.')+'<div class="chips" id="cqa-al">'+ALERG.map(function(a){ return '<button class="chip'+(A.indexOf(a[0])>=0?' on':'')+'" data-a="cqAlAl" data-v="'+a[0]+'">'+a[1]+'</button>'; }).join('')+'</div>'+
     '<label class="f mt">'+cqLbl('Otra cosa que deba saber (opcional)')+'<input data-cqx="txt" value="'+esc(al.txt||'')+'" placeholder="Por ejemplo: intolerancia a la fructosa"></label></section>'+
-    '<section class="cq-s" id="cq-_email"><div class="cq-h"><span class="cq-n">'+(n+2)+'</span><h2>Tu email</h2></div><p class="cq-p">Será tu usuario para entrar en tu app. Te llegará un email para que crees tu contraseña, que solo sabrás tú.</p>'+
+    '<section class="cq-s" id="cq-_email"><div class="cq-h"><span class="cq-n">'+(n+2)+'</span><h2>Tu email</h2></div><p class="cq-p">'+(CQ.d&&CQ.d.pagina?'Para que pueda contestarte. Si empezamos, será tu usuario para entrar en tu app.':'Será tu usuario para entrar en tu app. Te llegará un email para que crees tu contraseña, que solo sabrás tú.')+'</p>'+
     '<label class="f">Email<input type="email" inputmode="email" autocomplete="email" autocapitalize="off" data-cqx="email" value="'+esc(CQ.r._email||'')+'" placeholder="tu@email.com"></label></section>'+
     cqPrivHtml(n+3);
 }
@@ -14269,6 +14270,7 @@ A.cqEnviar=function(el){
 function cqHombreFin(){ try{ return CQ.d.preguntas&&CQ.d.preguntas.secciones?cqSexo()==='Hombre':CQ.d.sexo==='hombre'; }catch(e){ return false; } }      // v52.3: sin corazón para ellos
 function pintarGraciasCq(ya){
   var f=(CQ.d.preguntas&&CQ.d.preguntas.fin)||CQ.d.fin||{};
+  if(CQ.d.pagina) f={t:f.t,firma:f.firma,p:'Lo leo yo y te contesto lo antes posible.'};      // v53.4.135: desde «Tu página» aún no es cliente
   app.innerHTML=cqCab()+'<main class="wrap cqw"><div class="card center cq-fin"><div class="big-ok">'+(cqHombreFin()?ic('ok'):ic('corazon'))+'</div><h1>'+esc(f.t||'¡Muchas gracias!')+'</h1>'+
     (ya?'<p><b>Ya hemos recibido tus respuestas.</b> Si quieres cambiar algo, díselo a tu coach.</p>':'')+
     (CQ.acceso?'<p class="cq-acc">Te hemos enviado un email a <b>'+esc(CQ.acceso)+'</b> para que crees tu contraseña y entres en tu app. Míralo también en Spam.</p>':'')+(f.p?'<p>'+esc(f.p)+'</p>':'')+(f.firma?'<p class="cq-firma">'+esc(f.firma==='MOOD ON by Chadin'&&!conMarca()?'MOOD ON':f.firma)+'</p>':'')+'</div></main>';
@@ -18948,9 +18950,27 @@ A.pagQVer=function(el){ var id=el.dataset.id;
     modal('<h2>'+esc(x?x.nombre:'Cuestionario')+'</h2><p class="muted sm">Desde tu página'+(x&&x.plan?' · eligió «'+esc(x.plan)+'»':'')+(x&&x.email?' · '+esc(x.email):'')+'</p>'+cqRespuestasHtml(q)+
       (x&&!x.cid?'<button class="btn mt" data-a="pagQPasar" data-id="'+esc(id)+'">Pasar a cliente</button><button class="link danger mt" data-a="pagQBorrar" data-id="'+esc(id)+'">Borrar este cuestionario</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
   },function(e){ toast(limpiaErr(e),'err'); }); };
-A.pagQPasar=function(el){ var id=el.dataset.id;
-  confirmar('¿Pasarlo a cliente? Se crea su ficha con sus datos y su cuestionario ya respondido. Después le das acceso a su app como siempre.','Pasar a cliente',function(){
-    cargando(api('coachPaginaPasar',CO.pin,id)).then(function(r){ cerrarModal(); toast('Ya es cliente: te abro su ficha','ok'); return cargarLista(false).then(function(){ return abrirClienta(r.id,'enlace'); }); },function(e){ toast(limpiaErr(e),'err'); }); }); };
+A.pagQPasar=function(el){ var id=el.dataset.id, x=(CO.pag.cuests||[]).filter(function(z){ return z.id===id; })[0]; if(!x) return;
+  var L=CO.pag.planes||[], pl=L.filter(function(p){ return p.id===x.plan_id; })[0];
+  CO.pqEd={id:id,plan_id:pl?pl.id:'',acceso:!!x.email,pago:false,importe:pl?String(pl.precio).replace('.',','):'',metodo:'bizum'}; pagQModal(); };
+function pagQModal(){ var E=CO.pqEd, x=(CO.pag.cuests||[]).filter(function(z){ return z.id===E.id; })[0]||{}, L=CO.pag.planes||[];
+  modal('<h2>Pasar a cliente</h2><p class="muted sm">'+esc(x.nombre||'')+(x.plan?' · eligió «'+esc(x.plan)+'»':'')+'</p>'+
+    '<p class="muted sm">Se crea su ficha con sus datos y su cuestionario ya respondido. Y, si quieres, ya mismo:</p>'+
+    '<label class="f">Su plan<select id="pq-pl" data-c="pqPlan"><option value="">Sin plan por ahora</option>'+L.map(function(p){ return '<option value="'+esc(p.id)+'"'+(p.id===E.plan_id?' selected':'')+'>'+esc(p.nombre)+' · '+eur(p.precio)+' · '+mesesTxt(p.meses)+'</option>'; }).join('')+'</select></label>'+
+    '<div class="fila pqx-f"><span>Mandarle ya su acceso a la app<small class="fila-s">'+(x.email?'Le llega un email a '+esc(x.email)+' para crear su contraseña.':'No dejó su email: dale acceso luego desde su ficha.')+'</small></span><button class="sw'+(E.acceso?' on':'')+'" data-a="pqTog" data-v="acceso" aria-pressed="'+E.acceso+'" aria-label="Mandarle ya su acceso"'+(x.email?'':' disabled')+'><i></i></button></div>'+
+    '<div class="fila pqx-f"><span>Apuntar su primer pago<small class="fila-s">Si ya te ha pagado. Su plan queda al día desde hoy.</small></span><button class="sw'+(E.pago?' on':'')+'" data-a="pqTog" data-v="pago" aria-pressed="'+E.pago+'" aria-label="Apuntar su primer pago"><i></i></button></div>'+
+    (E.pago?'<label class="f">Importe (€)<input id="pq-i" inputmode="decimal" data-v29="pqImp" value="'+esc(E.importe)+'" placeholder="0"></label><div class="lab">Forma de pago</div><div class="tipos">'+Object.keys(METODO_L).filter(function(k){ return k!=='online'; }).map(function(k){ return '<button class="'+(E.metodo===k?'on':'')+'" data-a="pqMet" data-v="'+k+'">'+METODO_L[k]+'</button>'; }).join('')+'</div>':'')+
+    '<button class="btn mt" data-a="pagQPasarOk">Pasar a cliente</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); }
+CH.pqPlan=function(t){ var E=CO.pqEd, p=(CO.pag.planes||[]).filter(function(z){ return z.id===t.value; })[0]; E.plan_id=t.value; if(p) E.importe=String(p.precio).replace('.',','); pagQModal(); };
+A.pqTog=function(el){ var E=CO.pqEd, k=el.dataset.v; if(el.disabled) return; E[k]=!E[k]; pagQModal(); };
+A.pqMet=function(el){ CO.pqEd.metodo=el.dataset.v; pagQModal(); };
+IN29.pqImp=function(t){ CO.pqEd.importe=t.value; };
+A.pagQPasarOk=function(el){ var E=CO.pqEd; if(el.disabled) return;
+  if(E.pago&&String(E.importe).trim()==='') return toast('Pon el importe del pago','err');
+  el.disabled=true;
+  cargando(api('coachPaginaPasar',CO.pin,E.id,{plan_id:E.plan_id,acceso:!!E.acceso,pago:E.pago?{importe:E.importe,metodo:E.metodo}:null})).then(function(r){ cerrarModal(); CO.pg=null;
+    toast('Ya es cliente'+(r.acceso?' y le hemos mandado su acceso':'')+(r.pago?' · pago apuntado':'')+(r.errAcceso?' · el acceso no se ha podido mandar: hazlo desde su ficha':''),r.errAcceso?'err':'ok');
+    return cargarLista(false).then(function(){ return abrirClienta(r.id,r.acceso?'seguimiento':'enlace'); }); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.pagQBorrar=function(el){ var id=el.dataset.id; confirmar('¿Borrar este cuestionario? No se puede deshacer.','Borrar',function(){ cargando(api('coachPaginaCuestBorrar',CO.pin,id)).then(function(r){ CO.pag.cuests=r.cuests; cerrarModal(); var b=document.getElementById('pag-llega'); if(b) b.outerHTML=pagLlegaHtml(); toast('Borrado'); },function(e){ toast(limpiaErr(e),'err'); }); }); };
 A.sdPagos=function(){ siCambiosOk(function(){ CO.pagVolver=null; cargarPagos(true); }); };
 A.mnPagos=function(){ cerrarModal(); CO.pagVolver=null; cargarPagos(true); };
