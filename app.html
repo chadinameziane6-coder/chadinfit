@@ -109,6 +109,12 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-li{display:flex;flex-direction:column;gap:5px}.pag-lin{font-size:12px;font-weight:700;color:var(--mu)}
 .pag-l2{display:flex;gap:6px}.pag-l2 input{flex:1;min-width:0;margin:0}.pag-l2 .pag-cn{flex:0 0 100px}.pag-l2 .pag-cu{flex:0 0 120px}
 .pag-lr{display:flex;gap:8px;align-items:center}.pag-lr input{flex:1;min-width:0;margin:0}
+/* v53.4.158 · los 3 tonos de su página */
+.pag-ton{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.pag-t{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border:2px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;font:inherit;color:var(--tx);text-align:left}.pag-t.on{border-color:var(--c)}
+.pag-t b{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;padding:0 2px;line-height:1.2}.pag-t b .ic{width:14px;height:14px;margin:0;color:var(--c)}
+.pag-tm{position:relative;display:flex;flex-direction:column;gap:5px;height:84px;border-radius:11px;overflow:hidden;background:#F6F6F8;padding:30px 8px 8px}.pag-tm i:nth-child(1){position:absolute;left:0;right:0;top:0;height:22px;background:var(--g)}
+.pag-tm i:nth-child(2){height:5px;border-radius:3px;background:#2A2A30;width:80%}.pag-tm i:nth-child(3){height:5px;border-radius:3px;background:#C9C9D1;width:60%}.pag-tm i:nth-child(4){height:14px;border-radius:7px;background:var(--c);width:100%;margin-top:auto;box-shadow:0 4px 10px rgba(0,0,0,.15)}
+.pag-tot{display:flex;flex-direction:column;gap:2px;margin-top:10px}.pag-tot>span{font-size:12.5px;font-weight:700;color:var(--mu)}
 /* v53.4.157 · «Tu página»: toques de color sutiles con el color de su página (todos los entrenadores) */
 .pag-w #pag-est:not(.ok):not(.warn){background:#FFF3DC;color:#8A5300}
 .pag-w .pag-link .pag-acc .btn{border:0;color:#fff}.pag-w .pag-link .pag-acc .btn:first-child{background:var(--pc,#111);color:var(--pct,#fff)}.pag-w .pag-link .pag-acc .btn:first-child .ic{color:var(--pct,#fff)}.pag-w .pag-link .pag-acc .btn:nth-child(2){background:#25D366}.pag-w .pag-link .pag-acc .btn:nth-child(2) .ic{color:#fff}
@@ -3566,7 +3572,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.157';
+var APP_V = 'v53.4.158';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -19433,10 +19439,12 @@ A.negExportar=function(el){ if(el.disabled) return;
 };
 /* =====================================================================
    v53.4.130 · TU PÁGINA: la página de cada entrenador para posibles clientes (moodonapp.com/<nombre>). Es SU marca: su foto, su logo,
-   sus textos y sus planes; diseño «Oscuro» o «Claro» y su color. Desde aquí la edita, la publica, copia o manda el enlace y ve lo que
+   sus textos y sus planes; diseño «Oscuro» o «Claro» y su tono (morado, azul, negro y blanco, u otro color). Desde aquí la edita, la publica, copia o manda el enlace y ve lo que
    llega (visitas, toques en WhatsApp y los cuestionarios, que pasa a cliente cuando quiere).
    ===================================================================== */
-var PAG_COL=[['#111111','Negro'],['#A4502F','Terracota'],['#5E7A62','Salvia'],['#23395B','Marino'],['#B86B78','Rosa'],['#6B3A5B','Ciruela']];
+var PAG_TON=[['#6B3A5B','Morado','linear-gradient(135deg,#B48AA6,#6B3A5B)'],['#2457D6','Azul','linear-gradient(135deg,#7FA3F0,#2457D6)'],['#111111','Negro y blanco','linear-gradient(135deg,#55555C,#0B0B0C)']];      // v53.4.158: los 3 tonos de su página
+var PAG_COL=[['#A4502F','Terracota'],['#5E7A62','Salvia'],['#23395B','Marino'],['#B86B78','Rosa']];      // «Otro color (el de tu marca)»
+A.pagOtroCol=function(){ CO.pagOtro=true; pagApPintar('diseno'); };
 var PAG_SEC=[['cifras','Cifras','Personas acompañadas, años, valoración'],['para','Es para ti si…','Para quién es tu servicio'],['sobre','Sobre mí','Tu frase y cómo trabajas'],['pasos','Así trabajamos','Los pasos, del cuestionario al seguimiento'],
   ['app','Todo, en tu móvil','La app con la que trabajas, con capturas'],['opi','Opiniones','Solo con permiso por escrito de tu cliente'],['planes','Planes y precios','Salen de tus planes de Pagos'],['faq','Preguntas','Las dudas de siempre, resueltas']];
 function pagUrl(s){ return (/^(localhost|127\.)/.test(location.hostname)?location.origin+'/landing/':'https://moodonapp.com/')+s; }
@@ -19457,7 +19465,7 @@ function pagCampo(k,t,v,o){ o=o||{}; var at=' data-v29="pagCampo" data-k="'+k+'"
 /* v53.4.132 · el editor, más claro: los apartados en el orden en que se ven, con su estado (Lista · Falta rellenar · Oculta), se rellenan ahí mismo y
    se ve al momento cómo queda. En el ordenador ancho, la página al lado (se cambia mientras escribes); en el móvil, «Así se verá» dentro de cada apartado
    y «Ver cómo queda mi página» a pantalla completa. La vista previa es la página de verdad (404.html?vista=1), con los datos sin guardar por postMessage. */
-var PAG_AP=[['marca','Tu marca','Tu foto, tu logo y tu nombre'],['diseno','Diseño y color','Oscuro o claro, y el color de tus botones'],['portada','Portada','Lo primero que ven: tu frase grande'],
+var PAG_AP=[['marca','Tu marca','Tu foto, tu logo y tu nombre'],['diseno','Diseño y color','Oscuro o claro, y el tono: morado, azul o negro'],['portada','Portada','Lo primero que ven: tu frase grande'],
   ['cifras','Cifras','Tres datos que den confianza'],['para','Es para ti si…','Las frases en las que se reconocen'],['sobre','Sobre mí','Quién eres y cómo trabajas'],
   ['pasos','Así trabajamos','Del cuestionario al seguimiento'],['app','Todo, en tu móvil','Capturas de la app: sale sola'],['opi','Opiniones','Solo con permiso de tu cliente'],
   ['planes','Planes y precios','Salen de tus planes de Pagos'],['faq','Preguntas','Las dudas de siempre'],['empezar','Cuando quieren empezar','Tu cuestionario o tu WhatsApp']];
@@ -19469,7 +19477,7 @@ function pagVistaBase(){ var h=location.hostname; if(/^(localhost|127\.)/.test(h
 function pagVistaUrl(solo){ return pagVistaBase()+'vista-previa?vista=1'+(solo?'&solo='+solo:''); }
 function pagOrigen(){ try{ return new URL(pagVistaBase()).origin; }catch(e){ return location.origin; } }
 function pagTx(x){ return String(x==null?'':x).trim(); }
-function pagColNom(c){ var x=PAG_COL.filter(function(z){ return z[0]===String(c||'').toUpperCase(); })[0]; return x?x[1].toLowerCase():'tu color'; }
+function pagColNom(c){ var x=PAG_TON.concat(PAG_COL).filter(function(z){ return z[0]===String(c||'').toUpperCase(); })[0]; return x?x[1].toLowerCase():'tu color'; }
 function pagPlSel(){ var E=CO.pagEd, L=CO.pag.planes||[]; return (E.planes||[]).length?E.planes.filter(function(id){ return L.some(function(p){ return p.id===id; }); }):L.map(function(p){ return p.id; }); }
 /* lo que verá quien abra el enlace, con lo que hay escrito ahora (lo mismo que paginaPublica_ en Code.gs) */
 function pagPub(conImg){ var E=CO.pagEd, P=CO.pag, I=CO.pagImg||{}, S=pagPlSel(), wa='';
@@ -19579,8 +19587,11 @@ function pagMasBtn(l,n,max,t){ return n<max?'<button class="link pag-mas" data-a
 function pagApCuerpo(k){ var E=CO.pagEd, L, n;
   if(k==='marca') return pagMarcaHtml();
   if(k==='diseno') return '<div class="pag-dis">'+[['oscuro','Oscuro','Foto grande, letras blancas'],['claro','Claro','Limpio, la foto en tarjeta']].map(function(d){ return '<button class="pag-d d-'+d[0]+(E.diseno===d[0]?' on':'')+'" data-a="pagDis" data-v="'+d[0]+'" aria-pressed="'+(E.diseno===d[0])+'"><span class="pag-dm" aria-hidden="true"><i></i><i></i><i></i></span><b>'+d[1]+'</b><small>'+d[2]+'</small></button>'; }).join('')+'</div>'+
-    '<div class="f pag-colt"><span>Tu color</span><small class="muted">Para los botones y los detalles. Los textos, siempre en negro o blanco para que se lean bien.</small><div class="pag-col">'+PAG_COL.map(function(c){ return '<button class="pag-c'+(String(E.color).toUpperCase()===c[0]?' on':'')+'" data-a="pagCol" data-v="'+c[0]+'" aria-label="'+c[1]+'" style="--c:'+c[0]+'"></button>'; }).join('')+
-      '<label class="pag-c otro" aria-label="Otro color" style="--c:'+esc(E.color)+'"><input type="color" value="'+esc(E.color)+'" data-c="pagColOtro">+</label></div></div>';
+    (function(){ var cu=String(E.color).toUpperCase(), es=PAG_TON.some(function(t){ return t[0]===cu; }), ot=!es||CO.pagOtro;      // v53.4.158: 3 tonos, y «Otro color» aparte
+      return '<div class="f pag-colt"><span>Tono de tu página</span><small class="muted">Para los botones y los detalles. Los textos, siempre en negro o blanco para que se lean bien.</small>'+
+      '<div class="pag-ton">'+PAG_TON.map(function(t){ var on=cu===t[0]; return '<button class="pag-t'+(on?' on':'')+'" data-a="pagCol" data-v="'+t[0]+'" aria-pressed="'+on+'" style="--c:'+t[0]+';--g:'+t[2]+'"><span class="pag-tm" aria-hidden="true"><i></i><i></i><i></i><i></i></span><b>'+(on?ic('ok'):'')+t[1]+'</b></button>'; }).join('')+'</div>'+
+      (ot?'<div class="pag-tot"><span>Otro color (el de tu marca)</span><div class="pag-col">'+PAG_COL.map(function(c){ return '<button class="pag-c'+(cu===c[0]?' on':'')+'" data-a="pagCol" data-v="'+c[0]+'" aria-label="'+c[1]+'" style="--c:'+c[0]+'"></button>'; }).join('')+
+      '<label class="pag-c otro" aria-label="Otro color" style="--c:'+esc(E.color)+'"><input type="color" value="'+esc(E.color)+'" data-c="pagColOtro">+</label></div></div>':'<button class="link pag-mas" data-a="pagOtroCol">'+ic('mas')+'Otro color (el de tu marca)</button>')+'</div>'; })();
   if(k==='portada') return pagCampo('eyebrow','Encima del título',E.eyebrow,{max:60,ph:'Entrenadora personal · Online',ayuda:'Qué eres, en pocas palabras.'})+pagCampo('frase','Tu frase (el título grande)',E.frase,{max:90,ph:'Ponte fuerte sin vivir en el gimnasio.'})+
     pagCampo('sub','Debajo',E.sub,{max:220,area:1,rows:2,ph:'Te preparo un entreno y un menú a tu medida y te acompaño cada semana.'})+pagCampo('plazas','Aviso arriba (opcional)',E.plazas,{max:60,ph:'Plazas abiertas para diciembre',ayuda:'Si lo dejas vacío, no sale.'});
   if(k==='cifras'){ L=E.cifras||[];
