@@ -109,6 +109,21 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-li{display:flex;flex-direction:column;gap:5px}.pag-lin{font-size:12px;font-weight:700;color:var(--mu)}
 .pag-l2{display:flex;gap:6px}.pag-l2 input{flex:1;min-width:0;margin:0}.pag-l2 .pag-cn{flex:0 0 100px}.pag-l2 .pag-cu{flex:0 0 120px}
 .pag-lr{display:flex;gap:8px;align-items:center}.pag-lr input{flex:1;min-width:0;margin:0}
+/* v53.4.159 · la foto en las pantallas de entrar (móvil: arriba, con el logo en blanco; ordenador: media pantalla) */
+.acc-ft{position:absolute;left:0;right:0;top:0;height:54vh;min-height:340px;background:#111 url(/img/acceso.webp) center 24%/cover no-repeat}
+.acc-ft:after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0,rgba(0,0,0,.05) 32%,rgba(0,0,0,0) 55%,rgba(245,245,247,.75) 86%,#F5F5F7 100%)}
+.acc-ftx{display:none}
+.login.acc.acc-cf{position:relative;padding-top:44px}
+.acc-cf>.logo-w{color:#fff;margin-bottom:calc(50vh - 190px)}.acc-cf>.logo-w svg{width:220px;filter:drop-shadow(0 2px 10px rgba(0,0,0,.35))}.acc-cf>.logo-w em{color:rgba(255,255,255,.85)}
+.acc-cf .card{box-shadow:0 18px 44px rgba(0,0,0,.14)}
+@media (min-width:900px){
+  .acc-ft{position:fixed;top:0;bottom:0;right:auto;width:50vw;height:auto;min-height:0;background-position:center 30%}
+  .acc-ft:after{background:linear-gradient(180deg,rgba(0,0,0,0) 55%,rgba(0,0,0,.55) 100%)}
+  .acc-ftx{display:block;position:absolute;left:40px;bottom:36px;right:40px;z-index:1;color:#fff;font-size:22px;font-weight:800;letter-spacing:-.3px;line-height:1.2;max-width:360px}
+  .login.acc.acc-cf{margin-left:50vw;max-width:none;padding:70px 6vw;display:flex;flex-direction:column;align-items:center}
+  .acc-cf>*{width:100%;max-width:420px}
+  .acc-cf>.logo-w{color:var(--tx);margin-bottom:0}.acc-cf>.logo-w svg{width:260px;filter:none}.acc-cf>.logo-w em{color:var(--mu)}
+}
 /* v53.4.158 · los 3 tonos de su página */
 .pag-ton{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}.pag-t{display:flex;flex-direction:column;gap:6px;padding:6px 6px 8px;border:2px solid var(--line);border-radius:16px;background:#fff;cursor:pointer;font:inherit;color:var(--tx);text-align:left}.pag-t.on{border-color:var(--c)}
 .pag-t b{display:flex;align-items:center;gap:4px;font-size:12.5px;font-weight:800;padding:0 2px;line-height:1.2}.pag-t b .ic{width:14px;height:14px;margin:0;color:var(--c)}
@@ -3572,7 +3587,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.158';
+var APP_V = 'v53.4.159';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -9777,12 +9792,12 @@ function arrancarCoach(){
 var LGN=0;
 function pintarLogin(msg){
   CO.pin=''; var g=++LGN;
-  pantallaAcc('<div class="card center"><p class="muted">Un momento…</p></div>','Panel de coach');
+  pantallaEntrar('<div class="card center"><p class="muted">Un momento…</p></div>','Panel de coach');
   api('accesoInfo').then(function(r){
     if(g!==LGN||CO.pin) return;                 // v29.2: mientras tanto ya ha entrado (por ejemplo, con la sesión de tu página de inicio)
     CO.modoLogin=r.coachConPass?'pass':'pin';
     var avi=avisoInicioHtml(true), arriba=safariEs();
-    pantallaAcc((msg?'<p class="acc-msg">'+esc(msg)+'</p>':'')+(arriba?avi.replace('card acc-ini','card acc-ini arr'):'')+'<div class="card">'+(r.coachConPass
+    pantallaEntrar((msg?'<p class="acc-msg">'+esc(msg)+'</p>':'')+(arriba?avi.replace('card acc-ini','card acc-ini arr'):'')+'<div class="card">'+(r.coachConPass
       ?'<label class="f">Email<input type="email" id="co-e" autocomplete="username" inputmode="email" autocapitalize="off" spellcheck="false" placeholder="tu@email.com" value="'+esc(LS.get(SK.coe)||'')+'"></label><label class="f">Contraseña'+pwInput('co-p','current-password')+'</label>'+mantenerHtml('co-k','Mantener la sesión abierta 30 días en este dispositivo')+'<button class="btn mt" data-a="coEntrar">Entrar</button><button class="link mt acc-ol" data-a="coOlvide">¿Has olvidado tu contraseña?</button>'
       :'<label class="f">PIN<input type="password" id="pin" autocomplete="current-password" placeholder="••••••"></label>'+mantenerHtml('co-k','Mantener la sesión abierta 30 días en este dispositivo')+'<button class="btn mt" data-a="entrar">Entrar</button><p class="muted sm">Después crea tu contraseña: es más segura que el PIN.</p>')+'</div>'+(arriba?'':avi),'Panel de coach');
     enterEn(['pin','co-e','co-p'],A.coEntrar); var i=document.getElementById(r.coachConPass?(LS.get(SK.coe)?'co-p':'co-e'):'pin'); if(i) i.focus();
@@ -20288,7 +20303,9 @@ function sesionCaducada(m){
 function pwInput(id,ac,ph){ return '<div class="pw"><input id="'+id+'" type="password" autocomplete="'+ac+'"'+(ph?' placeholder="'+ph+'"':'')+'><button type="button" class="pw-v" data-a="verPw" data-i="'+id+'" aria-label="Mostrar u ocultar la contraseña">'+ic('ojo')+'</button></div>'; }
 A.verPw=function(el){ var i=document.getElementById(el.dataset.i); if(i){ i.type=i.type==='password'?'text':'password'; el.classList.toggle('on',i.type==='text'); } };
 function enterEn(ids,fn){ ids.forEach(function(id){ var i=document.getElementById(id); if(i) i.addEventListener('keydown',function(e){ if(e.key==='Enter'){ e.preventDefault(); fn(); } }); }); }
-function pantallaAcc(cuerpo,sub){ cerrarModal(); app.innerHTML='<div class="login acc">'+logoHtml('big',sub)+cuerpo+'</div>'; document.body.classList.add('pant-acc'); }
+function pantallaAcc(cuerpo,sub,foto){ cerrarModal(); app.innerHTML=(foto?'<div class="acc-ft" aria-hidden="true"><span class="acc-ftx">Tu espacio de entreno, alimentación y progreso</span></div>':'')+'<div class="login acc'+(foto?' acc-cf':'')+'">'+logoHtml('big',sub)+cuerpo+'</div>'; document.body.classList.add('pant-acc'); }
+/* v53.4.159 · la foto de MOOD ON solo en las pantallas de entrar (entrenador y cliente; el usuario por su cuenta, en /yo): no dentro de la app */
+function pantallaEntrar(cuerpo,sub){ pantallaAcc(cuerpo,sub,true); }
 function reglasPass(){ return '<p class="muted sm pw-r">Mínimo 10 caracteres, con letras y números. Mejor una frase que puedas recordar, como <i>Mi perra Luna 2026</i>.</p>'; }
 
 /* ---------- clienta: entrar ---------- */
@@ -20315,7 +20332,7 @@ function pintarLoginCl(msg,otra){
   document.body.classList.remove('coach');
   var avi=avisoInicioHtml(false), arriba=safariEs();
   if(otra&&!msg) msg='Ese enlace ya no sirve para entrar. Entra con tu email y tu contraseña.';
-  pantallaAcc((msg?'<p class="acc-msg">'+esc(msg)+'</p>':'')+
+  pantallaEntrar((msg?'<p class="acc-msg">'+esc(msg)+'</p>':'')+
     (otra?'<div class="card acc-otra"><p class="sm">En este móvil está abierta la cuenta de <b>'+esc(otra.n||'otro cliente')+'</b>.</p><button class="btn sm sec" data-a="lgSeguir">Seguir como '+esc(String(otra.n||'ella').split(' ')[0])+'</button></div>':'')+(arriba?avi.replace('card acc-ini','card acc-ini arr'):'')+
     '<div class="card"><h2>Entra en tu espacio</h2><label class="f">Email<input id="lg-e" type="email" inputmode="email" autocomplete="username" autocapitalize="off" spellcheck="false" placeholder="tu@email.com"></label>'+
     '<label class="f">Contraseña'+pwInput('lg-p','current-password')+'</label>'+mantenerHtml('lg-k','Mantener la sesión abierta 30 días en este móvil')+'<button class="btn mt" data-a="lgEntrar">Entrar</button>'+
@@ -20352,7 +20369,7 @@ A.lgOlvideOk=function(el){
 };
 /* código de 6 cifras (coach siempre en un dispositivo nuevo; clienta si la coach lo activa) */
 function pintarCodigo(c,quien){
-  pantallaAcc('<div class="card"><h2>Revisa tu email</h2><p class="muted">'+(c.soloCodigo?'Si tu cuenta tiene elegido entrar con código, te lo acabamos de enviar a <b>'+esc(c.email)+'</b>. Caduca en 10 minutos. Si no te llega, entra con tu contraseña.':'Te hemos enviado un código de 6 cifras a <b>'+esc(c.email)+'</b>. Caduca en 10 minutos.')+'</p>'+
+  pantallaEntrar('<div class="card"><h2>Revisa tu email</h2><p class="muted">'+(c.soloCodigo?'Si tu cuenta tiene elegido entrar con código, te lo acabamos de enviar a <b>'+esc(c.email)+'</b>. Caduca en 10 minutos. Si no te llega, entra con tu contraseña.':'Te hemos enviado un código de 6 cifras a <b>'+esc(c.email)+'</b>. Caduca en 10 minutos.')+'</p>'+
     '<label class="f">Código<input id="cod-i" inputmode="numeric" autocomplete="one-time-code" maxlength="6" placeholder="123456" class="cod-i"></label>'+
     (c.sinConfiar||SES_CORTA?'<p class="muted sm">'+(c.soloCodigo?'':c.sinConfiar?'Has elegido entrar siempre con código: te lo pediremos cada vez.':'No se guardará la sesión en este dispositivo.')+'</p>'
       :'<label class="chk-l"><input type="checkbox" id="cod-c" checked><span>'+(quien==='co'?'Confiar en este dispositivo (aquí no te volverá a pedir el código)':'Confiar en este dispositivo (aquí no volverá a pedir código)')+'</span></label>')+
@@ -20372,11 +20389,11 @@ A.codVolver=function(el){ if(el.dataset.q==='co') pintarLogin(); else pintarLogi
 
 /* ---------- crear la contraseña desde el email (?alta= o ?reset=) ---------- */
 function arrancarAlta(){
-  pantallaAcc('<div class="card center"><p class="muted">Un momento…</p></div>');
+  pantallaEntrar('<div class="card center"><p class="muted">Un momento…</p></div>');
   api('verAlta',BOOT.token).then(function(v){
     if(!v.ok){ topLimpia(); BOOT.mode='login'; BOOT.token=''; return arrancarLogin(); }      // v32: enlace ya usado (p. ej. la app fijada en el inicio con la dirección de la invitación): entra directo o pide usuario y contraseña
     CO.altaCoach=!!v.coach;
-    pantallaAcc('<div class="card"><h2>'+(v.coach?'Tu contraseña nueva':v.reset?'Hola, '+esc(v.nombre)+': tu contraseña nueva':'Hola, '+esc(v.nombre)+'. Crea tu contraseña')+'</h2>'+
+    pantallaEntrar('<div class="card"><h2>'+(v.coach?'Tu contraseña nueva':v.reset?'Hola, '+esc(v.nombre)+': tu contraseña nueva':'Hola, '+esc(v.nombre)+'. Crea tu contraseña')+'</h2>'+
       (v.coach?'':'<div class="acc-u"><span>Tu usuario</span><b>'+esc(v.email)+'</b></div>')+
       '<label class="f">Contraseña'+pwInput('al-p','new-password')+'</label><label class="f">Repítela'+pwInput('al-p2','new-password')+'</label>'+reglasPass()+
       '<button class="btn mt" data-a="altaOk">'+(v.coach?'Guardar y entrar':'Crear y entrar')+'</button></div>'+
