@@ -3430,7 +3430,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.142';
+var APP_V = 'v53.4.143';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -14184,10 +14184,10 @@ CH.intRegla=function(t){
 /* ---------- enlace y datos ---------- */
 /* v53.4.41 · la pestaña Ficha, más sencilla: a la vista, su acceso, su seguimiento y plan, y sus datos (Editar);
    lo demás, en «Más ajustes», plegado (lo que dejas abierto se queda abierto). Todo sigue en la página: se guarda igual que antes. */
-function fabAb(k){ if(!CO.fab) CO.fab=LS.get('moodon_fab')||{}; return !!CO.fab[k]; }
+function fabAb(k){ if(!CO.fab){ CO.fab={}; try{ localStorage.removeItem('moodon_fab'); }catch(e){} } return !!CO.fab[k]; }      // v53.4.143 (Javier: «cierra también Más ajustes, me sale abierto»): todo empieza cerrado; lo que abres sigue abierto mientras no recargues
 A.fabTog=function(el){
   var k=el.dataset.k, w=el.closest('.fab'); if(!w) return; fabAb(k);
-  CO.fab[k]=!CO.fab[k]; if(!CO.fab[k]) delete CO.fab[k]; LS.set('moodon_fab',CO.fab);
+  CO.fab[k]=!CO.fab[k]; if(!CO.fab[k]) delete CO.fab[k];
   w.classList.toggle('on',!!CO.fab[k]); el.setAttribute('aria-expanded',!!CO.fab[k]);
   if(k==='datos') el.textContent=CO.fab[k]?'Cerrar':'Editar';
   if(CO.fab[k]&&k!=='datos') setTimeout(function(){ var r=w.getBoundingClientRect(); if(r.top<70||r.top>window.innerHeight-120) window.scrollTo({top:Math.max(0,r.top+window.scrollY-80),behavior:'smooth'}); },30);
