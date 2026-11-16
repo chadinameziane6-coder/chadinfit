@@ -577,6 +577,31 @@ button.cfg-1:hover{border-color:rgba(17,17,17,.28)}
 .sec-h span{font-size:12px;color:var(--mu)}
 .sec-h.mov{border-top:0;padding-top:0;margin-top:12px}
 .sec-h.mov b{color:#0F7A6C}
+.pgt{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.pgt-b{font:inherit;text-align:left;cursor:pointer;border-radius:16px;padding:11px 14px;display:flex;flex-direction:column;gap:4px;background:#fff;border:1px solid #E2E2E8;color:var(--tx);min-width:0}
+.pgt-t{display:flex;align-items:center;gap:8px;flex-wrap:wrap}.pgt-t b{font-size:14px}
+.pgt-b small{font-size:12px;color:var(--mu)}
+.pgt-a.on{background:radial-gradient(220px 120px at 90% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%) padding-box,linear-gradient(160deg,#3A3A40 0%,#16161A 50%,#0A0A0B 100%) padding-box,linear-gradient(135deg,#FFFFFF 0%,#77777F 35%,#E8E8EC 60%,#55555C 100%) border-box;border:1.5px solid transparent;color:#fff}
+.pgt-a.on small{color:#BDBDC4}
+.pgt-p.on{background:linear-gradient(135deg,#F0F5FF 0%,#F5F0FF 100%);border:2px solid #7C8CFF}
+.pgt-av{margin:0 0 10px!important}
+.sem-tt{display:flex;align-items:baseline;justify-content:space-between;gap:8px}.sem-tt small{font:500 12px Plus Jakarta Sans,sans-serif;color:var(--mu)}
+.sp-fut .sp{background:linear-gradient(135deg,#F0F5FF,#F5F0FF)}
+.rut-ayu{margin:0 0 8px}
+.rut-l{display:flex!important;flex-direction:row!important;align-items:center;gap:12px!important;width:100%;font:inherit;text-align:left;cursor:pointer;color:var(--tx);padding:11px 14px!important;margin-bottom:10px}
+.rut-l.fut{background:linear-gradient(135deg,#F0F5FF 0%,#F5F0FF 100%);border:1px solid #E2E3FA}
+.rut-li{width:34px;height:34px;border-radius:11px;display:inline-flex;align-items:center;justify-content:center;background:#F0F0F3;color:#111;flex:none}
+.rut-l.fut .rut-li{background:linear-gradient(135deg,#9AE6FF,#B9A6FF);color:#1A1650}
+.rut-li .ic,.rut-li svg{width:18px;height:18px;margin:0}
+.rut-lt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}.rut-lt b{font-size:14.5px}.rut-lt small{font-size:12.5px;color:var(--mu)}
+.rut-ld{font-size:12px;font-weight:700;color:var(--mu);white-space:nowrap}
+.rut-lch{width:16px;height:16px;color:var(--mu);flex:none}
+.mov-pl{width:100%;font:inherit;text-align:left;cursor:pointer;flex-direction:row!important;align-items:center;flex-wrap:wrap;gap:4px 10px!important;background:#F1FAF6;border:1px solid #D3EEDD!important;border-radius:14px;padding:10px 12px!important}
+.mov-pl .mov-res{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#3A6B5A!important}
+.mov-pl .mov-ch{width:16px;height:16px;color:#0F7A6C;flex:none;transition:transform .15s}
+.mov-pl.on .mov-ch{transform:rotate(90deg)}
+.mov-pl.on{background:transparent;border-color:transparent!important;padding:0!important}
+.dd-sec.mov-cerrada{display:none}
 .ej-ed.mov{border-color:rgba(15,122,108,.4);background:#F2FAF8}
 .ej-ed.mov .ej-n{color:#0F7A6C}
 .st-ed.mv{grid-template-columns:18px minmax(0,1fr) 30px}
@@ -1269,6 +1294,10 @@ body.fc-abierto{overflow:hidden}
 .pfa-h{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;border:0;background:none;font:inherit;color:var(--tx);text-align:left;cursor:pointer}
 .pfa-i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--card2);flex:none;font-style:normal}
 .pfa-i .ic,.pfa-i svg{width:17px;height:17px;margin:0}
+/* v53.4.144 (Javier: «el de la clienta con colores»): cada ajuste con su color, como la ficha del panel */
+.pfa-desc{background:linear-gradient(135deg,#B9A6FF,#7C8CFF);color:#fff}.pfa-push{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240}
+.pfa-ciclo{background:linear-gradient(135deg,#FFD6E7,#FF9EC4);color:#7A1F48}.pfa-fb{background:linear-gradient(135deg,#FFE7C2,#FFD08A);color:#6B4500}
+.pfa-cuenta{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}
 .pfa-h>span{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
 .pfa-h>span b{font-size:14.5px}.pfa-h>span small{font-size:12.5px;color:var(--mu)}
 .pfa-h .pfa-ch{width:16px;height:16px;color:var(--mu);transition:transform .15s;flex:none}
@@ -3430,7 +3459,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.143';
+var APP_V = 'v53.4.144';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11202,7 +11231,7 @@ A.progProx=function(){
         ((r.ejercicios||[]).length?'<ul class="lista-ej">'+r.ejercicios.map(function(e,j){ return '<li><span class="ej-lab">'+esc(L[j])+'</span><div><b class="li-n">'+esc(tituloEj(e))+'</b> <span class="muted">'+esc(resumenEj(e))+'</span>'+(tipoEj(e)==='fuerza'?espLinea(e):'')+'</div></li>'; }).join('')+'</ul>':'<p class="muted sm">Todavía no tiene ejercicios.</p>')+'</div>'; }).join('')+'</div>'; }).join('')+
     '<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
-A.progProxVer=function(el){ var ri=+el.dataset.r; cerrarModal(); CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut='todas'; repintar(); setTimeout(function(){ var e=document.getElementById('rut-'+ri); if(e&&e.scrollIntoView) e.scrollIntoView({behavior:'smooth',block:'start'}); },80); };
+A.progProxVer=function(el){ var ri=+el.dataset.r; cerrarModal(); CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut='todas'; CO.progSel='p'; CO.rutAb=CO.rut[ri]; repintar(); setTimeout(function(){ var e=document.getElementById('rut-'+ri); if(e&&e.scrollIntoView) e.scrollIntoView({behavior:'smooth',block:'start'}); },80); };
 A.irHist=function(){ var e=document.getElementById('hist-rut'); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); };
 A.progNueva=function(){
   if(CO.rut.some(function(r){ return r._s; })) return toast('Guarda antes los cambios de sus rutinas');
@@ -11283,19 +11312,41 @@ function bibliotecaEj(){
   CO.d.series.forEach(function(x){ if(x.t!=='bloque') add(x.e); });
   return Object.keys(s).map(function(k){ return s[k]; }).sort(function(a,b){ return a.localeCompare(b,'es'); });
 }
+/* v53.4.144 (Javier: «es lioso que salga la rutina del 15 nov al 12 dic y debajo la siguiente del 13 dic en adelante… se queda muy largo»;
+   eligió en el lienzo la propuesta A, «Dos pestañas»): con algo preparado para más adelante, arriba «Ahora» y «Próxima», y solo se ven la
+   semana y las rutinas de la que eliges; cada rutina en una línea y abierta solo la que tocas (CO.rutAb) */
+function progBloques(){ var hoy=CO.hoy||hoyStr(), A_=CO.rut.filter(function(r){ return !rutFutura(r); }), P_=CO.rut.filter(rutFutura);
+  return {A:A_,P:P_,hoy:hoy,dA:A_.map(function(r){ return r.desde; }).filter(String).sort()[0]||'',hA:A_.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0]||'',
+    dP:P_.map(function(r){ return r.desde; }).filter(String).sort()[0]||'',hP:P_.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0]||''}; }
+function progEn(r){ return !CO.rut.some(rutFutura)||(rutFutura(r)?'p':'a')===CO.progSel; }
+function progTabsHtml(Bq){
+  var st=semanaTxtR(Bq.A.filter(function(r){ return vigenteEn(r,Bq.hoy,CO.rut); }),Bq.hoy), q=Bq.dP?diff(Bq.hoy,Bq.dP):0, n=function(L){ return L.length+(L.length===1?' rutina':' rutinas'); };
+  return '<div class="pgt" role="tablist" aria-label="Programación">'+
+    '<button role="tab" class="pgt-b pgt-a'+(CO.progSel==='a'?' on':'')+'" data-a="progSel" data-v="a" aria-selected="'+(CO.progSel==='a')+'"><span class="pgt-t"><span class="pg-tag pg-ok">Ahora</span><b>'+(Bq.dA||Bq.hA?(Bq.dA?fCorta(Bq.dA):'…')+' → '+(Bq.hA?fCorta(Bq.hA):'sin fin'):'Sin fechas')+'</b></span><small>'+n(Bq.A)+(st?' · '+st.toLowerCase():'')+'</small></button>'+
+    '<button role="tab" class="pgt-b pgt-p'+(CO.progSel==='p'?' on':'')+'" data-a="progSel" data-v="p" aria-selected="'+(CO.progSel==='p')+'"><span class="pgt-t"><span class="pg-tag pg-ind">'+ic('reloj')+'Próxima</span><b>desde el '+fCorta(Bq.dP)+'</b></span><small>'+n(Bq.P)+' · '+(q===1?'mañana':'en '+q+' días')+' · '+cG('ella','él')+' aún no la ve</small></button></div>'+
+    (CO.progSel==='p'?'<div class="pgx-av pgt-av">'+ic('reloj')+'Empieza el '+fMedia(Bq.dP)+'. '+cG('Ella','Él')+' no la ve hasta entonces: puedes prepararla y cambiarla tranquilo.</div>':'');
+}
+function rutLineaHtml(r,ri){ var E=r.ejercicios||[], nM=E.filter(esMov).length, tot=E.reduce(function(a,e){ return a+efectivasEj(e); },0), fut=rutFutura(r);
+  return '<button type="button" class="card rut-l'+(fut?' fut':'')+'" id="rut-'+ri+'" data-a="rutAb" data-r="'+ri+'"><span class="rut-li">'+ic('pesa')+'</span><span class="rut-lt"><b>'+esc(r.nombre||'Sin nombre')+'</b><small>'+(E.length?(E.length-nM)+((E.length-nM)===1?' ejercicio':' ejercicios')+(nM?' + '+nM+' de movilidad':'')+' · '+tot+' series':'Sin ejercicios todavía')+'</small></span>'+
+    (r._s?'<span class="pill warn">Sin guardar</span>':'')+'<span class="rut-ld">'+(r.dias.length?r.dias.map(function(d){ return DL[d]; }).join(' '):'Sin día')+'</span>'+ic('abajo','rut-lch')+'</button>'; }
+A.rutAb=function(el){ var ri=+el.dataset.r; CO.rutAb=CO.rut[ri]; repintar(); setTimeout(function(){ var c=document.getElementById('rut-'+ri); if(c&&c.scrollIntoView){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-90); } },40); };
+A.progSel=function(el){ var v=el.dataset.v==='p'?'p':'a'; if(v===CO.progSel) return; CO.progSel=v; CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; repintar(); };
 function vRutinas(){
-  var hoyK=diaSem(CO.hoy||hoyStr()), conDia=function(k){ return CO.rut.some(function(r){ return r.dias.indexOf(k)>=0; }); };
+  var Bq=progBloques(), hayF=Bq.P.length>0;
+  if(!hayF) CO.progSel='a'; else if(CO.progSel!=='a'&&CO.progSel!=='p') CO.progSel=Bq.A.length?'a':'p'; else if(CO.progSel==='a'&&!Bq.A.length) CO.progSel='p';
+  var RB=CO.rut.filter(progEn);
+  var hoyK=diaSem(CO.hoy||hoyStr()), conDia=function(k){ return RB.some(function(r){ return r.dias.indexOf(k)>=0; }); };
   if(CO.diaRut==null) CO.diaRut=conDia(hoyK)?hoyK:(DIAS.filter(conDia)[0]||'todas');
-  var sel=CO.diaRut, esDia=DIAS.indexOf(sel)>=0, sinDia=CO.rut.filter(function(r){ return !r.dias.length; }).length;
+  var sel=CO.diaRut, esDia=DIAS.indexOf(sel)>=0, sinDia=RB.filter(function(r){ return !r.dias.length; }).length;
   var hoyF=CO.hoy||hoyStr();
-  var h=progCard()+'<div class="card"><div class="card-t">Su semana</div><div class="semana-plan">'+DIAS.map(function(k){
-    var rs=CO.rut.filter(function(r){ return r.dias.indexOf(k)>=0; });
-    return '<button class="sp'+(sel===k?' on':'')+(k===hoyK?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return esc(r.nombre||'Sin nombre')+(r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
-  }).join('')+'</div><div class="tipos sem-f"><button class="'+(sel==='todas'?'on':'')+'" data-a="diaRut" data-d="todas">Todas las rutinas ('+CO.rut.length+')</button>'+
+  var h=progCard()+'<div class="card"><div class="card-t sem-tt">Su semana'+(hayF?'<small>'+(CO.progSel==='p'?'desde el '+fCorta(Bq.dP):'la de ahora')+'</small>':'')+'</div><div class="semana-plan'+(CO.progSel==='p'?' sp-fut':'')+'">'+DIAS.map(function(k){
+    var rs=RB.filter(function(r){ return r.dias.indexOf(k)>=0; });
+    return '<button class="sp'+(sel===k?' on':'')+(k===hoyK&&CO.progSel!=='p'?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return esc(r.nombre||'Sin nombre')+(!hayF&&r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
+  }).join('')+'</div><div class="tipos sem-f"><button class="'+(sel==='todas'?'on':'')+'" data-a="diaRut" data-d="todas">Todas las rutinas ('+RB.length+')</button>'+
     (sinDia||sel==='sin'?'<button class="'+(sel==='sin'?'on':'')+'" data-a="diaRut" data-d="sin">Sin día asignado ('+sinDia+')</button>':'')+'</div></div>';
-  var izq=h; h='';       // v23: en el ordenador, la semana a la izquierda y la rutina a la derecha
+  var izq=h; h=hayF?progTabsHtml(Bq):'';       // v23: en el ordenador, la semana a la izquierda y la rutina a la derecha
   var vis=[];
-  CO.rut.forEach(function(r,ri){ if(sel==='todas'||(sel==='sin'?!r.dias.length:r.dias.indexOf(sel)>=0)||r._vista===sel){ vis.push(ri); if(sel!=='todas') r._vista=sel; } });
+  CO.rut.forEach(function(r,ri){ if(progEn(r)&&(sel==='todas'||(sel==='sin'?!r.dias.length:r.dias.indexOf(sel)>=0)||r._vista===sel)){ vis.push(ri); if(sel!=='todas') r._vista=sel; } });
   if(esDia) h+='<div class="dia-h"><h2>'+cap(DLARGO[sel])+'</h2><span class="muted">'+(vis.length?vis.length+' rutina'+(vis.length>1?'s':''):'Descanso')+'</span></div>';
   else if(sel==='sin') h+='<div class="dia-h"><h2>Sin día asignado</h2><span class="muted">'+cG('La clienta','El cliente')+' puede hacerlas desde “Hacer otra rutina”</span></div>';
   if(!vis.length){
@@ -11303,8 +11354,10 @@ function vRutinas(){
     h+='<div class="card vacio-dia"><p class="muted">'+(esDia?'El '+DLARGO[sel]+' no tiene rutina: es día de descanso.':sel==='sin'?'Todas las rutinas tienen días asignados.':'Todavía no hay rutinas.')+'</p>'+
       (otras.length?'<div class="lab">Asignarle una rutina que ya tienes</div>'+otras.map(function(x){ return '<div class="otra"><div><b>'+esc(x.r.nombre||'Sin nombre')+'</b><div class="muted sm">'+(x.r.dias.length?x.r.dias.map(function(d){ return DL[d]; }).join(' '):'Sin día')+'</div></div><button class="btn sm sec" data-a="asignarDia" data-r="'+x.ri+'" data-d="'+sel+'">Añadir al '+DLARGO[sel]+'</button></div>'; }).join(''):'')+'</div>';
   }
-  h+=vis.map(function(ri){ return rutinaEd(CO.rut[ri],ri); }).join('');
-  h+='<div class="row rut-nuevas"><button class="btn sec" data-a="addRut">+ Nueva rutina'+(esDia?' para el '+DLARGO[sel]:'')+'</button><button class="btn sec" data-a="desdeModelo">'+ic('modelo')+'Desde un modelo</button>'+((CO.d.otras||[]).some(function(o){ return o.rutinas; })?'<button class="btn sec" data-a="traerRut">'+ic('copiar')+'De otro cliente</button>':'')+'</div>'+
+  var abR=vis.filter(function(ri){ return CO.rut[ri]===CO.rutAb; })[0]; if(abR==null) abR=vis[0];
+  if(vis.length>1&&!CO.md) h+='<p class="muted sm rut-ayu">'+(hayF?(CO.progSel==='p'?'Rutinas de la próxima programación':'Rutinas de la programación de ahora'):'Sus rutinas')+' · toca una para verla o cambiarla</p>';
+  h+=vis.map(function(ri){ return vis.length>1&&ri!==abR&&!CO.md?rutLineaHtml(CO.rut[ri],ri):rutinaEd(CO.rut[ri],ri); }).join('');
+  h+='<div class="row rut-nuevas"><button class="btn sec" data-a="addRut">+ Nueva rutina'+(esDia?' para el '+DLARGO[sel]:hayF?' en esta programación':'')+'</button><button class="btn sec" data-a="desdeModelo">'+ic('modelo')+'Desde un modelo</button>'+((CO.d.otras||[]).some(function(o){ return o.rutinas; })?'<button class="btn sec" data-a="traerRut">'+ic('copiar')+'De otro cliente</button>':'')+'</div>'+
     (CO.rut.some(function(r){ return r.id; })?'<button class="link mt6" data-a="rutModelo" data-r="todas">'+ic('modelo')+'Guardar la programación como modelo</button>':'');
   return (plnOn()?plnGuiaTop(false):'')+dkCols([[1,izq],[3,cfgCard()+histRutCard()]],[[2,h]],'lado')+'<datalist id="exlib">'+bibliotecaEj().map(function(n){ return '<option value="'+esc(n)+'">'; }).join('')+'</datalist>';
 }
@@ -11330,7 +11383,11 @@ function rutinaEd(r,ri){
     if(esMov(E[i])) movH+=u; else mainH+=u;
     i=fin+1;
   }
-  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<div class="sec-h mov"><b>'+ic('mov')+'Movilidad · calentamiento</b></div><div class="dd-sec mov" data-sec="mov">'+movH+'</div><div class="sec-h"><b>'+ic('pesa')+'Entrenamiento principal</b></div>':'')+
+  /* v53.4.144 (Javier: «si programas a mano, si has terminado el bloque de movilidad que se cierre, para que no haya tantas ventanas abiertas, solo
+     lo que estás trabajando»): la movilidad, en una línea con sus ejercicios; se abre al tocarla, al añadir uno o mientras editas uno suyo */
+  var movE=E.filter(esMov), movAb=!!window.__EJ_ABIERTOS||CO.movAb===r||(!!CO.ejAb&&movE.indexOf(CO.ejAb)>=0)||movE.some(ejVacioEd);
+  var movRes=movE.map(function(e){ return tipoEj(e)==='bloque'?nombreBloque(e):tituloEj(e); }).filter(Boolean).join(' · ');
+  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<button type="button" class="sec-h mov mov-pl'+(movAb?' on':'')+'" data-a="movAb" data-r="'+ri+'" aria-expanded="'+movAb+'"><b>'+ic('mov')+'Movilidad · calentamiento</b><span class="mov-res">'+nMov+(nMov===1?' ejercicio':' ejercicios')+(movAb?'':' · '+esc(movRes))+'</span>'+ic('flecha','mov-ch')+'</button><div class="dd-sec mov'+(movAb?'':' mov-cerrada')+'" data-sec="mov">'+movH+'</div><div class="sec-h"><b>'+ic('pesa')+'Entrenamiento principal</b></div>':'')+
     '<div class="dd-sec" data-sec="main">'+(mainH||(E.length?'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>':''))+'</div></div>';
   return '<div class="card" id="rut-'+ri+'">'+(CO.md&&CO.rut.length===1?'<span class="hidden" id="rs-'+ri+'"></span>':      // v53.4.25: en el banco de rutinas, una sola rutina lleva el nombre de arriba
     '<div class="rut-top"><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="'+(CO.md?'Nombre de este día (p. ej. Día 1 · Pierna)':'Nombre (p. ej. Glúteo y pierna A)')+'"><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>')+
@@ -11670,7 +11727,8 @@ function ejVer(e){ var r=null, i=-1; (CO.rut||[]).forEach(function(x,k){ var j=x
 document.addEventListener('focusin',function(ev){ var t=ev.target, c=t&&t.closest&&t.closest('.ej-ed'); if(!c||BOOT.mode==='clienta') return;      // lo que se está escribiendo es lo abierto
   var m=/^ee-(\d+)-(\d+)$/.exec(c.id||''), r=m&&CO.rut&&CO.rut[+m[1]], e=r&&r.ejercicios[+m[2]]; if(e&&!t.matches('.dd-h,.ej-tg,.dd-sum,[data-a=delEj]')) CO.ejAb=e; });
 A.ejAb=function(el){ var x=ejDe(el); if(!x.e) return; CO.ejAb=!ejC(x.e)?null:x.e; repintar(); ejVer(x.e); };
-A.ejListo=function(el){ var x=ejDe(el); if(x.e&&ejVacioEd(x.e)) return toast(tipoEj(x.e)==='bloque'?'Primero añade algún ejercicio al bloque':'Primero ponle nombre al ejercicio'); CO.ejAb=null; repintar(); if(x.e) ejVer(x.e); };
+A.ejListo=function(el){ var x=ejDe(el); if(x.e&&ejVacioEd(x.e)) return toast(tipoEj(x.e)==='bloque'?'Primero añade algún ejercicio al bloque':'Primero ponle nombre al ejercicio'); CO.ejAb=null; if(x.e&&esMov(x.e)) CO.movAb=null; repintar(); if(x.e) ejVer(x.e); };      // v53.4.144: al terminar uno de movilidad, la movilidad se pliega
+A.movAb=function(el){ var r=CO.rut[+el.dataset.r]; if(!r) return; var ab=el.classList.contains('on'); CO.movAb=ab?null:r; if(ab&&CO.ejAb&&esMov(CO.ejAb)) CO.ejAb=null; repintar(); };
 function addItem(el,item){ var ri=+el.dataset.r, r=CO.rut[ri]; r.ejercicios.push(item); CO.ejAb=item; r._s=true; repintar(); var inp=document.querySelector('[data-r="'+ri+'"][data-e="'+(r.ejercicios.length-1)+'"]'+(item.tipo==='bloque'?'[data-bk="n"]':'[data-k="n"]')); if(inp){ inp.scrollIntoView({block:'center'}); inp.focus(); } }
 A.addEj=function(el){ addItem(el,ejVacio()); };
 A.addCardio=function(el){ addItem(el,cardioVacio()); };
@@ -11710,7 +11768,8 @@ CH.blFmt=function(t){ var x=ejDe(t); x.e.f=t.value; x.e.p={}; if(t.value==='hiit
 /* v53.4.16: la rutina nueva empieza sin nada: «Ejercicio 1» y eliges qué es (ejAddHtml) */
 A.addRut=function(){ var d=DIAS.indexOf(CO.diaRut)>=0?[CO.diaRut]:[]; if(CO.diaRut==='sin') d=[];
   var hoy=CO.hoy||hoyStr(), vig=CO.rut.filter(function(r){ return vigenteEn(r,hoy,CO.rut); }), des=vig.map(function(r){ return r.desde; }).filter(String).sort()[0]||'', has=vig.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0]||'';
-  CO.rut.push({id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[],_s:true}); repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
+  if(CO.progSel==='p'&&CO.rut.some(rutFutura)){ var Bq=progBloques(); des=Bq.dP; has=Bq.hP; }      // v53.4.144: en «Próxima», con sus fechas
+  var nr={id:'',nombre:'',dias:d,desde:des&&des<=hoy?hoy:des,hasta:has,ejercicios:[],_s:true}; CO.rut.push(nr); CO.rutAb=nr; repintar(); var ri=CO.rut.length-1, c=document.getElementById('rut-'+ri); if(c){ c.scrollIntoView({block:'start'}); window.scrollBy(0,-120); var i=c.querySelector('.tit-in'); if(i) i.focus(); } };
 A.dupRut=function(el){ var ri=+el.dataset.r, n=copia(CO.rut[ri]); n.id=''; n.nombre=(n.nombre||'Rutina')+' (copia)'; n.dias=[]; n._s=true; delete n._vista; CO.rut.splice(ri+1,0,n); CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut='sin'; repintar(); var c=document.getElementById('rut-'+(ri+1)); if(c) c.scrollIntoView({block:'start'}); toast('Rutina duplicada (sin día). Elige sus días, ajusta y guarda.'); };
 /* v21: guardar una rutina devuelve una promesa (para la barra de guardar y para "Guardar y salir") */
 function ejGuardables(r){
@@ -18696,7 +18755,7 @@ function pfAjHtml(){
   var ab=CL.pfAb||'';
   return '<div class="card pf-aj"><div class="card-t">'+ic('ajuste')+'Ajustes</div>'+pfAjL().map(function(x){ var on=ab===x[0], b='';
       if(on){ b=String(x[4]()||'').replace(/<button class="btn sec salir-b"[^>]*>[\s\S]*?<\/button>/,''); }
-      return '<div class="pfa'+(on?' on':'')+'"><button class="pfa-h" data-a="pfAb" data-v="'+x[0]+'" aria-expanded="'+on+'"><i class="pfa-i">'+ic(x[1])+'</i><span><b>'+esc(x[2])+'</b><small>'+esc(x[3])+'</small></span>'+ic('flecha','pfa-ch')+'</button>'+(on?'<div class="pfa-b">'+b+'</div>':'')+'</div>'; }).join('')+'</div>';
+      return '<div class="pfa'+(on?' on':'')+'"><button class="pfa-h" data-a="pfAb" data-v="'+x[0]+'" aria-expanded="'+on+'"><i class="pfa-i pfa-'+x[0]+'">'+ic(x[1])+'</i><span><b>'+esc(x[2])+'</b><small>'+esc(x[3])+'</small></span>'+ic('flecha','pfa-ch')+'</button>'+(on?'<div class="pfa-b">'+b+'</div>':'')+'</div>'; }).join('')+'</div>';
 }
 A.pfAb=function(el){ var k=el.dataset.v; CL.pfAb=CL.pfAb===k?'':k; CL.keep=true; pintarCl(); setTimeout(function(){ var e=document.querySelector('.pfa.on'); if(e&&e.scrollIntoView) e.scrollIntoView({block:'nearest',behavior:'smooth'}); },60); };
 /* ---------- privacidad y acceso de la clienta (siempre con su contraseña actual) ---------- */
