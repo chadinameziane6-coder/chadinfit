@@ -109,6 +109,14 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-li{display:flex;flex-direction:column;gap:5px}.pag-lin{font-size:12px;font-weight:700;color:var(--mu)}
 .pag-l2{display:flex;gap:6px}.pag-l2 input{flex:1;min-width:0;margin:0}.pag-l2 .pag-cn{flex:0 0 100px}.pag-l2 .pag-cu{flex:0 0 120px}
 .pag-lr{display:flex;gap:8px;align-items:center}.pag-lr input{flex:1;min-width:0;margin:0}
+/* v53.4.157 · «Tu página»: toques de color sutiles con el color de su página (todos los entrenadores) */
+.pag-w #pag-est:not(.ok):not(.warn){background:#FFF3DC;color:#8A5300}
+.pag-w .pag-link .pag-acc .btn{border:0;color:#fff}.pag-w .pag-link .pag-acc .btn:first-child{background:var(--pc,#111);color:var(--pct,#fff)}.pag-w .pag-link .pag-acc .btn:first-child .ic{color:var(--pct,#fff)}.pag-w .pag-link .pag-acc .btn:nth-child(2){background:#25D366}.pag-w .pag-link .pag-acc .btn:nth-child(2) .ic{color:#fff}
+.pag-w .pag-link .sw.on{background:#13915A}
+.pag-w .pag-n{background:var(--pc,#111);color:var(--pct,#fff)}.pag-w .pag-n.off{background:#D6D6DC;color:#fff}
+.pag-w .pag-ap.ab{border-color:var(--pc,#111)}.pag-w .pag-d.on{border-color:var(--pc,#111)}
+.pag-w .pag-lli{background:var(--pti,var(--card2));color:var(--pc,#111)}
+.pag-w .pag-apf .btn:not(.sec),.pag-w #pag-gu:not([disabled]){background:var(--pc,#111);border-color:var(--pc,#111);color:var(--pct,#fff)}
 .pag-ck{width:22px;height:22px;border-radius:11px;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;flex:none}.pag-ck .ic{width:12px;height:12px;stroke-width:2.6}
 .pag-lp{display:flex;gap:10px;align-items:flex-start;padding-top:10px;border-top:1px solid var(--line2)}.pag-lp>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}.pag-lp input,.pag-lp textarea{margin:0}
 .pag-lpn{width:26px;height:26px;border-radius:13px;background:#111;color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none;margin-top:8px}
@@ -3558,7 +3566,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.156';
+var APP_V = 'v53.4.157';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -19511,6 +19519,10 @@ function pagChip(e){ return '<span class="pag-chip '+e+'"><i></i>'+{ok:'Lista',f
 function pagEstados(){ var dn=0;
   PAG_AP.forEach(function(a){ var st=pagEst(a[0]); if(st[0]!=='falta') dn++; var c=document.getElementById('pag-chip-'+a[0]); if(c) c.innerHTML=pagChip(st[0]); var r=document.getElementById('pag-res-'+a[0]); if(r) r.textContent=st[1]; });
   var t=document.getElementById('pag-prog-t'), b=document.getElementById('pag-prog-b'); if(t) t.textContent=dn+' de '+PAG_AP.length+' listos'; if(b) b.style.width=Math.round(dn*100/PAG_AP.length)+'%'; }
+function pagTono(){ var w=document.querySelector('.pag-w'); if(!w) return;      // v53.4.157: los toques de color del editor, con el color de su página
+  var c=String((CO.pagEd&&CO.pagEd.color)||'#111111'); if(!/^#[0-9A-Fa-f]{6}$/.test(c)) c='#111111';
+  var n=parseInt(c.slice(1),16), r=(n>>16)&255, g=(n>>8)&255, b=n&255, l=(0.2126*r+0.7152*g+0.0722*b)/255, mx=function(k){ return Math.round(k+(255-k)*0.9); };
+  w.style.setProperty('--pc',c); w.style.setProperty('--pct',l>0.62?'#111':'#fff'); w.style.setProperty('--pti','rgb('+mx(r)+','+mx(g)+','+mx(b)+')'); }
 function pintarPagina(arriba){
   var y=window.scrollY, lado=pagLado(); CO.pagLadoOn=lado;
   if(!pagMsg.on){ window.addEventListener('message',pagMsg); pagMsg.on=true; }
@@ -19518,7 +19530,7 @@ function pintarPagina(arriba){
   app.innerHTML='<header class="top"><button class="link" data-a="pgVolver">'+ic('atras')+'Inicio</button><div class="top-n">Tu página</div><span style="width:70px"></span></header><main class="wrap coachw pag-w"><div class="pag-g'+(lado?' lado':'')+'">'+
     '<div class="pag-ed" id="pag-ed">'+pagEdHtml()+'</div>'+
     (lado?'<aside class="pag-lado" aria-label="Vista previa"><div class="pag-ladot"><b>Así la ve quien abre tu enlace</b><small>Se cambia sola mientras escribes</small></div><div class="pag-tel" style="--k:'+k+'"><iframe class="pag-if" data-solo="" data-ir="'+esc(CO.pagAb||'')+'" src="'+esc(pagVistaUrl(''))+'" title="Vista previa de tu página"></iframe></div></aside>':'')+'</div></main>';
-  window.scrollTo(0,arriba?0:y);
+  pagTono(); window.scrollTo(0,arriba?0:y);
 }
 function pagEdPintar(){ var e=document.getElementById('pag-ed'); if(!e||CO.vista!=='pagina') return; e.innerHTML=pagEdHtml(); }
 function pagEdHtml(){
@@ -19638,8 +19650,8 @@ A.pagNoPub=function(){ var E=CO.pagEd; toast(E.on?'Primero toca «Guardar»: as�
 A.pagNomLogo=function(){ CO.pagEd.nomLogo=!CO.pagEd.nomLogo; pagSucio(); pagMarcaRefrescar(); if(CO.pagLadoOn) pagIr('marca'); };
 A.pagOn=function(){ var E=CO.pagEd; E.on=!E.on; if(E.on&&!pagSlugLimpio(E.slug)){ E.on=false; return toast('Elige primero el nombre de tu enlace','err'); } pagSucio(); pagEdPintar(); };
 A.pagDis=function(el){ pagSet('diseno',el.dataset.v); pagApPintar('diseno'); if(CO.pagAb==='diseno'&&CO.pagLadoOn) pagIr('portada'); };
-A.pagCol=function(el){ pagSet('color',el.dataset.v); pagApPintar('diseno'); };
-CH.pagColOtro=function(t){ pagSet('color',String(t.value||'#111111').toUpperCase()); pagApPintar('diseno'); };
+A.pagCol=function(el){ pagSet('color',el.dataset.v); pagApPintar('diseno'); pagTono(); };
+CH.pagColOtro=function(t){ pagSet('color',String(t.value||'#111111').toUpperCase()); pagApPintar('diseno'); pagTono(); };
 A.pagSecOn=function(el){ var k=el.dataset.v; CO.pagEd.sec[k]=CO.pagEd.sec[k]===false; pagSucio(); pagApPintar(k); };
 A.pagBot=function(el){ var E=CO.pagEd, k=el.dataset.v; if(k==='cuest') E.cuest=E.cuest===false; else E.wa=!E.wa; if(E.cuest===false&&!E.wa){ if(k==='cuest') E.cuest=true; else E.wa=true; return toast('Deja al menos uno de los dos para que puedan empezar','err'); } pagSucio(); pagApPintar('empezar'); };
 A.pagPlTog=function(el){ var E=CO.pagEd, L=CO.pag.planes||[], S=pagPlSel(), id=el.dataset.id, i=S.indexOf(id);
