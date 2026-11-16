@@ -791,6 +791,21 @@ input[type=checkbox]:focus-visible{outline:2px solid #111;outline-offset:2px}
 .coc-nav{display:flex;gap:10px;position:sticky;bottom:calc(20px + env(safe-area-inset-bottom))}
 .coc-a,.coc-s{height:58px;border-radius:29px;font:800 16px Plus Jakarta Sans,sans-serif;cursor:pointer}.coc-a{flex:1;background:rgba(23,23,26,.9);color:#fff;border:1.5px solid rgba(255,255,255,.25)}.coc-a:disabled{opacity:.35}.coc-s{flex:1.6;background:#fff;color:#111;border:0}
 /* v53.4.149 · la misma hoja antes y después de elegirla; pesar lo cocinado (con la olla o sin ella) */
+.sem-or{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 0 0;font-size:11.5px;color:var(--mu)}.sem-or b{color:var(--tx)}
+.sem-ob{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:16px;border:0;background:#111;color:#fff;font:800 12.5px Plus Jakarta Sans,sans-serif;cursor:pointer;flex:none}.sem-ob .ic{width:14px;height:14px;vertical-align:0}
+.ord-ay{margin:2px 0 10px}.ord-l{display:flex;flex-direction:column;gap:8px}.ord-f{display:flex;align-items:center;gap:10px;border-radius:16px;transition:background .12s}
+.ord-d{width:52px;display:flex;flex-direction:column;line-height:1.2;flex:none}.ord-d b{font-size:13px}.ord-d small{font-size:11px;color:var(--mu)}.ord-d.hoy b{color:#4C5BD6}
+.ord-c{flex:1;display:flex;align-items:center;gap:10px;min-height:52px;box-sizing:border-box;border-radius:14px;padding:6px 12px;background:#fff;border:1px solid #E6E6EA;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;position:relative;z-index:1}
+.ord-c>.ic{width:16px;height:16px;color:#8A8A8E;flex:none;vertical-align:0}.ord-c span{display:flex;flex-direction:column;min-width:0}.ord-c b{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ord-c small{font-size:11px;color:#8A8A8E}
+.ord-c.des{background:transparent;border:1.5px dashed #D6D6DC;color:#8A8A8E}.ord-c.des b{font-weight:700}
+.ord-c.lk{background:#F1F1F4;border-color:#F1F1F4;color:#8A8A8E;cursor:default}.ord-c.lk>.ic{color:#3FC98C}
+.ord-c.sel{border:2px solid #7C8CFF;background:#F0F5FF}
+.ord-c.arr{z-index:5;border:2px solid #111;box-shadow:0 14px 30px rgba(0,0,0,.22);cursor:grabbing}
+.ord-f.dst .ord-c:not(.arr){border:1.5px dashed #7C8CFF;background:rgba(124,140,255,.08)}
+body.ord-on{user-select:none;-webkit-user-select:none}
+.ord-pie{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:14px;text-align:center}.ord-pie .btn{margin:0}.ord-rs{align-self:center;display:inline-flex;align-items:center;gap:6px;color:#4C5BD6;font-weight:800}
+.mas-st{display:flex;align-items:baseline;gap:8px;margin:14px 0 8px}.mas-st b,b.mas-st{display:block;font-size:13.5px;margin:14px 0 8px}.mas-st small{font-size:11.5px;color:var(--mu)}.mas-st b{margin:0}
+.dt-cal{padding:0;font-size:inherit;color:#4C5BD6;font-weight:800}
 .rh-md{display:flex;margin:-4px 0 12px}.rh-md button{flex:1}.coc-fin b i{font-style:normal;font-size:18px;opacity:.75}
 .rh-st{display:inline-flex;gap:6px;margin-left:auto;flex:none}.rh-b{width:34px;height:34px;border-radius:17px;border:0;background:rgba(255,255,255,.75);color:#04301B;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}.rh-b .ic{width:16px;height:16px;vertical-align:0}
 .rh-p{display:flex;align-items:center;gap:10px;width:100%;margin:0 0 12px;background:#F2F5FF;border:1px solid #DCE4FA;border-radius:14px;padding:10px 12px;font:inherit;text-align:left;cursor:pointer;color:#1B2A6B}
@@ -3538,7 +3553,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.150';
+var APP_V = 'v53.4.151';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -3635,6 +3650,7 @@ var ICONS={
   atras:'<path d="M14.5 6l-6 6 6 6"/>',
   user:'<circle cx="12" cy="8.2" r="3.7"/><path d="M4.8 20a7.2 7.2 0 0 1 14.4 0"/>',
   olla:'<path d="M4 10h16v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"/><path d="M2 10h20M9 6v2M12 5v3M15 6v2"/>', sol:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2M5.6 5.6l1.4 1.4M17 17l1.4 1.4M5.6 18.4 7 17M17 7l1.4-1.4"/>',      // v53.4.148: modo cocina
+  orden:'<path d="M8 4v16M4 8l4-4 4 4M16 20V4M12 16l4 4 4-4"/>',      // v53.4.151: ordenar la semana
   play:'<path d="M8.5 5.8v12.4L18.5 12z"/>',
   campana:'<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z"/><path d="M10 20.6a2.2 2.2 0 0 0 4 0"/>',
   editar:'<path d="M4.5 19.5h4l10.5-10.5-4-4L4.5 15.5z"/><path d="M13.5 6.5l4 4"/>',
@@ -6397,7 +6413,8 @@ function vHoy(){
   var sel=CL.diaSel, esHoy=sel===hoy;
   var nombre=String(d.clienta.nombre||'').split(' ')[0], ft=CL.foto&&CL.foto.v===d.clienta.foto?CL.foto.img:'';
   var h='<div class="saludo'+(ft?' sal-ft':'')+'"><div><h1>Hola, '+esc(nombre)+'</h1><div class="muted">'+fLarga(hoy)+'</div></div>'+(ft?'<button class="hoy-av" data-a="pfVer" aria-label="Ver tu foto en grande"><img src="'+esc(ft)+'" alt=""></button>':'')+'</div>'+(esHoy?avisoSesHtml(false)+llamadaClHtml()+planAvisoHoy()+(d.logros?logroAvisoHtml():''):'')+semanaStrip(hoy,sel)+
-    (d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'');
+    (d.rutinas.length&&lunesDe(sel)===lunesDe(hoy)?'<div class="sem-or">'+(semOrdenada(lunesDe(hoy))?'<span><b>Semana ordenada por ti</b> · solo esta semana · tu dieta sigue el nuevo orden</span>':'<span>Toca un día para ver su entreno</span>')+'<button class="sem-ob" data-a="ordAbrir">'+ic('orden')+'Ordenar</button></div>':      // v53.4.151
+     d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'');
   if(esHoy) h+=pushHoyCard();      // v53.4.54: «Recibe avisos en tu móvil» (hasta que los active o diga «Ahora no»)
   if(esHoy) h+=eventoHoyCard();      // v52.11: su próxima competición, con la cuenta atrás
   else h+=eventoDiaCard(sel);
@@ -6411,7 +6428,7 @@ function vHoy(){
   if(!esHoy) h+=diaCard(sel,hoy);
   else if(!CL.dr){
     var hecho=d.sesiones.filter(function(s){ return s.fecha===hoy; });
-    var rh=d.rutinas.filter(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,hoy,d.rutinas); });
+    var rh=rutDia(hoy);      // v53.4.151: con su semana ordenada
     h+='<div class="card hl"><div class="card-t">Hoy toca</div>';
     var Mh=hecho.length?calcMarcas(d.series):null;
     hecho.forEach(function(s){ h+='<div class="hoy-ok"><div class="ho-h">'+ic('okc')+'<span>Hecho hoy</span><button class="btn sm '+(esPrimeraSes(s)?'':'sec')+'" data-a="compartirSes" data-id="'+esc(s.id)+'">'+ic('compartir')+(esPrimeraSes(s)?'Sube tu primer entreno':'Compartir')+'</button></div>'+sesFila(s,d,Mh,false,false,{hoy:1})+(s.rutina_id&&d.rutinas.some(function(r){ return r.id===s.rutina_id; })?'<button class="link ho-rep" data-a="empezar" data-id="'+esc(s.rutina_id)+'">'+ic('reinicio')+'Repetir esta rutina</button>':'')+'</div>'; });      // v44: una sola tarjeta
@@ -6433,6 +6450,43 @@ function vHoy(){
   if(esHoy&&!CL.ckF&&cicloOn()) h+=cicloHoyCard();      // v52: el anillo del ciclo, justo antes de su check-in
   return h+(esHoy?(CL.ckF?checkinCard(CL.ckF):checkinCard(hoy)):sel<hoy?(CL.ckF===sel?checkinCard(sel):checkinPasado(sel)):'');
 }
+/* v53.4.151 · «Ordenar»: los 7 días en lista; arrastras una rutina (o un descanso) a otro día y se cambian. Fluido: la tarjeta sigue al dedo
+   (transform) y, al soltar, las dos se colocan con una animación corta (FLIP). También con dos toques (uno y otro). Lo ya hecho no se mueve */
+var DCORTO=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], ORD=null;
+A.ordAbrir=function(){ var l=lunesDe(hoyStr()); CL.ord={l:l,P:semPermL(l).slice(),sel:-1}; modal('<div id="ord-box"></div>'); var b=document.querySelector('#modal .mbox'); if(b) b.classList.add('ord-mb'); ordPintar(); };
+function ordFila(i){ var O=CL.ord, f=sumar(O.l,i), hoy=hoyStr(), ds=DIAS[O.P[i]-1], R=rutDiaDe(ds,f), hecho=CL.d.sesiones.some(function(x){ return x.fecha===f; }), lk=hecho;
+  var nm=R.length?R.map(function(r){ return r.nombre; }).join(' + '):'Descanso', sb=lk?'hecho':R.length?R.reduce(function(a,r){ return a+r.ejercicios.length; },0)+' ejercicios':'';
+  return '<div class="ord-f" data-i="'+i+'"><span class="ord-d'+(f===hoy?' hoy':'')+'"><b>'+(f===hoy?'Hoy':DCORTO[i])+'</b><small>'+(f===hoy?DCORTO[i].toLowerCase()+' ':'')+aDate(f).getDate()+'</small></span>'+
+    '<div class="ord-c'+(R.length?'':' des')+(lk?' lk':'')+(O.sel===i?' sel':'')+'" data-i="'+i+'" data-k="'+O.P[i]+'" role="button" tabindex="0" aria-label="'+esc((f===hoy?'Hoy':DLARGO[DIAS[i]])+': '+nm+(lk?' (hecho)':''))+'">'+ic(lk?'ok':'asa')+'<span><b>'+esc(nm)+'</b>'+(sb?'<small>'+esc(sb)+'</small>':'')+'</span></div></div>'; }
+function ordPintar(fl){
+  var b=document.getElementById('ord-box'), O=CL.ord; if(!b||!O) return; var id=O.P.every(function(v,i){ return v===i+1; }), F={};
+  if(fl) [].forEach.call(b.querySelectorAll('.ord-c'),function(c){ F[c.dataset.k]=c.getBoundingClientRect().top; });
+  var h='<div class="mh-sh"><div><h2>Ordena tu semana</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div><p class="muted sm ord-ay">'+(O.sel>=0?'Ahora toca el día con el que lo cambias.':'Arrastra una rutina (o un descanso) a otro día: se cambian.')+'</p><div class="ord-l">';
+  for(var i=0;i<7;i++) h+=ordFila(i);
+  h+='</div><div class="ord-pie">'+(id?'':'<button class="link ord-rs" data-a="ordReset">'+ic('reinicio')+'Volver al orden de mi coach</button>')+'<small class="muted">Solo esta semana · la próxima, como la programó tu coach</small><button class="btn" data-a="ordOk">Listo</button></div>';
+  b.innerHTML=h;
+  if(fl) [].forEach.call(b.querySelectorAll('.ord-c'),function(c){ var t0=F[c.dataset.k]; if(t0==null) return; var dy=t0-c.getBoundingClientRect().top; if(!dy) return; c.style.transition='none'; c.style.transform='translateY('+dy+'px)'; c.getBoundingClientRect(); c.style.transition='transform .22s cubic-bezier(.2,.8,.2,1)'; c.style.transform=''; });
+}
+function ordCambia(i,j){ var O=CL.ord; if(!O||i===j) return; var t=O.P[i]; O.P[i]=O.P[j]; O.P[j]=t; O.sel=-1; ordPintar(true); try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){} }
+function ordLk(i){ var f=sumar(CL.ord.l,i); return CL.d.sesiones.some(function(x){ return x.fecha===f; }); }
+function ordTap(i){ var O=CL.ord; if(!O||ordLk(i)) return; if(O.sel<0||O.sel===i){ O.sel=O.sel===i?-1:i; ordPintar(); } else ordCambia(O.sel,i); }
+function ordDestino(y){ var best=null, bd=1e9; [].forEach.call(document.querySelectorAll('#ord-box .ord-f'),function(r){ var i=+r.dataset.i; if(ordLk(i)) return; var R=r.getBoundingClientRect(), d=y<R.top?R.top-y:y>R.bottom?y-R.bottom:0; if(d<bd){ bd=d; best=i; } }); return bd<40?best:null; }
+document.addEventListener('pointerdown',function(ev){ var c=ev.target&&ev.target.closest&&ev.target.closest('#ord-box .ord-c'); if(!c||c.classList.contains('lk')||(ev.button&&ev.button!==0)) return;
+  ORD={c:c,i:+c.dataset.i,x0:ev.clientX,y0:ev.clientY,act:false,pid:ev.pointerId,t:null}; });
+document.addEventListener('pointermove',function(ev){ var o=ORD; if(!o||ev.pointerId!==o.pid) return; var dy=ev.clientY-o.y0;
+  if(!o.act){ if(Math.abs(dy)<6&&Math.abs(ev.clientX-o.x0)<6) return; o.act=true; o.c.classList.add('arr'); document.body.classList.add('ord-on'); try{ o.c.setPointerCapture(ev.pointerId); }catch(e){} }
+  o.c.style.transition='none'; o.c.style.transform='translateY('+dy+'px) scale(1.03)';
+  var t=ordDestino(ev.clientY); if(t!==o.t){ var p=document.querySelector('#ord-box .ord-f.dst'); if(p) p.classList.remove('dst'); o.t=t; if(t!=null&&t!==o.i){ var r=document.querySelector('#ord-box .ord-f[data-i="'+t+'"]'); if(r) r.classList.add('dst'); } }
+  if(ev.cancelable) ev.preventDefault(); },{passive:false});
+function ordFin(ev,ok){ var o=ORD; if(!o||(ev&&ev.pointerId!==o.pid)) return; ORD=null; document.body.classList.remove('ord-on'); var p=document.querySelector('#ord-box .ord-f.dst'); if(p) p.classList.remove('dst');
+  if(!o.act){ if(ok) ordTap(o.i); return; }
+  o.c.classList.remove('arr'); if(ok&&o.t!=null&&o.t!==o.i) ordCambia(o.i,o.t); else { o.c.style.transition='transform .2s cubic-bezier(.2,.8,.2,1)'; o.c.style.transform=''; } }
+document.addEventListener('pointerup',function(ev){ ordFin(ev,true); }); document.addEventListener('pointercancel',function(ev){ ordFin(ev,false); });
+document.addEventListener('keydown',function(ev){ var c=ev.target&&ev.target.closest&&ev.target.closest('#ord-box .ord-c'); if(c&&(ev.key==='Enter'||ev.key===' ')){ ev.preventDefault(); ordTap(+c.dataset.i); } });
+A.ordReset=function(){ if(!CL.ord) return; CL.ord.P=[1,2,3,4,5,6,7]; CL.ord.sel=-1; ordPintar(true); };
+A.ordOk=function(){ var O=CL.ord; if(!O) return cerrarModal(); var pf=prefCl(); pf.n=pf.n||{}; var id=true;
+  for(var i=1;i<=7;i++){ var k='ws|'+O.l+'|'+i; if(O.P[i-1]!==i){ pf.n[k]=O.P[i-1]; id=false; } else delete pf.n[k]; }
+  prefLimpiaSem(pf); guardarPref(); CL.ord=null; cerrarModal(); CL.planSel=null; CL.keep=true; pintarCl(); toast(id?'Tu semana, como la programó tu coach':'Semana ordenada · solo esta semana','ok'); };
 function rutinaBloque(r,principal,txt,f){
   var O=ordenMov(r.ejercicios), lista=O.map(function(x){ return x.e; }), L=etiquetasEj(lista), G=gruposDe(lista), series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), nMov=O.filter(function(x){ return x.mov; }).length;
   var semR=r.desde&&r.hasta?(function(){ var hoy=f||hoyStr(), tot=Math.max(1,Math.ceil((diff(r.desde,r.hasta)+1)/7)), n=Math.floor(diff(r.desde,hoy)/7)+1; return n>=1&&n<=tot?' · semana '+n+' de '+tot:''; })():'';
@@ -6448,7 +6502,7 @@ function semanaStrip(hoy,sel){
   for(var i=0;i<7;i++){
     var f=sumar(l,i), k=DIAS[i];
     var hecho=d.sesiones.some(function(s){ return s.fecha===f; });
-    var plan=d.rutinas.some(function(r){ return r.dias.indexOf(k)>=0&&vigenteEn(r,f,d.rutinas); });
+    var plan=rutDia(f).length>0;      // v53.4.151
     var ev=(d.eventos||[]).filter(function(e){ return e.fecha===f; });      // v52.11
     h+='<button class="dia'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(hecho?' hc':'')+(plan?' plan':'')+(ev.length?' ev':'')+'" data-a="verDia" data-f="'+f+'" aria-label="'+esc(fLarga(f)+ev.map(function(e){ return ' · Competición: '+e.nombre; }).join(''))+'">'+DL[k]+'<small>'+aDate(f).getDate()+'</small><i></i>'+(ev.length?'<b class="dia-tr">'+ic('trofeo')+'</b>':'')+'</button>';
   }
@@ -6458,7 +6512,7 @@ function semanaStrip(hoy,sel){
 function diaCard(f,hoy){
   var d=CL.d, ds=diaSem(f), pasado=f<hoy;
   var hecho=d.sesiones.filter(function(s){ return s.fecha===f; });
-  var rs=d.rutinas.filter(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,f,d.rutinas); });
+  var rs=rutDia(f);      // v53.4.151
   var h='<div class="card"><div class="card-t">'+(pasado?'Lo que tocaba ese día':'Lo que te toca')+'</div>', Md=hecho.length?calcMarcas(d.series):null;
   if(hecho.length) h+='<p class="muted sm" style="margin:-4px 0 2px">Toca tu entreno para ver lo que apuntaste.</p>';
   if(hecho.length) h+='<div class="tocaba hecho">'+hecho.map(function(s){ return sesFila(s,d,Md,false,false); }).join('')+'</div>';     // v36: en un recuadro
@@ -6755,10 +6809,21 @@ A.cycCal=function(){
 function planesCl(){ var P=(CL.d.dieta&&CL.d.dieta.planes)||[]; P=libreCl()&&P.length?planesMez(P):P; return masLibCl()&&P.length?conLibHoy(P):P; }      // v33: con lo que ha cuadrado ella · v53.4.37: quitar platos, solo con «autorregulación» (Javier)
 function qOcCl(){ var M=miaCl(); M.q=M.q||{}; return M.q; }      // los platos que ha quitado (solo quien cuadra su dieta)
 function guardarOc(){ guardarMia(); }
-function entrenaDia(f){ var ds=diaSem(f); return CL.d.rutinas.some(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,f,CL.d.rutinas); })||CL.d.sesiones.some(function(s){ return s.fecha===f; }); }
+/* v53.4.151 · PUNTO 10 (Javier: «que dé a semana y con un desliz pueda cambiar el orden rápido y en segundos… solo para esa semana»):
+   su semana en otro orden. pref.n['ws|<lunes>|<1..7>'] = el día (1 = lunes … 7 = domingo) cuyo entreno hace ese día. La semana siguiente, como la programó su coach */
+function semPermL(l){ var n=(prefCl().n)||{}, P=[]; for(var i=1;i<=7;i++){ var v=num(n['ws|'+l+'|'+i]); P.push(v>=1&&v<=7?v:i); } return P.slice().sort().join()==='1,2,3,4,5,6,7'?P:[1,2,3,4,5,6,7]; }
+function semOrdenada(l){ return semPermL(l).some(function(v,i){ return v!==i+1; }); }
+function diaFuente(f){ var P=semPermL(lunesDe(f)), i=DIAS.indexOf(diaSem(f)); return DIAS[P[i]-1]; }
+function rutDiaDe(ds,f){ var d=CL.d; return (d.rutinas||[]).filter(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,f,d.rutinas); }); }
+function rutDia(f){ return rutDiaDe(diaFuente(f),f); }
+function entrenaDia(f){ return rutDia(f).length>0||CL.d.sesiones.some(function(s){ return s.fecha===f; }); }
+/* v53.4.151 · PUNTO 9: el día de dieta (entreno o descanso) sale de su calendario (con su semana ordenada); un toque lo cambia ese día (pref.n['dt|<fecha>'] = 1 entreno, 2 descanso) */
+function tipoCal(f){ return entrenaDia(f)?'entreno':'descanso'; }
+function tipoDia(f){ var v=num(((prefCl().n)||{})['dt|'+f]); return v===1?'entreno':v===2?'descanso':tipoCal(f); }
+function prefLimpiaSem(pf){ var n=pf.n||{}, l0=lunesDe(hoyStr()), f0=sumar(hoyStr(),-7); Object.keys(n).forEach(function(k){ var m=/^ws\|(\d{4}-\d\d-\d\d)\|/.exec(k), d=/^dt\|(\d{4}-\d\d-\d\d)$/.exec(k); if((m&&m[1]<l0)||(d&&d[1]<f0)) delete n[k]; }); }
 function planDe(f){
   var P=planesCl(); if(!P.length) return null;
-  var t=entrenaDia(f)?'entreno':'descanso';
+  var t=tipoDia(f);      // v53.4.151
   return P.filter(function(p){ return p.tipo===t; })[0]||P.filter(function(p){ return p.tipo==='todos'; })[0]||P[0];
 }
 function planHoy(){ return planDe(hoyStr()); }
@@ -6767,6 +6832,7 @@ function resumenOp(c){ var ops=c.opciones||[], o=ops[0]||{}; return (ops.length>
 /* ---------- ENTRENO ---------- */
 A.empezar=function(el){
   var r=CL.d.rutinas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return;
+  try{ var pf0=prefCl(), k0='dt|'+hoyStr(); if(pf0.n&&num(pf0.n[k0])===2){ delete pf0.n[k0]; guardarPref(); CL.planSel=null; } }catch(e){}      // v53.4.151: si entrena, su dieta de hoy pasa a la de entreno
   avisosHechos(function(a){ return a.tipo!=='dieta'; });      // v38
   if(CL.dr&&CL.dr.envio) return toastPend();
   if(CL.dr) return confirmar('Ya tienes un entreno en curso. ¿Lo descartas y empiezas este?','Empezar este',function(){ nuevoEntreno(r); });
@@ -8301,6 +8367,13 @@ function cmAhora(p){
   p.comidas.forEach(function(c,i){ var h=String(c.hora||''); if(/^\d{1,2}:\d{2}$/.test(h)&&('0'+h).slice(-5)<=ahora) mi=i; });
   return mi;
 }
+function dtNota(P,p,ph){ var h=hoyStr();
+  if(!dtDos(P)) return p.id===ph.id?'Este es el plan que te toca hoy.':'Hoy te toca el plan <b>'+esc(ph.nombre)+'</b>.';
+  var man=num(((prefCl().n)||{})['dt|'+h]), t=tipoDia(h), R=rutDia(h);
+  if(man) return 'Hoy: <b>día de '+(t==='entreno'?'entreno':'descanso')+'</b>, lo has cambiado tú. <button class="link dt-cal" data-a="dtCal">Volver a lo del calendario</button>';
+  if(p.id!==ph.id) return 'Hoy te toca el plan <b>'+esc(ph.nombre)+'</b>.';
+  return t==='entreno'?'Hoy entrenas según tu calendario'+(R.length?' ('+esc(R.map(function(r){ return r.nombre; }).join(', '))+')':'')+'. ¿Al final no entrenas? Toca «'+esc((P.filter(function(x){ return x.tipo==='descanso'; })[0]||{}).nombre||'Día de descanso')+'».':
+    'Hoy descansas según tu calendario. ¿Al final entrenas? Toca «'+esc((P.filter(function(x){ return x.tipo==='entreno'; })[0]||{}).nombre||'Día de entreno')+'».'; }
 function vDieta(){
   var die=CL.d.dieta, P=planesCl();
   if(!die||!P.length) return '<div class="vacio-g"><h2>Tu dieta</h2><p class="muted">Tu coach todavía no ha publicado tu plan de alimentación.</p></div>';
@@ -8311,7 +8384,7 @@ function vDieta(){
   dv.det=null;
   var h='<h1 class="tit">Tu dieta</h1>'+(die.desde||die.hasta?'<p class="muted sm" style="margin-top:-2px">'+(die.desde?'Desde el '+fCorta(die.desde):'')+(die.hasta?(die.desde?' hasta el ':'Hasta el ')+fCorta(die.hasta):'')+'</p>':'');
   if(P.length>1) h+='<div class="tipos">'+P.map(function(x){ return '<button class="'+(x.id===p.id?'on':'')+'" data-a="planSel" data-id="'+esc(x.id)+'">'+esc(x.nombre)+(x.id===ph.id?' · hoy':'')+'</button>'; }).join('')+'</div>'+
-    '<p class="muted sm">'+(p.id===ph.id?'Este es el plan que te toca hoy.':'Hoy te toca el plan <b>'+esc(ph.nombre)+'</b>.')+'</p>';
+    '<p class="muted sm">'+dtNota(P,p,ph)+'</p>';
   h+='<div class="seg dcl-seg"><button class="'+(dv.v!=='compra'&&!(dv.v==='mis'&&misRecOn())?'on':'')+'" data-a="dvVista" data-v="menu">'+ic('dieta')+'Menú</button><button class="'+(dv.v==='compra'?'on':'')+'" data-a="dvVista" data-v="compra">'+ic('lista')+(verMac()?'Compra':'Lista de la compra')+'</button>'+(misRecOn()?'<button class="'+(dv.v==='mis'?'on':'')+'" data-a="dvVista" data-v="mis">'+ic('calc')+'Mis recetas</button>':'')+'</div>';
   if(dv.v==='compra') return h+vCompra();
   if(dv.v==='mis'&&misRecOn()) return h+vMisRecetas();
@@ -8380,7 +8453,11 @@ function ingFila(o,it){
   return h;
 }
 function platoSel(){ var dv=CL.dv, p=planesCl().filter(function(x){ return x.id===dv.det.p; })[0], c=p&&p.comidas[dv.det.m]; return {p:p,c:c,o:c&&(c.opciones||[]).filter(function(x){ return x.id===dv.det.o; })[0]}; }
-A.planSel=function(el){ CL.planSel=el.dataset.id; if(CL.dv) CL.dv.det=null; CL.keep=true; pintarCl(); };
+A.planSel=function(el){ var P=planesCl(), x=P.filter(function(p){ return p.id===el.dataset.id; })[0]; CL.planSel=el.dataset.id; if(CL.dv) CL.dv.det=null;
+  if(x&&dtDos(P)&&(x.tipo==='entreno'||x.tipo==='descanso')){ var h=hoyStr(), pf=prefCl(); pf.n=pf.n||{}; if(x.tipo===tipoCal(h)) delete pf.n['dt|'+h]; else pf.n['dt|'+h]=x.tipo==='entreno'?1:2; prefLimpiaSem(pf); guardarPref(); }      // v53.4.151: cambia su día de hoy
+  CL.keep=true; pintarCl(); };
+function dtDos(P){ return P.some(function(p){ return p.tipo==='entreno'; })&&P.some(function(p){ return p.tipo==='descanso'; }); }
+A.dtCal=function(){ var pf=prefCl(), h=hoyStr(); if(pf.n) delete pf.n['dt|'+h]; guardarPref(); CL.planSel=null; CL.keep=true; pintarCl(); };
 A.dvVista=function(el){ CL.dv.v=el.dataset.v; CL.dv.det=null; pintarCl(); };
 A.dvCm=function(el){ CL.dv.cm[CL.planSel]=+el.dataset.m; CL.keep=true; pintarCl(); if(el.closest('.dl-r')) irCmSec(); };
 A.dvEdIng=function(){ CL.dv.edIng=!CL.dv.edIng; CL.keep=true; pintarCl(); };      // v53.4.119
@@ -8761,24 +8838,27 @@ A.cmMas=function(el){
   CL.masSel={p:p.id,m:mi}; CL.masF=''; CL.masVisto=null;      // v53.4.114: también con autorregulación (antes, su lista de siempre, con fotos pequeñas)
   cargando(cargarBancoCl()).then(function(){ pintarMasCl(''); },function(e){ toast('No se ha podido abrir la biblioteca: '+limpiaErr(e),'err'); });
 };
-function masLista(p,mi,q,f){
+function masLista(p,mi,q,f,otras){      // v53.4.151 (Javier, punto 11): con «otras», los de las demás comidas (solo al buscar)
   var c=p.comidas[mi], tp=tipoCmDe(c.nombre), ya={}; (c.opciones||[]).forEach(function(o){ if(o.lib&&o.mio!==3) ya[o.lib]=1; });
-  return libTodas().filter(function(r){ return r.t&&r.t.indexOf(tp)>=0&&!ya[r.id]; }).map(function(r){ var x=adaptarRecCl(r); return x?{r:r,n:x.n||r.n}:null; }).filter(function(z){
+  return libTodas().filter(function(r){ return r.t&&(otras?r.t.indexOf(tp)<0:r.t.indexOf(tp)>=0)&&!ya[r.id]; }).map(function(r){ var x=adaptarRecCl(r); return x?{r:r,n:x.n||r.n}:null; }).filter(function(z){
     if(!z) return false; if(q&&clave(z.n+' '+z.r.n).indexOf(clave(q))<0) return false;
     return !f||(f==='rap'?(num(z.r.min)||99)<=10:f==='olla'?!!z.r.tanda:f==='bas'?platoBasico(z.r):true); });
 }
 /* v53.4.114 (Javier: «lo de ligeras no me gusta, pon platos básicos»): carne, pescado o huevo con arroz, patata, boniato, quinoa, cuscús o pan, a la plancha, al horno o cocido */
 function platoBasico(r){ var n=clave(r.n||''); return !r.tanda&&!/pasta|pizza|noqui|wrap|hamburguesa|ensalada (de|cesar)|tofu|revuelto|rellena|lasa/.test(n)&&/(pollo|pavo|ternera|lomo|merluza|salmon|bacalao|sepia|calamar|huevo|tortilla francesa|atun)/.test(n)&&/(arroz|patata|boniato|quinoa|cuscus|pan\b)/.test(n); }
+function masCard(z,otra){ var r=z.r, tc=/d/.test(r.t||'')?'Desayuno':/c/.test(r.t||'')?'Comida o cena':'Media mañana o merienda';
+  return '<button class="mas-c'+(CL.masVisto===r.id?' mas-visto':'')+'" data-a="masPon" data-id="'+esc(r.id)+'">'+platoImg(r.img,'mas-im')+'<b>'+esc(z.n)+'</b><small>'+esc([otra?tc:'',num(r.min)?r.min+' min':'',r.tanda?'de olla':''].filter(Boolean).join(' · '))+'</small></button>'; }
 function pintarMasCl(q){
   var S=CL.masSel, p=S&&planesCl().filter(function(x){ return x.id===S.p; })[0], c=p&&p.comidas[S.m]; if(!c) return;
-  var f=CL.masF||'', L=masLista(p,S.m,q,f), cn=String(c.nombre).toLowerCase(), tp=tipoCmDe(c.nombre), st=document.querySelector('#modal .mbox'), top=st&&st.querySelector('.mas-g')?st.scrollTop:0;
+  var f=CL.masF||'', L=masLista(p,S.m,q,f), L2=q?masLista(p,S.m,q,f,true):[], cn=String(c.nombre).toLowerCase(), tp=tipoCmDe(c.nombre), st=document.querySelector('#modal .mbox'), top=st&&st.querySelector('.mas-g')?st.scrollTop:0;
   var F=[['','Todas']].concat(tp==='c'?[['bas','Básicos']]:[],[['rap','Rápidas']],tp==='c'?[['olla','De olla y cuchara']]:[]);
   modal('<div class="mh-sh"><div><small>'+esc(c.nombre)+'</small><h2>Más platos para tu '+esc(cn)+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+
     '<p class="muted sm">Elige el que te apetezca hoy: entra con las cantidades de tu '+esc(cn)+'.</p>'+
     '<input class="ban-q" data-v29="masQ" placeholder="Buscar: tortilla, lentejas, tostadas…" value="'+esc(q||'')+'" autocomplete="off" aria-label="Buscar plato">'+
     '<div class="tipos mas-f">'+F.map(function(x){ return '<button class="'+(f===x[0]?'on':'')+'" data-a="masF" data-v="'+x[0]+'">'+x[1]+'</button>'; }).join('')+'</div>'+
-    (L.length?'<div class="mas-g">'+L.map(function(z){ return '<button class="mas-c'+(CL.masVisto===z.r.id?' mas-visto':'')+'" data-a="masPon" data-id="'+esc(z.r.id)+'">'+platoImg(z.r.img,'mas-im')+'<b>'+esc(z.n)+'</b><small>'+esc((num(z.r.min)?z.r.min+' min':'')+(z.r.tanda?' · de olla':''))+'</small></button>'; }).join('')+'</div>'
-      :'<p class="muted mt">'+(q?'Ningún plato con «'+esc(q)+'».':'No hay más platos para esta comida.')+'</p>'));
+    (L.length?(L2.length?'<b class="mas-st">Para tu '+esc(cn)+'</b>':'')+'<div class="mas-g">'+L.map(masCard).join('')+'</div>'
+      :L2.length?'':'<p class="muted mt">'+(q?'Ningún plato con «'+esc(q)+'».':'No hay más platos para esta comida.')+'</p>')+
+    (L2.length?'<div class="mas-st"><b>De otras comidas</b><small>también puedes elegirlos</small></div><div class="mas-g">'+L2.map(function(z){ return masCard(z,true); }).join('')+'</div>':''));
   var b=document.querySelector('#modal .mbox'); if(b){ b.classList.add('mas-mb'); if(top) b.scrollTop=top; } if(typeof pintarImgs==='function') pintarImgs();
 }
 (window.IN29=window.IN29||{}).masQ=function(t){      // IN29 se declara más abajo (va al mismo objeto)
