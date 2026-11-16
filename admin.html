@@ -329,6 +329,16 @@ td.fin{text-align:right;white-space:nowrap}
 .pyo-fl>div>span{display:flex;flex-direction:column;gap:2px}
 .pyo-fl small{margin:0;display:block;color:#87878B;font-size:12.5px;line-height:1.35}
 .pyo-nota{margin:14px 0 0;font-size:13.5px;color:#4A4A4E}
+.pyo-den{display:flex;flex-direction:column;gap:12px;margin-top:6px}
+.pyo-den>div{border:1px solid #EDEDF0;border-left:3px solid #C62828;border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:8px}
+.pyo-den .q{display:flex;justify-content:space-between;gap:10px;font-size:13px;color:#6E6E73;flex-wrap:wrap}
+.pyo-den .q b{color:#C62828}
+.pyo-den blockquote{margin:0;padding:10px 12px;background:#F4F4F6;border-radius:10px;font-size:14.5px;white-space:pre-wrap;overflow-wrap:anywhere}
+.pyo-den ul{margin:0;padding-left:18px;font-size:13.5px;color:#4A4A4E}
+.pyo-den .bt{display:flex;gap:8px;flex-wrap:wrap}
+.pyo-roj{display:flex;gap:10px;align-items:center;background:#FDECEC;color:#8A0F1E;border:1px solid #F3C0C0;border-left:3px solid #C62828;border-radius:14px;padding:12px 14px;font-size:14px;text-decoration:none}
+.pyo-roj b{font-weight:700}
+.pyo-ok{display:flex;gap:8px;align-items:center;font-size:14px;color:#0F7A47;font-weight:600;padding:4px 0}
 .pyo-amb{display:flex;gap:10px;align-items:flex-start;background:#FFF6E0;color:#5C3B00;border:1px solid #F3D9A0;border-left:3px solid #E0A100;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
 @media (max-width:860px){
   .lado .mundo-l{display:none}
@@ -444,7 +454,7 @@ td.fin{text-align:right;white-space:nowrap}
     <!-- 16 nov 2026 · «Por su cuenta»: el resumen de «Entreno por mi cuenta» (moodonapp.com/yo). Solo números. -->
     <div id="v-yo" class="vista h">
       <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Por su cuenta · sin entrenador</span></span><h1>Resumen</h1><p>Las personas que usan «Entreno por mi cuenta» (moodonapp.com/yo).</p></div><div class="cab-b"><a class="chip-b" href="https://moodonapp.com/yo/" target="_blank" rel="noopener">Abrir la app</a></div></header>
-      <div class="pyo-solo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Solo números. Aquí no se ven nombres, emails ni entrenos de nadie.</span></div>
+      <div class="pyo-solo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Solo números. Aquí no se ven nombres, emails ni entrenos de nadie; de Comunidad, solo lo que alguien denuncia, para que puedas decidir.</span></div>
       <div id="yo-c" class="pyo-c"><section><div class="vacio">Cargando…</div></section></div>
     </div>
 
@@ -1076,6 +1086,7 @@ td.fin{text-align:right;white-space:nowrap}
       cif('Activas · 30 días', mil(d.activas_30), c ? 'el ' + pc(d.activas_30, c) + ' de las cuentas' : 'todavía no hay cuentas') +
       cif('Entrenos · 7 días', mil(e7), (a7 ? coma(e7 / a7) + ' por persona activa' : 'nadie ha entrenado esta semana') + (n(d.min_medio_30) ? ' · ' + n(d.min_medio_30) + ' min de media' : '')) + '</div>';
     if (n(d.emails_hoy) >= 60) h += '<div class="pyo-amb" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B07A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span><b>Hoy van ' + mil(d.emails_hoy) + ' emails de altas y contraseñas.</b> El plan gratis de Resend da 100 al día en total, también para la app de tus clientes. Si se queda corto, hay que pasar al plan de pago de Resend.</span></div>';
+    if (d.comu && n(d.comu.abiertas)) h += '<a class="pyo-roj" href="#yo" id="yo-ir-den"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#C62828" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5.5 21V4M5.5 4.5h11l-2.2 4 2.2 4h-11"/></svg><span><b>' + (n(d.comu.abiertas) === 1 ? 'Hay 1 denuncia' : 'Hay ' + mil(d.comu.abiertas) + ' denuncias') + ' en Comunidad.</b> Revísalas abajo, en «Comunidad».</span></a>';
     var S = Array.isArray(d.semanas) ? d.semanas : [];
     h += '<section><h2>Cómo va</h2><p class="sub">Últimas 12 semanas (de lunes a domingo).</p><div class="pyo-dos"><div class="pyo-graf"><b class="gt">Altas nuevas</b>' + bar(S, 'altas') + '</div><div class="pyo-graf"><b class="gt">Personas que entrenaron</b>' + bar(S, 'activos') + '</div></div></section>';
     var sig = n(SG.base) ? '<p class="pyo-nota">De las cuentas de más de 4 semanas, <b>' + mil(SG.n) + ' de ' + mil(SG.base) + ' (' + pc(SG.n, SG.base) + ')</b> han entrenado en las 2 últimas.</p>' : '<p class="pyo-nota">Cuando haya cuentas de más de 4 semanas, aquí verás cuántas siguen entrenando.</p>';
@@ -1096,8 +1107,39 @@ td.fin{text-align:right;white-space:nowrap}
       '<div><span>Aceptaron las condiciones de ahora' + (K.version ? '<small>Versión del ' + esc(fechaC(K.version)) + '</small>' : '') + '</span><b>' + mil(K.n) + '</b></div>' +
       '<div><span>Borradas<small>Solo el número; no queda nada de ellas' + (n(BJ.d30) ? ' · ' + mil(BJ.d30) + ' en los últimos 30 días' : '') + '</small></span><b>' + mil(BJ.total) + '</b></div>' +
       '</div></section></div></div>';
+    h += comuYo(d.comu, n, mil, fechaC, cif);
     $('yo-c').innerHTML = h;
   }
+  /* Comunidad (indep/006): números y denuncias. Lo denunciado se ve para poder decidir; nada más de nadie. */
+  function comuYo(M, n, mil, fechaC, cif) {
+    if (!M) return '';
+    var T = M.stats || {}, L = Array.isArray(M.lista) ? M.lista : [];
+    var h = '<section id="yo-comu"><h2>Comunidad</h2><p class="sub">Quien la activa elige un nombre visible y comparte sus entrenos. Aquí solo ves números y lo que alguien ha denunciado.</p>' +
+      '<div class="cifras">' + cif('En Comunidad', mil(T.activos), mil(T.perfiles) + ' la han activado alguna vez' + (n(T.suspendidos) ? ' · ' + mil(T.suspendidos) + ' suspendidas' : '')) +
+      cif('Publicaciones · 30 días', mil(T.pubs_30), mil(T.pubs_7) + ' esta semana · ' + mil(T.publican_30) + (n(T.publican_30) === 1 ? ' persona publica' : ' personas publican')) +
+      cif('Rutinas copiadas · 30 días', mil(T.copias_30), mil(T.coms_30) + (n(T.coms_30) === 1 ? ' comentario' : ' comentarios') + ' en 30 días') +
+      cif('Me gusta', mil(T.likes), mil(T.sigue) + (n(T.sigue) === 1 ? ' persona seguida' : ' seguimientos')) + '</div>';
+    h += '<div class="pyo-g"><b>Denuncias pendientes' + (n(M.abiertas) ? ' · ' + mil(M.abiertas) : '') + '</b></div>';
+    if (!L.length) h += '<div class="pyo-ok"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#0F7A47" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>No hay nada pendiente' + (n(T.resueltas_30) ? ' · ' + mil(T.resueltas_30) + ' resueltas en 30 días' : '') + '</div>';
+    else h += '<div class="pyo-den">' + L.map(function (x) {
+      var a = ' data-tipo="' + esc(x.tipo) + '" data-obj="' + n(x.obj) + '" data-autor="' + esc(x.autor || '') + '"';
+      return '<div><div class="q"><span>' + (x.tipo === 'pub' ? 'Publicación' : 'Comentario') + ' de <b style="color:#141414">' + esc(x.autor || 'alguien que ya no está') + '</b>' + (x.suspendido ? ' · ya suspendida' : '') + '</span><span><b>' + n(x.n) + (n(x.n) === 1 ? ' denuncia' : ' denuncias') + '</b> · la última el ' + esc(fechaC(x.ult)) + '</span></div>' +
+        '<blockquote>' + esc(x.texto == null ? '(ya no existe)' : x.texto || '(sin texto)') + '</blockquote>' +
+        '<ul>' + (Array.isArray(x.motivos) ? x.motivos : []).slice(0, 5).map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' +
+        '<div class="bt"><button class="chip-b peq neg" data-mod="ocultar"' + a + '>Ocultar</button>' + (x.suspendido || !x.autor ? '' : '<button class="btn-r" data-mod="suspender"' + a + '>Ocultar y suspender a ' + esc(String(x.autor).split(' ')[0]) + '</button>') + '<button class="chip-b peq" data-mod="descartar"' + a + '>Está bien, dejarlo</button></div></div>';
+    }).join('') + '</div>';
+    return h + '</section>';
+  }
+  $('yo-c').addEventListener('click', function (ev) {
+    if (ev.target.closest('#yo-ir-den')) { ev.preventDefault(); var sc = $('yo-comu'); if (sc) sc.scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    var b = ev.target.closest('[data-mod]'); if (!b || b.disabled) return;
+    var acc = b.getAttribute('data-mod'), autor = b.getAttribute('data-autor');
+    if (acc === 'suspender' && !window.confirm('¿Ocultar esto y suspender a ' + autor + '? No podrá publicar, comentar ni dar me gusta en Comunidad. El resto de la app lo sigue usando.')) return;
+    var t = b.textContent; ocupado(b, true, 'Un momento…');
+    llamar({ acc: 'yo_moderar', ses: lee(K.ses), tipo: b.getAttribute('data-tipo'), obj: Number(b.getAttribute('data-obj')), accion: acc }).then(function (r) {
+      if (YO) { YO.comu = r.comu; pintarYo(YO); var s = $('yo-comu'); if (s) s.scrollIntoView({ block: 'start' }); }
+    }).catch(function (er) { if (!fallo(er)) { ocupado(b, false, t); alert(er.message); } });
+  });
   window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) { irA(location.hash.slice(1)); window.scrollTo(0, 0); } });
   function fallo(er) {
     if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; AY = null; YO = null; verEntrar(); aviso(er.message); return true; }
