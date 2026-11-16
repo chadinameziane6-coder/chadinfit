@@ -596,11 +596,17 @@ button.cfg-1:hover{border-color:rgba(17,17,17,.28)}
 .rut-lt{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}.rut-lt b{font-size:14.5px}.rut-lt small{font-size:12.5px;color:var(--mu)}
 .rut-ld{font-size:12px;font-weight:700;color:var(--mu);white-space:nowrap}
 .rut-lch{width:16px;height:16px;color:var(--mu);flex:none}
-.mov-pl{width:100%;font:inherit;text-align:left;cursor:pointer;flex-direction:row!important;align-items:center;flex-wrap:wrap;gap:4px 10px!important;background:#F1FAF6;border:1px solid #D3EEDD!important;border-radius:14px;padding:10px 12px!important}
-.mov-pl .mov-res{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#3A6B5A!important}
-.mov-pl .mov-ch{width:16px;height:16px;color:#0F7A6C;flex:none;transition:transform .15s}
-.mov-pl.on .mov-ch{transform:rotate(90deg)}
-.mov-pl.on{background:transparent;border-color:transparent!important;padding:0!important}
+.sec-b{display:flex;align-items:center;gap:10px;width:100%;background:#111;color:#fff;border:0;border-radius:12px;padding:7px 14px 7px 7px;margin:14px 0 8px;font:inherit;text-align:left}
+.sec-b b{font:700 13px Plus Jakarta Sans,sans-serif!important;letter-spacing:.08em!important;text-transform:uppercase!important;color:#fff}
+.sec-b span{margin-left:auto;font-size:12px;color:#BDBDC4;white-space:nowrap}
+.sec-n{width:28px;height:28px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font:800 13px Plus Jakarta Sans,sans-serif;font-style:normal;flex:none;background:#fff;color:#111}
+.sec-mov .sec-n{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}.sec-car .sec-n{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240}.sec-run .sec-n{background:linear-gradient(135deg,#FFE7C2,#FFD08A);color:#6B4500}
+.mov-pl{cursor:pointer}.mov-pl .mov-ch{width:16px;height:16px;color:#BDBDC4;flex:none;transition:transform .15s}.mov-pl.on .mov-ch{transform:rotate(90deg)}
+.mov-res-l{display:flex;align-items:center;gap:8px;width:100%;font:inherit;text-align:left;cursor:pointer;background:#F1FAF6;border:1px solid #D3EEDD;border-radius:14px;padding:10px 12px;margin-bottom:6px;color:#3A6B5A;font-size:12.5px}
+.mov-res-l span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mov-res-l .ic{width:16px;height:16px;color:#0F7A6C;flex:none;margin:0}
+.rut-nb{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;background:#F0F0F3;border-radius:14px;padding:10px 14px}
+.rut-nb>span{font-size:10.5px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#8A8A8E}
+.rut-nb .tit-in{background:transparent!important;border:0!important;padding:0!important;height:auto!important;min-height:0!important;box-shadow:none!important;outline:0;width:100%}
 .dd-sec.mov-cerrada{display:none}
 .ej-ed.mov{border-color:rgba(15,122,108,.4);background:#F2FAF8}
 .ej-ed.mov .ej-n{color:#0F7A6C}
@@ -3459,7 +3465,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.144';
+var APP_V = 'v53.4.145';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11371,7 +11377,7 @@ function fechasDistintas(r){ return CO.rut.some(function(x){ return x!==r&&rutFu
 function rutinaEd(r,ri){
   r.ejercicios.forEach(normEd); ordenarMovEd(r);
   var E=r.ejercicios, G=gruposDe(E), L=etiquetasEj(E), tot=E.reduce(function(a,e){ return a+efectivasEj(e); },0), nMov=E.filter(esMov).length, dia=CO.diaRut, esDia=DIAS.indexOf(dia)>=0;
-  var movH='', mainH='', i=0;
+  var movH='', mainH='', i=0, PZ=[];
   while(i<E.length){
     var g=G[i], fin=g?g.fin:i, u;
     if(g){
@@ -11380,17 +11386,26 @@ function rutinaEd(r,ri){
       for(var k=i;k<=fin;k++) u+=ejEd(E[k],ri,k,G[k],L[k],E[k+1]);
       u+='</div>';
     } else u='<div class="dd-u" data-ini="'+i+'">'+(tipoEj(E[i])==='bloque'?bloqueEd(E[i],ri,i,L[i]):tipoEj(E[i])==='run'?runEd(E[i],ri,i,L[i]):ejEd(E[i],ri,i,null,L[i],E[i+1]))+'</div>';
-    if(esMov(E[i])) movH+=u; else mainH+=u;
+    if(esMov(E[i])) movH+=u; else { var tp=tipoEj(E[i]); PZ.push({k:tp==='run'?'run':tp==='cardio'&&!g?'car':'pri',u:u,ii:[i,fin]}); }
     i=fin+1;
   }
+  /* v53.4.145 (Javier eligió en el lienzo la S5b): cada bloque con una barra negra, su número en un círculo de color y lo que lleva;
+     el cardio y la carrera que vienen después de la fuerza, con su barra (como los ve ella en su entreno) */
+  var SEGS=[]; PZ.forEach(function(z){ var s=SEGS[SEGS.length-1]; if(!s||s.k!==z.k){ s={k:z.k,us:[],n:0,ser:0}; SEGS.push(s); } s.us.push(z.u); for(var q=z.ii[0];q<=z.ii[1];q++){ s.n++; s.ser+=efectivasEj(E[q]); } });
+  var conBarras=nMov>0||SEGS.length>1, nB=nMov?1:0;
+  var secB=function(k,n,sub){ return '<div class="sec-b sec-'+k+'"><i class="sec-n">'+n+'</i><b>'+{mov:'Movilidad · calentamiento',pri:'Entrenamiento principal',car:'Cardio',run:'Carrera'}[k]+'</b><span>'+sub+'</span></div>'; };
+  var sub=function(s){ return s.n+(s.n===1?' ejercicio':' ejercicios')+(s.k==='pri'&&s.ser?' · '+s.ser+' series':''); };
+  var primeraB=conBarras&&SEGS.length?secB(SEGS[0].k,++nB,sub(SEGS[0])):'';
+  SEGS.forEach(function(s,j){ mainH+=(j&&conBarras?secB(s.k,++nB,sub(s)):'')+s.us.join(''); });
   /* v53.4.144 (Javier: «si programas a mano, si has terminado el bloque de movilidad que se cierre, para que no haya tantas ventanas abiertas, solo
      lo que estás trabajando»): la movilidad, en una línea con sus ejercicios; se abre al tocarla, al añadir uno o mientras editas uno suyo */
   var movE=E.filter(esMov), movAb=!!window.__EJ_ABIERTOS||CO.movAb===r||(!!CO.ejAb&&movE.indexOf(CO.ejAb)>=0)||movE.some(ejVacioEd);
   var movRes=movE.map(function(e){ return tipoEj(e)==='bloque'?nombreBloque(e):tituloEj(e); }).filter(Boolean).join(' · ');
-  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<button type="button" class="sec-h mov mov-pl'+(movAb?' on':'')+'" data-a="movAb" data-r="'+ri+'" aria-expanded="'+movAb+'"><b>'+ic('mov')+'Movilidad · calentamiento</b><span class="mov-res">'+nMov+(nMov===1?' ejercicio':' ejercicios')+(movAb?'':' · '+esc(movRes))+'</span>'+ic('flecha','mov-ch')+'</button><div class="dd-sec mov'+(movAb?'':' mov-cerrada')+'" data-sec="mov">'+movH+'</div><div class="sec-h"><b>'+ic('pesa')+'Entrenamiento principal</b></div>':'')+
+  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<button type="button" class="sec-b sec-mov mov-pl'+(movAb?' on':'')+'" data-a="movAb" data-r="'+ri+'" aria-expanded="'+movAb+'"><i class="sec-n">1</i><b>Movilidad · calentamiento</b><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+'</span>'+ic('flecha','mov-ch')+'</button>'+
+      (movAb?'':'<button type="button" class="mov-res-l" data-a="movAb" data-r="'+ri+'"><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+' · '+esc(movRes)+'</span>'+ic('flecha')+'</button>')+'<div class="dd-sec mov'+(movAb?'':' mov-cerrada')+'" data-sec="mov">'+movH+'</div>':'')+primeraB+
     '<div class="dd-sec" data-sec="main">'+(mainH||(E.length?'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>':''))+'</div></div>';
   return '<div class="card" id="rut-'+ri+'">'+(CO.md&&CO.rut.length===1?'<span class="hidden" id="rs-'+ri+'"></span>':      // v53.4.25: en el banco de rutinas, una sola rutina lleva el nombre de arriba
-    '<div class="rut-top"><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="'+(CO.md?'Nombre de este día (p. ej. Día 1 · Pierna)':'Nombre (p. ej. Glúteo y pierna A)')+'"><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>')+
+    '<div class="rut-top"><label class="rut-nb"><span>Rutina</span><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="'+(CO.md?'Nombre de este día (p. ej. Día 1 · Pierna)':'Nombre (p. ej. Glúteo y pierna A)')+'"></label><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>')+
     (esDia&&r.dias.indexOf(dia)<0?'<div class="aviso-dia">Ya no está asignada al '+DLARGO[dia]+'. Guarda la rutina para aplicarlo.</div>':'')+
     '<div class="lab">'+(CO.md?'Días <span class="muted">(opcional)</span>':'Días que le toca')+'</div><div class="dias-sel">'+DIAS.map(function(k){ return '<button class="'+(r.dias.indexOf(k)>=0?'on':'')+'" data-a="togDia" data-r="'+ri+'" data-d="'+k+'">'+DL[k]+'</button>'; }).join('')+'</div>'+
     (CO.md?'':'<div class="grid2 rut-fe"><label class="f">Empieza<input type="date" data-r="'+ri+'" data-k="desde" value="'+esc(r.desde||'')+'"></label><label class="f">Termina<input type="date" data-r="'+ri+'" data-k="hasta" value="'+esc(r.hasta||'')+'"></label></div>'+
