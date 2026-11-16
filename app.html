@@ -3558,7 +3558,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.155';
+var APP_V = 'v53.4.156';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -12654,7 +12654,7 @@ function pintarBanco(arriba){
     });
     if(f.g&&f.g!=='_'){      // v40: con un grupo elegido, también los que lo trabajan como secundario
       var L2=B.filter(function(b){ return gk(b)!==f.g&&(b.g2||[]).indexOf(f.g)>=0&&pasaFiltro(b,F2); });
-      if(L2.length){ n+=L2.length; h+='<div class="bgrp bgrp-2"><h3>También trabajan '+esc(f.g.toLowerCase())+'</h3>'+L2.map(function(b){ return fila(b,f.g); }).join('')+'</div>'; }
+      if(L2.length){ var n0=n; n+=L2.length; h+='<div class="bgrp bgrp-2"><h3>'+(n0?'También trabajan '+esc(f.g.toLowerCase()):esc(f.g))+'</h3>'+L2.map(function(b){ return fila(b,f.g); }).join('')+'</div>'; }
     }
     if(!n) h+='<p class="muted mt">Ningún ejercicio cumple estos filtros.</p>';
     if(BASICOS.some(function(x){ return !bancoDe(x[0]); })&&!CO.bsel) h+='<button class="link mt" data-a="cargarBasicos">+ Añadir los ejercicios básicos que falten</button>';
