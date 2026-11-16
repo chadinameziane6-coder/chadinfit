@@ -601,7 +601,15 @@ button.cfg-1:hover{border-color:rgba(17,17,17,.28)}
 .sec-b span{margin-left:auto;font-size:12px;color:#BDBDC4;white-space:nowrap}
 .sec-n{width:28px;height:28px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;font:800 13px Plus Jakarta Sans,sans-serif;font-style:normal;flex:none;background:#fff;color:#111}
 .sec-mov .sec-n{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}.sec-car .sec-n{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240}.sec-run .sec-n{background:linear-gradient(135deg,#FFE7C2,#FFD08A);color:#6B4500}
-.mov-pl{cursor:pointer}.mov-pl .mov-ch{width:16px;height:16px;color:#BDBDC4;flex:none;transition:transform .15s}.mov-pl.on .mov-ch{transform:rotate(90deg)}
+.mov-pl,.blq-pl{cursor:pointer}.mov-pl .mov-ch,.blq-pl .mov-ch{width:16px;height:16px;color:#BDBDC4;flex:none;transition:transform .15s}.mov-pl.on .mov-ch,.blq-pl.on .mov-ch{transform:rotate(90deg)}
+/* v53.4.147: el principal, el cardio y la carrera también se pliegan en su línea; «Abrir todos» junto al recuento */
+.dd-u.blq-oc{display:none}
+.blq-res.blq-pri{background:#F6F6F8;border-color:#E4E4EA;color:#4A4A50}.blq-res.blq-pri .ic{color:#111}
+.blq-res.blq-car{background:#F0F6FF;border-color:#D6E4FA;color:#2F4A80}.blq-res.blq-car .ic{color:#4C5BD6}
+.blq-res.blq-run{background:#FFF6E8;border-color:#F7DDB0;color:#8A6420}.blq-res.blq-run .ic{color:#B26A00}
+.rut-cta{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.blq-todos{display:inline-flex;align-items:center;gap:6px;font:800 12px Plus Jakarta Sans,sans-serif;border-radius:99px;padding:6px 12px;background:#fff;border:1px solid #DADADF;color:#111;cursor:pointer;white-space:nowrap}.blq-todos .ic{width:14px;height:14px;vertical-align:0}
+.blq-todos.on{background:#111;color:#fff;border-color:#111}
 .mov-res-l{display:flex;align-items:center;gap:8px;width:100%;font:inherit;text-align:left;cursor:pointer;background:#F1FAF6;border:1px solid #D3EEDD;border-radius:14px;padding:10px 12px;margin-bottom:6px;color:#3A6B5A;font-size:12.5px}
 .mov-res-l span{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.mov-res-l .ic{width:16px;height:16px;color:#0F7A6C;flex:none;margin:0}
 .rut-nb{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;background:#F0F0F3;border-radius:14px;padding:10px 14px}
@@ -751,6 +759,20 @@ input[type=checkbox]:focus-visible{outline:2px solid #111;outline-offset:2px}
 .sp-f{display:block;font-style:normal;font-size:9px;color:var(--mu)}
 .sp.on .sp-f{color:#fff}
 .rut-est{line-height:1.4}
+/* v53.4.147 (Javier eligió la C2 · Cromo + hielo): los días y las fechas de la rutina, en una caja oscura «Cuándo la hace» con las semanas en una barra */
+.rut-cu{margin-top:12px;border-radius:18px;padding:14px 16px 12px;background:radial-gradient(500px 200px at 85% 0%,rgba(255,255,255,.10),rgba(255,255,255,0) 70%),linear-gradient(160deg,#26262B,#0E0E10);color:#fff}
+.rut-cu-h{display:flex;align-items:center;gap:8px;margin-bottom:10px}.rut-cu-h b{font:700 12.5px Plus Jakarta Sans,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:#fff}
+.rut-cu-i{width:26px;height:26px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240;flex:none}.rut-cu-i .ic{width:15px;height:15px;vertical-align:0}
+.rut-cu .lab{color:#BDBDC4;margin:0 0 6px}
+.rut-cu .dias-sel{flex-wrap:nowrap}.rut-cu .dias-sel button{flex:1 1 0;min-width:0;max-width:40px;background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.14);color:#BDBDC4}
+.rut-cu .dias-sel button.on{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);border-color:transparent;color:#0B1240;font-weight:800}
+.rut-cu label.f{color:#BDBDC4}.rut-cu input[type=date]{background:#fff;color:#111;border-color:#fff}
+.rcu-bar{display:flex;gap:3px;margin-top:12px}.rcu-bar i{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.16)}.rcu-bar i.ya{background:linear-gradient(90deg,#9AE6FF,#7C8CFF)}.rcu-bar i.hoy{background:#fff}
+.rcu-lin{margin-top:12px;height:7px;border-radius:4px;background:rgba(255,255,255,.16);overflow:hidden}.rcu-lin i{display:block;height:100%;border-radius:4px;background:linear-gradient(90deg,#9AE6FF,#7C8CFF)}
+.rut-cu .rut-est{color:#BDBDC4;font-size:12.5px}.rut-cu .rut-est b{color:#fff}
+.rut-cu .link{color:#9AE6FF;font-size:12.5px;padding:8px 0 0}
+/* v53.4.147 (Javier eligió la W2): en «Su semana», el nombre corto (lo de antes del punto) sin partir las palabras */
+.sp-n{display:block;font-weight:700;font-size:10px;line-height:1.2;letter-spacing:-.1px;overflow-wrap:normal;word-break:normal;hyphens:none;overflow:hidden;text-overflow:ellipsis}
 .hist-b{border-top:1px solid var(--line2);padding:11px 0}
 .hist-b:first-of-type{border-top:0;padding-top:0}
 .hist-r{border-top:1px solid var(--line2);padding:12px 0}
@@ -3468,7 +3490,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.146';
+var APP_V = 'v53.4.147';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -3520,6 +3542,7 @@ var ICONS={
   lupa:'<circle cx="11" cy="11" r="6.5"/><path d="M16 16l4 4"/>',
   ojo:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
   cal:'<rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  abrir2:'<path d="M7 9l5-5 5 5M7 15l5 5 5-5"/>', plegar2:'<path d="M7 4l5 5 5-5M7 20l5-5 5 5"/>',      // v53.4.147: «Abrir todos» / «Plegar todos»
   rev:'<rect x="5" y="4.5" width="14" height="16.5" rx="2.5"/><path d="M9.5 3h5v3h-5zM8.8 13l2.2 2.2 4.3-4.4"/>',
   plan:'<rect x="3" y="6" width="18" height="13" rx="2.5"/><path d="M3 10.5h18M7 15h4"/>',
   dieta:'<path d="M7 3v7a2 2 0 0 0 4 0V3M9 12v9M16.5 3C14 5 14 10 16.5 12V21"/>',
@@ -9661,7 +9684,7 @@ function pintarClienta(arriba){
     '<main class="wrap coachw'+(CO.sub==='chat'?' chatw':'')+'">'+v+'</main>'+gbarHtml();
   actualizarGbar();
   window.scrollTo(0,arriba?0:y);
-  setTimeout(pintarImgs,0);
+  setTimeout(pintarImgs,0); if(CO.sub==='entrenos') ajustarSp();
   if(CO.sub==='chat') chatAbrir(); else if(!MC.cid) chatPararPoll();
   if(CO.irCuest){ CO.irCuest=false; irACuest(); }
 }
@@ -11201,13 +11224,22 @@ A.segBorrarAct=function(el){
 };
 
 /* ---------------- programación: fechas, historial y recuperar ---------------- */
+/* v53.4.147 (W2): en «Su semana», lo que va antes del punto («Pierna A1. Glúteo e isquios» → «Pierna A1»); si viene todo en mayúsculas, en minúsculas con la inicial */
+/* v53.4.147: si una palabra no cabe en su casilla («Superior»), la letra baja un poco (hasta 8 px) en vez de partirla */
+function ajustarSp(){ [].forEach.call(document.querySelectorAll('.sp-n'),function(e){ var f=10; e.style.fontSize=''; while(e.scrollWidth>e.clientWidth+0.5&&f>8){ f-=0.5; e.style.fontSize=f+'px'; } }); }
+function spCorto(n){ n=String(n||'').trim(); var c=n.split('.')[0].trim()||n; if(c.length>3&&c===c.toUpperCase()&&c!==c.toLowerCase()) c=c.toLowerCase().replace(/(^|\s)(\S)/g,function(m,a,b){ return a+b.toUpperCase(); }); return c; }
+/* v53.4.147 (C2): las semanas de la rutina en una barra; las que ya pasaron en hielo, la de ahora en blanco. Con más de 16 semanas, una barra seguida */
+function semBarraRut(r){ var hoy=CO.hoy||hoyStr(); if(!r.desde||!r.hasta||r.hasta<r.desde) return '';
+  var dias=diff(r.desde,r.hasta)+1, tot=Math.max(1,Math.ceil(dias/7)), n=hoy<r.desde?0:r.hasta<hoy?tot+1:Math.min(tot,Math.floor(diff(r.desde,hoy)/7)+1);
+  if(tot>16) return '<div class="rcu-lin"><i style="width:'+Math.round(Math.max(0,Math.min(1,(diff(r.desde,hoy)+1)/dias))*100)+'%"></i></div>';
+  var h=''; for(var i=1;i<=tot;i++) h+='<i class="'+(i<n?'ya':i===n?'hoy':'')+'"></i>'; return '<div class="rcu-bar">'+h+'</div>'; }
 function estadoRut(r){
   var hoy=CO.hoy||hoyStr();
   if(!r.desde&&!r.hasta) return 'Sin fechas: la ve siempre. Ponle fecha de fin para que te avise cuando toque cambiarla.';
   if(r.desde&&r.desde>hoy) return 'Empieza el '+fMedia(r.desde)+(r.hasta?' y termina el '+fMedia(r.hasta):'')+'. Hasta entonces '+cG('ella','él')+' no la ve.';
   if(r.hasta&&r.hasta<hoy) return 'Terminó el '+fMedia(r.hasta)+': toca cambiarla. '+cG('Ella','Él')+' la sigue viendo hasta que empiece otra.';
   var st=semanaTxtR([r],hoy), n=r.hasta?diff(hoy,r.hasta):null;
-  return (st?st+' · ':'')+(n==null?'sin fecha de fin':n===0?'termina hoy':'termina en '+n+' día'+(n>1?'s':'')+' ('+fCorta(r.hasta)+')');
+  return (st?'<b>'+st+'</b> · ':'')+(n==null?'sin fecha de fin':n===0?'termina hoy':'termina en '+n+' día'+(n>1?'s':'')+' ('+fCorta(r.hasta)+')');
 }
 function progCard(){
   var R=CO.d.rutinas, hoy=CO.hoy||hoyStr(), vig=R.filter(function(r){ return vigenteEn(r,hoy,R); }), fut=R.filter(function(r){ return r.desde&&r.desde>hoy; });
@@ -11350,7 +11382,7 @@ function vRutinas(){
   var hoyF=CO.hoy||hoyStr();
   var h=progCard()+'<div class="card"><div class="card-t sem-tt">Su semana'+(hayF?'<small>'+(CO.progSel==='p'?'desde el '+fCorta(Bq.dP):'la de ahora')+'</small>':'')+'</div><div class="semana-plan'+(CO.progSel==='p'?' sp-fut':'')+'">'+DIAS.map(function(k){
     var rs=RB.filter(function(r){ return r.dias.indexOf(k)>=0; });
-    return '<button class="sp'+(sel===k?' on':'')+(k===hoyK&&CO.progSel!=='p'?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return esc(r.nombre||'Sin nombre')+(!hayF&&r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
+    return '<button class="sp'+(sel===k?' on':'')+(k===hoyK&&CO.progSel!=='p'?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return '<span class="sp-n" title="'+esc(r.nombre||'')+'">'+esc(spCorto(r.nombre)||'Sin nombre')+'</span>'+(!hayF&&r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
   }).join('')+'</div><div class="tipos sem-f"><button class="'+(sel==='todas'?'on':'')+'" data-a="diaRut" data-d="todas">Todas las rutinas ('+RB.length+')</button>'+
     (sinDia||sel==='sin'?'<button class="'+(sel==='sin'?'on':'')+'" data-a="diaRut" data-d="sin">Sin día asignado ('+sinDia+')</button>':'')+'</div></div>';
   var izq=h; h=hayF?progTabsHtml(Bq):'';       // v23: en el ordenador, la semana a la izquierda y la rutina a la derecha
@@ -11394,26 +11426,37 @@ function rutinaEd(r,ri){
   }
   /* v53.4.145 (Javier eligió en el lienzo la S5b): cada bloque con una barra negra, su número en un círculo de color y lo que lleva;
      el cardio y la carrera que vienen después de la fuerza, con su barra (como los ve ella en su entreno) */
-  var SEGS=[]; PZ.forEach(function(z){ var s=SEGS[SEGS.length-1]; if(!s||s.k!==z.k){ s={k:z.k,us:[],n:0,ser:0}; SEGS.push(s); } s.us.push(z.u); for(var q=z.ii[0];q<=z.ii[1];q++){ s.n++; s.ser+=efectivasEj(E[q]); } });
+  var SEGS=[]; PZ.forEach(function(z){ var s=SEGS[SEGS.length-1]; if(!s||s.k!==z.k){ s={k:z.k,us:[],n:0,ser:0,ee:[]}; SEGS.push(s); } s.us.push(z.u); for(var q=z.ii[0];q<=z.ii[1];q++){ s.n++; s.ser+=efectivasEj(E[q]); s.ee.push(E[q]); } });
   var conBarras=nMov>0||SEGS.length>1, nB=nMov?1:0;
-  var secB=function(k,n,sub){ return '<div class="sec-b sec-'+k+'"><i class="sec-n">'+n+'</i><b>'+{mov:'Movilidad · calentamiento',pri:'Entrenamiento principal',car:'Cardio',run:'Carrera'}[k]+'</b><span>'+sub+'</span></div>'; };
+  /* v53.4.147 (Javier: «que también se pueda cerrar entreno principal una vez lo completes y cardio, al igual que movilidad, o que puedas tener
+     todos abiertos»): cada bloque se pliega en su línea de resumen; abierto solo el que trabajas, y «Abrir todos» / «Plegar todos» */
+  var movE=E.filter(esMov), st=rAB(r), abi=function(key,ee){ return !!window.__EJ_ABIERTOS||blqAbierto(r,key)||(!!CO.ejAb&&ee.indexOf(CO.ejAb)>=0)||ee.some(ejVacioEd); };
+  if(st._vis) [['mov',movE]].concat(SEGS.map(function(z,j){ return ['s'+j,z.ee]; })).forEach(function(b){ if(b[1].some(function(e){ return st._vis.indexOf(e)<0; })) st[b[0]]=true; });      // lo que acabas de añadir, a la vista
+  st._vis=E.slice();
+  var movAb=abi('mov',movE), segAb=SEGS.map(function(z,j){ return conBarras?abi('s'+j,z.ee):true; });
+  var secB=function(k,n,sub,j){ var t={mov:'Movilidad · calentamiento',pri:'Entrenamiento principal',car:'Cardio',run:'Carrera'}[k];
+    return '<button type="button" class="sec-b sec-'+k+' blq-pl'+(segAb[j]?' on':'')+'" data-a="segAb" data-r="'+ri+'" data-s="s'+j+'" aria-expanded="'+segAb[j]+'"><i class="sec-n">'+n+'</i><b>'+t+'</b><span>'+sub+'</span>'+ic('flecha','mov-ch')+'</button>'; };
   var sub=function(s){ return s.n+(s.n===1?' ejercicio':' ejercicios')+(s.k==='pri'&&s.ser?' · '+s.ser+' series':''); };
-  var primeraB=conBarras&&SEGS.length?secB(SEGS[0].k,++nB,sub(SEGS[0])):'';
-  SEGS.forEach(function(s,j){ mainH+=(j&&conBarras?secB(s.k,++nB,sub(s)):'')+s.us.join(''); });
+  var resB=function(s,j){ return segAb[j]?'':'<button type="button" class="mov-res-l blq-res blq-'+s.k+'" data-a="segAb" data-r="'+ri+'" data-s="s'+j+'"><span>'+sub(s)+' · '+esc(s.ee.map(function(e){ return tipoEj(e)==='bloque'?nombreBloque(e):tituloEj(e); }).filter(Boolean).join(' · '))+'</span>'+ic('flecha')+'</button>'; };
+  var us=function(s,j){ return segAb[j]?s.us.join(''):s.us.map(function(u){ return u.replace('class="dd-u','class="dd-u blq-oc'); }).join(''); };
+  var primeraB=conBarras&&SEGS.length?secB(SEGS[0].k,++nB,sub(SEGS[0]),0)+resB(SEGS[0],0):'';
+  SEGS.forEach(function(s,j){ mainH+=(j&&conBarras?secB(s.k,++nB,sub(s),j)+resB(s,j):'')+us(s,j); });
+  var nBlq=(nMov?1:0)+(conBarras?SEGS.length:0), todosAb=nBlq>1&&(!nMov||movAb)&&segAb.every(Boolean);
   /* v53.4.144 (Javier: «si programas a mano, si has terminado el bloque de movilidad que se cierre, para que no haya tantas ventanas abiertas, solo
      lo que estás trabajando»): la movilidad, en una línea con sus ejercicios; se abre al tocarla, al añadir uno o mientras editas uno suyo */
-  var movE=E.filter(esMov), movAb=!!window.__EJ_ABIERTOS||CO.movAb===r||(!!CO.ejAb&&movE.indexOf(CO.ejAb)>=0)||movE.some(ejVacioEd);
   var movRes=movE.map(function(e){ return tipoEj(e)==='bloque'?nombreBloque(e):tituloEj(e); }).filter(Boolean).join(' · ');
-  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<button type="button" class="sec-b sec-mov mov-pl'+(movAb?' on':'')+'" data-a="movAb" data-r="'+ri+'" aria-expanded="'+movAb+'"><i class="sec-n">1</i><b>Movilidad · calentamiento</b><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+'</span>'+ic('flecha','mov-ch')+'</button>'+
-      (movAb?'':'<button type="button" class="mov-res-l" data-a="movAb" data-r="'+ri+'"><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+' · '+esc(movRes)+'</span>'+ic('flecha')+'</button>')+'<div class="dd-sec mov'+(movAb?'':' mov-cerrada')+'" data-sec="mov">'+movH+'</div>':'')+primeraB+
+  var lista='<div class="dd-list" id="ddl-'+ri+'">'+(nMov?'<button type="button" class="sec-b sec-mov mov-pl'+(movAb?' on':'')+'" data-a="segAb" data-r="'+ri+'" data-s="mov" aria-expanded="'+movAb+'"><i class="sec-n">1</i><b>Movilidad · calentamiento</b><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+'</span>'+ic('flecha','mov-ch')+'</button>'+
+      (movAb?'':'<button type="button" class="mov-res-l" data-a="segAb" data-r="'+ri+'" data-s="mov"><span>'+nMov+(nMov===1?' ejercicio':' ejercicios')+' · '+esc(movRes)+'</span>'+ic('flecha')+'</button>')+'<div class="dd-sec mov'+(movAb?'':' mov-cerrada')+'" data-sec="mov">'+movH+'</div>':'')+primeraB+
     '<div class="dd-sec" data-sec="main">'+(mainH||(E.length?'<div class="muted sm dd-vacio">Todavía no hay ejercicios aquí.</div>':''))+'</div></div>';
   return '<div class="card" id="rut-'+ri+'">'+(CO.md&&CO.rut.length===1?'<span class="hidden" id="rs-'+ri+'"></span>':      // v53.4.25: en el banco de rutinas, una sola rutina lleva el nombre de arriba
     '<div class="rut-top"><label class="rut-nb"><span>Rutina</span><input class="tit-in" data-r="'+ri+'" data-k="nombre" value="'+esc(r.nombre)+'" placeholder="'+(CO.md?'Nombre de este día (p. ej. Día 1 · Pierna)':'Nombre (p. ej. Glúteo y pierna A)')+'"></label><span class="pill warn'+(r._s?'':' hidden')+'" id="rs-'+ri+'">Sin guardar</span></div>')+
     (esDia&&r.dias.indexOf(dia)<0?'<div class="aviso-dia">Ya no está asignada al '+DLARGO[dia]+'. Guarda la rutina para aplicarlo.</div>':'')+
+    (CO.md?'':'<div class="rut-cu"><div class="rut-cu-h"><span class="rut-cu-i">'+ic('cal')+'</span><b>Cuándo la hace</b></div>')+      // v53.4.147 (C2): días y fechas en su caja oscura
     '<div class="lab">'+(CO.md?'Días <span class="muted">(opcional)</span>':'Días que le toca')+'</div><div class="dias-sel">'+DIAS.map(function(k){ return '<button class="'+(r.dias.indexOf(k)>=0?'on':'')+'" data-a="togDia" data-r="'+ri+'" data-d="'+k+'">'+DL[k]+'</button>'; }).join('')+'</div>'+
     (CO.md?'':'<div class="grid2 rut-fe"><label class="f">Empieza<input type="date" data-r="'+ri+'" data-k="desde" value="'+esc(r.desde||'')+'"></label><label class="f">Termina<input type="date" data-r="'+ri+'" data-k="hasta" value="'+esc(r.hasta||'')+'"></label></div>'+
-    '<div class="muted sm mt6 rut-est" id="rf-'+ri+'">'+estadoRut(r)+'</div>')+(!CO.md&&CO.rut.filter(function(x){ return x!==r&&rutFutura(x)===rutFutura(r); }).length?'<button class="link'+(fechasDistintas(r)?'':' hidden')+'" id="ft-'+ri+'" data-a="fechasTodas" data-r="'+ri+'">Poner estas fechas a '+(rutFutura(r)?'las demás rutinas de la próxima programación':'sus demás rutinas actuales')+' y guardar</button>':'')+
-    (E.length?'<div class="muted sm mt rut-cta">'+rutCuenta(E,nMov,tot)+'</div>':'')+
+    '<div id="rsb-'+ri+'">'+semBarraRut(r)+'</div><div class="muted sm mt6 rut-est" id="rf-'+ri+'">'+estadoRut(r)+'</div>')+(!CO.md&&CO.rut.filter(function(x){ return x!==r&&rutFutura(x)===rutFutura(r); }).length?'<button class="link'+(fechasDistintas(r)?'':' hidden')+'" id="ft-'+ri+'" data-a="fechasTodas" data-r="'+ri+'">Poner estas fechas a '+(rutFutura(r)?'las demás rutinas de la próxima programación':'sus demás rutinas actuales')+' y guardar</button>':'')+
+    (CO.md?'':'</div>')+
+    (E.length?'<div class="muted sm mt rut-cta"><span>'+rutCuenta(E,nMov,tot)+'</span>'+(nBlq>1?'<button type="button" class="blq-todos'+(todosAb?' on':'')+'" data-a="blqTodos" data-r="'+ri+'">'+ic(todosAb?'plegar2':'abrir2')+(todosAb?'Plegar todos':'Abrir todos')+'</button>':'')+'</div>':'')+
     lista+
     ejAddHtml(ri,E,G)+
     (CO.md?(CO.rut.length>1?'<div class="rut-acc"><button class="link danger" data-a="mdQuitarRut" data-r="'+ri+'">Quitar esta rutina</button></div>':'')+'</div>':      // v53.4.25: en el banco de rutinas, sin fechas ni «Guardar rutina» (se guarda todo con «Guardar en tu banco»)
@@ -11654,10 +11697,10 @@ function ddHueco(){
     });
   }
   if(!res){
-    var us=[].slice.call(sec.children).filter(function(u){ return u.classList.contains('dd-u')&&u!==D.srcU; }), k=0;
+    var todos=[].slice.call(sec.children).filter(function(u){ return u.classList.contains('dd-u')&&u!==D.srcU; }), us=todos.filter(function(u){ return !u.classList.contains('blq-oc'); }), k=0;      // v53.4.147: los de un bloque plegado no cuentan
     us.forEach(function(u){ var q=u.getBoundingClientRect(); if(q.top+q.height/2<y) k++; });
     var S=sec.getBoundingClientRect(), ly=!us.length?S.top+4:k===0?us[0].getBoundingClientRect().top-6:us[k-1].getBoundingClientRect().bottom+6;
-    res={t:'top',us:us,k:k,y:ly,l:S.left,w:S.width};
+    res={t:'top',us:us,todos:todos,k:k,y:ly,l:S.left,w:S.width};
   }
   D.slot=res;
   var l=document.getElementById('dd-line'); if(l){ l.style.top=Math.round(res.y-2)+'px'; l.style.left=Math.round(res.l)+'px'; l.style.width=Math.round(res.w)+'px'; l.className=res.t==='in'?'in':''; }
@@ -11675,7 +11718,7 @@ function ddSuelta(aplicar){
   U.forEach(function(a){ porIni[L.indexOf(a[0])]=a; });
   if(s.t==='in') dest={U:U,t:'in',grp:porIni[+s.gEl.dataset.ini],antes:s.mem[s.k]?L[+s.mem[s.k].dataset.ee]:null};
   else {
-    var sig=s.us[s.k];
+    var sig=s.us[s.k]; if(!sig&&s.todos&&s.k>0){ var tr=s.todos[s.todos.indexOf(s.us[s.k-1])+1]; if(tr) sig=tr; }      // v53.4.147: delante del bloque plegado que va detrás
     if(!sig&&D.sec==='mov'){ var m=D.lista.querySelector('.dd-sec[data-sec="main"] > .dd-u'); sig=m||null; }
     dest={U:U,t:'top',antes:sig?porIni[+sig.dataset.ini]:null};
   }
@@ -11715,7 +11758,7 @@ function inCoach(t){
   if(k==='buscaPick'){ filtrarPick(); return; }
   if(t.dataset.r!=null){
     var ri=+t.dataset.r, r=CO.rut[ri]; if(!r) return;
-    if(t.dataset.e==null){ r[k]=t.value; marcarRut(ri); if(k==='desde'||k==='hasta'){ var rf=document.getElementById('rf-'+ri); if(rf) rf.innerHTML=estadoRut(r); CO.rut.forEach(function(x,i){ var ft=document.getElementById('ft-'+i); if(ft) ft.classList.toggle('hidden',!fechasDistintas(x)); }); } return; }
+    if(t.dataset.e==null){ r[k]=t.value; marcarRut(ri); if(k==='desde'||k==='hasta'){ var rf=document.getElementById('rf-'+ri); if(rf) rf.innerHTML=estadoRut(r); var rsb=document.getElementById('rsb-'+ri); if(rsb) rsb.innerHTML=semBarraRut(r); CO.rut.forEach(function(x,i){ var ft=document.getElementById('ft-'+i); if(ft) ft.classList.toggle('hidden',!fechasDistintas(x)); }); } return; }
     var E=r.ejercicios[+t.dataset.e]; if(!E) return;
     if(t.dataset.sk!=null){ E.sets[+t.dataset.j][t.dataset.sk]=t.value; }
     else if(t.dataset.ck!=null){ E.obj=E.obj||{}; E.obj[t.dataset.ck]=t.value; }
@@ -11745,8 +11788,25 @@ function ejVer(e){ var r=null, i=-1; (CO.rut||[]).forEach(function(x,k){ var j=x
 document.addEventListener('focusin',function(ev){ var t=ev.target, c=t&&t.closest&&t.closest('.ej-ed'); if(!c||BOOT.mode==='clienta') return;      // lo que se está escribiendo es lo abierto
   var m=/^ee-(\d+)-(\d+)$/.exec(c.id||''), r=m&&CO.rut&&CO.rut[+m[1]], e=r&&r.ejercicios[+m[2]]; if(e&&!t.matches('.dd-h,.ej-tg,.dd-sum,[data-a=delEj]')) CO.ejAb=e; });
 A.ejAb=function(el){ var x=ejDe(el); if(!x.e) return; CO.ejAb=!ejC(x.e)?null:x.e; repintar(); ejVer(x.e); };
-A.ejListo=function(el){ var x=ejDe(el); if(x.e&&ejVacioEd(x.e)) return toast(tipoEj(x.e)==='bloque'?'Primero añade algún ejercicio al bloque':'Primero ponle nombre al ejercicio'); CO.ejAb=null; if(x.e&&esMov(x.e)) CO.movAb=null; repintar(); if(x.e) ejVer(x.e); };      // v53.4.144: al terminar uno de movilidad, la movilidad se pliega
-A.movAb=function(el){ var r=CO.rut[+el.dataset.r]; if(!r) return; var ab=el.classList.contains('on'); CO.movAb=ab?null:r; if(ab&&CO.ejAb&&esMov(CO.ejAb)) CO.ejAb=null; repintar(); };
+/* v53.4.144/147: al terminar uno de movilidad, la movilidad se pliega; al terminar el último de un bloque, ese bloque se pliega y se abre el siguiente */
+function blqListo(r,e){ var s=rAB(r), k=blqDe(r,e), S=segsRut(r.ejercicios);
+  if(k==='mov'){ s.mov=false; if(S.length) s.s0=true; return; }
+  var j=+String(k).slice(1); if(!k||!S[j]||S[j].ee[S[j].ee.length-1]!==e) return;
+  s[k]=false; if(S[j+1]) s['s'+(j+1)]=true; }
+A.ejListo=function(el){ var x=ejDe(el); if(x.e&&ejVacioEd(x.e)) return toast(tipoEj(x.e)==='bloque'?'Primero añade algún ejercicio al bloque':'Primero ponle nombre al ejercicio'); CO.ejAb=null; if(x.e&&x.r) blqListo(x.r,x.e); repintar(); if(x.e) ejVer(x.e); };      // v53.4.144: al terminar uno de movilidad, la movilidad se pliega
+/* v53.4.147: abrir o plegar cada bloque (movilidad, principal, cardio…). Al abrir uno se pliegan los demás (solo lo que estás trabajando) */
+var RAB=typeof WeakMap!=='undefined'?new WeakMap():null;
+function rAB(r){ if(!RAB) return {}; var s=RAB.get(r); if(!s){ s={}; RAB.set(r,s); } return s; }
+function blqAbierto(r,k){ var s=rAB(r); return k in s?!!s[k]:k==='s0'; }      // sin tocar nada: abierto el principal (el primero después de la movilidad)
+function segsRut(E){ var G=gruposDe(E), S=[], i=0; while(i<E.length){ var g=G[i], fin=g?g.fin:i; if(!esMov(E[i])){ var tp=tipoEj(E[i]), k=tp==='run'?'run':tp==='cardio'&&!g?'car':'pri', z=S[S.length-1]; if(!z||z.k!==k){ z={k:k,ee:[]}; S.push(z); } for(var q=i;q<=fin;q++) z.ee.push(E[q]); } i=fin+1; } return S; }
+function blqClaves(r){ var E=r.ejercicios; return (E.some(esMov)?['mov']:[]).concat(segsRut(E).map(function(z,j){ return 's'+j; })); }
+function blqDe(r,e){ if(esMov(e)) return 'mov'; var S=segsRut(r.ejercicios); for(var j=0;j<S.length;j++) if(S[j].ee.indexOf(e)>=0) return 's'+j; return ''; }
+A.segAb=function(el){ var r=CO.rut[+el.dataset.r]; if(!r) return; var k=el.dataset.s||'mov', s=rAB(r), ab=el.classList.contains('on');
+  if(ab){ s[k]=false; if(CO.ejAb&&blqDe(r,CO.ejAb)===k&&!ejVacioEd(CO.ejAb)) CO.ejAb=null; }
+  else blqClaves(r).forEach(function(x){ s[x]=x===k; });
+  repintar(); };
+A.movAb=function(el){ el.dataset.s='mov'; A.segAb(el); };
+A.blqTodos=function(el){ var r=CO.rut[+el.dataset.r]; if(!r) return; var s=rAB(r), abrir=!el.classList.contains('on'); blqClaves(r).forEach(function(x){ s[x]=abrir; }); if(!abrir&&CO.ejAb&&!ejVacioEd(CO.ejAb)) CO.ejAb=null; repintar(); };
 function addItem(el,item){ var ri=+el.dataset.r, r=CO.rut[ri]; r.ejercicios.push(item); CO.ejAb=item; r._s=true; repintar(); var inp=document.querySelector('[data-r="'+ri+'"][data-e="'+(r.ejercicios.length-1)+'"]'+(item.tipo==='bloque'?'[data-bk="n"]':'[data-k="n"]')); if(inp){ inp.scrollIntoView({block:'center'}); inp.focus(); } }
 A.addEj=function(el){ addItem(el,ejVacio()); };
 A.addCardio=function(el){ addItem(el,cardioVacio()); };
@@ -21854,6 +21914,7 @@ function guiaPlnHtml(){
     ['Aprobar y ponérsela','Sus rutinas aparecen en <b>Entrenos</b> con sus fechas y la dieta en <b>Dieta</b>. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')],
     ['¿Y lo de antes?','Sus rutinas de ahora pasan al <b>Historial de rutinas</b> (en Entrenos). Si las nuevas empiezan más tarde, las de ahora siguen hasta la víspera. La dieta anterior, a <b>Dietas anteriores</b>. Sus entrenos registrados no se pierden nunca.',''],
     ['Lo de ahora y lo que viene','En Entrenos, «Programación actual»: lo de ahora en negro, con su semana y lo que lleva; debajo, «Próximas» (lo preparado para más adelante, por fecha). <b>Tócalo</b> para ver qué tiene cada rutina sin salir. En ámbar, si acaba en una semana y no hay nada preparado.',hl('<span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span>')],
+    ['La rutina por dentro','Arriba, <b>«Cuándo la hace»</b>: sus días, las fechas y en qué semana va (la barra). Cada bloque (movilidad, principal, cardio) se pliega en su línea: queda abierto el que trabajas y, con «Listo» en su último ejercicio, se cierra y se abre el siguiente. <b>«Abrir todos»</b> para verlo todo a la vez.',hl('<span class="blq-todos">'+ic('abrir2')+'Abrir todos</span>')],      // v53.4.147
     ['Cambiar después','En Entrenos y en Dieta, como siempre: tocas lo que quieras y «Guardar». También puedes volver a «Plan» y preparar otro.',hl('<span class="btn sm">Guardar</span>')],
     ['Archivar o borrar una rutina','<b>Archivar</b>: pasa al historial; deja de verla y la recuperas cuando quieras. <b>Borrar para siempre</b>: no queda en el historial y no se puede recuperar.',''],
     ['Recuperar del historial','Una rutina: se añade a las de ahora. «Volver a esta programación»: sustituye a las de ahora (que pasan al historial).',hl('<span class="btn sm sec">Recuperar</span>')],
