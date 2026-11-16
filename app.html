@@ -1231,6 +1231,7 @@ body.fc-abierto{overflow:hidden}
 .com-av,.sd-av.com-av{display:inline-flex;align-items:center;justify-content:center;background:#111;color:#fff}.com-av .ic{width:18px;height:18px;color:#fff}.com-f .ch-tx b{font-weight:800}.com-h{display:flex;flex-direction:column;flex:1;min-width:0;color:var(--tx)}.com-h b{color:var(--tx);font-size:15px}.com-h small{font-size:12px;color:var(--mu)}
 .com-info{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--tx2);background:var(--card2);border-radius:12px;padding:10px 12px;margin:6px 0 4px}.com-info .ic{width:16px;height:16px;flex:none;margin-top:1px}
 .msj.prog,.msj.yo.prog{background:#fff;color:var(--tx);border:1.5px dashed #BDBDC4}.msj.prog .msj-h,.msj.prog .msj-h .link,.msj.prog .msj-del,.msj.yo.prog .msj-h,.msj.yo.prog .msj-h .link,.msj.yo.prog .msj-del{color:var(--mu)}.msj.yo.prog .msj-t a{color:var(--tx)}
+.com-fija{position:sticky;top:calc(var(--top-h,62px) + 8px);z-index:15;box-shadow:0 8px 22px rgba(15,15,20,.10)}
 .com-card{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:0 0 12px;font:inherit;color:var(--tx);cursor:pointer}.com-card .ch-tx{display:flex;flex-direction:column;flex:1;min-width:0}.com-card .ch-tx small{font-size:12.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.com-card>.ic{width:18px;height:18px;color:var(--mu)}
 .com-top{display:flex;align-items:center;gap:8px}.com-top .chat-tit{margin:8px 0 6px}.chat.com-cl{padding-bottom:150px}
 .com-pie{position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:25;display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.08);font-size:13px;color:var(--tx2);max-width:540px;margin:0 auto}.com-pie span{flex:1}.com-pie .btn.sm{flex:none;white-space:nowrap}
@@ -3346,7 +3347,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.137';
+var APP_V = 'v53.4.138';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5831,7 +5832,7 @@ A.comAuto=function(el){ var on=!el.classList.contains('on'); el.disabled=true; a
 function comCardCl(){
   var c=CL.d.com; if(!c) return '';
   var u=c.ult, nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
-  return '<button class="com-card" data-a="comAbrirCl"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
+  return '<button class="com-card com-fija" data-a="comAbrirCl"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
 }
 function vComCl(){
   var nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
@@ -19937,7 +19938,7 @@ function irAplicar(){
     if(!CL.d) return;
     IR={}; if(CL.dr&&CL.tab==='entreno') return;      // entrenando: no se le saca del entreno
     var t={chat:'chat',comunidad:'chat',hoy:'hoy',dieta:'dieta',plan:'perfil'}[q.ir]; if(!t) return;
-    if(q.ir==='comunidad'&&CL.d.com){ chatPararPoll(); CHT.com=true; } else if(t==='chat'){ CHT.com=false; }      // v53.4.129
+    if(q.ir==='comunidad'){ chatPararPoll(); CHT.com=true; } else if(t==='chat'){ CHT.com=false; }      // v53.4.129; v53.4.138: aunque sus datos aún no sepan que hay comunidad (la app ya estaba abierta)
     CL.tab=t; CL.diaSel=null; pintarCl(); window.scrollTo(0,0);
   } else if(BOOT.mode==='coach'&&CO.pin&&CO.lista){
     IR={}; if(q.ir==='pagina') return siCambiosOk(function(){ cargarPagina(true); });      // v53.4.130: un cuestionario desde «Tu página»
