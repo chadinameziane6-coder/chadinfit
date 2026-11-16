@@ -1301,6 +1301,9 @@ body.fc-abierto{overflow:hidden}
 .pfa-i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--card2);flex:none;font-style:normal}
 .pfa-i .ic,.pfa-i svg{width:17px;height:17px;margin:0}
 /* v53.4.144 (Javier: «el de la clienta con colores»): cada ajuste con su color, como la ficha del panel */
+.pf-ti{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:10px;font-style:normal;flex:none;margin-right:2px}
+.pf-ti .ic,.pf-ti svg{width:16px;height:16px;margin:0!important}
+.pf-ti-plan{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}.pf-ti-aj{background:#111;color:#fff}
 .pfa-desc{background:linear-gradient(135deg,#B9A6FF,#7C8CFF);color:#fff}.pfa-push{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240}
 .pfa-ciclo{background:linear-gradient(135deg,#FFD6E7,#FF9EC4);color:#7A1F48}.pfa-fb{background:linear-gradient(135deg,#FFE7C2,#FFD08A);color:#6B4500}
 .pfa-cuenta{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}
@@ -3465,7 +3468,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.145';
+var APP_V = 'v53.4.146';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -18616,7 +18619,7 @@ function diasTxt(d){ return d<0?'Venció hace '+(-d)+' día'+(d===-1?'':'s'):d==
 function planClCard(){
   var p=CL.d.plan; if(!p||(!p.nombre&&!p.hasta&&!(p.pagos||[]).length)) return '';
   var d=planClDias();
-  var h='<div class="card plan-cl"><div class="card-t">'+ic('euro')+'Tu plan</div><h2>'+esc(p.nombre||'Tu plan')+'</h2>'+
+  var h='<div class="card plan-cl"><div class="card-t"><i class="pf-ti pf-ti-plan">'+ic('euro')+'</i>Tu plan</div><h2>'+esc(p.nombre||'Tu plan')+'</h2>'+
     '<div class="plc-f">'+(p.desde?'<div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div>':'')+(p.hasta?'<div><span>'+(d!=null&&d<0?'Venció':'Vence')+'</span><b>'+esc(fAnio(p.hasta))+'</b></div>':'')+'</div>'+
     (d!=null?'<p class="plc-d'+(d<0?' bad':d<=7?' warn':'')+'">'+diasTxt(d)+'</p>':'')+
     (p.estado!=='baja'&&(p.hasta||(p.planes||[]).length)?'<button class="btn mt6'+(d!=null&&d<=7?'':' sec')+'" data-a="plRenovarCl">'+(p.pedido?ic('okc')+'Renovación pedida':'Renovar mi plan')+'</button>':'');
@@ -18768,7 +18771,7 @@ function pfAjL(){
 }
 function pfAjHtml(){
   var ab=CL.pfAb||'';
-  return '<div class="card pf-aj"><div class="card-t">'+ic('ajuste')+'Ajustes</div>'+pfAjL().map(function(x){ var on=ab===x[0], b='';
+  return '<div class="card pf-aj"><div class="card-t"><i class="pf-ti pf-ti-aj">'+ic('ajuste')+'</i>Ajustes</div>'+pfAjL().map(function(x){ var on=ab===x[0], b='';
       if(on){ b=String(x[4]()||'').replace(/<button class="btn sec salir-b"[^>]*>[\s\S]*?<\/button>/,''); }
       return '<div class="pfa'+(on?' on':'')+'"><button class="pfa-h" data-a="pfAb" data-v="'+x[0]+'" aria-expanded="'+on+'"><i class="pfa-i pfa-'+x[0]+'">'+ic(x[1])+'</i><span><b>'+esc(x[2])+'</b><small>'+esc(x[3])+'</small></span>'+ic('flecha','pfa-ch')+'</button>'+(on?'<div class="pfa-b">'+b+'</div>':'')+'</div>'; }).join('')+'</div>';
 }
