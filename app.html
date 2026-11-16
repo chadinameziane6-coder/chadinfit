@@ -3347,7 +3347,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.138';
+var APP_V = 'v53.4.139';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8770,9 +8770,9 @@ function plPintar(){
   else h+='<div class="pl-its">'+(V.ef.length?V.ef.map(function(e,k){ return plItHtml(V,e,k,edit); }).join(''):V.o&&V.o.texto?'<div class="cm-c">'+br(V.o.texto)+'</div>':'<p class="muted sm">Este plato no tiene alimentos apuntados.</p>')+'</div>';
   if(edit&&!V.lib&&V.ef.length&&!V.o.pz&&!V.o.lote) h+='<p class="muted sm pl-hoyx">'+(V.xe&&(Object.keys(V.xe.q||{}).length||Object.keys(V.xe.w||{}).length)?ic('ok')+'Tus cambios son solo para hoy: el plato de siempre no cambia y mañana vuelve tal cual.':'Toca ✕ para quitar un alimento o «Cambiar» para poner otro. Es solo para hoy: el plato de siempre no cambia.')+'</p>';      // v52
   if(CL.d.alMood&&!V.lib&&V.o&&V.o.id) h+=moodPlatoHtml(p,PL.m,V.o);      // v46
-  var tnd=!!(V.o&&V.o.lote&&V.ef.length&&!V.lib), tx=tnd?[!edit&&!(PL.rcOtra&&rcModo(V.o)!=='peso')?'<button class="link" data-a="ltOtra">'+(Math.abs(rcF(V.o,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }))-rcF(V.o,V.o.items))>0.004?'Cambiar lo que he comido':'He comido otra cantidad')+'</button>':'',V.on?'<button class="link" data-a="plQuitar">Quitar de hoy</button>':'','<button class="link" data-a="plVer">Ver el plato completo</button>'].filter(String):[];      // v53.4.121: por tandas, lo demás en gris
+  var tnd=!!(V.o&&V.o.lote&&V.ef.length&&!V.lib), tx=tnd?[!edit&&!(PL.rcOtra&&rcModo(V.o)!=='peso')?'<button class="link" data-a="ltOtra">'+(Math.abs(rcF(V.o,V.ef.map(function(e){ return {i:e.it.i,q:e.q}; }))-rcF(V.o,V.o.items))>0.004?'Cambiar lo que he comido':'He comido otra cantidad')+'</button>':'',V.on?'<button class="link" data-a="plQuitar">Quitar de hoy</button>':V.o&&V.o.mio===3?'<button class="link" data-a="plQuitarLib">Quitar de mi '+esc(cn)+'</button>':'','<button class="link" data-a="plVer">Ver el plato completo</button>'].filter(String):[];      // v53.4.121: por tandas, lo demás en gris
   h+='<div class="pl-acc'+(tnd?' rc-acc':'')+'">'+(!V.on?'<button class="btn" data-a="plElegir">'+ic('ok')+(casaCl()?'Me lo como hoy':'Elegir para hoy')+'</button>':t?'<button class="btn ok-b" data-a="plComido">'+ic('ok')+'Comido '+esc(t)+' · deshacer</button>':'<button class="btn" data-a="plComido">'+ic('ok')+'Lo he comido</button>')+
-    (tnd?(tx.length?'<div class="rc-ter">'+tx.join('<i class="rc-sep" aria-hidden="true"></i>')+'</div>':''):(V.on?'<button class="link" data-a="plQuitar">Quitar de hoy</button>':'')+(!V.lib?'<button class="link" data-a="plVer">'+'Ver el plato completo: preparación'+(edit?', cambiarlo para siempre…':', cambiar alimentos…')+'</button>':''))+
+    (tnd?(tx.length?'<div class="rc-ter">'+tx.join('<i class="rc-sep" aria-hidden="true"></i>')+'</div>':''):(V.on?'<button class="link" data-a="plQuitar">Quitar de hoy</button>':V.o&&V.o.mio===3?'<button class="link" data-a="plQuitarLib">Quitar de mi '+esc(cn)+'</button>':'')+(!V.lib?'<button class="link" data-a="plVer">'+'Ver el plato completo: preparación'+(edit?', cambiarlo para siempre…':', cambiar alimentos…')+'</button>':''))+
     (!V.lib&&V.o&&V.o.mio===2?'<button class="link danger pl-del" data-a="plBorrarMio">'+ic('papelera')+'Borrar mi plato</button>':'')+(!V.lib&&V.o&&V.o.mio===1?'<button class="link pl-del" data-a="plMiaReset">'+ic('reinicio')+'Volver al plato de mi coach</button>':'')+'</div></div>';      // v52: borrar los platos suyos desde aquí
   b.innerHTML=h; if(typeof pintarImgs==='function') pintarImgs();
 }
@@ -8986,6 +8986,13 @@ CH.plFoto=function(t){
 A.plFotoNo=function(el){ var ds=el.dataset; platoMioSet(ds.p,+ds.m,ds.o,function(x){ delete x.img; }); trasFotoPlato(); CL.keep=true; pintarCl(); };
 A.plComido=function(){ var p=plPlan(); if(!p) return; var mi=PL.m; cerrarModal(); PL=null; marcarComido(p,mi); };
 A.plQuitar=function(){ var p=plPlan(); if(!p) return; var mi=PL.m, o=opCm(p,mi,PL.o); PL=null; if(o&&o.mio===3){ var D=hoyDia(); if(D.l) delete D.l[keyCm(p,mi)]; CL._lh=null; } quitarHoy(p,mi); };      // v53.4.113: el del «+» se quita también de su comida
+/* v53.4.138→139 (Javier, «Fallos a corregir» 6: «cuando añada un plato de la biblio y al final no quiere comerlo, lo pueda quitar»):
+   el del «+» sin elegir (porque eligió otro o aún no) se quita de su comida de hoy con «Quitar de mi …», con «Deshacer» */
+var PL_LIB_UNDO=null;
+A.plQuitarLib=function(){ var p=plPlan(); if(!p) return; var mi=PL.m, k=keyCm(p,mi), D=hoyDia(), c=p.comidas[mi], x=D.l&&D.l[k]; if(!x) return;
+  PL_LIB_UNDO={k:k,x:x}; delete D.l[k]; CL._lh=null; guardarPref(); cerrarModal(); PL=null; CL.keep=true; pintarCl();
+  toastAcc('Quitado de tu '+String(c&&c.nombre||'comida').toLowerCase()+': '+(x.nombre||'el plato'),'Deshacer','plQuitarLibDesh'); };
+A.plQuitarLibDesh=function(){ var t=document.getElementById('tacc'); if(t) t.className=''; var u=PL_LIB_UNDO; PL_LIB_UNDO=null; if(!u) return; var D=hoyDia(); D.l=D.l||{}; if(D.l[u.k]) return; D.l[u.k]=u.x; CL._lh=null; guardarPref(); CL.keep=true; pintarCl(); toast('Vuelve a tu comida','ok'); };
 A.plVer=function(){ var p=plPlan(); if(!p||PL.lib) return; var d={p:p.id,m:PL.m,o:PL.o}; cerrarModal(); PL=null; A.dvPlato({dataset:d}); };
 A.dvLib45=function(el){ CL.libSel={p:el.dataset.p,m:+el.dataset.m,c45:1}; conBanco(function(){ CL.libF=''; pintarLibCl(''); }); };
 /* los alimentos sueltos de una comida */
