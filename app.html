@@ -1231,7 +1231,23 @@ body.fc-abierto{overflow:hidden}
 .com-av,.sd-av.com-av{display:inline-flex;align-items:center;justify-content:center;background:#111;color:#fff}.com-av .ic{width:18px;height:18px;color:#fff}.com-f .ch-tx b{font-weight:800}.com-h{display:flex;flex-direction:column;flex:1;min-width:0;color:var(--tx)}.com-h b{color:var(--tx);font-size:15px}.com-h small{font-size:12px;color:var(--mu)}
 .com-info{display:flex;gap:8px;align-items:flex-start;font-size:13px;line-height:1.45;color:var(--tx2);background:var(--card2);border-radius:12px;padding:10px 12px;margin:6px 0 4px}.com-info .ic{width:16px;height:16px;flex:none;margin-top:1px}
 .msj.prog,.msj.yo.prog{background:#fff;color:var(--tx);border:1.5px dashed #BDBDC4}.msj.prog .msj-h,.msj.prog .msj-h .link,.msj.prog .msj-del,.msj.yo.prog .msj-h,.msj.yo.prog .msj-h .link,.msj.yo.prog .msj-del{color:var(--mu)}.msj.yo.prog .msj-t a{color:var(--tx)}
-.com-fija{position:sticky;top:calc(var(--top-h,62px) + 8px);z-index:15;box-shadow:0 8px 22px rgba(15,15,20,.10)}
+.top-com{position:relative;width:44px;height:44px;border-radius:50%;border:0;background:#fff;box-shadow:var(--sh);display:inline-grid;place-items:center;cursor:pointer;color:var(--tx);flex:none}
+.top-com .ic{width:21px;height:21px;margin:0}
+.top-com .dot-n{position:absolute;top:-3px;right:-3px}
+.pf-aj{gap:0;padding-bottom:6px}
+.pfa{border-top:1px solid var(--line2)}
+.pf-aj .card-t+.pfa{border-top:0}
+.pfa-h{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;border:0;background:none;font:inherit;color:var(--tx);text-align:left;cursor:pointer}
+.pfa-i{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;background:var(--card2);flex:none;font-style:normal}
+.pfa-i .ic,.pfa-i svg{width:17px;height:17px;margin:0}
+.pfa-h>span{flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.3}
+.pfa-h>span b{font-size:14.5px}.pfa-h>span small{font-size:12.5px;color:var(--mu)}
+.pfa-h .pfa-ch{width:16px;height:16px;color:var(--mu);transition:transform .15s;flex:none}
+.pfa.on .pfa-ch{transform:rotate(90deg)}
+.pfa-b{padding:0 0 12px}
+.pfa-b>.card{box-shadow:none!important;border:0!important;background:none!important;padding:0!important;margin:0!important}
+.pfa-b>.card>.card-t{display:none}
+.pf-pie{margin-top:4px}
 .com-card{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:0 0 12px;font:inherit;color:var(--tx);cursor:pointer}.com-card .ch-tx{display:flex;flex-direction:column;flex:1;min-width:0}.com-card .ch-tx small{font-size:12.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.com-card>.ic{width:18px;height:18px;color:var(--mu)}
 .com-top{display:flex;align-items:center;gap:8px}.com-top .chat-tit{margin:8px 0 6px}.chat.com-cl{padding-bottom:150px}
 .com-pie{position:fixed;left:10px;right:10px;bottom:calc(76px + env(safe-area-inset-bottom));z-index:25;display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.08);font-size:13px;color:var(--tx2);max-width:540px;margin:0 auto}.com-pie span{flex:1}.com-pie .btn.sm{flex:none;white-space:nowrap}
@@ -3268,7 +3284,40 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .pln-row.falta .pln-rl{color:var(--bad)}.pln-row.pln-sub{border-top:0;padding-top:0}.pln-serb .link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--tx2)}.pln-serb .ic{width:16px;height:16px}.pln-sub .pln-rl{font-weight:600;padding-left:12px}.pln-ped .pln-que{margin:12px 0 0}.pln-fn .pln-in{margin:0}.pln-fn .pln-in input{width:80px}.pln-fn{display:flex;flex-wrap:wrap;gap:8px 16px}
 .pln-ev{font-size:15px;padding:8px 10px}.pln-gen{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}.pln-gen .btn{width:auto;margin:0}
 .pln-elige{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:12px}.pln-elige .card{margin:0;display:flex;flex-direction:column;gap:6px}
-.pln-op1.on{border:2px solid var(--tx)}.pln-ot{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15.5px}.pln-op1 p{flex:1;margin:0 0 4px}.pln-op1 .btn{margin:0}
+.pln-op1.on{border:2px solid var(--tx)}
+/* v53.4.140 · colores del panel, estilo «Cromo + degradados» (C3, elegido por Javier en el lienzo de diseño): lo de ahora en negro cromado
+   con menta; lo que viene en hielo y lavanda; las series especiales en lavanda; el Plan: con la app en cromo con hielo, el banco en menta y a mano en melocotón; avisos en ámbar */
+.pln-ti{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:11px;flex:none;font-style:normal}
+.pln-ti .ic,.pln-ti svg{width:18px;height:18px;margin:0}
+.pln-c1,.pln-c1.on{background:radial-gradient(260px 140px at 90% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%) padding-box,linear-gradient(160deg,#3A3A40 0%,#16161A 50%,#0A0A0B 100%) padding-box,linear-gradient(135deg,#FFFFFF 0%,#77777F 35%,#E8E8EC 60%,#55555C 100%) border-box!important;border:1.5px solid transparent!important;color:#fff;box-shadow:0 14px 30px rgba(10,10,12,.22)}
+.pln-c1 .pln-ot{color:#fff}.pln-c1 p.muted,.pln-c1 .muted{color:#BDBDC4!important}
+.pln-c1 .pln-ti{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0B1240}
+.pln-c1 .btn{background:linear-gradient(90deg,#9AE6FF,#7C8CFF)!important;border:0!important;color:#0B1240!important}
+.pln-c2 .pln-ti{background:linear-gradient(135deg,#C9F5E0,#8EF0C4);color:#0F5C38}
+.pln-c3 .pln-ti{background:linear-gradient(135deg,#FFE7C2,#FFD08A);color:#6B4500}
+.pln-rec{margin-left:auto;font-size:10.5px;font-weight:800;letter-spacing:.3px;background:linear-gradient(90deg,#9AE6FF,#7C8CFF);color:#0B1240;border-radius:99px;padding:3px 9px;white-space:nowrap}
+.cfg-col{background:linear-gradient(135deg,#F5F0FF 0%,#FFFFFF 75%)!important}
+.cfg-col .cfg-ti{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:12px;background:linear-gradient(135deg,#B9A6FF,#7C8CFF);color:#fff;flex:none}
+.cfg-col .cfg-ti .ic,.cfg-col .cfg-ti svg{width:18px;height:18px;color:#fff;margin:0}
+.cfg-col>span small{color:#5B4FD0!important}
+.cfg-col .cfg-chev{color:#7C8CFF!important}
+.pg-tag{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;border-radius:99px;padding:3px 9px;flex:none}
+.pg-tag .ic,.pg-tag svg{width:12px;height:12px;margin:0}
+.pg-ok{background:linear-gradient(90deg,#8EF0C4,#3FC98C);color:#04301B}.pg-ind{background:linear-gradient(90deg,#9AE6FF,#B9A6FF);color:#1A1650}
+.pg-ya{background:radial-gradient(220px 120px at 90% 0%,rgba(255,255,255,.16),rgba(255,255,255,0) 70%) padding-box,linear-gradient(160deg,#3A3A40 0%,#16161A 50%,#0A0A0B 100%) padding-box,linear-gradient(135deg,#FFFFFF 0%,#77777F 35%,#E8E8EC 60%,#55555C 100%) border-box;border:1.5px solid transparent;color:#fff;border-radius:16px;padding:11px 13px;display:flex;flex-direction:column;gap:9px}
+.pg-ya-t{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.pg-ya-t b{font-size:14.5px;color:#fff}.pg-ya-t b i{font-style:normal;color:#BDBDC4;margin:0 2px}
+.pg-ya-t em{font-style:normal;font-size:12.5px;font-weight:800;color:#8EF0C4;margin-left:auto}
+.pgx-bar{height:6px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}.pgx-bar i{display:block;height:100%;border-radius:3px;background:linear-gradient(90deg,#8EF0C4,#9AE6FF,#7C8CFF)}
+.pgx-av{display:flex;align-items:center;gap:6px;margin:8px 0 0;font-size:12.5px;font-weight:700;color:#5C3B00;background:linear-gradient(135deg,#FFF3D6,#FFE9C7);border:1px solid #F3D9A0;border-radius:10px;padding:6px 9px}
+.pgx-av .ic,.pgx-av svg,.pg-ok-t .ic,.pg-ok-t svg{width:14px;height:14px;margin:0;flex:none}
+.pg-ok-t{display:flex;align-items:center;gap:6px;margin:0;font-size:12.5px;font-weight:700;color:#8EF0C4}
+.pg-fut{margin-top:10px;background:linear-gradient(135deg,#F0F5FF 0%,#F5F0FF 100%);border:1px solid #E2E3FA;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.pg-fr{display:flex;gap:12px;align-items:flex-start;width:100%;padding-top:6px;border-top:1px solid #E4E3F7}
+.pg-fr:first-of-type{border-top:0;padding-top:2px}
+.pg-fd{display:flex;flex-direction:column;min-width:86px}.pg-fd b{font-size:13.5px;color:#5B4FD0}.pg-fd small{font-size:11.5px;color:var(--mu)}
+.pg-fn{font-size:13.5px;font-weight:600;line-height:1.35}
+.pg-pri .ic,.pg-pri svg{color:#5B4FD0}.pln-ot{display:flex;align-items:center;gap:8px;font-weight:800;font-size:15.5px}.pln-op1 p{flex:1;margin:0 0 4px}.pln-op1 .btn{margin:0}
 .pln-bt{display:flex;gap:6px}.pln-bt .btn{flex:1;padding-left:6px;padding-right:6px}.pln-pro{color:var(--mu);font-size:12.5px;margin-top:4px;text-align:left}
 .pln-res{display:flex;align-items:center;justify-content:space-between;gap:12px}.pln-res>div{display:flex;flex-direction:column;gap:2px;min-width:0}.pln-res b{font-size:14px;line-height:1.4}.pln-res .btn{width:auto;margin:0;white-space:nowrap}
 .pln-tec{color:var(--tx)!important;font-weight:700}.pln-ss{color:var(--mu);font-size:11px;font-weight:600}
@@ -3347,7 +3396,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.139';
+var APP_V = 'v53.4.141';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -5348,7 +5397,7 @@ function cfgResumen(){
   return (own?'<b>Valores propios de '+cG('esta clienta','este cliente')+'.</b> ':'Valores generales. ')+'Aproximación '+esc(apxTxt(C.apx[2]))+' · drop set −'+C.drop.pct+' % · rest-pause '+C.rp.desc+' s · back-off −'+C.backoff.pct+' % · pirámides ±'+C.pir.sube+'/'+C.pir.baja+' %';
 }
 function cfgCard(){ var own=Object.keys(CO.d.clienta.cfg||{}).length;      // v53.4.20: en una línea (los valores, al tocar «Ver o cambiar»)
-  return '<button type="button" class="card cfg-s cfg-1" data-a="cfgSer" aria-label="Series especiales: ver o cambiar sus valores">'+ic('ajuste')+'<span><b>Series especiales</b><small>'+(own?'Valores propios de '+cG('esta clienta','este cliente'):'Valores por defecto')+' · ver o cambiar</small></span>'+ic('flecha','cfg-chev')+'</button>'; }
+  return '<button type="button" class="card cfg-s cfg-1 cfg-col" data-a="cfgSer" aria-label="Series especiales: ver o cambiar sus valores"><i class="cfg-ti">'+ic('ajuste')+'</i><span><b>Series especiales</b><small>'+(own?'Valores propios de '+cG('esta clienta','este cliente'):'Valores por defecto')+' · ver o cambiar</small></span>'+ic('flecha','cfg-chev')+'</button>'; }
 /* v48: guía de las series especiales (lo mismo que ve ella al tocar la etiqueta, con sus valores) */
 A.tsGuia=function(){ var L=TS_ORDEN.filter(function(k){ return TS_INFO[k]; });
   modal('<h2>Guía de las series especiales</h2><p class="muted sm">Con los valores de '+esc(String(CO.d.clienta.nombre||'').split(' ')[0])+'. Al elegir una en la rutina, las repeticiones y el RIR de la guía se ponen solos si están vacíos. '+cG('Ella','Él')+' lo ve igual al tocar la etiqueta de la serie.</p>'+
@@ -5832,7 +5881,14 @@ A.comAuto=function(el){ var on=!el.classList.contains('on'); el.disabled=true; a
 function comCardCl(){
   var c=CL.d.com; if(!c) return '';
   var u=c.ult, nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
-  return '<button class="com-card com-fija" data-a="comAbrirCl"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
+  return '<button class="com-card" data-a="comAbrirCl"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
+}
+/* v53.4.141 (Javier, al ver la v53.4.138: la tarjeta fija «tapa el nombre del entrenador»): en su chat, la comunidad también arriba a la
+   izquierda en la cabecera, redonda como la campana y con su número sin leer; siempre a la vista, sin tapar nada */
+function topComCl(){
+  if(BOOT.mode!=='clienta'||CL.tab!=='chat'||CHT.com||!CL.d||!CL.d.com) return '';
+  var c=CL.d.com, nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
+  return '<button class="top-com" data-a="comAbrirCl" aria-label="Comunidad de '+esc(nom)+(c.n?', '+c.n+' sin leer':'')+'">'+ic('clientes')+(c.n?'<b class="dot-n">'+c.n+'</b>':'')+'</button>';
 }
 function vComCl(){
   var nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
@@ -6180,7 +6236,7 @@ function pintarCl(){
   if(CL.vsAbierto&&!CL.dr) A.vsCerrar();
   if(!{hoy:1,dieta:1,progreso:1,chat:1,perfil:1}[CL.tab]) CL.tab='hoy';
   var v={hoy:vHoy,dieta:vDieta,progreso:vProgreso,chat:vChat,perfil:vPerfil}[CL.tab]();
-  app.innerHTML='<header class="top top-c"><span class="top-esp" aria-hidden="true"></span><div class="top-logo">'+logoHtml('top')+'</div><button class="bell" data-a="avisos" aria-label="Avisos"></button></header><main class="wrap">'+pruebaBanda()+v+'</main>'+
+  app.innerHTML='<header class="top top-c">'+(topComCl()||'<span class="top-esp" aria-hidden="true"></span>')+'<div class="top-logo">'+logoHtml('top')+'</div><button class="bell" data-a="avisos" aria-label="Avisos"></button></header><main class="wrap">'+pruebaBanda()+v+'</main>'+
     '<nav class="nav">'+[['hoy','Hoy'],['dieta','Dieta'],['progreso','Progreso'],['chat','Chat'],['perfil','Perfil']].map(function(t){ var n=t[0]==='chat'&&CL.d.chat?(CL.d.chat.noLeidos||0)+(CL.d.com&&CL.d.com.n||0):0; return '<button class="'+(CL.tab===t[0]?'on':'')+'" data-a="tab" data-t="'+t[0]+'" aria-label="'+t[1]+'">'+(t[0]==='perfil'&&CL.foto&&CL.d.clienta&&CL.foto.v===CL.d.clienta.foto?'<img class="nv-ft" src="'+esc(CL.foto.img)+'" alt="">':ICO[t[0]])+'<span class="nav-l">'+t[1]+'</span>'+(n?'<b class="nav-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</button>'; }).join('')+'</nav>';
   window.scrollTo(0,keep?y:0);
   if(CL.tab==='chat') chatAbrir(); else chatPararPoll();
@@ -11074,9 +11130,18 @@ function progCard(){
   var d=vig.map(function(r){ return r.desde; }).filter(String).sort()[0], h2=vig.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0], st=semanaTxtR(vig,hoy);
   var H=CO.d.rutinasAnteriores||[], pri=faseEn(CO.d,'entreno',hoy);
   var h='<div class="card prog"><div class="card-t">Programación actual</div>';
-  h+=vig.length?'<p class="sm" style="margin:0">'+(d||h2?(d?'Del '+fMedia(d)+' ':'')+(h2?'al '+fMedia(h2):'sin fecha de fin')+(st?' · <b>'+st+'</b>':''):'Sus rutinas no tienen fechas. Ponles inicio y fin para saber cuánto tiempo debe estar con ellas.')+'</p>':'<p class="sm muted" style="margin:0">No tiene rutinas en marcha.</p>';
-  if(fut.length) h+='<p class="sm mt6">'+ic('reloj')+'Preparada'+(fut.length>1?'s':'')+' para más adelante: '+fut.map(function(r){ return esc(r.nombre)+' (desde el '+fCorta(r.desde)+')'; }).join(', ')+'.</p>';
-  if(pri&&(pri.prioridad||[]).length) h+='<p class="sm mt6 prio">'+ic('diana')+'Prioridad ahora: <b>'+esc(listaY(pri.prioridad))+'</b> · hasta el '+fMedia(pri.hasta)+'</p>';
+  /* v53.4.140 (Javier, «Fallos a corregir» 13: «más visual al hablar de fechas actuales y próximas, no todo mismo color»): lo de ahora
+     en negro cromado con menta, con su semana y una barra de lo que lleva; lo que viene, en hielo y lavanda y por fecha; si acaba pronto y no hay nada preparado, en ámbar */
+  if(vig.length&&(d||h2)){
+    var tot=d&&h2?diff(d,h2)+1:0, va=d?diff(d,hoy)+1:0, pc=tot>0?Math.max(0,Math.min(100,Math.round(va*100/tot))):0, qd=h2?diff(hoy,h2):null;
+    h+='<div class="pg-ya"><div class="pg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+(d?fMedia(d):'…')+' <i>→</i> '+(h2?fMedia(h2):'sin fin')+'</b>'+(st?'<em>'+st+'</em>':'')+'</div>'+
+      (tot>0?'<div class="pgx-bar" role="img" aria-label="'+pc+' % hecho"><i style="width:'+pc+'%"></i></div>':'')+
+      (qd!=null&&qd>=0&&qd<=7&&fut.length?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': lo siguiente ya está preparado</p>':'')+'</div>'+
+      (qd!=null&&qd>=0&&qd<=7&&!fut.length?'<p class="pgx-av">'+ic('alerta')+(qd===0?'Acaba hoy':'Acaba en '+qd+(qd===1?' día':' días'))+' y no hay nada preparado después</p>':'');
+  } else h+=vig.length?'<p class="sm" style="margin:0">Sus rutinas no tienen fechas. Ponles inicio y fin para saber cuánto tiempo debe estar con ellas.</p>':'<p class="sm muted" style="margin:0">No tiene rutinas en marcha.</p>';
+  if(fut.length){ var FG={}, FO=[]; fut.slice().sort(function(a,b){ return a.desde<b.desde?-1:a.desde>b.desde?1:0; }).forEach(function(r){ if(!FG[r.desde]){ FG[r.desde]=[]; FO.push(r.desde); } FG[r.desde].push(r.nombre); });
+    h+='<div class="pg-fut"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span>'+FO.map(function(f){ var q=diff(hoy,f); return '<div class="pg-fr"><span class="pg-fd"><b>'+fMedia(f)+'</b><small>'+(q===1?'mañana':'en '+q+' días')+'</small></span><span class="pg-fn">'+FG[f].map(esc).join(' · ')+'</span></div>'; }).join('')+'</div>'; }
+  if(pri&&(pri.prioridad||[]).length) h+='<p class="sm mt6 prio pg-pri">'+ic('diana')+'Prioridad ahora: <b>'+esc(listaY(pri.prioridad))+'</b> · hasta el '+fMedia(pri.hasta)+'</p>';
   return h+'<div class="row mt"><button class="btn sm" data-a="progNueva">Empezar programación nueva</button>'+(vig.length?'<button class="btn sm sec" data-a="segProrrogar" data-t="rutina">Prorrogar</button>':'')+'</div></div>';      // v53.4.20: sin «Historial de rutinas (N)» (el historial ya tiene su tarjeta)
 }
 A.irHist=function(){ var e=document.getElementById('hist-rut'); if(e) e.scrollIntoView({behavior:'smooth',block:'start'}); };
@@ -15971,7 +16036,7 @@ function nombreAdap(r,us,qu){ var nv=r.nv||{}, n=r.n, F=(us||[]).map(famDe).conc
   F.forEach(function(f){ if(nv[f]) n=nv[f]; }); Object.keys(nv).forEach(function(k){ if(k.indexOf('+')>0&&k.split('+').every(function(z){ return F.indexOf(z)>=0; })) n=nv[k]; }); return n; }
 /* v48: sin alcohol (halal): el vino de algunas recetas pasa a caldo o agua */
 function sinAlcTxt(t){ return String(t||'').replace(/, el vino y el agua/g,' y el agua').replace(/50 ml de vino blanco/g,'50 ml más de agua').replace(/Medio vaso de vino blanco/g,'Medio vaso de caldo').replace(/medio vaso de vino blanco \(o agua con limón\)/g,'medio vaso de agua con limón').replace(/medio vaso de vino blanco/g,'medio vaso de caldo').replace(/un chorr(it)?o de vino( blanco)?/g,'un chorrito de caldo').replace(/\bel vino\b/g,'el caldo').replace(/\bde vino\b/g,'de caldo').replace(/\bvino blanco\b/g,'caldo').replace(/\bvino\b/g,'caldo'); }
-function txtLib(r,sa){ var t=(r.ex?'Además: '+r.ex+'\n\n':'')+r.pasos+(r.fu?'\n\nReceta original ('+r.fn+'): '+r.fu:''); return sa?sinAlcTxt(t):t; }      // v53.4.95: con el enlace a la receta publicada
+function txtLib(r,sa){ var t=(r.ex?'Además: '+r.ex+'\n\n':'')+r.pasos; return sa?sinAlcTxt(t):t; }      // v53.4.95: con el enlace a la receta publicada; v53.4.141: sin él (Javier: «esto quítalo»)
 function notasAdap(us){ var v={}; return (us||[]).map(function(id){ var f=famDe(id); if(NOTA_ALT[f]&&!v[f]){ v[f]=1; return NOTA_ALT[f]; } return ''; }).filter(Boolean); }
 /* gramos para que la receta dé la proteína, los hidratos y la grasa de esa comida (mínimos cuadrados con límites) */
 function cuadrarReceta(x,obj,lim){
@@ -18263,7 +18328,7 @@ function pasosParse(t){
   var P=String(t||'').split(/\n\s*\n/), ex='', url='', fu='', N=[], S=[];
   P.forEach(function(x){ x=x.trim(); if(!x) return; var m;
     if(/^Además: /.test(x)) ex=x.replace(/^Además: /,'');
-    else if((m=x.match(/^Receta original \(([^)]*)\): (https:\/\/\S+)$/))){ fu=m[1]; url=m[2]; }
+    else if(/^Receta original \(/.test(x)) return;      // v53.4.141: el enlace de donde salió ya no sale (también en los platos guardados con él)
     else if(/^\(Adaptada:/.test(x)||/\n/.test(x)||!/\.\s+[A-ZÁÉÍÓÚÑ¿¡]/.test(x)) N.push(x);
     else S=S.concat(x.replace(/\.\s+(?=[A-ZÁÉÍÓÚÑ¿¡])/g,'.\u0001').split('\u0001'));
   });
@@ -18541,13 +18606,28 @@ function vPerfil(){
   var ft=CL.foto&&CL.foto.v===c.foto?CL.foto.img:'';
   return '<div class="saludo pf-cab"><div class="pf-avw"><button class="pf-av'+(ft?' ft':'')+'" data-a="'+(ft?'pfVer':'pfFoto')+'" aria-label="'+(ft?'Ver tu foto en grande':'Tu foto de perfil')+'">'+(ft?'<img src="'+esc(ft)+'" alt="">':esc(iniciales(nom)||'·'))+'</button><button class="pf-avb" data-a="pfFoto" aria-label="Cambiar tu foto">'+ic('foto')+'</button></div><div><h1>'+esc(nom||'Tu perfil')+'</h1><div class="muted">Tu plan, tu feedback y tu privacidad</div></div></div>'+
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
-    sugClCard()+
-    descClCard()+
-    pushClCard()+      // v53.4.54: avisos en este móvil
-    cicloPfCard()+      // v52.10: «Tu ciclo» con dos preguntas (verlo en Hoy y que tu coach lo vea)      // v52
-    (miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button>'+salirBtn()+'</div>')+
-    '<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
+    pfAjHtml()+      // v53.4.141: lo demás, recogido en «Ajustes» (cada apartado se abre al tocarlo)
+    '<div class="pf-pie">'+salirBtn()+'</div><p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
 }
+/* v53.4.141 (Javier, «Fallos a corregir» 7: «la pestaña de perfil cliente no puede venir más limpia? Lo de pagos vale pero el resto más
+   cerrado y si quiere modificar ajustes le da y ya sale todo»): su plan y sus pagos, a la vista; el feedback, el descanso, los avisos,
+   su ciclo y su cuenta, en «Ajustes», cada uno en una línea con cómo lo tiene, y se abre al tocarlo (uno cada vez) */
+function pfAjL(){
+  var dc=descCfg(), pe=PUSH.est, L=[
+    ['desc','reloj','Aviso del descanso',dc.son?(dc.cta?'Pitidos y cuenta atrás 3, 2, 1':'Pitidos al terminar'):'Sin sonido',descClCard],
+    ['push','campana','Avisos en este móvil',pe==='on'?'Activados':pe==='no'&&!pushIOS()?'Este navegador no los permite':'Desactivados',pushClCard]];
+  if(!hombreCl()) L.push(['ciclo','corazon','Tu ciclo',cicloOn()?'Lo ves en Hoy':'Apagado',cicloPfCard]);
+  L.push(['fb','idea','Feedback','¿Qué mejorarías? Cuéntamelo',sugClCard]);
+  L.push(['cuenta','candado','Tu cuenta y privacidad','Contraseña, acceso y política de privacidad',function(){ return miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button></div>'; }]);
+  return L;
+}
+function pfAjHtml(){
+  var ab=CL.pfAb||'';
+  return '<div class="card pf-aj"><div class="card-t">'+ic('ajuste')+'Ajustes</div>'+pfAjL().map(function(x){ var on=ab===x[0], b='';
+      if(on){ b=String(x[4]()||'').replace(/<button class="btn sec salir-b"[^>]*>[\s\S]*?<\/button>/,''); }
+      return '<div class="pfa'+(on?' on':'')+'"><button class="pfa-h" data-a="pfAb" data-v="'+x[0]+'" aria-expanded="'+on+'"><i class="pfa-i">'+ic(x[1])+'</i><span><b>'+esc(x[2])+'</b><small>'+esc(x[3])+'</small></span>'+ic('flecha','pfa-ch')+'</button>'+(on?'<div class="pfa-b">'+b+'</div>':'')+'</div>'; }).join('')+'</div>';
+}
+A.pfAb=function(el){ var k=el.dataset.v; CL.pfAb=CL.pfAb===k?'':k; CL.keep=true; pintarCl(); setTimeout(function(){ var e=document.querySelector('.pfa.on'); if(e&&e.scrollIntoView) e.scrollIntoView({block:'nearest',behavior:'smooth'}); },60); };
 /* ---------- privacidad y acceso de la clienta (siempre con su contraseña actual) ---------- */
 var ACC_OPS=[['pass','Solo con mi contraseña','Lo más rápido: tu email y tu contraseña.'],['dos','Contraseña + código al email','Doble verificación: además de la contraseña, te pedimos un código de 6 cifras cada vez que entras. Máxima privacidad.'],['codigo','Contraseña o código al email','Entras con tu contraseña o, si lo prefieres, con un código que te llega al email (sin tener que recordarla).']];
 function modalAcceso(){
@@ -21083,7 +21163,7 @@ function plnChecks(D,P){
   /* v53.4.125 (Javier: «Sin una pierna… no lo entiendo»): dicho con los ejercicios de cada tipo */
   var PN={sentadilla:'sentadillas ni prensa',bisagra:'peso muerto ni similares',puente:'hip thrust ni puentes de glúteo',zancada:'zancadas, búlgaras ni step-up',empuje_h:'press de pecho ni flexiones',empuje_v:'press de hombro',tiron_h:'remos',tiron_v:'jalones ni dominadas',cardio:'cardio'};
   var PF={sentadilla:'una sentadilla o prensa',bisagra:'un peso muerto o similar',puente:'un hip thrust o puente de glúteo',zancada:'una zancada, búlgara o step-up',empuje_h:'un press de pecho',empuje_v:'un press de hombro',tiron_h:'un remo',tiron_v:'un jalón o dominada',cardio:'cardio'};
-  (D.faltan||[]).forEach(function(f){ C.push({t:'warn',tit:'Falta '+(PF[f]||f),x:'Con su material no hay ninguno en tu banco: ponlo a mano o añade material en el pedido.'}); });
+  (D.faltan||[]).forEach(function(f){ C.push({t:'warn',tit:'Falta '+(PF[f]||f),x:'Con su material no hay ninguno en tu banco: ponlo a mano o añade material en tus indicaciones.'}); });
   if((D.porLes||[]).length){ C.push({t:'ok',tit:'Sin '+listaY(D.porLes.map(function(f){ return PN[f]||f; })),x:'Por su molestia en '+listaY((P.les||[]).map(function(l){ return LES_EN[l]||plnL(PLN_LES,l).toLowerCase(); }))+', no le conviene ninguno de tu banco. Esa zona se trabaja igual con los demás ejercicios de la sesión.'}); }
   var tot=0, rep=0; R.forEach(function(r){ r.ejercicios.forEach(function(e){ if(e._p&&e._p.mov) return; tot++; if((D.prev||{})[clave(e.n)]) rep++; }); });
   if(Object.keys(D.prev||{}).length) C.push({t:'ok',tit:'Distinto de lo anterior',x:(tot-rep)+' de '+tot+' ejercicios son nuevos'+(rep?'. Siguen '+rep+', para que siga progresando en ellos':'')+'.'});
@@ -21199,7 +21279,7 @@ function plnCmsDe(P){ if(P.cms) return P.cms; var p=CO.d.dieta&&CO.d.dieta.plane
 function plnPedidoHtml(P,X){
   var sg=plnSug(P), que=X.que||sg[0], F=plnFaltan(P,que), ent=que!=='dieta', die=que!=='entreno', bl=plnBloq(P,que), hay=X.E||X.Di;
   var Pv=Object.assign({},P,{cms:plnCmsDe(P),nEj:P.nEj||'',src:P.src});
-  var h='<div class="card pln-ped"><div class="pln-tt"><div><div class="card-t">'+(hay?'Cambiar el pedido':'Tu pedido')+'</div><small class="muted">Viene marcado con su cuestionario. Toca lo que quieras cambiar: se guarda solo.</small></div>'+(hay?'<button class="link" data-a="plnVerPed">Cerrar</button>':'<button class="link" data-a="plnModo" data-v="">'+ic('atras')+'Volver</button>')+'</div>';
+  var h='<div class="card pln-ped"><div class="pln-tt"><div><div class="card-t">'+(hay?'Cambiar tus indicaciones':'Tus indicaciones')+'</div><small class="muted">Viene marcado con su cuestionario. Toca lo que quieras cambiar: se guarda solo.</small></div>'+(hay?'<button class="link" data-a="plnVerPed">Cerrar</button>':'<button class="link" data-a="plnModo" data-v="">'+ic('atras')+'Volver</button>')+'</div>';
   (P.atencion||[]).forEach(function(a){ h+='<div class="pln-at '+(a.bloq?'bad':'warn')+'">'+ic('alerta')+'<span>'+esc(a.t)+'</span></div>'; });
   h+='<div class="seg pln-que">'+PLN_QUE.map(function(o){ return '<button class="'+(que===o[0]?'on':'')+'" data-a="plnQue" data-v="'+o[0]+'">'+o[1]+(sg[0]===o[0]?'<small>sugerido</small>':'')+'</button>'; }).join('')+'</div><p class="muted sm mt6">'+esc(sg[1])+'</p>';
   h+=plnFila(P,'obj','Objetivo',PLN_OBJ,false,F.indexOf('obj')>=0);
@@ -21217,15 +21297,15 @@ function plnPedidoHtml(P,X){
   if(die) h+=plnFila(Pv,'cms','Comidas al día',[3,4,5,6].map(function(n){ return [n,String(n)]; }))+plnFila(P,'opc','Platos por comida',[1,2,3].map(function(n){ return [n,String(n)]; }))+
     '<div class="pln-row'+(['edad','peso','altura'].some(function(k){ return F.indexOf(k)>=0; })?' falta':'')+'"><div class="pln-rl">Cuerpo</div><div class="pln-fn">'+[['edad','Edad','años'],['peso','Peso','kg'],['altura','Altura','cm']].map(function(z){ return '<label class="pln-in">'+z[1]+'<input data-v29="plnPdIn" data-k="'+z[0]+'" inputmode="decimal" value="'+esc(P[z[0]]==null?'':(z[0]==='peso'?fN(P[z[0]]):P[z[0]]))+'"> <small>'+z[2]+'</small></label>'; }).join('')+'</div></div>';
   if(ent) h+='<div class="pln-row"><div class="pln-rl">Prefiere evitar</div><div><input class="pln-ev" data-v29="plnPdIn" data-k="evitar" maxlength="300" value="'+esc(P.evitar)+'" placeholder="Burpees, sentadilla búlgara…">'+(P.dispTxt?'<p class="muted sm mt6">Escribió: «'+esc(P.dispTxt)+'»</p>':'')+'</div></div>';
-  h+='<div class="pln-gen">'+(bl?'<div class="pln-at bad">'+ic('alerta')+'<span>'+esc(bl.t)+'</span></div>':'<button class="btn pln-go" data-a="plnPrep">'+ic('diana')+(hay?'Rehacer con este pedido':'Generar plan')+'</button><small class="muted">Sale la propuesta debajo. No le llega nada hasta que la apruebes.</small>')+'</div>';
+  h+='<div class="pln-gen">'+(bl?'<div class="pln-at bad">'+ic('alerta')+'<span>'+esc(bl.t)+'</span></div>':'<button class="btn pln-go" data-a="plnPrep">'+ic('diana')+(hay?'Rehacer con estas indicaciones':'Generar plan')+'</button><small class="muted">Sale la propuesta debajo. No le llega nada hasta que la apruebes.</small>')+'</div>';
   return h+'</div>';
 }
 function plnEligeHtml(P,X){
   var R=(CO.d.rutinas||[]).length;
   var h='<div class="pln-elige">'+
-    '<div class="card pln-op1 on"><div class="pln-ot">'+ic('diana')+'Con la app</div><p class="muted sm">Eliges lo que quieres y la app prepara entreno y dieta. Luego lo retocas.</p><button class="btn" data-a="plnModo" data-v="app">Hacer el pedido</button></div>'+
-    '<div class="card pln-op1"><div class="pln-ot">'+ic('modelo')+'Desde tu banco de rutinas</div><p class="muted sm">Eliges una de tus rutinas o programaciones guardadas y la ajustas aquí antes de ponérsela.</p><button class="btn sec" data-a="plnBancoAbrir">Elegir del banco</button></div>'+
-    '<div class="card pln-op1"><div class="pln-ot">'+ic('lapiz')+'A mano</div><p class="muted sm">Lo montas tú, como siempre.</p><div class="pln-bt"><button class="btn sec" data-a="irRutinas">Ir a Entrenos</button><button class="btn sec" data-a="irDieta">Ir a Dieta</button></div>'+(R?'<button class="link pln-pro" data-a="plnProrroga">Prorrogar las rutinas de ahora</button>':'')+'</div>'+
+    '<div class="card pln-op1 pln-c1 on"><div class="pln-ot"><i class="pln-ti">'+ic('diana')+'</i>Con la app<span class="pln-rec">Recomendado</span></div><p class="muted sm">Eliges lo que quieres y la app prepara entreno y dieta. Luego lo retocas.</p><button class="btn" data-a="plnModo" data-v="app">Preparar su plan</button></div>'+
+    '<div class="card pln-op1 pln-c2"><div class="pln-ot"><i class="pln-ti">'+ic('modelo')+'</i>Desde tu banco de rutinas</div><p class="muted sm">Eliges una de tus rutinas o programaciones guardadas y la ajustas aquí antes de ponérsela.</p><button class="btn sec" data-a="plnBancoAbrir">Elegir del banco</button></div>'+
+    '<div class="card pln-op1 pln-c3"><div class="pln-ot"><i class="pln-ti">'+ic('lapiz')+'</i>A mano</div><p class="muted sm">Lo montas tú, como siempre.</p><div class="pln-bt"><button class="btn sec" data-a="irRutinas">Ir a Entrenos</button><button class="btn sec" data-a="irDieta">Ir a Dieta</button></div>'+(R?'<button class="link pln-pro" data-a="plnProrroga">Prorrogar las rutinas de ahora</button>':'')+'</div>'+
     '</div>';
   (P.atencion||[]).forEach(function(a){ h+='<div class="pln-at '+(a.bloq?'bad':'warn')+'">'+ic('alerta')+'<span>'+esc(a.t)+'</span></div>'; });
   var nb=bancoLista().filter(function(b){ return b.grupo!=='Movilidad'&&b.grupo!=='Cardio'; }).length;
@@ -21244,8 +21324,8 @@ function plnResumen(P,X){
   return L.filter(String).join(' · ');
 }
 function plnResHtml(P,X){
-  return '<div class="card pln-res"><div><small class="muted">'+(X.E&&X.E.banco?'Desde tu banco de rutinas':'Tu pedido')+(X.fecha?' · preparado el '+fCorta(X.fecha):'')+'</small><b>'+esc(plnResumen(P,X))+'</b></div>'+(X.verPed?'':'<button class="btn sm sec" data-a="plnVerPed">'+ic('lapiz')+'Cambiar pedido</button>')+'</div>'+
-    (X.viejo&&!X.verPed?'<div class="pln-at warn">'+ic('info')+'<span>Has cambiado el pedido después de prepararla.</span><button class="link" data-a="plnPrep">Rehacerla</button></div>':'');
+  return '<div class="card pln-res"><div><small class="muted">'+(X.E&&X.E.banco?'Desde tu banco de rutinas':'Tus indicaciones')+(X.fecha?' · preparado el '+fCorta(X.fecha):'')+'</small><b>'+esc(plnResumen(P,X))+'</b></div>'+(X.verPed?'':'<button class="btn sm sec" data-a="plnVerPed">'+ic('lapiz')+'Cambiar indicaciones</button>')+'</div>'+
+    (X.viejo&&!X.verPed?'<div class="pln-at warn">'+ic('info')+'<span>Has cambiado tus indicaciones después de prepararla.</span><button class="link" data-a="plnPrep">Rehacerla</button></div>':'');
 }
 function plnDosisTxt(e){
   if(e.tipo==='cardio') return '<b>'+esc(e.obj&&e.obj.tiempo||'')+' min</b>';
@@ -21343,7 +21423,7 @@ A.plnQue=function(el){ var X=plnCargar(); X.que=el.dataset.v; plnRep0(); };
 function plnGenerar(opt){
   opt=opt||{}; var X=plnCargar(), P=plnPerfil(), que=X.que||plnSug(P)[0], hz=[];
   if(plnBloq(P,opt.parte||que)) return Promise.resolve(toast(plnBloq(P,opt.parte||que).t,'err'));
-  var F=plnFaltan(P,opt.parte||que); if(F.length) return Promise.resolve(toast('Falta en el pedido: '+listaY(F.map(function(k){ return {obj:'el objetivo',niv:'el nivel',dias:'los días',edad:'la edad',peso:'el peso',altura:'la altura'}[k]; })),'err'));
+  var F=plnFaltan(P,opt.parte||que); if(F.length) return Promise.resolve(toast('Falta en tus indicaciones: '+listaY(F.map(function(k){ return {obj:'el objetivo',niv:'el nivel',dias:'los días',edad:'la edad',peso:'el peso',altura:'la altura'}[k]; })),'err'));
   var ent=que!=='dieta'&&opt.parte!=='dieta', die=que!=='entreno'&&opt.parte!=='entreno';
   if(ent){ X.seed=opt.seed!=null?opt.seed:X.seed; var antes=opt.otra&&X.E?X.E.rutinas.map(function(r){ return {ejercicios:r.ejercicios}; }):null; X.E=plnEntreno(P,{seed:X.seed,est:opt.est||'',antes:antes}); X.est=X.E.est.id; }
   else if(que==='dieta') X.E=null;
@@ -21539,7 +21619,7 @@ var NOVEDADES=[
     r:['Nueva pestaña «Plan» en cada cliente: eliges lo que quieres (objetivo, días, prioridades, cardio, técnicas…) y la app prepara entreno y dieta con tu banco de ejercicios.',
       'Lo revisas y lo retocas antes de ponérselo: no le llega nada hasta que pulsas «Aprobar y ponérsela».',
       'También desde tu banco de rutinas, o a mano como siempre. Y lo que prepares lo puedes guardar en tu banco.'],
-    img:[['v53_4_122_1.jpg','Eliges cómo: con la app, desde tu banco de rutinas o a mano'],['v53_4_122_2.jpg','El pedido: viene marcado con su cuestionario y tocas lo que quieras'],
+    img:[['v53_4_122_1.jpg','Eliges cómo: con la app, desde tu banco de rutinas o a mano'],['v53_4_122_2.jpg','Tus indicaciones: vienen marcadas con su cuestionario y tocas lo que quieras'],
       ['v53_4_122_3.jpg','La propuesta: la semana, las rutinas y la dieta, para revisarla'],['v53_4_122_4.jpg','Tocas un ejercicio: series, descanso, técnica o cambiarlo por otro'],
       ['v53_4_122_5.jpg','Cardio a su gusto: bajo impacto, HIIT o días de carrera']]}
 ];
@@ -21581,7 +21661,7 @@ A.novIr=function(el){
   if(n.ir==='plan'){
     var L=(CO.lista||[]).filter(function(c){ return c.activa&&c.nombre!==EJEMPLO; }), c=L.filter(function(x){ return !x.rutinas; })[0]||L[0];
     if(!c) return toast('Crea tu primer cliente: en su ficha tienes la pestaña «Plan»');
-    abrirClienta(c.id,'plan').then(function(){ toast('Esta es la pestaña «Plan» de '+primerNombre(c.nombre)+': empieza por «Hacer el pedido»','ok'); });
+    abrirClienta(c.id,'plan').then(function(){ toast('Esta es la pestaña «Plan» de '+primerNombre(c.nombre)+': empieza por «Preparar su plan»','ok'); });
   }
 };
 
@@ -21619,8 +21699,8 @@ A.pagGuiaNo=function(){ LS.set('chadin_guia_pag',1); var b=document.querySelecto
 function guiaPlnHtml(){
   var hl=function(h){ return h.replace(/^<(\w+)(?: class="([^"]*)")?/,function(m,tg,cl){ return '<'+tg+' class="'+(cl?cl+' ':'')+'gu-hl"'; }); };
   var P=[
-    ['Eliges cómo','En la pestaña «Plan» de cada cliente: con la app, desde tu banco de rutinas o a mano (Entrenos y Dieta, como siempre).',hl('<span class="btn sm">Hacer el pedido</span>')],
-    ['El pedido','Viene marcado con su cuestionario. <b>✎</b>: lo ha deducido la app, revísalo. <b>En rojo</b>: falta. Cada toque se guarda solo en su ficha.','<span class="tipos ops" style="margin:0"><button class="on" tabindex="-1">Perder grasa</button>'+hl('<button tabindex="-1">Recomposición</button>')+'</span>'],
+    ['Eliges cómo','En la pestaña «Plan» de cada cliente: con la app, desde tu banco de rutinas o a mano (Entrenos y Dieta, como siempre).',hl('<span class="btn sm">Preparar su plan</span>')],
+    ['Tus indicaciones','Vienen marcadas con su cuestionario. <b>✎</b>: lo ha deducido la app, revísalo. <b>En rojo</b>: falta. Cada toque se guarda solo en su ficha.','<span class="tipos ops" style="margin:0"><button class="on" tabindex="-1">Perder grasa</button>'+hl('<button tabindex="-1">Recomposición</button>')+'</span>'],
     ['Genera y revisa','Sale la semana, las rutinas y la dieta. <b>Todavía no le llega nada.</b> «Otra propuesta» cambia ejercicios y variantes.',hl('<span class="btn sm">Generar plan</span>')],
     ['Retócala','Toca un ejercicio para cambiar series, repeticiones, RIR, descanso, técnica o el ejercicio; «+ Añadir ejercicio» busca en tu banco.','<span class="gu-it">Hip thrust <span class="gu-g">3 × 10-12</span></span>'],
     ['Aprobar y ponérsela','Sus rutinas aparecen en <b>Entrenos</b> con sus fechas y la dieta en <b>Dieta</b>. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')],
