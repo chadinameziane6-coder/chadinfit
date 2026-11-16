@@ -294,7 +294,48 @@ td.fin{text-align:right;white-space:nowrap}
 .doc .q{flex:1 1 220px;min-width:0}
 .doc .q div{font-size:13px;color:#6E6E73}
 /* móvil */
+
+/* 16 nov 2026 · «Qué estás viendo» (Entrenadores / Por su cuenta) y el resumen de «Entreno por mi cuenta» */
+.mundo-l{font-size:12px;font-weight:700;letter-spacing:.06em;color:#87878B;padding:0 12px 6px}
+.mundo{display:flex;flex-direction:column;gap:4px;padding:4px;margin:0 4px 14px;background:#EDEDF0;border-radius:14px}
+.mundo button{border:0;background:transparent;border-radius:11px;padding:9px 10px;font:600 14px var(--f);color:#4A4A4E;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;line-height:1.2}
+.mundo button>span{display:flex;flex-direction:column;gap:1px}
+.mundo button small{margin:0;font-size:12px;font-weight:500;color:#87878B;line-height:1.3}
+.mundo button[aria-pressed=true]{background:#fff;color:#141414;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.mundo button[aria-pressed=true] small{color:#6E6E73}
+.menu a.ext{color:#4A4A4E;font-weight:500}
+.pyo-c{display:flex;flex-direction:column;gap:20px;min-width:0}
+.pyo-solo{display:flex;gap:8px;align-items:center;font-size:13.5px;color:#4A4A4E;background:#fff;border-radius:14px;padding:11px 14px}
+.pyo-dos{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.pyo-graf{display:flex;flex-direction:column;gap:8px}
+.pyo-graf b.gt{font-size:14px}
+.pyo-bar{display:flex;align-items:flex-end;gap:6px;height:130px;border-bottom:1px solid #EDEDF0;padding-top:18px}
+.pyo-bar i{flex:1;background:#D1D1D6;border-radius:4px 4px 0 0;position:relative;min-height:2px}
+.pyo-bar i.u{background:#141414}
+.pyo-bar i.u:after{content:attr(data-v);position:absolute;top:-19px;left:50%;transform:translateX(-50%);font:700 12.5px var(--f);color:#141414;font-style:normal}
+.pyo-x{display:flex;justify-content:space-between;font-size:12px;color:#87878B}
+.pyo-hb{display:flex;flex-direction:column;gap:12px;margin-top:10px}
+.pyo-hb>div{display:grid;grid-template-columns:minmax(120px,170px) 1fr 64px;gap:10px;align-items:center;font-size:14px}
+.pyo-hb span.b{height:10px;background:#EDEDF0;border-radius:5px;overflow:hidden;display:block}
+.pyo-hb span.b i{display:block;height:100%;background:#141414;border-radius:5px}
+.pyo-hb b{text-align:right;white-space:nowrap}
+.pyo-hb b small{margin:0;display:inline;font-weight:500;color:#87878B;font-size:12.5px}
+.pyo-g{margin-top:16px}
+.pyo-g:first-of-type{margin-top:8px}
+.pyo-g>b{font-size:13.5px;color:#4A4A4E}
+.pyo-fl{display:flex;flex-direction:column;margin-top:6px}
+.pyo-fl>div{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:11px 0;border-bottom:1px solid #EDEDF0;font-size:14px}
+.pyo-fl>div:last-child{border-bottom:0}
+.pyo-fl>div>span{display:flex;flex-direction:column;gap:2px}
+.pyo-fl small{margin:0;display:block;color:#87878B;font-size:12.5px;line-height:1.35}
+.pyo-nota{margin:14px 0 0;font-size:13.5px;color:#4A4A4E}
+.pyo-amb{display:flex;gap:10px;align-items:flex-start;background:#FFF6E0;color:#5C3B00;border:1px solid #F3D9A0;border-left:3px solid #E0A100;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
 @media (max-width:860px){
+  .lado .mundo-l{display:none}
+  .lado .mundo{order:3;width:100%;flex-direction:row;margin:4px 0 0}
+  .lado .mundo button{flex:1}
+  .pyo-dos{grid-template-columns:1fr}
+  .pyo-hb>div{grid-template-columns:minmax(100px,130px) 1fr 58px}
   #f-inv{grid-template-columns:1fr}
   .fc-cab,#invitar{padding:18px}
   #panel{flex-direction:column;align-items:stretch;padding:14px 14px 40px;gap:16px}
@@ -305,7 +346,7 @@ td.fin{text-align:right;white-space:nowrap}
   .lado .raya,.lado .como,.lado .yo,.lado .act{display:none}
   .lado .bts-l{order:2;flex-direction:row;padding:0}
   .lado .bts-l #b-act{display:none}
-  .menu{order:3;flex-direction:row;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px}
+  .menu{order:4;flex-direction:row;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px}
   .menu a{flex:none;padding:9px 14px;font-size:14.5px;background:#F5F5F7}
   .cab-v h1{font-size:26px}
   .cifras{grid-template-columns:1fr 1fr}
@@ -363,13 +404,20 @@ td.fin{text-align:right;white-space:nowrap}
   <aside class="lado">
     <div class="marca">MOOD ON</div>
     <div class="quien">Panel del dueño</div>
+    <div class="mundo-l" id="mundo-l">QUÉ ESTÁS VIENDO</div>
+    <div class="mundo" role="group" aria-labelledby="mundo-l">
+      <button type="button" id="m-ent" aria-pressed="true"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></svg><span>Entrenadores<small>y sus clientes</small></span></button>
+      <button type="button" id="m-yo" aria-pressed="false"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg><span>Por su cuenta<small>sin entrenador · /yo</small></span></button>
+    </div>
     <nav class="menu" aria-label="Secciones del panel">
-      <a href="#inicio" data-v="inicio" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg><span class="t">Inicio</span></a>
-      <a href="#entrenadores" data-v="entrenadores"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></svg><span class="t">Entrenadores</span></a>
-      <a href="#crm" data-v="crm"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg><span class="t">CRM</span><span class="num h" id="n-crm" title="Para hoy"></span></a>
-      <a href="#ayuda" data-v="ayuda"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.7 9.4a2.4 2.4 0 0 1 4.6.9c0 1.6-2.3 2.1-2.3 3.5"/><path d="M12 16.9h.01"/></svg><span class="t">Ayuda</span><span class="num h" id="n-ayuda" title="Sin contestar"></span></a>
-      <a href="#planes" data-v="planes"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/></svg><span class="t">Planes</span></a>
-      <a href="#plataforma" data-v="plataforma"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span class="t">Plataforma</span></a>
+      <a href="#inicio" data-v="inicio" class="m-ent" aria-current="page"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/></svg><span class="t">Inicio</span></a>
+      <a href="#entrenadores" data-v="entrenadores" class="m-ent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.8-3.5 3.4-5.5 6.5-5.5s5.7 2 6.5 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7"/><path d="M18 14.8c2 .7 3.2 2.5 3.5 5.2"/></svg><span class="t">Entrenadores</span></a>
+      <a href="#crm" data-v="crm" class="m-ent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h18l-7 8v6l-4 2v-8z"/></svg><span class="t">CRM</span><span class="num h" id="n-crm" title="Para hoy"></span></a>
+      <a href="#ayuda" data-v="ayuda" class="m-ent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.7 9.4a2.4 2.4 0 0 1 4.6.9c0 1.6-2.3 2.1-2.3 3.5"/><path d="M12 16.9h.01"/></svg><span class="t">Ayuda</span><span class="num h" id="n-ayuda" title="Sin contestar"></span></a>
+      <a href="#planes" data-v="planes" class="m-ent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 2 8l10 5 10-5z"/><path d="M2 13l10 5 10-5"/></svg><span class="t">Planes</span></a>
+      <a href="#plataforma" data-v="plataforma" class="m-ent"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-8 4 16 3-8h4"/></svg><span class="t">Plataforma</span></a>
+      <a href="#yo" data-v="yo" class="m-yo h"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><span class="t">Resumen</span></a>
+      <a href="https://moodonapp.com/yo/" target="_blank" rel="noopener" class="m-yo ext h"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/></svg><span class="t">Abrir la app</span></a>
     </nav>
     <div class="raya"></div>
     <div class="como">Entras como</div>
@@ -380,7 +428,7 @@ td.fin{text-align:right;white-space:nowrap}
 
   <main>
     <div id="v-inicio" class="vista">
-      <header class="cab-v"><div class="t"><span class="pre" id="i-fecha"></span><h1>Inicio</h1></div></header>
+      <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span> · <span id="i-fecha"></span></span><h1>Inicio</h1></div></header>
       <div class="cifras">
         <div class="cifra"><span>Entrenadores</span><b id="c-ent">–</b><em id="c-ent-s"></em></div>
         <div class="cifra"><span>Clientes activos</span><b id="c-cli">–</b><em id="c-cli-s"></em></div>
@@ -393,8 +441,15 @@ td.fin{text-align:right;white-space:nowrap}
       </section>
     </div>
 
+    <!-- 16 nov 2026 · «Por su cuenta»: el resumen de «Entreno por mi cuenta» (moodonapp.com/yo). Solo números. -->
+    <div id="v-yo" class="vista h">
+      <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Por su cuenta · sin entrenador</span></span><h1>Resumen</h1><p>Las personas que usan «Entreno por mi cuenta» (moodonapp.com/yo).</p></div><div class="cab-b"><a class="chip-b" href="https://moodonapp.com/yo/" target="_blank" rel="noopener">Abrir la app</a></div></header>
+      <div class="pyo-solo"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Solo números. Aquí no se ven nombres, emails ni entrenos de nadie.</span></div>
+      <div id="yo-c" class="pyo-c"><section><div class="vacio">Cargando…</div></section></div>
+    </div>
+
     <div id="v-entrenadores" class="vista h">
-      <header class="cab-v"><div class="t"><h1>Entrenadores</h1></div><div class="cab-b"><button class="chip-b" id="b-demo-ir" type="button">Ver como entrenador</button><button class="btn-n" id="b-inv-ir" type="button">+ Invitar entrenador</button></div></header>
+      <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span></span><h1>Entrenadores</h1></div><div class="cab-b"><button class="chip-b" id="b-demo-ir" type="button">Ver como entrenador</button><button class="btn-n" id="b-inv-ir" type="button">+ Invitar entrenador</button></div></header>
       <div id="ent-msg" class="ok-msg h" role="status"></div>
       <div class="filtros">
         <input id="ent-q" type="search" placeholder="Buscar por nombre o email" aria-label="Buscar entrenador">
@@ -426,7 +481,7 @@ td.fin{text-align:right;white-space:nowrap}
     </div>
 
     <div id="v-ayuda" class="vista h">
-      <header class="cab-v"><div class="t"><h1>Ayuda</h1><p>Lo que te escriben los entrenadores desde «Ayuda» en su panel. Al contestar, le llega por email y lo ve en su panel.</p></div></header>
+      <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span></span><h1>Ayuda</h1><p>Lo que te escriben los entrenadores desde «Ayuda» en su panel. Al contestar, le llega por email y lo ve en su panel.</p></div></header>
       <div id="ay-msg" class="ok-msg h" role="status"></div>
       <div id="ay-err" class="msg err h" role="alert" style="margin:0"></div>
       <div class="filtros"><div class="chips" id="ay-f" role="group" aria-label="Filtrar mensajes"></div></div>
@@ -437,7 +492,7 @@ td.fin{text-align:right;white-space:nowrap}
     <div id="v-ficha" class="vista h" aria-live="polite"></div>
 
     <div id="v-plataforma" class="vista h">
-      <header class="cab-v"><div class="t"><h1>Plataforma y seguridad</h1></div></header>
+      <header class="cab-v"><div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span></span><h1>Plataforma y seguridad</h1></div></header>
       <div id="pf-msg" class="ok-msg h" role="status"></div>
       <section aria-labelledby="t-leg">
         <h2 id="t-leg" style="font-size:17px">Documentos para los entrenadores</h2>
@@ -451,7 +506,7 @@ td.fin{text-align:right;white-space:nowrap}
 
     <div id="v-crm" class="vista h">
       <header class="cab-v">
-        <div class="t"><h1>CRM</h1><p>Tus posibles entrenadores: los que llegan por la web y los que apuntas tú.</p></div>
+        <div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span></span><h1>CRM</h1><p>Tus posibles entrenadores: los que llegan por la web y los que apuntas tú.</p></div>
         <button class="btn-n" id="b-crm-nuevo" type="button">+ Añadir contacto</button>
       </header>
       <div id="crm-msg" class="ok-msg h" role="status"></div>
@@ -473,7 +528,7 @@ td.fin{text-align:right;white-space:nowrap}
 
     <div id="v-planes" class="vista h">
       <header class="cab-v">
-        <div class="t"><span class="pre"><span class="pi">Propuesta · precios pendientes de decidir</span></span><h1>Planes</h1><p>Los planes que pagan los entrenadores. Los creas y los cambias aquí. Precios sin IVA; todavía no se cobra nada.</p></div>
+        <div class="t"><span class="pre"><span class="pi">Entrenadores y sus clientes</span> <span class="pi">Propuesta · precios pendientes de decidir</span></span><h1>Planes</h1><p>Los planes que pagan los entrenadores. Los creas y los cambias aquí. Precios sin IVA; todavía no se cobra nada.</p></div>
         <button class="btn-n" id="b-plan-nuevo" type="button">+ Crear plan</button>
       </header>
       <div id="pl-msg" class="ok-msg h" role="status"></div>
@@ -946,6 +1001,7 @@ td.fin{text-align:right;white-space:nowrap}
       if (vista === 'planes') cargarPlanes();
       if (vista === 'crm' && !abrirTras) cargarCrm();
       if (vista === 'ayuda') cargarAyuda();
+      if (vista === 'yo') cargarYo();
     }).catch(function (er) {
       if (/Vuelve a entrar/.test(er.message)) { guarda(K.ses, ''); verEntrar(); aviso(er.message); }
       else if ($('panel').classList.contains('h')) { verEntrar(); aviso(er.message); }
@@ -955,7 +1011,7 @@ td.fin{text-align:right;white-space:nowrap}
   $('b-act').addEventListener('click', cargar);
 
   /* ---------- las secciones ---------- */
-  var VISTAS = ['inicio', 'entrenadores', 'crm', 'ayuda', 'planes', 'plataforma', 'ficha'], vista = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
+  var VISTAS = ['inicio', 'entrenadores', 'crm', 'ayuda', 'planes', 'plataforma', 'ficha', 'yo'], vista = 'inicio', ultEnt = 'inicio', PL = null, KR = null, abrirTras = '';   // PL: planes y códigos · KR: el CRM
   function irA(v, sinCargar) {
     var fc = /^entrenador\/(co[0-9]{1,6})$/.exec(v || '');   // v53.4: la ficha de un entrenador (#entrenador/co2)
     if (fc) v = 'ficha'; else if (VISTAS.indexOf(v) < 0 || v === 'ficha') v = 'inicio';
@@ -964,14 +1020,87 @@ td.fin{text-align:right;white-space:nowrap}
     Array.prototype.forEach.call(document.querySelectorAll('.menu a'), function (a) {
       if (a.getAttribute('data-v') === (v === 'ficha' ? 'entrenadores' : v)) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
     });
+    // 16 nov 2026 · qué estás viendo: «Entrenadores y sus clientes» o «Por su cuenta» (cada lado con su menú)
+    var yo = v === 'yo';
+    if (!yo) ultEnt = v === 'ficha' ? 'entrenadores' : v;
+    $('m-ent').setAttribute('aria-pressed', String(!yo)); $('m-yo').setAttribute('aria-pressed', String(yo));
+    Array.prototype.forEach.call(document.querySelectorAll('.menu .m-ent'), function (a) { a.classList.toggle('h', yo); });
+    Array.prototype.forEach.call(document.querySelectorAll('.menu .m-yo'), function (a) { a.classList.toggle('h', !yo); });
+    if (!sinCargar && yo) cargarYo();
     if (fc) abrirFc(fc[1]);
     if (!sinCargar && v === 'planes' && !PL) cargarPlanes();
     if (!sinCargar && v === 'crm' && (!KR || abrirTras)) { cargarCrm(abrirTras); abrirTras = ''; }
     if (!sinCargar && v === 'ayuda') cargarAyuda();
   }
+
+  /* ---------- 16 nov 2026 · «Por su cuenta»: el resumen de «Entreno por mi cuenta» (solo números) ---------- */
+  $('m-yo').addEventListener('click', function () { if (location.hash !== '#yo') location.hash = 'yo'; });
+  $('m-ent').addEventListener('click', function () { if (vista === 'yo') location.hash = ultEnt || 'inicio'; });
+  var YO = null, yoCargando = false;
+  function cargarYo() {
+    if (yoCargando) return; yoCargando = true;
+    if (!YO) $('yo-c').innerHTML = '<section><div class="vacio">Cargando…</div></section>';
+    llamar({ acc: 'yo', ses: lee(K.ses) }).then(function (r) { YO = r.d || {}; pintarYo(YO); })
+      .catch(function (er) { if (!fallo(er)) $('yo-c').innerHTML = '<section><div class="vacio">' + esc(er.message) + '</div></section>'; })
+      .then(function () { yoCargando = false; });
+  }
+  var YO_TXT = {
+    obj: { grasa: 'Perder grasa', musculo: 'Ganar músculo', fuerza: 'Ganar fuerza', mantener: 'Mantenerse', salud: 'Mejorar su salud', rendir: 'Rendir en su deporte' },
+    niv: { ini: 'Empieza ahora', medio: 'Lleva un tiempo', avz: 'Bastante' },
+    lug: { gym: 'En el gimnasio', casa: 'En casa', ambos: 'En los dos sitios' },
+    min: { '30': '30 minutos', '45': '45 minutos', '60': '1 hora', '75': 'Más de 1 hora' }
+  };
+  function pintarYo(d) {
+    var n = function (x) { return Number(x) || 0; };
+    var pc = function (a, b) { return b ? Math.round(n(a) * 100 / n(b)) + ' %' : '–'; };
+    var mil = function (x) { return n(x).toLocaleString('es-ES'); };
+    var coma = function (x) { return String(Math.round(x * 10) / 10).replace('.', ','); };
+    var fechaC = function (iso) { var m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || '')); return m ? Number(m[3]) + ' ' + ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][Number(m[2]) - 1] + ' ' + m[1] : ''; };
+    var cif = function (t, v, e) { return '<div class="cifra"><span>' + t + '</span><b>' + v + '</b><em>' + e + '</em></div>'; };
+    var hb = function (rows, total) {
+      var mx = Math.max.apply(null, rows.map(function (r) { return n(r[1]); }).concat([1]));
+      return '<div class="pyo-hb">' + rows.map(function (r) { return '<div><span>' + esc(r[0]) + '</span><span class="b"><i style="width:' + Math.round(n(r[1]) * 100 / mx) + '%"></i></span><b>' + mil(r[1]) + (total ? ' <small>' + pc(r[1], total) + '</small>' : '') + '</b></div>'; }).join('') + '</div>';
+    };
+    var bar = function (S, k) {
+      var mx = Math.max.apply(null, S.map(function (x) { return n(x[k]); }).concat([1]));
+      return '<div class="pyo-bar">' + S.map(function (x, i) { var v = n(x[k]); return '<i title="Semana del ' + esc(fechaC(x.w)) + ': ' + v + '" style="height:' + Math.max(2, Math.round(v * 100 / mx)) + '%"' + (i === S.length - 1 ? ' class="u" data-v="' + v + '"' : '') + '></i>'; }).join('') + '</div><div class="pyo-x"><span>hace 12 semanas</span><span>esta semana</span></div>';
+    };
+    var dist = function (o, txt, orden) {
+      var ks = Object.keys(o || {}); if (orden) ks.sort(orden); else ks.sort(function (a, b) { return n(o[b]) - n(o[a]); });
+      return ks.map(function (k) { return [txt ? (txt[k] || k) : k, o[k]]; });
+    };
+    var c = n(d.cuentas), a7 = n(d.activas_7), e7 = n(d.entrenos_7), E = d.embudo || {}, C = d.con_que || {}, B = d.buscan || {}, SG = d.siguen || {}, K = d.condiciones || {}, BJ = d.bajas || {};
+    var h = '<div class="cifras">' +
+      cif('Cuentas', mil(c), '+' + mil(d.nuevas_7) + ' esta semana · +' + mil(d.nuevas_30) + ' en 30 días') +
+      cif('Activas · 7 días', mil(a7), 'entrenaron al menos una vez') +
+      cif('Activas · 30 días', mil(d.activas_30), c ? 'el ' + pc(d.activas_30, c) + ' de las cuentas' : 'todavía no hay cuentas') +
+      cif('Entrenos · 7 días', mil(e7), (a7 ? coma(e7 / a7) + ' por persona activa' : 'nadie ha entrenado esta semana') + (n(d.min_medio_30) ? ' · ' + n(d.min_medio_30) + ' min de media' : '')) + '</div>';
+    if (n(d.emails_hoy) >= 60) h += '<div class="pyo-amb" role="status"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#B07A00" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span><b>Hoy van ' + mil(d.emails_hoy) + ' emails de altas y contraseñas.</b> El plan gratis de Resend da 100 al día en total, también para la app de tus clientes. Si se queda corto, hay que pasar al plan de pago de Resend.</span></div>';
+    var S = Array.isArray(d.semanas) ? d.semanas : [];
+    h += '<section><h2>Cómo va</h2><p class="sub">Últimas 12 semanas (de lunes a domingo).</p><div class="pyo-dos"><div class="pyo-graf"><b class="gt">Altas nuevas</b>' + bar(S, 'altas') + '</div><div class="pyo-graf"><b class="gt">Personas que entrenaron</b>' + bar(S, 'activos') + '</div></div></section>';
+    var sig = n(SG.base) ? '<p class="pyo-nota">De las cuentas de más de 4 semanas, <b>' + mil(SG.n) + ' de ' + mil(SG.base) + ' (' + pc(SG.n, SG.base) + ')</b> han entrenado en las 2 últimas.</p>' : '<p class="pyo-nota">Cuando haya cuentas de más de 4 semanas, aquí verás cuántas siguen entrenando.</p>';
+    h += '<div class="pyo-dos"><section><h2>Del alta a entrenar</h2><p class="sub" style="margin:0">Dónde se quedan: cada paso, sobre todas las cuentas.</p>' +
+      hb([['Crean la cuenta', E.cuentas], ['Confirman el email', E.confirmadas], ['Empiezan', E.empiezan], ['Primer entreno', E.primer_entreno], ['Entrenan más de una semana', E.repiten]], n(E.cuentas)) + sig + '</section>' +
+      '<section><h2>Con qué entrenan</h2><p class="sub" style="margin:0">Una por cuenta: si tiene plan de la app cuenta ahí, si no, programa, si no, sus rutinas.</p>' +
+      hb([['Plan de la app', C.plan], ['Un programa', C.programa], ['Sus propias rutinas', C.propias], ['Aún sin empezar', C.sin_empezar]], c) + '</section></div>';
+    var nq = n(B.respuestas), PR = Array.isArray(d.programas) ? d.programas : [];
+    var porNum = function (a, b) { return Number(a) - Number(b); };
+    h += '<div class="pyo-dos"><section><h2>Qué buscan</h2><p class="sub" style="margin:0">' + (nq ? 'Lo que contestan las ' + mil(nq) + ' personas que piden un plan a la app.' : 'Cuando alguien pida un plan a la app, aquí verás lo que busca (objetivo, nivel, dónde y cuántos días).') + '</p>' +
+      (nq ? '<div class="pyo-g"><b>Objetivo</b>' + hb(dist(B.obj, YO_TXT.obj), nq) + '</div><div class="pyo-g"><b>Nivel</b>' + hb(dist(B.niv, YO_TXT.niv), nq) + '</div>' +
+        '<div class="pyo-g"><b>Dónde entrenan</b>' + hb(dist(B.lug, YO_TXT.lug), nq) + '</div><div class="pyo-g"><b>Días por semana</b>' + hb(dist(B.dias, null, porNum).map(function (r) { return [r[0] + ' días', r[1]]; }), nq) + '</div>' +
+        '<div class="pyo-g"><b>Tiempo por entreno</b>' + hb(dist(B.min, YO_TXT.min, porNum), nq) + '</div>' : '') + '</section>';
+    h += '<div class="pyo-c"><section><h2>Programas más añadidos</h2>' + (PR.length ? hb(PR.map(function (p) { return [p.nom, p.n]; })) : '<div class="vacio">Todavía nadie ha añadido un programa.</div>') + '</section>' +
+      '<section><h2>Cuentas</h2><div class="pyo-fl">' +
+      '<div><span>Confirmadas<small>Han abierto el email de confirmar</small></span><b>' + mil(d.confirmadas) + '</b></div>' +
+      '<div><span>Sin confirmar el email</span><b>' + mil(c - n(d.confirmadas)) + '</b></div>' +
+      '<div><span>Aceptaron las condiciones de ahora' + (K.version ? '<small>Versión del ' + esc(fechaC(K.version)) + '</small>' : '') + '</span><b>' + mil(K.n) + '</b></div>' +
+      '<div><span>Borradas<small>Solo el número; no queda nada de ellas' + (n(BJ.d30) ? ' · ' + mil(BJ.d30) + ' en los últimos 30 días' : '') + '</small></span><b>' + mil(BJ.total) + '</b></div>' +
+      '</div></section></div></div>';
+    $('yo-c').innerHTML = h;
+  }
   window.addEventListener('hashchange', function () { if (!$('panel').classList.contains('h')) { irA(location.hash.slice(1)); window.scrollTo(0, 0); } });
   function fallo(er) {
-    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; AY = null; verEntrar(); aviso(er.message); return true; }
+    if (/Vuelve a entrar/.test(er.message)) { cerrarHoja(); guarda(K.ses, ''); PL = null; KR = null; FK = null; AY = null; YO = null; verEntrar(); aviso(er.message); return true; }
     return false;
   }
   function hechoEn(id, t) {
@@ -1512,7 +1641,7 @@ td.fin{text-align:right;white-space:nowrap}
 
   $('b-salir').addEventListener('click', function () {
     var ses = lee(K.ses), disp = lee(K.disp);
-    guarda(K.ses, ''); guarda(K.disp, ''); PL = null; KR = null; R = null; FK = null; invDe = null; selK = ''; modoK = ''; edPlan = null;
+    guarda(K.ses, ''); guarda(K.disp, ''); PL = null; KR = null; R = null; FK = null; invDe = null; selK = ''; modoK = ''; edPlan = null; YO = null;
     llamar({ acc: 'salir', ses: ses, disp: disp }).catch(function () { }).then(verEntrar);
   });
   cargar();
