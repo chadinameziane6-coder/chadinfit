@@ -3553,7 +3553,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.151';
+var APP_V = 'v53.4.152';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8157,14 +8157,15 @@ function ctxPlato(o){
     pla:/(ensalada|con arroz|con patata|con quinoa|con pasta|con cuscus|plancha|horno|salteado)/.test(n)||(o.items||[]).filter(function(it){ return it.x==='verd'; }).length>=2};
 }
 function fatTipo(a){ var s=clave((a.n||'')+' '+(a.id||'')).replace(/_/g,' ');
-  if(/aceituna/.test(s)) return 'olv'; if(/aguacate|guacamole/.test(s)) return 'agu'; if(/(^|\s)(chia|lino|sesamo|semilla|pipas)/.test(s)) return 'sem';
-  if(/crema (de )?(cacahuete|almendra|anacardo|avellana)|mantequilla de cacahuete|hummus|queso crema|tahin/.test(s)) return 'unt';
+  if(/aceituna/.test(s)) return 'olv'; if(/aguacate|guacamole/.test(s)) return 'agu'; if(/(^|\s)aceite\b/.test(s)&&!/en aceite|coco/.test(s)) return 'ac';      // v53.4.152: el aceite de lino o de sésamo es aceite (no semillas)
+  if(/(^|\s)(chia|lino|sesamo|semilla|pipas)/.test(s)) return 'sem'; if(/queso crema/.test(s)) return 'qcr';      // v53.4.152: el queso crema, en la tostada (no en el bol de yogur)
+  if(/crema (de )?(cacahuete|almendra|anacardo|avellana)|mantequilla de cacahuete|hummus|tahin/.test(s)) return 'unt';
   if(/mantequilla|ghee|margarina|manteca|aceite (de )?coco/.test(s)) return 'acs';      // grasas para cocinar (no para aliñar)
   if(/^aceite|aceite (de|oliva|virgen|girasol)/.test(s)&&!/en aceite/.test(s)) return 'ac';
   if(/almendra|nuez|nueces|cacahuete|pistacho|anacardo|avellana|frutos secos|macadamia|pecana/.test(s)) return 'fs';
   if(/chocolate|cacao/.test(s)) return 'cho'; return 'otro'; }
-function fatOk(cx,src){ if(cx.coc&&!cx.pan&&(src==='ac'||src==='acs')) return ['ac','acs']; if(cx.pan) return ['ac','acs','agu','unt','olv','fs']; if(cx.bol) return ['fs','sem','unt','cho'];
-  if(cx.coc) return ['ac','acs']; if(cx.pla) return ['ac','agu','olv','fs','sem']; return ['fs','unt','cho']; }
+function fatOk(cx,src){ if(cx.coc&&!cx.pan&&(src==='ac'||src==='acs')) return ['ac','acs']; if(cx.pan) return ['ac','acs','agu','unt','qcr','olv','fs']; if(cx.bol) return ['fs','sem','unt','cho'];
+  if(cx.coc) return ['ac','acs']; if(cx.pla) return ['ac','agu','olv','fs','sem']; return ['fs','unt','qcr','cho']; }
 function varKey(a){ var w=clave(String(a.n||'')).replace(/\b(de|del|la|el|al|con|en|y)\b/g,' ').trim().split(/\s+/), k=w[0]||'';
   if(/^(crema|aceite|pan|queso|yogur|leche|bebida|pechuga|tortitas|tortilla|tortillas|arroz|pasta|copos|harina|fiambre|jamon|semillas|proteina|filete|carne)$/.test(k)&&w[1]) k+=' '+w[1];
   return k.replace(/z$/,'c').replace(/(es|s)$/,''); }
@@ -8174,41 +8175,41 @@ function panBase(o){ return /(tostad|tosta\b|bocadillo|sandwich|sandwic|wrap|mon
 var RX_BAS=/^(patata|arroz_blanco|pasta|boniato|pan_integral|pan_barra|pollo_pechuga|pavo_pechuga|ternera_filete|merluza|atun_natural|huevo|yogur_natural|leche_semi|platano|manzana|aceite_oliva)$/;      // v53.4.100: los básicos, siempre entre los 6
 /* v53.4.107 (nº 1, Javier: «en carnes, pescado, pollo o carne se puedan intercambiar unas con otras: contramuslo de pollo, salmón, filete de cerdo, filete de ternera,
    filetes de pollo… no rodaballo ni sepia todos los días porque es carísimo; una opción como calamares, pero no tantas»): la carne o el pescado, por los de diario */
-var TOSTA_Q=['requeson','queso_burgos0','queso_burgos','queso_lonchas_light','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','huevo','queso_semicurado','mozzarella_light'];      // v53.4.108 (Javier: «el queso de Burgos es para untar en la tostada: queso cottage, fiambre de pavo o jamón cocido»)
-var LATA_ALT=['pollo_pechuga','pavo_pechuga','jamon_serrano','jamon_cocido','salmon','merluza','pollo_muslo','ternera_filete','cerdo_lomo','bacalao','atun_aceite'];      // v53.4.108 (Javier: «en la tortilla, el atún sí, pero por pollo, jamón serrano, salmón, un filete… no langostinos ni pulpo, que no se comen a diario»)
-var VERD_ALT=['brocoli','judias_verdes','pipirrana','champinones','calabacin','esparragos','coliflor','espinacas','lechuga','berenjena','repollo'];      // v53.4.109 (Javier: «verduras intercambiables: brócoli, judías verdes, pipirrana, champiñones… como complemento o acompañando a hidratos y proteínas»)
+var TOSTA_Q=['requeson','queso_burgos0','queso_burgos','queso_lonchas_light','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','huevo','queso_semicurado','mozzarella_light','cottage1','queso_cabra_tierno','ricotta','feta','queso_edam','queso_gouda','queso_emmental','pollo_fiambre','rosbif','salmon_ahumado','bonito_natural'];      // v53.4.108 (Javier: «el queso de Burgos es para untar en la tostada: queso cottage, fiambre de pavo o jamón cocido»)
+var LATA_ALT=['pollo_pechuga','pavo_pechuga','jamon_serrano','jamon_cocido','salmon','merluza','pollo_muslo','ternera_filete','cerdo_lomo','bacalao','atun_aceite','bonito_natural','bonito_aceite','salmon_lata','pollo_fiambre'];      // v53.4.108 (Javier: «en la tortilla, el atún sí, pero por pollo, jamón serrano, salmón, un filete… no langostinos ni pulpo, que no se comen a diario»)
+var VERD_ALT=['brocoli','judias_verdes','pipirrana','champinones','calabacin','esparragos','coliflor','espinacas','lechuga','berenjena','repollo','acelgas','coles_bruselas','kale','pak_choi','cardo','grelos','col_rizada_savoy','lombarda','tirabeques','alcachofa','calabaza','setas_shiitake','setas_ostra','champinon_marron','portobello','menestra_congelada','espinacas_congeladas','judias_verdes_bote','esparragos_blancos','champinones_bote'];      // v53.4.109 (Javier: «verduras intercambiables: brócoli, judías verdes, pipirrana, champiñones… como complemento o acompañando a hidratos y proteínas»)
 function verdP(me){ return me.x==='verd'&&VERD_ALT.indexOf(famDe(me.id||me.a||''))>=0; }      // la verdura de acompañamiento (no la cebolla del sofrito ni el tomate de la tostada): por otra, gramo a gramo
-var HUEVO_ALT=['claras','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','queso_burgos0','requeson','pollo_pechuga','pavo_pechuga','queso_lonchas_light','tofu'];      // v53.4.109 (Javier: «el huevo solo pone claras, pero se puede cambiar por más cosas: fiambres…»)
+var HUEVO_ALT=['claras','pavo_fiambre','jamon_cocido','jamon_serrano','atun_natural','queso_burgos0','requeson','pollo_pechuga','pavo_pechuga','queso_lonchas_light','tofu','pollo_fiambre','cottage1','bonito_natural'];      // v53.4.109 (Javier: «el huevo solo pone claras, pero se puede cambiar por más cosas: fiambres…»)
 function huevoP(me){ return famDe(me.id||me.a||'')==='huevo'; }
 function lataP(me){ var T=usoAl(me); return me.x==='prot'&&T.indexOf('pes')>=0&&T.indexOf('fia')>=0; }
 function tostaQ(me){ return me.x==='lac'&&usoAl(me).indexOf('que')>=0&&!!(me.cx&&me.cx.pan); }
-var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','cerdo_solomillo','ternera_picada5','salmon','merluza','bacalao','calamar'];
+var PROT_DIA=['pollo_pechuga','pollo_muslo','pavo_pechuga','ternera_filete','cerdo_lomo','cerdo_solomillo','ternera_picada5','salmon','merluza','bacalao','calamar','pollo_entero','pavo_muslo','ternera_solomillo','ternera_tapa','ternera_redondo','ternera_cadera','cerdo_chuleta','conejo','lubina','rape','pescadilla','lenguado','abadejo','trucha','emperador','atun_fresco','bonito','sepia','gambas','pulpo'];
 function protTag(a){ var T=usoAl(a).filter(function(t){ return t.charAt(0)!=='>'; }); return T.indexOf('fia')>=0?'':T[0]==='car'||T[0]==='pes'?T[0]:''; }
 function protDia(me,a){ return me.x==='prot'&&a.x==='prot'&&!!protTag(me)&&!!protTag(a)&&PROT_DIA.indexOf(famDe(a.id))>=0; }
 function altsCtx(out,me,o){
   var cx=ctxPlato(o);
-  if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)){ var Tq=out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }); if(Tq.length) return Tq.slice(0,10); out=out.filter(function(z){ return z.a.x==='lac'&&usoAl(z.a).indexOf('que')>=0; }); if(out.length) return out.slice(0,10); }      // v53.4.119: si no hay de la lista de la tostada, otro queso (nunca se queda sin poder cambiarlo)
+  if(me.x==='lac'&&usoAl(me).indexOf('que')>=0){ if(tostaQ(me)){ var Tq=out.filter(function(z){ return TOSTA_Q.indexOf(famDe(z.a.id))>=0; }).sort(function(a,b){ return TOSTA_Q.indexOf(famDe(a.a.id))-TOSTA_Q.indexOf(famDe(b.a.id)); }); if(Tq.length) return Tq.slice(0,20); out=out.filter(function(z){ return z.a.x==='lac'&&usoAl(z.a).indexOf('que')>=0; }); if(out.length) return out.slice(0,10); }      // v53.4.119: si no hay de la lista de la tostada, otro queso (nunca se queda sin poder cambiarlo)
     out=out.filter(function(z){ return z.a.x==='lac'; }); }      // en un bol, por yogur o queso; en una tostada, por otro queso o fiambre
-  if(verdP(me)&&!(o&&panBase(o))){ var Ve=out.filter(function(z){ return VERD_ALT.indexOf(famDe(z.a.id))>=0; }); if(Ve.length>=2) return Ve.sort(function(a,b){ return VERD_ALT.indexOf(famDe(a.a.id))-VERD_ALT.indexOf(famDe(b.a.id)); }).slice(0,10); }
-  if(lataP(me)||huevoP(me)){ var LQ=huevoP(me)?HUEVO_ALT:LATA_ALT, La=out.filter(function(z){ return LQ.indexOf(famDe(z.a.id))>=0; }); if(La.length>=2) return La.sort(function(a,b){ return LQ.indexOf(famDe(a.a.id))-LQ.indexOf(famDe(b.a.id)); }).slice(0,10); }
-  if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,10); }
+  if(verdP(me)&&!(o&&panBase(o))){ var Ve=out.filter(function(z){ return VERD_ALT.indexOf(famDe(z.a.id))>=0; }); if(Ve.length>=2) return Ve.sort(function(a,b){ return VERD_ALT.indexOf(famDe(a.a.id))-VERD_ALT.indexOf(famDe(b.a.id)); }).slice(0,20); }
+  if(lataP(me)||huevoP(me)){ var LQ=huevoP(me)?HUEVO_ALT:LATA_ALT, La=out.filter(function(z){ return LQ.indexOf(famDe(z.a.id))>=0; }); if(La.length>=2) return La.sort(function(a,b){ return LQ.indexOf(famDe(a.a.id))-LQ.indexOf(famDe(b.a.id)); }).slice(0,20); }
+  if(me.x==='prot'&&protTag(me)){ var Pd=out.filter(function(z){ return PROT_DIA.indexOf(famDe(z.a.id))>=0; }); if(Pd.length>=3) return Pd.sort(function(a,b){ return PROT_DIA.indexOf(famDe(a.a.id))-PROT_DIA.indexOf(famDe(b.a.id)); }).slice(0,20); }
   var esPan=me.x==='hc'&&usoAl(me)[0]==='pan', tc=o?tipoOp(o):'';
   if(esPan&&(!o||tc!=='c'||panBase(o)||/^(tortilla_|pan_hamburguesa)/.test(famDe(me.id||me.a)))) out=out.filter(function(z){ return usoAl(z.a)[0]==='pan'; });      // v53.4.102: en tostadas, bocadillos o wraps, el pan solo por pan · v53.4.103: y en desayunos y meriendas, tampoco
   if(cx&&me.x==='grasa'){ var ok=fatOk(cx,fatTipo(me)); out=out.filter(function(z){ return ok.indexOf(fatTipo(z.a))>=0; }); }
   if(cx&&cx.coc&&!cx.pan&&me.x==='hc'&&/avena|harina/.test(clave((me.n||'')+' '+me.id))) out=out.filter(function(z){ return /avena|harina/.test(clave((z.a.n||'')+' '+z.a.id)); });
-  var pri=function(z){ return /^al/.test(z.a.id)?0:RX_BAS.test(famDe(z.a.id))?1:/^sup_/.test(z.a.id)?3:2; };      // los tuyos, luego los básicos (v53.4.100: la patata con el arroz), los de siempre y los de marca
+  var pri=function(z){ return z.a.amp?2.5:/^al/.test(z.a.id)?0:RX_BAS.test(famDe(z.a.id))?1:/^sup_/.test(z.a.id)?3:2; };      // v53.4.152: los de la base grande, detrás de los de siempre      // los tuyos, luego los básicos (v53.4.100: la patata con el arroz), los de siempre y los de marca
   out=out.map(function(z,i){ z._o=i; return z; }).sort(function(a,b){ return pri(a)-pri(b)||a._o-b._o; });
   var G={}, orden=[]; out.forEach(function(z){ var k=varKey(z.a); if(!G[k]){ G[k]=z; orden.push(k); } });      // una de cada (no cuatro almendras de marcas distintas)
   var L=orden.map(function(k){ return G[k]; });
   if(me.x==='grasa'){ var T={}, ts=[]; L.forEach(function(z){ var t=fatTipo(z.a); if(!T[t]){ T[t]=[]; ts.push(t); } T[t].push(z); }); L=[];      // de cada tipo, por turnos (aceite, frutos secos, aceitunas…)
-    for(var r=0;L.length<10&&ts.some(function(t){ return T[t].length>r; });r++) ts.forEach(function(t){ if(T[t][r]&&L.length<10) L.push(T[t][r]); }); }
+    for(var r=0;L.length<20&&ts.some(function(t){ return T[t].length>r; });r++) ts.forEach(function(t){ if(T[t][r]&&L.length<20) L.push(T[t][r]); }); }
   if(esPan&&L.some(function(z){ return usoAl(z.a)[0]==='gua'; })){      // v53.4.103: en comida y cena, arroz, patata, boniato, quinoa y cuscús primero, y dos panes
     var GO=['arroz_blanco','patata','boniato','quinoa','cuscus','pasta'], gk=function(z){ var i=GO.indexOf(famDe(z.a.id)); return i<0?9:i; };
-    L=L.filter(function(z){ return !/hamburguesa|burger/.test(clave((z.a.n||'')+' '+z.a.id)); }); var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,6), Pa=panOrden(L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; })).slice(0,4);
+    L=L.filter(function(z){ return !/hamburguesa|burger/.test(clave((z.a.n||'')+' '+z.a.id)); }); var Gu=L.filter(function(z){ return usoAl(z.a)[0]==='gua'; }).sort(function(a,b){ return gk(a)-gk(b); }).slice(0,12), Pa=panOrden(L.filter(function(z){ return usoAl(z.a)[0]!=='gua'; })).slice(0,8);
     return Gu.concat(Pa);
   }
   if(esPan){ if(!/hamburguesa|burger/.test(clave((me.n||'')+' '+(me.id||me.a||'')))) L=L.filter(function(z){ return !/hamburguesa|burger/.test(clave((z.a.n||'')+' '+z.a.id)); }); L=panOrden(L); }      // el pan de hamburguesa, solo por otro de hamburguesa
-  return L.slice(0,10);
+  return L.slice(0,20);      // v53.4.152: 10 → 20 (con la base grande hay más donde elegir)
 }
 /* v53.4.109 (Javier: «en las opciones del pan integral, añade tortitas de arroz y de maíz»): el pan, primero por estos */
 var PAN_ALT=['pan_barra','tortitas_arroz','tortitas_maiz','pan_molde_integral','pan_integral','pan_sin_gluten','pan_centeno','tortilla_trigo','tortilla_maiz'];
@@ -8322,7 +8323,7 @@ function enviarPref(){
 /* después de juntar lo de otro móvil: se repinta la dieta (o Hoy) cuando no esté escribiendo */
 function repintarDieCl(){ CL._mez=null; if(BOOT.mode!=='clienta'||!CL.d||(CL.tab!=='dieta'&&CL.tab!=='hoy')) return; repintarLibre(function(){ if(CL.tab==='dieta'||CL.tab==='hoy'){ var y=window.scrollY; CL.keep=true; pintarCl(); window.scrollTo(0,y); } }); }
 function intCl(){ var I=CL.d.dietaInt||{grupos:[],al:[]}; if(!(CL.bancoL&&CL.grMas&&masLibCl()&&libHoy())) return I;      // v53.4.113: con platos del «+» hoy, su banco entero (los suyos los cambia igual)
-  if(CL._ib&&CL._ibI===I&&CL._ibB===CL.bancoL) return CL._ib; var ya={}, bm=CL.bancoM||{}, al=I.al.map(function(a){ ya[a.id]=1; var z=bm[a.id]; return !a.b&&z&&z.b?Object.assign({},a,{b:z.b}):a; }); CL.bancoL.forEach(function(a){ if(!ya[a.id]&&a.x) al.push(a); });      // v53.4.120 (Javier, cliente de Miguel: «no puede sustituir alimentos de algunas opciones»): los de su dieta llegan sin macros (no los ve); los platos del «+» los necesitan para calcular el cambio
+  if(CL._ib&&CL._ibI===I&&CL._ibB===CL.bancoL) return CL._ib; var ya={}, bm=CL.bancoM||{}, al=I.al.map(function(a){ ya[a.id]=1; var z=bm[a.id]; return !a.b&&z&&z.b?Object.assign({},a,{b:z.b}):a; }); CL.bancoL.forEach(function(a){ if(!ya[a.id]&&a.x&&!a.nc) al.push(a); });      // v53.4.120 (Javier, cliente de Miguel: «no puede sustituir alimentos de algunas opciones»): los de su dieta llegan sin macros (no los ve); los platos del «+» los necesitan para calcular el cambio
   var gy={}, gr=I.grupos.slice(); I.grupos.forEach(function(g){ gy[g.id]=1; }); CL.grMas.forEach(function(g){ if(!gy[g.id]) gr.push(g); }); CL._ib={grupos:gr,al:al,eq:I.eq}; CL._ibI=I; CL._ibB=CL.bancoL; return CL._ib; }
 function verMac(){ return !!CL.d.dietaVer; }
 function verDet(){ return verMac()&&(libreCl()||!(CL.d&&CL.d.dn)); }      // v53.4.91 (nº 1, Javier): sin autorregulación, ni las kcal de cada comida ni las de cada alimento; solo el total del día (si su coach se lo enseña)
@@ -12883,7 +12884,7 @@ function grNut(){ return (CO.nut&&CO.nut.intercambios.grupos)||[]; }
 function grDe(id){ return grNut().filter(function(g){ return g.id===id; })[0]||null; }
 function grCorto(g){ return g?String(g.n).split(':')[0]:''; }
 var ALT_O=null;      // v53.4.91: el plato que se está pintando (para los intercambios según el plato)
-function altsCo(it,o){ if(!CO.nut) return []; var al=CO.vista==='clienta'&&CO.d&&CO.d.clienta?alimCl():null; return altsDe(it,al?CO.nut.alimentos.filter(function(a){ return !prohibidoAl(a,al); }):CO.nut.alimentos,grNut(),o||ALT_O); }
+function altsCo(it,o){ if(!CO.nut) return []; var al=CO.vista==='clienta'&&CO.d&&CO.d.clienta?alimCl():null; return altsDe(it,CO.nut.alimentos.filter(function(a){ return !a.nc&&!(al&&prohibidoAl(a,al)); }),grNut(),o||ALT_O); }      // v53.4.152: los de la base grande, también (menos los «nc»)
 function hidratarIt(it){ var a=CO.nutM&&CO.nutM[it.a]; if(a){ it.n=a.n; it.e=a.e; it.m=a.m||''; it.c=a.c; it.b=a.b.slice(); it.u=a.u; if(it.x==null) it.x=a.x||''; } return it; }
 function hidratarDie(){ if(!CO.die||!CO.nutM) return; CO.die.planes.forEach(function(p){ p.comidas.forEach(function(c){ c.opciones.forEach(function(o){ (o.items||[]).forEach(hidratarIt); }); }); }); }
 
@@ -13102,7 +13103,7 @@ function buscarAl(t){
   var W=q.split(' '), L=CO.nut.alimentos.filter(function(a){ var s=clave(a.n+' '+(a.m||'')+' '+(a.e||'')); return W.every(function(w){ return s.indexOf(w)>=0; }); });
   var al=t.dataset.x==='d'&&CO.d?alimCl():null, fuera=0;                      // v28: en su dieta, sin lo que no puede comer
   if(al){ L=L.filter(function(a){ if(prohibidoAl(a,al)){ fuera++; return false; } return true; }); }
-  L.sort(function(a,b){ var f=al?(esFav(b,al)?1:0)-(esFav(a,al)?1:0):0; var x=clave(a.n).indexOf(q)===0?0:1, y=clave(b.n).indexOf(q)===0?0:1; return f||x-y||(a.base?1:0)-(b.base?1:0)||String(a.n).localeCompare(String(b.n),'es'); });
+  L.sort(function(a,b){ var f=al?(esFav(b,al)?1:0)-(esFav(a,al)?1:0):0; var x=clave(a.n).indexOf(q)===0?0:1, y=clave(b.n).indexOf(q)===0?0:1; return f||(a.amp?1:0)-(b.amp?1:0)||x-y||(a.base?1:0)-(b.base?1:0)||String(a.n).localeCompare(String(b.n),'es'); });      // v53.4.152: los de la base grande, detrás de los de siempre
   var at=attrsDe(t.dataset);
   box.innerHTML=L.slice(0,10).map(function(a){ return '<button class="al-o'+(a.sup?' al-o-sup':'')+'" data-a="addAl"'+at+' data-id="'+esc(a.id)+'">'+(a.sup||a.img?alImg(a,'al-th sm'):'')+'<span><b>'+esc(a.n)+'</b><small>'+esc([a.e,a.m,a.base?'':'propio'].filter(Boolean).join(' · '))+'</small></span><small class="al-v">'+kTxt(a.b[0])+' kcal · P '+fN(a.b[1])+' · HC '+fN(a.b[2])+' · G '+fN(a.b[3])+' <i>/100 g</i></small></button>'; }).join('')+
     (L.length?'':'<div class="muted sm al-nada">'+(fuera?'Lo que encuentro no lo puede comer ('+esc(alimResumen(al))+').':'No está en tus alimentos.')+'</div>')+
@@ -13993,7 +13994,7 @@ function pintarNutri(arriba){
 /* ---------- alimentos ---------- */
 function vAlimentos(){
   var L=CO.nut.alimentos, f=CO.nf, casa=alCasa(), prop=L.filter(function(a){ return esMioAl(a); }).length, nsup=L.filter(function(a){ return a.sup; }).length, nmo=L.filter(function(a){ return a.mo||a.moV; }).length, oc=(!casa&&CO.nut.moOcultos)||[];
-  var h='<p class="muted sm">Valores <b>por 100 g</b>. Los de <b>referencia</b> son medias de tablas de composición (USDA/BEDCA) para cuadrar rápido; los de <b>supermercado</b> llevan los datos de su etiqueta (Mercadona, Lidl). Para otra marca, créalo con los datos de su etiqueta. Solo tú ves esta pantalla.</p>'+
+  var h='<p class="muted sm">Valores <b>por 100 g</b>. Los de <b>referencia</b> son medias de tablas de composición (USDA/BEDCA) para cuadrar rápido; los <b>genéricos del USDA</b> (crudos y cocinados) llevan los valores tal cual de su tabla; los de <b>supermercado</b> llevan los datos de su etiqueta (Mercadona, Lidl). Para otra marca, créalo con los datos de su etiqueta. Solo tú ves esta pantalla.</p>'+
     (casa?'<p class="muted sm">Al guardar un alimento nuevo eliges si va también a <b>MOOD ON</b> (lo ven los demás entrenadores y sus clientes) o solo para ti. Los compartidos llevan la etiqueta <span class="pill mo">MOOD ON</span>.</p>'
       :(oc.length?'<p class="muted sm">Has quitado de tu banco '+oc.length+(oc.length===1?' alimento':' alimentos')+'. <button class="link" data-a="moOcultosVer">Ver y volver a ponerlos</button></p>':''))+   // v53.4.66: los demás entrenadores lo ven todo junto, por categorías (sin «Míos» ni «MOOD ON»)
     '<div class="row nut-bar"><input data-k="buscaNut" id="busca-nut" value="'+esc(f.q)+'" placeholder="Buscar alimento o marca…" aria-label="Buscar alimento"><button class="btn sm" data-a="alNuevo">'+ic('mas')+'Desde etiqueta</button></div>'+
@@ -14051,7 +14052,7 @@ function modalAlSup(a){
 }
 function modalAlBase(a){
   CO.alEd=a;
-  modal('<h2>'+esc(a.n)+'</h2><p class="muted sm">'+esc([a.e,'Valores de referencia (USDA/BEDCA)'].filter(Boolean).join(' · '))+'</p>'+
+  modal('<h2>'+esc(a.n)+'</h2><p class="muted sm">'+esc([a.e,a.amp?'Valores de la tabla del USDA'+String(a.f||'').replace(/^USDA SR28/,' SR28'):'Valores de referencia (USDA/BEDCA)'].filter(Boolean).join(' · '))+'</p>'+      // v53.4.152
     '<div class="macros">'+macro('Kcal',a.b[0])+macro('Proteína',a.b[1],'g')+macro('Hidratos',a.b[2],'g')+macro('Grasa',a.b[3],'g')+'</div>'+
     '<p class="muted sm center">por 100 g'+(a.u?' · 1 '+esc(a.u[0])+' ≈ '+fN(a.u[1])+' g':'')+'</p>'+(a.t?'<p class="sm"><b>Contiene:</b> '+esc(a.t.split(',').map(function(k){ var x=CONTIENE.filter(function(c){ return c[0]===k; })[0]; return x?x[1].toLowerCase():k; }).join(', '))+'</p>':'')+grupoSel(a)+
     '<p class="muted sm">El grupo decide por qué alimentos puede cambiarlo '+cG('la clienta','el cliente')+'. Se guarda al elegirlo.</p>'+
@@ -14217,7 +14218,7 @@ function rlCands(txt){      // los alimentos que encajan, el mejor primero: {a, 
     if(/\.(cr|co)$/.test(a.id)){ var o=CO.nutM[famDe(a.id)+(coc?'.co':'.cr')]; if(o) a=o; }      // legumbres, arroz, pasta: en crudo, salvo «cocidos» o «de bote»
     var tk=toks.filter(function(w){ return !RL_VAR.test(w); }); if(!tk.length) tk=toks;
     var cov=K.filter(function(w){ return toks.indexOf(w)>=0||(w===hd&&H.some(function(h){ return toks.indexOf(h)>=0; })); }).length/K.length, cc=tk.filter(function(w){ return T.indexOf(w)>=0||H.indexOf(w)>=0; }).length/tk.length;
-    var sc=cov*2+cc+(syn?0.3:0)+(a.base?0.05:0), y=C[a.id];
+    var sc=cov*2+cc+(syn?0.3:0)+(a.base?0.05:0)-(a.amp?0.5:0), y=C[a.id];      // v53.4.152: los de la base grande, solo si encajan claramente mejor
     if(!y) C[a.id]={a:a,sc:sc,cov:cov,cc:cc}; else { if(sc>y.sc) y.sc=sc; if(cov>y.cov) y.cov=cov; if(cc>y.cc) y.cc=cc; }
   };
   Object.keys(RL_SIN).forEach(function(k){ var kt=rlT(k); if(kt.length&&kt.every(function(w){ return T.indexOf(w)>=0; })) pon(CO.nutM[RL_SIN[k]],kt,true); });
@@ -14620,7 +14621,7 @@ function ejemploInt(g,L){
 function vIntercambios(){
   var G=grNut(), L=CO.nut.alimentos;
   var h='<p class="muted sm">Cada grupo dice qué alimentos se pueden cambiar entre sí y qué se iguala al cambiar. En la app '+cG('de la clienta','del cliente')+', cada ingrediente con grupo tiene un botón <b>Cambiar</b> con sus equivalentes en gramos (en el mismo estado, crudo o cocido). En cada plato decides tú cuáles le dejas.</p>';
-  h+=G.map(function(g){ var F=L.filter(function(a){ return a.x===g.id; });
+  h+=G.map(function(g){ var F=L.filter(function(a){ return a.x===g.id&&!a.nc; });      // v53.4.152: los que entran en los cambios
     return '<div class="card int-g"><div class="card-t">'+esc(g.n)+' <span class="muted sm">'+F.length+' alimentos</span></div>'+
       '<label class="f" style="margin-top:0">Al cambiar, iguala<select data-c="intRegla" data-g="'+g.id+'">'+['hc','pr','gs','kc'].map(function(k){ return '<option value="'+k+'"'+(g.m===k?' selected':'')+'>'+MK_IG[k].replace(/^l(os|a|as) mism(os|a|as) /,'').replace(/^./,function(c){ return c.toUpperCase(); })+'</option>'; }).join('')+'</select></label>'+
       ejemploInt(g,F)+'<details class="int-det"><summary>Ver alimentos</summary><div class="int-chips">'+F.map(function(a){ return '<button class="chip" data-a="alVer" data-id="'+esc(a.id)+'">'+esc(alNom(a))+'</button>'; }).join('')+'</div></details></div>'; }).join('');
@@ -16911,7 +16912,7 @@ var AYUDA=[
   {g:1,q:'¿Cómo uso la misma dieta con varios clientes?',r:'En la dieta de un cliente, «Guardar en tu banco de dietas». Después, en otro cliente, pestaña Dieta → «Desde tu banco de dietas» (o «Poner una de tu banco»): eliges una y, si quieres, la ajustas a sus kcal (se escalan los gramos de cada plato). La que tenía queda en su historial.',k:'banco dietas plantilla copiar misma dieta kcal ajustar'},
   {g:1,q:'¿Cómo le hago una dieta?',r:'En su ficha, pestaña Dieta: pones sus kcal y macros y sus comidas con tus platos, recetas o alimentos. Para ir más rápido, «Copiar dieta…» la trae de otro cliente y la ajustas.',k:'dieta comidas macros kcal calorias menu copiar'},
   {g:1,casa:1,q:'¿Puede elegir sus platos?',r:'Sí. En su pestaña Dieta, activa «Autorregulación de macros»: con tu objetivo de kcal y macros, elige en su app entre tus platos, las recetas de la biblioteca o alimentos sueltos. Puede quitar los platos que no quiera y volver a ponerlos cuando quiera.',k:'elegir platos libre autorregulacion quitar recetas'},
-  {g:1,q:'¿Cómo añado alimentos y recetas?',r:'En Alimentos y recetas: busca o crea alimentos con sus macros, y recetas con sus ingredientes. Después los usas en todas tus dietas.',a:'sdNutri',k:'alimento receta macros ingredientes biblioteca'},
+  {g:1,q:'¿Cómo añado alimentos y recetas?',r:'En Alimentos y recetas: tienes más de 700 alimentos genéricos (crudos y cocinados) y los de supermercado; busca el que quieras o crea uno con los datos de su etiqueta. También recetas con sus ingredientes. Después los usas en todas tus dietas.',a:'sdNutri',k:'alimento receta macros ingredientes biblioteca'},
   {g:2,q:'¿Cómo programo una videollamada?',r:'En su ficha, pestaña Seguimiento: «Programar videollamada». Se crea con su enlace para conectarse y la ves en tu Calendario.',a:'sdCal',k:'videollamada llamada meet reunion cita calendario'},
   {g:2,q:'¿Cómo le pido revisiones y fotos?',r:'Desde su ficha (Seguimiento) programas cada cuánto te manda su revisión y sus fotos. Le sale en su app cuando le toca y, cuando lo envía, lo tienes en Inicio.',k:'revision check-in checkin fotos semanal programar'},
   {g:2,q:'¿Qué sale en Inicio?',r:'Tus tareas: lo atrasado y lo de hoy (revisiones y fotos que llegan, dietas o planes que acaban, mensajes…). Cuando lo haces, desaparece.',a:'sdInicio',k:'inicio tareas pendiente hoy avisos'},
