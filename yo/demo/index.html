@@ -1355,7 +1355,9 @@ window.YO_REVISAR = [
   { t: 'Programas de gimnasio del Word: hipertrofia y fuerza (tanda 5)', d: 'Hipertrofia principiante (3 días), intermedio torso/pierna (4) y avanzado empuje-tirón-pierna (6), con el RIR de cada ejercicio; fuerza principiante (3) y powerlifting intermedio y avanzado (4), con top set + back-off y los porcentajes en la nota (el RPE del Word, pasado a RIR: RPE 7 = RIR 3). Quitan «Fuerza para principiantes», «Hipertrofia 4 días · torso / pierna» y «Avanzado 6 días» de antes, que se repetían. Entreno → Programas → Hipertrofia o Fuerza.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'fuerza'; pintar(); } },
   { t: 'Programas híbridos del Word (tanda 6)', d: 'Cross training principiante (3 días) e intermedio (5), Hyrox principiante e intermedio (4: lunes, miércoles, viernes y domingo), Funcional principiante (3) e intermedio (4), HIIT + fuerza (3) y Atleta híbrido equilibrado (6, con 3 días de carrera). El Word da reglas y ejemplos, no programas cerrados: los he armado con sus semanas tipo, sus WOD y circuitos de ejemplo y su dosis de fuerza. Los AMRAP, EMOM y circuitos van como ejercicios seguidos con la explicación en la nota del primero (el reloj, en Herramientas); la carrera, el trineo o el granjero, en metros; los días de carrera, como en los programas de carrera. Entreno → Programas → Híbrido.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hibrido'; pintar(); } }
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hibrido'; pintar(); } },
+  { t: '100 programas en total (54 nuevos)', d: 'Además de los del Word: 54 que arma la app con un perfil fijo cada uno, como los de antes. Hipertrofia (pierna y glúteo, torso/pierna 5 días, full body 2 días, express, más brazos y hombros, más pecho y espalda, principiante 2 y 4 días, avanzados…), fuerza (2 días, powerbuilding, en casa con mancuernas y kettlebell o con barra, avanzado 6 días…), en casa (kettlebell, 25 min, glúteo sin material, gomas avanzado…), resistencia y perder grasa (HIIT en casa, bajo impacto, 5 días, principiante, circuitos…), híbridos, salud, aire libre, peso corporal y carrera (fuerza para corredores, correr + fuerza en casa, correr para perder grasa, trail). Los de 5 km, 10 km, media y maratón irán con el modelo del piloto de carrera, semana a semana. Entreno → Programas → Todos.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = ''; pintar(); } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -2932,16 +2934,79 @@ var PROGRAMAS = [
   { id: 'run10', n: 'Prepara 10 km', c: 'carrera', P: PP({ obj: 'resist', niv: 'int', dias: 5, min: 60, sem: 10, cv: 'normal', cvT: ['carrera'], dCarr: 4 }) },
   { id: 'runmm', n: 'Media maratón', c: 'carrera avanzado', P: PP({ obj: 'resist', niv: 'ava', dias: 5, min: 75, sem: 12, cv: 'normal', cvT: ['carrera'], dCarr: 4 }) },
   { id: 'hib4', n: 'Híbrido fuerza + resistencia', c: 'hibrido fuerza resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60, cv: 'normal', cvT: ['hiit', 'bajo'] }) },
-  { id: 'hib5', n: 'Híbrido avanzado 5 días', c: 'hibrido avanzado', P: PP({ obj: 'recomp', niv: 'ava', dias: 5, min: 75, cv: 'normal', cvT: ['hiit', 'carrera'], dCarr: 1 }) }
+  { id: 'hib5', n: 'Híbrido avanzado 5 días', c: 'hibrido avanzado', P: PP({ obj: 'recomp', niv: 'ava', dias: 5, min: 75, cv: 'normal', cvT: ['hiit', 'carrera'], dCarr: 1 }) },
+  /* 17 nov (Javier: «mejor 100 programas totales, un poco de cada»): 54 más, armados por el motor con un perfil fijo cada uno.
+     b: 1 = en revisión (solo con borradores, como en las demos), hasta su OK */
+  // carrera (los de 5 km, 10 km, media y maratón irán con el modelo del piloto «Empieza a correr desde cero», semana a semana)
+  { id: 'rfz2', b: 1, n: 'Fuerza para corredores · 2 días', c: 'carrera fuerza', P: PP({ obj: 'fuerza', niv: 'int', dias: 2, min: 45, prio: ['gluteo', 'isquios', 'core'] }) },
+  { id: 'rcasa', b: 1, n: 'Correr + fuerza en casa', c: 'carrera casa', P: PP({ obj: 'resist', niv: 'int', dias: 4, min: 45, lug: 'casa', mat: ['banda', 'mancuernas'], cv: 'normal', cvT: ['carrera'], dCarr: 2 }) },
+  { id: 'rgr', b: 1, n: 'Correr para perder grasa', c: 'carrera resistencia', P: PP({ obj: 'grasa', niv: 'int', dias: 4, min: 50, cv: 'normal', cvT: ['carrera'], dCarr: 2 }) },
+  { id: 'rtrail', b: 1, n: 'Trail · carrera y piernas fuertes', c: 'carrera', P: PP({ obj: 'resist', niv: 'int', dias: 4, min: 60, lug: 'aire', cv: 'normal', cvT: ['carrera'], dCarr: 3, prio: ['cuadriceps', 'gluteo'] }) },
+  // más variados
+  { id: 'cglc', b: 1, n: 'En casa con gomas · más glúteo y abdomen', c: 'casa', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 40, lug: 'casa', mat: ['banda'], prio: ['gluteo', 'core'] }) },
+  { id: 'pglu', b: 1, n: 'Pierna y glúteo · principiante', c: 'hipertrofia principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 50, prio: ['gluteo', 'cuadriceps'] }) },
+  { id: 'fcv4', b: 1, n: 'Fuerza + cardio 4 días', c: 'hibrido resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60, cv: 'normal', cvT: ['bajo'] }) },
+  { id: 'hiitg', b: 1, n: 'HIIT y fuerza en el gimnasio · 4 días', c: 'resistencia', P: PP({ obj: 'grasa', dias: 4, min: 50, cv: 'mucho', cvT: ['hiit'] }) },
+  { id: 'gava', b: 1, n: 'En casa con gomas · avanzado', c: 'casa avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 4, min: 45, lug: 'casa', mat: ['banda'] }) },
+  { id: 'hava5', b: 1, n: 'Hipertrofia avanzado 5 días', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 5, min: 75 }) },
+  { id: 'fzbar', b: 1, n: 'Fuerza en casa con barra y discos', c: 'fuerza casa', P: PP({ obj: 'fuerza', dias: 3, min: 60, lug: 'casa', mat: ['barra', 'otro'] }) },
+  { id: 'kbava', b: 1, n: 'Kettlebell avanzado', c: 'hibrido casa avanzado', P: PP({ obj: 'resist', niv: 'ava', dias: 4, min: 45, lug: 'casa', mat: ['kettlebell'], cv: 'normal', cvT: ['hiit'] }) },
+  // hipertrofia
+  { id: 'glu3', b: 1, n: 'Pierna y glúteo 3 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 3, min: 60, prio: ['gluteo'] }) },
+  { id: 'glu5', b: 1, n: 'Avanzado 5 días · más glúteo e isquios', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 5, min: 75, prio: ['gluteo', 'isquios'] }) },
+  { id: 'tp5h', b: 1, n: 'Torso / pierna 5 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 5, min: 60, est: 'tp5' }) },
+  { id: 'fb2h', b: 1, n: 'Full body 2 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 2, min: 60, est: 'fb2' }) },
+  { id: 'h45', b: 1, n: 'Hipertrofia express · 45 min', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 4, min: 45 }) },
+  { id: 'brazo4', b: 1, n: 'Hipertrofia 4 días · más brazos y hombros', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 4, min: 60, prio: ['biceps', 'triceps', 'hombro'] }) },
+  { id: 'pe4', b: 1, n: 'Hipertrofia 4 días · más pecho y espalda', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 4, min: 60, prio: ['pecho', 'espalda'] }) },
+  { id: 'hini2', b: 1, n: 'Gana músculo · principiante 2 días', c: 'hipertrofia principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 2, min: 50 }) },
+  { id: 'hini4', b: 1, n: 'Gana músculo · principiante 4 días', c: 'hipertrofia principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 4, min: 55, est: 'tp4' }) },
+  // fuerza
+  { id: 'fz2d', b: 1, n: 'Fuerza 2 días', c: 'fuerza', P: PP({ obj: 'fuerza', dias: 2, min: 60 }) },
+  { id: 'fzi4', b: 1, n: 'Fuerza principiante 4 días', c: 'fuerza principiante', P: PP({ obj: 'fuerza', niv: 'ini', dias: 4, min: 60, est: 'tp4' }) },
+  { id: 'pwb5', b: 1, n: 'Powerbuilding 5 días · fuerza e hipertrofia', c: 'fuerza hipertrofia', P: PP({ obj: 'fuerza', dias: 5, min: 75, est: 'tp5' }) },
+  { id: 'fzcasa', b: 1, n: 'Fuerza en casa · mancuernas y kettlebell', c: 'fuerza casa', P: PP({ obj: 'fuerza', dias: 3, min: 50, lug: 'casa', mat: ['mancuernas', 'kettlebell'] }) },
+  { id: 'fz45', b: 1, n: 'Fuerza 3 días · 45 min', c: 'fuerza', P: PP({ obj: 'fuerza', dias: 3, min: 45 }) },
+  { id: 'fz6', b: 1, n: 'Fuerza avanzado 6 días', c: 'fuerza avanzado', P: PP({ obj: 'fuerza', niv: 'ava', dias: 6, min: 90, est: 'ppl' }) },
+  // en casa
+  { id: 'ckb', b: 1, n: 'En casa con kettlebell', c: 'casa', P: PP({ obj: 'musculo', dias: 3, min: 45, lug: 'casa', mat: ['kettlebell'] }) },
+  { id: 'c25', b: 1, n: 'En casa · 25 minutos', c: 'casa', P: PP({ obj: 'salud', dias: 4, min: 25, lug: 'casa' }) },
+  { id: 'cglu', b: 1, n: 'Glúteo en casa sin material', c: 'casa principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 40, lug: 'casa', prio: ['gluteo'] }) },
+  { id: 'c2', b: 1, n: 'En casa · principiante 2 días', c: 'casa principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 2, min: 35, lug: 'casa' }) },
+  { id: 'ccore', b: 1, n: 'En casa · 3 días con más core', c: 'casa', P: PP({ obj: 'salud', dias: 3, min: 30, lug: 'casa', prio: ['core'] }) },
+  { id: 'cava5', b: 1, n: 'En casa avanzado 5 días', c: 'casa avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 5, min: 60, lug: 'casa', mat: ['mancuernas', 'banda', 'kettlebell'] }) },
+  { id: 'cgr', b: 1, n: 'Perder grasa en casa sin material', c: 'casa resistencia', P: PP({ obj: 'grasa', niv: 'ini', dias: 3, min: 35, lug: 'casa', cv: 'mucho', cvT: ['bajo'] }) },
+  // híbrido, resistencia y perder grasa
+  { id: 'hib3', b: 1, n: 'Híbrido principiante 3 días', c: 'hibrido principiante', P: PP({ obj: 'recomp', niv: 'ini', dias: 3, min: 50, cv: 'normal', cvT: ['bajo', 'hiit'] }) },
+  { id: 'hibr5', b: 1, n: 'Híbrido · carrera y gimnasio 5 días', c: 'hibrido carrera', P: PP({ obj: 'recomp', dias: 5, min: 60, cv: 'normal', cvT: ['carrera'], dCarr: 2 }) },
+  { id: 'hiitc', b: 1, n: 'HIIT en casa · 25 min', c: 'resistencia casa', P: PP({ obj: 'grasa', dias: 3, min: 25, lug: 'casa', cv: 'mucho', cvT: ['hiit'] }) },
+  { id: 'bajo3', b: 1, n: 'Fuerza y cardio de bajo impacto', c: 'resistencia principiante', P: PP({ obj: 'grasa', niv: 'ini', dias: 3, min: 45, cv: 'normal', cvT: ['bajo'] }) },
+  { id: 'gr5', b: 1, n: 'Perder grasa 5 días', c: 'resistencia', P: PP({ obj: 'grasa', dias: 5, min: 60 }) },
+  { id: 'grini', b: 1, n: 'Perder grasa · principiante', c: 'resistencia principiante', P: PP({ obj: 'grasa', niv: 'ini', dias: 3, min: 45 }) },
+  { id: 'rec3', b: 1, n: 'Recomposición 3 días', c: 'hipertrofia resistencia', P: PP({ obj: 'recomp', dias: 3, min: 60 }) },
+  { id: 'resm', b: 1, n: 'Resistencia muscular · circuitos de fuerza', c: 'resistencia', P: PP({ obj: 'resist', dias: 3, min: 45, cv: 'normal', cvT: ['hiit'] }) },
+  { id: 'fkb', b: 1, n: 'Funcional en casa con kettlebell', c: 'hibrido casa', P: PP({ obj: 'resist', dias: 3, min: 40, lug: 'casa', mat: ['kettlebell'], cv: 'normal', cvT: ['hiit'] }) },
+  { id: 'cvcore', b: 1, n: 'Cardio y core 3 días', c: 'resistencia', P: PP({ obj: 'salud', dias: 3, min: 40, cv: 'mucho', cvT: ['bajo'], prio: ['core'] }) },
+  // salud, principiante y avanzado
+  { id: 'sal2', b: 1, n: 'Salud y forma · 2 días', c: 'principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 2, min: 40 }) },
+  { id: 'aire3', b: 1, n: 'Entrena al aire libre', c: 'resistencia', P: PP({ obj: 'salud', dias: 3, min: 45, lug: 'aire', cv: 'normal', cvT: ['bajo'] }) },
+  { id: 'pc1', b: 1, n: 'Peso corporal · principiante', c: 'principiante casa', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 40, lug: 'aire' }) },
+  { id: 'pc2', b: 1, n: 'Peso corporal · avanzado', c: 'avanzado casa', P: PP({ obj: 'musculo', niv: 'ava', dias: 4, min: 50, lug: 'casa', mat: ['otro'] }) },
+  { id: 'espsa', b: 1, n: 'Espalda y core fuertes · principiante', c: 'principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 3, min: 40, prio: ['core', 'espalda'] }) },
+  { id: 'cam', b: 1, n: 'Caminar + fuerza', c: 'principiante resistencia', P: PP({ obj: 'salud', niv: 'ini', dias: 3, min: 45, cv: 'normal', cvT: ['bajo'] }) },
+  { id: 'gym4i', b: 1, n: 'Empieza en el gimnasio · 4 días', c: 'principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 4, min: 50 }) },
+  { id: 'g30', b: 1, n: 'Express 30 minutos en el gimnasio', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 3, min: 30 }) },
+  { id: 'tp4a', b: 1, n: 'Avanzado 4 días · torso / pierna', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 4, min: 75, est: 'tp4' }) },
+  { id: 'fb3a', b: 1, n: 'Full body avanzado 3 días', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 3, min: 75, est: 'fb3' }) }
 ];
-PROGRAMAS.forEach(function (p) { var P = p.P; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + (P.dCarr ? (P.dias - P.dCarr) + ' + ' + P.dCarr : P.dias) + ' días · ' + P.min + ' min · ' + ({ gym: 'Gimnasio', casa: 'Casa' })[P.lug]; });
+PROGRAMAS.forEach(function (p) { var P = p.P; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + (P.dCarr ? (P.dias - P.dCarr) + ' + ' + P.dCarr : P.dias) + ' días · ' + P.min + ' min · ' + ({ gym: 'Gimnasio', casa: 'Casa', aire: 'Aire libre' })[P.lug]; });
 var CATS = [['', 'Todos'], ['principiante', 'Principiante'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido'], ['avanzado', 'Avanzado']];
 function progChips(f) { return '<div class="chips scroll">' + CATS.map(function (c) { var on = f === c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="progF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>'; }
 function vProgramas() {
   var f = S.x.pf || '';
   if (f === 'carrera' && rpHay()) return progChips(f) + rpCatalogo();
   var F = fjVisibles(f);      // 17 nov: los programas de referencia del Word (En casa); con ellos, fuera los 2 de antes que repiten
-  var L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]); }), N = !f ? rpVisibles() : f === 'principiante' ? rpVisibles('ini') : f === 'avanzado' ? rpVisibles('ava') : [];
+  var bo = rpBorr(), L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]) && (!p.b || bo); }), N = !f ? rpVisibles() : f === 'principiante' ? rpVisibles('ini') : f === 'avanzado' ? rpVisibles('ava') : [];
   return progChips(f) +
     '<section class="card lista-b"><small class="mut">' + (L.length + N.length + F.length) + ((L.length + N.length + F.length) === 1 ? ' programa' : ' programas') + '</small>' + F.map(function (p) {
       return '<button class="prog-f" data-a="verFijo" data-v="' + p.id + '"><span class="pd"><b>' + p.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }).join('') + N.map(function (P) { var rg = rpRango(P);
@@ -3173,13 +3238,13 @@ var RP_NIV = [['ini', 'Principiante'], ['int', 'Intermedio'], ['ava', 'Avanzado'
 var RP_COL = { a: '#7C8CFF', b: 'var(--neg)', c: '#9AA0A8' };
 /* catálogo de Carrera: por nivel, con los programas nuevos arriba y los de siempre debajo */
 function rpCatalogo() {
-  var nv = S.x.rpNiv || 'ini', N = rpVisibles(nv), V = PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv; });
+  var nv = S.x.rpNiv || 'ini', N = rpVisibles(nv), V = PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv && (!p.b || rpBorr()); }), F = fjVisibles('carrera').filter(function (p) { return p.niv === nv; });      // 17 nov: también los nuevos en revisión y los del Word con carrera
   var h = '<div class="rp-niv" role="tablist">' + RP_NIV.map(function (x) { return '<button role="tab" aria-selected="' + (x[0] === nv) + '" class="' + (x[0] === nv ? 'on' : '') + '" data-a="rpNiv" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
-  h += '<section class="card"><small class="mut">' + (N.length + V.length) + ((N.length + V.length) === 1 ? ' programa' : ' programas') + '</small>' + N.map(function (P) {
+  h += '<section class="card"><small class="mut">' + (N.length + V.length + F.length) + ((N.length + V.length + F.length) === 1 ? ' programa' : ' programas') + '</small>' + N.map(function (P) {
     var rg = rpRango(P), act = rpActivo(P.id);
     return '<button class="rp-p" data-a="rpVer" data-v="' + P.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(P.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + P.sem + ' semanas · ' + P.dias + ' días · ' + rg[0] + '-' + rg[1] + ' min</span><span class="q">Para ti si ' + esc(P.para[0].charAt(0).toLowerCase() + P.para[0].slice(1).replace(/\.$/, '')) + '</span>' +
       '<span class="rp-tags"><span class="rp-tag">' + ic('diana', 12) + 'Meta: ' + esc(P.meta) + '</span>' + (act ? '<span class="rp-tag ok">' + ic('check', 12, null, 2.6) + 'Lo estás haciendo</span>' : '') + '</span></button>'; }).join('') +
-    V.map(function (p) { return '<button class="rp-p" data-a="verProg" data-v="' + p.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(p.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + esc(p.sub) + '</span></button>'; }).join('') + '</section>';
+    V.map(function (p) { return '<button class="rp-p" data-a="verProg" data-v="' + p.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(p.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + esc(p.sub) + '</span></button>'; }).join('') + F.map(function (p) { return '<button class="rp-p" data-a="verFijo" data-v="' + p.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(p.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + esc(p.sub) + '</span></button>'; }).join('') + '</section>';
   return h;
 }
 A.rpNiv = function (el) { S.x.rpNiv = el.dataset.v; pintar(); };
