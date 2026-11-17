@@ -112,12 +112,12 @@ body.ancho .pag-g.lado{display:grid;grid-template-columns:minmax(0,1fr) auto;gap
 .pag-fn{border:1px solid var(--line);background:#fff;border-radius:16px;padding:9px 11px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:2px;font:inherit;color:var(--tx);min-width:0}
 .pag-fn.on{border:2px solid #111;padding:8px 10px;background:#FAFAFB}.pag-fn .aa{font-size:26px;line-height:1.1;color:#111}.pag-fn small{font-size:12px;color:var(--mu);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .pag-cr{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:16px;padding:9px 12px}.pag-cr>span:nth-child(2){flex:1;min-width:0;display:flex;flex-direction:column}.pag-cr b{font-size:14px}.pag-cr small{color:var(--mu);font-size:12.5px}
-.pag-sw{width:40px;height:40px;border-radius:12px;border:1px solid rgba(0,0,0,.14);flex:none;display:block}
+.pag-csw{width:40px;height:40px;border-radius:12px;border:1px solid rgba(0,0,0,.14);flex:none;display:block}
 .pag-cb{position:relative;overflow:hidden;display:inline-flex!important;align-items:center;width:auto!important;flex:none}.pag-cb input,.pag-swb input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;margin:0;padding:0;border:0}
 .pag-cq{background:none;border:0;color:var(--mu);font:inherit;font-size:12.5px;font-weight:700;text-decoration:underline;cursor:pointer;padding:0 2px;flex:none}
 .pag-cw{display:flex;gap:5px;align-items:center;color:#8A5300;font-size:12px;font-weight:700;margin-top:3px;line-height:1.3}.pag-cw .ic{width:14px;height:14px;flex:none}.pag-cw[hidden]{display:none}
 .pag-st{display:flex;align-items:flex-end;gap:10px}.pag-st .f{flex:1;min-width:0}.pag-stw{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:-4px}.pag-stw:empty{display:none}
-.pag-swb{position:relative;overflow:hidden;border:1px solid var(--line);background:#fff;border-radius:14px;padding:6px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:none}.pag-swb .pag-sw{width:34px;height:34px}.pag-swb small{font-size:11px;font-weight:700;color:var(--mu)}
+.pag-swb{position:relative;overflow:hidden;border:1px solid var(--line);background:#fff;border-radius:14px;padding:6px 8px;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;flex:none}.pag-swb .pag-csw{width:34px;height:34px}.pag-swb small{font-size:11px;font-weight:700;color:var(--mu)}
 .pag-et{background:var(--card2);border-radius:16px;padding:12px;display:flex;flex-direction:column;gap:8px}.pag-et>b{font-size:13px}.pag-et>small{color:var(--mu);font-size:12.5px}.pag-et input{margin:0}
 .pag-ech{display:flex;flex-wrap:wrap;gap:6px}.pag-ech button{display:inline-flex;align-items:center;gap:5px;height:34px;padding:0 13px;border-radius:17px;border:1px solid var(--line);background:#fff;font:inherit;font-weight:700;font-size:13px;cursor:pointer;color:var(--tx)}
 .pag-ech button.on{background:#111;border-color:#111;color:#fff}.pag-ech .ic{width:14px;height:14px}
@@ -3756,7 +3756,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.164';
+var APP_V = 'v53.4.165';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -20324,10 +20324,10 @@ function pagTitulosHtml(){ var E=CO.pagEd, fk=PAG_FN.some(function(f){ return f[
     '<span class="pag-tts">Colores</span>'+pagColFila('colMarca','Tu nombre de marca')+pagColFila('colFrase','Tu frase grande')+pagColFila('colTit','Títulos de los apartados')+
     '<small class="muted">¿Un apartado con otro color? Ábrelo y cámbialo junto a su título. En «Tu app» y «¿Empezamos?», que tienen el fondo oscuro, el título sale en blanco si tu color no se lee bien.</small></div>'; }
 function pagColFila(k,t){ var c=CO.pagEd[k]||'', au=pagAutoCol(k), w=pagAvisoCol(k,c);
-  return '<div class="pag-cr" id="pag-cr-'+k+'"><span class="pag-sw" style="background:'+esc(c||au[0])+'"></span><span><b>'+t+'</b><small>'+esc(c||au[1])+'</small><span class="pag-cw"'+(w?'':' hidden')+'>'+w+'</span></span>'+
+  return '<div class="pag-cr" id="pag-cr-'+k+'"><span class="pag-csw" style="background:'+esc(c||au[0])+'"></span><span><b>'+t+'</b><small>'+esc(c||au[1])+'</small><span class="pag-cw"'+(w?'':' hidden')+'>'+w+'</span></span>'+
     '<button class="pag-cq" data-a="pagColQ" data-v="'+k+'"'+(c?'':' hidden')+'>Quitar</button><label class="btn sm sec pag-cb">Elegir color<input type="color" value="'+esc((c||au[0]).toLowerCase())+'" data-v29="pagColT" data-k="'+k+'" aria-label="Elegir color: '+esc(t)+'"></label></div>'; }
 function pagColFilaAct(k){ var r=document.getElementById('pag-cr-'+k); if(!r) return; var c=CO.pagEd[k]||'', au=pagAutoCol(k), w=pagAvisoCol(k,c);
-  r.querySelector('.pag-sw').style.background=c||au[0]; r.querySelector('small').textContent=c||au[1]; var x=r.querySelector('.pag-cw'); x.innerHTML=w; x.hidden=!w; r.querySelector('.pag-cq').hidden=!c; }
+  r.querySelector('.pag-csw').style.background=c||au[0]; r.querySelector('small').textContent=c||au[1]; var x=r.querySelector('.pag-cw'); x.innerHTML=w; x.hidden=!w; r.querySelector('.pag-cq').hidden=!c; }
 IN29.pagColT=function(t){ var k=t.dataset.k; CO.pagEd[k]=String(t.value||'').toUpperCase(); pagSucio(); pagColFilaAct(k); };
 A.pagColQ=function(el){ var k=el.dataset.v; CO.pagEd[k]=''; pagSucio(); pagColFilaAct(k); var i=document.querySelector('#pag-cr-'+k+' input'); if(i) i.value=pagAutoCol(k)[0].toLowerCase(); };
 A.pagFuente=function(el){ pagSet('titFont',el.dataset.v); [].forEach.call(document.querySelectorAll('#pag-tt .pag-fn'),function(b){ var on=b.dataset.v===el.dataset.v; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); }); };
@@ -20335,7 +20335,7 @@ A.pagFuente=function(el){ pagSet('titFont',el.dataset.v); [].forEach.call(docume
 function pagTitAuto(k){ var g=CO.pagEd.colTit; if(pagFondoOsc(k)) return pagColOk(g)&&pagContr(g,'#0B0B0C')>=3?g:'#FFFFFF'; return pagColOk(g)?g:'#111111'; }
 function pagTitHtml(k){ if(!PAG_TIT[k]) return ''; var T=(CO.pagEd.secTit||{})[k]||{}, c=pagColOk(T.c)?T.c:'', v=c||pagTitAuto(k);
   return '<div class="pag-st"><label class="f">Título del apartado<input data-v29="pagTit" data-k="'+k+'" maxlength="60" value="'+esc(T.t||'')+'" placeholder="'+esc(PAG_TIT[k])+'"></label>'+
-    '<label class="pag-swb" title="Color del título"><span class="pag-sw" id="pag-sts-'+k+'" style="background:'+esc(v)+'"></span><small>Color</small><input type="color" value="'+esc(v.toLowerCase())+'" data-v29="pagTitC" data-k="'+k+'" aria-label="Color del título de este apartado"></label></div>'+
+    '<label class="pag-swb" title="Color del título"><span class="pag-csw" id="pag-sts-'+k+'" style="background:'+esc(v)+'"></span><small>Color</small><input type="color" value="'+esc(v.toLowerCase())+'" data-v29="pagTitC" data-k="'+k+'" aria-label="Color del título de este apartado"></label></div>'+
     '<div class="pag-stw" id="pag-stw-'+k+'">'+pagTitPie(k)+'</div>'; }
 function pagTitPie(k){ var c=((CO.pagEd.secTit||{})[k]||{}).c||'', w=pagAvisoCol(k,c);
   return (w?'<span class="pag-cw">'+w+'</span>':'')+(c?'<button class="pag-cq" data-a="pagTitCQ" data-v="'+k+'">Quitar el color de este título</button>':''); }
