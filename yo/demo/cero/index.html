@@ -826,6 +826,20 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .cm-l{margin:2px 0 -2px}.cm-f{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
 .cm-tt{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;background:var(--suave);border-radius:12px;padding:9px 12px;font-size:13.5px}
 .cm-tt b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:15px}
+.n-m3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:2px 0 4px}
+.n-m3f{display:flex;flex-direction:column;align-items:stretch;gap:4px;font-size:12px}
+.n-m3f>span{display:flex;align-items:center;gap:3px;white-space:nowrap;color:var(--tx);font-weight:600}.n-m3f>span small{color:var(--tx2);font-weight:600;font-size:11.5px}
+.n-m3f>span b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-weight:700}
+.n-m3f>i{height:4px;border-radius:2px;width:100%}.n-m3f>i>i{border-radius:2px}
+.n-m3f.pasa>span,.n-m3f.pasa>span small{color:var(--rojo)}.n-m3f.ok>span,.n-m3f.ok>span small{color:var(--verde-tx)}
+/* Inicio: tocar otro día */
+.sem7.v2 button.s7{border:1px solid transparent;font:inherit;cursor:pointer;width:100%}
+.sem7.v2.osc button.s7.lib{border-color:transparent}
+.sem7.v2.osc .s7.hoyR{box-shadow:inset 0 0 0 1.5px rgba(255,255,255,.55)}
+.hoy-c.otro .hoy-sh{background:rgba(255,255,255,.14)}
+.hoy-2{gap:8px}.hoy-c .btn.sec.osc{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28)}
+.rr-cal{display:flex;gap:6px;align-items:flex-start;color:var(--tx2);margin:0}
+.rr-l{margin:4px 0 8px;padding-left:22px;display:flex;flex-direction:column;gap:8px}.rr-l li{padding-left:2px}.rr-l li b{display:block;font-size:14.5px}.rr-l li small{font-size:12.5px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -2249,12 +2263,14 @@ function rutinaDe(id) { for (var i = 0; i < S.rutinas.length; i++) if (S.rutinas
 function lunesDe(f) { var d = aDate(f), w = (d.getDay() + 6) % 7; d.setDate(d.getDate() - w); return fechaDe(d); }
 function hechosSemana() { var lun = lunesDe(hoyStr()), o = {}; S.sesiones.forEach(function (s) { if (s.fecha >= lun) o[DIAS7[(aDate(s.fecha).getDay() + 6) % 7]] = 1; }); return o; }
 /* la semana: cada día con su fecha, si toca entrenar (punto), si ya está hecho (check) y hoy resaltado */
-function semanaHtml(oscura) {
-  var sem = (S.perfil && S.perfil.semana) || {}, H = hechosSemana(), hoy = hoyLetra(), lun = lunesDe(hoyStr()), hs = hoyStr();
+function semanaHtml(oscura, toca) {
+  var sem = (S.perfil && S.perfil.semana) || {}, H = hechosSemana(), hoy = hoyLetra(), lun = lunesDe(hoyStr()), hs = hoyStr(), dv = toca ? diaVer() : null;
   return '<div class="sem7 v2' + (oscura ? ' osc' : '') + '" role="list" aria-label="Esta semana">' + DIAS7.map(function (d, i) {
     var f = sumar(lun, i), r = sem[d] ? rutinaDe(sem[d]) : null, cl = H[d] ? 'ok' : sem[d] ? (f < hs ? 'perd' : 'plan') : 'lib';
     var est = H[d] ? 'hecho' : sem[d] ? (f < hs ? 'no lo hiciste' : 'toca ' + (r ? r.nombre : 'entrenar')) : 'descanso';
-    return '<span class="s7 ' + cl + (d === hoy ? ' hoy' : '') + '" role="listitem" aria-label="' + esc(DIA_N[d] + ' ' + aDate(f).getDate() + (d === hoy ? ' (hoy)' : '') + ': ' + est) + '"><small>' + d + '</small><b>' + aDate(f).getDate() + '</b><i>' + (H[d] ? ic('check', 11, null, 3.2) : '') + '</i></span>'; }).join('') + '</div>';
+    var dentro = '<small>' + d + '</small><b>' + aDate(f).getDate() + '</b><i>' + (H[d] ? ic('check', 11, null, 3.2) : '') + '</i>', lab = esc(DIA_N[d] + ' ' + aDate(f).getDate() + (d === hoy ? ' (hoy)' : '') + ': ' + est);
+    if (toca) return '<button class="s7 ' + cl + (d === (dv || hoy) ? ' hoy' : '') + (dv && d === hoy ? ' hoyR' : '') + '" role="listitem" data-a="diaVer" data-d="' + d + '" aria-pressed="' + (d === (dv || hoy)) + '" aria-label="' + lab + '">' + dentro + '</button>';
+    return '<span class="s7 ' + cl + (d === hoy ? ' hoy' : '') + '" role="listitem" aria-label="' + lab + '">' + dentro + '</span>'; }).join('') + '</div>';
 }
 function nEjTxt(r) { var n = (r.ejercicios || []).filter(function (e) { return !e.cal; }).length; return n + (n === 1 ? ' ejercicio' : ' ejercicios'); }
 function minRut(r) { var t = 0; (r.ejercicios || []).forEach(function (e) { if (e.tipo === 'run') { t += +e.min || 30; return; } var n = (e.sets || []).length; t += n * (0.8 + (+e.d || 60) / 60); }); return Math.max(10, Math.round(t / 5) * 5); }
@@ -2293,8 +2309,9 @@ function vInicio() {
     '<span class="ini-der">' + (ra ? '<span class="racha" title="' + ra + (ra > 1 ? ' semanas seguidas' : ' semana') + ' entrenando" aria-label="' + ra + (ra > 1 ? ' semanas seguidas' : ' semana') + ' entrenando">' + ic('llama', 15) + '<b class="nm">' + ra + '</b> sem</span>' : '') +
     '<button class="redondo tema-b" data-a="temaRapido" aria-label="' + (esOscuro() ? 'Pasar a modo claro' : 'Pasar a modo oscuro') + '">' + ic(esOscuro() ? 'sol' : 'luna', 19) + '</button><button class="redondo av' + (fotoPf() ? ' con-f' : '') + '" data-a="perfil" aria-label="Tu perfil">' + avatarIn(nom, 22) + '</button></span></div>';
   var nH = Object.keys(hechosSemana()).length, nP = DIAS7.filter(function (d) { return sem[d]; }).length;
+  if (diaVer()) h += otroDiaCard(diaVer(), pv); else
   h += '<section class="hoy-c"><div class="hoy-l"><small>Hoy' + (pv && !pv.antes && !pv.fin ? ' · Semana ' + pv.sem + ' de ' + pv.de : '') + '</small>' + (hecho ? '<button class="hoy-sh" data-a="compartirHoy" aria-label="Compartir el entreno de hoy">' + ic('compartir', 15, null) + 'Compartir</button>' : nP ? '<em>' + nH + ' de ' + nP + ' esta semana</em>' : '') + '</div>' +
-    '<div class="hoy-t"><b class="plata">' + (hecho ? 'Entreno hecho' : r ? esc(r.nombre) : 'Día libre') + '</b><span>' + (hecho ? '¡Bien hecho! Descansa o haz algo suave.' : r ? nEjTxt(r) + ' · unos ' + minRut(r) + ' min' : (nP ? 'Hoy tu plan no tiene entreno' : 'Elige qué entrenar')) + '</span></div>' + semanaHtml(true) +
+    '<div class="hoy-t"><b class="plata">' + (hecho ? 'Entreno hecho' : r ? esc(r.nombre) : 'Día libre') + '</b><span>' + (hecho ? '¡Bien hecho! Descansa o haz algo suave.' : r ? nEjTxt(r) + ' · unos ' + minRut(r) + ' min' : (nP ? 'Hoy tu plan no tiene entreno' : 'Elige qué entrenar')) + '</span></div>' + semanaHtml(true, true) +
     (S.ses ? '<button class="btn bl" data-a="abrirSes">' + ic('play', 16) + 'Seguir con tu entreno</button>' : r && !hecho ? '<button class="btn bl" data-a="empezarRut" data-id="' + r.id + '">' + ic('play', 16) + 'Empezar entreno</button><button class="link bl2" data-a="entrenarHoy">Hacer otro</button>' : '<button class="btn bl" data-a="entrenarHoy">' + ic('play', 16) + 'Entrenar hoy</button>') +
     (pv ? '<div class="hoy-p"><i style="width:' + (pv.antes ? 0 : pv.pc) + '%"></i></div><small class="hoy-ps">Plan «' + esc(pv.nom) + '» · ' + (pv.antes ? 'empieza el ' + esc(fCorta(pv.desde)) : pv.fin ? 'terminado el ' + esc(fCorta(pv.hasta)) : pv.pc + ' % hecho · acaba el ' + esc(fCorta(pv.hasta))) + '</small>' : '') + '</section>';
   if (S.sesiones.length) {
@@ -2348,6 +2365,30 @@ VISTAS.hoy = function () {
   var r = rutinaDe(sel);
   h += '<div class="pie-fijo"><button class="btn" data-a="hoyEmpezar">' + ic('play', 16, null) + (sel === 'libre' ? 'Empezar entreno libre' : 'Empezar ' + esc(r ? r.nombre : '')) + '</button></div></div>';
   return h;
+};
+/* tocar otro día de la semana en Inicio: qué toca ese día, «Ver rutina» (resumen) y «Entrenarlo hoy» */
+function diaVer() { var d = S.x.diaV; return d && d !== hoyLetra() ? d : null; }
+A.diaVer = function (el) { var d = el.dataset.d; S.x.diaV = d === hoyLetra() || d === S.x.diaV ? null : d; pintar(); };
+A.diaHoy = function () { S.x.diaV = null; pintar(); };
+function otroDiaCard(d, pv) {
+  var sem = (S.perfil && S.perfil.semana) || {}, i = DIAS7.indexOf(d), f = sumar(lunesDe(hoyStr()), i), r = rutinaDe(sem[d]), ses = S.sesiones.filter(function (s) { return s.fecha === f; }), pasado = f < hoyStr();
+  var nomD = DIA_N[d] + ' ' + aDate(f).getDate(), tit, sub, bt;
+  if (ses.length) { var u = ses[ses.length - 1]; tit = 'Entreno hecho'; sub = esc(u.nombre || 'Entreno') + ' · ' + (u.min || 0) + ' min'; bt = '<button class="btn bl" data-a="verSes" data-id="' + u.id + '">Ver entreno</button>'; }
+  else if (r) { tit = esc(r.nombre); sub = (pasado ? 'No lo hiciste · ' : '') + nEjTxt(r) + ' · unos ' + minRut(r) + ' min'; bt = '<div class="fila2 hoy-2"><button class="btn sec osc" data-a="rutResumen" data-id="' + r.id + '">Ver rutina</button><button class="btn bl" data-a="' + (S.ses ? 'abrirSes' : 'empezarRut') + '" data-id="' + r.id + '">' + (S.ses ? 'Seguir con tu entreno' : 'Entrenarlo hoy') + '</button></div>'; }
+  else { tit = 'Descanso'; sub = 'Ese día tu plan no tiene entreno'; bt = '<button class="btn sec osc" data-a="semana">Cambiar mi semana</button>'; }
+  return '<section class="hoy-c otro"><div class="hoy-l"><small>' + esc(nomD) + (pv && !pv.antes && !pv.fin ? ' · Semana ' + pv.sem + ' de ' + pv.de : '') + '</small><button class="hoy-sh" data-a="diaHoy">Volver a hoy</button></div>' +
+    '<div class="hoy-t"><b class="plata">' + tit + '</b><span>' + sub + '</span></div>' + semanaHtml(true, true) + bt + '</section>';
+}
+/* resumen de una rutina en una ventana: sus ejercicios con series, repeticiones y descanso */
+A.rutResumen = function (el) {
+  var r = rutinaDe(el.dataset.id); if (!r) return;
+  var L = (r.ejercicios || []), cal = L.filter(esCal), ej = L.filter(function (e) { return !esCal(e); });
+  hoja('<h2>' + esc(r.nombre) + '</h2><p class="mut sm">' + nEjTxt(r) + ' · unos ' + minRut(r) + ' min' + ((r.dias || []).length ? ' · ' + r.dias.map(function (x) { return DIA_N[x]; }).join(', ').toLowerCase() : '') + '</p>' +
+    (cal.length ? '<p class="sm rr-cal">' + ic('llama', 14) + '<span>Calentamiento: ' + esc(cal.map(function (e) { return e.n; }).join(', ')) + '</span></p>' : '') +
+    '<ol class="rr-l">' + ej.map(function (e) { return '<li><b>' + esc(e.n) + '</b><small class="mut">' + esc(setsTxt(e)) + (+e.d && e.tipo !== 'run' && e.tipo !== 'cardio' ? ' · descanso ' + mmss(+e.d) : '') + '</small></li>'; }).join('') + '</ol>' +
+    '<button class="btn" data-a="rrEmpezar" data-id="' + r.id + '">' + (S.ses ? 'Seguir con tu entreno' : 'Entrenarla hoy') + '</button><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+};
+A.rrEmpezar = function (el) { cerrarHoja(); S.x.diaV = null; if (S.ses) return A.abrirSes(); empezarSes(rutinaDe(el.dataset.id));
 };
 A.entrenarHoy = function () { if (S.ses) return A.abrirSes(); var sem = (S.perfil && S.perfil.semana) || {}; S.x.hoySel = sem[hoyLetra()] || 'libre'; ir({ t: 'hoy' }); };
 A.hoySel = function (el) { S.x.hoySel = el.dataset.v; pintar(); };
@@ -3767,7 +3808,7 @@ function uniTxt(x) { if (!x.g) return x.det || ''; var m = String(x.det || '').m
 function macOk(v, o) { return Math.abs(v - o) <= Math.max(3, o * 0.15); }
 function macBarras(t, oc) {
   return '<div class="n-m3">' + MAC3.map(function (m) { var v = Math.round(t[m[0] === 'gr' ? 'g' : m[0]]), o = Math.round(oc[m[2]] || 0), ok = macOk(v, o), pasa = !ok && v > o, pc = o ? Math.min(100, Math.round(v * 100 / o)) : (v ? 100 : 0);
-    return '<div class="n-m3f' + (pasa ? ' pasa' : ok ? ' ok' : '') + '"><span>' + m[1] + '</span><i><i style="width:' + pc + '%"></i></i><b>' + v + ' / ' + o + ' g' + (pasa ? ic('subir', 13, null, 2.6) : ok ? ic('check', 13, null, 3) : '') + '</b></div>'; }).join('') + '</div>';
+    return '<div class="n-m3f' + (pasa ? ' pasa' : ok ? ' ok' : '') + '" title="' + m[1] + ': ' + v + ' de ' + o + ' g"><span><small>' + m[1].slice(0, m[0] === 'gr' ? 5 : 4) + '.</small> <b>' + v + '/' + o + '</b>' + (pasa ? ic('subir', 11, null, 2.8) : ok ? ic('check', 11, null, 3) : '') + '</span><i><i style="width:' + pc + '%"></i></i></div>'; }).join('') + '</div>';
 }
 /* qué alimentos empujan un macro que se pasa: los que ponen al menos el 30 % de ese macro en la comida */
 function rojosDe(L, t, oc) {
