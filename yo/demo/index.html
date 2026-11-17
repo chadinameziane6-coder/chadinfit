@@ -975,6 +975,25 @@ button.card.n-semc{display:flex;flex-direction:row;align-items:center;justify-co
 .pd-nota{display:flex;gap:6px;align-items:flex-start}.pd-nota .ic{flex-shrink:0;margin-top:2px}
 
 
+/* 17 nov (Word de programación): la vista de cada ejercicio como la de los clientes de los entrenadores (series.js) */
+.ej-acc4{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.ej-acc4 button{height:40px;border-radius:14px;border:1px solid var(--sec-b);background:var(--sec);display:flex;align-items:center;justify-content:center;gap:5px;font-size:12.5px;font-weight:700;color:var(--tx);padding:0 4px;min-width:0}
+.ej-acc4 button.on{border-color:var(--neg);box-shadow:inset 0 0 0 1px var(--neg)}
+.ej-maq,.ej-para{display:flex;gap:6px;align-items:flex-start;font-size:13px;margin:0;line-height:1.4}.ej-maq .ic,.ej-para .ic{flex-shrink:0;margin-top:2px}
+.ej-maq{color:var(--tx2)}.ej-para{background:var(--ambar-bg);color:var(--ambar-tx);border-radius:12px;padding:8px 10px}
+.ser-met{display:flex;flex-direction:column;gap:6px}.ser-met p{margin:0}
+.ser-tg{display:flex;flex-wrap:wrap;gap:6px}
+.ser-tg button{height:32px;border-radius:16px;border:1px solid var(--borde2);background:var(--card);display:inline-flex;align-items:center;gap:5px;padding:0 11px;font-size:12.5px;font-weight:700;color:var(--tx)}
+.ser-tg button.on{background:var(--neg);color:var(--neg-t);border-color:var(--neg)}
+.st-n small{display:block;font-size:8.5px;font-weight:800;color:var(--tx2);line-height:1.1;white-space:nowrap;letter-spacing:-.2px}
+.st.st-l2,.st-h.st-l2{grid-template-columns:30px 1fr 152px 40px}.st.st-l2{padding:6px}
+.st-hl{display:grid;grid-template-columns:34px 1fr 1fr;gap:4px}.st-hl i{font-style:normal;text-align:center}
+.ser-ch{display:flex;flex-wrap:wrap;gap:6px}.ser-ch .chip{margin:0}
+.st-lds{display:flex;flex-direction:column;gap:4px}
+.st-ld{display:grid;grid-template-columns:34px 1fr 1fr;gap:4px;align-items:center}.st-ld span{font-size:11px;font-weight:800;color:var(--tx2)}
+.st-ld input{min-width:0}
+.ej-quitar{display:inline-flex;align-items:center;gap:6px}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
 <body>
@@ -1327,7 +1346,10 @@ window.YO_REVISAR = [
   { t: 'Programas de carrera de siempre: calentamiento y zonas', d: 'Cada rutina con 4 o más ejercicios de calentamiento (tobillo, rodilla, cadera y glúteo; en los de impacto, también técnica), zonas en el texto (trotando en Z1-Z2…) y «rápido» en vez de «alegre». Programas → Carrera → De 0 a 5 km.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'carrera'; verProgSi('run5'); } },
   { t: 'Ejercicios nuevos (tanda 2)', d: 'Los del Word que no estaban: técnica de carrera (A-march, ankling, wall drill…), pliometría (bounding, CMJ, drop jumps…), activación antes de correr, fuerza y core. Cada uno con su «cómo se hace». Al dar el OK pasan a la biblioteca de MOOD ON.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'ejercicios'; ir({ t: 'demoNuevos' }); } }
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'ejercicios'; ir({ t: 'demoNuevos' }); } },
+  { t: 'La vista de cada ejercicio, como la de los clientes (tanda 3)', d: 'En un entreno de fuerza: Vídeo · Cambiar · Máquina · Nota (fija y «para la próxima vez»); método de series (pirámide, top set + back-off, drop, rest-pause, myo-reps, al fallo) con los kilos calculados solos; series de aproximación; «Cada lado» (izq. y der.) en los de una mano; «− Serie». (Empieza un entreno si no hay uno.)',
+    ir: function () { if (!S.ses) { var r = S.rutinas.filter(function (x) { return !rpDeRut(x) && (x.ejercicios || []).some(function (e) { return e.tipo !== 'run' && e.tipo !== 'cardio' && !e.cal; }); })[0]; if (r) empezarSes(r); else return toast('Crea antes una rutina de fuerza'); } else A.abrirSes();
+      var i = S.ses.ej.findIndex(function (e) { return e.tipo !== 'run' && e.tipo !== 'cardio' && !e.cal; }); if (i >= 0) { S.ses.ab = i; pintar(); } } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -3433,7 +3455,7 @@ function objetivoHoy(e) {
 
 function empezarSes(r) {
   if (S.ses) return A.abrirSes();
-  var ej = r ? JSON.parse(JSON.stringify(r.ejercicios || [])).map(function (e) { (e.sets || []).forEach(function (s) { s.rirO = s.rir || ''; s.kg = ''; s.reps = ''; s.rir = ''; s.ok = false; }); e.hecho = false; return e; }) : [];
+  var ej = r ? JSON.parse(JSON.stringify(r.ejercicios || [])).map(function (e) { (e.sets || []).forEach(function (s) { s.rirO = s.rir || ''; s.kg = ''; s.reps = ''; s.rir = ''; s.ok = false; delete s.kgI; delete s.repsI; delete s.kgD; delete s.repsD; delete s.lad; }); e.hecho = false; return e; }) : [];
   S.ses = { id: nuevoId(), rid: r ? r.id : '', nombre: r ? r.nombre : 'Entreno libre', libre: !r, inicio: Date.now(), ej: ej, ab: ej.findIndex(function (e) { return !e.cal; }) };
   if (S.ses.ab < 0) S.ses.ab = 0;
   guardaEnCurso(); S.pant = null; S.pila = []; ir({ t: 'entreno' });
@@ -3470,26 +3492,30 @@ function ejAbierto(e, i) {
     return h + ejAcc(i) + '</section>';
   }
   var O = objetivoHoy(e), M = esFz(e) ? mejorDe(e.n, S.ses.id) : null, U = ultimaDe(e.n, S.ses.id);
+  h += serCabHtml(e, i);      // 17 nov: Vídeo · Cambiar · Máquina · Nota (series.js)
   if (O || M) h += '<div class="o3' + (O && M ? '' : ' uno') + '">' + (O ? '<div class="o3-h">' + ic('diana', 20, null) + '<span><small>Objetivo de hoy</small><b>' + (O.p ? fN(O.p) + ' kg × ' : '') + O.r + '</b></span></div>' : '') +
     (M ? '<div class="o3-r">' + ic('trofeo', 20) + '<span><small>Tu récord</small><b>' + (M.p ? fN(M.p) + ' × ' : '') + M.r + '</b>' + (M.e1 ? '<i>1RM ≈ ' + fN(Math.round(M.e1)) + ' kg</i>' : '') + '</span></div>' : '') + '</div>';
   var uU = e.u === 's' ? 'Seg' : e.u === 'm' ? 'Metros' : 'Reps', W = U ? U.sets.filter(function (s) { return s.ok; }) : [];
   if (e.u === 's') h += ctaSetBtn(e, i, O, W);
-  h += '<div class="st-h"><span>#</span><span>' + (U ? 'Última vez' : '') + '</span><span>Kg</span><span>' + uU + '</span><span>RIR</span><span></span></div>';
+  h += serMetHtml(e, i);
+  h += e.lados ? '<div class="st-h st-l2"><span>#</span><span>' + (U ? 'Última vez' : '') + '</span><span class="st-hl"><i></i><i>Kg</i><i>' + uU + '</i></span><span></span></div>' : '<div class="st-h"><span>#</span><span>' + (U ? 'Última vez' : '') + '</span><span>Kg</span><span>' + uU + '</span><span>RIR</span><span></span></div>';
   e.sets.forEach(function (s, j) {
-    var pv = W[j] || null, an = j > 0 ? e.sets[j - 1] : null, phK = an && num(an.kg) != null && an.kg !== '' ? fN(an.kg) : O && O.p ? fN(O.p) : pv && pv.kg ? fN(pv.kg) : '', phR = O ? String(O.r) : pv ? String(pv.reps) : String(s.r || '').split('-').pop();
-    h += '<div class="st' + (s.ok ? ' ok' : '') + '"><span class="st-n">' + (s.t === 'aprox' ? 'C' : (j + 1)) + (s.rec ? ic('trofeo', 13, 'var(--verde)', 2.4) : '') + '</span><span class="st-u">' + (pv ? (pv.kg ? fN(pv.kg) + ' × ' : '') + esc(pv.reps) : '') + '</span>' +
+    var pv = W[j] || null, an = null; for (var q = j - 1; q >= 0 && s.t !== 'aprox'; q--) { var z = e.sets[q]; if (z.t !== 'aprox' && z.kg !== '' && num(z.kg) != null) { an = z; break; } }
+    var phK = an ? fN(an.kg) : O && O.p ? fN(O.p) : pv && pv.kg ? fN(pv.kg) : '', phR = s.t === 'aprox' || s.t === 'pir' || s.t === 'top' ? String(s.r || '').split('-').pop() : O ? String(O.r) : pv ? String(pv.reps) : String(s.r || '').split('-').pop();
+    var cK = serCalc(e, j, O, W); if (cK) phK = fN(cK);      // 17 nov: kilos calculados (aproximación, back-off, pirámide)
+    if (e.lados) { h += serLadosHtml(e, i, s, j, pv, phK, phR); return; }
+    h += '<div class="st' + (s.ok ? ' ok' : '') + '"><span class="st-n">' + (s.t === 'aprox' ? 'C' : (j + 1)) + (s.rec ? ic('trofeo', 13, 'var(--verde)', 2.4) : '') + (serTag(s.t) ? '<small>' + serTag(s.t) + '</small>' : '') + '</span><span class="st-u">' + (pv ? (pv.kg ? fN(pv.kg) + ' × ' : '') + esc(pv.reps) : '') + '</span>' +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(s.kg) + '" placeholder="' + esc(phK) + '" aria-label="Kilos de la serie ' + (j + 1) + '">' +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="numeric" value="' + esc(s.reps) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + (j + 1) + '">' +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '" placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + (j + 1) + '">' +
       '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + (j + 1) + ' hecha">' + ic('check', 16, s.ok ? '#fff' : 'var(--tx3)', 3) + '</button></div>';
   });
-  var esp = e.sets.map(function (z, j) { return TEC_N[z.t] ? '<p class="tec-f"><span class="tec-t">' + TEC_N[z.t] + '</span><span>Serie ' + (j + 1) + (z.det ? ': ' + esc(z.det) : '') + '</span>' + (z.t === 'fallo' ? '' : '<button class="link" data-a="herrCalc" data-i="' + i + '" data-m="' + z.t + '">Calcular</button>') + '</p>' : ''; }).join('');
-  if (esp) h += '<div class="tec-l">' + esp + '</div>';
+  h += serEspHtml(e, i, O, W);      // 17 nov: las series especiales con los números ya calculados
   if (U) h += '<p class="pie-u">' + ic('info', 14) + '<span>«Última vez»: lo que hiciste el ' + esc(fCorta(U.fecha)) + ' en cada serie.</span></p>';
   if (e.nota) h += '<p class="nota">' + esc(e.nota) + '</p>';
-  return h + '<div class="fila2 mt"><button class="btn-o" data-a="stMas" data-i="' + i + '">+ Añadir serie</button><button class="btn-o" data-a="sesCambiar" data-i="' + i + '">Cambiar ejercicio</button></div>' + ejAcc(i) + '</section>';
+  return h + '<div class="fila2 mt"><button class="btn-o" data-a="stMas" data-i="' + i + '">+ Añadir serie</button><button class="btn-o" data-a="stMenos" data-i="' + i + '">− Serie</button></div>' + ejAcc(i) + '</section>';
 }
-function ejAcc(i) { return '<button class="link rojo-t" data-a="sesQuitar" data-i="' + i + '">Quitar de este entreno</button>'; }
+function ejAcc(i) { return '<button class="link rojo-t ej-quitar" data-a="sesQuitar" data-i="' + i + '">' + ic('papelera', 15) + 'Quitar de este entreno</button>'; }
 function mmss(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + ('0' + s % 60).slice(-2); }
 A.sesAb = function (el) { S.ses.ab = +el.dataset.i; guardaEnCurso(); pintar(); };
 A.calOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); pintar(); };
@@ -3520,7 +3546,8 @@ A.stOk = function (el) {
   var i = +el.dataset.i, j = +el.dataset.j, e = S.ses.ej[i], s = e.sets[j];
   if (s.ok) { s.ok = false; s.rec = false; guardaEnCurso(); return pintar(); }
   var fila = el.closest('.st'), ins = fila ? fila.querySelectorAll('input') : [];
-  if (ins.length) { if (s.kg === '' && ins[0].placeholder) s.kg = ins[0].placeholder.replace(',', '.'); if (s.reps === '' && ins[1].placeholder) s.reps = ins[1].placeholder; }
+  if (e.lados) { if (!serLadosOk(e, s, fila)) { toast('Apunta las repeticiones de los dos lados'); return; } }
+  else if (ins.length) { if (s.kg === '' && ins[0].placeholder) s.kg = ins[0].placeholder.replace(',', '.'); if (s.reps === '' && ins[1].placeholder) s.reps = ins[1].placeholder; }
   if (!num(s.reps)) { toast('Apunta las repeticiones de la serie'); return; }
   s.ok = true;
   if (esFz(e) && s.t !== 'aprox') { var M = mejorDe(e.n, S.ses.id), p = num(s.kg) || 0, r = num(s.reps) || 0, yaHoy = e.sets.some(function (z, k) { return k !== j && z.rec; });
@@ -3559,7 +3586,7 @@ A.descartar = function () { if (typeof rcPantalla === 'function') rcPantalla(fal
 A.terminarSi = function () {
   cerrarHoja(); var X = S.ses, vol = 0, nser = 0, recs = [];
   var ej = X.ej.filter(function (e) { return !e.cal && ((e.sets || []).some(function (s) { return s.ok; }) || e.hecho); }).map(function (e) {
-    var o = { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', sets: (e.sets || []).filter(function (s) { return s.ok; }).map(function (s) { var p = num(s.kg) || 0, r = num(s.reps) || 0; nser++; if (!e.u) vol += p * r; return { t: s.t || 'normal', kg: s.kg, reps: s.reps, rir: s.rir, ok: true, rec: !!s.rec }; }) };
+    var o = { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', sets: (e.sets || []).filter(function (s) { return s.ok; }).map(function (s) { var p = num(s.kg) || 0, r = num(s.reps) || 0; nser++; if (!e.u) vol += serVol(s); var o2 = { t: s.t || 'normal', kg: s.kg, reps: s.reps, rir: s.rir, ok: true, rec: !!s.rec }; if (s.lad) o2.lad = s.lad; return o2; }) };
     if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = e.tipo === 'run' ? runKm(e.km) : null, mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.rp) o.rp = rpReg(e); }
     o.sets.forEach(function (s) { if (s.rec) recs.push({ e: e.n, p: num(s.kg) || 0, r: num(s.reps) || 0 }); });
     return o; });
@@ -3568,7 +3595,7 @@ A.terminarSi = function () {
   S.sesiones.push(Object.assign({ id: X.id, fecha: f }, d));
   guardar('yo_guardar_sesion', { sid: X.id, f: f, d: d }, 'ses_' + X.id);
   S.fin = Object.assign({ id: X.id, fecha: f, primero: S.sesiones.length === 1, libreEj: X.libre ? X.ej : null }, d); S.fin.modo = 'negro'; S.fin.slide = 0; S.fin.foto = null;
-  S.ses = null; DESC.fin = 0; try { localStorage.removeItem(ecK()); } catch (e) { }
+  serNotasVistas(X); S.ses = null; DESC.fin = 0; try { localStorage.removeItem(ecK()); } catch (e) { }
   S.pant = null; S.pila = []; ir({ t: 'fin' });
 };
 function recsRecientes(dias) { var lim = sumar(hoyStr(), -dias), L = []; S.sesiones.forEach(function (s) { if (s.fecha >= lim) (s.recs || []).forEach(function (r) { L.push(r); }); }); return L.reverse(); }
@@ -3823,6 +3850,114 @@ function ctaFinTiempo() {
 }
 A.ctaAutoNo = function () { CTA.auto = null; pintaDescanso(); toast('La siguiente serie la empiezas tú'); };
 setInterval(function () { var a = CTA.auto; if (!a || CTA.on) return; if (!S.ses) { CTA.auto = null; return; } if (Date.now() >= a.fin) { CTA.auto = null; ctaSerie(a.i, true); } }, 250);
+
+;
+/* ---------- La vista de cada ejercicio en el entreno, como la de los clientes de los entrenadores (17 nov 2026, Word de programación) ----------
+   Javier: «que la vista de los ejercicios sea como la que tienen los clientes de los entrenadores, con series especiales, calculadora automática,
+   cuenta atrás, poner kg en derecha o izquierda». Solo /yo. Arriba: Vídeo · Cambiar · Máquina · Nota. Método de series (normal, pirámide,
+   top set + back-off, drop set, rest-pause, myo-reps, al fallo) y series de aproximación, con los kilos calculados solos (en gris, se pueden
+   cambiar). En los ejercicios a una mano o una pierna, «Cada lado»: kilos y repeticiones de la izquierda y de la derecha. */
+var MET_SER = [['normal', 'Normal'], ['pir', 'Pirámide'], ['top', 'Top set + back-off'], ['drop', 'Drop set'], ['rp', 'Rest-pause'], ['myo', 'Myo-reps'], ['fallo', 'Al fallo']];
+var MET_INFO = { normal: 'Todas las series con el mismo peso y repeticiones.', pir: 'Cada serie, un poco más de peso y menos repeticiones.', top: 'Una serie pesada (top set) y luego las demás con un 15 % menos (back-off).',
+  drop: 'En la última serie, al acabar, bajas el peso un 20 % y sigues sin descansar (2 bajadas).', rp: 'En la última serie, al acabar, descansas 15 s y haces 2 mini-series más con el mismo peso.',
+  myo: 'Última serie de activación (12-15) y luego mini-series de 3-5 repeticiones con 15 s de descanso.', fallo: 'La última serie, hasta no poder hacer ni una repetición más con buena técnica.' };
+function serK(n) { return clave(n || ''); }
+function ejUni(e) { var b = bancoDe(e.n) || {}; return !!(b.ld || e.uni); }
+function redKg(v) { if (!(v > 0)) return 0; var p = v < 20 ? 1 : 2.5; return Math.round(v / p) * p; }
+/* el peso de referencia: el de la primera serie de trabajo (escrito o el que sugiere la app) */
+function serRef(e, O, W) {
+  var t = e.sets.filter(function (s) { return s.t !== 'aprox'; }), s0 = t[0] || {};
+  if (s0.t === 'top' || e.met === 'top') { var tp = e.sets.filter(function (s) { return s.t === 'top'; })[0]; if (tp && num(tp.kg)) return num(tp.kg); }
+  if (num(s0.kg)) return num(s0.kg); if (O && O.p) return O.p; var w = W && W.filter(function (s) { return s.t !== 'aprox'; })[0]; return w && num(w.kg) ? num(w.kg) : 0;
+}
+/* los kilos que calcula la app para una serie (aproximación, back-off, pirámide); 0 = nada que calcular */
+function serCalc(e, j, O, W) {
+  var s = e.sets[j], ref = serRef(e, O, W); if (!ref) return 0;
+  if (s.t === 'aprox') { var ka = e.sets.slice(0, j).filter(function (z) { return z.t === 'aprox'; }).length, na = e.sets.filter(function (z) { return z.t === 'aprox'; }).length; return redKg(ref * ([[0.6], [0.5, 0.75], [0.4, 0.6, 0.8]][Math.min(na, 3) - 1] || [0.6])[ka]); }
+  if (s.t === 'back') return redKg(ref * 0.85);
+  if (s.t === 'pir') { var kp = e.sets.slice(0, j).filter(function (z) { return z.t === 'pir'; }).length; return kp ? redKg(ref * (1 + 0.075 * kp)) : 0; }
+  return 0;
+}
+function serTag(t) { return { aprox: 'Aprox.', top: 'Top', back: 'Back-off', pir: 'Pirámide', drop: 'Drop', rp: 'Rest-pause', myo: 'Myo', fallo: 'Fallo' }[t] || ''; }
+/* debajo de las series: lo que hay que hacer en las especiales, con los números ya calculados */
+function serEspHtml(e, i, O, W) {
+  var L = [];
+  e.sets.forEach(function (s, j) {
+    var k = num(s.kg) || serCalc(e, j, O, W) || (j === e.sets.length - 1 ? serRef(e, O, W) : 0);
+    var cal = '<button class="link" data-a="herrCalc" data-i="' + i + '" data-m="' + s.t + '">Calculadora</button>', det = s.det ? esc(s.det) + ' · ' : '';
+    if (s.t === 'drop') { var dm = /(\d+)\s*bajadas?.*?(\d+)\s*%/.exec(s.det || ''), nb = dm ? Math.min(4, +dm[1]) : 2, pc = dm ? +dm[2] / 100 : 0.2, seq = [k]; for (var q = 0; q < nb; q++) seq.push(redKg(seq[q] * (1 - pc)));
+      L.push('<p class="tec-f"><span class="tec-t">Drop set</span><span>Serie ' + (j + 1) + ': ' + det + (k ? seq.map(fN).join(' → ') + ' kg, sin descansar' : 'baja el peso un ' + Math.round(pc * 100) + ' % ' + nb + ' veces, sin descansar') + '</span>' + cal + '</p>'); }
+    else if (s.t === 'rp') L.push('<p class="tec-f"><span class="tec-t">Rest-pause</span><span>Serie ' + (j + 1) + ': ' + det + 'al acabar, 15 s y 2 mini-series más' + (k ? ' con ' + fN(k) + ' kg' : '') + '</span><button class="link" data-a="serCta" data-v="15">' + ic('reloj', 13) + '15 s</button>' + cal + '</p>');
+    else if (s.t === 'myo') L.push('<p class="tec-f"><span class="tec-t">Myo-reps</span><span>Serie ' + (j + 1) + ': ' + det + '12-15 de activación y luego 3-5 mini-series de 3-5' + (k ? ' con ' + fN(k) + ' kg' : '') + '</span><button class="link" data-a="serCta" data-v="15">' + ic('reloj', 13) + '15 s</button>' + cal + '</p>');
+    else if (s.t === 'fallo') L.push('<p class="tec-f"><span class="tec-t">Al fallo</span><span>Serie ' + (j + 1) + ': ' + det + 'hasta no poder hacer otra con buena técnica</span></p>');
+  });
+  return L.length ? '<div class="tec-l">' + L.join('') + '</div>' : '';
+}
+/* arriba del ejercicio: Vídeo · Cambiar · Máquina · Nota, y lo apuntado (máquina, nota fija, «para hoy») */
+function serCabHtml(e, i) {
+  var P = S.perfil || {}, k = serK(e.n), mq = (P.maq || {})[k], nt = Object.assign({}, (P.notasEj || {})[k] || {});
+  if (nt.p && nt.pd === S.ses.id) nt.p = '';      // la de «para la próxima vez» sale la próxima, no en el entreno en que la escribes
+  if (nt.p) { S.ses.vistoP = S.ses.vistoP || {}; S.ses.vistoP[k] = 1; }
+  return '<div class="ej-acc4"><button data-a="verEj" data-n="' + esc(e.n) + '">' + ic('play', 15) + 'Vídeo</button><button data-a="sesCambiar" data-i="' + i + '">' + ic('cambiar', 15) + 'Cambiar</button>' +
+    '<button class="' + (mq ? 'on' : '') + '" data-a="ejMaq" data-i="' + i + '">' + ic('ajustes', 15) + 'Máquina</button><button class="' + (nt.f || nt.p ? 'on' : '') + '" data-a="ejNota" data-i="' + i + '">' + ic('lapiz', 15) + 'Nota</button></div>' +
+    (mq ? '<p class="ej-maq">' + ic('ajustes', 14) + '<span>' + esc(mq) + '</span></p>' : '') + (nt.f ? '<p class="nota">' + esc(nt.f) + '</p>' : '') + (nt.p ? '<p class="ej-para">' + ic('info', 14) + '<span><b>Para hoy:</b> ' + esc(nt.p) + '</span></p>' : '');
+}
+/* el método de series, la aproximación y «Cada lado» */
+function serMetHtml(e, i) {
+  var m = e.met || 'normal', ap = e.sets.some(function (s) { return s.t === 'aprox'; });
+  return '<div class="ser-met"><div class="chips ser-ch">' + MET_SER.map(function (x) { return '<button class="chip' + (x[0] === m ? ' on' : '') + '" data-a="serMet" data-i="' + i + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+    '<p class="sm mut">' + esc(MET_INFO[m]) + ' Los kilos en gris los calcula la app: puedes cambiarlos.</p>' +
+    '<div class="ser-tg"><button class="' + (ap ? 'on' : '') + '" data-a="serApx" data-i="' + i + '" aria-pressed="' + ap + '">' + ic(ap ? 'check' : 'mas', 13, null, 2.6) + 'Series de aproximación</button>' +
+    (ejUni(e) ? '<button class="' + (e.lados ? 'on' : '') + '" data-a="serLados" data-i="' + i + '" aria-pressed="' + !!e.lados + '">' + ic(e.lados ? 'check' : 'mas', 13, null, 2.6) + 'Cada lado (izq. y der.)</button>' : '') + '</div></div>';
+}
+/* una serie con izquierda y derecha */
+function serLadosHtml(e, i, s, j, pv, phK, phR) {
+  var f = function (ld, nm) { return '<div class="st-ld"><span>' + nm + '</span><input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg' + ld + '" inputmode="decimal" value="' + esc(s['kg' + ld] || '') + '" placeholder="' + esc(phK) + '" aria-label="Kilos ' + nm + ' serie ' + (j + 1) + '"><input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps' + ld + '" inputmode="numeric" value="' + esc(s['reps' + ld] || '') + '" placeholder="' + esc(phR) + '" aria-label="Repeticiones ' + nm + ' serie ' + (j + 1) + '"></div>'; };
+  return '<div class="st st-l2' + (s.ok ? ' ok' : '') + '"><span class="st-n">' + (s.t === 'aprox' ? 'C' : (j + 1)) + '</span><span class="st-u">' + (pv ? (pv.kg ? fN(pv.kg) + ' × ' : '') + esc(pv.reps) : '') + '</span><div class="st-lds">' + f('I', 'Izq.') + f('D', 'Der.') + '</div>' +
+    '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + (j + 1) + ' hecha">' + ic('check', 16, s.ok ? '#fff' : 'var(--tx3)', 3) + '</button></div>';
+}
+/* al marcar una serie con los dos lados: se guarda el peor lado como la serie (para récords) y los dos lados aparte */
+function serLadosOk(e, s, fila) {
+  var v = {}; ['kgI', 'repsI', 'kgD', 'repsD'].forEach(function (k) { var inp = fila && fila.querySelector('[data-k=' + k + ']'); v[k] = s[k] !== undefined && s[k] !== '' ? s[k] : inp ? inp.placeholder.replace(',', '.') : ''; s[k] = v[k]; });
+  if (!num(v.repsI) || !num(v.repsD)) return false;
+  s.kg = String(Math.max(num(v.kgI) || 0, num(v.kgD) || 0) || ''); s.reps = String(Math.min(num(v.repsI), num(v.repsD))); s.lad = { kgI: v.kgI, repsI: v.repsI, kgD: v.kgD, repsD: v.repsD }; return true;
+}
+function serVol(s) { if (s.lad) return (num(s.lad.kgI) || 0) * (num(s.lad.repsI) || 0) + (num(s.lad.kgD) || 0) * (num(s.lad.repsD) || 0); return (num(s.kg) || 0) * (num(s.reps) || 0); }
+/* cambiar el método: rehace los tipos de serie (las ya hechas no se tocan) y se queda en tu rutina para la próxima */
+function serRango(r) { var a = String(r || '10').split('-').map(Number); return [a[0] || 10, a[1] || a[0] || 10]; }
+A.serMet = function (el) {
+  var e = S.ses.ej[+el.dataset.i], m = el.dataset.v, W = e.sets.filter(function (s) { return s.t !== 'aprox'; }), n = W.length;
+  W.forEach(function (s) { if (!s.r0) s.r0 = s.r; }); var rg = serRango((W[0] || {}).r0);      // las repeticiones de antes, para volver a ellas
+  W.forEach(function (s, k) { if (s.ok) return; s.t = 'normal'; s.det = ''; s.r = s.r0;
+    if (m === 'pir') { s.t = 'pir'; s.r = String(Math.max(3, rg[1] + 2 - 2 * k)); }
+    else if (m === 'top') { s.t = k ? 'back' : 'top'; s.r = k ? rg[0] + '-' + rg[1] : Math.max(3, rg[0] - 3) + '-' + Math.max(4, rg[0] - 1); }
+    else if (k === n - 1 && /^(drop|rp|myo|fallo)$/.test(m)) s.t = m;
+  });
+  e.met = m; guardaEnCurso(); serARutina(e, function (q) { q.met = m; q.sets = e.sets.map(function (s) { var o = { t: s.t, r: s.r, rir: s.rirO || s.rir || '', kg: '' }; if (s.r0) o.r0 = s.r0; return o; }); }); pintar();
+};
+A.serApx = function (el) {
+  var e = S.ses.ej[+el.dataset.i], ap = e.sets.some(function (s) { return s.t === 'aprox'; });
+  if (ap) e.sets = e.sets.filter(function (s) { return s.t !== 'aprox' || s.ok; });
+  else e.sets = [{ t: 'aprox', r: '8', kg: '', reps: '', rir: '', ok: false }, { t: 'aprox', r: '5', kg: '', reps: '', rir: '', ok: false }, { t: 'aprox', r: '3', kg: '', reps: '', rir: '', ok: false }].concat(e.sets);
+  guardaEnCurso(); pintar();
+};
+A.serLados = function (el) { var e = S.ses.ej[+el.dataset.i]; e.lados = !e.lados; guardaEnCurso(); serARutina(e, function (q) { q.lados = e.lados ? 1 : 0; }); pintar(); };
+A.serCta = function (el) { audioOk(); empiezaDescanso(+el.dataset.v || 15); pintar(); };
+A.stMenos = function (el) { var e = S.ses.ej[+el.dataset.i], k = -1; e.sets.forEach(function (s, j) { if (!s.ok && s.t !== 'aprox') k = j; }); if (k < 0) return toast('No hay series sin hacer que quitar'); e.sets.splice(k, 1); guardaEnCurso(); pintar(); };
+function serARutina(e, fn) { var r = S.ses && S.ses.rid ? rutinaDe(S.ses.rid) : null; if (!r) return; var q = (r.ejercicios || []).filter(function (x) { return clave(x.n) === clave(e.n); })[0]; if (!q) return; fn(q); guardaRutina(r); }
+/* máquina y notas (por ejercicio, se guardan en tu perfil) */
+A.ejMaq = function (el) { var e = S.ses.ej[+el.dataset.i], v = ((S.perfil || {}).maq || {})[serK(e.n)] || '';
+  hoja('<h2>Ajustes de la máquina</h2><p class="mut sm">' + esc(e.n) + '. Lo verás aquí cada vez que hagas este ejercicio.</p><label class="f">Asiento, respaldo, agarre, altura…<textarea id="maq-t" rows="3" maxlength="200" placeholder="Ej.: asiento 4, respaldo 2, agarre neutro">' + esc(v) + '</textarea></label>' +
+    '<button class="btn" data-a="ejMaqSi" data-n="' + esc(e.n) + '">Guardar</button>' + (v ? '<button class="btn sec" data-a="ejMaqSi" data-n="' + esc(e.n) + '" data-v="borrar">Quitar</button>' : '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>')); };
+A.ejMaqSi = function (el) { var P = S.perfil = S.perfil || perfilNuevo(), t = el.dataset.v === 'borrar' ? '' : String((document.getElementById('maq-t') || {}).value || '').trim().slice(0, 200); P.maq = P.maq || {}; if (t) P.maq[serK(el.dataset.n)] = t; else delete P.maq[serK(el.dataset.n)]; guardaPerfil(); cerrarHoja(); pintar(); };
+A.ejNota = function (el) { var e = S.ses.ej[+el.dataset.i], nt = ((S.perfil || {}).notasEj || {})[serK(e.n)] || {};
+  hoja('<h2>Notas de ' + esc(e.n) + '</h2><label class="f">Siempre (nota fija)<textarea id="nt-f" rows="2" maxlength="300" placeholder="Ej.: codos pegados, bajar en 3 segundos">' + esc(nt.f || '') + '</textarea></label>' +
+    '<label class="f">Para la próxima vez<textarea id="nt-p" rows="2" maxlength="300" placeholder="Ej.: subir a 22,5 kg">' + esc(nt.p || '') + '</textarea><small class="mut">Te sale la próxima vez que hagas este ejercicio y, al terminar ese entreno, se borra sola.</small></label>' +
+    '<button class="btn" data-a="ejNotaSi" data-n="' + esc(e.n) + '">Guardar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
+A.ejNotaSi = function (el) { var P = S.perfil = S.perfil || perfilNuevo(), k = serK(el.dataset.n), f = String((document.getElementById('nt-f') || {}).value || '').trim().slice(0, 300), p = String((document.getElementById('nt-p') || {}).value || '').trim().slice(0, 300);
+  P.notasEj = P.notasEj || {}; if (f || p) P.notasEj[k] = { f: f, p: p, pd: p ? S.ses && S.ses.id : '' }; else delete P.notasEj[k]; if (S.ses && S.ses.vistoP && p) delete S.ses.vistoP[k]; guardaPerfil(); cerrarHoja(); pintar(); };
+/* al terminar el entreno: las notas «para la próxima vez» que ya ha visto se borran */
+function serNotasVistas(X) { var P = S.perfil; if (!P || !P.notasEj || !X || !X.vistoP) return; var c = 0; Object.keys(X.vistoP).forEach(function (k) { var n = P.notasEj[k]; if (n && n.p && n.pd !== X.id) { n.p = ''; c++; if (!n.f) delete P.notasEj[k]; } }); if (c) guardaPerfil(); }
 
 ;
 /* ---------- un entreno de Progreso y tu perfil ---------- */
