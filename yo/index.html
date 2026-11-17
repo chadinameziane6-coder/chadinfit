@@ -823,6 +823,9 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .cta-ay{font-size:12px;color:#9a9aa2}
 .d-au{position:absolute;left:12px;right:12px;top:-30px;height:26px;border:0;border-radius:13px;background:var(--neg);color:var(--neg-t);font-size:12px;font-weight:700}
 .cta-c>small.cta-ay{text-transform:none;letter-spacing:0;font-weight:600;font-size:12.5px}
+.cm-l{margin:2px 0 -2px}.cm-f{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
+.cm-tt{display:grid;grid-template-columns:auto 1fr;gap:6px 12px;align-items:center;background:var(--suave);border-radius:12px;padding:9px 12px;font-size:13.5px}
+.cm-tt b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:15px}
 
 </style>
 </head>
@@ -3192,9 +3195,11 @@ CH.csSel = function (t) { S.x.cs = S.x.cs || {}; S.x.cs[t.dataset.k] = t.value; 
 function sesOrd() { return S.sesiones.slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : a.fecha > b.fecha ? -1 : 0; }); }
 function sesNom(s) { return fCorta(s.fecha) + ' · ' + nomSes(s); }
 function cmpPar() {
-  var L = sesOrd(), C = S.x.cm || {}, b = C.b && L.filter(function (s) { return s.id === C.b; })[0] || L[0]; if (!b) return null;
-  var a = C.a && L.filter(function (s) { return s.id === C.a; })[0] || L.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha && clave(nomSes(s)) === clave(nomSes(b)); })[0] || L.filter(function (s) { return s.id !== b.id; })[0];
-  return { a: a || null, b: b };
+  var L = sesOrd(), C = S.x.cm || {}; if (!L.length) return null;
+  var r = C.r && L.some(function (s) { return clave(nomSes(s)) === clave(C.r); }) ? C.r : nomSes(L[0]);
+  var R = L.filter(function (s) { return clave(nomSes(s)) === clave(r); }), b = C.b && R.filter(function (s) { return s.id === C.b; })[0] || R[0];
+  var a = C.a && C.a !== b.id && R.filter(function (s) { return s.id === C.a; })[0] || R.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha; })[0] || R.filter(function (s) { return s.id !== b.id; })[0];
+  return { r: r, R: R, a: a || null, b: b };
 }
 function setsDe(s, n) { var o = null; (s && s.ej || []).forEach(function (e) { if (!o && clave(e.n) === clave(n) && e.tipo !== 'run' && e.tipo !== 'cardio') o = { u: e.u || '', z: (e.sets || []).filter(function (z) { return num(z.reps); }).map(function (z) { return { p: num(z.kg) || 0, r: num(z.reps) || 0 }; }) }; }); return o; }
 function setTxt(z, u) { return (z.p ? fN(z.p) + ' × ' : '') + z.r + (u === 's' ? ' s' : u === 'm' ? ' m' : z.p ? '' : ' rep.'); }
@@ -3212,7 +3217,7 @@ function colSets(Z, ref, u) {
 }
 function tot2(nom, va, vb, f, menosMejor) {
   var d = Math.round((vb - va) * 10) / 10, cl = d === 0 ? 'eq' : (d > 0) !== !!menosMejor ? 'up' : 'dn';
-  return '<div class="cm-t"><small class="mut">' + nom + '</small><b>' + f(va) + '</b></div><div class="cm-t"><small class="mut">' + nom + '</small><b>' + f(vb) + (d ? ' <span class="cm-pl ' + cl + '">' + (d > 0 ? '+' : '−') + f(Math.abs(d)) + '</span>' : '') + '</b></div>';
+  return '<span class="mut">' + nom + '</span><span>' + f(va) + ' → <b>' + f(vb) + '</b>' + (d ? ' <span class="cm-pl ' + cl + '">' + (d > 0 ? '+' : '−') + f(Math.abs(d)) + '</span>' : '') + '</span>';
 }
 function cardComparar() {
   if (S.sesiones.length < 2) return '';
@@ -3221,23 +3226,27 @@ function cardComparar() {
 }
 A.cmModo = function (el) { S.x.cmM = el.dataset.v; pintar(); };
 function cmpEntrenos() {
-  var P = cmpPar(); if (!P || !P.a) return '<p class="mut sm">Con dos entrenos podrás compararlos aquí.</p>';
-  var L = sesOrd(), sel = function (k, v) { return '<label class="f-s">' + '<select data-ch="cmSel" data-k="' + k + '" aria-label="' + (k === 'a' ? 'Entreno de la izquierda' : 'Entreno de la derecha') + '">' + L.map(function (s) { return '<option value="' + s.id + '"' + (s.id === v.id ? ' selected' : '') + '>' + esc(sesNom(s)) + '</option>'; }).join('') + '</select></label>'; };
+  var P = cmpPar(); if (!P) return '';
+  var rs = rutsSes(), h = '<small class="mut cm-l">1 · Rutina</small><label class="f-s ancho">' + ic('pesa', 14) + '<select data-ch="cmRut" aria-label="Rutina">' + rs.map(function (r) { return '<option' + (clave(r) === clave(P.r) ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select></label>';
+  if (!P.a) return h + '<p class="mut sm">Solo has hecho esta rutina una vez. Cuando la repitas podrás compararla.</p>';
+  var cuenta = {}; P.R.forEach(function (s) { cuenta[s.fecha] = (cuenta[s.fecha] || 0) + 1; });
+  var et = function (s) { var n = P.R.filter(function (x) { return x.fecha === s.fecha; }); return fCorta(s.fecha) + (cuenta[s.fecha] > 1 ? ' (' + (n.length - n.indexOf(s)) + ')' : ''); };
+  var sel = function (k, v, otro) { return '<label class="f-s"><select data-ch="cmSel" data-k="' + k + '" aria-label="' + (k === 'a' ? 'Fecha de la izquierda' : 'Fecha de la derecha') + '">' + P.R.map(function (s) { return '<option value="' + s.id + '"' + (s.id === v.id ? ' selected' : '') + (s.id === otro.id ? ' disabled' : '') + '>' + esc(et(s)) + '</option>'; }).join('') + '</select></label>'; };
   var A0 = P.a, B0 = P.b, kmA = kmSes(A0), kmB = kmSes(B0);
-  var h = '<div class="cm-2">' + sel('a', A0) + sel('b', B0) + '</div>';
-  h += '<div class="cm-2">' + tot2('Kilos', A0.vol || 0, B0.vol || 0, fmtK) + '</div><div class="cm-2">' + tot2('Series', A0.nser || 0, B0.nser || 0, String) + '</div><div class="cm-2">' + tot2('Minutos', A0.min || 0, B0.min || 0, String) + '</div>' +
-    (kmA || kmB ? '<div class="cm-2">' + tot2('Km', kmA, kmB, function (v) { return fN(Math.round(v * 10) / 10, 1); }) + '</div>' : '');
+  h += '<small class="mut cm-l">2 · Fechas</small><div class="cm-f">' + sel('a', A0, B0) + '<span class="mut sm">vs</span>' + sel('b', B0, A0) + '</div>';
+  h += '<div class="cm-tt">' + tot2('Kilos', A0.vol || 0, B0.vol || 0, fmtK) + tot2('Series', A0.nser || 0, B0.nser || 0, String) + tot2('Minutos', A0.min || 0, B0.min || 0, String) + (kmA || kmB ? tot2('Km', kmA, kmB, function (v) { return fN(Math.round(v * 10) / 10, 1); }) : '') + '</div>';
   var N = [], vis = {}; (B0.ej || []).concat(A0.ej || []).forEach(function (e) { var k = clave(e.n); if (!vis[k] && e.tipo !== 'run' && e.tipo !== 'cardio' && (e.sets || []).length) { vis[k] = 1; N.push(e.n); } });
   h += N.map(function (n) { var a = setsDe(A0, n), b = setsDe(B0, n), u = (b || a || {}).u;
     return '<div class="cm-e"><div class="cm-en"><b>' + esc(n) + '</b>' + pastilla(mejorZ(a && a.z), mejorZ(b && b.z)) + '</div><div class="cm-2">' + colSets(a, null, u) + colSets(b, a, u) + '</div></div>'; }).join('');
   return h;
 }
-CH.cmSel = function (t) { S.x.cm = S.x.cm || {}; var P = cmpPar(); if (P) { S.x.cm.a = S.x.cm.a || (P.a && P.a.id); S.x.cm.b = S.x.cm.b || P.b.id; } S.x.cm[t.dataset.k] = t.value; pintar(); };
+CH.cmRut = function (t) { S.x.cm = { r: t.value }; pintar(); };
+CH.cmSel = function (t) { var P = cmpPar(); if (!P) return; S.x.cm = { r: P.r, a: P.a && P.a.id, b: P.b.id }; S.x.cm[t.dataset.k] = t.value; pintar(); };
 A.cmpAnterior = function (el) {
   var id = el.dataset.id, L = sesOrd(), b = L.filter(function (s) { return s.id === id; })[0]; if (!b) return;
   var a = L.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha && clave(nomSes(s)) === clave(nomSes(b)); })[0] || L.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha; })[0];
   if (!a) return toast('No hay un entreno anterior para comparar');
-  S.x.cm = { a: a.id, b: b.id }; S.x.cmM = 'ses'; S.x.pv = 'ent'; S.pant = null; S.pila = []; S.tab = 'prog'; pintar();
+  S.x.cm = { r: nomSes(b), a: a.id, b: b.id }; S.x.cmM = 'ses'; S.x.pv = 'ent'; S.pant = null; S.pila = []; S.tab = 'prog'; pintar();
   setTimeout(function () { var c = $('#cmp'); if (c && c.scrollIntoView) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
 };
 function mejoresSem(l) { var M = {}, fin = sumar(l, 6); S.sesiones.forEach(function (s) { if (s.fecha < l || s.fecha > fin) return; (s.ej || []).forEach(function (e) { if (e.tipo === 'run' || e.tipo === 'cardio') return; var Z = setsDe(s, e.n); if (!Z || !Z.z.length) return; var m = mejorZ(Z.z), k = clave(e.n), o = M[k];
@@ -3245,9 +3254,9 @@ function mejoresSem(l) { var M = {}, fin = sumar(l, 6); S.sesiones.forEach(funct
 function cmpSemanas() {
   var h0 = lunesDe(hoyStr()), C = S.x.cs || {}, b = C.b || h0, a = C.a || sumar(h0, -7), A0 = semTot(a), B0 = semTot(b);
   var sel = function (k, v) { var o = ''; for (var i = 0; i < 16; i++) { var l = sumar(h0, -7 * i); o += '<option value="' + l + '"' + (l === v ? ' selected' : '') + '>' + esc(semNom(l)) + '</option>'; } return '<label class="f-s"><select data-ch="csSel" data-k="' + k + '" aria-label="' + (k === 'a' ? 'Semana de la izquierda' : 'Semana de la derecha') + '">' + o + '</select></label>'; };
-  var h = '<div class="cm-2">' + sel('a', a) + sel('b', b) + '</div>';
-  h += '<div class="cm-2">' + tot2('Entrenos', A0.n, B0.n, String) + '</div><div class="cm-2">' + tot2('Kilos', A0.vol, B0.vol, fmtK) + '</div><div class="cm-2">' + tot2('Series', A0.ser, B0.ser, String) + '</div><div class="cm-2">' + tot2('Minutos', A0.min, B0.min, String) + '</div>' +
-    (A0.km || B0.km ? '<div class="cm-2">' + tot2('Km corriendo', A0.km, B0.km, function (v) { return fN(Math.round(v * 10) / 10, 1); }) + '</div>' : '');
+  var h = '<div class="cm-f">' + sel('a', a) + '<span class="mut sm">vs</span>' + sel('b', b) + '</div>';
+  h += '<div class="cm-tt">' + tot2('Entrenos', A0.n, B0.n, String) + tot2('Kilos', A0.vol, B0.vol, fmtK) + tot2('Series', A0.ser, B0.ser, String) + tot2('Minutos', A0.min, B0.min, String) +
+    (A0.km || B0.km ? tot2('Km corriendo', A0.km, B0.km, function (v) { return fN(Math.round(v * 10) / 10, 1); }) : '') + '</div>';
   if (B0.km && B0.rmin) h += '<small class="mut">Ritmo medio corriendo (' + esc(semNom(b).toLowerCase()) + '): ' + ritmoTxt(B0.km, B0.rmin) + '</small>';
   var MA = mejoresSem(a), MB = mejoresSem(b), K = Object.keys(MB).concat(Object.keys(MA).filter(function (k) { return !MB[k]; }));
   if (K.length) h += '<small class="mut cm-sub">La mejor serie de cada ejercicio en cada semana</small>' + K.map(function (k) { var x = MA[k], y = MB[k], n = (y || x).n, u = (y || x).u;
