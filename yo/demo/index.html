@@ -313,6 +313,9 @@ h2{margin:0 0 6px;font-size:20px;font-weight:800}
 .tabbar button{border:0;background:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;color:var(--tab-off);font-size:10.5px;font-weight:600;padding:0;min-width:0}
 .tabbar button.on{color:var(--tx);font-weight:700}
 .mini-ses{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(92px + env(safe-area-inset-bottom));box-shadow:0 10px 24px rgba(15,122,71,.3);width:calc(100% - 24px);max-width:456px;height:50px;border-radius:25px;border:0;background:#0F7A47;color:#fff;display:flex;align-items:center;gap:8px;padding:0 16px;z-index:6;font-size:14px;font-weight:700}
+/* 17 nov: la barra «Entreno en curso» con una X para cancelarlo (pregunta antes) */
+.mini-ses{padding:0 6px 0 0}.mini-v{flex:1;min-width:0;display:flex;align-items:center;gap:8px;height:100%;padding:0 4px 0 16px;border:0;background:none;color:inherit;font:inherit;font-weight:700}
+.mini-x{width:38px;height:38px;border-radius:19px;border:0;background:rgba(255,255,255,.18);color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;padding:0}
 .con-pant .mini-ses{bottom:calc(16px + env(safe-area-inset-bottom))}
 .mini-ses span{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .toast{border:1px solid var(--flota-b);position:fixed;left:50%;top:calc(14px + env(safe-area-inset-top));transform:translate(-50%,-180%);visibility:hidden;width:calc(100% - 24px);max-width:456px;background:#111;color:#fff;border-radius:16px;padding:12px 14px;display:flex;gap:10px;align-items:center;font-size:14px;line-height:1.35;z-index:30;transition:transform .25s,visibility .25s;box-shadow:0 10px 24px rgba(0,0,0,.2)}
@@ -949,6 +952,29 @@ button.card.n-semc{display:flex;flex-direction:row;align-items:center;justify-co
 .rp-ses .mn.ok{display:inline-flex;align-items:center;gap:3px;color:var(--verde);font-weight:700}
 .rp-reg .run-in{margin-top:2px}
 
+/* 17 nov (Javier, Word «bloque de programación»): cronómetro de carrera, cronometrar ejercicios del calentamiento, notas y días ocupados */
+.rc{display:flex;flex-direction:column;gap:10px}.rc-h{display:flex;align-items:center;justify-content:space-between;gap:8px}.rc-h b{display:flex;align-items:center;gap:6px;font-size:15px}
+.rc-f{border-radius:18px;padding:14px 16px;display:flex;flex-direction:column;align-items:center;gap:2px;background:var(--suave);transition:background .3s}
+.rc-f span{font-size:14px;font-weight:800;letter-spacing:.3px}.rc-f b{font-size:52px;line-height:1.05;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-1px}.rc-f small{font-size:12.5px;color:var(--tx2);text-align:center}
+.rc-f.on{background:var(--neg);color:var(--neg-t)}.rc-f.on small{color:inherit;opacity:.8}
+.rc-f.off{background:var(--verde-bg);color:var(--verde-tx)}.rc-f.fin{background:var(--verde-bg);color:var(--verde-tx)}
+.rc-bar{height:8px;border-radius:4px;background:var(--suave);overflow:hidden}.rc-bar i{display:block;height:100%;background:var(--neg);border-radius:4px;transition:width .25s linear}
+.rc-b{display:flex;gap:8px;flex-wrap:wrap}.rc-b .btn{flex:1;min-width:130px}.rc-b .link{width:100%}
+.rc-ley{display:flex;gap:6px;align-items:flex-start;margin:0}.rc-ley .ic{flex-shrink:0;margin-top:2px}
+.rp-ej.con-tm .rp-en{padding-right:2px}
+.rp-tm{flex-shrink:0;min-width:38px;height:34px;border-radius:17px;border:1px solid var(--borde2);background:var(--card);display:flex;align-items:center;justify-content:center;gap:4px;padding:0 10px;font-size:12.5px;font-weight:800;color:var(--tx);font-variant-numeric:tabular-nums}
+.rp-tm.on{background:var(--neg);color:var(--neg-t);border-color:var(--neg)}
+.rp-nota textarea{width:100%;resize:vertical;min-height:70px}
+.rp-nt{display:flex;gap:6px;align-items:flex-start;margin:6px 0 0}.rp-nt .ic{flex-shrink:0;margin-top:2px}
+.rp-dots span.toca{background:var(--neg);color:var(--neg-t)}
+.rp-orden{display:flex;gap:6px;align-items:flex-start;margin:2px 0 0}.rp-orden .ic{flex-shrink:0;margin-top:2px}
+.pd-d button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;line-height:1.05}
+.pd-d button small{font-size:10px;font-weight:800;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pd-d button.otra{background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-style:solid}
+.pd-i.otra{background:var(--ambar-bg);border:1px solid var(--ambar-b);border-style:solid}
+.pd-nota{display:flex;gap:6px;align-items:flex-start}.pd-nota .ic{flex-shrink:0;margin-top:2px}
+
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
 <body>
@@ -1278,11 +1304,26 @@ document.addEventListener('DOMContentLoaded', function () {
    yo reviso y, si está ok, te doy el ok y lo publicas para todos»). Solo va en las demos (franja «Por revisar»).
    En la app de verdad (/yo) nada de esto se ve: los programas nuevos están en 'borrador' y solo salen con window.YO_BORR. */
 window.YO_BORR = 1;
+/* para probar el cronómetro: si no lo ha empezado, empieza el programa (hoy y dos días más) y abre su primer entreno */
+function demoRunEmpezar() {
+  var act = rpActivo('r0cero');
+  if (!act) { var hl = DIAS7.indexOf(hoyLetra()); S.x.rpd = { id: 'r0cero', sel: [0, 2, 4].map(function (k) { return DIAS7[(hl + k) % 7]; }) }; A.rpEmpezarSi(); act = rpActivo('r0cero'); }
+  var r = S.rutinas.filter(function (x) { return x.plan === act.id; }).sort(function (a, b) { return rpRank(a) - rpRank(b); })[0];
+  if (S.ses) return A.abrirSes(); S.pant = null; S.pila = []; empezarSes(r);
+}
 window.YO_REVISAR = [
-  { t: 'Programa de carrera «Empieza a correr desde cero»', d: 'Entreno → Programas → Carrera → Principiante. 8 semanas × 3 días: ábrelo, mira cada semana y sesión, y si quieres empiézalo y haz un entreno.',
+  { t: 'Programa «Empieza a correr desde cero» (con lo del Word)', d: 'Calentamiento de 6-8 ejercicios (tobillo, rodilla y cadera) siempre antes de correr; sin «Qué es», «Cómo avanzas» ni avisos médicos; zonas (Z1-Z2). Entreno → Programas → Carrera → Principiante.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'carrera'; S.x.rpNiv = 'ini'; S.x.rpW = null; ir({ t: 'rprog', id: 'r0cero' }); } },
-  { t: 'Calentamientos y métodos de carrera', d: '18 calentamientos con su ficha y 15 métodos («Qué es»), al final de Programas → Carrera.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'carrera'; ir({ t: 'rcal' }); } }
+  { t: 'Cronómetro de carrera con pitidos y notas', d: 'Dentro del entreno: «Empezar el cronómetro». Dos pitidos agudos = a trotar; uno largo y grave = a andar; tres al acabar. La caminata del calentamiento también se cronometra. Abajo, «Notas para ti» en vez de «¿Te ha dolido algo?». (Empieza el programa si no lo has empezado.)',
+    ir: demoRunEmpezar },
+  { t: 'Va por entrenos hechos y en orden', d: 'Si una semana haces 2 de 3, el siguiente es el 3.º de esa semana (no se salta a la siguiente). Con más de 10 días sin entrenar, propone repetir la última semana. Se ve en la ficha del programa una vez empezado.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'carrera'; ir({ t: 'rprog', id: 'r0cero' }); } },
+  { t: 'Cancelar un entreno desde la barra verde', d: 'Empieza cualquier entreno y vuelve a Inicio: la barra «Entreno en curso» tiene una X que pregunta «¿Seguro que quieres cancelar el entreno?».',
+    ir: function () { if (!S.ses && S.rutinas.length) { var r = S.rutinas.filter(function (x) { return !x.plan || !rpDeRut(x); })[0] || S.rutinas[0]; empezarSes(r); } S.pant = null; S.pila = []; irTab('inicio'); } },
+  { t: '«Cambiar días»: días ocupados más claros', d: 'En ámbar, con la letra o el número de la rutina que ya tienen. Al tocar uno, primero dice cuál tiene y pide tocar otra vez para cambiarlo. Entreno → Mis rutinas → abre un bloque → «Cambiar días».',
+    ir: function () { var r = S.rutinas.filter(function (x) { return x.plan; })[0]; S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; if (r) { S.x.abPlan = r.plan; pintar(); A.planDias({ dataset: { v: r.plan } }); } else pintar(); } },
+  { t: 'Programas de carrera de siempre: calentamiento y zonas', d: 'Cada rutina con 4 o más ejercicios de calentamiento (tobillo, rodilla, cadera y glúteo; en los de impacto, también técnica), zonas en el texto (trotando en Z1-Z2…) y «rápido» en vez de «alegre». Programas → Carrera → De 0 a 5 km.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'carrera'; verProgSi('run5'); } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   var L = window.YO_REVISAR || []; if (!L.length) return;
@@ -1794,57 +1835,57 @@ function faseTxt(k, sem) {
 }
 var RUN_YO = {
   ini: {
-    z2: { n: 'Rodaje suave con caminata', ca: 'Calentamiento: 5 min andando rápido y movilidad de tobillo y cadera', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
-      rpe: '3-4', fc: 'Zona 2', int: 'Suave: puedes hablar con frases largas. Si te ahogas, anda más rato.',
-      F: ['8 × (2 min trotando + 1 min andando) · 24 min', '6 × (3 min trotando + 1 min andando) · 24 min', '4 × (5 min trotando + 1 min andando) · 24 min', '20-25 min seguidos trotando suave (unos 3-3,5 km)'],
+    z2: { n: 'Rodaje suave con caminata', ca: 'Antes de correr: 5 min andando rápido y los ejercicios de calentamiento de esta rutina (tobillo, rodilla y cadera)', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
+      rpe: '3-4', fc: 'Zonas 1-2', int: 'Suave (Z1-Z2): puedes hablar con frases largas. Si te ahogas, anda más rato.',
+      F: ['8 × (2 min trotando en Z1-Z2 + 1 min andando) · 24 min', '6 × (3 min trotando en Z1-Z2 + 1 min andando) · 24 min', '4 × (5 min trotando en Z2 + 1 min andando) · 24 min', '20-25 min seguidos trotando suave en Z2 (unos 3-3,5 km)'],
       nota: 'Lo importante es acabar con ganas, no la velocidad. Si una semana se hace dura, repítela antes de avanzar.' },
-    series: { n: 'Fartlek suave', ca: 'Calentamiento: 5 min andando + 5 min trotando muy suave', vc: 'Vuelta a la calma: 5 min andando',
-      rpe: '5-6', fc: 'Zonas 2-3', int: '«Alegre» es más rápido que tu trote, pero puedes decir frases cortas. Nunca a tope.',
-      F: ['6 × (30 s alegre + 90 s andando)', '6 × (45 s alegre + 75 s trotando suave o andando)', '8 × (1 min alegre + 1 min trotando suave)', '5 × (2 min alegre + 1 min trotando suave)'],
+    series: { n: 'Fartlek suave', ca: 'Antes de correr: 5 min andando + 5 min trotando muy suave (Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min andando',
+      rpe: '5-6', fc: 'Zonas 2-3', int: '«Rápido» (Z3) es más deprisa que tu trote, pero puedes decir frases cortas. Nunca a tope.',
+      F: ['6 × (30 s rápido en Z3 + 90 s andando)', '6 × (45 s rápido en Z3 + 75 s trotando suave en Z1 o andando)', '8 × (1 min rápido en Z3 + 1 min trotando suave en Z1-Z2)', '5 × (2 min rápido en Z3 + 1 min trotando suave en Z1-Z2)'],
       nota: 'Fartlek = juego de ritmos. Puedes usar referencias: de farola a farola, una cuesta suave… Si duele algo, para.' },
-    larga: { n: 'Salida larga suave', ca: 'Calentamiento: 5 min andando rápido', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
-      rpe: '3-4', fc: 'Zona 2', int: 'Más larga, no más rápida: ritmo de charla todo el rato.',
-      F: ['30 min: 6 × (4 min trotando + 1 min andando)', '35 min: 6 × (5 min trotando + 1 min andando)', '40 min: 4 × (8 min trotando + 1 min andando)', '4-5 km seguidos (unos 35-40 min) muy suave'],
+    larga: { n: 'Salida larga suave', ca: 'Antes de correr: 5 min andando rápido y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
+      rpe: '3-4', fc: 'Zona 2', int: 'Más larga, no más rápida: ritmo de charla (Z2) todo el rato.',
+      F: ['30 min: 6 × (4 min trotando en Z2 + 1 min andando)', '35 min: 6 × (5 min trotando en Z2 + 1 min andando)', '40 min: 4 × (8 min trotando en Z2 + 1 min andando)', '4-5 km seguidos (unos 35-40 min) muy suave, en Z2'],
       nota: 'Es la sesión que más resistencia te da. Bebe agua antes y, si hace calor, llévala.' },
-    recup: { n: 'Recuperación activa', ca: 'Calentamiento: 5 min andando', vc: 'Vuelta a la calma: estiramientos suaves 5 min',
-      rpe: '2-3', fc: 'Zona 1-2', int: 'Muy suave: si dudas, ve más lento o anda.',
-      F: ['20 min andando rápido', '20 min: 4 × (4 min trotando muy suave + 1 min andando)', '20-25 min trotando muy suave', '25 min trotando muy suave'],
+    recup: { n: 'Recuperación activa', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: estiramientos suaves 5 min',
+      rpe: '2-3', fc: 'Zona 1-2', int: 'Muy suave (Z1): si dudas, ve más lento o anda.',
+      F: ['20 min andando rápido', '20 min: 4 × (4 min trotando muy suave en Z1 + 1 min andando)', '20-25 min trotando muy suave en Z1', '25 min trotando muy suave en Z1'],
       nota: 'Sirve para soltar piernas. Con cansancio o agujetas, haz solo la caminata.' }
   },
   int: {
-    z2: { n: 'Rodaje en zona 2', ca: 'Calentamiento: 10 min muy suave + movilidad', vc: 'Vuelta a la calma: 5 min suave y estiramientos',
+    z2: { n: 'Rodaje en zona 2', ca: 'Antes de correr: 10 min muy suave (Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave y estiramientos',
       rpe: '3-4', fc: 'Zona 2', int: 'Cómodo: respiras por la nariz y puedes hablar.',
-      F: ['6 km suaves + 4 × 80 m progresivos', '7 km suaves + 4 × 80 m progresivos', '8 km suaves + 6 × 80 m progresivos', '6 km suaves (semana de descarga)'],
+      F: ['6 km suaves en Z2 + 4 × 80 m progresivos', '7 km suaves en Z2 + 4 × 80 m progresivos', '8 km suaves en Z2 + 6 × 80 m progresivos', '6 km suaves en Z2 (semana de descarga)'],
       nota: 'Progresivos: 80 m acelerando poco a poco hasta un 85 %, vuelta andando. Mejoran la técnica sin cansar.' },
-    series: { n: 'Series', ca: 'Calentamiento: 15 min suave + técnica de carrera + 4 × 80 m progresivos', vc: 'Vuelta a la calma: 10 min muy suave',
+    series: { n: 'Series', ca: 'Antes: 15 min suave (Z1-Z2), los ejercicios de calentamiento de esta rutina, técnica de carrera y 4 × 80 m progresivos', vc: 'Vuelta a la calma: 10 min muy suave',
       rpe: '7-8', fc: 'Zonas 4-5', int: 'Fuertes pero iguales: la última tan rápida como la primera. Si no, sobra una.',
       F: ['6 × 400 m a ritmo de 5 km · recuperación 90 s trotando', '5 × 800 m a ritmo de 5 km · recuperación 2 min trotando', '4 × 1.000 m a ritmo de 10 km · recuperación 2 min trotando', 'Pirámide 200-400-600-800-600-400-200 m · recuperación: la mitad de lo que tardas en cada una'],
       nota: 'Si no sabes tu ritmo de 5 km: el más rápido que aguantarías unos 25-30 min.' },
-    larga: { n: 'Tirada larga', ca: 'Calentamiento: los 2 primeros km muy suaves', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
-      rpe: '3-4', fc: 'Zona 2', int: 'Ritmo de charla. En el último bloque, los 2 últimos km algo más vivos (RPE 5-6).',
-      F: ['9 km suaves', '10 km suaves', '12 km suaves', '10 km: 8 suaves + 2 algo más vivos'],
+    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km muy suaves (Z1)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
+      rpe: '3-4', fc: 'Zona 2', int: 'Ritmo de charla (Z2). En el último bloque, los 2 últimos km algo más rápidos (Z3, RPE 5-6).',
+      F: ['9 km suaves en Z2', '10 km suaves en Z2', '12 km suaves en Z2', '10 km: 8 suaves en Z2 + 2 algo más rápidos en Z3'],
       nota: 'Lleva agua si pasa de 1 hora. La tirada larga construye tu base: no la conviertas en carrera.' },
-    recup: { n: 'Rodaje de recuperación', ca: 'Calentamiento: 5 min andando', vc: 'Vuelta a la calma: estiramientos suaves',
+    recup: { n: 'Rodaje de recuperación', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: estiramientos suaves',
       rpe: '2-3', fc: 'Zona 1-2', int: 'Más lento que tu rodaje suave.',
-      F: ['30 min muy suaves (unos 4-5 km)', '30 min muy suaves', '35 min muy suaves', '30 min muy suaves'],
+      F: ['30 min muy suaves en Z1-Z2 (unos 4-5 km)', '30 min muy suaves en Z1-Z2', '35 min muy suaves en Z1-Z2', '30 min muy suaves en Z1-Z2'],
       nota: 'Va justo después de los días duros: suelta piernas y ayuda a recuperar.' }
   },
   ava: {
-    z2: { n: 'Rodaje aeróbico', ca: 'Calentamiento: 10 min suave + movilidad', vc: 'Vuelta a la calma: 5 min suave',
+    z2: { n: 'Rodaje aeróbico', ca: 'Antes de correr: 10 min suave (Z1-Z2) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave',
       rpe: '3-4', fc: 'Zona 2', int: 'Cómodo y constante.',
       F: ['10 km en zona 2 + 6 × 100 m progresivos', '11 km en zona 2 + 6 × 100 m progresivos', '12 km en zona 2 + 6 × 100 m progresivos', '10 km en zona 2 (descarga)'],
       nota: 'Que el reloj no mande: si el pulso sube, baja el ritmo.' },
-    series: { n: 'Series de calidad', ca: 'Calentamiento: 20 min suave + técnica + 4 × 100 m progresivos', vc: 'Vuelta a la calma: 10-15 min muy suave',
+    series: { n: 'Series de calidad', ca: 'Antes: 20 min suave (Z1-Z2), los ejercicios de calentamiento de esta rutina, técnica y 4 × 100 m progresivos', vc: 'Vuelta a la calma: 10-15 min muy suave',
       rpe: '8', fc: 'Zonas 4-5', int: 'Controladas: acabarías 1-2 más. La última, la más rápida.',
       F: ['10 × 400 m a ritmo de 5 km · recuperación 60 s trotando', '6 × 1.000 m a ritmo de 10 km · recuperación 90 s trotando', '4 × 2.000 m a ritmo umbral (media maratón) · recuperación 2 min trotando', 'Pirámide 400-800-1.200-1.600-1.200-800-400 m a ritmo 10 km · recuperación 90 s'],
       nota: 'El día anterior y el siguiente, suaves. Si la semana va cargada, quita una repetición.' },
-    larga: { n: 'Tirada larga', ca: 'Calentamiento: los 2 primeros km suaves', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
+    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km suaves (Z1-Z2)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
       rpe: '3-5', fc: 'Zonas 2-3', int: 'Suave; en el tercer bloque, los últimos 3 km a ritmo de media maratón.',
-      F: ['14 km suaves', '16 km suaves', '18 km: 15 suaves + 3 a ritmo de media maratón', '14 km suaves (descarga)'],
+      F: ['14 km suaves en Z2', '16 km suaves en Z2', '18 km: 15 suaves en Z2 + 3 a ritmo de media maratón (Z3-Z4)', '14 km suaves en Z2 (descarga)'],
       nota: 'Prueba aquí lo que comerás y beberás en carrera (geles, agua) a partir de 75-90 min.' },
-    recup: { n: 'Rodaje regenerativo', ca: 'Calentamiento: 5 min andando', vc: 'Vuelta a la calma: movilidad suave',
+    recup: { n: 'Rodaje regenerativo', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: movilidad suave',
       rpe: '2-3', fc: 'Zona 1-2', int: 'Muy suave de verdad.',
-      F: ['40 min muy suaves (unos 7 km)', '40 min muy suaves', '45 min muy suaves', '35 min muy suaves'],
+      F: ['40 min muy suaves en Z1-Z2 (unos 7 km)', '40 min muy suaves en Z1-Z2', '45 min muy suaves en Z1-Z2', '35 min muy suaves en Z1-Z2'],
       nota: 'Recuperar también es entrenar.' }
   }
 };
@@ -1896,6 +1937,46 @@ function runFicha(e, r) {
   return h + '</div>';
 }
 
+/* 17 nov (Javier, Word «bloque de programación»): «el calentamiento debe integrar más ejercicios, 4 diría, y más completos de activación y movilidad»;
+   «cuida el calentamiento sobre todo para ejercicios de impacto: más movilidad y activación de cadera, rodilla y tobillo». Solo /yo (el motor de los
+   entrenadores no se toca): cada rutina sale con 4 o más ejercicios de calentamiento, antes de lo demás. Se eligen de la biblioteca por su nombre;
+   si alguno no está (o no vale por su material o una molestia), se usa el siguiente de la lista. */
+var CAL_YO = {
+  tobillo: ['Círculos de tobillo', 'Elevaciones de talón dinámicas'],
+  rodilla: ['Círculos de rodilla', 'Sentadilla al aire', 'Sentadillas sin peso'],
+  cadera: ['Apertura y cierre de cadera de pie', 'Balanceo de pierna adelante y atrás', 'Balanceo de pierna lateral', 'Círculos de cadera en cuadrupedia', 'Zancada caminando con rotación de tronco'],
+  gluteo: ['Puente de glúteos con marcha (Glute Bridge March)', 'Puente de glúteos', 'Caminata lateral con minibanda', 'Monster walk con banda', 'Clamshell con minibanda'],
+  tecnica: ['Skipping A (rodillas arriba)', 'Skipping', 'Talones al glúteo'],
+  hombro: ['CARs de hombro', 'Círculos articulares de hombro', 'Dislocaciones de hombro con pica', 'Ángeles en la pared'],
+  core: ['Bird dog', 'Dead bug']
+};
+function calYoUno(cand, P, z, us) {
+  var L = CAL_YO[z] || [];
+  for (var i = 0; i < L.length; i++) { var k = clave(L[i]), x = cand.filter(function (c) { return c.k === k; })[0]; if (!x || us[k] || plnEvita(x, P)) continue; us[k] = 1;
+    var tec = z === 'tecnica', act = z === 'gluteo' || z === 'core', e = { n: x.n, tipo: 'fuerza', d: '0', nota: '', sets: [{ t: 'normal', r: tec ? '20' : act ? '10-12' : '8-10', rir: '', kg: '' }], _p: { k: x.k, mov: 1, zona: z, spec: 'mov:' + z } };
+    if (tec) e.u = 's'; return e; }
+  return null;
+}
+function calYoTipo(s) { if (s.run) return 'run'; var pie = 0, tor = 0, imp = 0;
+  (s.ej || []).forEach(function (e) { var p = e._p || {}; if (/sentadilla|zancada|bisagra|puente/.test(p.pat || '')) pie++; if (/empuje|tiron/.test(p.pat || '')) tor++; if (p.pat === 'salto' || e.tipo === 'cardio') imp++; });
+  return imp || pie >= tor ? 'pierna' : 'torso'; }
+function calYo(s, P, cand, base) {
+  var t = calYoTipo(s), us = {}, out = [], prev = (base || []).filter(function (e) { return e && e._p; });
+  var orden = t === 'run' ? ['tobillo', 'rodilla', 'cadera', 'gluteo'].concat(P.niv === 'ini' ? [] : ['tecnica']) : t === 'pierna' ? ['tobillo', 'rodilla', 'cadera', 'gluteo'] : ['hombro', 'cadera', 'core', 'tobillo'];
+  if (t !== 'run') prev.forEach(function (e) { us[e._p.k] = 1; out.push(e); });      // lo que ya elegía el motor (por sus molestias o sus ejercicios) se queda
+  orden.forEach(function (z) { if (out.length >= (t === 'run' && P.niv !== 'ini' ? 5 : 4) && t !== 'run') return; if (out.some(function (e) { return e._p.zona === z; })) return; var e = calYoUno(cand, P, z, us); if (e) out.push(e); });
+  if (out.length < 4) prev.forEach(function (e) { if (out.length < 4 && !us[e._p.k]) { us[e._p.k] = 1; out.push(e); } });
+  return out;
+}
+var _calMotor = plnCalent;
+plnCalent = function (s, P, cand, ctx) { return calYo(s, P, cand, _calMotor(s, P, cand, ctx) || []); };
+var _runSesMotor = plnRunSes;
+plnRunSes = function (i, t, P, cand, ctx) {
+  var s = _runSesMotor(i, t, P, cand, ctx), mov = s.ej.filter(function (e) { return e._p && e._p.mov; }), resto = s.ej.filter(function (e) { return !(e._p && e._p.mov); });
+  s.ej = calYo(s, P, cand, mov).concat(resto); return s;
+};
+
+
 ;
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
@@ -1924,6 +2005,7 @@ try { var mqO = matchMedia('(prefers-color-scheme: dark)'); if (mqO.addEventList
 
 /* ---------- iconos (línea fina) ---------- */
 var IC = {
+  pausa: '<path d="M9 5v14M15 5v14"/>',
   inicio: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
   entreno: '<path d="M6 7v10M3 9v6M18 7v10M21 9v6M6 12h12"/>',
   llama: '<path d="M12 3c.4 3.2 4.6 5 4.6 9.6a4.6 4.6 0 0 1-9.2 0c0-2.2 1-3.6 2.2-4.6.3 1.6 1.1 2.6 2.4 3-.5-2.6-.3-5.2 0-8z"/>',
@@ -2096,7 +2178,7 @@ function pintar() {
     var p = S.pant;
     if (p) h = (VISTAS[p.t] || function () { return ''; })(p);
     else h = ({ inicio: vInicio, entreno: vEntreno, nutri: vNutri, comu: vComu, prog: vProg })[S.tab]() + tabbar();
-    if (S.ses && (!p || p.t !== 'entreno') && !(p && p.t === 'fin')) h += '<button class="mini-ses" data-a="abrirSes">' + ic('reloj', 18, null) + '<span>Entreno en curso · ' + esc(S.ses.nombre) + '</span><b>Volver</b></button>';
+    if (S.ses && (!p || p.t !== 'entreno') && !(p && p.t === 'fin')) h += '<div class="mini-ses"><button class="mini-v" data-a="abrirSes">' + ic('reloj', 18, null) + '<span>Entreno en curso · ' + esc(S.ses.nombre) + '</span><b>Volver</b></button><button class="mini-x" data-a="sesCancelar" aria-label="Cancelar el entreno">' + ic('x', 18, null, 2.4) + '</button></div>';
   }
   el.innerHTML = h + '<p id="pend" class="pend" hidden></p>';
   el.className = S.pant ? 'con-pant' : '';
@@ -2568,16 +2650,19 @@ A.planDias = function (el) {
   if (el && el.dataset.v) S.x.pd = { pid: pid, sem: Object.assign({}, (S.perfil && S.perfil.semana) || {}), nota: '' };
   var X = S.x.pd, L = S.rutinas.filter(function (r) { return r.plan === pid; }).sort(ordenRut);
   hoja('<h2>Cambiar días</h2><p class="mut sm">Toca un día en cada rutina. Cada día solo puede tener una rutina.</p><div class="pd-l">' + L.map(function (r) {
-    return '<div class="pd-r"><b>' + esc(r.nombre) + '</b><div class="pd-d">' + DIAS7.map(function (d) { var on = X.sem[d] === r.id, otra = X.sem[d] && !on;
-      return '<button class="' + (on ? 'on' : otra ? 'otra' : '') + '" aria-pressed="' + on + '" aria-label="' + DIA_N[d] + (otra ? ' (ya tiene otra rutina)' : '') + '" data-a="planDiaT" data-r="' + r.id + '" data-d="' + d + '">' + d + '</button>'; }).join('') + '</div></div>'; }).join('') + '</div>' +
-    (X.nota ? '<p class="sm aviso-t">' + esc(X.nota) + '</p>' : '') + '<div class="leyenda pd-ley"><span><i class="pd-i on"></i>Esta rutina</span><span><i class="pd-i otra"></i>Ese día ya tiene otra</span></div>' +
+    return '<div class="pd-r"><b>' + esc(r.nombre) + '</b><div class="pd-d">' + DIAS7.map(function (d) { var on = X.sem[d] === r.id, otra = X.sem[d] && !on, ro = otra ? rutinaDe(X.sem[d]) : null;
+      return '<button class="' + (on ? 'on' : otra ? 'otra' : '') + '" aria-pressed="' + on + '" aria-label="' + DIA_N[d] + (ro ? ' (ya tiene ' + esc(ro.nombre) + ')' : '') + '" data-a="planDiaT" data-r="' + r.id + '" data-d="' + d + '">' + d + (ro ? '<small>' + esc(pdCorto(ro)) + '</small>' : '') + '</button>'; }).join('') + '</div></div>'; }).join('') + '</div>' +
+    (X.nota ? '<p class="sm aviso-t pd-nota">' + ic('info', 15) + '<span>' + esc(X.nota) + '</span></p>' : '') + '<div class="leyenda pd-ley"><span><i class="pd-i on"></i>Esta rutina</span><span><i class="pd-i otra"></i>Ya tiene otra (te digo cuál al tocarlo)</span></div>' +
     '<button class="btn" data-a="planDiasSi">Guardar días</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
 };
+/* la letra o el nombre corto de una rutina (A, B, C… si acaba en una letra; si no, sus 3 primeras letras) */
+function pdCorto(r) { var n = String(r.nombre || ''), m = /\b([A-Z])$/.exec(n) || /día (\d+)$/i.exec(n); return m ? m[1] : n.replace(/^(Correr|Carrera)\s*·\s*/i, '').slice(0, 3); }
 A.planDiaT = function (el) {
   var X = S.x.pd, d = el.dataset.d, id = el.dataset.r, antes = X.sem[d] ? rutinaDe(X.sem[d]) : null;
   X.nota = '';
-  if (X.sem[d] === id) X.sem[d] = null;
-  else { if (antes) X.nota = 'El ' + DIA_N[d].toLowerCase() + ' tenía «' + antes.nombre + '»: ahora toca «' + ((rutinaDe(id) || {}).nombre || '') + '».'; X.sem[d] = id; }
+  if (X.sem[d] === id) { X.sem[d] = null; X.conf = ''; }
+  else if (antes && X.conf !== id + d) { X.conf = id + d; X.nota = 'El ' + DIA_N[d].toLowerCase() + ' ya tiene «' + antes.nombre + '». Toca otra vez para cambiarlo por «' + ((rutinaDe(id) || {}).nombre || '') + '».'; }      // 17 nov: primero dice cuál tiene
+  else { if (antes) X.nota = 'El ' + DIA_N[d].toLowerCase() + ' tenía «' + antes.nombre + '»: ahora toca «' + ((rutinaDe(id) || {}).nombre || '') + '».'; X.sem[d] = id; X.conf = ''; }
   A.planDias();
 };
 A.planDiasSi = function () { S.perfil.semana = S.x.pd.sem; guardaPerfil(); S.x.pd = null; cerrarHoja(); toast('Días cambiados', 'ok'); pintar(); };
@@ -2840,11 +2925,11 @@ var RUN_MET = {
   cc: { n: 'Carrera-caminata', q: 'Alternas tramos trotando con tramos andando. Cada semana los tramos de trote se alargan y las pausas se acortan.', para: 'Acostumbrar piernas, tendones y respiración a correr sin cansarte de golpe.', quien: 'Principiantes y vuelta tras un parón.', v: ['Número de tramos', 'Minutos trotando', 'Minutos andando', 'Esfuerzo'], rpe: 'Trote 4-5 de 10 · andando 2-3', ej: '8 × (1 min trotando + 2 min andando)' },
   suave: { n: 'Rodaje suave', q: 'Corres seguido, a un ritmo cómodo en el que puedes hablar con frases largas.', para: 'Construir la base: el corazón y las piernas se adaptan a correr más tiempo.', quien: 'Todos los niveles. Es la mayor parte del entrenamiento.', v: ['Minutos o kilómetros', 'Esfuerzo (prueba del habla)'], rpe: '3-4 de 10', ej: '30 min suaves' },
   recup: { n: 'Rodaje de recuperación', q: 'Un rodaje más lento y más corto que el suave.', para: 'Soltar piernas después de un día duro sin sumar cansancio.', quien: 'Quien ya hace sesiones intensas.', v: ['Minutos', 'Esfuerzo'], rpe: '2-3 de 10', ej: '25 min muy suaves' },
-  cont: { n: 'Rodaje continuo', q: 'Corres un tiempo seguido a ritmo constante, algo más vivo que el suave.', para: 'Aguantar más tiempo un ritmo medio.', quien: 'Intermedios y avanzados. En principiantes, solo al final de la progresión y a ritmo de charla.', v: ['Minutos o kilómetros', 'Esfuerzo'], rpe: '4-6 de 10', ej: '20 min seguidos' },
-  prog: { n: 'Rodaje progresivo', q: 'Empiezas suave y vas subiendo el ritmo por tramos hasta acabar más rápido.', para: 'Aprender a controlar el ritmo y acabar fuerte sin pasarte al principio.', quien: 'Intermedios y avanzados.', v: ['Tramos', 'Minutos de cada tramo', 'Esfuerzo de cada tramo'], rpe: 'De 3 a 6-7 de 10', ej: '3 × 10 min: suave, medio y vivo' },
+  cont: { n: 'Rodaje continuo', q: 'Corres un tiempo seguido a ritmo constante, algo más rápido que el suave.', para: 'Aguantar más tiempo un ritmo medio.', quien: 'Intermedios y avanzados. En principiantes, solo al final de la progresión y a ritmo de charla.', v: ['Minutos o kilómetros', 'Esfuerzo'], rpe: '4-6 de 10', ej: '20 min seguidos' },
+  prog: { n: 'Rodaje progresivo', q: 'Empiezas suave y vas subiendo el ritmo por tramos hasta acabar más rápido.', para: 'Aprender a controlar el ritmo y acabar fuerte sin pasarte al principio.', quien: 'Intermedios y avanzados.', v: ['Tramos', 'Minutos de cada tramo', 'Esfuerzo de cada tramo'], rpe: 'De 3 a 6-7 de 10', ej: '3 × 10 min: suave, medio y rápido' },
   ritmo: { n: 'Rodaje a ritmo controlado', q: 'Un tramo al ritmo que quieres llevar en tu carrera (10 km, media…).', para: 'Aprender ese ritmo y que te salga sin pensar.', quien: 'Intermedios y avanzados con una marca o ritmo de referencia.', v: ['Minutos o km a ritmo', 'Ritmo o esfuerzo', 'Calentamiento y vuelta suaves'], rpe: '6-7 de 10', ej: '15 min suaves + 20 min a ritmo de 10 km + 10 min suaves' },
   larga: { n: 'Tirada larga', q: 'La sesión más larga de la semana, siempre suave.', para: 'Resistencia: que el cuerpo aguante mucho tiempo corriendo.', quien: 'Todos los niveles, ajustada a lo que ya corres.', v: ['Minutos o kilómetros', 'Esfuerzo'], rpe: '3-4 de 10', ej: '50 min de carrera cómoda' },
-  fartlek: { n: 'Fartlek', q: 'Juego de ritmos sin parar: tramos más vivos y tramos suaves trotando.', para: 'Introducir cambios de ritmo de forma controlada.', quien: 'Principiantes con base (30 min seguidos) y más.', v: ['Número de cambios', 'Duración de cada cambio', 'Esfuerzo', 'Recuperación trotando'], rpe: 'Vivo 6-7 · suave 3', ej: '6 × (1 min vivo + 2 min suave)' },
+  fartlek: { n: 'Fartlek', q: 'Juego de ritmos sin parar: tramos más rápidos y tramos suaves trotando.', para: 'Introducir cambios de ritmo de forma controlada.', quien: 'Principiantes con base (30 min seguidos) y más.', v: ['Número de cambios', 'Duración de cada cambio', 'Esfuerzo', 'Recuperación trotando'], rpe: 'Rápido 6-7 (Z3-Z4) · suave 3 (Z1-Z2)', ej: '6 × (1 min rápido + 2 min suave)' },
   stiempo: { n: 'Series por tiempo', q: 'Repeticiones de unos minutos a esfuerzo alto, con recuperación trotando o andando.', para: 'Tolerar esfuerzos intensos y mejorar el ritmo.', quien: 'Intermedios y avanzados.', v: ['Series', 'Minutos de cada una', 'Esfuerzo', 'Recuperación (tiempo y tipo)'], rpe: '7-8 de 10', ej: '5 × 3 min con 2 min trotando' },
   sdist: { n: 'Series por distancia', q: 'Repeticiones de una distancia fija (400 m, 1.000 m…), mejor en pista o en un tramo medido.', para: 'Mejorar el ritmo y comparar semana a semana.', quien: 'Intermedios y avanzados.', v: ['Series', 'Metros', 'Ritmo o esfuerzo', 'Recuperación'], rpe: '7-8 de 10', ej: '6 × 400 m con 90 s trotando' },
   intl: { n: 'Intervalos largos', q: 'Repeticiones de 3 a 8 minutos a un esfuerzo alto pero sostenible.', para: 'Aguantar ritmos altos durante más tiempo.', quien: 'Intermedios y avanzados.', v: ['Repeticiones', 'Minutos', 'Esfuerzo', 'Recuperación'], rpe: '7-8 de 10', ej: '4 × 5 min con 2 min 30 s trotando' },
@@ -2878,11 +2963,26 @@ var RUN_EJ = {
   andar: { n: 'Caminar suave', t: 'Vuelta a la calma', nv: 'Todos', ds: '3-5 min', vc: 1, cu: 'Al acabar', co: ['Camina a paso tranquilo.', 'Deja que la respiración vuelva poco a poco a la normalidad.', 'Bebe agua si la necesitas.'], fi: ['Esfuerzo 2 de 10.', 'No te pares de golpe después de correr.'], fa: '', si: '', ev: 'Si el mareo o la falta de aire no se pasan andando, para y consulta.' },
   movCalma: { n: 'Movilidad suave de gemelo y cadera', t: 'Vuelta a la calma', nv: 'Todos', ds: '1-2 min', vc: 1, cu: 'Al acabar (opcional)', co: ['Círculos suaves de tobillo y balanceos cortos de pierna.', 'Si quieres, apoya las manos en una pared y lleva una pierna atrás con el talón en el suelo.', 'Respira hondo.'], fi: ['Sin rebotes ni dolor.', 'Es para soltar, no para estirar fuerte.'], fa: '', si: '', ev: '' }
 };
-var RUN_CAL = ['caminata', 'trote', 'tobillo', 'talones', 'flexdors', 'balAA', 'balLat', 'marchaRod', 'skipBajo', 'skipAlto', 'amarch', 'askip', 'talGlut', 'lateral', 'zancada', 'cadera', 'acel', 'pogo'];
+/* 17 nov (Javier, Word «bloque de programación»): calentamiento más completo, con movilidad y activación de tobillo, rodilla y cadera, siempre antes de correr */
+Object.assign(RUN_EJ, {
+  rodilla: { n: 'Círculos de rodilla', t: 'Movilidad', nv: 'Todos', ds: '8 por sentido', ld: 'sentido', cu: 'Todas las sesiones', co: ['Pies juntos, rodillas un poco flexionadas y manos sobre las rodillas.', 'Dibuja círculos pequeños con las rodillas, despacio.', 'A mitad, cambia de sentido.'], fi: ['Círculos pequeños y suaves, sin forzar.', 'Los talones no se levantan.'], fa: 'Solo flexiona y estira las rodillas, sin círculos.', si: 'Sentadillas sin peso.', ev: 'Si notas dolor dentro de la rodilla, hazlo más pequeño o quítalo.' },
+  sentPeso: { n: 'Sentadillas sin peso', t: 'Activación', nv: 'Todos', ds: '10-12', cu: 'Todas las sesiones', co: ['Pies a la anchura de los hombros, puntas un poco hacia fuera.', 'Baja como si te sentaras en una silla, con el pecho alto.', 'Sube empujando el suelo con todo el pie.'], fi: ['Las rodillas siguen la dirección de los pies, sin irse hacia dentro.', 'Baja solo hasta donde controlas.'], fa: 'Siéntate y levántate de una silla.', si: 'Más lentas al bajar o con una pausa abajo.', ev: 'Si te molestan las rodillas, baja menos.' },
+  puente: { n: 'Puente de glúteos', t: 'Activación', nv: 'Todos', ds: '12-15', cu: 'Todas las sesiones', co: ['Tumbada boca arriba, rodillas dobladas y pies apoyados.', 'Aprieta los glúteos y sube la cadera hasta alinearla con rodillas y hombros.', 'Aguanta 1 segundo arriba y baja despacio.'], fi: ['Empuja con los talones.', 'Que trabaje el glúteo, no la zona lumbar.'], fa: 'Sube menos.', si: 'A una pierna.', ev: 'Si notas la zona lumbar, sube menos y aprieta más el glúteo.' },
+  soleo: { n: 'Elevaciones de talones con rodillas flexionadas', t: 'Activación', nv: 'Todos', ds: '12-15', cu: 'Todas las sesiones', co: ['De pie, con las rodillas un poco dobladas y apoyada en algo.', 'Sube de puntillas sin estirar las rodillas.', 'Baja despacio, sin rebotar.'], fi: ['Las rodillas se quedan dobladas todo el rato: así trabaja el sóleo.', 'El peso, en la base del dedo gordo.'], fa: 'Menos recorrido.', si: 'A una pierna.', ev: 'Sin rebotes: si notas el tendón de Aquiles, menos recorrido.' },
+  punteras: { n: 'Elevaciones de punteras', t: 'Activación', nv: 'Todos', ds: '12-15', cu: 'Rodajes y series', co: ['De pie, con la espalda apoyada en una pared y los talones algo separados de ella.', 'Sube las puntas de los pies hacia la espinilla.', 'Bájalas despacio sin tocar el suelo del todo.'], fi: ['Solo se mueve el tobillo.', 'Es para el músculo de delante de la espinilla (tibial).'], fa: 'Sentada.', si: 'Más repeticiones o más lento.', ev: 'Si notas la espinilla cargada, menos repeticiones.' },
+  monopodal: { n: 'Equilibrio a una pierna con rodilla arriba', t: 'Activación', nv: 'Todos', ds: '20 s por pierna', ld: 'pierna', cu: 'Todas las sesiones', co: ['De pie sobre una pierna, sube la otra rodilla a la altura de la cadera.', 'Aguanta quieta, con el tronco alto.', 'Cambia de pierna.'], fi: ['La rodilla de apoyo, un poco flexionada y sin irse hacia dentro.', 'La cadera no cae hacia un lado.'], fa: 'Con una mano en la pared.', si: 'Con los ojos cerrados o sobre un cojín.', ev: 'Hazlo junto a una pared por si pierdes el equilibrio.' },
+  puntillas: { n: 'Caminata de puntillas', t: 'Activación', nv: 'Todos', ds: '15 m', cu: 'Rodajes y series', co: ['Sube de puntillas.', 'Camina sobre la parte delantera del pie, con los talones arriba.', 'Pasos cortos y tronco alto.'], fi: ['Los talones no tocan el suelo.', 'Tobillos firmes, sin irse hacia fuera.'], fa: 'Menos metros.', si: 'Caminata sobre talones.', ev: 'Si se te carga el gemelo, menos metros.' },
+  talonesCam: { n: 'Caminata sobre talones', t: 'Activación', nv: 'Todos', ds: '15 m', cu: 'Rodajes y series', co: ['Sube las puntas de los pies.', 'Camina apoyando solo los talones.', 'Pasos cortos y tronco alto.'], fi: ['Las puntas no tocan el suelo.', 'Tronco alto, sin echarte hacia atrás.'], fa: 'Menos metros.', si: 'Más metros.', ev: 'Si notas la espinilla cargada, para.' },
+  ankling: { n: 'Ankling (técnica de tobillos)', t: 'Técnica de carrera', nv: 'Todos', ds: '2 × 20 m', cu: 'Rodajes y series', co: ['Avanza con pasos muy cortos, casi sin doblar las rodillas.', 'Apoya la parte delantera del pie debajo de la cadera y empuja con el tobillo.', 'Ritmo rápido y ligero.'], fi: ['Contacto corto y elástico.', 'Tronco alto, brazos cortos y rápidos.'], fa: 'Más lento, casi caminando.', si: 'Skipping bajo.', ev: 'Si te molesta el tendón de Aquiles, hazlo andando.' },
+  carioca: { n: 'Carrera lateral cruzada (carioca)', t: 'Técnica de carrera', nv: 'Intermedio', ds: '2 × 15 m por lado', cu: 'Series y cuestas', co: ['De lado, cruza un pie por delante y luego por detrás del otro.', 'La cadera gira y los hombros miran al frente.', 'Vuelve mirando al otro lado.'], fi: ['Pasos ligeros, sin tropezar.', 'Empieza despacio y coge ritmo.'], fa: 'Andando.', si: 'Más rápido.', ev: 'En un suelo liso y sin obstáculos.' },
+  jj: { n: 'Jumping jacks', t: 'Activación', nv: 'Todos', ds: '20', cu: 'Series y cuestas', co: ['De pie, con los pies juntos y los brazos abajo.', 'Salta abriendo piernas y brazos a la vez.', 'Vuelve a cerrar y repite con ritmo.'], fi: ['Aterriza suave, sobre la parte delantera del pie.', 'Rodillas un poco flexionadas.'], fa: 'Sin saltar: abre un pie y luego el otro.', si: 'Más rápido.', ev: 'Si te molesta al saltar, hazlo sin saltar.' }
+});
+var RUN_CAL = ['caminata', 'trote', 'tobillo', 'rodilla', 'talones', 'soleo', 'punteras', 'flexdors', 'balAA', 'balLat', 'cadera', 'sentPeso', 'puente', 'monopodal', 'puntillas', 'talonesCam', 'jj', 'marchaRod', 'ankling', 'skipBajo', 'skipAlto', 'amarch', 'askip', 'talGlut', 'carioca', 'lateral', 'zancada', 'acel', 'pogo'];
 
 /* ===== 3 · Prescripciones (campos con números) ===== */
 function rT(id, s, op) { return { ex: id, durationSeconds: s, op: op ? 1 : 0 }; }                             // por tiempo
 function rR(id, reps, s) { return { ex: id, reps: reps, durationSeconds: s }; }                                  // repeticiones (por lado si la ficha tiene ld)
+function rS(id, sl, s) { return { ex: id, secsLado: sl, durationSeconds: s }; }                                  // segundos por lado (equilibrio)
 function rM(id, sets, m, s) { return { ex: id, sets: sets, distanceMeters: m, durationSeconds: s }; }             // series × metros
 function rCC(n, on, off) { return { m: 'cc', intervalCount: n, intervalDuration: on, recoveryDuration: off, recoveryType: 'andando', intensityRPE: '4-5', recoveryRPE: '2-3' }; }
 function rTr(L) { return { m: 'cc', tramos: L.map(function (x) { return { durationSeconds: x[0], kind: x[1] }; }), intensityRPE: '4-5', recoveryRPE: '2-3' }; }
@@ -2891,12 +2991,13 @@ function rCont(s, m) { return { m: m || 'cont', durationSeconds: s, intensityRPE
 /* ===== 4 · Programas ===== */
 var RUN_PROG = [];
 (function () {
-  var A1 = [rT('caminata', 300), rR('tobillo', 8, 40), rR('talones', 10, 30)];
-  var A1s = [rT('caminata', 300), rR('balAA', 8, 40)];
-  var A3 = [rT('caminata', 240), rR('tobillo', 8, 40), rR('talones', 12, 35), rR('balAA', 8, 40), rM('marchaRod', 2, 15, 60)];
-  var A6 = [rT('caminata', 180), rT('trote', 120), rR('flexdors', 8, 40), rR('balAA', 8, 40), rR('balLat', 8, 40), rM('marchaRod', 2, 15, 60), rM('skipBajo', 2, 15, 60)];
-  var A6s = [rT('caminata', 180), rT('trote', 120), rR('tobillo', 8, 40), rR('balAA', 8, 40)];
-  var C1 = [rT('andar', 300), rT('movCalma', 60, 1)], C8 = [rT('andar', 300), rT('movCalma', 120, 1)];
+  // 17 nov (Javier): «calentamiento muy pobre… preparar mejor las articulaciones (skipping, balanceos)», «la movilidad siempre antes, no después», «más peso a la movilidad precarrera»
+  var A1 = [rT('caminata', 240), rR('tobillo', 8, 40), rR('rodilla', 8, 40), rR('cadera', 6, 60), rR('balAA', 10, 50), rR('talones', 12, 35)];
+  var A1s = [rT('caminata', 240), rR('tobillo', 8, 40), rR('rodilla', 8, 40), rR('balLat', 10, 50), rR('sentPeso', 10, 40), rR('puente', 12, 45)];
+  var A3 = [rT('caminata', 180), rR('tobillo', 8, 40), rR('cadera', 6, 60), rR('balAA', 10, 50), rR('soleo', 12, 40), rR('sentPeso', 10, 40), rM('marchaRod', 2, 15, 60)];
+  var A6 = [rT('caminata', 120), rT('trote', 120), rR('flexdors', 8, 40), rR('cadera', 6, 60), rR('balAA', 10, 50), rR('balLat', 10, 50), rM('marchaRod', 2, 15, 60), rM('skipBajo', 2, 15, 60)];
+  var A6s = [rT('caminata', 120), rT('trote', 120), rR('tobillo', 8, 40), rR('rodilla', 8, 40), rR('balAA', 10, 50), rR('soleo', 12, 40), rS('monopodal', 20, 50), rM('ankling', 2, 20, 60)];
+  var C1 = [rT('andar', 300)], C8 = [rT('andar', 300)];
   var Se = function (t, A, B, C, nota) { return { t: t, A: A, B: B, C: C, nota: nota || '' }; };
   var cc = 'Carrera-caminata';
   RUN_PROG.push({
@@ -2905,7 +3006,7 @@ var RUN_PROG = [];
     meta: '20 min seguidos', objetivo: 'Correr 20 minutos seguidos a ritmo de charla.',
     nivTxt: 'Principiante: empieza con 1 minuto de trote y mucha caminata, y avanza despacio.',
     sem: 8, dias: 3, minSes: [30, 45], mat: 'Zapatillas de correr y un sitio llano (parque, pista o cinta).',
-    para: ['Caminas 30 min a buen ritmo sin dolor.', 'No has corrido nunca o hace mucho.', 'Puedes entrenar 3 días a la semana, con un día de descanso entre medias.'],
+    para: ['Caminas 30 min a buen ritmo sin dolor.', 'No has corrido nunca o hace mucho.', 'Puedes entrenar 3 días a la semana, con un día de descanso entre medias.'],      // 17 nov: en la ficha solo «Para quién» y el material (lo de la salud está en las Condiciones y al darse de alta)
     noPara: ['Tienes ahora dolor o una lesión en el pie, el tobillo, la rodilla o la cadera.', 'Ya corres 15-20 min seguidos: este se te quedará corto.', 'Si tienes una enfermedad del corazón, estás embarazada u otra condición médica, consulta antes con tu médico.'],
     fases: [{ n: 'Adaptación', s: [1, 2], o: 'Piernas y tendones se acostumbran: tramos de 1-2 min.' }, { n: 'Base', s: [3, 5], o: 'Tramos más largos y menos pausas.' }, { n: 'Continuidad', s: [6, 7], o: 'Corres 10-15 min seguidos.' }, { n: 'Prueba', s: [8, 8], o: 'Baja un poco la carga y corres 20 min seguidos.' }],
     reglas: { avanza: 'si acabas las 3 sesiones con esfuerzo de 5 sobre 10 o menos y sin dolor.', repite: 'si te ha costado mucho (6 o más), te ha faltado alguna sesión o te molesta algo.', para: 'si un dolor sigue al día siguiente o te cambia la forma de correr.' },
@@ -2940,7 +3041,7 @@ function rpBTxt(B) {
   return durTxt(B.durationSeconds) + ' seguidos';
 }
 function rpTramos(B) { if (B.intervalCount) return B.intervalCount; if (B.tramos) return B.tramos.filter(function (x) { return x.kind === 'on'; }).length; return 1; }
-function rpDosis(x) { var E = RUN_EJ[x.ex] || {}; if (x.sets) return x.sets + ' × ' + x.distanceMeters + ' m'; if (x.reps) return x.reps + (E.ld ? ' por ' + E.ld : ''); return durTxt(x.durationSeconds); }
+function rpDosis(x) { var E = RUN_EJ[x.ex] || {}; if (x.secsLado) return x.secsLado + ' s por ' + (E.ld || 'lado'); if (x.sets) return x.sets + ' × ' + x.distanceMeters + ' m'; if (x.reps) return x.reps + (E.ld ? ' por ' + E.ld : ''); return durTxt(x.durationSeconds); }
 function rpRango(P) { var lo = 1e9, hi = 0; P.semanas.forEach(function (w) { w.forEach(function (s) { var t = rpMn(rpTot(s).t); lo = Math.min(lo, t); hi = Math.max(hi, t); }); }); return [Math.floor(lo / 5) * 5, Math.ceil(hi / 5) * 5]; }
 function rpSemRun(w) { return w.reduce(function (a, s) { return Math.max(a, rpRunB(s.B)); }, 0); }
 function rpProg(id) { for (var i = 0; i < RUN_PROG.length; i++) if (RUN_PROG[i].id === id) return RUN_PROG[i]; return null; }
@@ -2988,10 +3089,38 @@ function rpHay() { return rpVisibles().length > 0; }
 /* ===== 8 · El programa de la persona: semana en la que va y lo hecho ===== */
 function rpPlan(pid) { var L = (S.perfil && S.perfil.progs) || []; for (var i = 0; i < L.length; i++) if (L[i].id === pid) return L[i]; return null; }
 function rpActivo(id) { var L = (S.perfil && S.perfil.progs) || []; for (var i = L.length - 1; i >= 0; i--) { var p = L[i]; if (p.prog === id && S.rutinas.some(function (r) { return r.plan === p.id; })) return p; } return null; }
-function rpSemN(plan, P) { if (!plan || !plan.desde) return 1; var w = Math.floor(dDias(plan.desde, hoyStr()) / 7) + 1; return Math.max(1, Math.min(P.sem, w)); }
-function rpDeEj(e) { if (!e || !e.rp) return null; var P = rpProg(e.rp.p); if (!P) return null; var plan = rpPlan(e.rp.pid), w = rpSemN(plan, P), d = Math.min(e.rp.d, P.dias - 1); return { P: P, plan: plan, w: w, d: d, s: P.semanas[w - 1][d] }; }
-function rpDeRut(r) { var e = r && (r.ejercicios || []).filter(function (x) { return x.rp; })[0]; return e ? rpDeEj(e) : null; }
-function rpHecha(plan, w, d) { var k = null; if (!plan) return null; S.sesiones.forEach(function (s) { (s.ej || []).forEach(function (e) { if (e.rp && e.rp.pid === plan.id && e.rp.w === w && e.rp.d === d) k = e.rp; }); }); return k; }
+/* 17 nov (Javier: «si se salta un día o dos… que la app sea inteligente»): el programa va por ENTRENOS HECHOS Y EN ORDEN, no por fechas.
+   Lo siguiente que toca es el primer entreno (semana, día) que no has hecho. Los días de la semana solo dicen cuándo te lo propone.
+   «Repetir la semana N» guarda la hora (plan.rw[N]): lo hecho de esa semana antes de esa hora ya no cuenta y vuelve a tocar. */
+function rpDia0(f) { return new Date(String(f).slice(0, 10) + 'T00:00:00').getTime(); }
+function rpSesMs(s, x) { return x && x.ts ? x.ts : rpDia0(s.fecha); }
+function rpHechas(plan) { var L = []; if (!plan) return L; var rw = plan.rw || {};
+  S.sesiones.forEach(function (s) { (s.ej || []).forEach(function (e) { var x = e.rp; if (!x || x.pid !== plan.id) return; var t = rpSesMs(s, x); if (rw[x.w] && t < rw[x.w]) return; L.push({ w: x.w, d: x.d, t: t, x: x }); }); });
+  return L; }
+function rpHecha(plan, w, d) { var k = null; rpHechas(plan).forEach(function (h) { if (h.w === w && h.d === d) k = h.x; }); return k; }
+function rpPend(plan, P) { var H = {}, L = []; rpHechas(plan).forEach(function (h) { H[h.w + '|' + h.d] = 1; });
+  for (var w = 1; w <= P.sem; w++) for (var d = 0; d < P.dias; d++) if (!H[w + '|' + d]) L.push({ w: w, d: d }); return L; }
+function rpPos(plan, P) { var L = rpPend(plan, P); return L.length ? { w: L[0].w, d: L[0].d, fin: false } : { w: P.sem, d: P.dias - 1, fin: true }; }
+function rpSemN(plan, P) { return rpPos(plan, P).w; }
+/* la última vez que entrenó este programa (para proponer repetir si lleva más de 10 días sin entrenar) */
+function rpUltima(plan) { var u = null; rpHechas(plan).forEach(function (h) { if (!u || h.t > u.t) u = h; }); return u; }
+function rpParon(plan, P) { var u = rpUltima(plan), pos = rpPos(plan, P); if (!u || pos.fin) return null; var dd = Math.floor((Date.now() - u.t) / 864e5); return dd > 10 ? { dias: dd, w: u.w } : null; }
+/* en Mis rutinas e Inicio, cada día de entreno del programa enseña el que le tocaría si los haces en orden: el próximo día, el siguiente pendiente, etc. */
+function rpRutDe(e) { for (var i = 0; i < S.rutinas.length; i++) if ((S.rutinas[i].ejercicios || []).indexOf(e) >= 0) return S.rutinas[i]; return null; }
+function rpRank(r) {
+  if (!r || !r.plan) return 0; var sem = (S.perfil && S.perfil.semana) || {}, hl = DIAS7.indexOf(hoyLetra()), plan = rpPlan(r.plan), hoy = hoyStr();
+  var hoyHecho = plan && rpHechas(plan).some(function (h) { return h.t >= rpDia0(hoy); });
+  var dist = function (rid) { for (var k = hoyHecho ? 1 : 0; k < 7 + (hoyHecho ? 1 : 0); k++) if (sem[DIAS7[(hl + k) % 7]] === rid) return k; return 99; };
+  var L = S.rutinas.filter(function (x) { return x.plan === r.plan; }).map(function (x) { return { id: x.id, k: dist(x.id), o: x.orden || 0 }; }).sort(function (a, b) { return a.k - b.k || a.o - b.o; });
+  for (var i = 0; i < L.length; i++) if (L[i].id === r.id) return i; return 0;
+}
+function rpDeEj(e, k) {
+  if (!e || !e.rp) return null; var P = rpProg(e.rp.p); if (!P) return null; var plan = rpPlan(e.rp.pid);
+  if (k == null) { var r = rpRutDe(e); k = r ? rpRank(r) : 0; }
+  var L = rpPend(plan, P), x = L.length ? L[Math.min(k, L.length - 1)] : { w: P.sem, d: P.dias - 1 };
+  return { P: P, plan: plan, w: x.w, d: x.d, s: P.semanas[x.w - 1][x.d], fin: !L.length };
+}
+function rpDeRut(r) { var e = r && (r.ejercicios || []).filter(function (x) { return x.rp; })[0]; return e ? rpDeEj(e, rpRank(r)) : null; }
 /* lo que se ve fuera del entreno (Inicio, Mis rutinas, el resumen) */
 function rpHoyTxt(e) { var X = rpDeEj(e); return X ? rpBTxt(X.s.B) : (e.res || 'Carrera'); }
 function rpMinEj(e) { var X = rpDeEj(e); return X ? rpMn(rpTot(X.s).t) : 35; }
@@ -3009,7 +3138,6 @@ function rpCatalogo() {
     return '<button class="rp-p" data-a="rpVer" data-v="' + P.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(P.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + P.sem + ' semanas · ' + P.dias + ' días · ' + rg[0] + '-' + rg[1] + ' min</span><span class="q">Para ti si ' + esc(P.para[0].charAt(0).toLowerCase() + P.para[0].slice(1).replace(/\.$/, '')) + '</span>' +
       '<span class="rp-tags"><span class="rp-tag">' + ic('diana', 12) + 'Meta: ' + esc(P.meta) + '</span>' + (act ? '<span class="rp-tag ok">' + ic('check', 12, null, 2.6) + 'Lo estás haciendo</span>' : '') + '</span></button>'; }).join('') +
     V.map(function (p) { return '<button class="rp-p" data-a="verProg" data-v="' + p.id + '"><span class="t">' + ic('carrera', 20) + '<b>' + esc(p.n) + '</b>' + ic('sig', 16, 'var(--tx3)') + '</span><span class="m">' + esc(p.sub) + '</span></button>'; }).join('') + '</section>';
-  h += '<section class="card lista-b"><button class="fila-b rp-lib" data-a="rpCal"><b>Calentamientos de carrera</b><small>' + RUN_CAL.length + ' ejercicios con su ficha: tobillos, skipping, A-skip, aceleraciones…</small></button><button class="fila-b rp-lib" data-a="rpMetodos"><b>Métodos de carrera</b><small>Qué es cada sesión: fartlek, series, umbral, tirada larga…</small></button></section>';
   return h;
 }
 A.rpNiv = function (el) { S.x.rpNiv = el.dataset.v; pintar(); };
@@ -3018,36 +3146,37 @@ A.rpVer = function (el) { S.x.rpW = null; ir({ t: 'rprog', id: el.dataset.v }); 
 /* la ficha del programa */
 VISTAS.rprog = function (p) {
   var P = rpProg(p.id); if (!P) return '';
-  var rg = rpRango(P), act = rpActivo(P.id), wAct = act ? rpSemN(act, P) : 0, ab = S.x.rpW != null ? S.x.rpW : (wAct || 1);
+  var rg = rpRango(P), act = rpActivo(P.id), pos = act ? rpPos(act, P) : null, wAct = pos ? pos.w : 0, ab = S.x.rpW != null ? S.x.rpW : (wAct || 1);
   var h = '<div class="pant pad con-pie">' + cab('Programa');
   h += '<div class="rp-hero"><small>CARRERA · ' + ({ ini: 'PRINCIPIANTE', int: 'INTERMEDIO', ava: 'AVANZADO' })[P.niv] + '</small><h2>' + esc(P.n) + '</h2><small>' + esc(P.desc) + '</small>' +
     '<div class="rp-kp"><div><b>' + P.sem + '</b><small>semanas</small></div><div><b>' + P.dias + '</b><small>días/sem</small></div><div><b>' + rg[0] + '-' + rg[1] + '</b><small>min</small></div><div><b>0</b><small>material</small></div></div></div>';
   if (act) {
     var hechas = [0, 1, 2].slice(0, P.dias).map(function (d) { return rpHecha(act, wAct, d); }), nh = hechas.filter(Boolean).length;
-    var duro = hechas.some(function (x) { return x && ((+x.rpe || 0) >= 6 || x.dolor === 'si'); });
-    h += '<section class="card"><div class="card-h"><b>Vas por la semana ' + wAct + ' de ' + P.sem + '</b><small class="mut">' + nh + ' de ' + P.dias + ' hechas</small></div><div class="rp-dots">' + hechas.map(function (x, d) { return '<span class="' + (x ? 'ok' : '') + '">' + (x ? ic('check', 13, null, 3) : '') + 'Día ' + (d + 1) + '</span>'; }).join('') + '</div>' +
-      (duro ? '<div class="rp-aviso">' + ic('info', 15) + '<span>Esta semana has marcado <b>esfuerzo alto o dolor</b>. Lo prudente es repetirla antes de avanzar.</span></div>' : '') +
-      (wAct < P.sem ? '<button class="link izq rp-rep" data-a="rpRepetir" data-v="' + act.id + '">' + ic('deshacer', 15) + '<span>Repetir la semana ' + wAct + '</span></button>' : '') + '</section>';
+    var duro = hechas.some(function (x) { return x && (+x.rpe || 0) >= 7; });
+    var pr = rpParon(act, P), wRep = nh ? wAct : Math.max(1, wAct - 1);
+    h += '<section class="card"><div class="card-h"><b>' + (pos.fin ? '¡Programa terminado!' : 'Vas por la semana ' + wAct + ' de ' + P.sem) + '</b><small class="mut">' + nh + ' de ' + P.dias + ' hechas</small></div><div class="rp-dots">' + hechas.map(function (x, d) { return '<span class="' + (x ? 'ok' : !pos.fin && d === pos.d ? 'toca' : '') + '">' + (x ? ic('check', 13, null, 3) : '') + 'Día ' + (d + 1) + (!x && !pos.fin && d === pos.d ? ' · toca' : '') + '</span>'; }).join('') + '</div>' +
+      (pos.fin ? '' : '<p class="sm mut rp-orden">' + ic('info', 14) + '<span>Vas por entrenos hechos y en orden: si un día no puedes, el que te toca te espera y no te saltas nada.</span></p>') +
+      (pr ? '<div class="rp-aviso">' + ic('info', 15) + '<span>Llevas <b>' + pr.dias + ' días sin entrenar</b>. Lo prudente es repetir la semana ' + pr.w + ' antes de seguir.</span></div><button class="btn sec" data-a="rpRepetir" data-v="' + act.id + '" data-w="' + pr.w + '">' + ic('deshacer', 16) + 'Repetir la semana ' + pr.w + '</button>' :
+        duro ? '<div class="rp-aviso">' + ic('info', 15) + '<span>Esta semana has marcado <b>esfuerzo alto</b>. Lo prudente es repetirla antes de avanzar.</span></div>' : '') +
+      (!pr && wRep <= P.sem && (nh || wAct > 1) ? '<button class="link izq rp-rep" data-a="rpRepetir" data-v="' + act.id + '" data-w="' + wRep + '">' + ic('deshacer', 15) + '<span>Repetir la semana ' + wRep + '</span></button>' : '') + '</section>';
   }
-  h += '<section class="card"><b class="card-tt">Para quién</b><ul class="rp-li">' + P.para.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="rp-h">Mejor otro programa si…</p><ul class="rp-li mut">' + P.noPara.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="rp-mat">' + ic('carrera', 15) + '<span>' + esc(P.mat) + '</span></p></section>';
+  h += '<section class="card"><b class="card-tt">Para quién</b><ul class="rp-li">' + P.para.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><p class="rp-mat">' + ic('carrera', 15) + '<span>' + esc(P.mat) + '</span></p></section>';
   var fa = act ? rpFase(P, wAct) : null;
   h += '<section class="card"><b class="card-tt">Fases</b><div class="rp-fases">' + P.fases.map(function (f) { return '<div class="' + (f === fa ? 'on' : '') + '"><b>' + esc(f.n) + '</b>Sem ' + f.s[0] + (f.s[1] !== f.s[0] ? '-' + f.s[1] : '') + '</div>'; }).join('') + '</div><small class="mut">' + esc((fa || P.fases[0]).o) + '</small></section>';
   h += '<section class="card"><div class="card-h"><b class="card-tt" style="padding:0">Semanas</b><small class="mut">toca una sesión para verla</small></div>' + P.semanas.map(function (W, i) {
     var w = i + 1, on = ab === w, run = rpMn(rpSemRun(W)), f = rpFase(P, w), cont = W.some(function (s) { return !s.B.intervalCount && !s.B.tramos && w === P.sem; });
     var nh = act ? [0, 1, 2].slice(0, P.dias).filter(function (d) { return rpHecha(act, w, d); }).length : 0;
-    return '<button class="rp-w" data-a="rpSem" data-v="' + w + '" aria-expanded="' + on + '"><i class="n' + (w === wAct ? ' on' : nh === P.dias ? ' ok' : '') + '">' + (nh === P.dias && w !== wAct ? ic('check', 15, null, 3) : w) + '</i><span><b>Semana ' + w + ' · ' + esc(f.n) + '</b><small>' + P.dias + ' sesiones · ' + (cont ? run + ' min seguidos' : 'hasta ' + run + ' min corriendo') + (act && nh ? ' · ' + nh + (nh === 1 ? ' hecha' : ' hechas') : '') + '</small></span>' + ic(on ? 'abajo' : 'sig', 16, 'var(--tx3)') + '</button>' +
+    return '<button class="rp-w" data-a="rpSem" data-v="' + w + '" aria-expanded="' + on + '"><i class="n' + (w === wAct && !(pos && pos.fin) ? ' on' : nh === P.dias ? ' ok' : '') + '">' + (nh === P.dias && (w !== wAct || (pos && pos.fin)) ? ic('check', 15, null, 3) : w) + '</i><span><b>Semana ' + w + ' · ' + esc(f.n) + '</b><small>' + P.dias + ' sesiones · ' + (cont ? run + ' min seguidos' : 'hasta ' + run + ' min corriendo') + (act && nh ? ' · ' + nh + (nh === 1 ? ' hecha' : ' hechas') : '') + '</small></span>' + ic(on ? 'abajo' : 'sig', 16, 'var(--tx3)') + '</button>' +
       (on ? '<div class="rp-ses">' + W.map(function (s, d) { var hc = act && rpHecha(act, w, d); return '<button data-a="rpSes" data-p="' + P.id + '" data-w="' + w + '" data-d="' + d + '"><span><b>Día ' + (d + 1) + ' · ' + esc(s.t) + '</b><small>' + esc(rpBTxt(s.B)) + '</small></span>' + (hc ? '<small class="mn ok">' + ic('check', 13, null, 3) + 'Hecha</small>' : '<small class="mn">' + rpMn(rpTot(s).t) + ' min</small>') + '</button>'; }).join('') + '</div>' : '');
   }).join('') + '</section>';
-  h += '<section class="card"><b class="card-tt">Cómo avanzas</b><div class="rp-regla"><b>Pasas de semana</b> ' + esc(P.reglas.avanza) + '<br><b>Repites la semana</b> ' + esc(P.reglas.repite) + '<br><b>Para y consulta</b> ' + esc(P.reglas.para) + '</div>' +
-    '<p class="rp-h">Al acabar cada sesión apuntas</p><ul class="rp-li">' + P.registro.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul><div class="rp-mini">' + esc(P.seguridad) + '</div></section>';
   h += '<div class="pie-fijo">' + (act ? '<button class="btn sec" data-a="rpAMis" data-v="' + act.id + '">Ver en mis rutinas</button>' : '<button class="btn" data-a="rpEmpezar" data-v="' + P.id + '">' + ic('play', 16) + 'Empezar programa</button>') + '</div></div>';
   return h;
 };
 A.rpSem = function (el) { var w = +el.dataset.v, P = rpProg(S.pant.id), act = rpActivo(S.pant.id), ab = S.x.rpW != null ? S.x.rpW : (act ? rpSemN(act, P) : 1); S.x.rpW = ab === w ? 0 : w; pintar(); };
 A.rpSes = function (el) { ir({ t: 'rses', p: el.dataset.p, w: +el.dataset.w, d: +el.dataset.d }); };
 A.rpAMis = function (el) { S.x.abPlan = el.dataset.v; S.sub = 'rutinas'; irTab('entreno'); };
-A.rpRepetir = function (el) { hoja('<h2>¿Repetir esta semana?</h2><p class="mut">El programa se alarga 7 días: la semana siguiente empieza una semana más tarde. Lo que ya has hecho se queda guardado.</p><button class="btn" data-a="rpRepetirSi" data-v="' + el.dataset.v + '">Repetir la semana</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
-A.rpRepetirSi = function (el) { var p = rpPlan(el.dataset.v); if (!p) return; p.desde = sumar(p.desde, 7); if (p.hasta) p.hasta = sumar(p.hasta, 7); p.rep = (p.rep || 0) + 1; guardaPerfil(); cerrarHoja(); toast('Repites esta semana. ¡Sin prisa!', 'ok'); pintar(); };
+A.rpRepetir = function (el) { var w = +el.dataset.w || 1; hoja('<h2>¿Repetir la semana ' + w + '?</h2><p class="mut">Vuelves a hacer sus entrenos desde el primero. Lo que ya hiciste se queda guardado en tu historial.</p><button class="btn" data-a="rpRepetirSi" data-v="' + el.dataset.v + '" data-w="' + w + '">Repetir la semana ' + w + '</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
+A.rpRepetirSi = function (el) { var p = rpPlan(el.dataset.v), w = +el.dataset.w || 1; if (!p) return; p.rw = p.rw || {}; for (var k = w; k <= (p.sem || 52); k++) if (k === w || rpHechas(p).some(function (h) { return h.w === k; })) p.rw[k] = Date.now(); p.rep = (p.rep || 0) + 1; guardaPerfil(); cerrarHoja(); toast('Repites la semana ' + w + '. ¡Sin prisa!', 'ok'); pintar(); };
 
 /* una sesión (vista previa o la de tu programa) */
 function rpBarra(t) { return '<div class="rp-tot"><i style="flex:' + t.a + ';background:' + RP_COL.a + '"></i><i style="flex:' + t.b + ';background:' + RP_COL.b + '"></i><i style="flex:' + t.c + ';background:' + RP_COL.c + '"></i></div>' +
@@ -3056,11 +3185,14 @@ function rpInt(B) {
   var L = B.intervalCount ? [].concat.apply([], Array.apply(null, Array(B.intervalCount)).map(function () { return [[B.intervalDuration, 'on'], [B.recoveryDuration, 'off']]; })) : B.tramos ? B.tramos.map(function (x) { return [x.durationSeconds, x.kind]; }) : [[B.durationSeconds, 'on']];
   return '<div class="rp-int" aria-hidden="true">' + L.map(function (x) { return '<i style="flex:' + x[0] + ';height:' + (x[1] === 'on' ? 40 : 14) + 'px;background:' + (x[1] === 'on' ? 'var(--neg)' : 'var(--gris)') + '"></i>'; }).join('') + '</div>';
 }
-function rpRpeTxt(B) { return B.recoveryRPE ? '<b>Trote: esfuerzo ' + B.intensityRPE + ' de 10.</b> Puedes hablar con frases cortas. <b>Andando: ' + B.recoveryRPE + ' de 10.</b> Si te ahogas, baja el ritmo o anda antes.' : '<b>Esfuerzo ' + B.intensityRPE + ' de 10:</b> ritmo de charla. Si te ahogas, baja el ritmo; si lo necesitas, anda un minuto y sigue.'; }
+/* zonas (17 nov, Javier: «especificar trotar a Z1-Z2, aparte de intensidad baja»): del esfuerzo de 0 a 10 a la zona de pulso */
+function rpZona(rpe) { var a = String(rpe || '').split('-').map(Number), lo = a[0] || 0, hi = a[1] || lo, z = function (v) { return v <= 3 ? 1 : v <= 5 ? 2 : v <= 6 ? 3 : v <= 8 ? 4 : 5; }, z1 = z(lo), z2 = z(hi); return 'Z' + z1 + (z2 !== z1 ? '-Z' + z2 : ''); }
+function rpRpeTxt(B) { return B.recoveryRPE ? '<b>Trote en ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): puedes hablar con frases cortas. <b>Andando en ' + rpZona(B.recoveryRPE) + '</b> (' + B.recoveryRPE + ' de 10). Si te ahogas, baja el ritmo o anda antes.' : '<b>En ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): ritmo de charla. Si te ahogas, baja el ritmo; si lo necesitas, anda un minuto y sigue.'; }
 function rpFila(x, i, k, ck) {
-  var E = RUN_EJ[x.ex] || { n: x.ex, co: [''] }, on = ck && ck.indexOf(i) >= 0;
-  return '<div class="rp-ej' + (on ? ' on' : '') + '">' + (ck ? '<button class="rp-ck' + (on ? ' on' : '') + '" data-a="rpCk" data-k="' + k + '" data-j="' + i + '" aria-pressed="' + !!on + '" aria-label="' + esc(E.n) + ' hecho">' + ic('check', 14, null, 3) + '</button>' : '') +
-    '<button class="rp-en" data-a="rpEj" data-v="' + x.ex + '"><span><b>' + esc(E.n) + (x.op ? ' <small class="mut">(opcional)</small>' : '') + '</b><small>' + esc(E.fi ? E.fi[0] : '') + '</small></span><em>' + esc(rpDosis(x)) + '</em>' + ic('sig', 15, 'var(--tx3)') + '</button></div>';
+  var E = RUN_EJ[x.ex] || { n: x.ex, co: [''] }, on = ck && ck.indexOf(i) >= 0, tm = ck && !x.reps && !x.sets;
+  return '<div class="rp-ej' + (on ? ' on' : '') + (tm ? ' con-tm' : '') + '">' + (ck ? '<button class="rp-ck' + (on ? ' on' : '') + '" data-a="rpCk" data-k="' + k + '" data-j="' + i + '" aria-pressed="' + !!on + '" aria-label="' + esc(E.n) + ' hecho">' + ic('check', 14, null, 3) + '</button>' : '') +
+    '<button class="rp-en" data-a="rpEj" data-v="' + x.ex + '"><span><b>' + esc(E.n) + (x.op ? ' <small class="mut">(opcional)</small>' : '') + '</b><small>' + esc(E.fi ? E.fi[0] : '') + '</small></span><em>' + esc(rpDosis(x)) + '</em>' + ic('sig', 15, 'var(--tx3)') + '</button>' +
+    (tm ? '<button class="rp-tm" data-a="rcEj" data-k="' + k + '" data-j="' + i + '" aria-label="Cronometrar ' + esc(E.n) + '" id="rc-x-' + k + i + '">' + ic('reloj', 15) + '</button>' : '') + '</div>';
 }
 function rpBloques(X, ck) {
   var s = X.s, t = rpTot(s), fa = rpFacil(X.P, X.w, X.d);
@@ -3072,14 +3204,14 @@ function rpBloques(X, ck) {
 }
 function rpCabSes(X) {
   var t = rpTot(X.s);
-  return '<section class="card"><div class="card-h top"><span><b class="rp-st">' + esc(X.s.t) + '</b><br><small class="mut">' + esc(X.P.n) + ' · fase ' + esc(rpFase(X.P, X.w).n) + '</small></span><button class="chip rp-q" data-a="rpMet" data-v="' + X.s.B.m + '">' + ic('info', 13) + 'Qué es</button></div>' +
+  return '<section class="card"><div class="card-h top"><span><b class="rp-st">' + esc(X.s.t) + '</b><br><small class="mut">' + esc(X.P.n) + ' · fase ' + esc(rpFase(X.P, X.w).n) + '</small></span></div>' +
     '<div class="card-h"><b class="rp-big">' + rpMn(t.t) + ' min</b><small class="mut">' + rpMn(t.run) + ' min corriendo</small></div>' + rpBarra(t) + '</section>';
 }
 VISTAS.rses = function (p) {
   var P = rpProg(p.p); if (!P) return ''; var X = { P: P, w: p.w, d: p.d, s: P.semanas[p.w - 1][p.d] }, act = rpActivo(P.id), rut = act && S.rutinas.filter(function (r) { return r.plan === act.id && (r.ejercicios || []).some(function (e) { return e.rp && e.rp.d === p.d; }); })[0];
-  var esHoy = act && rpSemN(act, P) === p.w;
+  var pos = act ? rpPos(act, P) : null, esHoy = pos && !pos.fin && pos.w === p.w && pos.d === p.d;
+  if (act && esHoy) { var sem = (S.perfil && S.perfil.semana) || {}, rh = sem[hoyLetra()] && rutinaDe(sem[hoyLetra()]); rut = rh && rh.plan === act.id ? rh : S.rutinas.filter(function (r) { return r.plan === act.id; }).sort(function (a, b) { return rpRank(a) - rpRank(b); })[0]; }
   var h = '<div class="pant pad' + (rut && esHoy ? ' con-pie' : '') + '">' + cab('Semana ' + p.w + ' · Día ' + (p.d + 1)) + rpCabSes(X) + rpBloques(X, null);
-  h += '<p class="rp-mat">' + ic('lapiz', 14) + '<span>Al acabar apuntas: ' + esc(P.registro.join(', ').toLowerCase()) + '.</span></p>';
   if (rut && esHoy) h += '<div class="pie-fijo"><button class="btn" data-a="' + (S.ses ? 'abrirSes' : 'empezarRut') + '" data-id="' + rut.id + '">' + ic('play', 16) + (S.ses ? 'Seguir con tu entreno' : 'Empezar') + '</button></div>';
   return h + '</div>';
 };
@@ -3158,13 +3290,12 @@ function rpAbierto(e, i) {
   var X = rpDeEj(e); if (!X) return '<section class="card ej-a"><b>' + esc(e.n) + '</b><p class="mut sm">Este programa ya no está disponible.</p>' + ejAcc(i) + '</section>';
   e.ck = e.ck || { a: [], c: [] };
   var tr = rpTramos(X.s.B), hecho = e.tr != null ? e.tr : '';
-  var h = '<div class="rp-encurso" data-i="' + i + '"><p class="rp-sw">Semana ' + X.w + ' de ' + X.P.sem + ' · Día ' + (X.d + 1) + '</p>' + rpCabSes(X) + rpBloques(X, e.ck);
+  var h = '<div class="rp-encurso" data-i="' + i + '"><p class="rp-sw">Semana ' + X.w + ' de ' + X.P.sem + ' · Día ' + (X.d + 1) + '</p>' + rpCabSes(X) + rpBloques(X, e.ck) + rcHtml(e, i, X);
   h += '<section class="card rp-reg"><b class="card-tt">Cómo ha ido</b>' +
     '<div class="rp-q2"><span>' + (tr > 1 ? 'Tramos de trote hechos' : '¿Lo has corrido entero?') + '</span>' + (tr > 1 ? '<span class="stp"><button data-a="rpTr" data-i="' + i + '" data-v="-1" aria-label="Uno menos">' + ic('menos', 13, null, 2.4) + '</button><b>' + (hecho === '' ? '–' : hecho) + ' de ' + tr + '</b><button data-a="rpTr" data-i="' + i + '" data-v="1" aria-label="Uno más">' + ic('mas', 13, null, 2.4) + '</button></span>' :
       '<span class="rp-sn"><button class="' + (hecho === 1 ? 'on' : '') + '" data-a="rpTrSet" data-i="' + i + '" data-v="1">Sí</button><button class="' + (hecho === 0 ? 'on' : '') + '" data-a="rpTrSet" data-i="' + i + '" data-v="0">Con pausas</button></span>') + '</div>' +
     '<p class="rp-h">Esfuerzo de 0 a 10</p><div class="rp-rpeb">' + [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<button class="' + (String(e.rpe) === String(n) ? 'on' : '') + (n >= 7 ? ' alto' : '') + '" data-a="rpRpe" data-i="' + i + '" data-v="' + n + '" aria-label="Esfuerzo ' + n + '">' + n + '</button>'; }).join('') + '</div><div class="rp-esc"><span>Muy suave</span><span>Puedo hablar</span><span>A tope</span></div>' +
-    '<div class="rp-q2"><span>¿Te ha dolido algo?</span><span class="rp-sn"><button class="' + (e.dolor === 'no' ? 'on' : '') + '" data-a="rpDolor" data-i="' + i + '" data-v="no">No</button><button class="' + (e.dolor === 'si' ? 'on' : '') + '" data-a="rpDolor" data-i="' + i + '" data-v="si">Sí</button></span></div>' +
-    (e.dolor === 'si' ? '<div class="rp-mini">Si el dolor sigue mañana o te cambia la forma de correr, para y consulta. La próxima vez, repite la semana.</div>' : '') + runCampos(e, i) + '</section>';
+    '<label class="f rp-nota">Notas para ti<textarea data-in="rpNota" data-i="' + i + '" rows="3" maxlength="500" placeholder="Cómo te has sentido, el sitio, el calzado… Las verás al revisar este entreno.">' + esc(e.notaR || '') + '</textarea></label>' + runCampos(e, i) + '</section>';
   h += '<button class="btn' + (e.hecho ? ' verde' : '') + '" data-a="cardioOk" data-i="' + i + '">' + (e.hecho ? ic('check', 16, null, 3) + 'Hecho' : 'Marcar como hecho') + '</button>' + ejAcc(i) + '</div>';
   return h;
 }
@@ -3172,9 +3303,11 @@ A.rpCk = function (el) { var box = el.closest('.rp-encurso'); if (!box || !S.ses
 A.rpTr = function (el) { var e = S.ses.ej[+el.dataset.i], X = rpDeEj(e), tr = rpTramos(X.s.B), v = e.tr == null ? (+el.dataset.v > 0 ? tr : tr - 1) : e.tr + (+el.dataset.v); e.tr = Math.max(0, Math.min(tr, v)); guardaEnCurso(); pintar(); };
 A.rpTrSet = function (el) { var e = S.ses.ej[+el.dataset.i]; e.tr = +el.dataset.v; guardaEnCurso(); pintar(); };
 A.rpRpe = function (el) { var e = S.ses.ej[+el.dataset.i]; e.rpe = String(e.rpe) === el.dataset.v ? '' : +el.dataset.v; guardaEnCurso(); pintar(); };
+IN.rpNota = function (t) { var e = S.ses.ej[+t.dataset.i]; e.notaR = t.value.slice(0, 500); guardaEnCurso(); };
 A.rpDolor = function (el) { var e = S.ses.ej[+el.dataset.i]; e.dolor = e.dolor === el.dataset.v ? '' : el.dataset.v; guardaEnCurso(); pintar(); };
 /* lo que se guarda en el entreno terminado */
-function rpReg(e) { var X = rpDeEj(e); if (!X) return null; var tr = rpTramos(X.s.B); return { p: X.P.id, pid: e.rp.pid, d: X.d, w: X.w, v: X.P.v, de: tr, tr: e.tr != null ? (tr > 1 ? e.tr : (e.tr ? 1 : 0)) : null, rpe: e.rpe === '' || e.rpe == null ? null : +e.rpe, dolor: e.dolor || '' }; }
+function rpReg(e) { var X = rpDeEj(e, 0); if (!X) return null; var tr = rpTramos(X.s.B), o = { p: X.P.id, pid: e.rp.pid, d: X.d, w: X.w, v: X.P.v, ts: Date.now(), de: tr, tr: e.tr != null ? (tr > 1 ? e.tr : (e.tr ? 1 : 0)) : null, rpe: e.rpe === '' || e.rpe == null ? null : +e.rpe, dolor: e.dolor || '' };
+  if (String(e.notaR || '').trim()) o.nota = String(e.notaR).trim().slice(0, 500); return o; }
 function rpDeSes(s) { var L = (s && s.ej) || []; if (!L.length || L.some(function (e) { return e.tipo !== 'run'; })) return null; var e = L.filter(function (e) { return e.rp; })[0]; return e ? e.rp : null; }
 /* los 3 números del entreno de carrera (fin, Progreso, Inicio) en vez de series y kilos */
 function rpKpis(s) {
@@ -3182,6 +3315,85 @@ function rpKpis(s) {
   return [x.de > 1 ? [(x.tr != null ? x.tr : '–') + '/' + x.de, 'tramos'] : [x.tr === 0 ? 'Con pausas' : x.tr === 1 ? 'Seguido' : '–', 'sin parar'], [String(run), 'min corriendo'], [x.rpe != null ? x.rpe + '/10' : '–', 'esfuerzo']];
 }
 function rpResTxt(x) { if (!x) return ''; var L = ['Semana ' + x.w + ' · día ' + (x.d + 1)]; if (x.tr != null) L.push(x.de > 1 ? x.tr + ' de ' + x.de + ' tramos' : (x.tr ? 'entero' : 'con pausas')); if (x.rpe != null) L.push('esfuerzo ' + x.rpe + '/10'); if (x.dolor) L.push(x.dolor === 'si' ? 'con dolor' : 'sin dolor'); return L.join(' · '); }
+
+/* ===== 12 · Cronómetro de carrera (17 nov, Javier: «un cronómetro interno, para seguir los tiempos y descansos sin salir de la app,
+   con pitidos mientras corre y al acabar el descanso; distinto el de empieza a trotar del de toca andar») =====
+   Opcional: quien quiera usa su reloj. Va por la hora del reloj (no se desajusta si el móvil frena la app) y se guarda en el entreno
+   en curso (e.cr), así sigue aunque se recargue. Mantiene la pantalla encendida mientras corre (si el móvil lo permite).
+   Pitidos: dos agudos subiendo = a trotar · uno largo y grave = a andar · uno corto por segundo en los 3 últimos · tres al acabar. */
+var RC = { cur: -1, k: '', iv: 0, wl: null };
+function rcSegs(e, src) {
+  var X = rpDeEj(e, 0); if (!X) return [];
+  if (src === 'B') { var B = X.s.B; return B.intervalCount ? [].concat.apply([], Array.apply(null, Array(B.intervalCount)).map(function () { return [[B.intervalDuration, 'on'], [B.recoveryDuration, 'off']]; })) : B.tramos ? B.tramos.map(function (x) { return [x.durationSeconds, x.kind]; }) : [[B.durationSeconds, 'on']]; }
+  var m = /^([ac])(\d+)$/.exec(src || ''); if (!m) return []; var x = X.s[m[1].toUpperCase()][+m[2]]; if (!x) return [];
+  return x.secsLado ? [[x.secsLado, 'lado'], [x.secsLado, 'lado']] : [[x.durationSeconds, 'ej']];
+}
+function rcPos(e) { var c = e.cr; if (!c) return null; var L = rcSegs(e, c.src), ms = c.acum + (c.on ? Date.now() - c.ini : 0), t = ms / 1000, tot = L.reduce(function (a, x) { return a + x[0]; }, 0), acc = 0;
+  for (var i = 0; i < L.length; i++) { if (t < acc + L[i][0]) return { L: L, i: i, rest: acc + L[i][0] - t, t: t, tot: tot, fin: false }; acc += L[i][0]; }
+  return { L: L, i: L.length, rest: 0, t: tot, tot: tot, fin: true }; }
+function rcLabel(k, B) { return k === 'on' ? 'Trotando' + (B && B.intensityRPE ? ' · ' + rpZona(B.intensityRPE) : '') : k === 'off' ? 'Andando' + (B && B.recoveryRPE ? ' · ' + rpZona(B.recoveryRPE) : '') : k === 'lado' ? 'Un lado' : 'En marcha'; }
+function rcHtml(e, i, X) {
+  var c = e.cr && e.cr.src === 'B' ? e.cr : null, P = c ? rcPos(e) : null, L = rcSegs(e, 'B'), tot = L.reduce(function (a, x) { return a + x[0]; }, 0), B = X.s.B, tr = rpTramos(B);
+  var h = '<section class="card rc" id="rc-B" data-i="' + i + '"><div class="rc-h"><b>' + ic('reloj', 17) + 'Cronómetro de la parte principal</b><small class="mut">Opcional · con pitidos</small></div>';
+  if (!c) return h + '<p class="sm mut">Te va marcando cuándo trotar y cuándo andar, sin salir de la app. Si prefieres tu reloj, no hace falta.</p><button class="btn" data-a="rcIr" data-i="' + i + '">' + ic('play', 16) + 'Empezar el cronómetro · ' + mmss(tot) + '</button>' + rcLey() + '</section>';
+  var k = P.fin ? '' : P.L[P.i][1], sig = !P.fin && P.L[P.i + 1], nOn = P.L.slice(0, P.i + 1).filter(function (x) { return x[1] === 'on'; }).length;
+  h += '<div class="rc-f ' + (P.fin ? 'fin' : k) + '" id="rc-f"><span id="rc-l">' + (P.fin ? '¡Hecho!' : rcLabel(k, B)) + '</span><b id="rc-t">' + mmss(P.fin ? 0 : Math.ceil(P.rest)) + '</b>' +
+    '<small id="rc-n">' + (P.fin ? 'Parte principal terminada. Apunta abajo cómo ha ido.' : (tr > 1 ? 'Tramo ' + Math.max(1, nOn) + ' de ' + tr : 'Seguido') + (sig ? ' · luego ' + durTxt(sig[0]) + (sig[1] === 'on' ? ' trotando' : ' andando') : ' · es el último')) + '</small></div>' +
+    '<div class="rc-bar"><i id="rc-p" style="width:' + Math.min(100, Math.round(P.t * 100 / (P.tot || 1))) + '%"></i></div><small class="mut" id="rc-r">' + (P.fin ? '' : 'Quedan ' + mmss(Math.ceil(P.tot - P.t))) + '</small>';
+  h += '<div class="rc-b">' + (P.fin ? '<button class="btn sec" data-a="rcReset" data-i="' + i + '">' + ic('deshacer', 16) + 'Volver a empezar</button>' :
+    (c.on ? '<button class="btn" data-a="rcPausa" data-i="' + i + '">' + ic('pausa', 16) + 'Pausa</button>' : '<button class="btn" data-a="rcSeguir" data-i="' + i + '">' + ic('play', 16) + 'Seguir</button>') +
+    '<button class="btn sec" data-a="rcSaltar" data-i="' + i + '">Saltar tramo</button>' + (c.on ? '' : '<button class="link rojo-t" data-a="rcReset" data-i="' + i + '">Parar y reiniciar</button>')) + '</div>';
+  return h + rcLey() + '</section>';
+}
+function rcLey() { return '<p class="sm mut rc-ley">' + ic('sonido', 14) + '<span>Dos pitidos agudos: <b>a trotar</b>. Uno largo y grave: <b>a andar</b>. Tres al acabar. La pantalla se queda encendida mientras corres.' + (sonidoOn() ? '' : ' Tienes el sonido quitado: solo vibra.') + '</span></p>'; }
+function rcEj(i) { return S.ses && S.ses.ej[+i]; }
+function rcGuarda() { guardaEnCurso(); }
+A.rcIr = function (el) { var e = rcEj(el.dataset.i); if (!e) return; audioOk(); e.cr = { src: 'B', acum: 0, ini: Date.now(), on: true }; RC.cur = -1; RC.k = ''; rcGuarda(); rcPantalla(true); rcTick(); pintar(); };
+A.rcEj = function (el) {
+  var box = el.closest('.rp-encurso'); if (!box || !S.ses) return; var e = S.ses.ej[+box.dataset.i], src = el.dataset.k + el.dataset.j;
+  if (e.cr && e.cr.src === src) { e.cr = null; rcGuarda(); return pintar(); }
+  if (e.cr && e.cr.src === 'B' && !rcPos(e).fin) return toast('Termina o reinicia antes el cronómetro de la parte principal');
+  audioOk(); e.cr = { src: src, acum: 0, ini: Date.now(), on: true }; RC.cur = -1; RC.k = ''; rcGuarda(); rcPantalla(true); rcTick(); pintar();
+};
+A.rcPausa = function (el) { var e = rcEj(el.dataset.i); if (!e || !e.cr || !e.cr.on) return; e.cr.acum += Date.now() - e.cr.ini; e.cr.on = false; rcGuarda(); rcPantalla(false); pintar(); };
+A.rcSeguir = function (el) { var e = rcEj(el.dataset.i); if (!e || !e.cr) return; audioOk(); e.cr.ini = Date.now(); e.cr.on = true; rcGuarda(); rcPantalla(true); rcTick(); pintar(); };
+A.rcSaltar = function (el) { var e = rcEj(el.dataset.i); if (!e || !e.cr) return; var P = rcPos(e); if (P.fin) return; e.cr.acum += Math.ceil(P.rest * 1000) + 5; rcGuarda(); rcTick(); pintar(); };
+A.rcReset = function (el) { var e = rcEj(el.dataset.i); if (!e) return; e.cr = null; RC.cur = -1; rcGuarda(); rcPantalla(false); pintar(); };
+/* pitidos */
+function rcSuena(k) {
+  var v = function (p) { try { if (navigator.vibrate) navigator.vibrate(p); } catch (er) { } };
+  if (k === 'on') { pita(660, 0.14, 0.35); setTimeout(function () { pita(990, 0.2, 0.35); }, 190); v([90, 60, 90]); }
+  else if (k === 'off') { pita(392, 0.7, 0.35); v([450]); }
+  else if (k === 'tic') { pita(520, 0.07, 0.2); }
+  else if (k === 'lado') { pitaCorto(); setTimeout(pitaCorto, 220); v([80, 60, 80]); }
+  else if (k === 'fin') { pitaFin(); v([200, 100, 200, 100, 400]); }
+}
+/* la pantalla encendida mientras corre (Wake Lock; si el móvil no lo tiene, no pasa nada) */
+function rcPantalla(on) { try { if (on && navigator.wakeLock && !RC.wl) navigator.wakeLock.request('screen').then(function (w) { RC.wl = w; w.addEventListener('release', function () { RC.wl = null; }); }, function () { });
+  if (!on && RC.wl) { RC.wl.release(); RC.wl = null; } } catch (er) { } }
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible' && rcActivo()) rcPantalla(true); });
+function rcActivo() { if (!S.ses) return null; for (var i = 0; i < S.ses.ej.length; i++) { var e = S.ses.ej[i]; if (e.cr && e.cr.on) return { e: e, i: i }; } return null; }
+function rcTick() {
+  var A2 = rcActivo(); if (!A2) { if (RC.iv) { clearInterval(RC.iv); RC.iv = 0; } return; }
+  if (!RC.iv) RC.iv = setInterval(rcTick, 250);
+  var e = A2.e, P = rcPos(e), key = e.cr.src + ':' + P.i;
+  if (RC.k && RC.k.split(':')[0] === e.cr.src && RC.cur !== P.i) {      // cambia de tramo: pitido según lo que empieza
+    if (P.fin) rcSuena('fin'); else rcSuena(e.cr.src === 'B' ? P.L[P.i][1] : 'lado');
+  } else if (!P.fin && P.rest <= 3.05 && P.rest > 0.2) { var sg = Math.ceil(P.rest); if (RC.tic !== key + sg) { RC.tic = key + sg; rcSuena('tic'); } }
+  RC.cur = P.i; RC.k = key;
+  if (P.fin) {
+    e.cr.acum = P.tot * 1000; e.cr.on = false; rcPantalla(false);
+    if (e.cr.src === 'B') { var tr = rpTramos(rpDeEj(e, 0).s.B); if (e.tr == null) e.tr = tr > 1 ? tr : 1; }
+    else { var m = /^([ac])(\d+)$/.exec(e.cr.src); e.ck = e.ck || { a: [], c: [] }; if (m && e.ck[m[1]].indexOf(+m[2]) < 0) e.ck[m[1]].push(+m[2]); e.cr = null; }
+    guardaEnCurso(); pintar(); return;
+  }
+  if (e.cr.src === 'B') { var B = rpDeEj(e, 0).s.B, k = P.L[P.i][1], sig = P.L[P.i + 1], nOn = P.L.slice(0, P.i + 1).filter(function (x) { return x[1] === 'on'; }).length, tr2 = rpTramos(B), $ = function (id) { return document.getElementById(id); };
+    if ($('rc-t')) { $('rc-t').textContent = mmss(Math.ceil(P.rest)); $('rc-l').textContent = rcLabel(k, B); $('rc-f').className = 'rc-f ' + k; $('rc-p').style.width = Math.min(100, Math.round(P.t * 100 / (P.tot || 1))) + '%'; $('rc-r').textContent = 'Quedan ' + mmss(Math.ceil(P.tot - P.t));
+      $('rc-n').textContent = (tr2 > 1 ? 'Tramo ' + Math.max(1, nOn) + ' de ' + tr2 : 'Seguido') + (sig ? ' · luego ' + durTxt(sig[0]) + (sig[1] === 'on' ? ' trotando' : ' andando') : ' · es el último'); } }
+  else { var b = document.getElementById('rc-x-' + e.cr.src); if (b) { b.classList.add('on'); b.textContent = mmss(Math.ceil(P.rest)) + (P.L.length > 1 ? (P.i ? ' · 2.º' : ' · 1.º') : ''); } }
+}
+setInterval(function () { if (rcActivo() && !RC.iv) rcTick(); }, 1500);
+
 
 ;
 /* ---------- el entreno en curso (como lo ven los clientes de los entrenadores) ---------- */
@@ -3330,7 +3542,9 @@ A.terminar = function () {
   var pend = X.ej.filter(function (e) { return !e.cal && !exHecho(e); }).length;
   hoja('<h2>¿Terminar el entreno?</h2>' + (pend ? '<p class="mut">Te quedan ' + pend + (pend === 1 ? ' ejercicio' : ' ejercicios') + ' sin completar. Se guarda lo que has hecho.</p>' : '<p class="mut">¡Lo has completado todo!</p>') + '<button class="btn" data-a="terminarSi">Terminar y guardar</button><button class="btn sec" data-a="cerrarHoja">Seguir entrenando</button>');
 };
-A.descartar = function () { cerrarHoja(); S.ses = null; guardaEnCurso(); DESC.fin = 0; S.pant = null; S.pila = []; pintar(); };
+/* 17 nov (Javier): cancelar el entreno desde la barra «Entreno en curso», preguntando antes */
+A.sesCancelar = function () { hoja('<h2>¿Seguro que quieres cancelar el entreno?</h2><p class="mut">Se borra lo que llevas apuntado de «' + esc(S.ses ? S.ses.nombre : '') + '». No se guarda en tu historial.</p><button class="btn rojo" data-a="descartar">Sí, cancelar el entreno</button><button class="btn sec" data-a="cerrarHoja">No, seguir</button>'); };
+A.descartar = function () { if (typeof rcPantalla === 'function') rcPantalla(false); cerrarHoja(); S.ses = null; guardaEnCurso(); DESC.fin = 0; S.pant = null; S.pila = []; pintar(); };
 A.terminarSi = function () {
   cerrarHoja(); var X = S.ses, vol = 0, nser = 0, recs = [];
   var ej = X.ej.filter(function (e) { return !e.cal && ((e.sets || []).some(function (s) { return s.ok; }) || e.hecho); }).map(function (e) {
@@ -3606,7 +3820,7 @@ VISTAS.sesion = function (p) {
   var s = S.sesiones.filter(function (x) { return x.id === p.id; })[0]; if (!s) return '';
   var h = '<div class="pant pad">' + cab(esc(s.nombre || 'Entreno')) + '<p class="mut">' + esc(new Date(s.fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' })) + ' · ' + s.min + ' min</p>';
   h += '<div class="kpis k3">' + (rpKpis(s) || [[String(s.nser || 0), 'series'], [fmtK(s.vol), 'kg'], [String((s.recs || []).length), 'récords']]).map(function (k) { return '<div><b>' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>';
-  (s.ej || []).forEach(function (e) { h += '<section class="card"><b>' + esc(e.n) + '</b>' + (e.hecho ? '<small class="mut">' + esc(e.txt || 'Hecho') + (runRes(e) ? ' · ' + esc(runRes(e)) : '') + (e.rp ? '<br>' + esc(rpResTxt(e.rp)) : '') + '</small>' : (e.sets || []).map(function (z, i) { return '<div class="fila-r"><span class="mut">Serie ' + (i + 1) + (z.rec ? ' ' + ic('trofeo', 13, 'var(--verde)', 2.4) : '') + '</span><span>' + (num(z.kg) ? fN(z.kg) + ' kg × ' : '') + esc(z.reps) + (e.u === 's' ? ' s' : '') + (z.rir !== '' && z.rir != null ? ' · RIR ' + esc(z.rir) : '') + '</span></div>'; }).join('')) + '</section>'; });
+  (s.ej || []).forEach(function (e) { h += '<section class="card"><b>' + esc(e.n) + '</b>' + (e.hecho ? '<small class="mut">' + esc(e.txt || 'Hecho') + (runRes(e) ? ' · ' + esc(runRes(e)) : '') + (e.rp ? '<br>' + esc(rpResTxt(e.rp)) : '') + '</small>' + (e.rp && e.rp.nota ? '<p class="nota rp-nt">' + ic('lapiz', 14) + '<span>' + esc(e.rp.nota) + '</span></p>' : '') : (e.sets || []).map(function (z, i) { return '<div class="fila-r"><span class="mut">Serie ' + (i + 1) + (z.rec ? ' ' + ic('trofeo', 13, 'var(--verde)', 2.4) : '') + '</span><span>' + (num(z.kg) ? fN(z.kg) + ' kg × ' : '') + esc(z.reps) + (e.u === 's' ? ' s' : '') + (z.rir !== '' && z.rir != null ? ' · RIR ' + esc(z.rir) : '') + '</span></div>'; }).join('')) + '</section>'; });
   if (S.sesiones.some(function (x) { return x.id !== s.id && x.fecha <= s.fecha; })) h += '<button class="btn" data-a="cmpAnterior" data-id="' + s.id + '">' + ic('grafica', 18, null) + 'Comparar con el anterior</button>';
   h += '<button class="btn sec" data-a="compartirSes" data-id="' + s.id + '">' + ic('compartir', 18) + 'Compartir este entreno</button>';
   return h + '</div>';
