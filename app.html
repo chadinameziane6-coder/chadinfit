@@ -3756,7 +3756,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.165';
+var APP_V = 'v53.4.166';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -9006,7 +9006,7 @@ function libSugCm(p,mi){
    media mañana o merienda, comida o cena), con su foto; la que elige entra ajustada a lo que le toca en esa comida (como al generar la
    dieta) y es solo para ese día: va en dieta_pref.dia.l (una por comida) y sale en su comida como un plato más («De la biblioteca»).
    ===================================================================== */
-function masLibCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.dn)&&!libreCl(); }      // v53.4.115: en todos los paneles
+function masLibCl(){ return BOOT.mode==='clienta'&&!!(CL.d&&CL.d.dn)&&!libreCl()&&!CL.d.sinMas; }      // v53.4.115: en todos los paneles · v53.4.166: su entrenador puede quitarle el «+» (sinMas)
 function libHoy(){ var d=prefCl().dia; return d&&d.f===hoyStr()&&d.l&&typeof d.l==='object'&&Object.keys(d.l).length?d.l:null; }
 function conLibHoy(P){
   var L=libHoy(); if(!L) return P;
@@ -13666,7 +13666,7 @@ function vDietaPlan(){
     dieOpcHtml()+'</div>';
   if(gdOn()) cab=gdRevHtml()+dieCabSimple(P);      // v53.4.91 (nº 1): arriba, solo lo que se usa; lo demás en «Más opciones»
   var ve='<div class="card"><div class="card-t">Lo que ve '+nom+'</div>'+verKmHtml(true)+
-    libreFilaHtml()+prefResumen()+'<button class="link" data-a="abrirNutri">'+ic('dieta')+'Alimentos, recetas e intercambios</button></div>'+miaResumenHtml();
+    libreFilaHtml()+masFilaHtml()+prefResumen()+'<button class="link" data-a="abrirNutri">'+ic('dieta')+'Alimentos, recetas e intercambios</button></div>'+miaResumenHtml();
   var obj='<div class="card">'+(gdOn()&&P.length===1?'':'<div class="grid2"><label class="f">Nombre del plan<input data-pk="nombre" value="'+esc(p.nombre)+'" placeholder="Día de entreno"></label><label class="f">Para los días<select data-pk="tipo">'+Object.keys(TIPOS_PLAN).map(function(k){ return '<option value="'+k+'"'+(p.tipo===k?' selected':'')+'>'+TIPOS_PLAN[k]+'</option>'; }).join('')+'</select></label></div>')+
     (mcMano()?'<div class="lab">Objetivo del día</div><div class="grid4"><label class="f" style="margin-top:0">Kcal<input data-pk="kcal" inputmode="numeric" value="'+esc(p.kcal)+'"></label><label class="f" style="margin-top:0">Proteína (g)<input data-pk="proteina" inputmode="numeric" value="'+esc(p.proteina)+'"></label><label class="f" style="margin-top:0">Hidratos (g)<input data-pk="carbohidratos" inputmode="numeric" value="'+esc(p.carbohidratos)+'"></label><label class="f" style="margin-top:0">Grasa (g)<input data-pk="grasa" inputmode="numeric" value="'+esc(p.grasa)+'"></label></div>'+
     '<div class="muted sm mt" id="kcal-calc">'+kcalTxt()+'</div><button class="link" data-a="mcMano" data-v="0">'+ic('calc')+'Por gramos por kilo (los hidratos, solos)</button>':'<div class="mt">'+mcHtml('pl')+'</div>')+
@@ -15174,7 +15174,7 @@ function vRecEdCasa(){
     '<div class="card"><div class="card-t">Cómo se hace</div><textarea data-rk="texto" rows="6" placeholder="Pasos, tiempos, trucos…">'+esc(r.texto||'')+'</textarea></div>'+
     recRepHtml(r)+
     '<div class="card"><div class="card-t">¿En qué comidas la propongo al generar dietas?</div><div class="tipos rec-tp">'+
-      MO_T.map(function(t){ return '<button class="'+(String(r.tipos||'').indexOf(t[0])>=0?'on':'')+'" data-a="recTipo" data-v="'+t[0]+'">'+t[1]+'</button>'; }).join('')+'</div><p class="muted sm">También les sale a tus clientes que cuadran su dieta, en «De la biblioteca». Si no eliges ninguna, solo está en tu banco.</p></div>'+
+      MO_T.map(function(t){ return '<button class="'+(String(r.tipos||'').indexOf(t[0])>=0?'on':'')+'" data-a="recTipo" data-v="'+t[0]+'">'+t[1]+'</button>'; }).join('')+'</div><p class="muted sm">'+(CO.casa===true?'También les sale a tus clientes que cuadran su dieta, en «De la biblioteca». ':'')+'Si no eliges ninguna, solo está en tu banco.</p></div>'+
     (r.pend?'<div class="rec-bar"><button class="btn ok-b" data-a="recGuardar" data-mo="todos">'+ic('ok')+'Aprobar y publicar para todos</button><button class="btn sec" data-a="recGuardar">Guardar sin aprobar</button></div>':
     '<div class="rec-bar"><button class="btn" data-a="recGuardar">'+ic('ok')+'Guardar receta</button>'+(nuevo?'<button class="btn sec" data-a="recGuardar" data-otra="1">'+ic('mas')+'Guardar y meter otra</button>':'')+'</div>')+
     (lb?'<div class="rlib-acc">'+(ov&&!lbBorrada(ov)?'<button class="link" data-a="recLibOriginal">'+ic('reinicio')+'Volver a la original</button>':'')+'<button class="link danger" data-a="recLibBorrar">Borrar receta</button></div>':r.id?'<button class="link danger mt" data-a="recBorrar">'+(r.mo&&!CO.nut.casa?'Quitar de tu banco':'Borrar receta')+'</button>':'')+'<button class="btn sec mt" data-a="recSalir">Volver a recetas</button>';
@@ -15335,7 +15335,7 @@ function vEnlace(){
     cfgSegCard()+
     '<div class="card fab-mas fi-card"><div class="card-t">Más ajustes</div>'+
       fabFila('alim','Alimentación',esc(resAl),alimCard())+
-      fabFila('app','Qué ve y qué puede hacer en su app',esc(resApp),verKmHtml(false)+libreFilaHtml()+entLibreFilaHtml()+moodFilaHtml())+
+      fabFila('app','Qué ve y qué puede hacer en su app',esc(resApp),verKmHtml(false)+libreFilaHtml()+masFilaHtml()+entLibreFilaHtml()+moodFilaHtml())+
       fabFila('pasos','Pasos y medallas',esc(resPa),pasosFichaCard()+logrosFichaCard())+
       fabFila('notas','Notas privadas y WhatsApp directo',esc(resNo),
         '<label class="f" style="margin-top:0">Notas privadas ('+cG('ella','él')+' no las ve)<textarea id="c-notas" rows="4" placeholder="Lesiones, historial, contexto…">'+esc(c.notas)+'</textarea></label>'+
@@ -18268,6 +18268,27 @@ A.togMood=function(){
   cargando(api('coachAlMood',CO.pin,cid,on)).then(function(){ if(CO.cid!==cid) return; CO.d.clienta.alMood=on; repintar();
     toast(on?'Listo: en su app sale «Añadir a MOOD ON» en sus platos y recetas':'Ya no sale «Añadir a MOOD ON» en su app','ok'); },function(e){ toast(limpiaErr(e),'err'); });
 };
+/* v53.4.166 · «Puede buscar más platos» (Miguel, por Javier): en cualquier panel, quitarle el «+» de cada comida (solo ve tus platos). Por defecto, sí */
+function masFilaHtml(){
+  var cl=CO.d.clienta; if(cl.dietaLibre) return '';      // con autorregulación (solo nº 1) ya busca lo que quiere
+  var on=!cl.sinMas;
+  return '<div class="fila mt"><span>Puede buscar más platos <small class="muted">(el «+» de cada comida)</small></span><button class="sw'+(on?' on':'')+'" data-a="togMas" aria-label="Puede buscar más platos" aria-pressed="'+on+'"><i></i></button></div>'+
+    '<p class="muted sm">'+(on?'Activado: además de tus platos, con el «+» puede buscar platos de la biblioteca con foto, ajustados a su comida, solo para ese día.':'Desactivado: en su app solo salen los platos que le pones tú (sin el «+»).')+'</p>'+
+    '<button class="link sm mas-todos" data-a="masTodos">Cambiarlo para todos tus clientes</button>';
+}
+A.togMas=function(){
+  var on=!!CO.d.clienta.sinMas, cid=CO.cid;
+  cargando(api('coachSinMas',CO.pin,cid,on)).then(function(){ if(CO.cid!==cid) return; CO.d.clienta.sinMas=!on; repintar();
+    toast(on?'Listo: con el «+» puede buscar más platos':'Listo: solo ve los platos que le pones tú','ok'); },function(e){ toast(limpiaErr(e),'err'); });
+};
+A.masTodos=function(){
+  var n=(CO.lista||[]).length;
+  modal('<h2>¿Para todos tus clientes?</h2><p class="muted sm">Cambia «Puede buscar más platos» en '+(n?(n>1?'los '+n+' clientes':'el cliente')+' que tienes ahora':'todos tus clientes')+'. Luego puedes cambiarlo en cada uno.</p>'+
+    '<button class="btn" data-a="masTodosSi" data-v="0">Quitar el «+» a todos</button><button class="btn sec mt" data-a="masTodosSi" data-v="1">Ponerlo a todos</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
+};
+A.masTodosSi=function(el){ if(el.disabled) return; el.disabled=true; var on=el.dataset.v==='1', cid=CO.cid;
+  cargando(api('coachSinMasTodos',CO.pin,on)).then(function(){ cerrarModal(); if(CO.d&&CO.d.clienta&&CO.cid===cid) CO.d.clienta.sinMas=!on; repintar();
+    toast(on?'Listo: todos tus clientes pueden buscar más platos':'Listo: tus clientes solo ven los platos que les pones','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 function libreFilaHtml(){
   if(CO.casa===false) return '';      // v53.4.42: «Autorregulación de macros», solo en la cuenta nº 1 (Chadín): a los demás entrenadores les liaba (Javier)
   var lib=!!CO.d.clienta.dietaLibre;
@@ -23266,7 +23287,7 @@ function pintarPrueba(arriba){
     '<div class="card pr-cl"><div class="card-t"><span class="ps-tt">'+ic('ojo')+'Clienta de prueba</span></div>';
   if(!ex) h+='<p class="muted sm">Primero crea la clienta de ejemplo (Ana Ejemplo): rutina, dieta y 12 semanas de datos inventados.</p><button class="btn" data-a="prCrear">Crear la clienta de ejemplo</button>';
   else h+='<p class="muted sm"><b>'+esc(ex.nombre)+'</b>: su rutina, su dieta y 12 semanas de datos. Cambia cómo la tienes configurada y mira su app:</p>'+
-    sw('prKcal','Ve kcal',ex.kcal)+sw('prMacros','Ve macros',ex.macros)+sw('prLibre','Autorregulación de su dieta',ex.libre,'cuadra '+cG('ella','él')+' sus platos')+sw('prEntLibre','Permisos ampliados en el entreno',ex.entLibre)+
+    sw('prKcal','Ve kcal',ex.kcal)+sw('prMacros','Ve macros',ex.macros)+(CO.casa===true?sw('prLibre','Autorregulación de su dieta',ex.libre,'cuadra '+cG('ella','él')+' sus platos'):'')+sw('prEntLibre','Permisos ampliados en el entreno',ex.entLibre)+
     sw('prDiario','Se pesa a diario',ex.registra&&ex.registra.diario)+sw('prPasos','Pasos'+(ex.pasosObj?' (objetivo '+fP(ex.pasosObj)+')':''),!!ex.pasosObj)+sw('prLogros','Logros',ex.logrosOn)+
     '<button class="btn mt" data-a="prAbrir">'+ic('movil')+'Abrir su app</button><button class="btn sec mt" data-a="prFicha">Ir a su ficha (rutina, dieta…)</button><button class="btn sec mt" data-a="prCero">Empezar de cero</button>'+
     '<p class="muted sm">Se abre en otra pestaña con su propia sesión de 2 horas: tu cuenta de cliente en este móvil no se toca. Lo que hagas allí (entrenos, pasos…) se guarda en Ana Ejemplo.</p>';
@@ -23293,7 +23314,7 @@ function prRefrescar(msg){ return api('coachPrueba',CO.pin).then(function(r){ CO
 function prCambia(p,msg){ return cargando(p.then(function(){ return prRefrescar(msg); })).catch(function(e){ toast(limpiaErr(e),'err'); }); }
 A.prMacros=function(){ var ex=CO.pr.ejemplo; prCambia(api('coachDietaMacros',CO.pin,ex.id,!ex.macros?true:ex.kcal?'kcal':false),!ex.macros?'Ahora ve kcal y macros':'Ya no ve los macros'); };
 A.prKcal=function(){ var ex=CO.pr.ejemplo; prCambia(api('coachDietaMacros',CO.pin,ex.id,ex.kcal?false:'kcal'),ex.kcal?'Ya no ve kcal ni macros':'Ahora ve las kcal (sin los macros)'); };      // v49
-A.prLibre=function(){ var ex=CO.pr.ejemplo; prCambia(api('coachDietaLibre',CO.pin,ex.id,!ex.libre),!ex.libre?'Autorregulación activada':'Autorregulación desactivada'); };
+A.prLibre=function(){ if(CO.casa!==true) return; var ex=CO.pr.ejemplo; prCambia(api('coachDietaLibre',CO.pin,ex.id,!ex.libre),!ex.libre?'Autorregulación activada':'Autorregulación desactivada'); };
 A.prEntLibre=function(){ var ex=CO.pr.ejemplo; prCambia(api('coachEntrenoLibre',CO.pin,ex.id,!ex.entLibre),!ex.entLibre?'Permisos ampliados activados':'Permisos ampliados desactivados'); };
 A.prDiario=function(){ var ex=CO.pr.ejemplo, R=Object.assign({peso:true,medidas:true,fotos:true},ex.registra||{}); R.diario=!R.diario; if(R.diario) R.peso=true; prCambia(api('coachRegistra',CO.pin,ex.id,R),R.diario?'Ahora se pesa a diario':'Ya no se pesa a diario'); };
 A.prPasos=function(){ var ex=CO.pr.ejemplo; prCambia(api('coachPasosCfg',CO.pin,ex.id,{obj:ex.pasosObj?0:8000}),ex.pasosObj?'Sin pasos':'Pasos con objetivo de 8.000'); };
