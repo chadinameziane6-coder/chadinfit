@@ -1525,7 +1525,7 @@ function cargar() {
 function juntaBanco() {
   var mis = ((S.perfil && S.perfil.misEj) || []).map(function (e) { return { nombre: e.nombre, grupo: e.grupo, equipo: e.equipo, registro: e.reg || '', indicaciones: e.nota || '', mio: 1 }; });
   var ks = {}; mis.forEach(function (e) { ks[clave(e.nombre)] = 1; });
-  S.banco = (S.bancoSrv || []).filter(function (b) { return !ks[clave(b.nombre)]; }).concat(mis).sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); });
+  S.banco = (S.bancoSrv || []).filter(function (b) { return b.nombre && !/^https?:\/\//i.test(b.nombre) && !ks[clave(b.nombre)]; }).concat(mis).sort(function (a, b) { return a.nombre.localeCompare(b.nombre, 'es'); });
   CO.banco = S.banco.map(bancoMap);
 }
 /* del banco del servidor al formato del motor (como banco_() del panel) */
