@@ -1357,7 +1357,11 @@ window.YO_REVISAR = [
   { t: 'Programas híbridos del Word (tanda 6)', d: 'Cross training principiante (3 días) e intermedio (5), Hyrox principiante e intermedio (4: lunes, miércoles, viernes y domingo), Funcional principiante (3) e intermedio (4), HIIT + fuerza (3) y Atleta híbrido equilibrado (6, con 3 días de carrera). El Word da reglas y ejemplos, no programas cerrados: los he armado con sus semanas tipo, sus WOD y circuitos de ejemplo y su dosis de fuerza. Los AMRAP, EMOM y circuitos van como ejercicios seguidos con la explicación en la nota del primero (el reloj, en Herramientas); la carrera, el trineo o el granjero, en metros; los días de carrera, como en los programas de carrera. Entreno → Programas → Híbrido.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hibrido'; pintar(); } },
   { t: '100 programas en total (54 nuevos)', d: 'Además de los del Word: 54 que arma la app con un perfil fijo cada uno, como los de antes. Hipertrofia (pierna y glúteo, torso/pierna 5 días, full body 2 días, express, más brazos y hombros, más pecho y espalda, principiante 2 y 4 días, avanzados…), fuerza (2 días, powerbuilding, en casa con mancuernas y kettlebell o con barra, avanzado 6 días…), en casa (kettlebell, 25 min, glúteo sin material, gomas avanzado…), resistencia y perder grasa (HIIT en casa, bajo impacto, 5 días, principiante, circuitos…), híbridos, salud, aire libre, peso corporal y carrera (fuerza para corredores, correr + fuerza en casa, correr para perder grasa, trail). Los de 5 km, 10 km, media y maratón irán con el modelo del piloto de carrera, semana a semana. Entreno → Programas → Todos.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = ''; pintar(); } }
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = ''; pintar(); } },
+  { t: 'Glúteo: 7 programas y su filtro', d: 'Filtro «Glúteo» en Programas. Principiante 3 días, 3 días de 45 min, intermedio 4, avanzado 5, en casa con mancuernas, con gomas y sin material. Con las pautas del Word: series de glúteo por nivel, hip thrust, búlgaras o step-up, bisagra y abducción, y el ejercicio principal de glúteo el primero; el resto del cuerpo, para mantener. Sustituyen a los 7 de glúteo que había.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'gluteo'; pintar(); } },
+  { t: 'Pautas del Word en los programas que arma la app', d: 'En los 70 que arma la app (los de antes y los nuevos), después de armarlos: gemelos, abdomen, brazos y hombro cuando faltan; una serie menos donde se pasa de lo que dice el Word para su nivel; el músculo prioritario, el primero; y en principiantes, nunca al fallo. Abre cualquiera de Hipertrofia (no los del Word) y mira el final de cada día.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hipertrofia'; pintar(); } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -2432,9 +2436,9 @@ function perfilMotor(q) {
     min: +q.min || 45, lug: q.lug === 'casa' ? 'casa' : 'gym', mat: mat, prio: q.prio || [], les: [], cv: q.obj === 'rendir' ? 'normal' : '', sem: 8,
     sexo: q.sexo === 'hombre' ? 'hombre' : 'mujer', nEj: 0, tec: '', serP: {}, cvT: q.cvT || ['bajo'], dCarr: q.dCarr || 0, atencion: [] };
 }
-function hacerPlan(seed, P, origen, est) {
+function hacerPlan(seed, P, origen, est) {      // 17 nov: los del catálogo que arma el motor, con las pautas del Word (pautasWord)
   P = P || perfilMotor(qDef());
-  var D; try { D = plnEntreno(P, { seed: seed || 0, est: est || '' }); } catch (e) { console.error(e); return toast('No he podido preparar el plan. Vuelve a probar.'); }
+  var D; try { D = plnEntreno(P, { seed: seed || 0, est: est || '' }); if (origen && !origen.fijo) D = pautasWord(D, P); } catch (e) { console.error(e); return toast('No he podido preparar el plan. Vuelve a probar.'); }
   S.x.plan = { D: D, P: P, seed: seed || 0, ab: 0, origen: origen || null, est: est || '' };
   S.v = 'plan'; arriba(); pintar();
 }
@@ -2943,8 +2947,6 @@ var PROGRAMAS = [
   { id: 'rgr', b: 1, n: 'Correr para perder grasa', c: 'carrera resistencia', P: PP({ obj: 'grasa', niv: 'int', dias: 4, min: 50, cv: 'normal', cvT: ['carrera'], dCarr: 2 }) },
   { id: 'rtrail', b: 1, n: 'Trail · carrera y piernas fuertes', c: 'carrera', P: PP({ obj: 'resist', niv: 'int', dias: 4, min: 60, lug: 'aire', cv: 'normal', cvT: ['carrera'], dCarr: 3, prio: ['cuadriceps', 'gluteo'] }) },
   // más variados
-  { id: 'cglc', b: 1, n: 'En casa con gomas · más glúteo y abdomen', c: 'casa', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 40, lug: 'casa', mat: ['banda'], prio: ['gluteo', 'core'] }) },
-  { id: 'pglu', b: 1, n: 'Pierna y glúteo · principiante', c: 'hipertrofia principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 50, prio: ['gluteo', 'cuadriceps'] }) },
   { id: 'fcv4', b: 1, n: 'Fuerza + cardio 4 días', c: 'hibrido resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60, cv: 'normal', cvT: ['bajo'] }) },
   { id: 'hiitg', b: 1, n: 'HIIT y fuerza en el gimnasio · 4 días', c: 'resistencia', P: PP({ obj: 'grasa', dias: 4, min: 50, cv: 'mucho', cvT: ['hiit'] }) },
   { id: 'gava', b: 1, n: 'En casa con gomas · avanzado', c: 'casa avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 4, min: 45, lug: 'casa', mat: ['banda'] }) },
@@ -2952,8 +2954,6 @@ var PROGRAMAS = [
   { id: 'fzbar', b: 1, n: 'Fuerza en casa con barra y discos', c: 'fuerza casa', P: PP({ obj: 'fuerza', dias: 3, min: 60, lug: 'casa', mat: ['barra', 'otro'] }) },
   { id: 'kbava', b: 1, n: 'Kettlebell avanzado', c: 'hibrido casa avanzado', P: PP({ obj: 'resist', niv: 'ava', dias: 4, min: 45, lug: 'casa', mat: ['kettlebell'], cv: 'normal', cvT: ['hiit'] }) },
   // hipertrofia
-  { id: 'glu3', b: 1, n: 'Pierna y glúteo 3 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 3, min: 60, prio: ['gluteo'] }) },
-  { id: 'glu5', b: 1, n: 'Avanzado 5 días · más glúteo e isquios', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 5, min: 75, prio: ['gluteo', 'isquios'] }) },
   { id: 'tp5h', b: 1, n: 'Torso / pierna 5 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 5, min: 60, est: 'tp5' }) },
   { id: 'fb2h', b: 1, n: 'Full body 2 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 2, min: 60, est: 'fb2' }) },
   { id: 'h45', b: 1, n: 'Hipertrofia express · 45 min', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 4, min: 45 }) },
@@ -2971,7 +2971,6 @@ var PROGRAMAS = [
   // en casa
   { id: 'ckb', b: 1, n: 'En casa con kettlebell', c: 'casa', P: PP({ obj: 'musculo', dias: 3, min: 45, lug: 'casa', mat: ['kettlebell'] }) },
   { id: 'c25', b: 1, n: 'En casa · 25 minutos', c: 'casa', P: PP({ obj: 'salud', dias: 4, min: 25, lug: 'casa' }) },
-  { id: 'cglu', b: 1, n: 'Glúteo en casa sin material', c: 'casa principiante', P: PP({ obj: 'musculo', niv: 'ini', dias: 3, min: 40, lug: 'casa', prio: ['gluteo'] }) },
   { id: 'c2', b: 1, n: 'En casa · principiante 2 días', c: 'casa principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 2, min: 35, lug: 'casa' }) },
   { id: 'ccore', b: 1, n: 'En casa · 3 días con más core', c: 'casa', P: PP({ obj: 'salud', dias: 3, min: 30, lug: 'casa', prio: ['core'] }) },
   { id: 'cava5', b: 1, n: 'En casa avanzado 5 días', c: 'casa avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 5, min: 60, lug: 'casa', mat: ['mancuernas', 'banda', 'kettlebell'] }) },
@@ -3000,7 +2999,7 @@ var PROGRAMAS = [
   { id: 'fb3a', b: 1, n: 'Full body avanzado 3 días', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 3, min: 75, est: 'fb3' }) }
 ];
 PROGRAMAS.forEach(function (p) { var P = p.P; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + (P.dCarr ? (P.dias - P.dCarr) + ' + ' + P.dCarr : P.dias) + ' días · ' + P.min + ' min · ' + ({ gym: 'Gimnasio', casa: 'Casa', aire: 'Aire libre' })[P.lug]; });
-var CATS = [['', 'Todos'], ['principiante', 'Principiante'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido'], ['avanzado', 'Avanzado']];
+var CATS = [['', 'Todos'], ['principiante', 'Principiante'], ['gluteo', 'Glúteo'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido'], ['avanzado', 'Avanzado']];
 function progChips(f) { return '<div class="chips scroll">' + CATS.map(function (c) { var on = f === c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="progF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>'; }
 function vProgramas() {
   var f = S.x.pf || '';
@@ -3016,7 +3015,7 @@ function vProgramas() {
 A.progF = function (el) { S.x.pf = el.dataset.v; pintar(); };
 A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProgSi(id); }, 'prog'); };
 function verProgSi(id) { var p = PROGRAMAS.filter(function (x) { return x.id === id; })[0]; if (!p) return; var P = JSON.parse(JSON.stringify(p.P)), est = P.est; delete P.est;
-  S.x.plan = null; var D; try { D = plnEntreno(P, { seed: plnHash(p.id) * 100 | 0, est: est }); } catch (e) { console.error(e); return toast('No he podido preparar el programa'); }
+  S.x.plan = null; var D; try { D = pautasWord(plnEntreno(P, { seed: plnHash(p.id) * 100 | 0, est: est }), P); } catch (e) { console.error(e); return toast('No he podido preparar el programa'); }
   S.x.plan = { D: D, P: P, seed: plnHash(p.id) * 100 | 0, ab: 0, origen: p, est: est }; S.v = 'plan'; arriba(); pintar(); }
 
 ;
@@ -3664,10 +3663,49 @@ var PROG_FIJOS = [
       { n: 'Fuerza tren superior', p: 'torso', ej: [FJ('Press banca', 3, '5', { rir: '2-4' }), FJ('Dominadas', 3, '6-8'), FJ('Press militar con mancuernas', 3, '8'), FJ('Remo con mancuerna a una mano', 3, '10', { ld: 1 }), FJ('Face pull', 2, '15', { rir: '1-3' })] },
       { n: 'Running de calidad', run: 'series' },
       { n: 'Fuerza full body moderada', p: 'completo', ej: [FJ('Peso muerto', 3, '4', { rir: '3' }), FJ('Press inclinado', 3, '8-10'), FJ('Zancada inversa con mancuernas', 2, '10', { ld: 1 }), FJ('Remo invertido en TRX', 3, '10'), FJ('Pallof press', 2, '10', { ld: 1, rir: '' })] },
-      { n: 'Rodaje largo', run: 'larga' }] }
+      { n: 'Rodaje largo', run: 'larga' }] },
+  /* ---- glúteo (Javier: «mete enfoque en glúteos, que es muy demandado»). Con las pautas del Word de hipertrofia: series a la semana de glúteo mayor
+     y medio según el nivel (§12), combinar extensión de cadera (hip thrust), flexión de cadera (búlgaras, zancadas, step-up), bisagra y abducción (§38),
+     y el ejercicio principal de glúteo al principio de la sesión (prioridad, §41). El resto del cuerpo, con volumen de mantenimiento ---- */
+  { id: 'gl0', n: 'Glúteo · principiante 3 días', c: 'gluteo hipertrofia principiante', niv: 'ini', dias: 3, min: 50, sem: 8, rir: '2-3', d: 90, lug: 'gym', obj: 'musculo', tag: 'Gimnasio',
+    nota: 'Prioridad glúteo con el resto del cuerpo para mantener. Sube peso cuando hagas todas las repeticiones con buena técnica.',
+    D: [{ n: 'Día A', p: 'pierna', ej: [FJ('Hip thrust en máquina de discos', 3, '10-12', { rir: '3' }), FJ('Prensa a 45° con pies altos', 2, '10-12', { rir: '3' }), FJ('Abducción en máquina', 2, '15-20'), FJ('Jalón al pecho', 2, '10-12', { rir: '3' }), FJ('Press de pecho en máquina', 2, '8-12', { rir: '3' }), FJ('Dead bug', 2, '10', { rir: '' })] },
+      { n: 'Día B', p: 'pierna', ej: [FJ('Sentadilla goblet', 3, '10', { rir: '3' }), FJ('Peso muerto rumano con mancuernas', 3, '10', { rir: '3' }), FJ('Step-up subida en banco', 2, '10', { ld: 1, nota: 'Agárrate a algo si lo necesitas' }), FJ('Remo en máquina', 2, '10-12', { rir: '3' }), FJ('Press militar con mancuernas', 2, '10', { rir: '3' }), FJ('Gemelos', 2, '12-15')] },
+      { n: 'Día C', p: 'pierna', ej: [FJ('Hip thrust en máquina de discos', 3, '10-12', { rir: '3' }), FJ('Zancada inversa con mancuernas', 2, '10', { ld: 1, rir: '3' }), FJ('Abducción en máquina', 2, '15-20'), FJ('Curl femoral sentado', 2, '10-12'), FJ('Jalón al pecho', 2, '10-12', { rir: '3' }), FJ('Crunch en polea', 2, '12-15')] }] },
+  { id: 'gl3', n: 'Glúteo · 3 días de 45 min', c: 'gluteo hipertrofia', niv: 'int', dias: 3, min: 45, sem: 8, rir: '1-2', d: 90, lug: 'gym', obj: 'musculo', tag: 'Gimnasio',
+    D: [{ n: 'Día A', p: 'pierna', ej: [FJ('Hip thrust', 4, '8-10', { rir: '1-2' }), FJ('Sentadilla goblet', 3, '10', { rir: '2' }), FJ('Abducción en máquina', 3, '15-20'), FJ('Jalón al pecho', 3, '10-12', { rir: '2' }), FJ('Dead bug', 2, '10', { rir: '' })] },
+      { n: 'Día B', p: 'pierna', ej: [FJ('Peso muerto rumano con mancuernas', 3, '10', { rir: '2' }), FJ('Step-up subida en banco', 3, '10', { ld: 1, rir: '2' }), FJ('Patada de glúteo en polea', 3, '12-15', { ld: 1 }), FJ('Press de banca con mancuernas', 3, '8-12', { rir: '2' }), FJ('Gemelos', 3, '12-15')] },
+      { n: 'Día C', p: 'pierna', ej: [FJ('Hip thrust unilateral', 3, '10-12', { ld: 1, rir: '1-2' }), FJ('Zancada inversa con mancuernas', 3, '10', { ld: 1, rir: '2' }), FJ('Abducción en polea', 2, '15', { ld: 1 }), FJ('Remo con mancuerna a una mano', 3, '10', { ld: 1, rir: '2' }), FJ('Crunch en polea', 2, '12-15')] }] },
+  { id: 'gl1', n: 'Glúteo · intermedio 4 días', c: 'gluteo hipertrofia', niv: 'int', dias: 4, min: 60, sem: 8, rir: '1', d: 90, lug: 'gym', obj: 'musculo', tag: 'Gimnasio',
+    nota: 'Dos días de glúteo y dos de torso. Glúteo: hip thrust, búlgaras, step-up, bisagra y abducción, para trabajarlo en todos sus recorridos.',
+    D: [{ n: 'Glúteo A', p: 'pierna', ej: [FJ('Hip thrust', 4, '8-10', { rir: '1-2' }), FJ('Sentadilla búlgara', 3, '8-12', { ld: 1, rir: '1-2' }), FJ('Peso muerto rumano', 3, '8-10', { rir: '2' }), FJ('Abducción en máquina', 3, '12-20'), FJ('Gemelos', 3, '10-15')] },
+      { n: 'Torso A', p: 'torso', ej: [FJ('Jalón al pecho', 3, '8-12', { rir: '1-2' }), FJ('Press inclinado', 3, '8-12', { rir: '1-2' }), FJ('Remo en máquina', 3, '10-12', { rir: '1-2' }), FJ('Elevaciones laterales', 3, '12-20'), FJ('Curl en polea', 2, '10-15'), FJ('Extensión de tríceps', 2, '10-15')] },
+      { n: 'Glúteo B', p: 'pierna', ej: [FJ('Hip thrust unilateral', 3, '10-12', { ld: 1, rir: '1-2' }), FJ('Prensa a 45° con pies altos', 3, '10-15', { rir: '1-2' }), FJ('Step-up subida en banco', 3, '10', { ld: 1, rir: '1-2' }), FJ('Patada de glúteo en polea', 3, '12-15', { ld: 1 }), FJ('Curl femoral', 3, '10-12'), FJ('Abducción en polea', 2, '15', { ld: 1 }), FJ('Crunch en polea', 3, '12')] },
+      { n: 'Torso B', p: 'torso', ej: [FJ('Press de pecho', 3, '8-12', { rir: '1-2' }), FJ('Remo con mancuerna a una mano', 3, '10', { ld: 1, rir: '1-2' }), FJ('Press militar con mancuernas', 2, '10', { rir: '1-2' }), FJ('Face pull', 2, '15'), FJ('Elevaciones laterales en polea', 2, '15-20'), FJ('Dead bug', 3, '10', { rir: '' })] }] },
+  { id: 'gl2', n: 'Glúteo · avanzado 5 días', c: 'gluteo hipertrofia avanzado', niv: 'ava', dias: 5, min: 70, sem: 8, rir: '0-2', d: 90, lug: 'gym', obj: 'musculo', tag: 'Gimnasio',
+    nota: 'Tres días de tren inferior (dos con prioridad glúteo) y dos de torso. RIR 1-2 en los pesados y 0-1 en los aislamientos.',
+    D: [{ n: 'Glúteo pesado', p: 'pierna', ej: [FJ('Hip thrust', 4, '6-10', { rir: '1-2' }), FJ('Sentadilla búlgara en multipower', 3, '8-12', { ld: 1, rir: '1-2' }), FJ('Peso muerto rumano', 3, '6-10', { rir: '2' }), FJ('Abducción en máquina', 3, '15-20', { rir: '0-1' })] },
+      { n: 'Torso A', p: 'torso', ej: [FJ('Jalón al pecho', 3, '8-12', { rir: '1-2' }), FJ('Press inclinado', 3, '8-12', { rir: '1-2' }), FJ('Remo en T con apoyo', 3, '8-12', { rir: '1-2' }), FJ('Elevaciones laterales', 3, '12-20', { rir: '0-1' }), FJ('Curl en polea', 2, '10-15', { rir: '0-1' }), FJ('Extensión de tríceps', 2, '10-15', { rir: '0-1' })] },
+      { n: 'Pierna', p: 'pierna', ej: [FJ('Hack squat', 3, '8-12', { rir: '1-2' }), FJ('Curl femoral sentado', 3, '10-12', { rir: '1' }), FJ('Step-up subida en banco', 3, '10', { ld: 1, rir: '1-2', nota: 'Con apoyo de una mano' }), FJ('Gemelos', 4, '10-15', { rir: '0-1' }), FJ('Crunch en polea', 3, '12', { rir: '1' })] },
+      { n: 'Torso B', p: 'torso', ej: [FJ('Press plano con mancuernas', 3, '8-12', { rir: '1-2' }), FJ('Jalón unilateral', 3, '8-12', { ld: 1, rir: '1-2' }), FJ('Remo alto', 3, '8-12', { rir: '1-2' }), FJ('Pec deck inverso', 3, '12-20', { rir: '0-1' }), FJ('Elevaciones laterales en polea', 3, '15-20', { rir: '0-1' }), FJ('Extensión overhead', 2, '10-15', { rir: '0-1' })] },
+      { n: 'Glúteo bombeo', p: 'pierna', ej: [FJ('Hip thrust unilateral', 3, '10-15', { ld: 1, rir: '1' }), FJ('Patada de glúteo en polea', 3, '12-15', { ld: 1, rir: '0-1' }), FJ('Abducción en polea', 3, '15', { ld: 1, rir: '0-1' }), FJ('Zancadas caminando con mancuernas', 3, '12', { ld: 1, rir: '1-2' })] }] },
+  { id: 'gl4', n: 'Glúteo en casa con mancuernas', c: 'gluteo casa', niv: 'int', dias: 3, min: 45, sem: 8, rir: '1-2', d: 75, mat: 'Mancuernas (y una silla o sofá)', obj: 'musculo',
+    D: [{ n: 'Día A', p: 'pierna', ej: [FJ('Puente de glúteo con mancuerna', 4, '10-15', { nota: 'Mejor con la espalda apoyada en el sofá (como un hip thrust)' }), FJ('Sentadilla búlgara con mancuerna', 3, '8-12', { ld: 1 }), FJ('Peso muerto rumano con mancuernas', 3, '10'), FJ('Abducción de cadera tumbada de lado', 3, '15-20', { ld: 1 }), FJ('Flexiones con rodillas apoyadas', 3, '8-12'), FJ('Dead bug', 2, '10', { rir: '' })] },
+      { n: 'Día B', p: 'pierna', ej: [FJ('Sentadilla goblet', 3, '10-12'), FJ('Zancada inversa con mancuernas', 3, '10', { ld: 1 }), FJ('Peso muerto a una pierna', 3, '10', { ld: 1 }), FJ('Remo con dos mancuernas inclinado', 3, '10'), FJ('Press militar con mancuernas', 3, '10'), FJ('Gemelos', 3, '15', { nota: 'Con mancuernas' })] },
+      { n: 'Día C', p: 'pierna', ej: [FJ('Puente de glúteos a una pierna', 3, '12', { ld: 1 }), FJ('Step-up subida en banco', 3, '10', { ld: 1, nota: 'En una silla firme' }), FJ('Sentadilla sumo mancuerna', 3, '12'), FJ('Abducción de cadera tumbada de lado', 3, '20', { ld: 1 }), FJ('Remo con mancuerna a una mano', 3, '10', { ld: 1 }), FJ('Plancha lateral', 2, '30', { seg: 1, ld: 1, rir: '' })] }] },
+  { id: 'gl5', n: 'Glúteo en casa con gomas', c: 'gluteo casa principiante', niv: 'ini', dias: 3, min: 40, sem: 8, rir: '2-3', d: 60, mat: 'Bandas elásticas y minibanda', obj: 'musculo',
+    D: [{ n: 'Día A', p: 'pierna', ej: [FJ('Hip thrust con banda', 3, '12-20'), FJ('Sentadilla con banda', 3, '12-15'), FJ('Caminata lateral con minibanda', 2, '12', { ld: 1 }), FJ('Peso muerto rumano con banda', 2, '12-15'), FJ('Remo con banda', 3, '12-15'), FJ('Dead bug', 2, '10', { rir: '' })] },
+      { n: 'Día B', p: 'pierna', ej: [FJ('Split squat (zancada estática)', 2, '10-12', { ld: 1 }), FJ('Patada de glúteo con banda', 2, '15', { ld: 1 }), FJ('Clamshell con banda', 2, '15-20', { ld: 1 }), FJ('Press de pecho con banda', 3, '12-15'), FJ('Elevación de gemelos de pie', 2, '15'), FJ('Plancha frontal', 2, '30', { seg: 1, rir: '' })] },
+      { n: 'Día C', p: 'pierna', ej: [FJ('Hip thrust con banda', 3, '15-20'), FJ('Monster walk con banda', 2, '12', { ld: 1 }), FJ('Abducción de cadera de pie con banda', 2, '15-20', { ld: 1 }), FJ('Jalón con banda', 3, '12-15'), FJ('Press de hombros con banda', 2, '12-15'), FJ('Curl femoral con banda', 2, '12-15')] }] },
+  { id: 'gl6', n: 'Glúteo en casa sin material', c: 'gluteo casa principiante', niv: 'ini', dias: 3, min: 35, sem: 8, rir: '2-3', d: 60, mat: 'Sin material', obj: 'musculo',
+    nota: 'Sin peso, el glúteo progresa con más repeticiones, pausas arriba y ejercicios a una pierna. Si se te queda corto, una minibanda ayuda mucho.',
+    D: [{ n: 'Día A', p: 'pierna', ej: [FJ('Puente de glúteos', 3, '15-20', { nota: 'Aprieta 2 s arriba' }), FJ('Sentadilla al aire', 3, '15'), FJ('Zancadas dinámicas', 2, '10', { ld: 1 }), FJ('Abducción de cadera tumbada de lado', 3, '20', { ld: 1 }), FJ('Flexiones inclinadas', 2, '8-12'), FJ('Dead bug', 2, '10', { rir: '' })] },
+      { n: 'Día B', p: 'pierna', ej: [FJ('Puente de glúteos a una pierna', 3, '10-12', { ld: 1 }), FJ('Split squat (zancada estática)', 3, '10', { ld: 1 }), FJ('Bisagra de cadera con pica', 3, '12'), FJ('Abducción de cadera tumbada de lado', 3, '20', { ld: 1 }), FJ('Prone Y-T-W', 2, '8'), FJ('Plancha lateral', 2, '20', { seg: 1, ld: 1, rir: '' })] },
+      { n: 'Día C', p: 'pierna', ej: [FJ('Puente de glúteos con marcha (Glute Bridge March)', 3, '10', { ld: 1 }), FJ('Zancada lateral', 3, '10', { ld: 1 }), FJ('Step Down controlado', 3, '8', { ld: 1 }), FJ('Sentadilla al aire', 3, '20', { nota: 'Pies más abiertos (sumo) y 1 s abajo' }), FJ('Flexiones con rodillas apoyadas', 2, '8-12'), FJ('Hollow hold', 2, '20', { seg: 1, rir: '' })] }] }
 ];
 PROG_FIJOS.forEach(function (p) { p.estado = 'borrador'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
-var FJ_SUST = { casa0: 1, casa4: 1, fzi: 1, hip4: 1, ppl6: 1 };      // los del motor que repiten estos: «En casa sin material», «En casa con mancuernas», «Fuerza para principiantes», «Hipertrofia 4 días · torso / pierna» y «Avanzado 6 días · empuje, tirón y pierna»
+var FJ_SUST = { casa0: 1, casa4: 1, fzi: 1, hip4: 1, ppl6: 1, glu4: 1, glcasa: 1 };      // + «Glúteo y pierna 4 días» y «Glúteo en casa» (los sustituyen los de glúteo)
+      // los del motor que repiten estos: «En casa sin material», «En casa con mancuernas», «Fuerza para principiantes», «Hipertrofia 4 días · torso / pierna» y «Avanzado 6 días · empuje, tirón y pierna»
 function fjVisibles(f) { var b = rpBorr(); return PROG_FIJOS.filter(function (p) { return (p.estado === 'publicado' || b) && (!f || p.c.split(' ').indexOf(f) >= 0); }); }
 /* el plan del programa: las rutinas con sus ejercicios y 4 o más de calentamiento (como los demás programas de /yo) */
 function fjPlan(p) {
@@ -3685,6 +3723,67 @@ function fjPlan(p) {
   return { D: { rutinas: rut, desde: hoy, hasta: sumar(hoy, p.sem * 7 - 1) }, P: P };
 }
 A.verFijo = function (el) { var p = PROG_FIJOS.filter(function (x) { return x.id === el.dataset.v; })[0]; if (!p) return; var X = fjPlan(p); S.x.plan = { D: X.D, P: X.P, seed: 0, ab: 0, origen: p }; S.v = 'plan'; arriba(); pintar(); };
+
+;
+/* ---------- Pautas del Word de programación (17 nov 2026) para los programas del catálogo que arma el motor ----------
+   El motor es el del panel de entrenadores (no se toca). Aquí, solo en /yo, se ajusta lo que sale para cumplir las pautas del Word de hipertrofia:
+   series por músculo y semana según el nivel (§12, agrupadas como en la biblioteca), nunca al fallo en principiantes, gemelos, abdomen y brazos
+   cuando faltan, menos series donde se pasa y el ejercicio del músculo prioritario al principio (§41). */
+var PW_G = { 'Pecho': 'pec', 'Espalda': 'esp', 'Hombro': 'hom', 'Bíceps': 'bic', 'Tríceps': 'tri', 'Cuádriceps': 'cua', 'Isquiosurales': 'isq', 'Glúteo': 'glu', 'Gemelo': 'gem', 'Core': 'core' };
+var PW_RG = { pec: [6, 8, 8, 14, 10, 18], esp: [8, 16, 14, 26, 18, 34], hom: [6, 12, 12, 22, 14, 30], bic: [4, 8, 8, 12, 10, 16], tri: [4, 8, 8, 14, 10, 18],
+  cua: [6, 10, 8, 14, 10, 18], isq: [4, 6, 6, 12, 8, 14], glu: [8, 14, 12, 24, 16, 32], gem: [4, 8, 8, 14, 10, 18], core: [4, 6, 6, 12, 8, 16] };
+var PW_PRIO = { gluteo: 'glu', cuadriceps: 'cua', isquios: 'isq', espalda: 'esp', pecho: 'pec', hombro: 'hom', biceps: 'bic', triceps: 'tri', core: 'core' };
+function pwLim(k, niv) { var r = PW_RG[k], i = niv === 'ini' ? 0 : niv === 'ava' ? 4 : 2; return [r[i], r[i + 1]]; }
+function pwFz(e) { return e && !esCal(e) && e.tipo !== 'run' && e.tipo !== 'cardio' && !e.u && (e.sets || []).length; }
+function pwGr(e) { var b = bancoDe(e.n) || {}, o = {}; var g = PW_G[b.grupo]; if (g) o[g] = 1; String(b.grupos || '').split(/,\s*/).forEach(function (x) { var g2 = PW_G[x]; if (g2 && !o[g2]) o[g2] = 0.5; }); return o; }
+function pwVol(D) { var V = {}; D.rutinas.forEach(function (r) { var v = (r.dias || []).length || 1; r.ejercicios.forEach(function (e) { if (!pwFz(e)) return; var n = e.sets.filter(function (s) { return s.t !== 'aprox'; }).length * v, G = pwGr(e); for (var k in G) V[k] = (V[k] || 0) + n * G[k]; }); }); return V; }
+function pwRir(niv) { return niv === 'ini' ? '2-3' : niv === 'ava' ? '1-2' : '1-2'; }
+function pwNuevo(n, sets, r, niv, g) { var e = { n: n, tipo: 'fuerza', d: '60', nota: '', sets: [], _p: { k: clave(n), g: g, pat: 'aislamiento', pw: 1 } }; for (var i = 0; i < sets; i++) e.sets.push({ t: 'normal', r: r, rir: pwRir(niv), kg: '' }); return e; }
+function pwElige(P, k) {      // el ejercicio que se añade, según dónde entrena y con qué
+  var gym = P.lug === 'gym', m = P.mat || [], mc = m.indexOf('mancuernas') >= 0 || m.indexOf('kettlebell') >= 0, bd = m.indexOf('banda') >= 0;
+  if (k === 'gem') return 'Elevación de gemelos de pie';
+  if (k === 'core') return gym ? 'Crunch abdominal en polea' : 'Dead bug';
+  if (k === 'hom') return gym || mc ? 'Elevaciones laterales con mancuernas' : bd ? 'Elevaciones laterales con banda' : 'Flexiones pike con pies elevados';
+  if (k === 'bic') return gym || mc ? 'Curl de bíceps con mancuernas' : bd ? 'Curl de bíceps con banda' : '';
+  if (k === 'tri') return gym ? 'Extensión de tríceps en polea con cuerda' : mc ? 'Extensión de tríceps con mancuerna sobre la cabeza' : bd ? 'Extensión de tríceps con banda' : 'Flexiones diamante';
+  return '';
+}
+function pwDonde(D, k, n) {      // la rutina a la que va: la de pierna para gemelos; la de torso (o la más corta) para lo demás; nunca dos veces el mismo
+  var R = D.rutinas.filter(function (r) { return !r.run && r.ejercicios.some(pwFz) && !r.ejercicios.some(function (e) { return clave(e.n) === clave(n); }); }); if (!R.length) return null;
+  var pierna = function (r) { var V = 0; r.ejercicios.forEach(function (e) { if (!pwFz(e)) return; var G = pwGr(e); V += (G.cua || 0) + (G.glu || 0) + (G.isq || 0); }); return V; };
+  var n = function (r) { return r.ejercicios.filter(pwFz).length; };
+  R.sort(function (a, b) { return k === 'gem' ? pierna(b) - pierna(a) : (k === 'core' ? 0 : pierna(a) - pierna(b)) || n(a) - n(b); });
+  return R[0];
+}
+function pautasWord(D, P) {
+  if (!D || !D.rutinas) return D;
+  var niv = P.niv || 'int', hip = P.obj === 'musculo' || P.obj === 'recomp' || P.obj === 'fuerza';
+  // 1 · principiantes: nunca al fallo (RIR 2 o más)
+  if (niv === 'ini') D.rutinas.forEach(function (r) { r.ejercicios.forEach(function (e) { (e.sets || []).forEach(function (s) { if (s.t === 'fallo') s.t = 'normal'; if (s.rir !== '' && s.rir != null && num(String(s.rir).split('-')[0]) < 2) s.rir = '2-3'; }); }); });
+  if (!hip) return D;
+  // 2 · lo que falta (gemelos, abdomen y, si es para ganar músculo, brazos): por debajo de la mitad del mínimo
+  ['gem', 'core'].concat(P.obj === 'musculo' ? ['bic', 'tri', 'hom'] : []).forEach(function (k) {
+    var L = pwLim(k, niv), n = pwElige(P, k); if (!n || !bancoDe(n)) return;
+    for (var vez = 0; vez < 2; vez++) {      // hasta 2 rutinas (en intermedio y avanzado, el mínimo no cabe en una)
+      var V = pwVol(D); if ((V[k] || 0) >= L[0] * 0.6) return;
+      var r = pwDonde(D, k, n); if (!r) return;
+      var veces = (r.dias || []).length || 1, falta = L[0] * 0.6 - (V[k] || 0), sets = Math.max(2, Math.min(4, Math.ceil(falta / veces)));
+      r.ejercicios.push(pwNuevo(n, sets, k === 'gem' || k === 'core' ? '10-15' : k === 'hom' ? '12-20' : '10-12', niv, ({ gem: 'Gemelo', core: 'Core', bic: 'Bíceps', tri: 'Tríceps', hom: 'Hombro' })[k]));
+    }
+  });
+  // 3 · donde se pasa (más de un 15 % por encima del máximo), una serie menos en sus ejercicios, empezando por los del final (mínimo 2)
+  Object.keys(PW_RG).forEach(function (k) {
+    var L = pwLim(k, niv), tope = L[1] * 1.15, vuelta = 0;
+    while ((pwVol(D)[k] || 0) > tope && vuelta++ < 40) {
+      var hecho = false; D.rutinas.forEach(function (r) { if (hecho) return; for (var i = r.ejercicios.length - 1; i >= 0; i--) { var e = r.ejercicios[i]; if (pwFz(e) && pwGr(e)[k] === 1 && e.sets.length > 2) { e.sets.pop(); hecho = true; return; } } });
+      if (!hecho) break;
+    }
+  });
+  // 4 · prioridad: el primer ejercicio del músculo prioritario, el primero de la sesión (después del calentamiento)
+  var pr = (P.prio || []).map(function (x) { return PW_PRIO[x]; }).filter(Boolean)[0];
+  if (pr) D.rutinas.forEach(function (r) { var E = r.ejercicios, cal = E.filter(function (e) { return esCal(e); }).length, i = E.findIndex(function (e) { return pwFz(e) && pwGr(e)[pr] === 1; }); if (i > cal) { var x = E.splice(i, 1)[0]; E.splice(cal, 0, x); } });
+  return D;
+}
 
 ;
 /* ---------- el entreno en curso (como lo ven los clientes de los entrenadores) ---------- */
