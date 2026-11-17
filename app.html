@@ -3571,6 +3571,9 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-q button svg{width:22px;height:22px}.aa-q button.on{background:#111;border-color:#111;color:#fff}.aa-q button.on svg{stroke:#fff}
 .aa-cu{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}.aa-cu .tipos{margin:0}.aa-cu input[type=time]{margin-left:auto;width:118px;text-align:center}
 .aa-vis{margin:12px 0 4px}.aa-av{margin:8px 0 0}
+.aa-fr{display:flex;align-items:center;justify-content:space-between;gap:10px}.aa-fr .hm-fecha{margin-top:10px}
+.aa-como{display:inline-flex;align-items:center;gap:5px;border:0;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--mu);padding:6px 2px;cursor:pointer;flex:none}.aa-como svg{width:16px;height:16px}.aa-como:hover{color:var(--tx)}
+.aa-fr .aa-como{margin-top:10px}.top .aa-como{min-width:70px;justify-content:flex-end}
 .aa-fc .card-t{display:flex;align-items:center;gap:8px}.aa-fc .card-t .btn{margin-left:auto;width:auto}
 .aa-nav{align-items:center;gap:8px;flex-wrap:nowrap;min-width:0}.aa-nav .cal-y{white-space:nowrap}
 @media(max-width:719px){.aa-ag-v .aa-nav .cal-y{font-size:20px}.aa-ag-v .aa-top .aa-ag{padding:9px 13px;font-size:13px}}
@@ -3673,7 +3676,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.160';
+var APP_V = 'v53.4.161';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -11160,13 +11163,44 @@ A.aaFicha=function(el){ irA(el.dataset.cid,'calendario'); };
 A.llVerIni=function(el){ var cid=el.dataset.cid, id=el.dataset.id; irA(cid,'calendario',function(){ A.llVer({dataset:{id:id}}); }); };
 function inicioHtml2(){
   var hoy=CO.hoy||hoyStr(), act=CO.lista.filter(function(c){ return c.activa; });
-  var h=avisoSeg()+avisoSesHtml(true)+ppHtml()+'<div class="hm-fecha">'+esc(cap(fLarga(hoy)))+'</div><div class="aa-top"><h1 class="hm-t">'+esc(aaSaludo())+'</h1><button class="aa-ag" data-a="citaNueva">'+ic('mas')+'Agendar</button></div>';
+  var h=avisoSeg()+avisoSesHtml(true)+ppHtml()+'<div class="aa-fr"><div class="hm-fecha">'+esc(cap(fLarga(hoy)))+'</div>'+aaComo()+'</div><div class="aa-top"><h1 class="hm-t">'+esc(aaSaludo())+'</h1><button class="aa-ag" data-a="citaNueva">'+ic('mas')+'Agendar</button></div>';
   if(CO.lista.length||(CO.nuevos||[]).length||(CO.citasMias||[]).length) h+=avisosIniHtml();
   h+='<div class="hm-h hm-hc h2-ch"><span>Clientes · '+act.length+'</span><span class="hm-hb">'+(CO.lista.length>3?'<button class="link" data-a="verClientes">Ver la lista</button>':'')+'<button class="hm-nueva" data-a="nuevaClienta">+ Nuevo</button></span></div>';
   h+=CO.lista.length?(CO.lista.length>3?cliBuscaHtml('hm-q'):'')+'<div class="hm-g c2-g" id="hm-cli">'+tiles2()+'<p class="cli-nada'+(CO.lista.some(cliVa)?' h':'')+'">Ningún cliente se llama así</p></div>':'<div class="card hm-vacio"><b>Crea tu primer cliente</b><p class="muted sm">Te doy su enlace para que lo abra en el móvil.</p><button class="btn sm" data-a="nuevaClienta">+ Nuevo cliente</button></div>';
   if(!CO.lista.some(function(c){ return c.nombre===EJEMPLO; })) h+='<button class="hm-ej" data-a="crearEjemplo">Probar con la clienta de ejemplo</button>';
   return h;
 }
+
+/* v53.4.161 · GUÍA RÁPIDA DE AVISOS Y AGENDA (Javier: «¿cómo usar?, para explicar todo a nuevos entrenadores, pero no lo pongas como novedad»).
+   Botón «¿Cómo funciona?» en Inicio (junto a «Agendar») y en el Calendario y, la primera vez en Inicio, un aviso amarillo. Mismo panel que las otras guías. */
+function guiaAgHtml(){
+  var hl=function(h){ return h.replace(/^<(\w+)(?: class="([^"]*)")?/,function(m,tg,cl){ return '<'+tg+' class="'+(cl?cl+' ':'')+'gu-hl"'; }); };
+  var tile=function(c,icn,t,n,sub){ return '<span class="aa-t '+c+'" style="min-height:0;padding:8px 10px;gap:2px;border-radius:14px"><span class="aa-tl" style="font-size:12px">'+ic(icn)+t+'</span><b style="font-size:22px">'+n+'</b><small style="font-size:11px">'+sub+'</small></span>'; };
+  var P=[
+    ['Lo primero: tu próxima cita','Arriba del todo, en negro, lo siguiente que tienes (una llamada, un entreno, una videollamada…) y cuánto falta. Con un toque, su ficha.','<div class="aa-sig" style="margin:0;padding:10px 12px"><span class="aa-sh" style="font-size:18px">19:00<small>en 1 h 40 min</small></span><span class="aa-st"><b style="font-size:14px">Entreno con Ana</b><small>Tu próxima cita</small></span></div>'],
+    ['Las 4 casillas','Todo lo que tienes pendiente con todos tus clientes, en 4 números. Toca una y debajo sale su lista; cada fila lleva un botón con lo que hay que hacer.','<div class="aa-ts" style="margin:0;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px">'+tile('t-atr','alerta','Atrasado',3,'Rocío · Nuria')+tile('t-hoy','cal','Hoy',2,'Próxima 19:00')+tile('t-sem','reloj','Esta semana',6,'2 citas · 4 vencen')+tile('t-nue','clientes','Nuevos',1,'Nerea')+'</div>'],
+    ['Atrasado (rojo)','Lo que ya tendría que estar hecho: un plan vencido sin renovar, una revisión o unas fotos sin hacer, <b>un cliente sin rutina o sin dieta</b>, <b>alguien que no entrena desde hace 7 días</b> y los nuevos de tu página sin atender en 2 días. Empieza siempre por aquí.',''],
+    ['Hoy (verde)','Tus citas de hoy por hora, las revisiones, fotos y tareas que tocan hoy y los mensajes sin leer.',''],
+    ['Esta semana (naranja)','Tus citas de los próximos días y lo que vence: planes, dietas y rutinas te avisan <b>5 y 3 días antes</b>. Lo del mismo día va junto («Vencen 2 planes · Laura y Pablo»): tócalo para ver cada uno.',''],
+    ['Nuevos (azul)','Quien rellena el cuestionario de <b>tu página</b> (el enlace de tu Instagram o WhatsApp) y aún no es tu cliente. «Ver» abre sus respuestas y «Pasar a cliente» le crea la ficha.',''],
+    ['Nada se pierde','Un aviso no desaparece solo: se quita cuando lo haces (renovar, preparar, registrar, dar de alta…). Si se pasa la fecha, salta a Atrasado.',''],
+    ['Agendar','«+ Agendar»: llamada, videollamada, entreno u <b>«Otra cosa»</b> (escribes lo que quieras: «Entreno en el parque», «Médico»…). Con un cliente o <b>«Solo yo»</b>, el día, la hora y dónde.',hl('<span class="aa-ag">'+ic('mas')+'Agendar</span>')],
+    ['Que le salga en su app','Si la cita es con un cliente, le sale en su app (en Hoy, en su campana y en su mes) con «Añadir a mi calendario» y «Cómo llegar». Si no quieres, desactívalo al agendarla.',''],
+    ['Los avisos','Te llega un aviso al móvil <b>3 días antes, el mismo día y 1 hora antes</b> de cada cita (y a tu cliente, si le sale en su app). En tu pantalla bloqueada no salen nombres de clientes.',''],
+    ['El calendario','Todo junto con los mismos colores (y las competiciones con su trofeo). Filtra por Atrasado, Citas, Vencen o Nuevos. En el ordenador, por meses; en el móvil, por semanas.',hl('<span class="btn sm sec">'+ic('cal')+'Ver todo en el calendario</span>')],
+    ['Cambiar o cancelar','Toca la cita: cambia el día, la hora o lo que quieras, o «Cancelar la cita» (si le salía en su app, le avisamos).','']
+  ];
+  return '<div class="gu-h"><b>Guía rápida: avisos y agenda</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">Para que no se te escape nada, tengas los clientes que tengas.</p>'+
+    P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p>'+(x[2]?'<div class="gu-im" inert>'+x[2]+'</div>':'')+'</div>'; }).join('');
+}
+A.agGuia=function(){
+  LS.set('chadin_guia_ag',1); var b=document.querySelector('.gu-ban.ag-gb'); if(b) b.remove();
+  var g=document.getElementById('guia-die'); if(!g){ g=document.createElement('aside'); g.id='guia-die'; document.body.appendChild(g); }
+  g.setAttribute('aria-label','Guía rápida de avisos y agenda'); g.innerHTML=guiaAgHtml(); g.scrollTop=0; requestAnimationFrame(function(){ g.classList.add('open'); });
+};
+A.agGuiaNo=function(){ LS.set('chadin_guia_ag',1); var b=document.querySelector('.gu-ban.ag-gb'); if(b) b.remove(); };
+function aaComo(){ return '<button class="aa-como" data-a="agGuia">'+ic('ayuda')+'Cómo usar</button>'; }
+function agGuiaBan(){ return LS.get('chadin_guia_ag')?'':'<div class="gu-ban ag-gb">'+ic('idea')+'<span><b>¿Primera vez?</b> Mira en 1 minuto cómo funcionan tus avisos y tu agenda: las 4 casillas, agendar y lo que le llega a tu cliente.</span><button class="link" data-a="agGuia">Ver guía</button><button class="link" data-a="agGuiaNo">No volver a mostrar</button></div>'; }
 /* ---------- Agendar (y cambiar o cancelar una cita) ---------- */
 function horaSig(){ var d=new Date(); d.setMinutes(0); d.setHours(d.getHours()+1); return ('0'+d.getHours()).slice(-2)+':00'; }
 A.citaNueva=function(el){ var cid=(el&&el.dataset&&el.dataset.cid)||''; citaModal(null,cid); };
@@ -11364,7 +11398,7 @@ function pintarAgenda(){
     h+=dias.length?'<section class="card aa-c">'+dias.map(function(f){ return agDiaHtml(f,porD[f],hoy); }).join('')+'</section>':'<div class="card"><p class="muted" style="margin:0">'+(CO.agD?'Ese día no hay nada.':'Nada '+(esta?'más ':'')+'este mes'+(F?' de este tipo':'')+'.')+'</p></div>';
     h+='</div>'+(vistaAncha()?'':'<div class="aa-vm"><button class="link" data-a="agVista" data-v="sem">'+ic('lista')+'Ver por semanas</button></div>');
   }
-  app.innerHTML='<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Calendario</div><span style="width:70px"></span></header><main class="wrap coachw aa-ag-v">'+h+'</main>';
+  app.innerHTML='<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Calendario</div>'+aaComo()+'</header><main class="wrap coachw aa-ag-v">'+h+'</main>';
 }
 A.agSem=function(el){ var hoy=CO.hoy||hoyStr(); CO.agW=sumar(CO.agW||lunesDe(hoy),7*(+el.dataset.v)); pintarAgenda(); window.scrollTo(0,0); };
 A.agSemHoy=function(){ CO.agW=null; pintarAgenda(); };
