@@ -994,6 +994,16 @@ button.card.n-semc{display:flex;flex-direction:row;align-items:center;justify-co
 .st-ld input{min-width:0}
 .ej-quitar{display:inline-flex;align-items:center;gap:6px}
 
+/* 17 nov · rutinas sueltas */
+.rs-tg{margin:0 0 12px}
+.rs-ej{padding:10px 0;border-top:1px solid var(--bd,rgba(13,13,15,.08))}
+.rs-ej:first-of-type{border-top:0}
+.rs-ej b{display:block;font-size:15px}
+.rs-ej small{color:var(--tx2)}
+.rs-ej p{margin:4px 0 0}
+.prog-niv{display:block;margin:14px 0 2px;font-size:12px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2)}
+.prog-niv:first-of-type{margin-top:6px}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -1361,7 +1371,11 @@ window.YO_REVISAR = [
   { t: 'Glúteo: 7 programas y su filtro', d: 'Filtro «Glúteo» en Programas. Principiante 3 días, 3 días de 45 min, intermedio 4, avanzado 5, en casa con mancuernas, con gomas y sin material. Con las pautas del Word: series de glúteo por nivel, hip thrust, búlgaras o step-up, bisagra y abducción, y el ejercicio principal de glúteo el primero; el resto del cuerpo, para mantener. Sustituyen a los 7 de glúteo que había.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'gluteo'; pintar(); } },
   { t: 'Pautas del Word en los programas que arma la app', d: 'En los 70 que arma la app (los de antes y los nuevos), después de armarlos: gemelos, abdomen, brazos y hombro cuando faltan; una serie menos donde se pasa de lo que dice el Word para su nivel; el músculo prioritario, el primero; y en principiantes, nunca al fallo. Abre cualquiera de Hipertrofia (no los del Word) y mira el final de cada día.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hipertrofia'; pintar(); } }
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pf = 'hipertrofia'; pintar(); } },
+  { t: 'Rutinas sueltas (50)', d: 'Entreno → Programas → arriba «Rutinas sueltas»: para un día suelto. Hyrox 7, Cross training 8 (AMRAP, EMOM, For Time, chipper, escalera…), HIIT 6, Funcional 6, Hipertrofia con enfoque 10 (glúteos, hombro y tríceps, espalda y bíceps, pecho, cuádriceps, isquios y glúteo, brazos, torso), Fuerza 6 y Carrera 7 (fartlek, series cortas, 400 m, 1000 m, umbral, cuestas, tirada larga). Cada una con su calentamiento; «Empezar ahora» la guarda en Mis rutinas y empieza el entreno.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pv = 'rut'; S.x.rsf = ''; pintar(); } },
+  { t: 'Programas sin «Principiante» ni «Avanzado» arriba', d: 'Corrección de Javier: el nivel va dentro de cada tipo. Ahora, en cada filtro (Todos, Glúteo, En casa…), la lista sale ordenada en Principiante, Intermedio y Avanzado.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'programas'; S.x.pv = 'prog'; S.x.pf = 'hipertrofia'; pintar(); } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -2999,18 +3013,24 @@ var PROGRAMAS = [
   { id: 'fb3a', b: 1, n: 'Full body avanzado 3 días', c: 'hipertrofia avanzado', P: PP({ obj: 'musculo', niv: 'ava', dias: 3, min: 75, est: 'fb3' }) }
 ];
 PROGRAMAS.forEach(function (p) { var P = p.P; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + (P.dCarr ? (P.dias - P.dCarr) + ' + ' + P.dCarr : P.dias) + ' días · ' + P.min + ' min · ' + ({ gym: 'Gimnasio', casa: 'Casa', aire: 'Aire libre' })[P.lug]; });
-var CATS = [['', 'Todos'], ['principiante', 'Principiante'], ['gluteo', 'Glúteo'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido'], ['avanzado', 'Avanzado']];
+var CATS = [['', 'Todos'], ['gluteo', 'Glúteo'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido']];
 function progChips(f) { return '<div class="chips scroll">' + CATS.map(function (c) { var on = f === c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="progF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>'; }
 function vProgramas() {
+  var tg = rpBorr() ? '<div class="seg2 rs-tg" role="tablist">' + [['prog', 'Programas'], ['rut', 'Rutinas sueltas']].map(function (t) { var on = (S.x.pv || 'prog') === t[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progVista" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' : '';      // 17 nov: rutinas sueltas (en revisión)
+  if (tg && S.x.pv === 'rut') return tg + vSueltas();
+  return tg + vProgramasL();
+}
+function vProgramasL() {      // 17 nov (Javier: «quita principiante y avanzado; eso debe clasificarse dentro de cada programa»): sin esos filtros; dentro de cada uno, por nivel
   var f = S.x.pf || '';
   if (f === 'carrera' && rpHay()) return progChips(f) + rpCatalogo();
-  var F = fjVisibles(f);      // 17 nov: los programas de referencia del Word (En casa); con ellos, fuera los 2 de antes que repiten
-  var bo = rpBorr(), L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]) && (!p.b || bo); }), N = !f ? rpVisibles() : f === 'principiante' ? rpVisibles('ini') : f === 'avanzado' ? rpVisibles('ava') : [];
-  return progChips(f) +
-    '<section class="card lista-b"><small class="mut">' + (L.length + N.length + F.length) + ((L.length + N.length + F.length) === 1 ? ' programa' : ' programas') + '</small>' + F.map(function (p) {
-      return '<button class="prog-f" data-a="verFijo" data-v="' + p.id + '"><span class="pd"><b>' + p.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }).join('') + N.map(function (P) { var rg = rpRango(P);
-      return '<button class="prog-f" data-a="rpVer" data-v="' + P.id + '"><span class="pd"><b>' + P.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(P.n) + '</b><small>' + ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + P.sem + ' semanas · ' + rg[0] + '-' + rg[1] + ' min · Carrera</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }).join('') + L.map(function (p) {
-      var P = p.P; return '<button class="prog-f" data-a="verProg" data-v="' + p.id + '"><span class="pd"><b>' + (P.dCarr ? P.dias : P.dias) + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }).join('') + '</section>';
+  var F = fjVisibles(f);      // los programas hechos con el Word; con ellos, fuera los de antes que repiten (FJ_SUST)
+  var bo = rpBorr(), L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]) && (!p.b || bo); }), N = !f ? rpVisibles() : [];
+  var it = F.map(function (p) { return { niv: p.niv, h: '<button class="prog-f" data-a="verFijo" data-v="' + p.id + '"><span class="pd"><b>' + p.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; })
+    .concat(N.map(function (P) { var rg = rpRango(P); return { niv: P.niv, h: '<button class="prog-f" data-a="rpVer" data-v="' + P.id + '"><span class="pd"><b>' + P.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(P.n) + '</b><small>' + ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + P.sem + ' semanas · ' + rg[0] + '-' + rg[1] + ' min · Carrera</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; }))
+    .concat(L.map(function (p) { var P = p.P; return { niv: P.niv, h: '<button class="prog-f" data-a="verProg" data-v="' + p.id + '"><span class="pd"><b>' + P.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; }));
+  var h = progChips(f) + '<section class="card lista-b"><small class="mut">' + it.length + (it.length === 1 ? ' programa' : ' programas') + '</small>';
+  [['ini', 'Principiante'], ['int', 'Intermedio'], ['ava', 'Avanzado']].forEach(function (n) { var G = it.filter(function (x) { return x.niv === n[0]; }); if (G.length) h += '<b class="prog-niv">' + n[1] + ' · ' + G.length + '</b>' + G.map(function (x) { return x.h; }).join(''); });
+  return h + '</section>';
 }
 A.progF = function (el) { S.x.pf = el.dataset.v; pintar(); };
 A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProgSi(id); }, 'prog'); };
@@ -3522,7 +3542,7 @@ var FJ_ALIAS = { 'Prone Y-T-W': ['YTW'], 'Elevaciones en W boca abajo': ['YTW', 
   'Aperturas en polea': ['Cruce en polea media'], 'Remo orientado al dorsal': ['Remo en polea - agarre estrecho', 'Codos pegados, hacia la cadera'], 'Remo de espalda alta con apoyo': ['Remo en T con máquina', 'Codos abiertos, hacia la espalda alta'],
   'Remo en T con apoyo': ['Remo en T con máquina'], 'Pullover en polea': ['Pullover en polea con cuerda'], 'Deltoides posterior en polea': ['Pájaros en poleas cruzadas'], 'Curl bayesiano': ['Curl bayesian'],
   'Sentadilla': ['Sentadilla con barra'], 'Press banca': ['Press de banca con barra'], 'Remo': ['Remo con barra agarre prono'], 'Peso muerto': ['Peso muerto convencional'], 'Press militar': ['Press militar con barra'] };
-function FJ(n, s, r, o) { o = o || {}; var al = FJ_ALIAS[n], nota = [al && al[1], o.nota].filter(Boolean).join('. '); return { n: al ? al[0] : n, s: s, r: r, seg: o.seg, m: o.m, ld: o.ld, nota: nota, rir: o.rir, top: o.top, rb: o.rb, rirb: o.rirb, d: o.d, cardio: o.cardio }; }      // ejercicio: nombre, series, repeticiones (o segundos)
+function FJ(n, s, r, o) { o = o || {}; var al = FJ_ALIAS[n], nota = [al && al[1], o.nota].filter(Boolean).join('. '); return { n: al ? al[0] : n, s: s, r: r, seg: o.seg, m: o.m, ld: o.ld, nota: nota, rir: o.rir, top: o.top, rb: o.rb, rirb: o.rirb, d: o.d, cardio: o.cardio, rr: o.rr, runE: o.runE }; }      // ejercicio: nombre, series, repeticiones (o segundos)
 var PROG_FIJOS = [
   { id: 'cs0', n: 'En casa sin material · principiante', c: 'casa principiante', niv: 'ini', dias: 3, min: 35, sem: 8, rir: '3-4', d: 60, mat: 'Sin material',
     nota: 'Puedes añadir caminatas suaves los días de descanso. Los ejercicios de espalda sin material no sustituyen del todo a un remo o una dominada con resistencia.',
@@ -3714,11 +3734,12 @@ function fjPlan(p) {
   var rut = p.D.map(function (d, i) {
     if (d.run) { var sr = plnRunSes(i, d.run, P, cand, { seed: 0, H: {}, cvU: {} }); return { nombre: d.n, foco: d.p || 'carrera', dias: [dq[i]], run: 1, ejercicios: sr.ej }; }      // tanda 6: los días de running, como en los programas de carrera
     var ej = (d.ej || []).map(function (x) {
+      if (x.runE) return JSON.parse(JSON.stringify(x.runE));      // rutinas sueltas de carrera: la sesión ya hecha
       if (x.cardio) return { n: x.n, tipo: 'cardio', m: ['tiempo'], obj: { tiempo: String(x.cardio) }, s: '1', d: '', nota: x.nota };
-      var e = { n: x.n, tipo: 'fuerza', d: String(x.d != null ? x.d : p.d), nota: x.nota, sets: [] }; var ri = x.rir != null ? x.rir : p.rir; for (var k = 0; k < x.s; k++) e.sets.push(x.top ? { t: k ? 'back' : 'top', r: k ? x.rb || x.r : x.r, rir: k && x.rirb != null ? x.rirb : ri, kg: '' } : { t: 'normal', r: x.r, rir: ri, kg: '' }); if (x.top) e.met = 'top'; if (x.seg) e.u = 's'; if (x.m) e.u = 'm'; if (x.ld) e.uni = 1; return e; });
+      var e = { n: x.n, tipo: 'fuerza', d: String(x.d != null ? x.d : p.d), nota: x.nota, sets: [] }; var ri = x.rir != null ? x.rir : p.rir; for (var k = 0; k < x.s; k++) e.sets.push(x.top ? { t: k ? 'back' : 'top', r: k ? x.rb || x.r : x.r, rir: k && x.rirb != null ? x.rirb : ri, kg: '' } : { t: 'normal', r: x.rr ? String(x.rr[k]) : x.r, rir: ri, kg: '' }); if (x.top) e.met = 'top'; if (x.seg) e.u = 's'; if (x.m) e.u = 'm'; if (x.ld) e.uni = 1; return e; });
     if (d.fin) ej.push(plnRunEj(d.fin, P));      // fuerza + running suave al final
-    var cal = calYo({ run: 0, ej: [{ _p: { pat: d.p === 'pierna' || d.p === 'completo' || d.p === 'cardio' ? 'sentadilla' : d.p === 'tiron' ? 'tiron_h' : 'empuje_h' } }] }, P, cand, []);
-    return { nombre: d.n, foco: d.p, dias: [dq[i]], ejercicios: cal.concat(ej) };
+    var cal = d.p === 'carrera' ? calYo({ run: 1, ej: [] }, P, cand, []) : calYo({ run: 0, ej: [{ _p: { pat: d.p === 'pierna' || d.p === 'completo' || d.p === 'cardio' ? 'sentadilla' : d.p === 'tiron' ? 'tiron_h' : 'empuje_h' } }] }, P, cand, []);
+    return { nombre: d.n, foco: d.p, dias: [dq[i]], run: d.p === 'carrera' ? 1 : 0, ejercicios: cal.concat(ej) };
   });
   return { D: { rutinas: rut, desde: hoy, hasta: sumar(hoy, p.sem * 7 - 1) }, P: P };
 }
@@ -3784,6 +3805,110 @@ function pautasWord(D, P) {
   if (pr) D.rutinas.forEach(function (r) { var E = r.ejercicios, cal = E.filter(function (e) { return esCal(e); }).length, i = E.findIndex(function (e) { return pwFz(e) && pwGr(e)[pr] === 1; }); if (i > cal) { var x = E.splice(i, 1)[0]; E.splice(cal, 0, x); } });
   return D;
 }
+
+;
+/* ---------- Rutinas sueltas (17 nov 2026) ----------
+   Javier: «aparte de programas, un apartado de rutinas: un repertorio de 50 rutinas diferentes de hyrox, crossfit, hiit, funcional, hipertrofia
+   (enfoque glúteos, hombro y tríceps…) y fuerza, y de carrera (fartlek, series cortas)». Para un día suelto: «Empezar ahora» o «Guardar en mis rutinas».
+   Se arman con lo mismo que los programas del Word (FJ y fjPlan, con su calentamiento) y siguen sus pautas: WOD y circuitos de ejemplo del Word,
+   dosis de fuerza por nivel, prioridad del músculo al principio y zonas en la carrera. En revisión: solo con borradores (las demos), hasta su OK. */
+function RU(n, st, ca, vc, bl, rpe, fc, nota) { return { n: n, tipo: 'run', st: st, ca: ca, vc: vc, bl: bl, rpe: rpe, fc: fc, nota: nota, video: '', _p: { run: st, k: 'run-' + st } }; }
+function SU(id, n, c, niv, min, o, ej) { return Object.assign({ id: id, n: n, c: c, niv: niv, min: min, lug: 'gym', rir: niv === 'ini' ? '2-3' : '1-2', d: 90, ej: ej }, o || {}); }
+var RS_CATS = [['', 'Todas'], ['hyrox', 'Hyrox'], ['cross', 'Cross training'], ['hiit', 'HIIT'], ['funcional', 'Funcional'], ['hipertrofia', 'Hipertrofia'], ['gluteo', 'Glúteo'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera']];
+var C30 = { seg: 1, rir: '', d: 30 }, C20 = { seg: 1, rir: '', d: 20 }, SR = { rir: '', d: 0 };
+var RSUELTAS = [
+  // ---- Hyrox (las 8 estaciones: SkiErg, trineo, burpees, remo, granjero, zancadas con saco y wall balls; la carrera es la base)
+  SU('h1', 'Hyrox · técnica de estaciones', 'hyrox', 'ini', 50, { nota: 'Carga cómoda y 1-2 min de descanso: hoy se aprende a moverse en cada estación.' }, [FJ('SkiErg', 4, '250', { m: 1, rir: '' }), FJ('Empuje de trineo', 4, '15', { m: 1, rir: '' }), FJ('Arrastre de trineo', 4, '15', { m: 1, rir: '' }), FJ('Burpee con salto horizontal', 3, '10', { m: 1, rir: '' }), FJ('Remo ergómetro', 3, '250', { m: 1, rir: '' }), FJ('Farmer carry con kettlebells', 3, '40', { m: 1, rir: '' }), FJ('Zancadas con saco', 3, '20', { m: 1, rir: '' }), FJ('Wall ball', 3, '10', { rir: '' })]),
+  SU('h2', 'Hyrox · correr cansada', 'hyrox carrera', 'int', 45, { d: 0 }, [FJ('Carrera', 4, '800', Object.assign({ m: 1, nota: 'Compromised running: 4 rondas de 800 m controlados y 20 wall balls, sin parar entre medias. RPE 7' }, SR)), FJ('Wall ball', 4, '20', { rir: '', d: 60 })]),
+  SU('h3', 'Hyrox · media simulación', 'hyrox carrera', 'ava', 60, { d: 0, nota: 'Simulación al 50 % del Word: alterna cada 500 m de carrera con su estación, en orden. No es para ir a tope.' }, [FJ('Carrera', 8, '500', Object.assign({ m: 1, nota: 'Corre 500 m antes de cada estación (8 veces)' }, SR)), FJ('SkiErg', 1, '500', Object.assign({ m: 1 }, SR)), FJ('Empuje de trineo', 1, '25', Object.assign({ m: 1 }, SR)), FJ('Arrastre de trineo', 1, '25', Object.assign({ m: 1 }, SR)), FJ('Burpee con salto horizontal', 1, '40', Object.assign({ m: 1 }, SR)), FJ('Remo ergómetro', 1, '500', Object.assign({ m: 1 }, SR)), FJ('Farmer carry con kettlebells', 1, '100', Object.assign({ m: 1 }, SR)), FJ('Zancadas con saco', 1, '50', Object.assign({ m: 1 }, SR)), FJ('Wall ball', 1, '50', SR)]),
+  SU('h4', 'Hyrox · fuerza para las estaciones', 'hyrox fuerza', 'int', 55, { rir: '2-3', d: 150 }, [FJ('Sentadilla', 3, '5', { rir: '2-4' }), FJ('Peso muerto rumano', 3, '6-8'), FJ('Zancadas con saco', 3, '10', { ld: 1 }), FJ('Empuje de trineo', 4, '20', { m: 1, rir: '' }), FJ('Remo con mancuerna a una mano', 3, '10', { ld: 1 }), FJ('Farmer carry con kettlebells', 3, '50', { m: 1, rir: '' })]),
+  SU('h5', 'Hyrox · motor en los ergos', 'hyrox', 'int', 45, { nota: 'A ritmo de carrera, no a tope: que la última salga como la primera.' }, [FJ('SkiErg', 5, '500', { m: 1, rir: '', d: 90 }), FJ('Remo ergómetro', 5, '500', { m: 1, rir: '', d: 90 })]),
+  SU('h6', 'Hyrox · bloques de 2 estaciones', 'hyrox carrera', 'int', 50, { d: 0 }, [FJ('Carrera', 3, '1000', Object.assign({ m: 1, nota: '3 vueltas de 1 km de carrera + 500 m de remo + 20 wall balls. Descansa 2 min entre vueltas. RPE 7' }, SR)), FJ('Remo ergómetro', 3, '500', Object.assign({ m: 1 }, SR)), FJ('Wall ball', 3, '20', { rir: '', d: 120 })]),
+  SU('h7', 'Hyrox · primer contacto', 'hyrox carrera', 'ini', 40, { d: 0 }, [FJ('Carrera', 4, '400', Object.assign({ m: 1, nota: '4 rondas de 400 m de carrera suave y 10 sentadillas goblet, sin parar. RPE 6' }, SR)), FJ('Sentadilla goblet', 4, '10', { rir: '', d: 60 }), FJ('Farmer carry con kettlebells', 2, '40', { m: 1, rir: '' })]),
+  // ---- Cross training (WOD)
+  SU('w1', 'WOD Foundation · AMRAP 10', 'cross', 'ini', 35, {}, [FJ('Sentadilla goblet', 3, '8', { rir: '3', nota: 'Fuerza antes del WOD' }), FJ('Sentadilla al aire', 1, '8', Object.assign({ nota: 'AMRAP 10 min controlado (todas las rondas que puedas): 8 sentadillas, 6 flexiones inclinadas, 8 remos en anillas y 30 s de bici. RPE 5-6' }, SR)), FJ('Flexiones inclinadas', 1, '6', SR), FJ('Remo en anillas', 1, '8', SR), FJ('Bicicleta estática', 1, '30', { seg: 1, rir: '', d: 0 })]),
+  SU('w2', 'WOD Engine · 4 rondas', 'cross', 'int', 40, {}, [FJ('Push press con barra', 4, '5', { rir: '2-3', nota: 'Fuerza antes del WOD' }), FJ('Remo ergómetro', 4, '400', Object.assign({ m: 1, nota: '4 rondas: 400 m de remo, 10 arrancadas con mancuerna (alternando) y 8 burpees. Límite 18 min. RPE 7-8' }, SR)), FJ('Arrancada con mancuerna', 4, '10', SR), FJ('Burpees', 4, '8', SR)]),
+  SU('w3', 'WOD Power Engine · 5 rondas', 'cross', 'ava', 45, { nota: 'Solo si dominas la cargada y las dominadas.' }, [FJ('Remo ergómetro', 5, '250', Object.assign({ m: 1, nota: '5 rondas: 250 m de remo, 6 cargadas de potencia (submáximas), 8 dominadas y 6 burpees saltando la barra. Límite 20 min' }, SR)), FJ('Power clean', 5, '6', SR), FJ('Dominadas', 5, '8', SR), FJ('Burpee saltando la barra', 5, '6', SR)]),
+  SU('w4', 'EMOM 16 · cuerpo completo', 'cross', 'int', 35, {}, [FJ('Kettlebell swing', 4, '12', Object.assign({ nota: 'EMOM 16 min: minuto 1, 12 swings; 2, 8 thrusters; 3, 8 burpees; 4, 30 s de mountain climbers. 4 vueltas' }, SR)), FJ('Thruster con mancuernas', 4, '8', SR), FJ('Burpees', 4, '8', SR), FJ('Mountain climbers', 4, '30', { seg: 1, rir: '', d: 0 })]),
+  SU('w5', 'For Time · 21-15-9', 'cross', 'int', 30, {}, [FJ('Thruster con mancuernas', 3, '', Object.assign({ rr: [21, 15, 9], nota: 'For Time: 21 thrusters y 21 remos, luego 15 y 15, luego 9 y 9, lo antes posible con buena técnica. Límite 12 min' }, SR)), FJ('Remo invertido en TRX', 3, '', Object.assign({ rr: [21, 15, 9] }, SR))]),
+  SU('w6', 'Chipper · de todo un poco', 'cross', 'int', 40, {}, [FJ('Remo ergómetro', 1, '1000', Object.assign({ m: 1, nota: 'Chipper: todo de una vez, en orden y partiéndolo como quieras. Límite 25 min. RPE 7' }, SR)), FJ('Wall ball', 1, '50', SR), FJ('Kettlebell swing', 1, '40', SR), FJ('Zancada inversa con mancuernas', 1, '30', SR), FJ('Burpees', 1, '20', SR), FJ('Comba', 1, '100', SR)]),
+  SU('w7', 'Escalera · swings y burpees', 'cross', 'int', 25, {}, [FJ('Kettlebell swing', 10, '', Object.assign({ rr: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20], nota: 'Escalera de 12 min: 2 swings y 2 burpees, luego 4 y 4, 6 y 6… Apunta hasta dónde llegas' }, SR)), FJ('Burpees', 10, '', Object.assign({ rr: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20] }, SR))]),
+  SU('w8', 'Halterofilia y gimnásticos', 'cross', 'int', 50, { d: 120 }, [FJ('Power clean', 6, '2', { rir: '3', nota: 'Técnica: carga ligera y cada repetición perfecta' }), FJ('Push jerk', 5, '3', { rir: '3' }), FJ('Dominadas', 4, '5-8', { rir: '2' }), FJ('Flexiones', 4, '10', { rir: '2' }), FJ('Hollow hold', 3, '30', { seg: 1, rir: '' })]),
+  // ---- HIIT (intervalos fuertes, no a tope; con calentamiento y vuelta a la calma)
+  SU('x1', 'HIIT · 4 × 4', 'hiit', 'int', 40, {}, [FJ('Remo ergómetro', 4, '240', { seg: 1, rir: '', d: 180, nota: '10 min suaves para calentar; 4 min fuertes (85-95 % de tu FC máx., sin llegar a tope) y 3 min suaves; 5 min suaves al final. También en bici o corriendo' })]),
+  SU('x2', 'HIIT · 20/10 (estilo Tabata)', 'hiit', 'int', 25, {}, [FJ('Assault bike', 8, '20', { seg: 1, rir: '', d: 10, nota: 'Bloque 1: 8 × 20 s fuerte y 10 s suave (4 min). Luego 3 min suaves' }), FJ('Burpees', 8, '20', { seg: 1, rir: '', d: 10, nota: 'Bloque 2: igual. Formato popular 20/10, no el protocolo de laboratorio' })]),
+  SU('x3', 'HIIT principiante · bici 20/40', 'hiit', 'ini', 25, {}, [FJ('Bicicleta estática', 10, '20', { seg: 1, rir: '', d: 40, nota: '5 min suaves; 10 × 20 s rápido y 40 s suave; 5 min suaves. RPE 7' })]),
+  SU('x4', 'Circuito HIIT 30/30', 'hiit', 'int', 30, {}, [FJ('Burpees', 3, '30', Object.assign({ nota: '3 rondas: 30 s fuerte y 30 s de descanso en cada uno (12 min). RPE 7-9' }, C30)), FJ('Mountain climbers', 3, '30', C30), FJ('Cuerdas de batida', 3, '30', C30), FJ('Assault bike', 3, '30', C30)]),
+  SU('x5', 'HIIT avanzado · 40/20', 'hiit', 'ava', 35, {}, [FJ('Assault bike', 20, '40', { seg: 1, rir: '', d: 20, nota: '20 × 40 s fuerte y 20 s suave (20 min). Si rindes mucho menos en los últimos, para ahí' })]),
+  SU('x6', 'HIIT en casa sin material', 'hiit', 'int', 25, { lug: 'casa', mat: 'Sin material' }, [FJ('Jumping jacks', 3, '30', Object.assign({ nota: '3 rondas, 30 s y 30 s de descanso. Sin saltos: step jacks, sentadilla normal y burpee con paso atrás' }, C30)), FJ('Sentadilla con salto', 3, '30', C30), FJ('Mountain climbers', 3, '30', C30), FJ('Burpees', 3, '30', C30), FJ('Skipping', 3, '30', C30)]),
+  // ---- Funcional (circuitos del Word; no es HIIT)
+  SU('f1', 'Funcional principiante · 30/30', 'funcional', 'ini', 35, {}, [FJ('Sentadilla a cajón', 3, '30', Object.assign({ nota: '3 rondas: 30 s cada uno y 30 s de descanso; 90 s entre rondas. RPE 5-6' }, C30)), FJ('Step jacks', 3, '30', C30), FJ('Flexiones inclinadas', 3, '30', C30), FJ('Remo con banda', 3, '30', C30), FJ('Puente de glúteos', 3, '30', C30), FJ('Dead bug', 3, '30', { seg: 1, rir: '', d: 90 })]),
+  SU('f2', 'Funcional intermedio · 40/20', 'funcional', 'int', 40, {}, [FJ('Sentadilla goblet', 4, '40', Object.assign({ nota: '4 rondas: 40 s cada uno y 20 s de descanso; 60-90 s entre rondas. RPE 6-8' }, C20)), FJ('Kettlebell swing', 4, '40', C20), FJ('Mountain climbers', 4, '40', C20), FJ('Remo con mancuerna a una mano', 4, '40', Object.assign({ nota: 'Cambia de brazo a mitad' }, C20)), FJ('Zancada inversa con mancuernas', 4, '40', C20), FJ('Burpees', 4, '40', { seg: 1, rir: '', d: 75 })]),
+  SU('f3', 'Funcional avanzado · 40/20', 'funcional', 'ava', 45, {}, [FJ('Thruster con mancuernas', 4, '40', Object.assign({ nota: '4 rondas: 40 s y 20 s de descanso; 60-90 s entre rondas. La carga, la que te deje moverte bien' }, C20)), FJ('Cuerdas de batida', 4, '40', C20), FJ('Kettlebell swing', 4, '40', C20), FJ('Gateo de oso', 4, '40', C20), FJ('Farmer carry con kettlebells', 4, '40', C20), FJ('Burpee con salto al cajón', 4, '40', { seg: 1, rir: '', d: 75, nota: 'O subiendo al cajón sin salto' })]),
+  SU('f4', 'Funcional con kettlebell', 'funcional', 'int', 40, { lug: 'casa', mat: 'Kettlebell' }, [FJ('Kettlebell swing', 4, '15'), FJ('Cargada con kettlebell', 3, '8', { ld: 1 }), FJ('Press militar con kettlebell', 3, '8', { ld: 1 }), FJ('Sentadilla goblet', 3, '12', { nota: 'Con la kettlebell' }), FJ('Remo gorila con kettlebells', 3, '10'), FJ('Farmer carry con kettlebells', 3, '40', { m: 1, rir: '' })]),
+  SU('f5', 'Funcional de bajo impacto', 'funcional', 'ini', 35, {}, [FJ('Step jacks', 3, '40', Object.assign({ nota: 'Sin saltos: 3 rondas de 40 s y 20 s de descanso. Puede ser intenso igual' }, C20)), FJ('Sentadilla a cajón', 3, '40', C20), FJ('Step-up subida en banco', 3, '40', C20), FJ('Burpee con paso atrás', 3, '40', C20), FJ('Remo con banda', 3, '40', C20), FJ('Marcha con rodillas arriba', 3, '40', { seg: 1, rir: '', d: 90 })]),
+  SU('f6', 'Core y estabilidad', 'funcional', 'int', 30, { lug: 'casa', mat: 'Sin material' }, [FJ('Dead bug', 3, '10', { rir: '' }), FJ('Plancha frontal', 3, '40', { seg: 1, rir: '' }), FJ('Plancha lateral', 3, '30', { seg: 1, ld: 1, rir: '' }), FJ('Bird dog', 3, '10', { ld: 1, rir: '' }), FJ('Hollow hold', 3, '30', { seg: 1, rir: '' }), FJ('Plancha con toque de hombros', 3, '20', { rir: '' })]),
+  // ---- Hipertrofia con enfoque (el músculo prioritario, el primero)
+  SU('p1', 'Rutina hipertrofia · enfoque glúteos (hip thrust)', 'hipertrofia gluteo', 'int', 55, {}, [FJ('Hip thrust', 4, '8-10'), FJ('Sentadilla búlgara', 3, '8-12', { ld: 1 }), FJ('Peso muerto rumano', 3, '8-10', { rir: '2' }), FJ('Abducción en máquina', 3, '15-20', { rir: '1' }), FJ('Patada de glúteo en polea', 2, '12-15', { ld: 1, rir: '1' })]),
+  SU('p2', 'Rutina hipertrofia · enfoque glúteos (unilateral)', 'hipertrofia gluteo', 'int', 50, {}, [FJ('Hip thrust unilateral', 3, '10-12', { ld: 1 }), FJ('Step-up subida en banco', 3, '10', { ld: 1 }), FJ('Zancadas caminando con mancuernas', 3, '12', { ld: 1 }), FJ('Abducción en polea', 3, '15', { ld: 1, rir: '1' }), FJ('Hiperextensiones para glúteo', 3, '12-15', { rir: '1' })]),
+  SU('p3', 'Rutina hipertrofia · enfoque glúteos en casa', 'hipertrofia gluteo', 'ini', 40, { lug: 'casa', mat: 'Bandas elásticas y minibanda', d: 60 }, [FJ('Hip thrust con banda', 4, '15-20'), FJ('Split squat (zancada estática)', 3, '10-12', { ld: 1 }), FJ('Clamshell con banda', 3, '20', { ld: 1 }), FJ('Puente de glúteos a una pierna', 3, '12', { ld: 1 }), FJ('Monster walk con banda', 3, '12', { ld: 1 })]),
+  SU('p4', 'Rutina hipertrofia · enfoque hombro y tríceps', 'hipertrofia', 'int', 50, {}, [FJ('Elevaciones laterales', 4, '12-20', { rir: '1' }), FJ('Press de hombros', 3, '8-12'), FJ('Pec deck inverso', 3, '12-20', { rir: '1' }), FJ('Fondos asistidos en máquina', 3, '8-12'), FJ('Extensión overhead', 3, '10-15', { rir: '1' }), FJ('Extensión de tríceps', 2, '12-15', { rir: '1' })]),
+  SU('p5', 'Rutina hipertrofia · enfoque espalda y bíceps', 'hipertrofia', 'int', 55, {}, [FJ('Jalón al pecho', 3, '8-12'), FJ('Remo con apoyo', 3, '8-12'), FJ('Jalón unilateral', 2, '10-12', { ld: 1 }), FJ('Pullover en polea', 2, '12-15', { rir: '1' }), FJ('Curl bayesiano', 3, '10-12', { ld: 1, rir: '1' }), FJ('Curl martillo', 2, '10-15', { rir: '1' })]),
+  SU('p6', 'Rutina hipertrofia · enfoque pecho', 'hipertrofia', 'int', 50, {}, [FJ('Press inclinado', 4, '8-10'), FJ('Press banca', 3, '6-10', { rir: '2' }), FJ('Aperturas en polea', 3, '12-15', { rir: '1' }), FJ('Fondos en paralelas para pecho', 2, '8-12', { nota: 'Asistidos si hace falta' }), FJ('Elevaciones laterales', 3, '15', { rir: '1' }), FJ('Extensión de tríceps', 2, '12', { rir: '1' })]),
+  SU('p7', 'Rutina hipertrofia · enfoque cuádriceps', 'hipertrofia', 'int', 55, {}, [FJ('Hack squat', 4, '8-10', { rir: '2' }), FJ('Prensa', 3, '10-15'), FJ('Extensión de cuádriceps', 3, '12-15', { rir: '1' }), FJ('Sentadilla búlgara', 2, '10', { ld: 1 }), FJ('Gemelos', 3, '10-15', { rir: '1' })]),
+  SU('p8', 'Rutina hipertrofia · enfoque isquios y glúteo', 'hipertrofia gluteo', 'int', 50, {}, [FJ('Peso muerto rumano', 4, '6-10', { rir: '2' }), FJ('Curl femoral sentado', 3, '10-12'), FJ('Hip thrust', 3, '8-12'), FJ('Curl femoral', 2, '12-15', { rir: '1' }), FJ('Hiperextensiones a 45º', 2, '12-15', { rir: '1' })]),
+  SU('p9', 'Rutina hipertrofia · enfoque brazos', 'hipertrofia', 'int', 45, { d: 75 }, [FJ('Curl Scott', 3, '8-12'), FJ('Extensión overhead', 3, '10-12'), FJ('Curl bayesiano', 3, '10-12', { ld: 1, rir: '1' }), FJ('Extensión de tríceps', 3, '12-15', { rir: '1' }), FJ('Curl martillo', 2, '12', { rir: '1' }), FJ('Patada de tríceps unilateral en polea', 2, '12-15', { ld: 1, rir: '1' })]),
+  SU('p10', 'Rutina hipertrofia · torso completo', 'hipertrofia', 'int', 60, {}, [FJ('Press inclinado', 3, '8-12'), FJ('Jalón al pecho', 3, '8-12'), FJ('Remo en máquina', 3, '10-12'), FJ('Press de hombros', 2, '8-12'), FJ('Elevaciones laterales', 3, '12-20', { rir: '1' }), FJ('Curl en polea', 2, '12', { rir: '1' }), FJ('Extensión de tríceps', 2, '12', { rir: '1' })]),
+  // ---- Fuerza (multiarticulares, pocas repeticiones, descansos largos, sin fallo)
+  SU('s1', 'Rutina fuerza · sentadilla', 'fuerza', 'int', 60, { rir: '2-3', d: 180 }, [FJ('Sentadilla', 4, '4', { top: 1, rb: '5', rir: '2', rirb: '3' }), FJ('Prensa', 3, '8', { rir: '2' }), FJ('Curl femoral', 3, '10'), FJ('Rueda abdominal', 2, '10', { rir: '3' })]),
+  SU('s2', 'Rutina fuerza · press banca', 'fuerza', 'int', 60, { rir: '2-3', d: 180 }, [FJ('Press banca', 4, '3', { top: 1, rb: '5', rir: '2', rirb: '3' }), FJ('Press inclinado con barra', 3, '6-8'), FJ('Remo con apoyo', 3, '8'), FJ('Extensión de tríceps', 3, '10-12'), FJ('Face pull', 2, '15')]),
+  SU('s3', 'Rutina fuerza · peso muerto', 'fuerza', 'int', 60, { rir: '2-3', d: 180 }, [FJ('Peso muerto', 4, '3', { top: 1, rb: '4', rir: '2', rirb: '3' }), FJ('Peso muerto rumano', 3, '6'), FJ('Remo', 3, '6-8'), FJ('Farmer carry con kettlebells', 3, '30', { m: 1, rir: '' }), FJ('Plancha lateral', 2, '30', { seg: 1, ld: 1, rir: '' })]),
+  SU('s4', 'Rutina fuerza · press militar', 'fuerza', 'int', 50, { rir: '2-3', d: 150 }, [FJ('Press militar', 4, '5'), FJ('Push press con barra', 3, '3'), FJ('Dominadas', 4, '5'), FJ('Elevaciones laterales', 3, '12', { rir: '1-2' }), FJ('Hollow hold', 2, '30', { seg: 1, rir: '' })]),
+  SU('s5', 'Rutina fuerza · cuerpo completo', 'fuerza', 'ini', 55, { rir: '3', d: 150, nota: 'Técnica antes que peso. Sube cuando hagas todas las repeticiones con buena técnica.' }, [FJ('Sentadilla', 3, '5', { rir: '3-4' }), FJ('Press banca', 3, '5', { rir: '3-4' }), FJ('Remo', 3, '8'), FJ('Peso muerto rumano', 2, '8'), FJ('Dead bug', 2, '10', { rir: '' })]),
+  SU('s6', 'Rutina fuerza · 5 × 5', 'fuerza', 'int', 60, { rir: '2-3', d: 180, nota: 'El mismo peso en las 5 series. Cuando salgan todas, la próxima vez 2,5 kg más.' }, [FJ('Sentadilla', 5, '5'), FJ('Press banca', 5, '5'), FJ('Remo', 5, '5')]),
+  // ---- Carrera (con su calentamiento antes y las zonas)
+  SU('c1', 'Rutina fartlek', 'carrera', 'ini', 40, {}, [FJ('', 1, '', { runE: RU('Fartlek', 'fartlek', '10', '5', [runBl('8', '', '1 min', '', '1:30', 'trotando')], '6-7', 'Zona 3-4 en los cambios', '8 cambios de 1 min a ritmo alegre (Z3-Z4) y 1:30 trotando suave (Z1-Z2). Antes, 10 min suaves; al final, 5 min andando.') })]),
+  SU('c2', 'Rutina series cortas · 10 × 200 m', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Series cortas', 'series', '15', '10', [runBl('10', '200 m', '', '', '1:00', 'andando o trotando')], '8', 'Zona 4-5', 'Rápidas pero controladas: la última, igual de rápida que la primera. 15 min suaves antes y 10 al final.') })]),
+  SU('c3', 'Rutina series de 400 m', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Series de 400 m', 'series', '15', '10', [runBl('8', '400 m', '', '', '1:30', 'trotando')], '8', 'Zona 4', 'A ritmo de 5 km o algo más rápido; 1:30 trotando entre series.') })]),
+  SU('c4', 'Rutina series largas · 5 × 1000 m', 'carrera', 'ava', 55, {}, [FJ('', 1, '', { runE: RU('Series largas', 'series', '15', '10', [runBl('5', '1000 m', '', '', '2:00', 'trotando')], '7-8', 'Zona 4', 'A ritmo de 10 km; 2 min trotando entre series.') })]),
+  SU('c5', 'Rutina umbral', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Umbral', 'umbral', '15', '10', [runBl('2', '', '10 min', '', '3:00', 'trotando')], '7', 'Zona 3-4 (umbral)', '«Cómodamente duro»: puedes decir frases cortas. 2 bloques de 10 min con 3 min trotando.') })]),
+  SU('c6', 'Rutina cuestas', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Cuestas', 'cuestas', '15', '10', [runBl('8', '', '45 s', '', 'bajando', 'andando')], '8', 'Zona 4', '8 subidas de 45 s fuertes en una cuesta moderada; baja andando o trotando muy suave.') })]),
+  SU('c7', 'Rutina tirada larga suave', 'carrera', 'int', 70, {}, [FJ('', 1, '', { runE: RU('Tirada larga', 'larga', '', '', [runBl('1', '', '60 min')], '3-4', 'Zona 2', 'Suave y larga: cuenta el tiempo, no el ritmo. Si hace falta, camina 1 min cada 10.') })])
+];
+var RS_P = { p4: 'torso', p5: 'tiron', p6: 'empuje', p9: 'torso', p10: 'torso', s2: 'empuje', s4: 'empuje', p7: 'pierna', s1: 'pierna', s3: 'pierna', h4: 'pierna' };      // el calentamiento, según lo que se trabaja
+RSUELTAS.forEach(function (x) { x.p = x.ej[0].runE ? 'carrera' : RS_P[x.id] || (/gluteo/.test(x.c) ? 'pierna' : 'completo'); });
+function rsVisibles(f) { return rpBorr() ? RSUELTAS.filter(function (x) { return !f || x.c.split(' ').indexOf(f) >= 0; }) : []; }
+function rsRutina(x) {      // la rutina (con su calentamiento), como un día de los programas del Word
+  var p = { niv: x.niv, dias: 3, min: x.min, sem: 1, rir: x.rir, d: x.d, lug: x.lug, mat: x.mat || '', obj: 'musculo', D: [{ n: x.n, p: x.p, ej: x.ej }] };
+  var r = fjPlan(p).D.rutinas[0]; r.nombre = x.n; delete r.dias; return r;
+}
+function rsTxtEj(e) {
+  if (e.tipo === 'run') return (e.bl || []).map(function (b) { return (b.r > 1 ? b.r + ' × ' : '') + (b.d || b.du) + (b.rec ? ' · recuperación ' + b.rec + (b.rt ? ' ' + b.rt : '') : ''); }).join(' + ');
+  if (e.tipo === 'cardio') return (e.obj && e.obj.tiempo) + ' min';
+  var s = e.sets || [], u = e.u === 's' ? ' s' : e.u === 'm' ? ' m' : '', rr = s.map(function (z) { return z.r; });
+  return rr.every(function (r) { return r === rr[0]; }) ? s.length + ' × ' + rr[0] + u : rr.join('-') + u;
+}
+function vSueltas() {
+  var f = S.x.rsf || '', L = rsVisibles(f);
+  var h = '<div class="chips scroll">' + RS_CATS.map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="rsF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>';
+  return h + '<section class="card lista-b"><small class="mut">' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + ' · para un día suelto</small>' + L.map(function (x) {
+    return '<button class="prog-f" data-a="verSuelta" data-v="' + x.id + '"><span class="pd"><b>' + x.min + '</b><small>min</small></span><span class="fr-t"><b>' + esc(x.n) + '</b><small>' + ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[x.niv] + ' · ' + (x.lug === 'casa' ? 'Casa' + (x.mat ? ' · ' + esc(x.mat) : '') : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }).join('') + '</section>';
+}
+A.rsF = function (el) { S.x.rsf = el.dataset.v; pintar(); };
+A.progVista = function (el) { S.x.pv = el.dataset.v; pintar(); };
+A.verSuelta = function (el) { ir({ t: 'suelta', id: el.dataset.v }); };
+VISTAS.suelta = function (p) {
+  var x = RSUELTAS.filter(function (y) { return y.id === p.id; })[0]; if (!x) return '';
+  var r = rsRutina(x), cal = r.ejercicios.filter(esCal), E = r.ejercicios.filter(function (e) { return !esCal(e); }), ya = rsGuardada(x);
+  var h = '<div class="pant pad con-pie">' + cab('Rutina suelta') + '<h1 class="t1">' + esc(x.n) + '</h1><p class="mut">' + ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[x.niv] + ' · unos ' + x.min + ' min</p>' + (x.nota ? '<p class="sm mut">' + esc(x.nota) + '</p>' : '');
+  h += '<section class="card dia-c">' + (cal.length ? '<div class="cal">Calentamiento: ' + esc(cal.map(function (e) { return e.n; }).join(', ')) + '</div>' : '') +
+    E.map(function (e) { return '<div class="rs-ej"><b>' + esc(e.n) + '</b><small>' + esc(rsTxtEj(e)) + '</small>' + (e.nota ? '<p class="sm mut">' + esc(e.nota) + '</p>' : '') + '</div>'; }).join('') + '</section>';
+  return h + '<div class="pie-fijo"><button class="btn sec" data-a="rsGuardar" data-v="' + x.id + '"' + (ya ? ' disabled' : '') + '>' + (ya ? ic('check', 16, null, 3) + 'En mis rutinas' : 'Guardar en mis rutinas') + '</button><button class="btn" data-a="rsEmpezar" data-v="' + x.id + '">' + ic('play', 16) + (S.ses ? 'Seguir con tu entreno' : 'Empezar ahora') + '</button></div></div>';
+};
+function rsGuardada(x) { return S.rutinas.filter(function (r) { return r.suelta === x.id; })[0] || null; }
+function rsGuarda(x) { var ya = rsGuardada(x); if (ya) return ya; var r = rsRutina(x), o = { id: nuevoId(), nombre: x.n, foco: r.foco || '', run: r.run ? 1 : 0, suelta: x.id, ejercicios: r.ejercicios.map(function (e) { var c = plnLimpioEj(e); if (esCal(e)) c.cal = 1; return c; }) }; S.rutinas.push(o); guardaRutina(o); return o; }
+A.rsGuardar = function (el) { var x = RSUELTAS.filter(function (y) { return y.id === el.dataset.v; })[0]; if (!x) return; rsGuarda(x); toast('Guardada en Mis rutinas', 'ok'); pintar(); };
+A.rsEmpezar = function (el) { if (S.ses) return A.abrirSes(); var x = RSUELTAS.filter(function (y) { return y.id === el.dataset.v; })[0]; if (!x) return; empezarSes(rsGuarda(x)); A.abrirSes(); };
 
 ;
 /* ---------- el entreno en curso (como lo ven los clientes de los entrenadores) ---------- */
