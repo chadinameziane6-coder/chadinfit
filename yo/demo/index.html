@@ -864,6 +864,13 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .n-om.ok{background:var(--sec-b);color:var(--tx2);font-weight:600}
 .n-om .link{font-size:12.5px;font-weight:800;color:var(--tx);padding:0}
 
+/* la media de la semana, cerrada en una línea (se abre al tocarla) */
+button.card.n-semc{display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;width:100%;text-align:left;font:inherit;color:var(--tx);cursor:pointer;padding:14px 16px}
+.n-semc .col{flex:1;min-width:0;align-items:flex-start}.n-semc b{font-size:15px}.n-semc small{display:block;font-size:13px}
+.n-semc>svg:last-child{color:var(--tx2);flex:none}
+.n-semv{position:relative}.n-semv .card-h{padding-right:34px}
+.n-semx{position:absolute;top:12px;right:12px;width:30px;height:30px;border-radius:50%;border:0;background:var(--sec-b);color:var(--tx);display:flex;align-items:center;justify-content:center;cursor:pointer}.n-semx svg{transform:rotate(180deg)}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
 <body>
@@ -3992,6 +3999,7 @@ A.nDia = function (el) { var f = sumar(nd(), +el.dataset.v); if (f > hoyStr()) r
 function objTxtP(N) { return N.pct; }
 function objTxt(N) { if (!N) return ''; var o = N.obj === 'def' ? 'perder grasa −' + N.pct + ' %' : N.obj === 'sup' ? 'ganar músculo +' + N.pct + ' %' : N.obj === 'mano' ? 'mi cifra' : 'mantener'; return o + ' · ' + fmil(N.kcal) + ' kcal'; }
 /* la semana: lo que comió cada día (de lunes a domingo) con la línea del objetivo; la media, solo de los días ya terminados */
+A.nSemAb = function () { S.x.semAb = !S.x.semAb; pintar(); };
 function semanaCard(f) {
   var lun = lunesDe(f), hoy = hoyStr(), N = nut(), dias = [], comp = [];
   for (var i = 0; i < 7; i++) { var d = sumar(lun, i), t = totDe(diaDe(d).it).k; dias.push({ f: d, k: t }); if (d < hoy && t > 0) comp.push(t); }
@@ -3999,7 +4007,10 @@ function semanaCard(f) {
   var mx = Math.max.apply(null, dias.map(function (x) { return x.k; }).concat([obj * 1.15, 1]));
   var g = '<div class="n-sem">' + (obj ? '<span class="obj" style="bottom:' + Math.round(obj * 100 / mx) + '%"></span>' : '') + dias.map(function (x) {
     return '<span class="d' + (x.f === hoy ? ' hoy' : '') + '"><i style="height:' + Math.max(x.k ? 3 : 0, Math.round(x.k * 100 / mx)) + '%" title="' + esc(fCorta(x.f)) + ': ' + fmil(x.k) + ' kcal"></i><small>' + DIAS7[(aDate(x.f).getDay() + 6) % 7] + '</small></span>'; }).join('') + '</div>';
-  return '<section class="card"><div class="card-h top"><span class="col"><small class="mut">Media de esta semana</small><span class="n-med"><b>' + (comp.length ? fmil(med) : '–') + '</b><span class="mut sm">kcal/día</span></span></span>' +
+  var dc = comp.length ? comp.length + (comp.length === 1 ? ' día completo' : ' días completos') : 'Sin días completos';
+  /* cerrada en una línea; al tocarla se abre ahí mismo (se consulta a final de semana: no hace falta tenerla tan a mano) */
+  if (!S.x.semAb) return '<button class="card n-semc" data-a="nSemAb" aria-expanded="false">' + ic('grafica', 20) + '<span class="col"><b>Media de esta semana</b><small class="mut">' + (comp.length ? fmil(med) + ' kcal/día · ' : '') + dc + '</small></span>' + ic('abajo', 18) + '</button>';
+  return '<section class="card n-semv"><button class="n-semx" data-a="nSemAb" aria-expanded="true" aria-label="Cerrar la media de la semana">' + ic('abajo', 18) + '</button><div class="card-h top"><span class="col"><small class="mut">Media de esta semana</small><span class="n-med"><b>' + (comp.length ? fmil(med) : '–') + '</b><span class="mut sm">kcal/día</span></span></span>' +
     '<small class="mut der">' + (comp.length ? comp.length + (comp.length === 1 ? ' día completo' : ' días completos') : 'Sin días completos') + (lun <= hoy && hoy <= sumar(lun, 6) ? '<br>hoy aún no cuenta' : '') + '</small></div>' + g +
     '<div class="leyenda"><span><i class="pt n"></i>Lo que comiste</span>' + (obj ? '<span><i class="ln dis"></i>Tu objetivo</span>' : '') + '<button class="link" data-a="nMeses">Ver meses</button></div></section>';
 }
