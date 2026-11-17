@@ -1142,6 +1142,7 @@ td.fin{text-align:right;white-space:nowrap}
       var a = ' data-tipo="' + esc(x.tipo) + '" data-obj="' + n(x.obj) + '" data-autor="' + esc(x.autor || '') + '"';
       return '<div><div class="q"><span>' + (x.tipo === 'pub' ? 'Publicación' : 'Comentario') + ' de <b style="color:#141414">' + esc(x.autor || 'alguien que ya no está') + '</b>' + (x.suspendido ? ' · ya suspendida' : '') + '</span><span><b>' + n(x.n) + (n(x.n) === 1 ? ' denuncia' : ' denuncias') + '</b> · la última el ' + esc(fechaC(x.ult)) + '</span></div>' +
         '<blockquote>' + esc(x.texto == null ? '(ya no existe)' : x.texto || '(sin texto)') + '</blockquote>' +
+        (typeof x.foto === 'string' && x.foto.indexOf('data:image/jpeg;base64,') === 0 ? '<img src="' + x.foto + '" alt="Foto de la publicación denunciada" style="display:block;max-width:220px;width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:12px;margin:6px 0">' : '') +
         '<ul>' + (Array.isArray(x.motivos) ? x.motivos : []).slice(0, 5).map(function (m) { return '<li>' + esc(m) + '</li>'; }).join('') + '</ul>' +
         '<div class="bt"><button class="chip-b peq neg" data-mod="ocultar"' + a + '>Ocultar</button>' + (x.suspendido || !x.autor ? '' : '<button class="btn-r" data-mod="suspender"' + a + '>Ocultar y suspender a ' + esc(String(x.autor).split(' ')[0]) + '</button>') + '<button class="chip-b peq" data-mod="descartar"' + a + '>Está bien, dejarlo</button></div></div>';
     }).join('') + '</div>';

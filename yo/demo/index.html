@@ -844,6 +844,11 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .off{display:flex;flex-direction:column;gap:6px;padding:8px 0 4px;border-top:1px solid var(--linea)}
 .off .btn{margin:0}.off small{font-size:12px}.off-t{margin:2px 0}
 .off-k{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13px;font-weight:700;white-space:nowrap}.off-k em{font-style:normal;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:6px;background:var(--suave);color:var(--tx2)}
+/* foto en las publicaciones de Comunidad */
+.cm-foto{margin:2px -2px 2px;border-radius:16px;overflow:hidden;background:var(--suave);aspect-ratio:4/5}
+.cm-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.cp-foto{margin:2px 0}.cp-f{display:flex;flex-direction:column;align-items:center;gap:6px}.cp-f .crop-z{width:100%}
+.cp-crop{border-radius:16px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -873,7 +878,7 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
     var uid=function(pid){ for(var k in C.per) if(C.per[k].pid===pid && C.per[k].activo && !C.per[k].susp) return k; return null; };
     var sigo=function(x,y){ return C.sigue.some(function(f){ return f.a===x&&f.b===y; }); };
     var cuenta=function(L,f){ return L.filter(f).length; };
-    var pj=function(p){ var q=C.per[p.u]||{}; return {id:p.id, pid:q.pid, nombre:q.nombre, mio:p.u===u, creado:p.creado, t:p.d.t, min:p.d.min, nser:p.d.nser, vol:p.d.vol, rec:p.d.rec, nej:(p.d.rut&&p.d.rut.ej||[]).length,
+    var pj=function(p){ var q=C.per[p.u]||{}; return {id:p.id, pid:q.pid, nombre:q.nombre, mio:p.u===u, creado:p.creado, foto:!!p.foto, t:p.d.t, min:p.d.min, nser:p.d.nser, vol:p.d.vol, rec:p.d.rec, nej:(p.d.rut&&p.d.rut.ej||[]).length,
       likes:cuenta(C.likes,function(l){ return l.p===p.id; }), yo_like:C.likes.some(function(l){ return l.p===p.id&&l.u===u; }), coms:cuenta(C.coms,function(c){ return c.p===p.id&&!c.oc&&vis(u,c.u); }), copias:cuenta(C.cop,function(c){ return c.p===p.id; }), sigo:sigo(u,p.u)}; };
     var estado=function(){ var p=C.per[u]; if(!p) return null; return {activo:p.activo, suspendido:!!p.susp, nombre:p.nombre, pid:p.pid, normas:p.normas,
       siguiendo:cuenta(C.sigue,function(f){ return f.a===u&&C.per[f.b]&&C.per[f.b].activo; }), seguidores:cuenta(C.sigue,function(f){ return f.b===u&&C.per[f.a]&&C.per[f.a].activo; }),
@@ -892,6 +897,9 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
     if(fn==='yo_comu_publicar'){ var d=a.d||{}; if(!a.sid||String(a.sid).length<4) return E('Entreno no válido'); if(!d.t) return E('Publicación no válida');
       if(C.pubs.some(function(p){ return p.u===u&&p.sid===a.sid; })) return E('Este entreno ya está publicado');
       var o={}; ['t','min','nser','vol','rec','rut'].forEach(function(k){ if(d[k]!=null) o[k]=d[k]; }); C.n++; C.pubs.push({id:C.n, u:u, sid:a.sid, d:o, creado:new Date().toISOString()}); return R({id:C.n}); }
+    if(fn==='yo_comu_foto_poner'){ var xp=C.pubs.filter(function(p){ return p.id===+a.pub&&p.u===u; })[0]; if(!xp) return E('Publicación no válida'); if(a.foto==null){ delete xp.foto; return R(null); }
+      if(String(a.foto).length>300000||String(a.foto).indexOf('data:image/jpeg;base64,')!==0) return E('Foto no válida'); xp.foto=a.foto; return R(null); }
+    if(fn==='yo_comu_foto'){ var xf=C.pubs.filter(function(p){ return p.id===+a.pub&&!p.oc&&(p.u===u||(okPer(p.u)&&vis(u,p.u))); })[0]; return R(xf&&xf.foto||null); }
     if(fn==='yo_comu_borrar_pub'){ C.pubs=C.pubs.filter(function(p){ return !(p.id===+a.pub&&p.u===u); }); return R(null); }
     if(fn==='yo_comu_like'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); C.likes=C.likes.filter(function(l){ return !(l.p===x.id&&l.u===u); }); if(a.si) C.likes.push({p:x.id,u:u});
       return R({likes:cuenta(C.likes,function(l){ return l.p===x.id; }), yo_like:!!a.si}); }
@@ -4422,9 +4430,9 @@ var NORMAS = ['Respeta a todo el mundo: nada de insultos, burlas sobre el cuerpo
   'Nada de contenido sexual, violento ni ilegal.',
   'No vendas, no hagas publicidad ni pidas datos a nadie.',
   'No des consejos médicos ni de dietas extremas.',
-  'Publica solo tus propios entrenos.',
+  'Publica solo tus propios entrenos, y no subas fotos de otras personas sin su permiso.',
   'Si algo no está bien, denúncialo: lo revisamos y podemos ocultarlo o suspender la cuenta.'];
-var MOTIVOS = ['Insultos, acoso u odio', 'Contenido sexual o violento', 'Spam o publicidad', 'Consejos peligrosos para la salud', 'Se hace pasar por otra persona', 'Otra cosa'];
+var MOTIVOS = ['Insultos, acoso u odio', 'Contenido sexual o violento', 'Spam o publicidad', 'Consejos peligrosos para la salud', 'Se hace pasar por otra persona', 'Foto inapropiada o de otra persona', 'Otra cosa'];
 IC.corazon = '<path d="M12 20s-7.4-4.5-9-9.2C1.9 7.4 4 4.5 7.1 4.5c2 0 3.4 1.1 4.9 3 1.5-1.9 2.9-3 4.9-3 3.1 0 5.2 2.9 4.1 6.3-1.6 4.7-9 9.2-9 9.2z"/>';
 IC.coment = '<path d="M4.5 5h15a1 1 0 0 1 1 1v9.5a1 1 0 0 1-1 1H10l-4.5 3.5V16.5h-1a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1z"/>';
 IC.bandera = '<path d="M5.5 21V4M5.5 4.5h11l-2.2 4 2.2 4h-11"/>';
@@ -4517,6 +4525,8 @@ function cardPub(x, prev) {
     '<button class="fr-t"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"' + (prev ? ' tabindex="-1"' : '') + '><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></button>' +
     (prev ? '' : '<button class="cm-dots' + (ab ? ' on' : '') + '" data-a="cMenu" data-id="' + x.id + '" aria-label="Más opciones" aria-expanded="' + ab + '">' + ic('dots', 20) + '</button>') + '</div>';
   h += '<b class="cm-t">' + esc(x.t) + '</b>';
+  if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
+  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   var K = [[(x.min || 0) + ' min', 'duración'], [String(x.nser || 0), 'series'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'volumen'] : [String(x.nej || 0), 'ejercicios']];
   h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
   if (x.rec) h += '<span class="cm-rec">' + ic('trofeo', 15) + 'Récord: ' + esc(x.rec) + '</span>';
@@ -4831,29 +4841,84 @@ A.finComu = function () {
   if (C.est === undefined) return rpc('yo_comu_estado').then(function (e) { C.est = e || null; A.finComu(); }, function (e) { toast(cErr(e)); });
   if (C.est && C.est.activo && C.est.suspendido) return toast('Tu cuenta de Comunidad está suspendida');
   if (!comuActiva()) return hoja('<h2>Publicar en la Comunidad</h2><p class="mut">Para publicar tus entrenos, primero entra en la Comunidad: eliges el nombre que verán los demás y aceptas las normas.</p><button class="btn" data-a="cIrActivar">' + (C.est ? 'Volver a la Comunidad' : 'Activar Comunidad') + '</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
-  var d = S.x.cpub = pubDe(U), n = d.rut.ej.length;
-  var x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, min: d.min, nser: d.nser, vol: d.vol, rec: d.rec, nej: n, likes: 0, coms: 0, mio: true };
-  hoja('<h2>Publicar en la Comunidad</h2><p class="mut sm">Así lo verá la gente de la Comunidad:</p>' + cardPub(x, true) +
-    '<label class="f">Título<input id="cp-t" maxlength="60" value="' + esc(d.t) + '" data-in="cpTit"></label>' +
-    (n ? '<label class="chk"><input type="checkbox" id="cp-rut" checked data-ch="cpRut"><span>Dejar que copien la rutina (' + n + (n === 1 ? ' ejercicio' : ' ejercicios') + ', con sus series y repeticiones, sin tus pesos)</span></label>' : '') +
-    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>No sale tu peso, ni tus fotos, ni lo que comes.</span></p>' +
-    '<button class="btn" data-a="cPublicar">Publicar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  S.x.cpub = pubDe(U); S.x.cpub.cop = true; if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } pintaPub();
 };
-IN.cpTit = function (t) { var b = document.querySelector('.cm-pub.prev .cm-t'); if (b) b.textContent = t.value.trim() || ' '; };
-CH.cpRut = function (t) { var s = document.querySelector('.cm-pub.prev .cm-cop'); if (s) s.textContent = t.checked ? 'Se podrá copiar la rutina' : 'Sin rutina para copiar'; };
+function pintaPub() {
+  var C = CMU(), d = S.x.cpub, n = d.rut ? d.rut.ej.length : 0;
+  var x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, min: d.min, nser: d.nser, vol: d.vol, rec: d.rec, nej: d.cop ? n : 0, likes: 0, coms: 0, mio: true };
+  hoja('<h2>Publicar en la Comunidad</h2><p class="mut sm">Así lo verá la gente de la Comunidad:</p>' + cardPub(x, true) +
+    '<label class="f">Título<input id="cp-t" maxlength="60" value="' + esc(d.t) + '" data-in="cpTit"></label>' + cpfHtml() +
+    (n ? '<label class="chk"><input type="checkbox" id="cp-rut"' + (d.cop ? ' checked' : '') + ' data-ch="cpRut"><span>Dejar que copien la rutina (' + n + (n === 1 ? ' ejercicio' : ' ejercicios') + ', con sus series y repeticiones, sin tus pesos)</span></label>' : '') +
+    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>No sale tu peso, ni tus fotos de progreso, ni lo que comes.</span></p>' +
+    '<button class="btn" data-a="cPublicar">Publicar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  cpfEnganchar();
+}
+IN.cpTit = function (t) { if (S.x.cpub) S.x.cpub.t = t.value; var b = document.querySelector('.cm-pub.prev .cm-t'); if (b) b.textContent = t.value.trim() || ' '; };
+CH.cpRut = function (t) { if (S.x.cpub) S.x.cpub.cop = t.checked; var s = document.querySelector('.cm-pub.prev .cm-cop'); if (s) s.textContent = t.checked ? 'Se podrá copiar la rutina' : 'Sin rutina para copiar'; };
 A.cPublicar = function (el) {
   var U = S.fin, d = S.x.cpub, C = CMU(); if (!U || !d || el.disabled) return;
   var t = String(($('#cp-t') || {}).value || '').trim(); if (!t) return toast('Ponle un título');
-  d.t = t.slice(0, 60); if (!$('#cp-rut') || !$('#cp-rut').checked) delete d.rut;
+  var dd = { t: t.slice(0, 60), min: d.min, nser: d.nser, vol: d.vol, rec: d.rec }; if (d.rut && $('#cp-rut') && $('#cp-rut').checked) dd.rut = d.rut;
+  var foto = CPF ? cpfJpeg() : null;
   el.disabled = true; el.textContent = 'Publicando…';
-  rpc('yo_comu_publicar', { sid: U.id, d: d }).then(function (r) {
-    cerrarHoja(); U.pub = (r && r.id) || 1; olvidaFeeds(); if (C.est) C.est.pubs = (C.est.pubs || 0) + 1; C.pers = {};
-    toast('Publicado en la Comunidad', 'ok'); pintar();
+  rpc('yo_comu_publicar', { sid: U.id, d: dd }).then(function (r) {
+    var id = r && r.id, fin = function (msg, cls) { cerrarHoja(); if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } U.pub = id || 1; olvidaFeeds(); if (C.est) C.est.pubs = (C.est.pubs || 0) + 1; C.pers = {}; toast(msg, cls); pintar(); };
+    if (!foto || !id) return fin('Publicado en la Comunidad', 'ok');
+    el.textContent = 'Subiendo la foto…';
+    rpc('yo_comu_foto_poner', { pub: id, foto: foto }).then(function () { C.fotos = C.fotos || {}; C.fotos[id] = foto; fin('Publicado en la Comunidad, con tu foto', 'ok'); },
+      function () { fin('Publicado, pero la foto no se ha podido subir'); });
   }, function (e) {
     var m = cErr(e); if (/ya está publicado/.test(m)) { cerrarHoja(); U.pub = 1; pintar(); return toast('Este entreno ya estaba en la Comunidad'); }
     el.disabled = false; el.textContent = 'Publicar'; toast(m);
   });
 };
+
+/* ---------- la foto de una publicación: opcional; se coloca (arrastrar y zoom) en 4:5 y se reduce a 864 × 1080 en JPEG.
+   Al volver a dibujarla en el móvil pierde la ubicación y los datos de la cámara (EXIF). Se guarda aparte (indep.comu_foto, 007)
+   y solo se pide al verla (yo_comu_foto), con las mismas reglas que la publicación ---------- */
+var CPF = null, CPF_W = 240, CPF_H = 300;
+function cpfHtml() {
+  if (!CPF) return '<label class="btn sec cp-foto">' + ic('foto', 18) + 'Añadir una foto (opcional)<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>';
+  return '<div class="cp-f"><div class="crop cp-crop" id="cp-crop" style="width:' + CPF_W + 'px;height:' + CPF_H + 'px"><img id="cp-i" src="' + CPF.url + '" alt="" draggable="false"></div>' +
+    '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CPF.z + '" data-in="cpZ" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla.</small>' +
+    '<button class="link rojo-t izq" data-a="cpFotoQuitar">Quitar la foto</button></div>' +
+    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>La verán las personas de la Comunidad. Le quitamos la ubicación y los datos de la cámara. No subas fotos de otras personas sin su permiso.</span></p>';
+}
+CH.cpFoto = function (t) {
+  var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
+  var u = URL.createObjectURL(f), im = new Image();
+  im.onload = function () { CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height) }; pintaPub(); };
+  im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
+  im.src = u;
+};
+A.cpFotoQuitar = function () { if (CPF) URL.revokeObjectURL(CPF.url); CPF = null; pintaPub(); };
+function cpfLim() { var C = CPF, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - CPF_W) / 2, Math.min((W - CPF_W) / 2, C.x)); C.y = Math.max(-(H - CPF_H) / 2, Math.min((H - CPF_H) / 2, C.y)); return { W: W, H: H }; }
+function cpfPinta() {
+  var C = CPF, i = $('#cp-i'); if (!C || !i) return; var d = cpfLim();
+  i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (CPF_W / 2 + C.x - d.W / 2) + 'px'; i.style.top = (CPF_H / 2 + C.y - d.H / 2) + 'px';
+  var pv = $('#cp-prev-img'); if (pv && !cpfPinta.t) cpfPinta.t = setTimeout(function () { cpfPinta.t = 0; var q = $('#cp-prev-img'); if (q && CPF) q.src = cpfJpeg(0.6, 0.4); }, 120);
+}
+function cpfEnganchar() {
+  var box = $('#cp-crop'); if (!box || !CPF) return; cpfPinta(); var ini = null;
+  box.addEventListener('pointerdown', function (ev) { ini = { px: ev.clientX, py: ev.clientY, x: CPF.x, y: CPF.y }; try { box.setPointerCapture(ev.pointerId); } catch (e) { } ev.preventDefault(); });
+  box.addEventListener('pointermove', function (ev) { if (!ini) return; CPF.x = ini.x + ev.clientX - ini.px; CPF.y = ini.y + ev.clientY - ini.py; cpfPinta(); });
+  var fin = function () { ini = null; }; box.addEventListener('pointerup', fin); box.addEventListener('pointercancel', fin);
+}
+IN.cpZ = function (t) { if (!CPF) return; CPF.z = +t.value || 1; cpfPinta(); };
+function cpfJpeg(q, esc_) {
+  var C = CPF, d = cpfLim(), k = (esc_ || 1) * 1080 / CPF_H, W = Math.round(CPF_W * k), H = Math.round(CPF_H * k), cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  var x = cv.getContext('2d'); x.fillStyle = '#000'; x.fillRect(0, 0, W, H); x.drawImage(C.im, (CPF_W / 2 + C.x - d.W / 2) * k, (CPF_H / 2 + C.y - d.H / 2) * k, d.W * k, d.H * k);
+  var u = cv.toDataURL('image/jpeg', q || 0.75); if (!esc_ && u.length > 360000) u = cv.toDataURL('image/jpeg', 0.6); if (!esc_ && u.length > 360000) u = cv.toDataURL('image/jpeg', 0.45); return u;
+}
+/* las fotos del feed: se piden una vez cada una, al pintarse */
+function cargaFotosComu() {
+  var C = CMU(); C.fotos = C.fotos || {}; C.fotoPide = C.fotoPide || {};
+  Array.prototype.forEach.call(document.querySelectorAll('.cm-foto[data-pf]:not(.ok)'), function (el) {
+    var id = el.getAttribute('data-pf'); if (C.fotos[id]) { el.classList.add('ok'); el.innerHTML = '<img src="' + C.fotos[id] + '" alt="">'; return; }
+    if (C.fotoPide[id]) return; C.fotoPide[id] = 1;
+    rpc('yo_comu_foto', { pub: +id }).then(function (f) { if (!f) return; C.fotos[id] = f; Array.prototype.forEach.call(document.querySelectorAll('.cm-foto[data-pf="' + id + '"]'), function (e2) { e2.classList.add('ok'); e2.innerHTML = '<img src="' + f + '" alt="">'; }); }, function () { C.fotoPide[id] = 0; });
+  });
+}
 
 arrancar();
 </script>
