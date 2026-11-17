@@ -3654,6 +3654,24 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .ci-g{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:24px;align-items:start}
 @media(max-width:699px){.ci-mg button{height:46px}}
 .ci-g .ci-cal{margin:0;position:sticky;top:0}
+
+/* v53.4.163 · Progreso de la app del cliente en dos vistas y las próximas fechas arriba */
+.pf-fe{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px;margin:0 0 12px;font:inherit;text-align:left;color:var(--tx)}
+button.pf-fe{cursor:pointer}
+.pf-it{display:flex;flex-direction:column;gap:2px;border-radius:15px;padding:10px 11px;background:#F4F4F6;min-width:0}
+.pf-it.solo{grid-column:span 2}
+.pf-it .lb{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.4px;color:#6B6B70}
+.pf-it .lb .ic,.pf-it .lb svg{width:15px;height:15px;margin:0}
+.pf-it .cu{font-size:21px;font-weight:800;line-height:1.15;margin-top:2px}
+.pf-it .fe{font-size:13px;font-weight:700;color:#3A3A3C}
+.pf-it.k-rev .lb{color:#D13B3B}.pf-it.k-foto .lb{color:#3B6FD1}.pf-it.k-peso .lb{color:#13915A}.pf-it.k-medidas .lb{color:#C2620F}
+.pf-it.toca{background:#111;color:#fff}.pf-it.toca .fe{color:rgba(255,255,255,.75)}.pf-it.toca .cu{color:#fff}
+.pf-it.toca.k-rev .lb{color:#FF7A7A}.pf-it.toca.k-foto .lb{color:#8FB2FF}.pf-it.toca.k-peso .lb{color:#6FD6A0}.pf-it.toca.k-medidas .lb{color:#FFB04D}
+.pf-pt{position:sticky;top:0;z-index:5;background:var(--bg);padding:6px 0 10px;margin:0 0 4px}
+.pf-seg{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:#E4E4E8;border-radius:14px;padding:4px}
+.pf-seg button{border:0;background:none;height:40px;border-radius:11px;font:inherit;font-weight:800;font-size:14.5px;color:#6B6B70;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.pf-seg button.on{background:#fff;color:#111;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.pf-seg .ic,.pf-seg svg{width:17px;height:17px;margin:0}
 </style>
 </head>
 <body>
@@ -3715,7 +3733,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.162';
+var APP_V = 'v53.4.163';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7057,7 +7075,7 @@ A.continuar=function(){ CL.tab='entreno'; pintarCl(); };
 A.terminarYa=function(){ CL.tab='entreno'; pintarCl(); A.finalizar(); };
 A.enviarPend=function(){ enviarPendiente(false); };
 A.volverPend=function(){ if(!CL.dr) return; delete CL.dr.envio; guardarBorrador(true); CL.tab='entreno'; pintarCl(); window.scrollTo(0,0); };
-function cancelarYa(){ var ed=CL.dr&&CL.dr.edit, k=CL.dr&&CL.dr.k; CL.dr=null; LS.del(KB()); cancelarNube(k); resetSync(); ocultarRest(); pararReloj(); cerrarTm(); CL.tab=ed?'progreso':'hoy'; pintarCl(); toast(ed?'Sin cambios: el entreno se queda como estaba.':'Entreno cancelado. No se ha guardado nada.'); }
+function cancelarYa(){ var ed=CL.dr&&CL.dr.edit, k=CL.dr&&CL.dr.k; CL.dr=null; LS.del(KB()); cancelarNube(k); resetSync(); ocultarRest(); pararReloj(); cerrarTm(); CL.tab=ed?'progreso':'hoy'; if(ed) CL.pSub='ent'; pintarCl(); toast(ed?'Sin cambios: el entreno se queda como estaba.':'Entreno cancelado. No se ha guardado nada.'); }
 A.descartar=function(){ if(CL.dr&&CL.dr.edit) return confirmar('¿Salir sin guardar los cambios? El entreno se queda como estaba.','Salir sin guardar',cancelarYa,'Seguir editando'); confirmar('¿Cancelar este entreno? No se guardará nada de lo que has apuntado y tu rutina no cambia.','Sí, cancelar entreno',cancelarYa,'Volver'); };
 A.cancelarEntreno=A.descartar;
 A.quitarEj=function(el){
@@ -8003,7 +8021,7 @@ function terminadoOk(dr,r,prs,tarde,datos){
   LS.del(KB()); CL.dr=null; resetSync(); ocultarRest(); pararReloj();
   return cargando(datos&&!datos.bloqueo?Promise.resolve(datos):api('apiClienta',BOOT.token)).then(function(d){ CL.d=d; colaLocal(d); snapGuardar(SNAP.k(),JSON.stringify(d)); },function(){}).then(function(){
     if(tarde){ CL.keep=true; pintarCl(); toast(ed?'Cambios del entreno enviados':'Tu entreno se ha enviado','ok'); return; }
-    if(ed){ cerrarModal(); CL.tab='progreso'; pintarCl(); toast('Entreno actualizado','ok'); return; }
+    if(ed){ cerrarModal(); CL.tab='progreso'; CL.pSub='ent'; pintarCl(); toast('Entreno actualizado','ok'); return; }
     var U={r:r,prs:prs||[],rutina:dr.rutina||'',fecha:dr.fecha||hoyStr(),ej:r.ej||[],primero:((CL.d&&CL.d.sesiones)||[]).length===1}; logrosInit(); logrosTrasEntreno(U);      // v53.4.28: su primer entreno → «Sube tu primer entreno»      // v47: sus logros nuevos, en la pantalla de «¡Enhorabuena!»
     CL.tab='hoy'; pintarCl(); CL.finSlide=0; abrirFin(U);
   });
@@ -9830,15 +9848,37 @@ A.cpCopiar=function(){
 function modalTexto(t){ modal('<h2>Tu lista</h2><textarea rows="12" readonly>'+esc(t)+'</textarea><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); }
 
 /* ---------- PROGRESO ---------- */
+/* v53.4.163 · Progreso en dos vistas (Javier: «se hace súper largo en el móvil»): arriba, en las dos, las próximas fechas;
+   «Métricas» (peso y medidas, fotos, tu ciclo) y «Entrenos» (totales y récords, tus entrenos, progresión por ejercicio, medallas). */
+function revFechas(hoy){
+  var R=revEstado(), F=fotosEstado(), PP=progEstado('peso'), PM=progEstado('medidas'), L=[];
+  function it(k,t,f,ya){ var n=diff(hoy,f), cu=ya?'Hecho':n<0?'Pendiente':n===0?'Hoy':n===1?'Mañana':'En '+n+' días';
+    return '<div class="pf-it k-'+k+(!ya&&n<=0?' toca':'')+'"><span class="lb">'+ic(k)+t+'</span><b class="cu">'+cu+'</b><span class="fe">'+esc(fMedia(f))+'</span></div>'; }
+  if(R) L.push(it('rev','Revisión',R.rv.fecha,R.todo&&diff(hoy,R.rv.fecha)<=0));
+  if(PP) L.push(it('peso','Peso',PP.P.fecha,PP.ok&&PP.n<=0));
+  if(PM) L.push(it('medidas','Medidas',PM.P.fecha,PM.ok&&PM.n<=0));
+  if(F) L.push(it('foto','Fotos',F.fo.fecha,false));
+  if(!L.length) return '';
+  if(L.length%2) L[L.length-1]=L[L.length-1].replace('class="pf-it','class="pf-it solo');
+  var toca=avisosCl().some(function(a){ return a.k==='rev'||a.k==='fotos'||a.k==='pm'; });      // si toca algo, lleva a la campana (como antes)
+  return toca?'<button class="pf-fe" data-a="avisos" aria-label="Tus próximas fechas: ver qué toca">'+L.join('')+'</button>':'<div class="pf-fe">'+L.join('')+'</div>';
+}
 function vProgreso(){
   var d=CL.d, hoy=hoyStr();
   var s30=d.sesiones.filter(function(s){ return s.fecha>=sumar(hoy,-29); }).length;
   var vol=d.sesiones.reduce(function(a,s){ return a+(num(s.volumen)||0); },0);
   var recs=contarRecords(calcMarcas(d.series),d.sesiones);
-  return '<h1 class="tit">Tu progreso</h1>'+revLinea(hoy)+'<div class="kpis">'+kpi(d.sesiones.length,'Entrenos totales',s30+' en los últimos 30 días')+kpi(recs,'Récords conseguidos')+'</div>'+(d.logros?logrosCard():'')+
-    (regCl().peso||regCl().medidas?pesoCard(d.medidas,true,d.registra):'')+(regCl().fotos?fotosCard(CL,true):'')+histCard(CL,false)+cicloClCard()+ejercicioCard(d.series,CL,false)+
-    (vol?'<p class="muted sm center">Has movido '+fN(vol,0)+' kg en total. ¡Sigue así!</p>':'')+'<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
+  var met=((regCl().peso||regCl().medidas)?pesoCard(d.medidas,true,d.registra):'')+(regCl().fotos?fotosCard(CL,true):'')+cicloClCard();
+  var sub=met?(CL.pSub||LS.get('moodon_prog_sub')||'met'):'ent';
+  var h='<h1 class="tit">Tu progreso</h1>'+revFechas(hoy);
+  if(met) h+='<div class="pf-pt"><div class="pf-seg" role="tablist">'+[['met','Métricas','peso'],['ent','Entrenos','pesa']].map(function(x){ return '<button role="tab" aria-selected="'+(sub===x[0])+'" class="'+(sub===x[0]?'on':'')+'" data-a="progSub" data-v="'+x[0]+'">'+ic(x[2])+x[1]+'</button>'; }).join('')+'</div></div>';
+  if(sub==='met') h+=met;
+  else h+='<div class="kpis">'+kpi(d.sesiones.length,'Entrenos totales',s30+' en los últimos 30 días')+kpi(recs,'Récords conseguidos')+'</div>'+histCard(CL,false)+ejercicioCard(d.series,CL,false)+(d.logros?logrosCard():'')+
+    (vol?'<p class="muted sm center">Has movido '+fN(vol,0)+' kg en total. ¡Sigue así!</p>':'');
+  return h+'<p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
 }
+A.progSub=function(el){ var v=el.dataset.v; if(CL.pSub===v) return; CL.pSub=v; LS.set('moodon_prog_sub',v); CL.keep=true; pintarCl();
+  var t=document.querySelector('.pf-pt'); if(t&&t.getBoundingClientRect().top<0) t.scrollIntoView({block:'start'}); };
 A.medidas=function(){
   var hoy=hoyStr(), R=regCl(), P=R.peso||!R.medidas, M=R.medidas;
   modal('<h2>'+(P&&M?'Peso y medidas':P?'Tu peso':'Tus medidas')+'</h2><p class="muted sm">'+(P?'Mejor en ayunas y a la misma hora. ':'')+(M?'Medidas en cm. Rellena solo lo que tengas.':'')+'</p>'+
@@ -19045,7 +19085,7 @@ CH.finFoto=function(t){
   im.src=u;
 };
 A.finModo=function(el){ if(CL.finModo===el.dataset.v) return; CL.finModo=el.dataset.v; if(CL.ultEntreno) abrirFin(CL.ultEntreno); };
-A.finVerTodo=function(){ cerrarModal(); CL.tab='progreso'; pintarCl(); setTimeout(function(){ var h=document.getElementById('hist'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); },120); };
+A.finVerTodo=function(){ cerrarModal(); CL.tab='progreso'; CL.pSub='ent'; pintarCl(); setTimeout(function(){ var h=document.getElementById('hist'); if(h) h.scrollIntoView({behavior:'smooth',block:'start'}); },120); };
 A.finVolver=function(){ if(CL.ultEntreno) abrirFin(CL.ultEntreno); else cerrarModal(); };
 function esPrimeraSes(s){ return !!s&&(CL.d.sesiones||[]).every(function(x){ return x.id===s.id||String(x.fecha)>String(s.fecha); }); }
 A.compartirSes=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return; CL.finSlide=0; var U=ultDeSesion(s); U.primero=esPrimeraSes(s); abrirFin(U); };
