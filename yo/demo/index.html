@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#EFEFF1">
 <script>/* el modo claro/oscuro elegido se pone antes de pintar nada, para que no parpadee */try{var t_=localStorage.getItem('yo_tema');if(t_==='claro'||t_==='oscuro')document.documentElement.setAttribute('data-tema',t_);var o_=t_?t_==='oscuro':matchMedia('(prefers-color-scheme: dark)').matches;document.querySelector('meta[name=theme-color]').setAttribute('content',o_?'#121214':'#EFEFF1');}catch(e){}</script>
@@ -60,7 +60,7 @@ color-scheme:dark}
 --hero-sh:0 18px 40px rgba(0,0,0,.5);--hero-m:#B9B9C1;--flota-b:rgba(255,255,255,.10);
 color-scheme:dark}}
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;touch-action:pan-x pan-y}
 body{margin:0;background:var(--pie);color:var(--tx);font-family:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;font-size:15px;-webkit-font-smoothing:antialiased}
 button,input,textarea,select{font:inherit;color:inherit}
 button{cursor:pointer}
@@ -1987,6 +1987,9 @@ var VISTAS = {};
 A.reintentar = function () { cargar(); };
 
 /* un solo escuchador para toda la app */
+/* sin zoom: ni pellizco ni doble toque (iOS no hace caso al viewport, por eso los gestos) */
+['gesturestart', 'gesturechange', 'gestureend'].forEach(function (t) { document.addEventListener(t, function (ev) { ev.preventDefault(); }, { passive: false }); });
+document.addEventListener('touchmove', function (ev) { if (ev.touches && ev.touches.length > 1) ev.preventDefault(); }, { passive: false });
 document.addEventListener('click', function (ev) {
   var el = ev.target.closest('[data-a]'); if (!el) return;
   var f = A[el.dataset.a]; if (!f) return;
