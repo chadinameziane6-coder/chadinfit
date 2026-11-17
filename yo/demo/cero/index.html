@@ -840,6 +840,10 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .hoy-2{gap:8px}.hoy-c .btn.sec.osc{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28)}
 .rr-cal{display:flex;gap:6px;align-items:flex-start;color:var(--tx2);margin:0}
 .rr-l{margin:4px 0 8px;padding-left:22px;display:flex;flex-direction:column;gap:8px}.rr-l li{padding-left:2px}.rr-l li b{display:block;font-size:14.5px}.rr-l li small{font-size:12.5px}
+/* buscar en Open Food Facts */
+.off{display:flex;flex-direction:column;gap:6px;padding:8px 0 4px;border-top:1px solid var(--linea)}
+.off .btn{margin:0}.off small{font-size:12px}.off-t{margin:2px 0}
+.off-k{display:flex;flex-direction:column;align-items:flex-end;gap:2px;font-size:13px;font-weight:700;white-space:nowrap}.off-k em{font-style:normal;font-size:10.5px;font-weight:700;padding:2px 6px;border-radius:6px;background:var(--suave);color:var(--tx2)}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -3911,8 +3915,38 @@ VISTAS.nbuscar = function () {
 function nbFilas() {
   var B = S.x.nb || {}, L = B.q ? buscaAl(B.q) : recientes();
   var cab_ = B.q ? (L.length ? '' : '<p class="mut sm">' + (!NUT_OK || S.alMO === null ? 'Cargando los alimentos…' : 'No sale nada con «' + esc(B.q) + '». Prueba con otra palabra, escanea el código o créalo con «Alimento nuevo».') + '</p>') : (L.length ? '<small class="mut">Los últimos que has apuntado</small>' : '<p class="mut sm">Escribe para buscar entre los alimentos de MOOD ON (también los de Mercadona) y los tuyos.</p>');
-  return '<div id="nb-l" class="card lista-b">' + cab_ + L.map(function (a) { return '<button class="fila-b fila-x" data-a="nbElegir" data-k="' + esc(a.key) + '"><span class="col"><b>' + esc(a.n) + (a.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc([a.sub, fmil(a.k) + ' kcal / 100 g'].filter(Boolean).join(' · ')) + '</small></span>' + ic('mas', 16) + '</button>'; }).join('') + '</div>';
+  return '<div id="nb-l" class="card lista-b">' + cab_ + L.map(function (a) { return '<button class="fila-b fila-x" data-a="nbElegir" data-k="' + esc(a.key) + '"><span class="col"><b>' + esc(a.n) + (a.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc([a.sub, fmil(a.k) + ' kcal / 100 g'].filter(Boolean).join(' · ')) + '</small></span>' + ic('mas', 16) + '</button>'; }).join('') + offHtml(B) + '</div>';
 }
+/* buscar en Open Food Facts por nombre: solo si lo toca; solo se envía lo que ha escrito (nunca su nombre ni su cuenta) */
+function offHtml(B) {
+  var q = String(B.q || '').trim(); if (q.length < 3) return '';
+  var X = S.x.off && S.x.off.q === q ? S.x.off : null;
+  if (!X) return '<div class="off"><button class="btn sec" data-a="offBuscar">' + ic('buscar', 17) + 'Buscar «' + esc(q.slice(0, 30)) + '» en Open Food Facts</button><small class="mut">Solo se envía lo que has escrito. Nunca tu nombre ni tu cuenta.</small></div>';
+  if (X.est === 'c') return '<div class="off"><p class="mut sm">Buscando en Open Food Facts…</p></div>';
+  if (X.est === 'e') return '<div class="off"><p class="mut sm">No se ha podido buscar ahora (sin conexión o la base no responde).</p><button class="btn sec" data-a="offBuscar">Volver a intentarlo</button></div>';
+  if (!X.L.length) return '<div class="off"><p class="mut sm">Open Food Facts no tiene nada con «' + esc(q) + '» y sus datos completos. Prueba con otra palabra o la marca.</p></div>';
+  return '<div class="off"><small class="mut off-t">De Open Food Facts · al elegirlo se copia a tus alimentos</small>' + X.L.map(function (a, i) {
+    return '<button class="fila-b fila-x" data-a="offElegir" data-i="' + i + '"><span class="col"><b>' + esc(a.n) + '</b><small>' + esc(a.m || '') + '</small></span><span class="off-k"><span>' + fmil(a.k) + ' kcal</span><em>Open Food Facts</em></span></button>'; }).join('') + '</div>';
+}
+A.offBuscar = function () {
+  var q = String((S.x.nb || {}).q || '').trim(); if (q.length < 3) return;
+  S.x.off = { q: q, est: 'c', L: [] }; var l = $('#nb-l'); if (l) l.outerHTML = nbFilas();
+  var u = 'https://world.openfoodfacts.org/cgi/search.pl?search_terms=' + encodeURIComponent(q) + '&search_simple=1&action=process&json=1&page_size=24&lc=es&tagtype_0=countries&tag_contains_0=contains&tag_0=spain&fields=code,product_name,product_name_es,brands,nutriments';
+  fetch(u, { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (j) {
+    if (!S.x.off || S.x.off.q !== q) return;
+    S.x.off.L = ((j && j.products) || []).map(function (p) { var n = p.nutriments || {}, k = num(n['energy-kcal_100g']), pr = num(n.proteins_100g), h = num(n.carbohydrates_100g), g = num(n.fat_100g), nom = p.product_name_es || p.product_name;
+      if (!nom || k == null || pr == null || h == null || g == null || k > 950) return null;
+      var o = { ean: p.code || '', n: String(nom).trim().slice(0, 80), m: p.brands ? String(p.brands).split(',')[0].trim().slice(0, 40) : '', k: Math.round(k), p: pr, h: h, g: g };
+      [['fi', 'fiber_100g'], ['az', 'sugars_100g'], ['sa', 'saturated-fat_100g'], ['sal', 'salt_100g']].forEach(function (x) { var v = num(n[x[1]]); if (v != null && v >= 0 && v <= 100) o[x[0]] = Math.round(v * 10) / 10; });
+      return o; }).filter(Boolean).slice(0, 15);
+    S.x.off.est = 'ok'; var l2 = $('#nb-l'); if (l2) l2.outerHTML = nbFilas();
+  }, function () { if (S.x.off && S.x.off.q === q) { S.x.off.est = 'e'; var l3 = $('#nb-l'); if (l3) l3.outerHTML = nbFilas(); } });
+};
+A.offElegir = function (el) {
+  var a = S.x.off && S.x.off.L[+el.dataset.i]; if (!a) return;
+  var ya = a.ean && alimentos().filter(function (x) { return x.ean && x.ean === a.ean; })[0]; if (ya) return hojaCuanto(ya, null);
+  var b = Object.assign({ id: 'al' + rand(8), tipo: 'al', off: 1 }, a); guardaBiblio(b); var a2 = alDe('u:' + b.id); if (a2) hojaCuanto(a2, null);
+};
 IN.nbQ = function (t) { S.x.nb.q = t.value; var l = $('#nb-l'); if (l) l.outerHTML = nbFilas(); };
 A.nbCom = function (el) { S.x.nb.c = +el.dataset.v; Array.prototype.forEach.call(el.parentNode.children, function (b) { b.classList.toggle('on', b === el); }); };
 A.nbElegir = function (el) { var a = alDe(el.dataset.k); if (a) hojaCuanto(a, null); };
