@@ -1468,6 +1468,10 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
 .cm-mac .p i{background:var(--m-p)}.cm-mac .h i{background:var(--m-h)}.cm-mac .g i{background:var(--m-g)}
 .cm-quien.rv{margin:12px 0 4px}
 .rc-acc .btn{flex:1}
+/* comidas suyas (18 nov) */
+.n-ch2 .n-cn{border:0;background:none;padding:0;color:inherit;text-align:left;font:inherit;cursor:pointer;min-width:0}
+.n-com-mas{margin:4px 0 14px}
+.rojo-t{color:var(--rojo)!important}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -1821,6 +1825,8 @@ function demoRunEmpezar() {
 /* los ejercicios nuevos del Word (pendientes de meter en la biblioteca de MOOD ON): una lista solo de la demo, por tipo */
 window.YO_NUEVOS = [];
 window.YO_REVISAR = [
+  { t: 'Nuevo · Comidas tuyas: Snack, Pre entreno… (18 nov)', d: 'Nutrición → abajo, «Añadir otra comida»: nombre y dónde va; se lleva el 10 % y las demás bajan. Tocando el nombre de cualquier comida, cambiarlo (y quitar las tuyas).',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'nutri'; pintar(); var b = document.querySelector('[data-a=comNueva]'); if (b) b.scrollIntoView({ block: 'center' }); } },
   { t: 'Nuevo · Recetas en la Comunidad (18 nov)', d: 'Comunidad → filtro «Recetas»: la tarjeta con raciones, kcal y macros por ración; «Ver receta» y «Guardar en mis recetas». En tu receta (Nutrición → Recetas), «Compartir», con su foto u otra.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'comu'; var C = CMU(); C.tab = 'd'; C.ff = 'rec'; pintar(); } },
   { t: 'Nuevo · Añadir alimento: lo que más tomas, primero (18 nov)', d: 'Al tocar «+» en una comida: «En el desayuno sueles tomar» y «Otros que tomas a menudo», con la cantidad de siempre; el «+» negro lo añade de un toque (con Deshacer). Al buscar, los tuyos primero.',
@@ -2565,7 +2571,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.4';
+var YO_V = 'yo-1.5';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -6284,9 +6290,27 @@ var REP_DEF = { 2: [50, 50], 3: [30, 40, 30], 4: [25, 35, 15, 25], 5: [20, 10, 3
 var ACT_N = { sed: [1.2, 'Sedent.', 'sedentaria', 'Casi sin ejercicio'], ligera: [1.375, 'Ligera', 'ligera', '1–3 días de ejercicio por semana'], moderada: [1.55, 'Moder.', 'moderada', '3–5 días de ejercicio por semana'], alta: [1.725, 'Alta', 'alta', '6–7 días de ejercicio por semana'], muy: [1.9, 'Muy alta', 'muy alta', 'A diario o con trabajo físico'] };
 S.diario = {}; S.biblio = []; S.alMO = null;
 function nut() { return (S.perfil && S.perfil.nut) || null; }
-function nComidas() { var n = (nut() && nut().n) || 4; return COMIDAS_N[n] ? n : 4; }
-function comidas() { return COMIDAS_N[nComidas()]; }
-function repart() { var N = nut(), n = nComidas(); return N && N.rep && N.rep.length === n ? N.rep : REP_DEF[n]; }
+/* 18 nov (Javier: «que puedan añadir más comidas y ponerles nombre, “Snack” o “Pre entreno”, aparte de las que ya hay»): además de las de siempre
+   (2 a 7, nBase), comidas suyas en nut.ex = [{n: nombre, tras: después de qué comida (-1 = la primera), off: quitada}]. Cada una guarda su número
+   (nBase + su sitio en la lista) para que lo apuntado no cambie de comida; al quitarla solo se oculta. nut.nom: otro nombre para las de siempre. */
+function nBase() { var n = (nut() && nut().n) || 4; return COMIDAS_N[n] ? n : 4; }
+function extras() { return (nut() && nut().ex) || []; }
+function nComidas() { return nBase() + extras().length; }
+function comidas() { return comNombres(nBase(), (nut() || {}).nom, extras()); }
+function comOff(i) { var j = i - nBase(); return j >= 0 && !!(extras()[j] || {}).off; }
+/* el orden en el que salen: las de siempre y, detrás de cada una, las suyas; las quitadas solo si ese día tienen algo apuntado */
+function comOrden(D) { return comOrdenDe(nBase(), extras(), D); }
+function comNombres(nb, nom, E) { return COMIDAS_N[nb].map(function (x, i) { return (nom && nom[i]) || x; }).concat(E.map(function (e) { return e.n; })); }
+function comOrdenDe(nb, E, D) {
+  var o = [], con = function (j) { var e = E[j]; return !e.off || (D && D.it.some(function (x) { return (x.c | 0) === nb + j; })); };
+  E.forEach(function (e, j) { if (e.tras === -1 && con(j)) o.push(nb + j); });
+  for (var i = 0; i < nb; i++) { o.push(i); E.forEach(function (e, j) { if (e.tras === i && con(j)) o.push(nb + j); }); }
+  E.forEach(function (e, j) { if ((e.tras == null || e.tras >= nb) && con(j)) o.push(nb + j); });
+  return o;
+}
+function repDef(nb, E) { var ne = E.filter(function (e) { return !e.off; }).length, b = REP_DEF[nb].map(function (x) { return x * (100 - 10 * ne) / 100; }), r = b.map(Math.round).concat(E.map(function (e) { return e.off ? 0 : 10; }));
+  var d = 100 - r.reduce(function (a, x) { return a + x; }, 0); if (d) r[r.indexOf(Math.max.apply(null, r))] += d; return r; }
+function repart() { var N = nut(), n = nComidas(); return N && N.rep && N.rep.length === n ? N.rep : repDef(nBase(), extras()); }
 function fmil(v) { return String(Math.round(v || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }
 function f1(v) { return fN(Math.round((v || 0) * 10) / 10, 1); }
 function diaDe(f) { return S.diario[f] || { it: [] }; }
@@ -6298,7 +6322,7 @@ function guardaDia(f) {
 }
 function nd() { return S.x.nd || hoyStr(); }
 /* las comidas por la hora: lo que toca ahora */
-function comidaAhora() { var h = new Date().getHours(), n = nComidas(); if (n === 2) return h < 17 ? 0 : 1; if (n === 3) return h < 11 ? 0 : h < 17 ? 1 : 2; if (n === 4) return h < 11 ? 0 : h < 16 ? 1 : h < 19 ? 2 : 3; if (n === 5) return h < 10 ? 0 : h < 13 ? 1 : h < 16 ? 2 : h < 19 ? 3 : 4;
+function comidaAhora() { var h = new Date().getHours(), n = nBase(); if (n === 2) return h < 17 ? 0 : 1; if (n === 3) return h < 11 ? 0 : h < 17 ? 1 : 2; if (n === 4) return h < 11 ? 0 : h < 16 ? 1 : h < 19 ? 2 : 3; if (n === 5) return h < 10 ? 0 : h < 13 ? 1 : h < 16 ? 2 : h < 19 ? 3 : 4;
   if (n === 6) return h < 10 ? 0 : h < 13 ? 1 : h < 16 ? 2 : h < 19 ? 3 : h < 22 ? 4 : 5; return h < 10 ? 0 : h < 13 ? 1 : h < 16 ? 2 : h < 18 ? 3 : h < 20 ? 4 : h < 22 ? 5 : 6; }
 /* lo que toca en cada comida: con los macros de cada comida (si los ha puesto) o con su % del día */
 function objCom(N, i) { if (!N || N.on === false || !N.kcal) return null; var R = N.rm; if (R && R.p && R.p.length === nComidas()) return { k: Math.round(R.p[i] * 4 + R.c[i] * 4 + R.g[i] * 9), p: R.p[i], c: R.c[i], g: R.g[i], mac: 1 }; var f = repart()[i] / 100; return { k: Math.round(N.kcal * f), p: Math.round(N.p * f), c: Math.round(N.c * f), g: Math.round(N.g * f) }; }
@@ -6360,10 +6384,11 @@ function vNutri() {
   h += semanaCard(f);
   h += '<div class="n-acc"><button data-a="nBuscar">' + ic('buscar', 20) + '<span>Buscar</span></button><button data-a="nEscanear">' + ic('codigo', 20) + '<span>Escanear</span></button><button data-a="nEtiqueta">' + ic('etiqueta', 20) + '<span>Etiqueta</span></button><button data-a="nRecetas">' + ic('olla', 20) + '<span>Recetas</span></button></div>';
   var Y = diaDe(sumar(f, -1)).it, OB = objsDia(N, f);
-  C.forEach(function (nom, i) {
-    var L = D.it.filter(function (x) { return (x.c | 0) === i; }), LY = Y.filter(function (x) { return (x.c | 0) === i; }), oc = OB[i];
+  comOrden(D).forEach(function (i) {
+    var nom = C[i], L = D.it.filter(function (x) { return (x.c | 0) === i; }), LY = Y.filter(function (x) { return (x.c | 0) === i; }), oc = OB[i];
     h += comidaCard(nom, i, L, oc, f, LY.length && !cqDe(f, i) ? '<button class="link n-cop n-cop2" data-a="nCopiarCom" data-c="' + i + '">' + ic('copiar', 14) + 'Copiar la ' + (f === hoy ? 'de ayer' : 'del día anterior') + ' · ' + fmil(totDe(LY).k) + ' kcal</button>' : '');      // 18 nov: dentro de la tarjeta
   });
+  if (extras().filter(function (e) { return !e.off; }).length < 4) h += '<button class="btn-dash n-com-mas" data-a="comNueva">' + ic('mas', 16, null, 2.4) + 'Añadir otra comida</button>';
   h += '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Tus calorías son privadas: nunca salen en Comunidad.</span></p>';
   return h + '</div>';
 }
@@ -6415,7 +6440,7 @@ function omLinea(i, t, oc) {
 }
 A.nOmitir = function (el) {
   var c = +el.dataset.c, f = nd(), D = diaDe(f), n = nComidas(), om = (D.om || []).filter(function (q) { return q.c !== c; }), ya = om.map(function (q) { return q.c; }), libres = [], resto = [], j;
-  for (j = 0; j < n; j++) { if (j === c || ya.indexOf(j) >= 0) continue; resto.push(j); if (!D.it.some(function (x) { return (x.c | 0) === j; })) libres.push(j); }
+  for (j = 0; j < n; j++) { if (j === c || ya.indexOf(j) >= 0 || comOff(j)) continue; resto.push(j); if (!D.it.some(function (x) { return (x.c | 0) === j; })) libres.push(j); }
   om.push({ c: c, r: libres.length ? libres : resto }); D.om = om; S.diario[f] = D; guardaDia(f); pintar();
 };
 A.nOmDeshacer = function (el) { var c = +el.dataset.c, f = nd(), D = diaDe(f); D.om = (D.om || []).filter(function (q) { return q.c !== c; }); if (!D.om.length) delete D.om; S.diario[f] = D; guardaDia(f); pintar(); };
@@ -6469,7 +6494,7 @@ function comidaCard(nom, i, L, oc, f, cop) {
   var Q = cqDe(f, i), t = totDe(L), obj = oc ? oc.k : 0, conMac = oc && (oc.p || oc.c || oc.g);
   if (Q) return comidaCuadrada(nom, i, L, oc, Q);
   var R = conMac ? rojosDe(L, t, oc) : {}, pasa = obj && t.k > obj * 1.1, pc = obj ? Math.min(100, Math.round(t.k * 100 / obj)) : 0;
-  var h = '<section class="card n-com n-com2"><div class="n-ch2"><span class="mi">' + ic(comIco(nom), 18) + '</span><span class="col"><b>' + esc(nom) + '</b><small>' + (L.length ? L.length + (L.length === 1 ? ' alimento' : ' alimentos') : 'Aún nada') + (oc && oc.aj ? ' · ajustada' : '') + '</small></span>' +
+  var h = '<section class="card n-com n-com2"><div class="n-ch2"><span class="mi">' + ic(comIco(nom), 18) + '</span><button class="col n-cn" data-a="comEd" data-c="' + i + '" aria-label="' + esc('Cambiar ' + nom) + '"><b>' + esc(nom) + '</b><small>' + (L.length ? L.length + (L.length === 1 ? ' alimento' : ' alimentos') : 'Aún nada') + (oc && oc.aj ? ' · ajustada' : '') + '</small></button>' +
     '<span class="kc' + (pasa ? ' pasa' : '') + '"><b>' + fmil(t.k) + '</b><small>' + (obj ? 'de ' + fmil(obj) + ' kcal' : 'kcal') + '</small></span>' +
     '<button class="n-add" data-a="nBuscar" data-c="' + i + '" aria-label="Añadir a ' + esc(nom.toLowerCase()) + '">' + ic('mas', 16, null, 2.6) + '</button>' + (obj ? '<i class="n-pl"><u style="width:' + pc + '%"' + (pasa ? ' class="pasa"' : '') + '></u></i>' : '') + '</div><div class="n-cb2">';
   h += L.map(function (x) { var u = uniTxt(x), r = R[x.id], gv = gramosVer(x);
@@ -6562,7 +6587,7 @@ function semDiaHtml(lun) {
   var D = diaDe(f), t = totDe(D.it), C = comidas(), d = aDate(f), dn = DIA_N[DIAS7[(d.getDay() + 6) % 7]];
   var h = '<div class="n-sdia"><p><b>' + esc(dn + ' ' + d.getDate()) + '</b> · <span class="nw">' + fmil(t.k) + ' kcal</span>' + (t.k ? ' · <span class="nw">P ' + Math.round(t.p) + '</span> · <span class="nw">HC ' + Math.round(t.h) + '</span> · <span class="nw">G ' + Math.round(t.g) + '</span>' : '') + '</p>';
   if (!D.it.length) h += '<p class="mut sm">Ese día no apuntaste nada.</p>';
-  else C.forEach(function (n, i) { var L = D.it.filter(function (x) { return (x.c | 0) === i; }); if (!L.length) return; h += '<div class="fila-r"><b>' + esc(n) + '</b><span>' + fmil(totDe(L).k) + ' kcal</span></div>'; });
+  else comOrden(D).forEach(function (i) { var n = C[i], L = D.it.filter(function (x) { return (x.c | 0) === i; }); if (!L.length) return; h += '<div class="fila-r"><b>' + esc(n) + '</b><span>' + fmil(totDe(L).k) + ' kcal</span></div>'; });
   return h + '<button class="link" data-a="nSemIr" data-f="' + f + '">Ver ese día ›</button></div>';
 }
 
@@ -6572,7 +6597,7 @@ VISTAS.nbuscar = function () {
   cargaNutri(); var B = S.x.nb || { q: '' }, para = B.para;
   return '<div class="pant pad">' + cab(para === 'rec' ? 'Añadir ingrediente' : 'Añadir a ' + esc(comidas()[B.c].toLowerCase())) +
     '<label class="buscar">' + ic('buscar', 18, 'var(--tx2)') + '<input id="nb-q" data-in="nbQ" value="' + esc(B.q) + '" placeholder="Buscar: pollo, yogur, arroz…" aria-label="Buscar alimento" autocomplete="off"></label>' +
-    (para === 'rec' ? '' : '<div class="chips scroll">' + comidas().map(function (n, i) { return '<button class="chip' + (B.c === i ? ' on' : '') + '" data-a="nbCom" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div>') +
+    (para === 'rec' ? '' : '<div class="chips scroll">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (B.c === i ? ' on' : '') + '" data-a="nbCom" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div>') +
     '<div class="fila2"><button class="btn sec" data-a="nEscanear">' + ic('codigo', 18) + 'Escanear</button><button class="btn sec" data-a="nAlNuevo">' + ic('mas', 18) + 'Alimento nuevo</button></div>' +
     nbFilas() + '</div>';
 };
@@ -6665,7 +6690,7 @@ function hojaCuanto(a, it, pre) {      // pre: un apunte anterior con la cantida
     (uni ? '<div class="seg2"><button class="' + (X.modo === 'u' ? 'on' : '') + '" data-a="cuModo" data-v="u">' + esc(plural(a.uni.charAt(0).toUpperCase() + a.uni.slice(1))) + '</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="cuModo" data-v="g">Gramos</button></div>' : '') +
     '<label class="f" id="cu-l">' + (X.modo === 'u' ? 'Cuántas (' + esc(a.uni) + ' de ' + a.gu + ' g)' : 'Gramos') + '<span class="cu-stp"><button type="button" data-a="cuPaso" data-v="-1" aria-label="Menos">' + ic('menos', 18, null, 2.6) + '</button><input id="cu-v" class="grande" inputmode="decimal" value="' + fN(v, X.modo === 'u' ? 1 : 0) + '" data-in="cuV"><button type="button" data-a="cuPaso" data-v="1" aria-label="Más">' + ic('mas', 18, null, 2.6) + '</button></span></label>' +
     '<div class="n-prev cu-prev" id="cu-p"></div>' +
-    (rec ? '' : '<div class="f">¿En qué comida?<div class="chips">' + comidas().map(function (n, i) { return '<button type="button" class="chip' + (X.c === i ? ' on' : '') + '" data-a="cuCom" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></div>') +
+    (rec ? '' : '<div class="f">¿En qué comida?<div class="chips">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button type="button" class="chip' + (X.c === i ? ' on' : '') + '" data-a="cuCom" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></div>') +
     '<button class="btn cu-ok" id="cu-ok" data-a="cuOk">' + (it ? 'Guardar' : rec ? 'Añadir a la receta' : 'Añadir') + '</button>' + (it ? '<button class="btn sec" data-a="cuBorrar">' + ic('papelera', 18) + 'Quitar</button>' : ''));
   cuPrev();
 }
@@ -6855,7 +6880,7 @@ VISTAS.napuntar = function () {
   if (X.modo === 'g' && porPeso) h += '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>' + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
   else h += '<div class="chips">' + [0.5, 1, 1.5, 2].map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === 0.5 ? '½' : v === 1.5 ? '1½' : v) + '</button>'; }).join('') + '</div><small class="mut">' + (X.r === 1 ? '1 ración' : fN(X.r, 1).replace(/,0$/, '') + ' raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small>';
   h += '</section><section class="card n-tot" id="ar-t">' + arTotHtml(q) + '</section>';
-  h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comidas().map(function (n, i) { return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
+  h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
   if (r.ing && r.ing.length) h += '<section class="card"><b>Ingredientes' + (r.rac > 1 ? ' (la receta entera)' : ' (1 ración)') + '</b>' + r.ing.map(function (i) { var nom = Array.isArray(i) ? alNombre(i[0]) : i.n, g = Array.isArray(i) ? i[1] : i.g; return '<div class="fila-r"><span>' + esc(nom) + '</span><span class="mut">' + fmil(g) + ' g</span></div>'; }).join('') + (r.ex ? '<small class="mut">Además: ' + esc(r.ex) + '</small>' : '') + '</section>';
   if (r.pasos) h += '<section class="card"><b>Cómo se hace</b><p class="txt">' + esc(r.pasos) + '</p></section>';
   if (r.mio) h += '<div class="fila2 rc-acc"><button class="btn sec" data-a="nRecEditar" data-k="' + esc(r.key) + '">' + ic('lapiz', 18) + 'Cambiar o borrar</button>' + (r.cpub ? '' : '<button class="btn sec" data-a="recComu" data-k="' + esc(r.key) + '">' + ic('comu', 18) + 'Compartir</button>') + '</div>' + (r.de ? '<p class="mut sm">Guardada de la Comunidad: la receta de ' + esc(r.de) + '.</p>' : '');      // 18 nov: compartir en la Comunidad
@@ -6982,7 +7007,7 @@ A.nAjustes = function () {
   hoja('<h2>Ajustes de nutrición</h2>' +
     '<button class="fila-b fila-x" data-a="nCalc"><span class="col"><b>Objetivo de calorías</b><small>' + (N ? esc(objTxt(N)) + ' al día' : 'Sin calcular') + '</small></span>' + ic('sig', 18) + '</button>' +
     '<button class="fila-b fila-x" data-a="nMac"' + (N ? '' : ' disabled') + '><span class="col"><b>Macros</b><small>' + (N ? 'Proteína ' + Math.round(N.p) + ' g · Hidratos ' + Math.round(N.c) + ' g · Grasa ' + Math.round(N.g) + ' g' : 'Primero, tu objetivo') + '</small></span>' + ic('sig', 18) + '</button>' +
-    '<button class="fila-b fila-x" data-a="nMac"' + (N ? '' : ' disabled') + '><span class="col"><b>Reparto en comidas</b><small>' + nComidas() + ' comidas · ' + repart().join(' / ') + ' %</small></span>' + ic('sig', 18) + '</button>' +
+    '<button class="fila-b fila-x" data-a="nMac"' + (N ? '' : ' disabled') + '><span class="col"><b>Reparto en comidas</b><small>' + comOrden().length + ' comidas · ' + comOrden().map(function (i) { return repart()[i]; }).join(' / ') + ' %</small></span>' + ic('sig', 18) + '</button>' +
     '<div class="fila-x sw"><span class="col"><b>Llevar mis calorías</b><small id="sw-t">' + (!N || N.on !== false ? 'Ves cuánto te queda cada día' : 'El diario solo guarda lo que comes') + '</small></span><button class="sw-b" role="switch" aria-checked="' + (!N || N.on !== false) + '" aria-label="Llevar mis calorías" data-a="nOn"><span></span></button></div>' +
     '<button class="btn" data-a="cerrarHoja">Listo</button>');
 };
@@ -7045,10 +7070,10 @@ A.caSig = function () {
   if (mano && (mano < 900 || mano > 6000)) return toast('Escribe una cifra entre 900 y 6.000 kcal');
   var k = mano || (r && r.k); if (!k) return; var peso = num(c.peso) || ultPeso() || 65, N = nut() || {};
   var p = Math.round(peso * 1.8 / 5) * 5, g = Math.round(peso * 0.9 / 5) * 5; if (N.kcal === k && N.p) { p = N.p; g = N.g; }
-  S.x.mac = { sexo: c.sexo, edad: num(c.edad), alt: num(c.alt), peso: num(c.peso), act: c.act, obj: mano ? 'mano' : c.obj, pct: mano ? 0 : c.pct, kcal: k, peso_: peso, p: p, g: g, c: Math.max(0, Math.round((k - p * 4 - g * 9) / 4 / 5) * 5), n: nComidas(), rep: repart().slice(), modo: mano ? 'g' : (N.modo || 'gkg'), pk: N.kcal === k ? N.pk : 0, gk: N.kcal === k ? N.gk : 0 };
+  S.x.mac = { sexo: c.sexo, edad: num(c.edad), alt: num(c.alt), peso: num(c.peso), act: c.act, obj: mano ? 'mano' : c.obj, pct: mano ? 0 : c.pct, kcal: k, peso_: peso, p: p, g: g, c: Math.max(0, Math.round((k - p * 4 - g * 9) / 4 / 5) * 5), n: nBase(), rep: repart().slice(), modo: mano ? 'g' : (N.modo || 'gkg'), pk: N.kcal === k ? N.pk : 0, gk: N.kcal === k ? N.gk : 0 };
   ir({ t: 'nmac' });
 };
-A.nMac = function () { cerrarHoja(); var N = nut(); if (!N) return A.nCalc(); S.x.mac = Object.assign({}, N, { peso_: ultPeso() || N.peso || 65, rep: repart().slice(), n: nComidas(), av: !!(N.rm && N.rm.p && N.rm.p.length === nComidas()), rm: N.rm && N.rm.p && N.rm.p.length === nComidas() ? { p: N.rm.p.slice(), c: N.rm.c.slice(), g: N.rm.g.slice() } : null }); ir({ t: 'nmac' }); };
+A.nMac = function () { cerrarHoja(); var N = nut(); if (!N || !N.kcal) return A.nCalc(); S.x.mac = Object.assign({}, N, { peso_: ultPeso() || N.peso || 65, rep: repart().slice(), n: nBase(), av: !!(N.rm && N.rm.p && N.rm.p.length === nComidas()), rm: N.rm && N.rm.p && N.rm.p.length === nComidas() ? { p: N.rm.p.slice(), c: N.rm.c.slice(), g: N.rm.g.slice() } : null }); ir({ t: 'nmac' }); };
 /* 17 nov 2026 (Javier): macros por g/kg (proteína y grasa; los hidratos, solos con lo que queda) o en gramos; de 2 a 7 comidas;
    el reparto por % se cuadra solo (al subir una, bajan las demás) y, para quien sabe más, los macros de cada comida */
 function macIni(M) { M.modo = M.modo || 'gkg'; var pe = M.peso_ || 65; M.pk = M.pk || Math.round(M.p / pe * 10) / 10; M.gk = M.gk || Math.round(M.g / pe * 10) / 10; if (M.modo === 'gkg') macGkg(M); return M; }
@@ -7080,15 +7105,15 @@ VISTAS.nmac = function () {
       return '<div class="mac-f"><span class="col"><b>' + x[1] + '</b><small class="mut">' + fN(g / pe, 1) + ' g/kg · ' + pc(kc) + ' %</small></span><button class="redondo gris sm" data-a="macMenos" data-k="' + x[0] + '" aria-label="Menos ' + x[1].toLowerCase() + '">' + ic('menos', 16) + '</button><label class="mac-in"><input inputmode="numeric" data-in="macG" data-k="' + x[0] + '" value="' + g + '" aria-label="Gramos de ' + x[1].toLowerCase() + '"><span>g</span></label><button class="redondo gris sm" data-a="macMas" data-k="' + x[0] + '" aria-label="Más ' + x[1].toLowerCase() + '">' + ic('mas', 16) + '</button></div>'; }).join('');
   }
   h += '</section>';
-  var C = COMIDAS_N[M.n], sum = M.rep.reduce(function (a, b) { return a + b; }, 0);
-  h += '<section class="card"><div class="card-h"><b>Reparto en comidas</b><small class="mut">opcional</small></div><small class="mut">¿Cuántas comidas haces?</small><div class="seg6">' + [2, 3, 4, 5, 6, 7].map(function (n) { return '<button class="' + (M.n === n ? 'on' : '') + '" data-a="macN" data-v="' + n + '" aria-label="' + n + ' comidas">' + n + '</button>'; }).join('') + '</div>';
+  var E = (nut() || {}).ex || [], C = comNombres(M.n, M.n === nBase() ? (nut() || {}).nom : null, E), O = comOrdenDe(M.n, E), sum = M.rep.reduce(function (a, b) { return a + b; }, 0);      // 18 nov: con las comidas suyas, en su orden
+  h += '<section class="card"><div class="card-h"><b>Reparto en comidas</b><small class="mut">opcional</small></div><small class="mut">¿Cuántas comidas haces?</small><div class="seg6">' + [2, 3, 4, 5, 6, 7].map(function (n) { return '<button class="' + (M.n === n ? 'on' : '') + '" data-a="macN" data-v="' + n + '" aria-label="' + n + ' comidas">' + n + '</button>'; }).join('') + '</div>' + (E.some(function (e) { return !e.off; }) ? '<small class="mut">Y las tuyas: ' + esc(E.filter(function (e) { return !e.off; }).map(function (e) { return e.n; }).join(', ')) + ' (se añaden o se quitan desde Nutrición).</small>' : '');
   if (!M.av) {
-    h += '<div class="rep-bar">' + C.map(function (nom, i) { return '<i style="width:' + M.rep[i] + '%" title="' + esc(nom) + '"></i>'; }).join('') + '</div>' +
-      C.map(function (nom, i) { var f = M.rep[i] / 100; return '<div class="mac-f"><span class="col"><b>' + esc(nom) + ' · ' + fmil(M.kcal * f) + ' kcal</b><small class="mut">P ' + Math.round(M.p * f) + ' g · H ' + Math.round(M.c * f) + ' g · G ' + Math.round(M.g * f) + ' g</small></span><button class="redondo gris sm" data-a="repMenos" data-i="' + i + '" aria-label="Menos en ' + esc(nom) + '">' + ic('menos', 16) + '</button><b class="mac-v">' + M.rep[i] + ' %</b><button class="redondo gris sm" data-a="repMas" data-i="' + i + '" aria-label="Más en ' + esc(nom) + '">' + ic('mas', 16) + '</button></div>'; }).join('') +
+    h += '<div class="rep-bar">' + O.map(function (i) { var nom = C[i]; return '<i style="width:' + M.rep[i] + '%" title="' + esc(nom) + '"></i>'; }).join('') + '</div>' +
+      O.map(function (i) { var nom = C[i], f = M.rep[i] / 100; return '<div class="mac-f"><span class="col"><b>' + esc(nom) + ' · ' + fmil(M.kcal * f) + ' kcal</b><small class="mut">P ' + Math.round(M.p * f) + ' g · H ' + Math.round(M.c * f) + ' g · G ' + Math.round(M.g * f) + ' g</small></span><button class="redondo gris sm" data-a="repMenos" data-i="' + i + '" aria-label="Menos en ' + esc(nom) + '">' + ic('menos', 16) + '</button><b class="mac-v">' + M.rep[i] + ' %</b><button class="redondo gris sm" data-a="repMas" data-i="' + i + '" aria-label="Más en ' + esc(nom) + '">' + ic('mas', 16) + '</button></div>'; }).join('') +
       '<small class="mut">Al subir una comida, las demás bajan solas para que siempre sume 100 %.</small><button class="btn sec" data-a="macAv">' + ic('ajustes', 17) + 'Ajustar los macros de cada comida</button>';
   } else {
     h += '<small class="mut">Pon los gramos de cada macro en cada comida (por ejemplo, menos hidratos en una y más alrededor del entreno). Al cambiar uno, ese macro se cuadra solo en las demás comidas.</small>' +
-      C.map(function (nom, i) { var kc = M.rm.p[i] * 4 + M.rm.c[i] * 4 + M.rm.g[i] * 9;
+      O.map(function (i) { var nom = C[i], kc = M.rm.p[i] * 4 + M.rm.c[i] * 4 + M.rm.g[i] * 9;
         return '<div class="rm-c"><div class="rm-h"><b>' + esc(nom) + '</b><span>' + fmil(kc) + ' kcal</span></div><div class="rm-g">' + MAC_N.map(function (x) {
           return '<div class="rm-m"><small><i class="pt" style="background:' + x[2] + '"></i>' + x[1] + '</small><b>' + M.rm[x[0]][i] + ' g</b><span><button class="redondo gris xs" data-a="rmD" data-k="' + x[0] + '" data-i="' + i + '" data-d="-5" aria-label="Menos ' + x[1].toLowerCase() + ' en ' + esc(nom) + '">' + ic('menos', 14) + '</button><button class="redondo gris xs" data-a="rmD" data-k="' + x[0] + '" data-i="' + i + '" data-d="5" aria-label="Más ' + x[1].toLowerCase() + ' en ' + esc(nom) + '">' + ic('mas', 14) + '</button></span></div>'; }).join('') + '</div></div>'; }).join('') +
       '<button class="link" data-a="macAvNo">Volver al reparto por %</button>';
@@ -7103,7 +7128,7 @@ A.macMas = function (el) { var M = S.x.mac; M[el.dataset.k] += 5; macSyncRm(M); 
 A.macMenos = function (el) { var M = S.x.mac; M[el.dataset.k] = Math.max(0, M[el.dataset.k] - 5); macSyncRm(M); pintar(); };
 var macT; IN.macG = function (t) { var M = S.x.mac, v = parseInt(t.value.replace(/\D/g, ''), 10); if (isNaN(v)) return; M[t.dataset.k] = Math.min(1500, v); macSyncRm(M); clearTimeout(macT); macT = setTimeout(function () { var k = t.dataset.k; pintar(); var i = $('[data-in=macG][data-k=' + k + ']'); if (i) { i.focus(); try { var n = i.value.length; i.setSelectionRange(n, n); } catch (e) { } } }, 700); };
 A.macCuadrar = function () { var M = S.x.mac; M.c = Math.max(0, Math.round((M.kcal - M.p * 4 - M.g * 9) / 4)); macSyncRm(M); pintar(); };
-A.macN = function (el) { var M = S.x.mac; M.n = +el.dataset.v; M.rep = REP_DEF[M.n].slice(); if (M.av) M.rm = macRmDe(M); pintar(); };
+A.macN = function (el) { var M = S.x.mac; M.n = +el.dataset.v; M.rep = repDef(M.n, (nut() || {}).ex || []); if (M.av) M.rm = macRmDe(M); pintar(); };
 A.repMas = function (el) { var M = S.x.mac, i = +el.dataset.i; if (M.rep[i] >= 90) return; M.rep = cuadra(M.rep, i, M.rep[i] + 5, 100); pintar(); };
 A.repMenos = function (el) { var M = S.x.mac, i = +el.dataset.i; if (M.rep[i] <= 0) return; M.rep = cuadra(M.rep, i, M.rep[i] - 5, 100); pintar(); };
 A.macAv = function () { var M = S.x.mac; M.av = true; M.rm = macRmDe(M); pintar(); };
@@ -7113,7 +7138,9 @@ A.macGuardar = function () {
   var M = S.x.mac; if (M.rep.reduce(function (a, b) { return a + b; }, 0) !== 100) return;
   if (!S.perfil) S.perfil = perfilNuevo(); var on = !S.perfil.nut || S.perfil.nut.on !== false;
   macSyncRm(M);
+  var N0 = S.perfil.nut || {};
   S.perfil.nut = { on: on, sexo: M.sexo, edad: M.edad, alt: M.alt, peso: M.peso, act: M.act, obj: M.obj, pct: M.pct, kcal: M.kcal, p: M.p, c: M.c, g: M.g, n: M.n, rep: M.rep.slice(), modo: M.modo, pk: M.pk, gk: M.gk };
+  if (N0.ex && N0.ex.length) S.perfil.nut.ex = N0.ex; if (N0.nom && M.n === (N0.n || 4)) S.perfil.nut.nom = N0.nom;      // 18 nov: se quedan sus comidas y sus nombres
   if (M.av && M.rm) S.perfil.nut.rm = { p: M.rm.p.slice(), c: M.rm.c.slice(), g: M.rm.g.slice() };
   guardaPerfil(); toast('Objetivo guardado', 'ok'); S.pant = null; S.pila = []; S.tab = 'nutri'; arriba(); pintar();
 };
@@ -7183,6 +7210,52 @@ function escLeido(v) { var fn = ESC && ESC.fn; try { if (navigator.vibrate) navi
 A.escCerrar = function () { escCerrar(); };
 A.escNum = function () { var n = document.getElementById('esc-n'); if (!n) return; n.hidden = false; setTimeout(function () { var i = document.getElementById('esc-ean'); if (i) i.focus(); }, 50); };
 A.escNumOk = function () { var v = (($('#esc-ean') || {}).value || '').replace(/\D/g, ''); if (v.length < 8) return escMsg('Escribe los números del código (de 8 a 14).', 'mal'); escLeido(v); };
+
+/* ---------- comidas suyas (18 nov): añadir («Snack», «Pre entreno»…), cambiar el nombre de cualquiera y quitar las suyas ---------- */
+var COM_SUG = ['Snack', 'Pre entreno', 'Post entreno', 'Media tarde', 'Recena'];
+function nutDe() { if (!S.perfil) S.perfil = perfilNuevo(); return S.perfil.nut = S.perfil.nut || { n: 4 }; }
+A.comNueva = function () {
+  var nb = nBase(), C = comidas(), ah = comidaAhora(); S.x.cn = { n: '', tras: ah };
+  var N = nut(), k10 = N && N.kcal ? Math.round(N.kcal * 0.1) : 0;
+  hoja('<h2>Añadir una comida</h2><label class="f">Nombre<input id="cn-n" maxlength="20" placeholder="Ej.: Snack" autocomplete="off"></label>' +
+    '<div class="chips">' + COM_SUG.filter(function (x) { return C.indexOf(x) < 0; }).map(function (x) { return '<button type="button" class="chip" data-a="comSug" data-v="' + esc(x) + '">' + esc(x) + '</button>'; }).join('') + '</div>' +
+    '<div class="f">¿Dónde va?<div class="chips" id="cn-t">' + comOrden().filter(function (i) { return i < nb; }).map(function (i) { return '<button type="button" class="chip' + (i === ah ? ' on' : '') + '" data-a="comTras" data-v="' + i + '">Después de ' + esc(C[i].toLowerCase()) + '</button>'; }).join('') + '</div></div>' +
+    (k10 ? '<p class="mut sm">Le damos el 10 % de tu día (unas ' + fmil(k10) + ' kcal) y las demás comidas bajan un poco para que el total siga igual. Lo cambias cuando quieras en Ajustes → Macros y comidas.</p>' : '') +
+    '<button class="btn" data-a="comNuevaSi">Añadir comida</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  setTimeout(function () { var i = $('#cn-n'); if (i) i.focus(); }, 80);
+};
+A.comSug = function (el) { var i = $('#cn-n'); if (i) i.value = el.dataset.v; var nb = nBase(), C = COMIDAS_N[nb];
+  if (/^pre/i.test(el.dataset.v) || /^post/i.test(el.dataset.v)) { var co = C.indexOf('Comida'); if (co >= 0) A.comTras({ dataset: { v: String(/^pre/i.test(el.dataset.v) ? Math.max(0, co) : co) } }); } };
+A.comTras = function (el) { S.x.cn.tras = +el.dataset.v; Array.prototype.forEach.call(document.querySelectorAll('#cn-t .chip'), function (b) { b.classList.toggle('on', +b.dataset.v === S.x.cn.tras); }); };
+A.comNuevaSi = function () {
+  var n = String(($('#cn-n') || {}).value || '').replace(/\s+/g, ' ').trim().slice(0, 20); if (n.length < 2) return toast('Ponle un nombre a la comida');
+  if (comidas().some(function (x, i) { return !comOff(i) && clave(x) === clave(n); })) return toast('Ya tienes una comida que se llama así');
+  var N = nutDe(), rep = repart().slice(); N.ex = (N.ex || []).concat([{ n: n, tras: S.x.cn.tras }]);
+  rep.push(0); N.rep = cuadra(rep, rep.length - 1, 10, 100);
+  if (N.rm && N.rm.p) N.rm = macRmDe({ rep: N.rep, p: N.p || 0, c: N.c || 0, g: N.g || 0 });
+  guardaPerfil(); cerrarHoja(); toast(n + ' añadida a tus comidas', 'ok'); pintar();
+};
+A.comEd = function (el) {
+  var i = +el.dataset.c, C = comidas(), nb = nBase(), suya = i >= nb, D = diaDe(nd()), hay = D.it.some(function (x) { return (x.c | 0) === i; });
+  S.x.ce = { i: i };
+  hoja('<h2>' + esc(C[i]) + '</h2><label class="f">Nombre<input id="ce-n" maxlength="20" value="' + esc(C[i]) + '" autocomplete="off"></label><button class="btn" data-a="comEdSi">Guardar el nombre</button>' +
+    (suya ? '<button class="btn sec rojo-t" data-a="comQuitar"' + (hay ? ' disabled' : '') + '>' + ic('papelera', 17) + 'Quitar esta comida</button>' + (hay ? '<small class="mut">Para quitarla, primero quita lo que tiene apuntado hoy.</small>' : '<small class="mut">Lo que apuntaste otros días en ella se queda en esos días.</small>') : (nut() && nut().nom && nut().nom[i] ? '<button class="link" data-a="comEdDef">Volver a «' + esc(COMIDAS_N[nb][i]) + '»</button>' : '')) +
+    '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+};
+A.comEdSi = function () {
+  var i = S.x.ce.i, n = String(($('#ce-n') || {}).value || '').replace(/\s+/g, ' ').trim().slice(0, 20); if (n.length < 2) return toast('Ponle un nombre');
+  if (comidas().some(function (x, j) { return j !== i && !comOff(j) && clave(x) === clave(n); })) return toast('Ya tienes una comida que se llama así');
+  var N = nutDe(), nb = nBase(); if (i >= nb) N.ex[i - nb].n = n; else { N.nom = N.nom || {}; if (n === COMIDAS_N[nb][i]) delete N.nom[i]; else N.nom[i] = n; }
+  guardaPerfil(); cerrarHoja(); toast('Nombre cambiado', 'ok'); pintar();
+};
+A.comEdDef = function () { var N = nutDe(); if (N.nom) delete N.nom[S.x.ce.i]; guardaPerfil(); cerrarHoja(); pintar(); };
+A.comQuitar = function () {
+  var i = S.x.ce.i, N = nutDe(), nb = nBase(), e = N.ex && N.ex[i - nb]; if (!e) return;
+  var rep = repart().slice(); e.off = 1; N.rep = cuadra(rep, i, 0, 100);
+  if (N.rm && N.rm.p) N.rm = macRmDe({ rep: N.rep, p: N.p || 0, c: N.c || 0, g: N.g || 0 });
+  guardaPerfil(); cerrarHoja(); toast(e.n + ' quitada', 'ok'); pintar();
+};
+
 
 ;
 /* ---------- Comunidad (tablero 23) ----------
