@@ -3782,6 +3782,24 @@ button.pf-fe{cursor:pointer}
 .pf-seg button{border:0;background:none;height:40px;border-radius:11px;font:inherit;font-weight:800;font-size:14.5px;color:#6B6B70;display:flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
 .pf-seg button.on{background:#fff;color:#111;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .pf-seg .ic,.pf-seg svg{width:17px;height:17px;margin:0}
+/* v53.4.170 · Las próximas fechas en hojitas de calendario (el día, qué toca y cuándo, de un vistazo) y «Métricas | Entrenos» en negro */
+.pf-fe{display:grid;grid-template-columns:repeat(var(--n,3),1fr);gap:8px;padding:10px 10px 9px}
+.pf-it{display:flex;flex-direction:column;align-items:center;text-align:center;gap:0;padding:0;background:none;border-radius:0;min-width:0}
+.pf-hj{width:62px;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;line-height:1.1}
+.pf-hj .hw,.pf-hj .hm{display:block;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.pf-hj .hw{padding:3px 0;background:#F2F2F5;color:#6B6B70}.pf-hj .hm{padding:0 0 4px;color:#8A8A90}
+.pf-hj .hd{display:block;font-size:20px;font-weight:800;letter-spacing:-.03em;padding-top:3px;color:#111}
+.pf-it .pf-q{display:flex;align-items:center;justify-content:center;gap:4px;margin-top:6px;font-size:12.5px;font-weight:800;color:#111;max-width:100%}
+.pf-it .pf-q .ic,.pf-it .pf-q svg{width:12px;height:12px;margin:0;flex:none}
+.pf-it .pf-cu{font-size:11.5px;font-weight:600;color:#6B6B70}
+.pf-it.nx .pf-hj{background:#0D0D10;border-color:#0D0D10;box-shadow:0 6px 16px rgba(127,214,255,.25)}
+.pf-it.nx .pf-hj .hw{background:linear-gradient(90deg,#7FD6FF,#9A8CFF);color:#0D0D10}.pf-it.nx .pf-hj .hd{color:#fff}.pf-it.nx .pf-hj .hm{color:#A9AEC0}
+.pf-it.nx .pf-cu{color:#111;font-weight:800}
+.pf-it.ya .pf-hj{opacity:.55}.pf-it.ya .pf-cu{color:#13915A;font-weight:700}
+.pf-fe[style*="--n:4"] .pf-hj{width:56px}
+.pf-it.toca{background:none;color:inherit}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.pf-seg button.on{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.18)}
 </style>
 </head>
 <body>
@@ -3843,7 +3861,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.169';
+var APP_V = 'v53.4.170';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -9962,16 +9980,27 @@ function modalTexto(t){ modal('<h2>Tu lista</h2><textarea rows="12" readonly>'+e
    «Métricas» (peso y medidas, fotos, tu ciclo) y «Entrenos» (totales y récords, tus entrenos, progresión por ejercicio, medallas). */
 function revFechas(hoy){
   var R=revEstado(), F=fotosEstado(), PP=progEstado('peso'), PM=progEstado('medidas'), L=[];
-  function it(k,t,f,ya){ var n=diff(hoy,f), cu=ya?'Hecho':n<0?'Pendiente':n===0?'Hoy':n===1?'Mañana':'En '+n+' días';
-    return '<div class="pf-it k-'+k+(!ya&&n<=0?' toca':'')+'"><span class="lb">'+ic(k)+t+'</span><b class="cu">'+cu+'</b><span class="fe">'+esc(fMedia(f))+'</span></div>'; }
-  if(R) L.push(it('rev','Revisión',R.rv.fecha,R.todo&&diff(hoy,R.rv.fecha)<=0));
-  if(PP) L.push(it('peso','Peso',PP.P.fecha,PP.ok&&PP.n<=0));
-  if(PM) L.push(it('medidas','Medidas',PM.P.fecha,PM.ok&&PM.n<=0));
-  if(F) L.push(it('foto','Fotos',F.fo.fecha,false));
+  // v53.4.170 (Javier: «que sea visual y de primeras sepas día, qué tienes y cuándo», «hojas en fila, pero no tan grande»):
+  // cada fecha en una hojita de calendario (día de la semana, día y mes), debajo qué toca y cuánto falta; por orden de fecha.
+  // Lo que toca ya (hoy o pendiente) o, si no hay, lo más próximo, en negro con el brillo de MOOD ON. Sin colores por tipo.
+  function it(k,t,f,ya){ var n=diff(hoy,f), d=aDate(f);
+    L.push({k:k,t:t,f:String(f).slice(0,10),ya:!!ya,n:n,cu:ya?'Hecho':n<0?'Pendiente':n===0?'Hoy':n===1?'Mañana':'en '+n+' días',
+      w:diaSemC(d),dn:d.getDate(),m:d.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}); }
+  if(R) it('rev','Revisión',R.rv.fecha,R.todo&&diff(hoy,R.rv.fecha)<=0);
+  if(PP) it('peso','Pesarte',PP.P.fecha,PP.ok&&PP.n<=0);
+  if(PM) it('medidas','Medirte',PM.P.fecha,PM.ok&&PM.n<=0);
+  if(F) it('foto','Fotos',F.fo.fecha,false);
   if(!L.length) return '';
-  if(L.length%2) L[L.length-1]=L[L.length-1].replace('class="pf-it','class="pf-it solo');
+  L.sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; });
+  var ya0=L.filter(function(x){ return !x.ya&&x.n<=0; }), sig=L.filter(function(x){ return !x.ya; })[0];
+  L.forEach(function(x){ x.nx=ya0.length?(ya0.indexOf(x)>=0):x===sig; });
+  var h=L.map(function(x){ return '<div class="pf-it k-'+x.k+(x.nx?' nx':'')+(x.ya?' ya':'')+(!x.ya&&x.n<=0?' toca':'')+'">'+
+    '<span class="pf-hj" aria-hidden="true"><span class="hw">'+esc(x.w)+'</span><span class="hd">'+x.dn+'</span><span class="hm">'+esc(x.m)+'</span></span>'+
+    '<span class="pf-q">'+ic(x.k)+esc(x.t)+'</span><span class="pf-cu">'+esc(x.cu)+'</span>'+
+    '<span class="sr">'+esc(x.t+': '+fMedia(x.f)+', '+x.cu)+'</span></div>'; }).join('');
   var toca=avisosCl().some(function(a){ return a.k==='rev'||a.k==='fotos'||a.k==='pm'; });      // si toca algo, lleva a la campana (como antes)
-  return toca?'<button class="pf-fe" data-a="avisos" aria-label="Tus próximas fechas: ver qué toca">'+L.join('')+'</button>':'<div class="pf-fe">'+L.join('')+'</div>';
+  var st=' style="--n:'+L.length+'"';
+  return toca?'<button class="pf-fe"'+st+' data-a="avisos" aria-label="Tus próximas fechas: ver qué toca">'+h+'</button>':'<div class="pf-fe"'+st+'>'+h+'</div>';
 }
 function vProgreso(){
   var d=CL.d, hoy=hoyStr();
