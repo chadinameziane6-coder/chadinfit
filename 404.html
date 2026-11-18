@@ -215,7 +215,8 @@ h1,h2,.marca b{font-family:var(--tit-f,inherit)}
   function eur(v){ v=Number(v)||0; return (Math.round(v*100)%100?v.toFixed(2).replace('.',','):String(Math.round(v)).replace(/\B(?=(\d{3})+(?!\d))/g,'.'))+' €'; }
   function nada(t){ document.title='Página no encontrada'; pg.innerHTML='<div class="nada"><h1>'+esc(t||'Esta página no existe')+'</h1><p>Revisa el enlace o pídeselo otra vez a tu entrenador.</p><a class="btn" style="max-width:280px" href="/">Ir a MOOD ON</a></div>'; }
   if(!VISTA&&!/^[a-z0-9][a-z0-9-]{1,28}[a-z0-9]$/.test(slug)) return nada();
-  function ev(e){ if(VISTA) return; try{ fetch(API+'/pagina/evento',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({s:slug,e:e}),keepalive:true}).catch(function(){}); }catch(er){} }
+  function ev(e){ if(VISTA) return; try{ if(localStorage.getItem('moodon_coach')) return; }catch(er){}      /* v53.4.169: desde el móvil u ordenador donde un entrenador tiene abierto su panel, no cuenta; el resto, una vez al día por móvil (lo decide el servidor) */
+    try{ fetch(API+'/pagina/evento',{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify({s:slug,e:e}),keepalive:true}).catch(function(){}); }catch(er){} }
   /* v53.4.164: contraste (WCAG) para no poner un color que no se lee sobre fondo oscuro */
   function lumR(h){ var c=parseInt(String(h).slice(1),16), f=function(v){ v/=255; return v<=0.03928?v/12.92:Math.pow((v+0.055)/1.055,2.4); }; return 0.2126*f((c>>16)&255)+0.7152*f((c>>8)&255)+0.0722*f(c&255); }
   function contr(a,b){ var x=lumR(a), y=lumR(b); return (Math.max(x,y)+0.05)/(Math.min(x,y)+0.05); }

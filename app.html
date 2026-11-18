@@ -3843,7 +3843,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.168';
+var APP_V = 'v53.4.169';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -10096,6 +10096,7 @@ function cargarLista(rapido){
     try{ if(CO.lista) ref=CO.resTxt||''; else { ponerResumen(JSON.parse(snap)); ref=snap; } CO.cid=null; pintarLista(); pintado=true; }catch(e){}
   }
   var p=api('coachResumen',CO.pin).then(function(r){
+    if(!DEMO) try{ localStorage.setItem('moodon_coach','1'); }catch(e){}      // v53.4.169: este móvil u ordenador es de un entrenador: sus visitas a las páginas de moodonapp.com no cuentan
     var txt=JSON.stringify(r), igual=ref===txt; snapGuardar(k,txt); CO.resTxt=txt;
     var antes={}, hubo=!!CO.lista; (CO.lista||[]).forEach(function(c){ antes[c.id]=(c.chat&&c.chat.noLeidos)||0; });
     ponerResumen(r);
