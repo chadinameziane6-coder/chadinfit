@@ -3844,8 +3844,12 @@ button.pf-fe{cursor:pointer}
 .cyc-cmp .cyc-l{background:none;padding:0;border-radius:0}.cyc-cmp .cyc-l span{font-size:12.5px;color:#4A4A50;font-weight:600}
 .cyc-cmp .cyc-tip{margin:6px 0 0;font-size:12px;line-height:1.35;background:linear-gradient(90deg,rgba(127,214,255,.16),rgba(154,140,255,.16));border-radius:12px;padding:6px 9px}.cyc-cmp .cyc-tip .ic{width:13px;height:13px;color:#5B5BD6}
 .cyc-acc{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding-top:9px;border-top:1px solid #F0F0F3}.cyc-acc .cyc-ya{margin:0;background:#111;color:#fff;border:0}.cyc-acc .link{display:inline-flex;align-items:center;gap:5px;font-size:13px;margin-left:auto}
+.cyc-kr{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:-2px}
+.cyc-cl{width:32px;height:32px;border-radius:50%;border:0;background:#F2F2F5;color:#111;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}.cyc-cl .ic{width:16px;height:16px;margin:0}
+.cyc-ya2{display:inline-flex;align-items:center;gap:6px;margin:8px 0 0;border:0;border-radius:999px;background:#FDECEC;color:#C8323A;font:800 13px Plus Jakarta Sans,sans-serif;padding:8px 14px;cursor:pointer}.cyc-ya2 .ic{width:15px;height:15px;margin:0;color:#E5484D}
 .cyc-cmp .cyc-av{font-size:10.5px;margin:8px 0 0}
-.ck-rap{padding:14px}.ck-rh b{display:block;font:800 16px Plus Jakarta Sans,sans-serif}.ck-rh small{font-size:12.5px;color:var(--mu);font-weight:600}
+.ck-rap{padding:14px}
+.ck-cab{position:relative}.ck-x{margin-left:auto;align-self:center;width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.7);color:#111;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}.ck-x .ic{width:16px;height:16px;margin:0;transform:rotate(180deg)}.ck-rh b{display:block;font:800 16px Plus Jakarta Sans,sans-serif}.ck-rh small{font-size:12.5px;color:var(--mu);font-weight:600}
 .ck-rn{display:flex;justify-content:space-between;gap:2px;margin-top:12px}
 .ck-rn button{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;font:inherit;cursor:pointer;min-width:0}
 .ck-rn i{position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff)}
@@ -3930,7 +3934,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.172';
+var APP_V = 'v53.4.173';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7066,9 +7070,9 @@ function checkinCard(hoy){
     var mj=!hombreCl(), res=[mj&&e.regla?'Con el periodo':'',mj&&!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',mj&&e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
     return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
   }
-  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div></div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
+  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>'+(CL.ckAb||CL.ckEd?'<button class="ck-x" data-a="ckCierra" aria-label="Cerrar">'+ic('abajo')+'</button>':'')+'</div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
 
-    (hombreCl()?'<input type="hidden" id="ck-dia" value="">'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>':
+    (hombreCl()||!cicloOn()?'<input type="hidden" id="ck-dia" value="">'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>':
     '<div class="fila"><span>¿Estás con el periodo?</span><button class="sw'+(CL.ck.regla?' on':'')+'" data-a="ckRegla" aria-label="Estás con el periodo"><i></i></button></div>'+
     '<div class="muted sm mt6">Márcalo cada día que lo tengas. El día del ciclo se calcula solo y puedes corregirlo.</div>'+
     '<div class="grid2"><label class="f">Día del ciclo<input id="ck-dia" data-k="ckdia" inputmode="numeric" value="'+esc(dia)+'" placeholder="–"></label>'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>'+'</div>'+
@@ -7077,7 +7081,7 @@ function checkinCard(hoy){
     '<details class="ck-sin"'+(CL.ck.sin.length?' open':'')+'><summary>'+ic('mas')+'Síntomas de hoy <span class="muted">(opcional)</span></summary><div class="tipos ck-sl">'+SINT_ORDEN.map(function(k){ var on=CL.ck.sin.indexOf(k)>=0; return '<button class="'+(on?'on':'')+'" data-a="ckSin" data-k="'+k+'" aria-pressed="'+on+'">'+ic(on?'ok':'mas')+esc(SINT[k])+'</button>'; }).join('')+'</div></details>')+      // v52.10
     '<div class="lab lab-i">Energía hoy, del 1 al 10 <button class="i-btn" data-a="ckInfo" aria-label="Qué significa cada número">'+ic('info')+'</button></div><div class="escala e10 ck-col" id="ck-en">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){ return '<button class="'+(CL.ck.energia===v?'on':'')+'" data-a="ckEn" data-v="'+v+'" style="--c:'+CK_10[v-1]+'">'+v+'</button>'; }).join('')+'</div><div class="escala-l"><span>1 · '+gCl('Agotada','Agotado')+'</span><span>10 · A tope</span></div><div class="ck-en-t" id="ck-en-t">'+(CL.ck.energia?esc(CL.ck.energia+' · '+ENE()[CL.ck.energia]):'')+'</div>'+
     '<label class="f">Notas para tu coach <span class="muted">(opcional)</span><textarea id="ck-notas" rows="3" placeholder="'+(hombreCl()?'Cuéntale a tu coach cómo estás: cansancio, dolores, ánimo, hambre, cómo has dormido…':'Cuéntale a tu coach cómo estás: cansancio, dolores, hinchazón, ánimo, hambre, cómo has dormido…')+'">'+esc(e.notas||'')+'</textarea></label>'+
-    '<button class="btn mt" data-a="ckGuardar">Guardar check-in</button>'+(esH?'':'<button class="btn sec mt" data-a="ckCerrar">Ahora no</button>')+'</div>';
+    '<button class="btn mt" data-a="ckGuardar">Guardar check-in</button>'+(esH?(CL.ckAb||CL.ckEd?'<button class="btn sec mt" data-a="ckCierra">Ahora no</button>':''):'<button class="btn sec mt" data-a="ckCerrar">Ahora no</button>')+'</div>';
 }
 /* v53.4.171 (Javier): «¿Cómo te sientes hoy?» con un toque, de rojo (agotada) a verde oscuro (súper a tope); al tocar se abre lo demás
    (el periodo, el día del ciclo, los síntomas, el sueño, la energía del 1 al 10 para afinar y la nota) y se guarda como siempre */
@@ -7092,6 +7096,8 @@ function ckRapidoHtml(){
 }
 A.ckRapido=function(el){ var v=el.dataset.v; CL.ckAb=true; CL.ckQ=v?+v:null; CL.keep=true; pintarCl();
   setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); if(!v){ var t=document.getElementById('ck-notas'); if(t) setTimeout(function(){ t.focus({preventScroll:true}); },350); } },60); };
+A.ckCierra=function(){ CL.ckAb=false; CL.ckQ=null; CL.ckEd=false; CL.keep=true; pintarCl();      // v53.4.173 (Javier): «si quieres volver a salir no se cierra»
+  setTimeout(function(){ var c=document.getElementById('ck-card'); if(c&&c.getBoundingClientRect().top<0) c.scrollIntoView({block:'center',behavior:'smooth'}); },60); };
 A.ckEditar=function(){ CL.ckEd=true; CL.keep=true; pintarCl(); setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); },60); };
 A.ckRegla=function(el){
   CL.ck.regla=!CL.ck.regla; el.classList.toggle('on',CL.ck.regla);
@@ -7153,16 +7159,15 @@ function cicloHoyCard(){
   var C=cicloEstado(), e=diarioDe(hoyStr())||{}, hecho=ckHecho(e);
   if(!C) return '<div class="card cyc cyc-0" id="cyc"><div class="cyc-h"><span class="cyc-ic">'+ic('gota')+'</span><div><b>Tu ciclo</b><small>Te digo en qué fase estás, cuándo te toca el periodo y, con tus registros, cómo te sienta cada fase.</small></div></div>'+
     '<label class="f">¿Cuándo empezó tu último periodo?<input type="date" id="cyc-f" max="'+hoyStr()+'" min="'+sumar(hoyStr(),-60)+'"></label>'+
-    '<div class="row mt6"><button class="btn sm" data-a="cycPrimera">'+ic('ok')+'Empezar</button><button class="link" data-a="cycOff">No quiero verlo</button></div></div>';
+    '<div class="row mt6"><button class="btn sm" data-a="cycPrimera">'+ic('ok')+'Empezar</button><button class="link" data-a="cycOff">No tengo la regla</button></div></div>';
   var fx=C.f==='largo'?'premenstrual':C.f, q=diff(hoyStr(),C.prox), cerca=!C.reglaHoy&&(C.retraso||q<=3);
   /* v53.4.171 (Javier): compacto, con los colores de siempre en el anillo */
   var tip=cicloTipHoy(C);
   return '<div class="card cyc cyc-cmp" id="cyc"><div class="cyc-cr"><div class="cyc-w">'+cicloAnillo(C)+'<div class="cyc-c"><b>'+C.d+'</b><small>'+(C.f==='menstrual'?'de tu periodo':'día')+'</small></div></div>'+
-    '<div class="cyc-tx"><small class="cyc-k">Tu ciclo</small><div class="cyc-f" style="--cf:'+CIC_C[fx]+'"><i></i><b>'+esc(C.f==='menstrual'?'Día '+C.d+' de tu periodo':CIC_N[C.f])+'</b></div>'+
+    '<div class="cyc-tx"><div class="cyc-kr"><small class="cyc-k">Tu ciclo</small><button class="cyc-cl" data-a="cycCal" aria-label="Calendario de tu ciclo" title="Calendario">'+ic('cal')+'</button></div><div class="cyc-f" style="--cf:'+CIC_C[fx]+'"><i></i><b>'+esc(C.f==='menstrual'?'Día '+C.d+' de tu periodo':CIC_N[C.f])+'</b></div>'+
     '<div class="cyc-l">'+(C.f!=='menstrual'?'<span>'+(C.retraso?'Tu periodo se retrasa '+C.retraso+(C.retraso>1?' días':' día'):'Tu periodo, '+(q>0?'en '+q+(q>1?' días':' día'):'hoy')+' · '+esc(fCorta(C.prox)))+'</span>':'<span>Próximo periodo · '+esc(fCorta(sumar(C.ult,C.L)))+'</span>')+
       (C.d<=C.ov+1&&!C.retraso?'<span>Ventana fértil · '+esc(fCorta(C.fIni))+' – '+esc(fCorta(C.fFin))+'</span>':'')+'</div>'+
-      (tip?'<p class="cyc-tip">'+ic('idea')+'<span>'+esc(tip)+'</span></p>':'')+'</div></div>'+
-    '<div class="cyc-acc">'+(cerca?'<button class="btn sm cyc-ya" data-a="cycYa">'+ic('gota')+'Me ha venido hoy</button>':'<span></span>')+'<button class="link" data-a="cycCal">'+ic('cal')+'Calendario</button></div>'+
+      (cerca?'<button class="cyc-ya cyc-ya2" data-a="cycYa">'+ic('gota')+'Me ha venido hoy</button>':'')+(tip?'<p class="cyc-tip">'+ic('idea')+'<span>'+esc(tip)+'</span></p>':'')+'</div></div>'+      // v53.4.173 (Javier): calendario arriba, solo el icono; «Me ha venido hoy» en rojito
     '<p class="muted cyc-av">Aproximado, con tus check-ins'+(C.P.ini.length<2?' (con más periodos apuntados, más preciso)':'')+'. No sirve como método anticonceptivo.</p></div>';
   var h='<div class="card cyc" id="cyc"><div class="cyc-t"><b>Tu ciclo</b><button class="link" data-a="cycCal">'+ic('cal')+'Calendario</button></div>'+
     '<div class="cyc-r"><div class="cyc-w">'+cicloAnillo(C)+'<div class="cyc-c">'+cicloCentro(C)+'</div></div></div>'+
@@ -7183,7 +7188,7 @@ function cycGuardarRegla(f,txt){ return cargando(colaDiario({fecha:f,regla:true}
 A.cycYa=function(){ cycGuardarRegla(hoyStr(),'Apuntado: hoy es el día 1 de tu periodo. Márcalo en tu check-in los días que lo tengas'); };
 A.cycPrimera=function(){ var f=val('cyc-f'); if(!/^\d{4}-\d{2}-\d{2}$/.test(f)||f>hoyStr()) return toast('Elige el día que empezó tu último periodo'); if(f<sumar(hoyStr(),-60)) return toast('Pon una fecha de los últimos 2 meses');
   cycGuardarRegla(f,'¡Listo! Con tus check-ins se irá afinando'); };
-A.cycOff=function(){ confirmar('¿Quitar «Tu ciclo» de Hoy? Puedes volver a ponerlo en Perfil. El check-in sigue igual.','Quitarlo',function(){ var pf=prefCl(); pf.cic={off:1}; guardarPref(); CL.keep=true; pintarCl(); }); };
+A.cycOff=function(){ confirmar('Quitamos «Tu ciclo» de Hoy y las preguntas del periodo de tu check-in. Si cambia, lo vuelves a poner en Perfil → «Tu ciclo».','Quitarlo',function(){ var pf=prefCl(); pf.cic={off:1}; guardarPref(); CL.keep=true; pintarCl(); }); };
 A.cycOn=function(){ var pf=prefCl(); delete pf.cic; guardarPref(); CL.keep=true; pintarCl(); toast('«Tu ciclo» vuelve a salir en Hoy','ok'); };
 A.cycDia=function(el){      // v52.10: apuntar o quitar el periodo de un día desde el calendario
   var f=el.dataset.f, e=diarioDe(f)||{}, si=!e.regla;
@@ -20138,7 +20143,7 @@ function cicloPfCard(){
   var on=cicloOn(), co=!!(CL.d.clienta&&CL.d.clienta.cicloCoach);
   var fila=function(a,t,sub,v){ return '<div class="fila dsc-f"><span>'+t+'<small class="fila-s">'+sub+'</small></span><button class="sw'+(v?' on':'')+'" data-a="'+a+'" aria-label="'+esc(t)+'" aria-pressed="'+v+'"><i></i></button></div>'; };
   return '<div class="card cyc-pf"><div class="card-t">'+ic('gota')+'Tu ciclo</div>'+
-    fila('cycTog','¿Quieres ver tu ciclo en Hoy?','Tu fase, tu próximo periodo y cómo te sienta cada fase según tus registros.',on)+
+    fila('cycTog','¿Quieres ver tu ciclo en Hoy?','Tu fase, tu próximo periodo y cómo te sienta cada fase según tus registros. Apagado (por ejemplo, si no tienes la regla), tu check-in no pregunta por el periodo.',on)+
     fila('cycCoTog','¿Quieres que tu coach vea tu ciclo?','Verá los días de tu periodo, la fase y los síntomas del ciclo para adaptar tu entreno. Puedes quitarlo cuando quieras.',co)+'</div>';
 }
 A.cycTog=function(){ if(!cicloOn()) return A.cycOn(); var pf=prefCl(); pf.cic={off:1}; guardarPref(); CL.keep=true; pintarCl(); toast('«Tu ciclo» ya no sale en Hoy','ok'); };
