@@ -306,6 +306,11 @@ body.pag-sh-on{overflow:hidden}@keyframes pag2s{from{transform:translateY(40px);
 .lista-ej{margin:10px 0 14px;padding-left:20px;color:var(--tx2);font-size:14px}.lista-ej li{margin:3px 0}
 .hecho{background:rgba(19,145,90,.08);border:1px solid rgba(19,145,90,.3);color:var(--ok);border-radius:10px;padding:10px 12px;font-weight:600;font-size:14px;margin-bottom:12px}
 details.otras{margin-top:14px;border-top:1px solid var(--line);padding-top:10px}
+details.otras{border-top:0;padding-top:0}
+details.otras>summary{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px 12px 16px;border-radius:18px;background:#F2F2F5;color:var(--tx)}
+.ot-t b{display:block;font:800 14.5px Plus Jakarta Sans,sans-serif}.ot-t small{display:block;font-size:12.5px;font-weight:600;color:var(--mu);margin-top:1px}
+.ot-ch{width:32px;height:32px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center;flex:none}.ot-ch .ic{width:16px;height:16px;margin:0;transition:transform .2s}
+details.otras[open]>summary{margin-bottom:4px}details.otras[open]>summary .ot-ch .ic{transform:rotate(180deg)}
 details summary{cursor:pointer;list-style:none;color:var(--mg);font-weight:600;font-size:14px}
 details summary::-webkit-details-marker{display:none}
 .otra{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line2)}
@@ -3925,7 +3930,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.171';
+var APP_V = 'v53.4.172';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6809,7 +6814,8 @@ function vHoy(){
     var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); };
     rh.forEach(function(r){ if(!hechaR(r)) h+=rutinaBloque(r,true,null,hoy); });      // v44: la que ya ha hecho no se repite debajo (se puede repetir en «Hacer otra rutina»)
     var otras=d.rutinas.filter(function(r){ return rh.indexOf(r)<0&&vigenteEn(r,hoy,d.rutinas); });
-    if(otras.length) h+='<details class="otras"'+(rh.length?'':' open')+'><summary>'+(rh.length?'Hacer otra rutina':'¿Quieres entrenar igualmente? Elige rutina')+'</summary>'+otras.map(function(r){
+    /* v53.4.172 (Javier): en descanso, «¿Quieres entrenar igualmente?» cerrado; se abre al tocarlo (y se queda abierto mientras no recargue) */
+    if(otras.length) h+='<details class="otras"'+(CL.otAb?' open':'')+'><summary><span class="ot-t">'+(rh.length?'<b>Hacer otra rutina</b>':'<b>¿Quieres entrenar igualmente?</b><small>Elige rutina · '+otras.length+(otras.length===1?' rutina':' rutinas')+'</small>')+'</span><span class="ot-ch">'+ic('abajo')+'</span></summary>'+otras.map(function(r){
       return '<div class="otra"><div><b>'+esc(r.nombre)+'</b><div class="muted sm">'+r.ejercicios.length+' ejercicios'+(r.dias.length?' · '+r.dias.map(function(x){return DL[x];}).join(' '):'')+(hechaR(r)?' · hecha hoy':'')+'</div></div><button class="btn sm'+(hechaR(r)?' sec':'')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(hechaR(r)?'Repetir':'Empezar')+'</button></div>';
     }).join('')+'</details>';
     h+='</div>';
@@ -14744,6 +14750,7 @@ A.gdOpc=function(el){ var v=+el.dataset.v; CO.nd.planes.forEach(function(p){ p.o
 A.gdRep=function(){ CO.nd.repAb=true; CO.nd.mismo=true; ndPintar(); };
 A.gdModo=function(el){ CO.nd.modo=el.dataset.v; CO.nd.mismo=true; ndPintar(); };
 document.addEventListener('toggle',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('gd-mas')&&CO.nd) CO.nd.masAb=t.open; },true);
+document.addEventListener('toggle',function(e){ var t=e.target; if(t&&t.classList&&t.classList.contains('otras')&&typeof CL==='object'&&CL) CL.otAb=t.open; },true);      // v53.4.172
 A.gdHacer=function(el){
   var N=CO.nd; if(!CO.nut){ cargando(cargarNut()).then(function(){ A.gdHacer(el); },function(e){ toast(limpiaErr(e),'err'); }); return; }
   if(N.modo==='gen'&&N.planes.some(function(p){ return p.obj.slice(1).some(function(x){ return num(x)==null; }); })) return toast('Pon proteína, hidratos y grasa para generar los platos (paso 1)','err');
