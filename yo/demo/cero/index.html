@@ -1458,6 +1458,16 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
 .nb-n{font-size:11px;font-weight:800;color:var(--tx3);white-space:nowrap}
 .nb-mas{width:34px;height:34px;border-radius:50%;border:0;background:#0D0D10;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;padding:0}
 .nb-mas.sec{background:var(--suave);color:var(--tx)}
+/* Comunidad: recetas (18 nov) */
+.cm-ff{margin:2px 0 10px}
+.cm-tipo{align-self:flex-start;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--tx2);background:var(--suave);border-radius:999px;padding:4px 10px 4px 8px}
+.cm-foto.rv{aspect-ratio:4/3;margin:0 0 12px}.cm-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.cp-otra{display:inline-flex;align-items:center;gap:6px;margin:2px 0 8px;cursor:pointer}
+.cm-mac{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:var(--tx2);font-weight:600}
+.cm-mac span{display:inline-flex;align-items:center;gap:5px}.cm-mac b{color:var(--tx)}.cm-mac i{width:8px;height:8px;border-radius:50%}
+.cm-mac .p i{background:var(--m-p)}.cm-mac .h i{background:var(--m-h)}.cm-mac .g i{background:var(--m-g)}
+.cm-quien.rv{margin:12px 0 4px}
+.rc-acc .btn{flex:1}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -1487,7 +1497,7 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
     var uid=function(pid){ for(var k in C.per) if(C.per[k].pid===pid && C.per[k].activo && !C.per[k].susp) return k; return null; };
     var sigo=function(x,y){ return C.sigue.some(function(f){ return f.a===x&&f.b===y; }); };
     var cuenta=function(L,f){ return L.filter(f).length; };
-    var pj=function(p){ var q=C.per[p.u]||{}; return {id:p.id, pid:q.pid, nombre:q.nombre, mio:p.u===u, creado:p.creado, foto:!!p.foto, t:p.d.t, c:p.d.c||'', min:p.d.min, nser:p.d.nser, vol:p.d.vol, rec:p.d.rec, nej:(p.d.rut&&p.d.rut.ej||[]).length,
+    var pj=function(p){ var q=C.per[p.u]||{}; return {id:p.id, pid:q.pid, nombre:q.nombre, mio:p.u===u, creado:p.creado, foto:!!p.foto, t:p.d.t, c:p.d.c||'', tipo:p.d.tipo||'', rc:p.d.rc||null, rk:p.d.rc?p.d.rc.k:null, min:p.d.min, nser:p.d.nser, vol:p.d.vol, rec:p.d.rec, nej:(p.d.rut&&p.d.rut.ej||[]).length,
       likes:cuenta(C.likes,function(l){ return l.p===p.id; }), yo_like:C.likes.some(function(l){ return l.p===p.id&&l.u===u; }), coms:cuenta(C.coms,function(c){ return c.p===p.id&&!c.oc&&vis(u,c.u); }), copias:cuenta(C.cop,function(c){ return c.p===p.id; }), sigo:sigo(u,p.u)}; };
     var estado=function(){ var p=C.per[u]; if(!p) return null; return {activo:p.activo, suspendido:!!p.susp, nombre:p.nombre, pid:p.pid, normas:p.normas,
       siguiendo:cuenta(C.sigue,function(f){ return f.a===u&&C.per[f.b]&&C.per[f.b].activo; }), seguidores:cuenta(C.sigue,function(f){ return f.b===u&&C.per[f.a]&&C.per[f.a].activo; }),
@@ -1505,7 +1515,7 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
       return R(L.sort(function(x,y){ return y.id-x.id; }).slice(0,30).map(pj)); }
     if(fn==='yo_comu_publicar'){ var d=a.d||{}; if(!a.sid||String(a.sid).length<4) return E('Entreno no válido'); if(!d.t) return E('Publicación no válida');
       if(C.pubs.some(function(p){ return p.u===u&&p.sid===a.sid; })) return E('Este entreno ya está publicado');
-      var o={}; ['t','min','nser','vol','rec','rut'].forEach(function(k){ if(d[k]!=null) o[k]=d[k]; }); if(d.c) o.c=String(d.c).slice(0,200); C.n++; C.pubs.push({id:C.n, u:u, sid:a.sid, d:o, creado:new Date().toISOString()}); return R({id:C.n}); }
+      var o={}; ['t','min','nser','vol','rec','rut'].forEach(function(k){ if(d[k]!=null) o[k]=d[k]; }); if(d.tipo==='rec'){ if(!d.rc||!(d.rc.ing||[]).length) return E('Receta no válida'); o.tipo='rec'; o.rc=d.rc; } if(d.c) o.c=String(d.c).slice(0,200); C.n++; C.pubs.push({id:C.n, u:u, sid:a.sid, d:o, creado:new Date().toISOString()}); return R({id:C.n}); }
     if(fn==='yo_comu_foto_poner'){ var xp=C.pubs.filter(function(p){ return p.id===+a.pub&&p.u===u; })[0]; if(!xp) return E('Publicación no válida'); if(a.foto==null){ delete xp.foto; return R(null); }
       if(String(a.foto).length>300000||String(a.foto).indexOf('data:image/jpeg;base64,')!==0) return E('Foto no válida'); xp.foto=a.foto; return R(null); }
     if(fn==='yo_comu_foto'){ var xf=C.pubs.filter(function(p){ return p.id===+a.pub&&!p.oc&&(p.u===u||(okPer(p.u)&&vis(u,p.u))); })[0]; return R(xf&&xf.foto||null); }
@@ -1523,7 +1533,7 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
       C.bloq=C.bloq.filter(function(b){ return !(b.a===u&&b.b===o); }); if(a.si){ C.bloq.push({a:u,b:o}); C.sigue=C.sigue.filter(function(f){ return !((f.a===u&&f.b===o)||(f.a===o&&f.b===u)); }); } return R(null); }
     if(fn==='yo_comu_silenciar'){ var o=uid(a.p); if(!o||o===u) return E('Esa persona no está en Comunidad'); C.sil=C.sil.filter(function(s){ return !(s.a===u&&s.b===o); }); if(a.si) C.sil.push({a:u,b:o}); return R(null); }
     if(fn==='yo_comu_denunciar'){ if(['pub','com'].indexOf(a.tipo)<0) return E('Denuncia no válida'); C.den.push({tipo:a.tipo, obj:+a.obj, q:u, motivo:a.motivo}); return R(null); }
-    if(fn==='yo_comu_copiar'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); if(x.u!==u&&!C.cop.some(function(c){ return c.p===x.id&&c.u===u; })) C.cop.push({p:x.id,u:u}); return R({rut:x.d.rut||null, t:x.d.t, nombre:(C.per[x.u]||{}).nombre}); }
+    if(fn==='yo_comu_copiar'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); if(x.u!==u&&!C.cop.some(function(c){ return c.p===x.id&&c.u===u; })) C.cop.push({p:x.id,u:u}); return R({rut:x.d.rut||null, rc:x.d.rc||null, tipo:x.d.tipo||'', t:x.d.t, nombre:(C.per[x.u]||{}).nombre}); }
     if(fn==='yo_comu_top'){ return R(C.pubs.filter(function(p){ return !p.oc&&okPer(p.u)&&vis(u,p.u)&&C.cop.some(function(c){ return c.p===p.id; }); }).map(pj).sort(function(x,y){ return y.copias-x.copias||y.id-x.id; }).slice(0,8)); }
     if(fn==='yo_comu_gente'){ var q=String(a.q||'').trim().toLowerCase(); return R(Object.keys(C.per).filter(function(k){ return k!==u&&okPer(k)&&vis(u,k)&&(q?C.per[k].nombre.toLowerCase().indexOf(q)>=0:!sigo(u,k)); }).map(function(k){ var L=C.pubs.filter(function(p){ return p.u===k&&!p.oc; });
       return {pid:C.per[k].pid, nombre:C.per[k].nombre, pubs:L.length, ult:L.length?L[L.length-1].creado:null, sigo:sigo(u,k)}; }).sort(function(x,y){ return (x.sigo-y.sigo)||(y.pubs-x.pubs); })); }
@@ -1742,9 +1752,20 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
   var pM2 = pub(UID, A2.sid, A2.o, [20, 3], mio(A2));
   var pLaura2 = pub('otra1', 'sesdemo0006', -1, [7, 50], { t: 'Torso', min: 49, nser: 17, vol: 4100, rut: rut([['Press de banca con mancuernas', 4, 10], ['Jalón al pecho', 4, 10], ['Press militar con mancuernas', 3, 10], ['Remo en máquina', 3, 12], ['Elevaciones laterales', 3, 15]]) });
   var pPablo = pub('otra6', 'sesdemo0007', 0, [7, 40], { t: 'Pierna en casa', min: 35, nser: 14, vol: 1850, rut: rut([['Sentadilla goblet', 4, 12], ['Zancada inversa', 3, 10], ['Puente de glúteo', 3, 15], ['Plancha lateral', 3, 30, 's']]) });
+  /* 18 nov: recetas compartidas (por ración: kcal y macros de los ingredientes, por 100 g) */
+  function receta(rac, L, pasos, min) { var t = { k: 0, p: 0, h: 0, g: 0 }, ing = L.map(function (x) { t.k += x[2] * x[1] / 100; t.p += x[3] * x[1] / 100; t.h += x[4] * x[1] / 100; t.g += x[5] * x[1] / 100; return { n: x[0], g: x[1], k: x[2], p: x[3], h: x[4], gr: x[5] }; });
+    return { rac: rac, min: min || 0, k: Math.round(t.k / rac), p: Math.round(t.p / rac * 10) / 10, h: Math.round(t.h / rac * 10) / 10, g: Math.round(t.g / rac * 10) / 10, ing: ing, pasos: pasos }; }
+  var pRec1 = pub('otra3', 'rc:demo1', -3, [9, 30], { t: 'Tortitas de avena y plátano', tipo: 'rec', c: 'Mi desayuno de los domingos, sin azúcar', rc: receta(2, [['Copos de avena', 80, 372, 13.5, 59, 7], ['Plátano', 120, 89, 1.1, 23, 0.3], ['Claras de huevo', 150, 52, 11, 0.7, 0.2], ['Huevo', 55, 143, 12.6, 0.7, 9.5], ['Canela', 2, 247, 4, 81, 1.2], ['Yogur griego natural', 125, 97, 9, 4, 5], ['Arándanos', 60, 57, 0.7, 14, 0.3]],
+    'Tritura la avena con el plátano, las claras, el huevo y la canela. Deja reposar 5 minutos. En una sartén antiadherente a fuego medio, echa un cucharón y dale la vuelta cuando salgan burbujas. Sirve con el yogur y los arándanos.', 20) });
+  var pRec2 = pub('otra1', 'rc:demo2', -1, [13, 45], { t: 'Bowl de pollo, quinoa y aguacate', tipo: 'rec', c: 'Para llevar al trabajo, aguanta bien en la nevera', rc: receta(2, [['Quinoa', 120, 368, 14, 64, 6], ['Pechuga de pollo', 300, 120, 23, 0, 2.6], ['Aguacate', 100, 160, 2, 9, 15], ['Tomate cherry', 150, 18, 0.9, 3.9, 0.2], ['Maíz dulce', 80, 86, 3.3, 19, 1.4], ['Aceite de oliva virgen extra', 10, 884, 0, 0, 100], ['Lima', 20, 30, 0.7, 10, 0.2]],
+    'Cuece la quinoa 15 minutos y escúrrela. Haz el pollo a la plancha con sal y pimienta y córtalo en tiras. Monta el bowl con la quinoa, el pollo, el aguacate, los tomates y el maíz. Aliña con el aceite y la lima.', 25) });
+  var pRec3 = pub('otra5', 'rc:demo3', 0, [8, 20], { t: 'Lentejas estofadas con verduras', tipo: 'rec', rc: receta(4, [['Lentejas pardinas', 320, 330, 24, 52, 1.5], ['Patata', 300, 77, 2, 17, 0.1], ['Zanahoria', 150, 41, 0.9, 10, 0.2], ['Cebolla', 150, 40, 1.1, 9, 0.1], ['Pimiento rojo', 120, 31, 1, 6, 0.3], ['Aceite de oliva virgen extra', 20, 884, 0, 0, 100], ['Pimentón dulce', 5, 282, 14, 54, 13]],
+    'Sofríe la cebolla, la zanahoria y el pimiento con el aceite. Añade el pimentón, las lentejas y la patata en trozos. Cubre con agua y deja 35 minutos a fuego medio. Rectifica de sal.', 50) });
+  function copias(p, n, pre) { for (var i = 0; i < n; i++) CO.cop.push({ p: p, u: pre + i }); }
+  copias(pRec1, 9, 'r'); copias(pRec2, 14, 's'); copias(pRec3, 5, 't');
   function like(p, L) { L.forEach(function (u) { CO.likes.push({ p: p, u: u }); }); }
   like(pSara, ['otra1', 'otra4', 'otra5', UID]); like(pAlex, ['otra2', 'otra3', 'otra6']); like(pDani, ['otra4']); like(pM1, ['otra1', 'otra3', 'otra5']);
-  like(pLaura, ['otra2', 'otra3', 'otra4', 'otra5', 'otra6', UID]); like(pNuria, ['otra1', 'otra3']); like(pM2, ['otra1', 'otra6']); like(pLaura2, ['otra3']);
+  like(pLaura, ['otra2', 'otra3', 'otra4', 'otra5', 'otra6', UID]); like(pNuria, ['otra1', 'otra3']); like(pM2, ['otra1', 'otra6']); like(pLaura2, ['otra3']); like(pRec1, ['otra1', 'otra5', UID]); like(pRec2, ['otra3', 'otra4', 'otra5', 'otra6']); like(pRec3, ['otra1']);
   function com(p, u, o, h, t) { CO.n++; CO.coms.push({ id: CO.n, p: p, u: u, t: t, creado: iso(o, h[0], h[1]) }); }
   com(pLaura, 'otra2', -4, [9, 2], '¡Qué máquina!'); com(pLaura, 'otra3', -4, [12, 30], 'Ese hip thrust ya es serio. ¿Cuánto tiempo llevas?'); com(pLaura, 'otra1', -4, [13, 1], 'Unos 8 meses, poco a poco');
   com(pM1, 'otra1', A1.o, [20, 15], 'Bien ahí con la pierna'); com(pM1, 'otra5', A1.o + 1, [8, 40], 'Me apunto tu rutina para la semana que viene');
@@ -1752,7 +1773,6 @@ html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 
   [['otra1', 'Laura'], ['otra3', 'Sara'], ['otra2', 'Dani']].forEach(function (x) { CO.sigue.push({ a: UID, b: x[0] }); });
   ['otra1', 'otra5', 'otra6'].forEach(function (u) { CO.sigue.push({ a: u, b: UID }); });
   CO.sigue.push({ a: 'otra1', b: 'otra3' }, { a: 'otra3', b: 'otra1' }, { a: 'otra2', b: 'otra4' });
-  function copias(p, n, pre) { for (var i = 0; i < n; i++) CO.cop.push({ p: p, u: pre + i }); }
   copias(pAlex, 24, 'x'); copias(pSara, 11, 'y'); copias(pLaura, 7, 'z'); CO.cop.push({ p: pM1, u: 'otra5' }, { p: pM1, u: 'otra1' });
 
   /* ---------- todo junto, como lo guarda el Supabase de mentira ---------- */
@@ -1801,6 +1821,8 @@ function demoRunEmpezar() {
 /* los ejercicios nuevos del Word (pendientes de meter en la biblioteca de MOOD ON): una lista solo de la demo, por tipo */
 window.YO_NUEVOS = [];
 window.YO_REVISAR = [
+  { t: 'Nuevo · Recetas en la Comunidad (18 nov)', d: 'Comunidad → filtro «Recetas»: la tarjeta con raciones, kcal y macros por ración; «Ver receta» y «Guardar en mis recetas». En tu receta (Nutrición → Recetas), «Compartir», con su foto u otra.',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'comu'; var C = CMU(); C.tab = 'd'; C.ff = 'rec'; pintar(); } },
   { t: 'Nuevo · Añadir alimento: lo que más tomas, primero (18 nov)', d: 'Al tocar «+» en una comida: «En el desayuno sueles tomar» y «Otros que tomas a menudo», con la cantidad de siempre; el «+» negro lo añade de un toque (con Deshacer). Al buscar, los tuyos primero.',
     ir: function () { S.pant = null; S.pila = []; S.tab = 'nutri'; pintar(); A.nBuscar({ dataset: { c: '0' } }); } },
   { t: 'Nuevo · Fotos que encajan con el título (18 nov)', d: 'Unas 160 fotos: si dice gomas, salen gomas; kettlebell, alguien con una kettlebell; mancuernas, sin material, glúteo, fuerza, cross, HIIT, correr… Cada programa tiene la suya y no se repiten en la lista. Arriba de cada tarjeta, las semanas y los días por semana.',
@@ -2543,7 +2565,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.3';
+var YO_V = 'yo-1.4';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -6836,7 +6858,7 @@ VISTAS.napuntar = function () {
   h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comidas().map(function (n, i) { return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
   if (r.ing && r.ing.length) h += '<section class="card"><b>Ingredientes' + (r.rac > 1 ? ' (la receta entera)' : ' (1 ración)') + '</b>' + r.ing.map(function (i) { var nom = Array.isArray(i) ? alNombre(i[0]) : i.n, g = Array.isArray(i) ? i[1] : i.g; return '<div class="fila-r"><span>' + esc(nom) + '</span><span class="mut">' + fmil(g) + ' g</span></div>'; }).join('') + (r.ex ? '<small class="mut">Además: ' + esc(r.ex) + '</small>' : '') + '</section>';
   if (r.pasos) h += '<section class="card"><b>Cómo se hace</b><p class="txt">' + esc(r.pasos) + '</p></section>';
-  if (r.mio) h += '<button class="btn sec" data-a="nRecEditar" data-k="' + esc(r.key) + '">' + ic('lapiz', 18) + 'Cambiar o borrar la receta</button>';
+  if (r.mio) h += '<div class="fila2 rc-acc"><button class="btn sec" data-a="nRecEditar" data-k="' + esc(r.key) + '">' + ic('lapiz', 18) + 'Cambiar o borrar</button>' + (r.cpub ? '' : '<button class="btn sec" data-a="recComu" data-k="' + esc(r.key) + '">' + ic('comu', 18) + 'Compartir</button>') + '</div>' + (r.de ? '<p class="mut sm">Guardada de la Comunidad: la receta de ' + esc(r.de) + '.</p>' : '');      // 18 nov: compartir en la Comunidad
   h += '<div class="pie-fijo"><button class="btn" data-a="arOk">' + (X.it ? 'Guardar' : 'Añadir a ' + esc(comidas()[X.c].toLowerCase())) + '</button>' + (X.it ? '<button class="btn sec" data-a="arQuitar">Quitar del diario</button>' : '') + '</div>';
   return h + '</div>';
 };
@@ -7232,20 +7254,27 @@ function vComu() {
   var t = C.tab;
   if ((C.feed[t] === null || Date.now() - (C.ts[t] || 0) > 90000) && !C.carg[t] && !C.ferr[t]) setTimeout(function () { cargaTab(t); }, 0);
   h += cabComu(true) + '<div class="cm-tabs" role="tablist">' + [['s', 'Siguiendo'], ['d', 'Descubrir']].map(function (x) { var on = t === x[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="cTab" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
-  h += '<div class="cm-priv">' + ic('escudo', 16) + '<span>Solo se ve lo que tú eliges compartir. Tu peso, tus fotos de progreso y tus calorías nunca salen aquí.</span></div>';
+  h += '<div class="cm-priv">' + ic('escudo', 16) + '<span>Solo se ve lo que tú eliges compartir. Tu peso, tus fotos de progreso y lo que comes nunca salen aquí.</span></div>';
   if (C.ferr[t] && C.feed[t] === null) return h + errCard(C.ferr[t]) + '</div>';
   if (C.feed[t] === null) return h + CARGANDO + '</div>';
+  h += '<div class="chips cm-ff">' + [['', 'Todo'], ['ent', 'Entrenos'], ['rec', 'Recetas']].map(function (x) { var on = (C.ff || '') === x[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="cFiltro" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';      // 18 nov: también recetas
   h += t === 's' ? vSiguiendo(C) : vDescubrir(C);
   if (C.mas[t]) h += '<button class="btn sec" data-a="cMas"' + (C.carg[t] ? ' disabled' : '') + '>' + (C.carg[t] ? 'Cargando…' : 'Ver más') + '</button>';
   return h + '</div>';
 }
+function deFiltro(x) { var f = CMU().ff || ''; return !f || (f === 'rec') === (x.tipo === 'rec'); }
+A.cFiltro = function (el) { CMU().ff = el.dataset.v; pintar(); };
 function vSiguiendo(C) {
-  var F = C.feed.s.filter(noOculta);
+  var F = C.feed.s.filter(noOculta).filter(deFiltro);
+  if (!F.length && C.ff) return '<section class="card vacio"><b>' + (C.ff === 'rec' ? 'Todavía no hay recetas de la gente que sigues' : 'Todavía no hay entrenos de la gente que sigues') + '</b><small class="mut">Mira en Descubrir o comparte la tuya.</small></section>';
   if (!F.length) return '<section class="card vacio cm-vacio"><span class="cm-ic">' + ic('comu', 26) + '</span><b>Aquí verás los entrenos de la gente que sigues</b><small class="mut">Y los tuyos, cuando publiques uno al terminar de entrenar.</small><button class="btn" data-a="cTab" data-v="d">Descubrir gente</button></section>';
   return F.map(function (x) { return cardPub(x); }).join('');
 }
 function vDescubrir(C) {
-  var h = '', T = (C.top || []).filter(noOculta), G = (C.gente || []).slice(0, 5), F = C.feed.d.filter(noOculta);
+  var h = '', T0 = (C.top || []).filter(noOculta), T = C.ff === 'rec' ? [] : T0.filter(function (x) { return x.tipo !== 'rec'; }), TR = C.ff === 'ent' ? [] : T0.filter(function (x) { return x.tipo === 'rec'; }), G = C.ff ? [] : (C.gente || []).slice(0, 5), F = C.feed.d.filter(noOculta).filter(deFiltro);
+  if (TR.length) h += '<h2 class="cm-h2">Recetas que más se guardan</h2><section class="card cm-lista">' + TR.map(function (x) {
+    return '<div class="cm-fila"><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + fmil(x.rk || 0) + ' kcal por ración · de ' + esc(x.nombre) + ' · ' + fN(x.copias, 0) + (x.copias === 1 ? ' la ha guardado' : ' la han guardado') + '</small></span>' +
+      (x.mio ? '<span class="mio">TUYA</span>' : '<button class="btn-neg sm" data-a="cRecVer" data-id="' + x.id + '">Ver</button>') + '</div>'; }).join('') + '</section>';
   if (T.length) h += '<h2 class="cm-h2">Rutinas que más se copian</h2><section class="card cm-lista">' + T.map(function (x) {
     return '<div class="cm-fila"><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + x.nej + (x.nej === 1 ? ' ejercicio' : ' ejercicios') + ' · ' + (x.min || 0) + ' min · de ' + esc(x.nombre) + ' · ' + fN(x.copias, 0) + (x.copias === 1 ? ' la ha copiado' : ' la han copiado') + '</small></span>' +
       (x.mio ? '<span class="mio">TUYA</span>' : '<button class="btn-neg sm" data-a="cCopiar" data-id="' + x.id + '">' + ic('copiar', 15, null) + 'Copiar</button>') + '</div>'; }).join('') + '</section>';
@@ -7255,7 +7284,7 @@ function vDescubrir(C) {
   return h;
 }
 function filaGente(g) {
-  var sub = g.pubs ? g.pubs + (g.pubs === 1 ? ' entreno compartido' : ' entrenos compartidos') + (g.ult ? ' · el último ' + haceTxt(fechaDe(new Date(g.ult))) : '') : 'Acaba de llegar';
+  var sub = g.pubs ? g.pubs + (g.pubs === 1 ? ' publicación' : ' publicaciones') + (g.ult ? ' · el último ' + haceTxt(fechaDe(new Date(g.ult))) : '') : 'Acaba de llegar';
   return '<div class="cm-fila"><button class="cm-av" data-a="cPersona" data-p="' + esc(g.pid) + '" aria-label="Ver a ' + esc(g.nombre) + '">' + esc(iniciales(g.nombre)) + '</button>' +
     '<button class="fr-t" data-a="cPersona" data-p="' + esc(g.pid) + '"><b>' + esc(g.nombre) + '</b><small>' + sub + '</small></button>' +
     (g.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">Siguiendo</button>' : '<button class="btn-neg sm" data-a="cSeguir" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">Seguir</button>') + '</div>';
@@ -7267,6 +7296,7 @@ function cardPub(x, prev) {
   var h = '<section class="card cm-pub' + (prev ? ' prev' : '') + '"><div class="cm-quien"><button class="cm-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '"' + (prev ? ' tabindex="-1"' : '') + '>' + esc(iniciales(x.nombre)) + '</button>' +
     '<button class="fr-t"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"' + (prev ? ' tabindex="-1"' : '') + '><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></button>' +
     (prev ? '' : '<button class="cm-dots' + (ab ? ' on' : '') + '" data-a="cMenu" data-id="' + x.id + '" aria-label="Más opciones" aria-expanded="' + ab + '">' + ic('dots', 20) + '</button>') + '</div>';
+  if (x.tipo === 'rec') return h + cardRec(x, prev, ab, A_);
   h += '<b class="cm-t">' + esc(x.t) + '</b>';
   if (x.c || prev) h += '<p class="cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';      // 17 nov (Javier): un comentario del entreno, «entreno increíble para glúteos»
   if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
@@ -7282,6 +7312,92 @@ function cardPub(x, prev) {
   if (ab) h += menuPub(x);
   return h + '</section>';
 }
+/* 18 nov (PDF «fallos mejoras II (1)»: «compartir recetas en Comunidad y que la gente se las guarde, como los entrenos»):
+   la receta con su foto, raciones, kcal y macros por ración e ingredientes; «Ver receta» y «Guardar en mis recetas» */
+function cardRec(x, prev, ab, A_) {
+  var C = CMU(), r = x.rc || {}, h = '<span class="cm-tipo">' + ic('olla', 14) + 'Receta</span><b class="cm-t">' + esc(x.t) + '</b>';
+  if (x.c || prev) h += '<p class="cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';
+  if (prev && CPF) h += '<div class="cm-foto rc"><img id="cp-prev-img" alt=""></div>';
+  else if (prev && x.fsrc) h += '<div class="cm-foto rc ok"><img src="' + esc(x.fsrc) + '" alt=""></div>';
+  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto rc' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de la receta">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
+  var K = [[String(r.rac || 1), (r.rac || 1) === 1 ? 'ración' : 'raciones'], [fmil(r.k || 0), 'kcal por ración'], [String((r.ing || []).length), 'ingredientes']];
+  h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
+  h += '<div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div>';
+  h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>';
+  if (x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá ver y guardar' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'Nadie la ha guardado todavía') + '</span>';
+  else h += '<button class="cm-copiar"' + A_('cRecVer') + ' data-id="' + x.id + '">Ver receta</button>';
+  h += '</div>';
+  if (ab) h += menuPub(x);
+  return h + '</section>';
+}
+A.cRecVer = function (el) { CMU().menu = null; ir({ t: 'comuRec', id: +el.dataset.id }); };
+VISTAS.comuRec = function (p) {
+  var C = CMU(), x = unaPub(p.id); if (!x || !x.rc) return '<div class="pant pad">' + cab('Receta') + '<section class="card vacio"><b>Esa receta ya no está</b></section></div>';
+  var r = x.rc, fsrc = x.foto ? (C.fotos || {})[x.id] : '', ya = recGuardadaDe(x.id);
+  if (x.foto && !fsrc) setTimeout(cargaFotosComu, 0);
+  var h = '<div class="pant pad con-pie">' + cab(esc(x.t)) + (x.foto ? '<div class="cm-foto rc rv' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="">' : '') + '</div>' : '');
+  h += '<div class="cm-quien rv"><span class="cm-av">' + esc(iniciales(x.nombre)) + '</span><span class="fr-t"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></span></div>' + (x.c ? '<p class="cm-dice">' + esc(x.c) + '</p>' : '');
+  h += '<section class="card"><div class="cm-k"><span><b>' + (r.rac || 1) + '</b><small>' + ((r.rac || 1) === 1 ? 'ración' : 'raciones') + '</small></span><span><b>' + fmil(r.k || 0) + '</b><small>kcal por ración</small></span><span><b>' + (r.min ? r.min + "'" : (r.ing || []).length) + '</b><small>' + (r.min ? 'minutos' : 'ingredientes') + '</small></span></div>' +
+    '<div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div></section>';
+  h += '<section class="card"><div class="card-h"><b>Ingredientes</b><small class="mut">' + ((r.rac || 1) > 1 ? 'la receta entera' : '1 ración') + '</small></div>' + (r.ing || []).map(function (i) { return '<div class="fila-r"><span>' + esc(i.n) + '</span><b>' + fmil(i.g) + ' g</b></div>'; }).join('') + '</section>';
+  if (r.pasos) h += '<section class="card"><b>Cómo se hace</b><p class="txt">' + esc(r.pasos) + '</p></section>';
+  h += '<div class="pie-fijo">' + (x.mio ? '<p class="mut sm center">Es tuya: ' + (x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'nadie la ha guardado todavía') + '</p>' :
+    '<button class="btn" data-a="cRecGuardar" data-id="' + x.id + '"' + (ya ? ' disabled' : '') + '>' + (ya ? ic('check', 16, null, 3) + 'Ya está en tus recetas' : ic('olla', 17) + 'Guardar en mis recetas') + '</button>') + '</div>';
+  return h + '</div>';
+};
+function recGuardadaDe(pid) { return (S.biblio || []).filter(function (b) { return b.tipo === 'rec' && b.cpub === pid; })[0] || null; }
+A.cRecGuardar = function (el) {
+  var id = +el.dataset.id; if (el.disabled) return; el.disabled = true;
+  rpc('yo_comu_copiar', { pub: id }).then(function (r) {
+    var rc = r && r.rc; if (!rc || !(rc.ing || []).length) { el.disabled = false; return toast('Esta publicación no trae receta'); }
+    var b = { id: 'rc' + rand(8), tipo: 'rec', n: String(r.t || 'Receta').slice(0, 70), cpub: id, de: nom1(r.nombre),
+      ing: rc.ing.slice(0, 40).map(function (i) { return { key: '', n: String(i.n).slice(0, 80), g: +i.g || 0, k: +i.k || 0, p: +i.p || 0, h: +i.h || 0, gr: +i.gr || 0 }; }),
+      pasos: String(rc.pasos || '').slice(0, 2000), rac: Math.max(1, +rc.rac || 1), olla: 0, tara: 0, llena: 0, foto: 0, k: Math.round(+rc.k || 0), p: +rc.p || 0, h: +rc.h || 0, g: +rc.g || 0 };
+    var f = (CMU().fotos || {})[id];
+    guardaBiblio(b);
+    if (f) { b.foto = 1; RFOTO[b.id] = f; guardaBiblio(b); rpc('yo_rec_foto_poner', { bid: b.id, foto: f }).then(null, function () {}); }
+    var x = unaPub(id); if (x) x.copias = (x.copias || 0) + 1;
+    toast('Guardada en tus recetas: la de ' + nom1(r.nombre), 'ok'); pintar();
+  }, function (e) { el.disabled = false; toast(cErr(e)); });
+};
+/* compartir una receta suya (desde la receta, en Nutrición) */
+A.recComu = function (el) {
+  var C = CMU(), r = recDe(el.dataset.k); if (!r || !r.mio) return;
+  if (C.est === undefined) return rpc('yo_comu_estado').then(function (e) { C.est = e || null; A.recComu(el); }, function (e) { toast(cErr(e)); });
+  if (C.est && C.est.activo && C.est.suspendido) return toast('Tu cuenta de Comunidad está suspendida');
+  if (!comuActiva()) return hoja('<h2>Compartir en la Comunidad</h2><p class="mut">Para compartir tus recetas, primero entra en la Comunidad: eliges el nombre que verán los demás y aceptas las normas.</p><button class="btn" data-a="cIrActivar">' + (C.est ? 'Volver a la Comunidad' : 'Activar Comunidad') + '</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
+  if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; }
+  S.x.crec = { key: r.key, id: r.id, t: r.n, c: '', fsrc: recFotoSrc(r), confoto: true,
+    rc: { rac: r.rac || 1, min: r.min || 0, k: r.k, p: r.p, h: r.h, g: r.g, pasos: String(r.pasos || '').slice(0, 2000), ing: (r.ing || []).slice(0, 40).map(function (i) { return { n: String(i.n).slice(0, 80), g: i.g, k: i.k, p: i.p, h: i.h, gr: i.gr }; }) } };
+  pintaPubRec();
+};
+function pintaPubRec() {
+  var C = CMU(), d = S.x.crec, x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, c: d.c || '', tipo: 'rec', rc: d.rc, fsrc: d.confoto ? d.fsrc : '', likes: 0, coms: 0, mio: true };
+  hoja('<h2>Compartir la receta</h2><p class="mut sm">Así la verá la gente de la Comunidad:</p>' + cardPub(x, true) +
+    '<label class="f">Añade un comentario (opcional)<textarea id="cp-c" maxlength="200" rows="2" data-in="cpComR" placeholder="Ej.: la cena de los domingos, rinde para 4">' + esc(d.c || '') + '</textarea></label>' +
+    (CPF ? cpfHtml() + (d.fsrc ? '' : '<label class="chk"><input type="checkbox" id="cr-g"' + (d.guarda !== false ? ' checked' : '') + ' data-ch="crGuarda"><span>Guardarla también como foto de la receta</span></label>') :
+      d.fsrc ? '<label class="chk"><input type="checkbox" id="cr-f"' + (d.confoto ? ' checked' : '') + ' data-ch="crFoto"><span>Con la foto de la receta</span></label><label class="link izq cp-otra">' + ic('foto', 15) + 'Usar otra foto<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>' : cpfHtml()) +      // 18 nov (Javier: «¿pueden adjuntar foto?»): la de la receta, otra o una nueva
+    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>Sale la receta: el nombre, los ingredientes con sus gramos, cómo se hace, las raciones y lo que tiene cada ración. Nunca lo que tú comes ni tu diario.</span></p>' +
+    '<button class="btn" data-a="cPublicarRec">Compartir</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  cpfEnganchar();
+}
+CH.crGuarda = function (t) { if (S.x.crec) S.x.crec.guarda = t.checked; };
+IN.cpComR = function (t) { if (S.x.crec) S.x.crec.c = t.value; var b = document.querySelector('.cm-pub.prev .cm-dice'); if (b) { b.textContent = t.value.trim(); b.hidden = !t.value.trim(); } };
+CH.crFoto = function (t) { if (S.x.crec) { S.x.crec.confoto = t.checked; pintaPubRec(); } };
+A.cPublicarRec = function (el) {
+  var d = S.x.crec, C = CMU(); if (!d || el.disabled) return;
+  var dd = { t: String(d.t).slice(0, 60), tipo: 'rec', rc: d.rc }, cm = String(d.c || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200);
+  var foto = CPF ? cpfJpeg() : d.confoto && /^data:image\/jpeg;base64,/.test(d.fsrc || '') ? d.fsrc : null;
+  if (CPF && !d.fsrc && d.guarda !== false) { var fr = cpfJpeg(0.6), b = (S.biblio || []).filter(function (x) { return x.id === d.id; })[0];      // la foto nueva, también en la receta
+    if (b && fr.length <= 300000) rpc('yo_rec_foto_poner', { bid: d.id, foto: fr }).then(function () { RFOTO[d.id] = fr; b.foto = 1; guardaBiblio(b); }, function () {}); }
+  el.disabled = true; el.textContent = 'Compartiendo…';
+  rpc('yo_comu_publicar', { sid: 'rc:' + d.id + ':' + Date.now().toString(36), d: dd }).then(function (r) {
+    var id = r && r.id, fin = function (msg, cls) { cerrarHoja(); if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } olvidaFeeds(); if (C.est) C.est.pubs = (C.est.pubs || 0) + 1; C.pers = {}; S.x.crec = null; toast(msg, cls); pintar(); };
+    if (!foto || !id) return fin('Receta compartida en la Comunidad', 'ok');
+    rpc('yo_comu_foto_poner', { pub: id, foto: foto }).then(function () { C.fotos = C.fotos || {}; C.fotos[id] = foto; fin('Receta compartida, con su foto', 'ok'); }, function () { fin('Compartida, pero la foto no se ha podido subir'); });
+  }, function (e) { el.disabled = false; el.textContent = 'Compartir'; toast(cErr(e)); });
+};
 function menuPub(x) {
   var L = x.mio ? [['cEditarCom', x.c ? 'Editar comentario' : 'Añadir comentario'], ['cBorrarPub', 'Borrar publicación', 1]] : [[x.sigo ? 'cDejar' : 'cSeguir', x.sigo ? 'Dejar de seguir' : 'Seguir a ' + nom1(x.nombre)], ['cSilenciar', 'Silenciar'], ['cBloquear', 'Bloquear a ' + nom1(x.nombre)], ['cDenunciar', 'Denunciar publicación', 1]];
   return '<button class="cm-fondo" data-a="cMenuNo" aria-label="Cerrar el menú" tabindex="-1"></button><div class="cm-menu" role="menu">' + L.map(function (m) {
@@ -7644,7 +7760,7 @@ function cpfHtml() {
 CH.cpFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height) }; pintaPub(); };
+  im.onload = function () { CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height) }; if (document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
