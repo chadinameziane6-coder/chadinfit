@@ -1528,7 +1528,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 /* Lo que está pendiente del OK de Javier (17 nov 2026: «todas las mejoras que tienen que revisarse, subidas a la simulación;
    yo reviso y, si está ok, te doy el ok y lo publicas para todos»). Solo va en las demos (franja «Por revisar»).
-   En la app de verdad (/yo) nada de esto se ve: los programas nuevos están en 'borrador' y solo salen con window.YO_BORR. */
+   18 nov 2026: Javier lo publicó todo en /yo. YO_BORR solo enseña aquí lo que se marque nuevo como 'borrador'. */
 window.YO_BORR = 1;
 /* para probar el cronómetro: si no lo ha empezado, empieza el programa (hoy y dos días más) y abre su primer entreno */
 function demoRunEmpezar() {
@@ -2260,7 +2260,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-0.8';
+var YO_V = 'yo-1.0';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -3261,7 +3261,7 @@ var PROGRAMAS = [
   { id: 'hib4', n: 'Híbrido fuerza + resistencia', c: 'hibrido fuerza resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60, cv: 'normal', cvT: ['hiit', 'bajo'] }) },
   { id: 'hib5', n: 'Híbrido avanzado 5 días', c: 'hibrido avanzado', P: PP({ obj: 'recomp', niv: 'ava', dias: 5, min: 75, cv: 'normal', cvT: ['hiit', 'carrera'], dCarr: 1 }) },
   /* 17 nov (Javier: «mejor 100 programas totales, un poco de cada»): 54 más, armados por el motor con un perfil fijo cada uno.
-     b: 1 = en revisión (solo con borradores, como en las demos), hasta su OK */
+     b: 1 = los nuevos del 17 nov; publicados para todas el 18 nov (OK de Javier) */
   // carrera (los de 5 km, 10 km, media y maratón irán con el modelo del piloto «Empieza a correr desde cero», semana a semana)
   { id: 'rfz2', b: 1, n: 'Fuerza para corredores · 2 días', c: 'carrera fuerza', P: PP({ obj: 'fuerza', niv: 'int', dias: 2, min: 45, prio: ['gluteo', 'isquios', 'core'] }) },
   { id: 'rcasa', b: 1, n: 'Correr + fuerza en casa', c: 'carrera casa', P: PP({ obj: 'resist', niv: 'int', dias: 4, min: 45, lug: 'casa', mat: ['banda', 'mancuernas'], cv: 'normal', cvT: ['carrera'], dCarr: 2 }) },
@@ -3323,7 +3323,7 @@ PROGRAMAS.forEach(function (p) { var P = p.P; p.sub = ({ ini: 'Principiante', in
 var CATS = [['', 'Todos'], ['gluteo', 'Glúteo'], ['casa', 'En casa'], ['hipertrofia', 'Hipertrofia'], ['fuerza', 'Fuerza'], ['carrera', 'Carrera'], ['resistencia', 'Resistencia'], ['hibrido', 'Híbrido']];
 function progChips(f) { return '<div class="chips scroll">' + CATS.map(function (c) { var on = f === c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="progF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>'; }
 function vProgramas() {
-  var tg = rpBorr() ? '<div class="seg2 rs-tg" role="tablist">' + [['prog', 'Programas'], ['rut', 'Rutinas sueltas']].map(function (t) { var on = (S.x.pv || 'prog') === t[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progVista" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' : '';      // 17 nov: rutinas sueltas (en revisión)
+  var tg = rsVisibles().length ? '<div class="seg2 rs-tg" role="tablist">' + [['prog', 'Programas'], ['rut', 'Rutinas sueltas']].map(function (t) { var on = (S.x.pv || 'prog') === t[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progVista" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' : '';      // 17 nov: rutinas sueltas (publicadas el 18 nov)
   if (tg && S.x.pv === 'rut') return tg + vSueltas();
   return tg + vProgramasL();
 }
@@ -3331,7 +3331,7 @@ function vProgramasL() {      // 17 nov (Javier: «quita principiante y avanzado
   var f = S.x.pf || '';
   if (f === 'carrera' && rpHay()) return progChips(f) + rpCatalogo();
   var F = fjVisibles(f);      // los programas hechos con el Word; con ellos, fuera los de antes que repiten (FJ_SUST)
-  var bo = rpBorr(), L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]) && (!p.b || bo); }), N = !f ? rpVisibles() : [];
+  var L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]); }), N = !f ? rpVisibles() : [];
   var it = F.map(function (p) { return { niv: p.niv, h: '<button class="prog-f" data-a="verFijo" data-v="' + p.id + '"><span class="pd"><b>' + p.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; })
     .concat(N.map(function (P) { var rg = rpRango(P); return { niv: P.niv, h: '<button class="prog-f" data-a="rpVer" data-v="' + P.id + '"><span class="pd"><b>' + P.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(P.n) + '</b><small>' + ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[P.niv] + ' · ' + P.sem + ' semanas · ' + rg[0] + '-' + rg[1] + ' min · Carrera</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; }))
     .concat(L.map(function (p) { var P = p.P; return { niv: P.niv, h: '<button class="prog-f" data-a="verProg" data-v="' + p.id + '"><span class="pd"><b>' + P.dias + '</b><small>días</small></span><span class="fr-t"><b>' + esc(p.n) + '</b><small>' + esc(p.sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>' }; }));
@@ -3349,8 +3349,8 @@ function verProgSi(id) { var p = PROGRAMAS.filter(function (x) { return x.id ===
 /* ---------- Programas de carrera completos (prompt maestro, fase 1) · solo panel usuario /yo ----------
    Todo con números, no con texto libre: programa → fases → semanas → sesiones → A calentamiento, B parte principal,
    C vuelta a la calma. Los minutos (de cada bloque, de la sesión y corriendo) se calculan; rpValida() revisa el programa.
-   Los programas nuevos salen a los usuarios solo con estado 'publicado' (lo aprueba Javier). Para verlos antes:
-   abrir /yo/?borradores (se queda en ese navegador) o localStorage yo_borr = 1.
+   Los programas nuevos salen a los usuarios solo con estado 'publicado' (lo aprueba Javier; el piloto, publicado el 18 nov).
+   Uno nuevo en 'borrador' se ve antes abriendo /yo/?borradores (se queda en ese navegador), con localStorage yo_borr = 1 o en las demos.
    No toca el motor de planes (motor.js) ni nada de los paneles de entrenador. */
 
 /* ===== 1 · Métodos de carrera (catálogo) ===== */
@@ -3434,7 +3434,7 @@ var RUN_PROG = [];
   var Se = function (t, A, B, C, nota) { return { t: t, A: A, B: B, C: C, nota: nota || '' }; };
   var cc = 'Carrera-caminata';
   RUN_PROG.push({
-    id: 'r0cero', v: 1, estado: 'borrador', disc: 'carrera', niv: 'ini', n: 'Empieza a correr desde cero',
+    id: 'r0cero', v: 1, estado: 'publicado', disc: 'carrera', niv: 'ini', n: 'Empieza a correr desde cero',
     desc: 'Alternas trote y caminata. Cada semana corres un poco más y paras menos. Al final corres 20 minutos seguidos.',
     meta: '20 min seguidos', objetivo: 'Correr 20 minutos seguidos a ritmo de charla.',
     nivTxt: 'Principiante: empieza con 1 minuto de trote y mucha caminata, y avanza despacio.',
@@ -3564,7 +3564,7 @@ var RP_NIV = [['ini', 'Principiante'], ['int', 'Intermedio'], ['ava', 'Avanzado'
 var RP_COL = { a: '#7C8CFF', b: 'var(--neg)', c: '#9AA0A8' };
 /* catálogo de Carrera: por nivel, con los programas nuevos arriba y los de siempre debajo */
 function rpCatalogo() {
-  var nv = S.x.rpNiv || 'ini', N = rpVisibles(nv), V = PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv && (!p.b || rpBorr()); }), F = fjVisibles('carrera').filter(function (p) { return p.niv === nv; });      // 17 nov: también los nuevos en revisión y los del Word con carrera
+  var nv = S.x.rpNiv || 'ini', N = rpVisibles(nv), V = PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv; }), F = fjVisibles('carrera').filter(function (p) { return p.niv === nv; });      // 17 nov: también los nuevos (b: 1, publicados el 18 nov) y los del Word con carrera
   var h = '<div class="rp-niv" role="tablist">' + RP_NIV.map(function (x) { return '<button role="tab" aria-selected="' + (x[0] === nv) + '" class="' + (x[0] === nv ? 'on' : '') + '" data-a="rpNiv" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
   h += '<section class="card"><small class="mut">' + (N.length + V.length + F.length) + ((N.length + V.length + F.length) === 1 ? ' programa' : ' programas') + '</small>' + N.map(function (P) {
     var rg = rpRango(P), act = rpActivo(P.id);
@@ -3832,7 +3832,7 @@ setInterval(function () { if (rcActivo() && !RC.iv) rcTick(); }, 1500);
 /* ---------- Programas de referencia del Word de programación (17 nov 2026): En casa ---------- 
    «Programas de referencia» 58-67 del Word (sin material, con mancuernas, con gomas y mixto). A diferencia de los de siempre (que arma el motor),
    estos llevan los ejercicios, series y repeticiones del Word; el calentamiento (4 o más, de la biblioteca) se añade como en los demás (calYo).
-   Salen solo con estado 'publicado' (hasta el OK de Javier, en las demos con YO_BORR). Se ven y se empiezan como los demás (vTuPlan → planGuardar). */
+   Salen solo con estado 'publicado' (18 nov 2026: Javier los publica todos; uno nuevo en 'borrador' solo se ve en las demos con YO_BORR). Se ven y se empiezan como los demás (vTuPlan → planGuardar). */
 /* los nombres del Word que ya están en la biblioteca con otro nombre (o son una variante: va en la nota) */
 var FJ_ALIAS = { 'Prone Y-T-W': ['YTW'], 'Elevaciones en W boca abajo': ['YTW', 'Solo la W: codos doblados y escápulas juntas'], 'Sentadilla con pausa': ['Sentadilla al aire', 'Con 2 s de pausa abajo'],
   'Elevación de gemelos a una pierna': ['Elevación de gemelos de pie', 'A una pierna'], 'Sentadilla a una pierna asistida': ['Sentadilla pistol', 'Asistida: agárrate a algo o baja hasta un banco'],
@@ -4033,7 +4033,7 @@ var PROG_FIJOS = [
       { n: 'Día B', p: 'pierna', ej: [FJ('Puente de glúteos a una pierna', 3, '10-12', { ld: 1 }), FJ('Split squat (zancada estática)', 3, '10', { ld: 1 }), FJ('Bisagra de cadera con pica', 3, '12'), FJ('Abducción de cadera tumbada de lado', 3, '20', { ld: 1 }), FJ('Prone Y-T-W', 2, '8'), FJ('Plancha lateral', 2, '20', { seg: 1, ld: 1, rir: '' })] },
       { n: 'Día C', p: 'pierna', ej: [FJ('Puente de glúteos con marcha (Glute Bridge March)', 3, '10', { ld: 1 }), FJ('Zancada lateral', 3, '10', { ld: 1 }), FJ('Step Down controlado', 3, '8', { ld: 1 }), FJ('Sentadilla al aire', 3, '20', { nota: 'Pies más abiertos (sumo) y 1 s abajo' }), FJ('Flexiones con rodillas apoyadas', 2, '8-12'), FJ('Hollow hold', 2, '20', { seg: 1, rir: '' })] }] }
 ];
-PROG_FIJOS.forEach(function (p) { p.estado = 'borrador'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
+PROG_FIJOS.forEach(function (p) { p.estado = 'publicado'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
 var FJ_SUST = { casa0: 1, casa4: 1, fzi: 1, hip4: 1, ppl6: 1, glu4: 1, glcasa: 1 };      // + «Glúteo y pierna 4 días» y «Glúteo en casa» (los sustituyen los de glúteo)
       // los del motor que repiten estos: «En casa sin material», «En casa con mancuernas», «Fuerza para principiantes», «Hipertrofia 4 días · torso / pierna» y «Avanzado 6 días · empuje, tirón y pierna»
 function fjVisibles(f) { var b = rpBorr(); return PROG_FIJOS.filter(function (p) { return (p.estado === 'publicado' || b) && (!f || p.c.split(' ').indexOf(f) >= 0); }); }
@@ -4195,7 +4195,7 @@ var RSUELTAS = [
 ];
 var RS_P = { p4: 'torso', p5: 'tiron', p6: 'empuje', p9: 'torso', p10: 'torso', s2: 'empuje', s4: 'empuje', p7: 'pierna', s1: 'pierna', s3: 'pierna', h4: 'pierna' };      // el calentamiento, según lo que se trabaja
 RSUELTAS.forEach(function (x) { x.p = x.ej[0].runE ? 'carrera' : RS_P[x.id] || (/gluteo/.test(x.c) ? 'pierna' : 'completo'); });
-function rsVisibles(f) { return rpBorr() ? RSUELTAS.filter(function (x) { return !f || x.c.split(' ').indexOf(f) >= 0; }) : []; }
+function rsVisibles(f) { var b = rpBorr(); return RSUELTAS.filter(function (x) { return (x.estado !== 'borrador' || b) && (!f || x.c.split(' ').indexOf(f) >= 0); }); }   // 18 nov: publicadas (una nueva con estado 'borrador' solo en las demos)
 function rsRutina(x) {      // la rutina (con su calentamiento), como un día de los programas del Word
   var p = { niv: x.niv, dias: 3, min: x.min, sem: 1, rir: x.rir, d: x.d, lug: x.lug, mat: x.mat || '', obj: 'musculo', D: [{ n: x.n, p: x.p, ej: x.ej }] };
   var r = fjPlan(p).D.rutinas[0]; r.nombre = x.n; delete r.dias; return r;
