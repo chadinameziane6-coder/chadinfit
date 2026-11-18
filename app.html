@@ -3800,6 +3800,70 @@ button.pf-fe{cursor:pointer}
 .pf-it.toca{background:none;color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .pf-seg button.on{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+/* v53.4.171 · Hoy de la clienta, más elegante: tu semana en su tarjeta (✓ verde), el anillo de tu preparación, los pasos en una línea,
+   tu ciclo compacto, «¿Cómo te sientes hoy?» con un toque (de rojo a verde) y el calendario con los recordatorios de color y «Lo próximo» */
+.semc{background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px 12px 10px;margin:4px 0 12px}
+.semc .sem-n{margin:0 0 4px}.semc .sem-n span{font-size:15px;font-weight:800}
+.semc .semana{gap:4px;margin:0}
+.semc .semana .dia{position:relative;background:none;border:0;box-shadow:none;border-radius:14px;padding:6px 0 21px;font:700 11px Plus Jakarta Sans,sans-serif;color:#9A9AA0}
+.semc .semana .dia small{font:800 15.5px/1.2 Plus Jakarta Sans,sans-serif;color:#111;margin-top:1px}
+.semc .semana .dia i{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);width:0;height:0;margin:0;border:0;background:none;display:flex;align-items:center;justify-content:center}
+.semc .semana .dia.plan i{width:5px;height:5px;bottom:9px;border-radius:50%;background:#111}
+.semc .semana .dia.hc i{width:16px;height:16px;bottom:3px;border-radius:50%;background:#1FA45A;color:#fff}
+.semc .semana .dia.hc i .ic{width:10px;height:10px;margin:0;stroke-width:3.4}
+.semc .semana .dia.hoy{box-shadow:inset 0 0 0 1.5px #111;color:#111}
+.semc .semana .dia.sel{background:#111;color:#A9AEC0;box-shadow:0 4px 12px rgba(0,0,0,.18)}.semc .semana .dia.sel small{color:#fff}
+.semc .semana .dia.sel.plan i{background:#fff}.semc .semana .dia.sel.hc i{background:#1FA45A;box-shadow:0 0 0 2px #111}
+.semc .dia-tr{right:-3px;top:-4px}
+.semc .sem-or{margin:6px 2px 0;padding-top:9px;border-top:1px solid #F0F0F3}.semc .sem-ayuda{margin:6px 2px 0}
+.ev-cd.eva{display:flex;align-items:center;gap:14px;background:#fff;color:var(--tx);border:1px solid var(--line);border-radius:22px;padding:12px 14px;width:100%;text-align:left}
+.eva-w{position:relative;width:74px;height:74px;flex:none}.eva-r{width:74px;height:74px;display:block}
+.eva .ev-cdc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;margin:0;background:none;color:var(--tx);padding:0}
+.eva .ev-cdc b{font:800 20px Plus Jakarta Sans,sans-serif;letter-spacing:-.02em}.eva .ev-cdc small{font:700 10px Plus Jakarta Sans,sans-serif;color:var(--mu);margin-top:2px}.eva .ev-cdc.hoy b{font-size:15px}
+.eva .ev-cdx{flex:1;min-width:0;display:flex;flex-direction:column}
+.eva .ev-cdk{display:flex;align-items:center;gap:5px;font:800 10px Plus Jakarta Sans,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#B8860B}.eva .ev-cdk .ic{width:12px;height:12px;margin:0;color:#C99A1A}
+.eva .ev-cdn{font:800 15.5px/1.25 Plus Jakarta Sans,sans-serif;color:var(--tx);margin:3px 0 1px}.eva .ev-cdf{font-size:12px;color:var(--mu);font-weight:600}
+.eva-p{align-self:flex-start;font-style:normal;font-size:11px;font-weight:700;margin-top:6px;background:#FBF4E1;color:#8A6A10;border-radius:999px;padding:3px 9px}
+.ps-c.ps-cmp{display:flex;align-items:center;gap:8px;padding:10px 10px 10px 12px;border-radius:20px}
+.ps-row{flex:1;min-width:0;display:flex;align-items:center;gap:11px;background:none;border:0;padding:0;color:inherit;font:inherit;text-align:left;cursor:pointer}
+.ps-ri{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12);display:flex;align-items:center;justify-content:center;flex:none}.ps-ri .ic{width:17px;height:17px;margin:0}
+.ps-rt{flex:1;min-width:0;display:flex;flex-direction:column}.ps-rt b{font:800 14.5px Plus Jakarta Sans,sans-serif;color:#fff}.ps-rt small{font-size:11.5px;color:#A9AEC0;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ps-rb{width:54px;height:5px;border-radius:3px;background:rgba(255,255,255,.16);flex:none;overflow:hidden}.ps-rb i{display:block;height:100%;border-radius:3px;background:#fff}
+.ps-rm{width:34px;height:34px;border-radius:50%;border:0;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer}.ps-rm .ic{width:17px;height:17px;margin:0}
+.ps-cerrar{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;margin-left:6px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;vertical-align:middle;cursor:pointer}.ps-cerrar .ic{width:15px;height:15px;margin:0;transform:rotate(180deg)}
+.cyc.cyc-cmp{padding:12px 14px 10px}
+.cyc-cr{display:flex;align-items:center;gap:12px}.cyc-cmp .cyc-w{width:86px;height:86px;flex:none}.cyc-cmp .cy-sg{stroke-width:15}.cyc-cmp .cy-hoy{stroke-width:5}
+.cyc-cmp .cyc-c{inset:20px}.cyc-cmp .cyc-c b{font:800 21px/1 Plus Jakarta Sans,sans-serif}.cyc-cmp .cyc-c small{font-size:9.5px;margin-top:2px}
+.cyc-tx{flex:1;min-width:0}.cyc-k{display:block;font:800 10px Plus Jakarta Sans,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A8A90}
+.cyc-cmp .cyc-f{justify-content:flex-start;margin:2px 0 2px}.cyc-cmp .cyc-f i{width:9px;height:9px}
+.cyc-cmp .cyc-l{background:none;padding:0;border-radius:0}.cyc-cmp .cyc-l span{font-size:12.5px;color:#4A4A50;font-weight:600}
+.cyc-cmp .cyc-tip{margin:6px 0 0;font-size:12px;line-height:1.35;background:linear-gradient(90deg,rgba(127,214,255,.16),rgba(154,140,255,.16));border-radius:12px;padding:6px 9px}.cyc-cmp .cyc-tip .ic{width:13px;height:13px;color:#5B5BD6}
+.cyc-acc{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:10px;padding-top:9px;border-top:1px solid #F0F0F3}.cyc-acc .cyc-ya{margin:0;background:#111;color:#fff;border:0}.cyc-acc .link{display:inline-flex;align-items:center;gap:5px;font-size:13px;margin-left:auto}
+.cyc-cmp .cyc-av{font-size:10.5px;margin:8px 0 0}
+.ck-rap{padding:14px}.ck-rh b{display:block;font:800 16px Plus Jakarta Sans,sans-serif}.ck-rh small{font-size:12.5px;color:var(--mu);font-weight:600}
+.ck-rn{display:flex;justify-content:space-between;gap:2px;margin-top:12px}
+.ck-rn button{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;font:inherit;cursor:pointer;min-width:0}
+.ck-rn i{position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff)}
+.ck-rn i:after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--c)}
+.ck-rn small{font:700 11px/1.2 Plus Jakarta Sans,sans-serif;color:#6A6A70;text-align:center}
+.ck-rnota{display:flex;align-items:center;gap:7px;width:100%;margin-top:12px;padding:10px 0 0;border:0;border-top:1px solid #F0F0F3;background:none;font:700 13px Plus Jakarta Sans,sans-serif;color:#4A4A50;cursor:pointer;text-align:left}.ck-rnota .ic{width:15px;height:15px;margin:0}
+.escala.ck-col button{background:color-mix(in srgb,var(--c) 16%,#fff);border-color:transparent;color:#111}
+.escala.ck-col button.on{background:var(--c);color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--c)}
+.cz-md.hc{background:#111}.cz-md.hc b{color:#fff}.cz-md.pl{background:#fff;box-shadow:inset 0 0 0 1px var(--line)}.cz-md.pl b{color:#111}
+.cz-md.bd b{margin-top:-8px}.cz-md .cz-mk{display:none}
+.cz-bd{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;color:#fff;flex:none}.cz-bd .ic{width:11px;height:11px;margin:0}
+.cz-md .cz-bd{position:absolute;bottom:-5px;left:50%;transform:translateX(-50%);border:2px solid #fff}
+.cz-bd.r{background:#7C5CFF}.cz-bd.c{background:#13915A}.cz-bd.f{background:#E07A1F}.cz-bd.g{background:#C99A1A}
+.cz-ly i.g{background:#C99A1A}
+.cz-md b{color:#9A9AA0}.cz-md.hoy{background:#fff;color:#111;box-shadow:inset 0 0 0 2px #111}.cz-md.hoy b{color:#111}.cz-md.hoy.hc{background:#111}.cz-md.hoy.hc b{color:#fff}
+.cz-md.sel{box-shadow:0 0 0 2px #fff,0 0 0 4px #111}.cz-mg{gap:9px 5px}.cz-md{min-height:46px;justify-content:center;padding:0 2px;border-radius:13px}.cz-md b{font-size:14px}
+.cz-ly i.p{background:#fff;box-shadow:inset 0 0 0 1px #C7C7CC}.cz-ly i.r{background:#7C5CFF}
+.cz-px{margin-top:12px;padding-top:10px;border-top:1px solid var(--line)}.cz-pt{display:block;font:800 10.5px Plus Jakarta Sans,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#8A8A90;margin-bottom:2px}
+.cz-pr{display:flex;align-items:center;gap:10px;width:100%;padding:7px 0;border:0;background:none;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.cz-pd{width:36px;text-align:center;line-height:1.05;flex:none}.cz-pd small{display:block;font:800 9.5px Plus Jakarta Sans,sans-serif;letter-spacing:.06em;color:#6A6A70}.cz-pd b{font:800 17px Plus Jakarta Sans,sans-serif}
+.cz-pr .cz-bd{width:32px;height:32px}.cz-pr .cz-bd .ic{width:15px;height:15px}
+.cz-ptx{flex:1;min-width:0;display:flex;flex-direction:column}.cz-ptx b{font-size:13.5px;font-weight:800}.cz-ptx small{font-size:11.5px;color:var(--mu);font-weight:600}
+.cz-pn{font-size:11px;font-weight:800;background:#F2F2F5;border-radius:999px;padding:4px 8px;white-space:nowrap}
 </style>
 </head>
 <body>
@@ -3861,7 +3925,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.170';
+var APP_V = 'v53.4.171';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6720,9 +6784,9 @@ function vHoy(){
   if(!CL.diaSel) CL.diaSel=hoy;
   var sel=CL.diaSel, esHoy=sel===hoy;
   var nombre=String(d.clienta.nombre||'').split(' ')[0], ft=CL.foto&&CL.foto.v===d.clienta.foto?CL.foto.img:'';
-  var h='<div class="saludo'+(ft?' sal-ft':'')+'"><div><h1>Hola, '+esc(nombre)+'</h1><div class="muted">'+fLarga(hoy)+'</div></div>'+(ft?'<button class="hoy-av" data-a="pfVer" aria-label="Ver tu foto en grande"><img src="'+esc(ft)+'" alt=""></button>':'')+'</div>'+(esHoy?avisoSesHtml(false)+citaClHtml()+llamadaClHtml()+planAvisoHoy()+(d.logros?logroAvisoHtml():''):'')+semanaStrip(hoy,sel)+
-    (d.rutinas.length&&lunesDe(sel)===lunesDe(hoy)?'<div class="sem-or">'+(semOrdenada(lunesDe(hoy))?'<span><b>Semana ordenada por ti</b> · solo esta semana · tu dieta sigue el nuevo orden</span>':'<span>Toca un día para ver su entreno</span>')+'<button class="sem-ob" data-a="ordAbrir">'+ic('orden')+'Ordenar</button></div>':      // v53.4.151
-     d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'');
+  var h='<div class="saludo'+(ft?' sal-ft':'')+'"><div><h1>Hola, '+esc(nombre)+'</h1><div class="muted">'+fLarga(hoy)+'</div></div>'+(ft?'<button class="hoy-av" data-a="pfVer" aria-label="Ver tu foto en grande"><img src="'+esc(ft)+'" alt=""></button>':'')+'</div>'+(esHoy?avisoSesHtml(false)+citaClHtml()+llamadaClHtml()+planAvisoHoy()+(d.logros?logroAvisoHtml():''):'')+'<div class="semc">'+semanaStrip(hoy,sel)+
+    (d.rutinas.length&&lunesDe(sel)===lunesDe(hoy)?'<div class="sem-or">'+(semOrdenada(lunesDe(hoy))?'<span>'+semOrTxt(hoy,'<b>ordenada por ti</b> · solo esta semana')+'</span>':'<span>'+semOrTxt(hoy,'toca un día para verlo')+'</span>')+'<button class="sem-ob" data-a="ordAbrir">'+ic('orden')+'Ordenar</button></div>':      // v53.4.151
+     d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'')+'</div>';
   if(esHoy) h+=pushHoyCard();      // v53.4.54: «Recibe avisos en tu móvil» (hasta que los active o diga «Ahora no»)
   if(esHoy) h+=eventoHoyCard();      // v52.11: su próxima competición, con la cuenta atrás
   else h+=eventoDiaCard(sel);
@@ -6812,10 +6876,14 @@ function semanaStrip(hoy,sel){
     var hecho=d.sesiones.some(function(s){ return s.fecha===f; });
     var plan=rutDia(f).length>0;      // v53.4.151
     var ev=(d.eventos||[]).filter(function(e){ return e.fecha===f; });      // v52.11
-    h+='<button class="dia'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(hecho?' hc':'')+(plan?' plan':'')+(ev.length?' ev':'')+'" data-a="verDia" data-f="'+f+'" aria-label="'+esc(fLarga(f)+ev.map(function(e){ return ' · Competición: '+e.nombre; }).join(''))+'">'+DL[k]+'<small>'+aDate(f).getDate()+'</small><i></i>'+(ev.length?'<b class="dia-tr">'+ic('trofeo')+'</b>':'')+'</button>';
+    h+='<button class="dia'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(hecho?' hc':'')+(plan?' plan':'')+(ev.length?' ev':'')+'" data-a="verDia" data-f="'+f+'" aria-label="'+esc(fLarga(f)+ev.map(function(e){ return ' · Competición: '+e.nombre; }).join(''))+'">'+DL[k]+'<small>'+aDate(f).getDate()+'</small><i>'+(hecho?ic('ok'):'')+'</i>'+(ev.length?'<b class="dia-tr">'+ic('trofeo')+'</b>':'')+'</button>';
   }
   return h+'</div>';
 }
+/* v53.4.171 · «2 de 4 entrenos» de esta semana (días con entreno hecho de los días con entreno, contando lo hecho de más) */
+function semCuenta(hoy){ var l=lunesDe(hoy), t=0, k=0; for(var i=0;i<7;i++){ var f=sumar(l,i), hc=CL.d.sesiones.some(function(s){ return s.fecha===f; }), pl=rutDia(f).length>0; if(hc) k++; if(pl||hc) t++; }
+  return t?'<b>'+k+' de '+t+'</b> '+(t===1?'entreno':'entrenos')+' · ':''; }
+function semOrTxt(hoy,tx){ var c=semCuenta(hoy); return c?c+tx:tx.replace(/^(<b>)?(\S)/,function(m,b,l){ return (b||'')+l.toUpperCase(); }); }
 /* otro día de la semana: lo programado y lo registrado */
 function diaCard(f,hoy){
   var d=CL.d, ds=diaSem(f), pasado=f<hoy;
@@ -6986,6 +7054,8 @@ function checkinCard(hoy){
   var dia=!vacio(e.dia_ciclo)?e.dia_ciclo:(CL.ck.regla?diaPeriodo(est):(est||''));
   var hecho=num(e.energia)!=null||!vacio(e.sueno)||!vacio(e.dia_ciclo)||!!e.notas||CL.ck.sin.length>0||CL.ck.pm;
   var esH=hoy===hoyStr();
+  if(esH&&!hecho&&!CL.ckEd&&!CL.ckAb) return ckRapidoHtml();      // v53.4.171
+  if(CL.ckQ!=null&&CL.ck.energia==null) CL.ck.energia=CL.ckQ;
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var mj=!hombreCl(), res=[mj&&e.regla?'Con el periodo':'',mj&&!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',mj&&e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
     return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
@@ -6999,10 +7069,23 @@ function checkinCard(hoy){
     '<div class="fase" id="ck-fase">'+faseTxt(dia,CL.ck.regla,cicloP())+'</div>'+
     '<div class="fila mt"><span>¿Notas síntomas premenstruales?<small class="fila-s">Los días antes del periodo: cansancio, hinchazón, ánimo…</small></span><button class="sw'+(CL.ck.pm?' on':'')+'" data-a="ckPm" aria-label="Síntomas premenstruales"><i></i></button></div>'+
     '<details class="ck-sin"'+(CL.ck.sin.length?' open':'')+'><summary>'+ic('mas')+'Síntomas de hoy <span class="muted">(opcional)</span></summary><div class="tipos ck-sl">'+SINT_ORDEN.map(function(k){ var on=CL.ck.sin.indexOf(k)>=0; return '<button class="'+(on?'on':'')+'" data-a="ckSin" data-k="'+k+'" aria-pressed="'+on+'">'+ic(on?'ok':'mas')+esc(SINT[k])+'</button>'; }).join('')+'</div></details>')+      // v52.10
-    '<div class="lab lab-i">Energía hoy, del 1 al 10 <button class="i-btn" data-a="ckInfo" aria-label="Qué significa cada número">'+ic('info')+'</button></div><div class="escala e10" id="ck-en">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){ return '<button class="'+(CL.ck.energia===v?'on':'')+'" data-a="ckEn" data-v="'+v+'">'+v+'</button>'; }).join('')+'</div><div class="escala-l"><span>1 · '+gCl('Agotada','Agotado')+'</span><span>10 · A tope</span></div><div class="ck-en-t" id="ck-en-t">'+(CL.ck.energia?esc(CL.ck.energia+' · '+ENE()[CL.ck.energia]):'')+'</div>'+
+    '<div class="lab lab-i">Energía hoy, del 1 al 10 <button class="i-btn" data-a="ckInfo" aria-label="Qué significa cada número">'+ic('info')+'</button></div><div class="escala e10 ck-col" id="ck-en">'+[1,2,3,4,5,6,7,8,9,10].map(function(v){ return '<button class="'+(CL.ck.energia===v?'on':'')+'" data-a="ckEn" data-v="'+v+'" style="--c:'+CK_10[v-1]+'">'+v+'</button>'; }).join('')+'</div><div class="escala-l"><span>1 · '+gCl('Agotada','Agotado')+'</span><span>10 · A tope</span></div><div class="ck-en-t" id="ck-en-t">'+(CL.ck.energia?esc(CL.ck.energia+' · '+ENE()[CL.ck.energia]):'')+'</div>'+
     '<label class="f">Notas para tu coach <span class="muted">(opcional)</span><textarea id="ck-notas" rows="3" placeholder="'+(hombreCl()?'Cuéntale a tu coach cómo estás: cansancio, dolores, ánimo, hambre, cómo has dormido…':'Cuéntale a tu coach cómo estás: cansancio, dolores, hinchazón, ánimo, hambre, cómo has dormido…')+'">'+esc(e.notas||'')+'</textarea></label>'+
     '<button class="btn mt" data-a="ckGuardar">Guardar check-in</button>'+(esH?'':'<button class="btn sec mt" data-a="ckCerrar">Ahora no</button>')+'</div>';
 }
+/* v53.4.171 (Javier): «¿Cómo te sientes hoy?» con un toque, de rojo (agotada) a verde oscuro (súper a tope); al tocar se abre lo demás
+   (el periodo, el día del ciclo, los síntomas, el sueño, la energía del 1 al 10 para afinar y la nota) y se guarda como siempre */
+var CK_10=['#E5484D','#EC6A3A','#F08A24','#F2A62A','#F2C230','#C7C83A','#8CC448','#3DBE6A','#239A54','#147A43'];
+var CK_R=[[2,'#E5484D'],[4,'#F08A24'],[6,'#F2C230'],[8,'#3DBE6A'],[10,'#147A43']];
+function ckNiv(){ return [gCl('Agotada','Agotado'),gCl('Cansada','Cansado'),'Normal','A tope','Súper a tope']; }
+function ckRapidoHtml(){
+  var N=ckNiv();
+  return '<div class="card ck-rap" id="ck-card"><div class="ck-rh"><b>¿Cómo te sientes hoy?</b><small>Toca cómo estás y, si quieres, completa lo demás</small></div>'+
+    '<div class="ck-rn">'+CK_R.map(function(x,i){ return '<button data-a="ckRapido" data-v="'+x[0]+'" style="--c:'+x[1]+'" aria-label="'+esc(N[i])+'"><i></i><small>'+esc(N[i])+'</small></button>'; }).join('')+'</div>'+
+    '<button class="ck-rnota" data-a="ckRapido" data-v="">'+ic('nota')+'Añadir una nota para '+esc(czCoach())+'</button></div>';
+}
+A.ckRapido=function(el){ var v=el.dataset.v; CL.ckAb=true; CL.ckQ=v?+v:null; CL.keep=true; pintarCl();
+  setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); if(!v){ var t=document.getElementById('ck-notas'); if(t) setTimeout(function(){ t.focus({preventScroll:true}); },350); } },60); };
 A.ckEditar=function(){ CL.ckEd=true; CL.keep=true; pintarCl(); setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); },60); };
 A.ckRegla=function(el){
   CL.ck.regla=!CL.ck.regla; el.classList.toggle('on',CL.ck.regla);
@@ -7023,7 +7106,7 @@ A.ckGuardar=function(){
   cargando(colaDiario(p)).then(function(){
     var e=diarioDe(hoy,true);
     e.regla=p.regla; e.premenstrual=p.premenstrual; e.sintomas=p.sintomas; e.dia_ciclo=num(p.dia_ciclo)==null?'':num(p.dia_ciclo); e.sueno=num(p.sueno)==null?'':num(p.sueno); e.energia=p.energia; e.notas=p.notas;
-    toast(pas?'Check-in del '+fLarga(hoy).toLowerCase()+' guardado':'Check-in guardado','ok'); CL.ckF=null; CL.ckEd=false; CL.keep=true; pintarCl();
+    toast(pas?'Check-in del '+fLarga(hoy).toLowerCase()+' guardado':'Check-in guardado','ok'); CL.ckF=null; CL.ckEd=false; CL.ckAb=false; CL.ckQ=null; CL.keep=true; pintarCl();
   },function(e){ toast('No se ha podido guardar: '+limpiaErr(e),'err'); });
 };
 /* =====================================================================
@@ -7066,6 +7149,15 @@ function cicloHoyCard(){
     '<label class="f">¿Cuándo empezó tu último periodo?<input type="date" id="cyc-f" max="'+hoyStr()+'" min="'+sumar(hoyStr(),-60)+'"></label>'+
     '<div class="row mt6"><button class="btn sm" data-a="cycPrimera">'+ic('ok')+'Empezar</button><button class="link" data-a="cycOff">No quiero verlo</button></div></div>';
   var fx=C.f==='largo'?'premenstrual':C.f, q=diff(hoyStr(),C.prox), cerca=!C.reglaHoy&&(C.retraso||q<=3);
+  /* v53.4.171 (Javier): compacto, con los colores de siempre en el anillo */
+  var tip=cicloTipHoy(C);
+  return '<div class="card cyc cyc-cmp" id="cyc"><div class="cyc-cr"><div class="cyc-w">'+cicloAnillo(C)+'<div class="cyc-c"><b>'+C.d+'</b><small>'+(C.f==='menstrual'?'de tu periodo':'día')+'</small></div></div>'+
+    '<div class="cyc-tx"><small class="cyc-k">Tu ciclo</small><div class="cyc-f" style="--cf:'+CIC_C[fx]+'"><i></i><b>'+esc(C.f==='menstrual'?'Día '+C.d+' de tu periodo':CIC_N[C.f])+'</b></div>'+
+    '<div class="cyc-l">'+(C.f!=='menstrual'?'<span>'+(C.retraso?'Tu periodo se retrasa '+C.retraso+(C.retraso>1?' días':' día'):'Tu periodo, '+(q>0?'en '+q+(q>1?' días':' día'):'hoy')+' · '+esc(fCorta(C.prox)))+'</span>':'<span>Próximo periodo · '+esc(fCorta(sumar(C.ult,C.L)))+'</span>')+
+      (C.d<=C.ov+1&&!C.retraso?'<span>Ventana fértil · '+esc(fCorta(C.fIni))+' – '+esc(fCorta(C.fFin))+'</span>':'')+'</div>'+
+      (tip?'<p class="cyc-tip">'+ic('idea')+'<span>'+esc(tip)+'</span></p>':'')+'</div></div>'+
+    '<div class="cyc-acc">'+(cerca?'<button class="btn sm cyc-ya" data-a="cycYa">'+ic('gota')+'Me ha venido hoy</button>':'<span></span>')+'<button class="link" data-a="cycCal">'+ic('cal')+'Calendario</button></div>'+
+    '<p class="muted cyc-av">Aproximado, con tus check-ins'+(C.P.ini.length<2?' (con más periodos apuntados, más preciso)':'')+'. No sirve como método anticonceptivo.</p></div>';
   var h='<div class="card cyc" id="cyc"><div class="cyc-t"><b>Tu ciclo</b><button class="link" data-a="cycCal">'+ic('cal')+'Calendario</button></div>'+
     '<div class="cyc-r"><div class="cyc-w">'+cicloAnillo(C)+'<div class="cyc-c">'+cicloCentro(C)+'</div></div></div>'+
     '<div class="cyc-f" style="--cf:'+CIC_C[fx]+'"><i></i><b>'+esc(C.f==='menstrual'?'Día '+C.d+' de tu periodo':CIC_N[C.f])+'</b></div>'+
@@ -19567,9 +19659,22 @@ A.czMesN=function(el){ var p=CL.czM.split('-').map(Number); CL.czM=fechaDe(new D
 A.czMesD=function(el){ CL.czD=el.dataset.f; czMesPintar(); };
 function czDia(f){
   var d=CL.d, hoy=hoyStr(), c=d.clienta||{}, r={hecho:(d.sesiones||[]).some(function(s){ return s.fecha===f; }),plan:[],citas:(d.citas||[]).filter(function(x){ return x.fecha===f; }),
-    rev:!!(c.revision&&c.revision.fecha===f),fotos:!!(c.fotos&&c.fotos.fecha===f),ev:(d.eventos||[]).filter(function(e){ return e.fecha===f; })};
+    rev:!!(c.revision&&c.revision.fecha===f),fotos:!!(c.fotos&&c.fotos.fecha===f),ev:(d.eventos||[]).filter(function(e){ return e.fecha===f; }),ll:(d.llamadas||[]).filter(function(x){ return x.fecha===f; })};
   if(!r.hecho&&f>=hoy){ try { r.plan=rutDia(f); } catch(e){ r.plan=[]; } }
   return r;
+}
+/* v53.4.171 · «Lo próximo» debajo del mes: revisión, citas, videollamadas, fotos y competiciones, con su fecha y cuánto falta */
+function czProxHtml(hoy){
+  var d=CL.d, c=d.clienta||{}, L=[];
+  (d.citas||[]).forEach(function(x){ if(x.fecha>=hoy) L.push({f:x.fecha,k:'c',i:'user',t:x.titulo+' con '+czCoach(),s:[x.hora,x.lugar&&!czUrl(x.lugar)?x.lugar:''].filter(String).join(' · ')}); });
+  (d.llamadas||[]).forEach(function(x){ if(x.fecha>=hoy) L.push({f:x.fecha,k:'c',i:'video',t:'Videollamada con '+czCoach(),s:[x.hora,(+x.minutos||30)+' min'].filter(String).join(' · ')}); });
+  if(c.revision&&c.revision.fecha>=hoy) L.push({f:c.revision.fecha,k:'r',i:'rev',t:'Revisión con '+czCoach(),s:'Rellena tu revisión ese día'});
+  if(c.fotos&&c.fotos.fecha>=hoy) L.push({f:c.fotos.fecha,k:'f',i:'foto',t:'Fotos de progreso',s:'De frente, de perfil y de espaldas'});
+  (d.eventos||[]).forEach(function(e){ if(e.fecha>=hoy) L.push({f:e.fecha,k:'g',i:'trofeo',t:e.nombre,s:[e.prioridad==='principal'?'Tu objetivo principal':'Competición',e.lugar].filter(String).join(' · ')}); });
+  L.sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; }); L=L.slice(0,5);
+  if(!L.length) return '<div class="cz-px"><b class="cz-pt">Lo próximo</b><p class="muted sm">No tienes revisiones, citas ni fotos a la vista.</p></div>';
+  return '<div class="cz-px"><b class="cz-pt">Lo próximo</b>'+L.map(function(x){ var n=diff(hoy,x.f), dd=aDate(x.f);
+    return '<button class="cz-pr" data-a="czMesD" data-f="'+x.f+'"><span class="cz-pd"><small>'+esc(diaSemC(dd).toUpperCase())+'</small><b>'+dd.getDate()+'</b></span><span class="cz-bd '+x.k+'">'+ic(x.i)+'</span><span class="cz-ptx"><b>'+esc(x.t)+'</b>'+(x.s?'<small>'+esc(x.s)+'</small>':'')+'</span><span class="cz-pn">'+(n===0?'Hoy':n===1?'Mañana':'en '+n+' días')+'</span></button>'; }).join('')+'</div>';
 }
 function czMesPintar(){
   var M=CL.czM, Y=+M.slice(0,4), m=+M.slice(5,7)-1, p1=M+'-01', ult=fechaDe(new Date(Y,m+1,0)), off=DIAS.indexOf(diaSem(p1)), hoy=hoyStr(), sel=CL.czD||(hoy.slice(0,7)===M?hoy:'');
@@ -19577,12 +19682,15 @@ function czMesPintar(){
     '<div class="cz-mg">'+['L','M','X','J','V','S','D'].map(function(x){ return '<span class="cz-dh">'+x+'</span>'; }).join('')+(off?'<span style="grid-column:span '+off+'"></span>':'');
   for(var dd=1;dd<=+ult.slice(8);dd++){
     var f=fechaDe(new Date(Y,m,dd)), r=czDia(f);
-    g+='<button class="cz-md'+(f===hoy?' hoy':'')+(f===sel?' sel':'')+(f<hoy?' pas':'')+'" data-a="czMesD" data-f="'+f+'" aria-label="'+esc(fLarga(f))+'"><b>'+dd+'</b>'+(r.citas.length?'<span class="cz-t">'+esc(r.citas[0].hora)+'</span>':'')+(r.ev.length?'<span class="cz-tr">'+ic('trofeo')+'</span>':'')+
+    var bd=r.ev.length?['g','trofeo']:r.citas.length||r.ll.length?['c',r.ll.length&&!r.citas.length?'video':'user']:r.rev?['r','rev']:r.fotos?['f','foto']:null;      // v53.4.171: el recordatorio, con su icono de color
+    g+='<button class="cz-md'+(f===hoy?' hoy':'')+(f===sel&&CL.czD?' sel':'')+(f<hoy?' pas':'')+(r.hecho?' hc':r.plan.length?' pl':'')+(bd?' bd':'')+'" data-a="czMesD" data-f="'+f+'" aria-label="'+esc(fLarga(f))+'"><b>'+dd+'</b>'+(bd?'<span class="cz-bd '+bd[0]+'">'+ic(bd[1])+'</span>':'')+
       '<span class="cz-mk">'+(r.hecho?'<i class="h"></i>':'')+(r.plan.length?'<i class="p"></i>':'')+(r.rev?'<i class="r"></i>':'')+(r.fotos?'<i class="f"></i>':'')+'</span></button>';
   }
-  g+='</div><div class="cz-ly"><span><i class="h"></i>Entreno hecho</span><span><i class="p"></i>Toca entrenar</span><span><i class="c"></i>Cita con '+esc(czCoach())+'</span><span><i class="r"></i>Revisión</span><span><i class="f"></i>Fotos</span><span>'+ic('trofeo')+'Competición</span></div>';
-  if(sel){ var r2=czDia(sel), L=[];
+  g+='</div><div class="cz-ly"><span><i class="h"></i>Hecho</span><span><i class="p"></i>Toca entrenar</span><span><i class="r"></i>Revisión</span><span><i class="c"></i>Cita con '+esc(czCoach())+'</span><span><i class="f"></i>Fotos</span><span><i class="g"></i>Competición</span></div>';
+  if(!CL.czD) g+=czProxHtml(hoy);      // v53.4.171: «Lo próximo»
+  if(sel&&CL.czD){ var r2=czDia(sel), L=[];
     r2.citas.forEach(function(x){ L.push('<div class="cz-dr"><b>'+esc(x.hora)+'</b><span>'+esc(x.titulo)+' con '+esc(czCoach())+(x.lugar&&!czUrl(x.lugar)?'<small>'+esc(x.lugar)+'</small>':'')+'</span></div>'); });
+    r2.ll.forEach(function(x){ L.push('<div class="cz-dr"><b>'+esc(x.hora)+'</b><span>Videollamada con '+esc(czCoach())+'<small>'+((+x.minutos||30)+' min')+'</small></span></div>'); });
     r2.ev.forEach(function(e){ L.push('<div class="cz-dr"><b class="tr">'+ic('trofeo')+'</b><span>'+esc(e.nombre)+'<small>'+esc(e.prioridad==='principal'?'Tu objetivo principal':'Competición preparatoria')+'</small></span></div>'); });
     if(r2.hecho) L.push('<div class="cz-dr"><b class="ok">'+ic('okc')+'</b><span>Entreno hecho</span></div>');
     if(r2.plan.length) L.push('<div class="cz-dr"><b>'+ic('pesa')+'</b><span>Toca entrenar<small>'+esc(listaY(r2.plan.map(function(z){ return z.nombre; })))+'</small></span></div>');
@@ -19976,10 +20084,22 @@ function eventoHoyCard(){
   if(pend) h+='<div class="card ev-hoy ev-pend"><span class="ev-ic pri">'+ic('trofeo')+'</span><div class="ev-tx"><b>¿Cómo te fue en '+esc(pend.nombre)+'?</b><small>Cuéntaselo a tu coach: tu marca o cómo te sentiste.</small></div><button class="btn sm" data-a="evClRes" data-id="'+esc(pend.id)+'">Contarlo</button></div>';
   var P=E.filter(function(e){ return e.fecha>=hoy; }); if(!P.length) return h;
   var sig=P[0], n=diff(hoy,sig.fecha);
-  /* v53.4.5: en una línea, para no cargar su Hoy: qué es, su nombre, el día y los días que faltan; lo demás (su preparación, su objetivo, qué es), al tocarla */
+  /* v53.4.171 (Javier): «el anillo de tu preparación»: se llena desde que empieza su preparación (sus bloques de entreno) hasta el día;
+     sin preparación, solo los días. Lo demás (su objetivo, qué es), al tocarla, como antes */
+  return h+evAnilloHtml(sig,hoy,n);
+  /* v53.4.5: en una línea (ya no se usa) */
   return h+'<button class="card ev-hoy ev-cd" data-a="evClLista"><span class="ev-cdx"><span class="ev-cdk">'+ic('trofeo')+(sig.prioridad==='principal'?'Tu objetivo principal':'Tu próxima competición')+'</span>'+
     '<b class="ev-cdn">'+esc(sig.nombre)+'</b><small class="ev-cdf">'+esc([fMedia(sig.fecha),sig.lugar].filter(String).join(' · '))+'</small></span>'+
     (n>0?'<span class="ev-cdc"><b>'+n+'</b> <small>'+(n===1?'día':'días')+'</small></span>':'<span class="ev-cdc hoy"><b>¡Hoy!</b></span>')+'</button>';
+}
+function evAnilloHtml(e,hoy,n){
+  var R=27, C=2*Math.PI*R, tot=e.prep&&e.prep<e.fecha?diff(e.prep,e.fecha):0, hh=tot?diff(e.prep,hoy):0, fr=tot&&hh>0?Math.min(1,hh/tot):0;
+  var semT=tot?Math.max(1,Math.ceil(tot/7)):0, sem=tot&&hh>=0?Math.min(semT,Math.floor(hh/7)+1):0;
+  var svg='<svg class="eva-r" viewBox="0 0 74 74" aria-hidden="true"><defs><linearGradient id="eva-g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F3D27A"/><stop offset="1" stop-color="#C99A1A"/></linearGradient></defs><circle cx="37" cy="37" r="'+R+'" fill="none" stroke="#F1EEE6" stroke-width="7"/>'+
+    (fr>0?'<circle cx="37" cy="37" r="'+R+'" fill="none" stroke="url(#eva-g)" stroke-width="7" stroke-linecap="round" stroke-dasharray="'+(C*Math.max(fr,.03)).toFixed(1)+' '+C.toFixed(1)+'" transform="rotate(-90 37 37)"/>':'')+'</svg>';
+  return '<button class="card ev-hoy ev-cd eva" data-a="evClLista"><span class="eva-w">'+svg+(n>0?'<span class="ev-cdc"><b>'+n+'</b> <small>'+(n===1?'día':'días')+'</small></span>':'<span class="ev-cdc hoy"><b>¡Hoy!</b></span>')+'</span>'+
+    '<span class="ev-cdx"><span class="ev-cdk">'+ic('trofeo')+(e.prioridad==='principal'?'Tu objetivo principal':'Tu próxima competición')+'</span><b class="ev-cdn">'+esc(e.nombre)+'</b><small class="ev-cdf">'+esc([fMedia(e.fecha),e.lugar].filter(String).join(' · '))+'</small>'+
+    (hh<0&&tot?'<em class="eva-p">Tu preparación empieza el '+esc(fCorta(e.prep))+'</em>':sem?'<em class="eva-p">Semana '+sem+' de '+semT+' de tu preparación</em>':'')+'</span></button>';
 }
 /* otro día de su semana con competición: arriba, qué es y cuánto falta (o «¿Cómo te fue?» si ya pasó) */
 function eventoDiaCard(f){
@@ -21704,11 +21824,13 @@ function pasosCard(hoy){
   var P=CL.d.pasos, obj=P.obj, L=pasosRango(P.dias,obj,lunesDe(hoy),sumar(lunesDe(hoy),6)), h0=L.filter(function(x){ return x.hoy; })[0]||{p:0}, n=h0.p, ok=n>=obj;
   var max=Math.max(obj,Math.max.apply(null,L.map(function(x){ return x.p; })))||1;
   var bars=L.map(function(x){ var hh=x.hay?Math.max(6,Math.round(x.p/max*40)):4; return '<span class="psm-b"><i class="'+(x.ok?'ok':x.hay?'no':'vac')+'" style="height:'+hh+'px"></i><small'+(x.hoy?' class="hoy"':'')+'>'+DL[diaSem(x.f)]+'</small></span>'; }).join('');
-  return '<div class="card ps-c ps-negra" id="ps-card"><div class="ps-dh"><span class="ps-tt">'+ic('pasos')+'Pasos</span><span>Objetivo '+fP(obj)+'</span></div>'+
+  if(!CL.psAb) return '<div class="card ps-c ps-negra ps-cmp" id="ps-card"><button class="ps-row" data-a="pasosAbre" aria-label="Ver tus pasos de hoy y de la semana"><span class="ps-ri">'+ic('pasos')+'</span><span class="ps-rt"><b>'+fP(n)+' pasos</b><small>'+(ok?'¡Objetivo cumplido!':'de '+fP(obj)+(n?' · te faltan '+fP(obj-n):' · apúntalos al final del día'))+'</small></span><span class="ps-rb"><i style="width:'+Math.min(100,Math.round(n/(obj||1)*100))+'%"></i></span></button>'+(ok?'<button class="ps-rm" data-a="pasosFiesta" aria-label="Compartir tus pasos">'+ic('compartir')+'</button>':'<button class="ps-rm" data-a="pasosApuntar" aria-label="Apuntar pasos">'+ic('mas')+'</button>')+'</div>';      // v53.4.171
+  return '<div class="card ps-c ps-negra" id="ps-card"><div class="ps-dh"><span class="ps-tt">'+ic('pasos')+'Pasos</span><span>Objetivo '+fP(obj)+'<button class="ps-cerrar" data-a="pasosAbre" aria-label="Cerrar">'+ic('abajo')+'</button></span></div>'+
     '<button class="ps-hoy" data-a="pasosVer" aria-label="Ver tus pasos"><b>'+fP(n)+'</b><small>'+(ok?'<span class="ps-okt">'+ic('estrella')+'¡Objetivo cumplido!</span>':n?'pasos hoy · te faltan '+fP(obj-n):'pasos hoy · apúntalos al final del día')+'</small></button>'+
     '<button class="ps-mini" data-a="pasosVer" aria-label="Ver tu semana de pasos">'+bars+'</button>'+
     '<div class="ps-acc"><button class="btn sm ps-ap" data-a="pasosApuntar">'+ic('mas')+'Apuntar pasos</button>'+(ok?'<button class="btn sm ps-sh-b" data-a="pasosFiesta">'+ic('compartir')+'Compartir</button>':'')+'</div></div>';
 }
+A.pasosAbre=function(){ CL.psAb=!CL.psAb; CL.keep=true; pintarCl(); };      // v53.4.171
 /* ---- la semana o el mes en grande ---- */
 function pasosGraf(L,obj,sem){
   var W=340, H=sem?196:170, Lm=6, R=40, T=sem?24:12, B=22, n=L.length, band=(W-Lm-R)/n, bw=Math.max(3,Math.min(sem?30:8,band*(sem?0.6:0.66)));
