@@ -1448,6 +1448,16 @@ html[data-tema="oscuro"] .mp-in{--tx:#0D0D0F;--tx2:#55555E;--tx3:#7A7A82;--card:
 .lb-neg .mio{background:#fff;color:#0D0D10}.lb-neg .fila-b.crea b{color:#9ADFFF}
 html[data-tema="oscuro"] .lista-b.lb-neg{background:radial-gradient(120% 60% at 100% 0%,rgba(127,214,255,.14),transparent 60%),#0B0B0D!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.45)!important}
 @media (prefers-color-scheme:dark){html:not([data-tema="claro"]) .lista-b.lb-neg{background:radial-gradient(120% 60% at 100% 0%,rgba(127,214,255,.14),transparent 60%),#0B0B0D!important;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 14px 30px rgba(0,0,0,.45)!important}}
+/* Añadir alimento (18 nov): primero lo que más tomas, con la cantidad de siempre y «+» para añadirlo de un toque */
+.nb-v{margin:12px 0 8px}
+.nb-l{padding-top:6px}
+.nb-t{display:block;font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin:12px 2px 2px}.nb-t:first-child{margin-top:4px}
+.nb-f{display:flex;align-items:center;gap:8px;border-top:1px solid var(--linea)}.nb-t+.nb-f,.nb-l>small+.nb-f{border-top:0}
+.nb-f .fila-b{flex:1;min-width:0;border-top:0;flex-direction:row;align-items:center;gap:8px}.nb-f .fila-b .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.nb-f .fila-b>.ic{display:none}
+.nb-n{font-size:11px;font-weight:800;color:var(--tx3);white-space:nowrap}
+.nb-mas{width:34px;height:34px;border-radius:50%;border:0;background:#0D0D10;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;padding:0}
+.nb-mas.sec{background:var(--suave);color:var(--tx)}
 
 </style>
 </head>
@@ -2102,7 +2112,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.2';
+var YO_V = 'yo-1.3';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -5855,10 +5865,19 @@ function alimentos() {
   return L;
 }
 function alDe(key) { var L = alimentos(); for (var i = 0; i < L.length; i++) if (L[i].key === key) return L[i]; return null; }
-function buscaAl(q) {
-  var k = clave(q || ''); if (!k) return [];
+/* 18 nov (PDF «fallos mejoras II (1)»: «buscador de alimentos: primero los que más sueles buscar»): lo que más apunta en los últimos 60 días,
+   cuántas veces (en esa comida y en total) y la cantidad de siempre (la que más repite, con su apunte para copiarlo tal cual) */
+function frecuentes(c) {
+  var lim = sumar(hoyStr(), -60), M = {};
+  Object.keys(S.diario).forEach(function (f) { if (f < lim) return; diaDe(f).it.forEach(function (x) { var k = x.ref && x.ref.t !== 'rec' ? x.ref.id : ''; if (!k || !x.g) return;
+    var m = M[k] = M[k] || { k: k, n: 0, nc: 0, q: {}, t: {} }, q = (x.mu || 'g') + '|' + x.g; m.n++; if (x.c === c) m.nc++; m.q[q] = (m.q[q] || 0) + 1; m.t[q] = x; }); });
+  return Object.keys(M).map(function (k) { var m = M[k], a = alDe(k); if (!a) return null; var q = Object.keys(m.q).sort(function (x, y) { return m.q[y] - m.q[x]; })[0]; m.a = a; m.it = m.t[q]; return m; }).filter(Boolean);
+}
+function frecMapa() { var o = {}; frecuentes(-1).forEach(function (m) { o[m.k] = m; }); return o; }
+function buscaAl(q, fq) {
+  var k = clave(q || ''); if (!k) return []; fq = fq || {};
   var L = alimentos().filter(function (a) { return clave(a.n + ' ' + a.sub).indexOf(k) >= 0; });
-  L.sort(function (a, b) { return ((clave(b.n).indexOf(k) === 0) - (clave(a.n).indexOf(k) === 0)) || ((b.mio || 0) - (a.mio || 0)) || a.n.length - b.n.length; });
+  L.sort(function (a, b) { return (((fq[b.key] || {}).n || 0) - ((fq[a.key] || {}).n || 0)) || ((clave(b.n).indexOf(k) === 0) - (clave(a.n).indexOf(k) === 0)) || ((b.mio || 0) - (a.mio || 0)) || a.n.length - b.n.length; });
   return L.slice(0, 40);
 }
 function recientes() {
@@ -6104,11 +6123,39 @@ VISTAS.nbuscar = function () {
     '<div class="fila2"><button class="btn sec" data-a="nEscanear">' + ic('codigo', 18) + 'Escanear</button><button class="btn sec" data-a="nAlNuevo">' + ic('mas', 18) + 'Alimento nuevo</button></div>' +
     nbFilas() + '</div>';
 };
-function nbFilas() {
-  var B = S.x.nb || {}, L = B.q ? buscaAl(B.q) : recientes();
-  var cab_ = B.q ? (L.length ? '' : '<p class="mut sm">' + (!NUT_OK || S.alMO === null ? 'Cargando los alimentos…' : 'No sale nada con «' + esc(B.q) + '». Prueba con otra palabra, escanea el código o créalo con «Alimento nuevo».') + '</p>') : (L.length ? '<small class="mut">Los últimos que has apuntado</small>' : '<p class="mut sm">Escribe para buscar entre los alimentos de MOOD ON (también los de Mercadona) y los tuyos.</p>');
-  return '<div id="nb-l" class="card lista-b">' + cab_ + L.map(function (a) { return '<button class="fila-b fila-x" data-a="nbElegir" data-k="' + esc(a.key) + '"><span class="col"><b>' + esc(a.n) + (a.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc([a.sub, fmil(a.k) + ' kcal / 100 g'].filter(Boolean).join(' · ')) + '</small></span>' + ic('mas', 16) + '</button>'; }).join('') + offHtml(B) + '</div>';
+function nbFila(a, m, n) {      // n: las veces que sale (en esa comida, si va en «En el desayuno sueles tomar»)
+  var sub = m ? 'Sueles: ' + m.it.det + ' · ' + fmil(m.it.k) + ' kcal' : [a.sub, fmil(a.k) + ' kcal / 100 g'].filter(Boolean).join(' · ');
+  return '<div class="nb-f' + (m ? ' fr' : '') + '"><button class="fila-b fila-x" data-a="nbElegir" data-k="' + esc(a.key) + '"><span class="col"><b>' + esc(a.n) + (a.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc(sub) + '</small></span>' +
+    (m ? '<span class="nb-n">' + (n || m.n) + ((n || m.n) === 1 ? ' vez' : ' veces') + '</span>' : '') + '</button>' +
+    (m ? '<button class="nb-mas" data-a="nbRapido" data-k="' + esc(a.key) + '" aria-label="' + esc('Añadir ' + m.it.det + ' de ' + a.n) + '">' + ic('mas', 16, null, 2.6) + '</button>' : '<button class="nb-mas sec" data-a="nbElegir" data-k="' + esc(a.key) + '" aria-label="Añadir ' + esc(a.n) + '">' + ic('mas', 16, null, 2.6) + '</button>') + '</div>';
 }
+var NB_V = [['frec', 'Lo que más tomas'], ['rec', 'Recientes'], ['mios', 'Mis alimentos']];
+function nbFilas() {
+  var B = S.x.nb || {}, rec = B.para === 'rec', v = B.v || 'frec', h = '';
+  if (B.q) { var fq = frecMapa(), L = buscaAl(B.q, fq);
+    h = L.length ? (fq[L[0].key] ? '<small class="mut">Primero, los que más tomas</small>' : '') + L.map(function (a) { return nbFila(a, fq[a.key]); }).join('') : '<p class="mut sm">' + (!NUT_OK || S.alMO === null ? 'Cargando los alimentos…' : 'No sale nada con «' + esc(B.q) + '». Prueba con otra palabra, escanea el código o créalo con «Alimento nuevo».') + '</p>';
+    return '<div id="nb-l" class="card lista-b nb-l">' + h + offHtml(B) + '</div>'; }
+  var tabs = '<div class="seg-p nb-v" role="tablist">' + NB_V.map(function (x) { return '<button role="tab" aria-selected="' + (v === x[0]) + '" class="' + (v === x[0] ? 'on' : '') + '" data-a="nbVer" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  if (v === 'frec') {
+    var F = frecuentes(rec ? -1 : B.c), cn = rec ? '' : comidas()[B.c].toLowerCase(), A1 = rec ? [] : F.filter(function (m) { return m.nc > 0; }).sort(function (x, y) { return y.nc - x.nc || y.n - x.n; }).slice(0, 8), ya = {};
+    A1.forEach(function (m) { ya[m.k] = 1; }); var A2 = F.filter(function (m) { return !ya[m.k]; }).sort(function (x, y) { return y.n - x.n; }).slice(0, A1.length ? 8 : 14);
+    if (!F.length) h = '<p class="mut sm">Cuando apuntes comidas, aquí saldrá lo que más tomas, con la cantidad de siempre para añadirlo de un toque.</p>';
+    if (A1.length) h += '<small class="nb-t">En ' + (B.c === 1 ? 'la ' : 'el ') + esc(cn) + ' sueles tomar</small>' + A1.map(function (m) { return nbFila(m.a, m, m.nc); }).join('');
+    if (A2.length) h += '<small class="nb-t">' + (A1.length ? 'Otros que tomas a menudo' : 'Lo que más tomas') + '</small>' + A2.map(function (m) { return nbFila(m.a, m); }).join('');
+  } else if (v === 'rec') { var R = recientes(); h = R.length ? '<small class="nb-t">Los últimos que has apuntado</small>' + R.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Todavía no has apuntado nada.</p>'; }
+  else { var Mi = alimentos().filter(function (a) { return a.mio; }); h = Mi.length ? Mi.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Los alimentos que crees o escanees saldrán aquí.</p>'; }
+  return tabs + '<div id="nb-l" class="card lista-b nb-l">' + h + '</div>';
+}
+A.nbVer = function (el) { S.x.nb.v = el.dataset.v; pintar(); };
+/* «+» de un frecuente: lo añade con la cantidad de siempre a la comida elegida, sin abrir nada (y se puede deshacer) */
+A.nbRapido = function (el) {
+  var B = S.x.nb || {}, m = frecMapa()[el.dataset.k]; if (!m) return A.nbElegir(el);
+  if (B.para === 'rec') return hojaCuanto(m.a, null, m.it);
+  var f = nd(), D = S.diario[f] = diaDe(f), o = Object.assign({}, m.it, { id: rand(8), c: B.c });
+  D.it.push(o); guardaDia(f);
+  toast(m.a.n + ' · ' + m.it.det + ' añadido a ' + comidas()[B.c].toLowerCase(), 'ok', '<button class="toast-b" data-a="nbDeshacer" data-v="' + o.id + '">Deshacer</button>');
+};
+A.nbDeshacer = function (el) { var f = nd(), D = diaDe(f), i = D.it.findIndex(function (x) { return x.id === el.dataset.v; }); if (i >= 0) { D.it.splice(i, 1); guardaDia(f); toast('Quitado'); } };
 /* buscar en Open Food Facts por nombre: solo si lo toca; solo se envía lo que ha escrito (nunca su nombre ni su cuenta) */
 function offHtml(B) {
   var q = String(B.q || '').trim(); if (q.length < 3) return '';
@@ -6139,9 +6186,9 @@ A.offElegir = function (el) {
   var ya = a.ean && alimentos().filter(function (x) { return x.ean && x.ean === a.ean; })[0]; if (ya) return hojaCuanto(ya, null);
   var b = Object.assign({ id: 'al' + rand(8), tipo: 'al', off: 1 }, a); guardaBiblio(b); var a2 = alDe('u:' + b.id); if (a2) hojaCuanto(a2, null);
 };
-IN.nbQ = function (t) { S.x.nb.q = t.value; var l = $('#nb-l'); if (l) l.outerHTML = nbFilas(); };
+IN.nbQ = function (t) { var antes = !!S.x.nb.q; S.x.nb.q = t.value; var l = $('#nb-l'); if (!l) return; if (antes !== !!t.value) { var tb = document.querySelector('.nb-v'); if (tb) tb.remove(); } l.outerHTML = nbFilas(); };
 A.nbCom = function (el) { S.x.nb.c = +el.dataset.v; Array.prototype.forEach.call(el.parentNode.children, function (b) { b.classList.toggle('on', b === el); }); };
-A.nbElegir = function (el) { var a = alDe(el.dataset.k); if (a) hojaCuanto(a, null); };
+A.nbElegir = function (el) { var a = alDe(el.dataset.k), m = frecMapa()[el.dataset.k]; if (a) hojaCuanto(a, null, m ? m.it : null); };      // si lo toma a menudo, con su cantidad de siempre
 /* 17 nov 2026 · crudo o cocido: cuánto pesa cocinado lo que pesaba en crudo (f = cocido / crudo). Si están los dos en la base, sale de sus kcal
    (la energía no cambia al cocer: solo entra o sale agua); si no, de esta tabla (valores medios de cocción) */
 var CRCO_T = [[/arroz/, 2.7], [/pasta|macarr|espagu|tallar|fideo|noodle|lasa[nñ]/, 2.3], [/quinoa|quinua/, 2.8], [/cusc/, 2.6], [/lentej/, 2.6], [/garbanz/, 2.6], [/alubia|judia blanca|frijol|soja verde|azuki/, 2.7],
@@ -6154,10 +6201,11 @@ function crco(a) {
   return f ? { est: est, f: f } : null;
 }
 /* «¿Cuánto?»: en gramos o, si tiene, en unidades (rebanada, unidad…) */
-function hojaCuanto(a, it) {
-  var B = S.x.nb || {}, rec = B.para === 'rec', uni = a.uni && a.gu, g = it ? it.g : uni ? a.gu : 100, cc = crco(a);
-  S.x.cu = { a: a, it: it, modo: it ? it.mu || 'g' : uni ? 'u' : 'g', c: it ? it.c : B.c || 0, cc: cc, est: it && it.est ? it.est : cc ? cc.est : '' };
-  var X = S.x.cu, v = X.modo === 'u' ? Math.round(g / a.gu * 10) / 10 : it && it.gin ? it.gin : g;
+function hojaCuanto(a, it, pre) {      // pre: un apunte anterior con la cantidad de siempre (18 nov: «lo que más tomas»)
+  var B = S.x.nb || {}, rec = B.para === 'rec', uni = a.uni && a.gu, sr = it || pre, g = sr ? sr.g : uni ? a.gu : 100, cc = crco(a);
+  S.x.cu = { a: a, it: it, modo: sr ? sr.mu || 'g' : uni ? 'u' : 'g', c: it ? it.c : B.c || 0, cc: cc, est: sr && sr.est ? sr.est : cc ? cc.est : '' };
+  if (S.x.cu.modo === 'u' && !uni) S.x.cu.modo = 'g';
+  var X = S.x.cu, v = X.modo === 'u' ? Math.round(g / a.gu * 10) / 10 : sr && sr.gin ? sr.gin : g;
   var mas = [['fi', 'Fibra'], ['az', 'Azúcares'], ['sa', 'Saturadas'], ['sal', 'Sal']].filter(function (x) { return a[x[0]] != null && a[x[0]] !== ''; }).map(function (x) { return x[1] + ' ' + f1(a[x[0]]); }).join(' · ');
   hoja('<h2 class="cu-t">' + esc(a.n) + '</h2><small class="mut">' + esc([a.sub, fmil(a.k) + ' kcal por 100 g'].filter(Boolean).join(' · ')) + '</small>' +      // 18 nov (maqueta aprobada): los macros, en el donut de abajo
     (cc ? '<div class="f cu-cc">¿Cómo lo pesas?<div class="seg2" id="cu-cc"' + (X.modo === 'u' ? ' hidden' : '') + '><button class="' + (X.est === 'cr' ? 'on' : '') + '" data-a="cuEst" data-v="cr">En crudo</button><button class="' + (X.est === 'co' ? 'on' : '') + '" data-a="cuEst" data-v="co">Cocinado</button></div></div>' : '') +
