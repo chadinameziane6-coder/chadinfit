@@ -1433,8 +1433,9 @@ html[data-tema="oscuro"] .n-acc button:not(:first-child){background:#fff;color:#
 .ej-img{width:48px;height:48px;border-radius:12px;background:var(--suave);color:var(--tx3);display:flex;align-items:center;justify-content:center;flex:none;overflow:hidden}.ej-img img{width:100%;height:100%;object-fit:cover;display:block}
 .ej-eq{font-style:normal;font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--suave);color:var(--tx2)}
 /* Tus entrenos: rango */
-.ph-rg{display:flex;gap:3px;margin:10px 0 2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08)}
-.ph-rg button{flex:1;border:0;background:none;color:#C9CCD8;font-size:11.5px;font-weight:800;padding:7px 0;border-radius:999px;white-space:nowrap;min-width:0}
+.ph-rg{display:flex;gap:3px;margin:10px 0 2px;padding:3px;border-radius:999px;background:rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none}.ph-rg::-webkit-scrollbar{display:none}
+.ph-rg button{flex:1 0 auto;border:0;background:none;color:#C9CCD8;font-size:11px;font-weight:800;padding:7px 5px;border-radius:999px;white-space:nowrap}      /* 19 nov: «3 meses» se salía de su pastilla en móviles estrechos */
+@media (max-width:370px){.ph-rg button{padding:7px 3px;font-size:10.5px}}
 .ph-rg button.on{background:#fff;color:#0D0D10}
 .ph-bars.fino{gap:2px}.ph-bars.fino .sn-b i{width:100%;border-radius:3px 3px 1px 1px}.ph-bars.fino .sn-l{font-size:9.5px}
 /* modo oscuro: las piezas blancas nuevas, con sus colores de siempre */
@@ -1752,6 +1753,11 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
     SES[sid] = { f: f(o), d: dd }; LISTA.push({ sid: sid, o: o, d: dd });
   }
   var RUTS = {}; RUT.forEach(function (x) { var c = JSON.parse(JSON.stringify(x)); delete c.id; RUTS[x.id] = c; });
+  // 19 nov: una rutina hecha por ella (sin programa), para ver «tus rutinas, sin foto» y planificar sus series
+  RUTS['r_mia_demo'] = { nombre: 'Mi glúteo del sábado', orden: 99, ejercicios: [
+    { n: 'Hip thrust con barra', tipo: 'fuerza', d: '120', sets: [{ t: 'aprox', r: '8' }, { t: 'normal', r: '10', rir: '2' }, { t: 'normal', r: '10', rir: '2' }, { t: 'back', r: '12', rir: '1' }] },
+    { n: 'Peso muerto rumano', tipo: 'fuerza', d: '90', sets: [{ t: 'normal', r: '10', rir: '2' }, { t: 'normal', r: '10', rir: '2' }, { t: 'normal', r: '10', rir: '2' }] },
+    { n: 'Abducción en máquina', tipo: 'fuerza', d: '60', sets: [{ t: 'normal', r: '15' }, { t: 'normal', r: '15' }, { t: 'normal', r: '15' }] }] };
 
   /* ---------- peso (casi todos los días), medidas cada dos semanas y 3 fotos ---------- */
   var MED = {}, ini = desde, p0 = 66.1, p1 = 62.4;
@@ -1902,9 +1908,9 @@ window.YO_REVISAR = [
   /* 19 nov 2026: la lista de Chadín (23:16). En la app de verdad no está: esperan su OK. */
   { t: 'Nuevo · Inicio: un solo «Compartir» (19 nov)', d: 'Con el entreno de hoy hecho ya no sale «Compartir» dos veces: solo en «Tu último entreno».',
     ir: function () { S.pant = null; S.pila = []; irTab('inicio'); setTimeout(function () { var c = document.querySelector('.ult-c'); if (c) c.scrollIntoView({ block: 'center' }); }, 150); } },
-  { t: 'Nuevo · Tus rutinas, sin fotos (19 nov)', d: 'Las rutinas que creas tú salen con un icono (sin foto), también al abrirlas; las de los programas siguen con la suya. Entreno → Mis rutinas → «Nueva rutina».',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; pintar(); } },
-  { t: 'Nuevo · Planificar cada serie, con su RIR (19 nov)', d: 'Al crear o editar tu rutina: «Planificar las series» en cada ejercicio. Cada serie con su tipo (aproximación, normal, top set, back-off, drop set…), sus repeticiones y su RIR; «+ Aproximación» la pone la primera. Junto a series y repeticiones, también el RIR. (Aquí se abre una rutina de prueba sin guardar.)',
+  { t: 'Nuevo · Tus rutinas, sin fotos (19 nov)', d: 'Las rutinas que creas tú salen con un icono (sin foto), también al abrirlas; las de los programas siguen con la suya. Entreno → Mis rutinas: «Mi glúteo del sábado» (de prueba).',
+    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; pintar(); setTimeout(function () { var c = document.querySelector('.mr-ic'); if (c) c.scrollIntoView({ block: 'center' }); }, 150); } },
+  { t: 'Nuevo · Planificar cada serie, con su RIR (19 nov)', d: 'Al crear o editar tu rutina: «Planificar las series» en cada ejercicio. Cada serie con su tipo (aproximación, normal, top set, back-off, drop set…), sus repeticiones y su RIR; «+ Aproximación» la pone la primera. Junto a series y repeticiones, también el RIR. (Aquí, con «Mi glúteo del sábado».)',
     ir: function () { var mi = S.rutinas.filter(function (r) { return rutPropia(r) && (r.ejercicios || []).length; })[0];
       if (mi) { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; A.abrirRut({ dataset: { id: mi.id } }); }
       else { var tres = function (r) { return [{ t: 'normal', r: r }, { t: 'normal', r: r }, { t: 'normal', r: r }]; }; S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas';
