@@ -4475,8 +4475,9 @@ VISTAS.fin = function () {
   if (R.length) h += '<div class="card recs"><b class="verde-t">' + ic('trofeo', 18, 'var(--verde)') + (R.length === 1 ? '¡1 récord hoy!' : '¡' + R.length + ' récords hoy!') + '</b>' + R.slice(0, 5).map(function (r) { return '<div class="fila-r"><b>' + esc(r.e) + '</b><span>' + (r.p ? fN(r.p) + ' kg × ' : '') + r.r + '</span></div>'; }).join('') + '</div>';
   if (U.libreEj && U.libreEj.length) h += '<button class="card enlace" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
   h += '<section class="card sh"><b>Compártelo</b><div class="seg-p ancho" role="tablist" aria-label="Estilo">' + [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Con tu foto']].map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="car"><button class="redondo gris" data-a="finSlide" aria-label="Anterior">' + ic('atras', 16) + '</button><div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div><button class="redondo gris" data-a="finSlide" aria-label="Siguiente">' + ic('sig', 16) + '</button></div>' +
-    '<div class="puntos"><i class="' + (U.slide ? '' : 'on') + '"></i><i class="' + (U.slide ? 'on' : '') + '"></i></div><small class="mut center">' + (U.slide ? 'El resumen de tu entreno' : 'Los kilos de hoy') + ' · desliza con las flechas</small>' +
+    '<div class="seg-p ancho fin-t" role="tablist" aria-label="Tarjeta">' + FIN_T.map(function (t, i) { return '<button role="tab" aria-selected="' + (U.slide === i) + '" class="' + (U.slide === i ? 'on' : '') + '" data-a="finSlide" data-i="' + i + '">' + t[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="car"><button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button><div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div><button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button></div>' +
+    '<div class="puntos">' + FIN_T.map(function (t, i) { return '<i class="' + (U.slide === i ? 'on' : '') + '"></i>'; }).join('') + '</div><small class="mut center">' + FIN_T[U.slide || 0][2] + ' · desliza con las flechas</small>' +
     (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '<button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><small class="mut center">Instagram, WhatsApp o guardarla en tu galería</small>') +
     '<button class="btn sec" data-a="finGuardar">' + ic('descargar', 18) + 'Guardar imagen</button>' +
     (U.pub ? '<span class="cm-hecho">' + ic('check', 17, 'var(--verde)', 2.6) + 'Publicado en la Comunidad</span>' : '<button class="btn sec" data-a="finComu">' + ic('comu', 18) + 'Publicar en la Comunidad</button>') + (U.foto ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '') + '</section>';
@@ -4486,14 +4487,17 @@ VISTAS.fin = function () {
 var trasPintar = function () { if (S.pant && S.pant.t === 'fin') pintaTarjeta(); };
 A.finListo = function () { S.fin = null; irTab('inicio'); };
 A.finModo = function (el) { S.fin.modo = el.dataset.v; pintar(); };
-A.finSlide = function () { S.fin.slide = S.fin.slide ? 0 : 1; pintar(); };
+/* 19 nov (Chadín: «tipo Hevy», estilo «Grande»): tres tarjetas, como en la app de los clientes */
+var FIN_T = [['sum', 'Resumen', 'El resumen de tu entreno'], ['res', 'Ejercicios', 'Tus ejercicios y sus series'], ['vol', 'Tu carga', 'Lo que has levantado hoy']];
+A.finSlide = function (el) { var n = FIN_T.length, i = el && el.dataset.i != null ? +el.dataset.i : ((S.fin.slide || 0) + (el && el.dataset.d ? +el.dataset.d : 1) + n) % n; S.fin.slide = i; pintar(); };
 CH.finFoto = function (t) { var f = t.files && t.files[0]; if (!f) return; var u = URL.createObjectURL(f), im = new Image(); im.onload = function () { S.fin.foto = im; pintar(); }; im.src = u; };
 A.finGuardarRut = function () { var U = S.fin; S.x.ed = { id: nuevoId(), nombre: 'Mi entreno libre', dias: [], nuevo: true, ejercicios: U.libreEj.filter(function (e) { return !e.cal; }).map(function (e) { return { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', d: e.d || '90', sets: e.sets.map(function (s) { return { t: s.t || 'normal', r: String(s.reps || s.r || '10'), rir: '', kg: '' }; }) }; }) }; U.libreEj = null; ir({ t: 'rutina' }); };
 var tarjCache = {};
 function pintaTarjeta() {
   var U = S.fin, box = $('#fin-img'); if (!U || !box) return; var k = U.id + '|' + U.slide + '|' + U.modo + '|' + (U.foto ? U.foto.src : '');
-  if (tarjCache[k]) { box.innerHTML = '<img src="' + tarjCache[k].url + '" alt="' + (U.slide ? 'Resumen de tu entreno' : 'Los kilos de hoy') + '">'; return; }
-  tarjeta(U, U.slide ? 'res' : 'vol', U.modo === 'blanco' ? 'negro' : U.modo, U.foto).then(function (cv) { if (U.modo === 'blanco') blancoDe(cv); cv.toBlob(function (b) { tarjCache[k] = { blob: b, url: URL.createObjectURL(b) }; var bx = $('#fin-img'); if (bx) bx.innerHTML = '<img src="' + tarjCache[k].url + '" alt="Tu entreno">'; }, 'image/png'); });
+  var T = FIN_T[U.slide || 0] || FIN_T[0], vieja = soloRunYo(U);      // solo carrera: la tarjeta de siempre
+  if (tarjCache[k]) { box.innerHTML = '<img src="' + tarjCache[k].url + '" alt="' + T[2] + '">'; return; }
+  (vieja ? tarjeta(U, T[0] === 'res' ? 'res' : 'vol', U.modo === 'blanco' ? 'negro' : U.modo, U.foto) : tarjetaGrande(U, T[0], U.modo, U.foto)).then(function (cv) { if (U.modo === 'blanco' && vieja) blancoDe(cv); cv.toBlob(function (b) { tarjCache[k] = { blob: b, url: URL.createObjectURL(b) }; var bx = $('#fin-img'); if (bx) bx.innerHTML = '<img src="' + tarjCache[k].url + '" alt="Tu entreno">'; }, 'image/png'); });
 }
 /* versión en blanco: la misma tarjeta con los colores al revés (fondo blanco, letras y dibujos en negro) */
 function blancoDe(cv) { var x = cv.getContext('2d'), d = x.getImageData(0, 0, cv.width, cv.height), a = d.data; for (var i = 0; i < a.length; i += 4) { a[i] = 255 - a[i]; a[i + 1] = 255 - a[i + 1]; a[i + 2] = 255 - a[i + 2]; } x.putImageData(d, 0, 0); return cv; }
@@ -4504,7 +4508,7 @@ A.finCompartir = function () {
   if (f && navigator.canShare && navigator.canShare({ files: [f] })) return navigator.share({ files: [f], title: 'Mi entreno', text: '#MOODON' }).catch(function () { });
   A.finGuardar();
 };
-A.finGuardar = function () { var t = tarjActual(); if (!t) return; var a = document.createElement('a'); a.href = t.url; a.download = 'MOOD_ON_' + (S.fin.slide ? 'resumen' : 'entreno') + '_' + S.fin.fecha + '.png'; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
+A.finGuardar = function () { var t = tarjActual(); if (!t) return; var a = document.createElement('a'); a.href = t.url; a.download = 'MOOD_ON_' + ['resumen', 'ejercicios', 'carga'][S.fin.slide || 0] + '_' + S.fin.fecha + '.png'; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
 
 /* ---------- las tarjetas para historias (1080 × 1920) ---------- */
 function linSvg(k, s, c, w) { return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" style="color:' + c + '" stroke-width="' + (w || 1.5) + '" aria-hidden="true">' + (LIN[k] || '') + '</svg>'; }
@@ -4514,6 +4518,64 @@ function fontsListas() { try { return Promise.all(['500 46px', '600 34px', '700 
 function rr(x, X, Y, W, H, R) { x.beginPath(); x.moveTo(X + R, Y); x.arcTo(X + W, Y, X + W, Y + H, R); x.arcTo(X + W, Y + H, X, Y + H, R); x.arcTo(X, Y + H, X, Y, R); x.arcTo(X, Y, X + W, Y, R); x.closePath(); }
 function ajusta(x, t, max, px, peso) { for (; px > 30; px -= 4) { x.font = peso + ' ' + px + 'px "Plus Jakarta Sans", sans-serif'; if (x.measureText(t).width <= max) break; } return px; }
 function recorta(x, t, max) { if (x.measureText(t).width <= max) return t; while (t.length > 2 && x.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; }
+/* 19 nov (Chadín): «tipo Hevy», estilo «Grande» (aprobado): Resumen, Ejercicios («4×» = series) y Tu carga (el dibujo grande y los kilos en una pastilla).
+   Cifras enormes, alineadas a la izquierda; con foto, abajo (encima de la barra de Instagram); en negro y en blanco, centradas en alto. */
+function soloRunYo(U) { var e = U.ej || []; return !U.vol && e.length > 0 && e.every(function (x) { return x.tipo === 'run'; }); }
+function grSer(e) { return (e.tipo === 'fuerza' || !e.tipo) && !e.hecho && (e.sets || []).length ? e.sets.length : 0; }
+function grLin(x, t, max, n) { var P = String(t).split(' '), L = [], a = ''; P.forEach(function (w) { var b = a ? a + ' ' + w : w; if (x.measureText(b).width > max && a) { L.push(a); a = w; } else a = b; }); if (a) L.push(a);
+  if (L.length > n) { L = L.slice(0, n); L[n - 1] = recorta(x, L[n - 1] + ' …', max); } return L; }
+function grEsp(x, v) { try { x.letterSpacing = v; } catch (e) { } }
+function tarjetaGrande(U, tipo, modo, foto) {
+  var C = compVol(U.vol), R = U.recs || [], nr = R.length, rec = {}, bl = modo === 'blanco', ft = modo === 'foto' && foto; R.forEach(function (r) { rec[clave(r.e)] = 1; });
+  var FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.62)' : 'rgba(255,255,255,.8)', ORO = bl ? '#B8860B' : '#F2C14E', F = ' "Plus Jakarta Sans", sans-serif';
+  return fontsListas().then(function () { return Promise.all([linImg('trophy', ORO, 2.2), C ? linImg(C.img, FG, 1.15) : Promise.resolve(null)]); }).then(function (I) {
+    var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), M = 90, AN = W - 2 * M, ops = [], add = function (h, f) { ops.push({ h: h, f: f }); };
+    if (ft) { var s = Math.max(W / foto.width, H / foto.height), w = foto.width * s, h = foto.height * s; x.drawImage(foto, (W - w) / 2, (H - h) / 2, w, h); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(.3, 'rgba(0,0,0,.08)'); g.addColorStop(.5, 'rgba(0,0,0,.18)'); g.addColorStop(1, 'rgba(0,0,0,.7)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    else if (bl) { x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H); }
+    else { var rg = x.createRadialGradient(W / 2, 560, 50, W / 2, 560, 1300); rg.addColorStop(0, '#1d1d20'); rg.addColorStop(1, '#0b0b0c'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
+    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+    var tit = String(U.nombre || 'Mi entreno'), d = new Date(U.fecha + 'T12:00:00'), fe = (d.toLocaleDateString('es-ES', { weekday: 'long' }) + ' ' + d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }).replace('.', '')).toUpperCase();
+    if (U.primero) fe = 'MI PRIMER ENTRENO · ' + fe;
+    var nser = (U.ej || []).reduce(function (a, e) { return a + grSer(e); }, 0);
+    var cab = function (sub) {
+      add(68, function (y) { x.fillStyle = FG; var T = tit.toUpperCase(), px = ajusta(x, T, AN, 58, '800'); x.font = '800 ' + px + 'px' + F; x.fillText(recorta(x, T, AN), M, y + 56); });
+      add(66, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.fillText(sub, M, y + 40); grEsp(x, '0px'); }); };
+    if (tipo === 'sum') {
+      cab(fe);
+      var km = (U.ej || []).reduce(function (a, e) { return a + (+e.km || 0); }, 0), L = [[String(U.min || 0), 'MIN']];
+      if (U.vol) L.push([fmtK(U.vol), 'KG']); if (km) L.push([String(Math.round(km * 10) / 10).replace('.', ','), 'KM']);
+      if (nr) L.push([String(nr), nr === 1 ? 'RÉCORD' : 'RÉCORDS', 1]); else if (nser) L.push([String(nser), nser === 1 ? 'SERIE' : 'SERIES']);
+      L.forEach(function (l) { add(172, function (y) { x.fillStyle = l[2] ? ORO : FG; var px = ajusta(x, l[0], AN - 230, 170, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-6px'); x.fillText(l[0], M, y + 150); var w = x.measureText(l[0]).width; grEsp(x, '3px');
+        x.fillStyle = l[2] ? ORO : FG; x.font = '800 44px' + F; x.fillText(l[1], M + w + 18, y + 150); grEsp(x, '0px'); }); });
+    } else if (tipo === 'res') {
+      cab(fe + (nser ? ' · ' + nser + (nser === 1 ? ' SERIE' : ' SERIES') : ''));
+      var E = (U.ej || []).map(function (e) { return { n: e.tipo === 'bloque' ? (e.fmt || e.n) : e.n, c: grSer(e), t: e.hecho ? (e.txt || '') : '', r: !!rec[clave(e.n)] }; }), NX = M + 170, NW = AN - 170, disp = (H - 330) - 260 - 134 - 80, usado = 0, k = 0;
+      for (; k < E.length; k++) { var e = E[k], nm = String(e.n || '').toUpperCase() + (e.c ? '' : (e.t ? ' · ' + String(e.t).toUpperCase() : ''));
+        x.font = '800 44px' + F; var Ls = grLin(x, nm, (e.c ? NW : AN) - (e.r ? 60 : 0), 2), hh = Math.max(Ls.length * 50 + 26, 112);
+        if (usado + hh > disp) break; usado += hh;
+        (function (e, Ls, hh) { add(hh, function (y) { var cy = y + hh / 2;
+          if (e.c) { x.fillStyle = FG; x.font = '800 96px' + F; grEsp(x, '-3px'); x.fillText(String(e.c), M, cy + 34); var w = x.measureText(String(e.c)).width; grEsp(x, '0px'); x.font = '800 70px' + F; x.globalAlpha = .9; x.fillText('×', M + w + 4, cy + 34); x.globalAlpha = 1; }
+          var bx = e.c ? NX : M, by = cy - (Ls.length * 50) / 2 + 38; x.fillStyle = FG; x.font = '800 44px' + F; Ls.forEach(function (t, j) { x.fillText(t, bx, by + j * 50); });
+          if (e.r && I[0]) { var lw = x.measureText(Ls[Ls.length - 1]).width; x.drawImage(I[0], bx + lw + 12, by + (Ls.length - 1) * 50 - 38, 46, 46); } }); })(e, Ls, hh); }
+      if (k < E.length) { var mas = E.length - k; add(56, function (y) { x.fillStyle = SUB; x.font = '800 34px' + F; grEsp(x, '3px'); x.fillText('Y ' + mas + (mas === 1 ? ' EJERCICIO MÁS' : ' EJERCICIOS MÁS'), M, y + 42); grEsp(x, '0px'); }); }
+    } else if (C) {
+      add(420, function (y) { if (I[1]) x.drawImage(I[1], M - 20, y, 400, 400); });
+      add(64, function (y) { x.fillStyle = bl ? 'rgba(17,17,17,.8)' : 'rgba(255,255,255,.92)'; x.font = '700 34px' + F; grEsp(x, '4px'); x.fillText('HOY HE LEVANTADO LO MISMO QUE', M, y + 44); grEsp(x, '0px'); });
+      if (C.cant) add(280, function (y) { x.fillStyle = FG; var px = ajusta(x, C.cant, AN, 330, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-14px'); x.fillText(C.cant, M, y + 260); grEsp(x, '0px'); });
+      add(C.cant ? 132 : 150, function (y) { x.fillStyle = FG; var T = String(C.nom).toUpperCase(), px = ajusta(x, T, AN, C.cant ? 104 : 128, '800'); x.font = '800 ' + px + 'px' + F; x.fillText(T, M, y + (C.cant ? 116 : 130)); });
+      add(96, function (y) { var kg = fmtK(U.vol) + ' kg'; x.font = '800 34px' + F; var w = x.measureText(kg).width; x.save(); x.shadowColor = 'transparent'; x.fillStyle = bl ? '#111111' : '#FFFFFF'; rr(x, M, y + 26, w + 48, 62, 31); x.fill();
+        x.fillStyle = bl ? '#FFFFFF' : '#111111'; x.fillText(kg, M + 24, y + 70); x.restore(); x.fillStyle = bl ? 'rgba(17,17,17,.85)' : 'rgba(255,255,255,.95)'; x.font = '600 32px' + F; x.fillText(recorta(x, 'en ' + tit, AN - w - 70), M + w + 66, y + 69); });
+    } else {
+      add(150, function (y) { x.fillStyle = FG; var px = ajusta(x, '¡ENTRENO HECHO!', AN, 130, '800'); x.font = '800 ' + px + 'px' + F; x.fillText('¡ENTRENO HECHO!', M, y + 125); });
+      add(70, function (y) { x.fillStyle = SUB; x.font = '700 40px' + F; x.fillText((U.min || 0) + (U.min === 1 ? ' MINUTO' : ' MINUTOS') + ' DÁNDOLO TODO', M, y + 52); });
+    }
+    add(71, function (y) { x.save(); var sc = 180 / 1600; x.translate(M, y + 44); x.scale(sc, sc); x.fillStyle = FG; x.fill(new Path2D(LOGO_D), 'evenodd'); x.restore(); });
+    var tot = ops.reduce(function (a, o) { return a + o.h; }, 0), y = ft ? Math.max(230, (H - 330) - tot) : Math.max(200, Math.round((H - tot) / 2) - 30);
+    if (ft) { x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 18; }
+    ops.forEach(function (o) { o.f(y); y += o.h; });
+    return cv;
+  });
+}
 function tarjeta(U, tipo, modo, foto) {
   var C = compVol(U.vol);
   return fontsListas().then(function () { return Promise.all([linImg(C ? C.img : rpKpis(U) ? 'run' : 'barbell', '#FFFFFF', 0.7), linImg('trophy', '#FFFFFF', 1.5), linImg('stopwatch', '#FFFFFF', 1.5), linImg('barbell', '#FFFFFF', 1.5), linImg('trophy', '#FFFFFF', 1.7)]); }).then(function (I) {

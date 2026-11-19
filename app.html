@@ -3893,6 +3893,14 @@ button.pf-fe{cursor:pointer}
 .z2-sd{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:rgba(28,30,38,.04);border:0;border-radius:16px;padding:9px 12px;font:inherit;color:inherit;cursor:pointer}
 .z2-sd small{font-size:11px;font-weight:700;color:#6B7085}.z2-sd b{font-size:17px;font-weight:800;margin:1px 0 6px}.z2-sd b span{font-size:12px;color:#9AA0B4}
 .z2-sd i{display:block;height:4px;border-radius:2px;background:rgba(28,30,38,.08);overflow:hidden}.z2-sd u{display:block;height:100%;background:linear-gradient(90deg,#3D4F66,#7C8FD8);border-radius:2px}
+/* v53.4.176 (Chadín: «lo de los pasos no se ve bien»): la tarjeta de pasos era negra con letra blanca; con el estilo 2 la tarjeta se volvía blanca y la letra no se veía → en claro, como las demás */
+:where(html.s2) .card.ps-negra{background:rgba(255,255,255,.82);color:#17181F;border-color:rgba(255,255,255,.95)}
+:where(html.s2) .ps-negra .ps-dh{color:#6B7085}:where(html.s2) .ps-negra .ps-hoy b{color:#17181F}:where(html.s2) .ps-negra .ps-hoy small{color:#6B7085}:where(html.s2) .ps-negra .ps-okt{color:#17181F}
+:where(html.s2) .ps-negra .psm-b i,:where(html.s2) .ps-negra .psm-b i.vac{background:rgba(28,30,38,.08)}:where(html.s2) .ps-negra .psm-b i.no{background:#B9BFD3}:where(html.s2) .ps-negra .psm-b i.ok{background:linear-gradient(180deg,#7C8FD8,#3D4F66)}
+:where(html.s2) .ps-negra .psm-b small{color:#9AA0B4}:where(html.s2) .ps-negra .psm-b small.hoy{color:#17181F;font-weight:800}
+:where(html.s2) .ps-negra .ps-ap{color:#17181F;border-color:rgba(28,30,38,.22)}:where(html.s2) .ps-negra .ps-sh-b{background:#17181F;color:#fff;border-color:#17181F}
+:where(html.s2) .ps-negra .ps-cerrar,:where(html.s2) .ps-negra .ps-ri{background:rgba(28,30,38,.06);color:#17181F}:where(html.s2) .ps-negra .ps-rb{background:rgba(28,30,38,.08)}:where(html.s2) .ps-negra .ps-rb i{background:linear-gradient(90deg,#3D4F66,#7C8FD8)}
+:where(html.s2) .ps-negra .ps-rt b{color:#17181F}:where(html.s2) .ps-negra .ps-rt small{color:#6B7085}
 /* «Hoy toca» en grafito */
 .card.hl.z2-hero{background:radial-gradient(120% 90% at 100% 0%,#33395A 0%,#17181F 55%);color:#fff;border:0;border-radius:28px;padding:18px;box-shadow:0 18px 40px rgba(23,24,31,.28)}
 .z2-hero.z2-ok{background:radial-gradient(120% 90% at 100% 0%,#1E4D3A 0%,#16191A 55%)}
@@ -4040,7 +4048,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.175';
+var APP_V = 'v53.4.176';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6931,7 +6939,7 @@ A.z2VerSes=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===e
   modal('<div class="mh-sh"><div><h2>Tu entreno de hoy</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+sesFila(s,CL.d,calcMarcas(CL.d.series),false,false,{hoy:1}).replace('<details class="ses sxf"','<details open class="ses sxf"')+
     (s.rutina_id&&CL.d.rutinas.some(function(r){ return r.id===s.rutina_id; })?'<button class="btn sec mt" data-a="z2Rep" data-id="'+esc(s.rutina_id)+'">'+ic('reinicio')+'Repetir esta rutina</button>':'')); };
 A.z2Rep=function(el){ cerrarModal(); A.empezar(el); };
-A.z2Sh=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return; var U=ultDeSesion(s); U.primero=esPrimeraSes(s); sh2Abrir(U,'vol'); };
+A.z2Sh=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return; var U=ultDeSesion(s); U.primero=esPrimeraSes(s); sh2Abrir(U,'sum'); };
 /* ---------- casillas: lo principal a lo ancho y debajo, en fila (Javier, 20:49: con todo, 3 en fila) ---------- */
 function recTxt(R){ return (R.p?fN(R.p)+' kg × ':'')+rU(fN(R.r,0),uNom(R.e)); }
 function haceCl(f){ var n=diff(f,hoyStr()); return n<=0?'Hoy':n===1?'Ayer':n<7?'Hace '+n+' días':n<14?'Hace 1 semana':n<60?'Hace '+Math.floor(n/7)+' semanas':'Hace '+Math.floor(n/30)+' meses'; }
@@ -7020,7 +7028,7 @@ var SHM=['negro','foto','trans'], SHM_N={negro:'Negro',foto:'Con tu foto',trans:
 function shEstado(U,t,recs,ri){ var m=CL.sh&&CL.sh.m||'negro';
   if(U&&U!==CL.ultEntreno){ CL.ultEntreno=U; CL.finCv={}; CL.finMotI=null; }
   recs=recs||(U?recsPorEj(U.prs).map(function(b){ return {e:b.e,p:b.p,r:b.r,f:U.fecha||hoyStr()}; }):[]);
-  CL.sh={U:U||null,t:t||(U?'vol':'rec'),recs:recs,ri:ri!=null?ri:(recs.length>1?'all':0),m:m,cv:{}}; }
+  CL.sh={U:U||null,t:t||(U?'sum':'rec'),recs:recs,ri:ri!=null?ri:(recs.length>1?'all':0),m:m,cv:{}}; }
 function sh2Abrir(U,t,recs,ri){ shEstado(U,t,recs,ri); modal('<div class="sh2 sh2-m"><div class="mh-sh"><div><h2>'+(U?(U.primero?'Sube tu primer entreno':'Comparte tu entreno'):'Comparte tu récord')+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div><div id="sh2">'+shBloque()+'</div></div>'); shMontar(); }
 A.recSh=function(){ var R=z2UltRec(); if(!R) return; sh2Abrir(null,'rec',R.lista.map(function(x){ return {e:x.e,p:x.p,r:x.r,f:x.f}; })); };
 A.recShDr=function(el){ var i=+el.dataset.i, j=el.dataset.j, e=CL.dr&&CL.dr.ej[i], m=e&&marcasDraft(i)[j]; if(!m) return; sh2Abrir(null,'rec',[{e:e.n,p:num(m.p)||0,r:num(m.r)||0,f:hoyStr()}]); };
@@ -7028,10 +7036,10 @@ function recCorto(n){ n=String(n||''); return n.length>16?n.split(' ')[0]:n; }
 function shRecs(){ var S=CL.sh; return S.ri==='all'?S.recs.slice(0,3):[S.recs[S.ri]||S.recs[0]]; }
 function shBloque(){
   var S=CL.sh, h='';
-  if(S.U) h+='<div class="sh2-ch">'+[['vol','Tu carga'],['res','Tu entreno']].concat(S.recs.length?[['rec','Tu récord']]:[]).map(function(c){ return '<button class="'+(S.t===c[0]?'on':'')+(c[0]==='rec'?' au':'')+'" data-a="sh2T" data-v="'+c[0]+'">'+(c[0]==='rec'?ic('trofeo'):'')+c[1]+'</button>'; }).join('')+'</div>';
+  if(S.U) h+='<div class="sh2-ch">'+[['sum','Resumen'],['res','Ejercicios'],['vol','Tu carga']].concat(S.recs.length?[['rec','Tu récord']]:[]).map(function(c){ return '<button class="'+(S.t===c[0]?'on':'')+(c[0]==='rec'?' au':'')+'" data-a="sh2T" data-v="'+c[0]+'">'+(c[0]==='rec'?ic('trofeo'):'')+c[1]+'</button>'; }).join('')+'</div>';
   if(S.t==='rec'&&S.recs.length>1) h+='<div class="sh2-ch sub">'+S.recs.slice(0,3).map(function(r,i){ return '<button class="'+(S.ri===i?'on':'')+'" data-a="sh2R" data-v="'+i+'">'+esc(recCorto(r.e))+'</button>'; }).join('')+'<button class="'+(S.ri==='all'?'on':'')+'" data-a="sh2R" data-v="all">Los '+Math.min(3,S.recs.length)+'</button></div>';
   h+='<div class="seg2 sh2-seg" id="sh2-seg">'+SHM.map(function(m){ return '<button data-a="sh2M" data-v="'+m+'"'+(S.m===m?' class="on"':'')+'>'+SHM_N[m]+'</button>'; }).join('')+'</div>';
-  h+='<div class="sh2-car" id="sh2-car">'+SHM.map(function(m){ return '<div class="sh2-s'+(m==='trans'?' tr':'')+'" data-m="'+m+'">'+(m==='foto'&&!CL.finFoto?'<label class="sh2-fp">'+ic('foto')+'<b>Elige tu foto</b><small>Del gimnasio, un selfie… y te ponemos el récord encima</small><input type="file" accept="image/*" data-c="sh2Foto" hidden></label>':'<span class="sh2-ph">'+ic('reloj')+'Preparando…</span>')+'</div>'; }).join('')+'</div>';
+  h+='<div class="sh2-car" id="sh2-car">'+SHM.map(function(m){ return '<div class="sh2-s'+(m==='trans'?' tr':'')+'" data-m="'+m+'">'+(m==='foto'&&!CL.finFoto?'<label class="sh2-fp">'+ic('foto')+'<b>Elige tu foto</b><small>Del gimnasio, un selfie… y te ponemos '+(S.t==='rec'?'el récord':'tu entreno')+' encima</small><input type="file" accept="image/*" data-c="sh2Foto" hidden></label>':'<span class="sh2-ph">'+ic('reloj')+'Preparando…</span>')+'</div>'; }).join('')+'</div>';
   h+='<div class="sh2-dots" id="sh2-dots">'+SHM.map(function(m){ return '<i'+(S.m===m?' class="on"':'')+'></i>'; }).join('')+'</div><p class="sh2-hint">'+ic('desl')+'Desliza para cambiar el fondo'+(CL.finFoto?' · <label class="sh2-cf">Cambiar foto<input type="file" accept="image/*" data-c="sh2Foto" hidden></label>':'')+'</p>';
   return h+'<div class="sh2-ics"><button class="ig" data-a="sh2Acc" data-v="ig"><i>'+ic('insta')+'</i>Historias</button><button class="wa" data-a="sh2Acc" data-v="wa"><i>'+ic('wa')+'</i>WhatsApp</button><button data-a="sh2Acc" data-v="dl"><i>'+ic('descargar')+'</i>Guardar</button><button data-a="sh2Acc" data-v="mas"><i>'+ic('mas3')+'</i>Más</button></div>';
 }
@@ -7055,7 +7063,7 @@ function shClave(m){ var S=CL.sh; return S.t==='rec'?'rec|'+S.ri+'|'+m:S.t+'|'+m
 function sh2Canvas(m){ var S=CL.sh, k=shClave(m); if(S.cv[k]) return Promise.resolve(S.cv[k]);
   var p=S.t==='rec'?(m==='foto'?tarjetaRecord(shRecs(),'trans').then(function(c){ return componerFoto(c); }):tarjetaRecord(shRecs(),m)):finCanvas(S.t,m).then(function(o){ return o.cv; });
   return p.then(function(cv){ var o={cv:cv,url:cv.toDataURL('image/png')}; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); S.cv[k]=o; return o; }); }
-function sh2Nombre(m){ var S=CL.sh; return 'MOOD_ON_'+(S.t==='rec'?'record':S.t==='res'?'resumen':'entreno')+'_'+hoyStr()+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':'')+'.png'; }
+function sh2Nombre(m){ var S=CL.sh; return 'MOOD_ON_'+(S.t==='rec'?'record':S.t==='res'?'ejercicios':S.t==='sum'?'resumen':'carga')+'_'+hoyStr()+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':'')+'.png'; }
 A.sh2Acc=function(el){
   var S=CL.sh, m=S.m, v=el.dataset.v;
   if(m==='foto'&&!CL.finFoto){ var fi=document.querySelector('#sh2-car input[data-c=sh2Foto]'); if(fi) fi.click(); return; }
@@ -19588,7 +19596,7 @@ function ultDeSesion(s){
 function finHtml(U){
   /* v53.4.175 (Javier: «hay muchos botones»): arriba lo de hoy; los récords en dorado, cada uno con su compartir; y el mismo bloque de compartir que el récord:
      tarjeta (Tu carga · Tu entreno · Tu récord), fondo deslizando (Negro · Con tu foto · Transparente) y Historias · WhatsApp · Guardar · Más */
-  CL.finSlide=0; shEstado(U,CL.sh&&CL.sh.U===U?CL.sh.t:'vol');
+  CL.finSlide=0; shEstado(U,CL.sh&&CL.sh.U===U?CL.sh.t:'sum');
   var r=U.r||{}, C=compVol(r.vol), R=recsPorEj(U.prs), f0=U.fecha||hoyStr(), dt=aDate(f0);
   return '<div class="celebra fin31 z2-fin"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button>'+
     '<div class="big-ok z2-ftr">'+ic('trofeo')+'</div><h2>'+(U.primero?'¡Tu primer entreno en MOOD ON!':'¡Entreno completado!')+'</h2><p class="z2-fsb">'+esc([U.rutina,cap(DLARGO[diaSem(f0)])+' '+dt.getDate()+' '+mesC(dt)].filter(String).join(' · '))+'</p>'+
@@ -19623,7 +19631,8 @@ function finModoAct(){ return CL.finModo==='trans'&&CL.finFoto?'foto':CL.finModo
 function finCanvas(t,m){
   CL.finCv=CL.finCv||{}; var k=t+'|'+m;
   if(CL.finCv[k]) return Promise.resolve(CL.finCv[k]);
-  return (m==='foto'?tarjetaEntreno(t,'trans',true).then(componerFoto):tarjetaEntreno(t,m)).then(function(cv){
+  var nueva=(t==='sum'||t==='res'||t==='vol')&&!soloCarrera(CL.ultEntreno||{}), dib=function(mo){ return nueva?tarjetaGrande(t,mo):tarjetaEntreno(t==='sum'?'vol':t,mo,m==='foto'); };      // v53.4.176
+  return (m==='foto'?dib('trans').then(componerFoto):dib(m)).then(function(cv){
     var o={cv:cv,url:cv.toDataURL('image/png')}; CL.finCv[k]=o; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); return o; });
 }
 function finPreparar(){
@@ -19760,6 +19769,64 @@ function pegatinaRun(x,W,H,U,modo,enFoto){
   logoCanvas(x,(W-293)/2,yt+160,293,'#FFFFFF',true);
   x.textAlign='left';
 }
+/* v53.4.176 (Chadín: «los diseños de entreno que sean tipo Hevy», estilo «Grande»): Resumen, Ejercicios y Tu carga.
+   Cifras enormes en blanco, alineadas a la izquierda y abajo (por encima de la barra de responder de Instagram); en negro, centradas en alto.
+   «4×» = series (Chadín: «para saber que son 4 series»); en Tu carga el dibujo grande y los kilos en una pastilla blanca. Solo carrera: la pegatina de siempre. */
+var GR_ORO='#F2C14E';
+function grEsp(x,v){ try{ x.letterSpacing=v; }catch(e){} }
+function grFecha(U){ var f=U.fecha||hoyStr(), d=aDate(f).toLocaleDateString('es-ES',{weekday:'long'}), t=(d+' '+fCorta(f)).toUpperCase(); return U.primero?'MI PRIMER ENTRENO · '+t:t; }
+function grSeries(e){ var m=/^(\d+) series?$/.exec(String(e.txt||'')); return m?+m[1]:0; }
+function grLineas(x,t,max,n){ var P=String(t).split(' '), L=[], a=''; P.forEach(function(w){ var b=a?a+' '+w:w; if(x.measureText(b).width>max&&a){ L.push(a); a=w; } else a=b; }); if(a) L.push(a);
+  if(L.length>n){ L=L.slice(0,n); L[n-1]=recortar(x,L[n-1]+' …',max); } return L; }
+function tarjetaGrande(tipo,modo){
+  var U=CL.ultEntreno||{}, r=U.r||{}, C=compVol(r.vol), R=recsPorEj(U.prs), nr=R.length, rec={}; R.forEach(function(b){ rec[clave(b.e)]=1; });
+  return fuentesListas().then(function(){ return Promise.all([linImg('trophy',GR_ORO,2.2),C?linImg(C.img,'#FFFFFF',1.15):Promise.resolve(null)]); }).then(function(I){
+    var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), M=90, AN=W-2*M, ops=[], add=function(h,f){ ops.push({h:h,f:f}); };
+    fondoCard(x,W,H,modo); x.textAlign='left'; x.textBaseline='alphabetic';
+    var tit=String(U.rutina||'Mi entreno'), nser=(U.ej||[]).reduce(function(a,e){ return a+grSeries(e); },0);
+    var cab=function(sub){
+      add(68,function(y){ x.fillStyle='#fff'; var T=tit.toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+56); });
+      add(66,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.fillText(sub,M,y+40); grEsp(x,'0px'); }); };
+    if(tipo==='sum'){
+      cab(grFecha(U));
+      var L=[[String(r.min||0),'MIN']];
+      if(r.vol) L.push([fN(r.vol,0),'KG']);
+      if(r.runKm) L.push([fN(r.runKm,1),'KM']);
+      if(nr) L.push([String(nr),nr===1?'RÉCORD':'RÉCORDS',1]); else if(nser) L.push([String(nser),nser===1?'SERIE':'SERIES']);
+      L.forEach(function(l){ add(172,function(y){ x.fillStyle=l[2]?GR_ORO:'#fff'; var px=textoAjustado(x,l[0],AN-230,170,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-6px'); x.fillText(l[0],M,y+150); var w=x.measureText(l[0]).width; grEsp(x,'3px');
+        x.fillStyle=l[2]?GR_ORO:'rgba(255,255,255,.92)'; x.font='800 44px'+FCV; x.fillText(l[1],M+w+18,y+150); grEsp(x,'0px'); }); });
+    } else if(tipo==='res'){
+      cab(grFecha(U)+(nser?' · '+nser+(nser===1?' SERIE':' SERIES'):''));
+      var NX=M+170, NW=AN-170, disp=(H-330)-260-134-80, usado=0, E=U.ej||[], k=0;
+      x.font='800 44px'+FCV;
+      for(;k<E.length;k++){ var e=E[k], n=grSeries(e), nm=String(e.n||'').toUpperCase()+(n?'':(e.txt?' · '+String(e.txt).toUpperCase():'')), tr=!!rec[clave(e.n)];
+        x.font='800 44px'+FCV; var Ls=grLineas(x,nm,(n?NW:AN)-(tr?60:0),2), h=Math.max(Ls.length*50+26,112);
+        if(usado+h>disp&&k<E.length) break; usado+=h;
+        (function(e,n,Ls,tr,h){ add(h,function(y){ var cy=y+h/2;
+          if(n){ x.fillStyle='#fff'; x.font='800 96px'+FCV; grEsp(x,'-3px'); x.fillText(String(n),M,cy+34); var w=x.measureText(String(n)).width; grEsp(x,'0px'); x.font='800 70px'+FCV; x.globalAlpha=.9; x.fillText('×',M+w+4,cy+34); x.globalAlpha=1; }
+          var bx=n?NX:M, by=cy-(Ls.length*50)/2+38; x.fillStyle='#fff'; x.font='800 44px'+FCV;
+          Ls.forEach(function(t,j){ x.fillText(t,bx,by+j*50); });
+          if(tr&&I[0]){ var lw=x.measureText(Ls[Ls.length-1]).width; x.drawImage(I[0],bx+lw+12,by+(Ls.length-1)*50-38,46,46); } }); })(e,n,Ls,tr,h); }
+      if(k<E.length){ var mas=E.length-k; add(56,function(y){ x.fillStyle='rgba(255,255,255,.8)'; x.font='800 34px'+FCV; grEsp(x,'3px'); x.fillText('Y '+mas+(mas===1?' EJERCICIO MÁS':' EJERCICIOS MÁS'),M,y+42); grEsp(x,'0px'); }); }
+    } else {
+      if(C){
+        add(420,function(y){ if(I[1]) x.drawImage(I[1],M-20,y,400,400); });
+        add(64,function(y){ x.fillStyle='rgba(255,255,255,.92)'; x.font='700 34px'+FCV; grEsp(x,'4px'); x.fillText('HOY HE LEVANTADO LO MISMO QUE',M,y+44); grEsp(x,'0px'); });
+        if(C.cant) add(280,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,C.cant,AN,330,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-14px'); x.fillText(C.cant,M,y+260); grEsp(x,'0px'); });
+        add(C.cant?132:150,function(y){ x.fillStyle='#fff'; var T=String(C.nom).toUpperCase(), px=textoAjustado(x,T,AN,C.cant?104:128,'800'); x.font='800 '+px+'px'+FCV; x.fillText(T,M,y+(C.cant?116:130)); });
+        add(96,function(y){ var kg=fN(r.vol,0)+' kg'; x.font='800 34px'+FCV; var w=x.measureText(kg).width; x.save(); x.shadowColor='transparent'; x.fillStyle='#fff'; rrect(x,M,y+26,w+48,62,31); x.fill(); x.restore();
+          x.fillStyle='#111'; x.save(); x.shadowColor='transparent'; x.fillText(kg,M+24,y+70); x.restore(); x.fillStyle='rgba(255,255,255,.95)'; x.font='600 32px'+FCV; x.fillText(recortar(x,'en '+tit,AN-w-70),M+w+66,y+69); });
+      } else {
+        add(150,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,'¡ENTRENO HECHO!',AN,130,'800'); x.font='800 '+px+'px'+FCV; x.fillText('¡ENTRENO HECHO!',M,y+125); });
+        add(70,function(y){ x.fillStyle='rgba(255,255,255,.9)'; x.font='700 40px'+FCV; x.fillText((r.min||0)+(+r.min===1?' MINUTO':' MINUTOS')+' DÁNDOLO TODO',M,y+52); });
+      }
+    }
+    add(71,function(y){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,M,y+44,180,'#FFFFFF',true); x.restore(); });
+    var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=modo==='negro'?Math.max(200,Math.round((H-tot)/2)-30):Math.max(230,(H-330)-tot);
+    sombraCard(x,modo); ops.forEach(function(o){ o.f(y); y+=o.h; });
+    return cv;
+  });
+}
 function tarjetaEntreno(tipo,modo,enFoto){
   var U=CL.ultEntreno||{}; modo=modo||'negro'; var tr=modo==='trans', C=compVol((U.r||{}).vol), soloBl=(U.ej||[]).length&&(U.ej||[]).every(function(e){ return e.bl; });      // v53.4.19: solo bloques → el cronómetro (no la barra)
   return fuentesListas().then(function(){ return Promise.all([linImg(C?C.img:soloBl?'stopwatch':'barbell','#FFFFFF',0.7),linImg('trophy','#FFFFFF',1.5),linImg('stopwatch','#FFFFFF',1.5),linImg('barbell','#FFFFFF',1.5),linImg('trophy','#FFFFFF',1.7)]); }).then(function(I){
@@ -19774,7 +19841,7 @@ function tarjetaEntreno(tipo,modo,enFoto){
       if(r.vol) T.push([fN(r.vol,0)+' kg','Volumen',I[3]]); if(fz||nr) T.push([nr?String(nr):'–',nr===1?'Récord':'Récords',I[1]]);
       datosCard(x,W,350,T,modo);
       var top=640, rowH=104, F=filasRes(L,880,function(e){ return lineasBl(x,e.bl,W-260).length; }), used=F.reduce(function(a,o){ return a+o.h; },0), mas=L.length-F.length, ph=16+used+(mas?54:0)+24;
-      if(tr) ly=Math.min(H-320,top+ph+80);      // v39: sin fondo o con su foto, el logo justo debajo de la lista (su foto va debajo)
+      ly=Math.min(H-320,top+ph+90);      // v39: sin fondo o con su foto, el logo justo debajo de la lista · v53.4.176 (Chadín): también en negro, que no quede abajo del todo
       x.save(); x.shadowColor='transparent'; x.fillStyle=tr?'rgba(0,0,0,.34)':'rgba(255,255,255,.05)'; rrect(x,60,top,W-120,ph,40); x.fill(); x.restore();
       var yy=top+16;
       F.forEach(function(o,k){
