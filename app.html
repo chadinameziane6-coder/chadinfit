@@ -3805,6 +3805,10 @@ button.pf-fe{cursor:pointer}
 .pf-it.toca{background:none;color:inherit}
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .pf-seg button.on{background:#111;color:#fff;box-shadow:0 4px 12px rgba(0,0,0,.18)}
+/* v53.4.174 (Javier): «que el récord de peso salga en amarillo, como oro» → los récords (etiqueta, marca y aviso) en dorado */
+.bdg.rec{background:linear-gradient(135deg,#FCF3D6,#F5E2A6);color:#7A5A00;box-shadow:inset 0 0 0 1px rgba(201,154,26,.35)}.bdg.rec .ic{color:#B8860B}
+.mrk.rec .ic{color:#C99A1A}
+#toast.oro{background:linear-gradient(135deg,#E9C25A,#C99A1A);color:#2B1E00;box-shadow:0 10px 28px rgba(201,154,26,.35)}
 /* v53.4.171 · Hoy de la clienta, más elegante: tu semana en su tarjeta (✓ verde), el anillo de tu preparación, los pasos en una línea,
    tu ciclo compacto, «¿Cómo te sientes hoy?» con un toque (de rojo a verde) y el calendario con los recordatorios de color y «Lo próximo» */
 .semc{background:#fff;border:1px solid var(--line);border-radius:22px;padding:10px 12px 10px;margin:4px 0 12px}
@@ -3934,7 +3938,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.173';
+var APP_V = 'v53.4.174';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -7467,7 +7471,7 @@ function pintarMarcas(i,nuevo){
   if(nuevo!=null&&(m[nuevo]||m['i'+nuevo])){
     var x=m[nuevo]||m['i'+nuevo], row=document.getElementById('s-'+i+'-'+nuevo);
     if(row){ row.classList.remove('brillo'); void row.offsetWidth; row.classList.add('brillo'); }
-    toast(x.t==='rec'?'¡Nuevo récord en '+e.n+'! '+(x.p?fN(x.p)+' kg × ':'')+fN(x.r,0):'¡Has mejorado en '+e.n+'! '+x.txt,'ok');
+    toast(x.t==='rec'?'¡Nuevo récord en '+e.n+'! '+(x.p?fN(x.p)+' kg × ':'')+fN(x.r,0):'¡Has mejorado en '+e.n+'! '+x.txt,x.t==='rec'?'oro':'ok');
     try{ if(navigator.vibrate) navigator.vibrate(x.t==='rec'?[80,60,80,60,160]:[80,60,80]); }catch(err){}
   }
 }
