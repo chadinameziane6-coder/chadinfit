@@ -172,6 +172,8 @@ if (/(^|[#&])t=/.test(location.hash)) {
     if (o !== location.origin && !/^https:\/\/([a-z0-9-]+\.)*(googleusercontent\.com|google\.com)$/.test(o) && !/^http:\/\/localhost(:\d+)?$/.test(o)) return;
     var d = e.data; if (!d || !d.chadinfit) return;
     if (d.listo) listo();
+    /* v53.4.181: modo oscuro de la app de la clienta: el fondo de esta página y la barra del móvil, del mismo color */
+    if ((d.tema === 'oscuro' || d.tema === 'claro') && deAqui(e)) { var tc = d.tema === 'oscuro' ? '#1C1C1E' : '#F5F5F7', mt = document.querySelector('meta[name=theme-color]'); if (mt) mt.setAttribute('content', tc); document.documentElement.style.background = document.body.style.background = f.style.background = tc; }
     /* v28: la sesión se recuerda aquí (en el iPhone, lo que guarda el marco de Google se borra al cerrar Safari).
        Solo se la damos a la app que va dentro de esta página. */
     if ((d.pideSes || d.guarda) && deAqui(e)) {
