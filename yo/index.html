@@ -1953,6 +1953,58 @@ html[data-tema="oscuro"] .sw-f input:checked+i{background:#fff}html[data-tema="o
 .cp-fm{margin:6px 0 2px}
 /* la vista previa de la hoja no se encoge (antes se aplastaba y la foto salía como una tira) */
 .hoja-c .cm-pub,.hoja-c .cp-f,.hoja-c .crop{flex-shrink:0}
+/* 20 nov (borrador): hoja de compartir una imagen (carrera, Comunidad) */
+.shi-m{margin:6px 0 0}.shi-img{margin:14px auto 16px;width:216px;height:384px}.shi-ac{margin-bottom:6px}
+.rc-ud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 2px}.rc-ud>span{font-size:13px;font-weight:600;color:var(--tx2)}
+
+/* 21 nov: velo bajo la barra de pestañas (que no se vea el contenido por debajo de la barra flotante ni de la de Safari) */
+.tab-velo{position:fixed;left:0;right:0;bottom:-120px;height:calc(120px + 92px + env(safe-area-inset-bottom));background:linear-gradient(180deg,var(--pie0) 0,var(--pie) 34px,var(--pie) 100%);z-index:4;pointer-events:none}
+html[data-tema="oscuro"] .tab-velo{height:calc(120px + 62px + env(safe-area-inset-bottom));background:#1C1C1E}
+@media (prefers-color-scheme:dark){html:not([data-tema="claro"]) .tab-velo{height:calc(120px + 62px + env(safe-area-inset-bottom));background:#1C1C1E}}
+/* 21 nov: progresión por ejercicio, al tocar un punto */
+.pe-gb{fill:#0D0D10}.pe-gv{stroke:var(--tx3);stroke-width:1.2;stroke-dasharray:3 3}.pe-gp.on{fill:#9ADFFF;stroke:#0D0D10;stroke-width:3}
+.pe-hit{fill:transparent;cursor:pointer;-webkit-tap-highlight-color:transparent}.pe-hit:focus{outline:none}.pe-ayuda{display:block;margin-top:2px}
+html[data-tema="oscuro"] .pe-gb{fill:#2C2C2E}html[data-tema="oscuro"] .pe-gp.on{stroke:#fff}
+/* 21 nov: compartir · «Sin fondo» (sobre cuadros, como una pegatina) y la foto que se mueve y se hace zoom */
+.fin2-sht.c4{flex-wrap:wrap}.fin2-sht.c4 .seg-p,.shi-m.c4{width:100%}.fin2-sht.c4 .seg-p button,.shi-m.c4 button{flex:1;padding:7px 4px}
+.car-img.sin-f{background-color:#3A3A3E;background-image:linear-gradient(45deg,#4A4A4F 25%,transparent 25%,transparent 75%,#4A4A4F 75%),linear-gradient(45deg,#4A4A4F 25%,transparent 25%,transparent 75%,#4A4A4F 75%);background-size:16px 16px;background-position:0 0,8px 8px}
+.car-img.sin-f.sin-n{background-color:#F4F4F6;background-image:linear-gradient(45deg,#E2E2E6 25%,transparent 25%,transparent 75%,#E2E2E6 75%),linear-gradient(45deg,#E2E2E6 25%,transparent 25%,transparent 75%,#E2E2E6 75%)}
+.car-img.sin-f img{object-fit:contain;padding:10px;box-sizing:border-box}
+.car-img.aj{position:relative;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}.car-img.aj img{position:absolute;max-width:none;pointer-events:none}.car-img.aj .aj-o{inset:0;width:100%;height:100%}
+.shi-x{display:flex;flex-direction:column;gap:6px;margin:-2px 0 4px}.shi-x .crop-z{margin:0}.shi-let{align-self:center}.shi-x small{text-align:center}
+/* 21 nov · propuestas del panel «Tus entrenos» (solo demos hasta que Chadín elija) */
+/* 'claro': lo de siempre en una tarjeta blanca */
+.hoy-c.ph-claro{background:var(--card)!important;color:var(--tx);border:0!important;box-shadow:var(--sombra-s,0 6px 18px rgba(0,0,0,.08))}
+.ph-claro .hoy-l small{color:var(--tx2)}.ph-claro .ph-rg{background:var(--suave)}.ph-claro .ph-rg button{color:var(--tx2)}.ph-claro .ph-rg button.on{background:var(--neg);color:var(--neg-t)}
+.ph-claro .ph-mt button{background:var(--suave);color:var(--tx2);box-shadow:none}.ph-claro .ph-mt button.on{background:var(--neg);color:var(--neg-t);box-shadow:none}
+.ph-claro .sn-big b,.ph-claro .ph-gt,.ph-claro .ph-det b{color:var(--tx)}.ph-claro .sn-big span,.ph-claro .ph-det span,.ph-claro .ph-ley2{color:var(--tx2)}
+.ph-claro .ph-det{background:var(--suave)}.ph-claro .ph-gl{border-top-color:var(--borde)}.ph-claro .ph-gl.cero{border-top-color:var(--borde2)}.ph-claro .ph-gl em,.ph-claro .sn-l{color:var(--tx3)}
+.ph-claro .sn-v{color:var(--tx)}.ph-claro .sn-b i{background:var(--suave2)}.ph-claro .sn-b.ok i{background:linear-gradient(180deg,#7FD6FF,#9A8CFF);box-shadow:none}
+.ph-claro .ph-bars .sn-b.sel i{background:var(--neg);box-shadow:none}.ph-claro .ph-bars .sn-b.sel .sn-l,.ph-claro .sn-b.hoy .sn-l{color:var(--tx)}
+/* 'hevy': el número de la barra elegida arriba, barras azules con su escala a la derecha y Entrenos · Tiempo · Volumen debajo */
+.phh{--phh-a:#3D63F5;--phh-p:#C3D0FF;gap:0;padding:18px 16px 14px}
+.phh-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.phh-v{display:flex;flex-direction:column;gap:3px;min-width:0}.phh-v b{font-size:30px;font-weight:800;letter-spacing:-.03em;line-height:1.05;color:var(--tx)}.phh-v b small{font-size:15px;font-weight:700;letter-spacing:0;color:var(--tx2)}
+.phh-v span{font-size:13px;font-weight:600;color:var(--tx2)}
+.phh-sel{position:relative;display:inline-flex;align-items:center;gap:5px;flex:none;border-radius:999px;background:var(--suave);color:var(--tx);padding:7px 10px;font-size:12.5px;font-weight:700}
+.phh-sel select{border:0;background:none;font:inherit;color:inherit;padding:0;margin:0;-webkit-appearance:none;appearance:none;outline:none;height:auto}
+.phh-g{position:relative;display:flex;align-items:flex-end;gap:4px;height:150px;margin:22px 34px 0 0}
+.phh-gl{position:absolute;left:0;right:-34px;height:0;border-top:1px dashed var(--borde);pointer-events:none}.phh-gl.cero{border-top-style:solid;border-top-color:var(--borde2)}
+.phh-gl em{position:absolute;right:0;top:-8px;font-style:normal;font-size:10.5px;font-weight:700;color:var(--tx3);background:var(--card);padding-left:4px}
+.phh-b{flex:1;height:100%;display:flex;align-items:flex-end;justify-content:center;border:0;background:none;padding:0;min-width:0;cursor:pointer;position:relative;z-index:1}
+.phh-b i{display:block;width:min(20px,72%);border-radius:5px 5px 0 0;background:var(--phh-p);transition:background-color .15s}.phh-b.sel i{background:var(--phh-a)}
+.phh-x{display:flex;gap:4px;margin:6px 34px 0 0}.phh-x span{flex:1;min-width:0;text-align:center;font-size:10.5px;font-weight:700;color:var(--tx3);white-space:nowrap;overflow:visible}.phh-x span.sel{color:var(--tx)}
+.phh-m{display:flex;gap:8px;margin-top:16px}.phh-m button{flex:1;border:0;border-radius:999px;padding:9px 0;font-size:13px;font-weight:800;background:var(--suave);color:var(--tx2)}.phh-m button.on{background:var(--phh-a);color:#fff}
+.phh-tot{margin:14px 0 0;font-size:13px;color:var(--tx2);font-weight:600;line-height:1.45}.phh-tot b{color:var(--tx);font-weight:800}.phh-tot .dlt{margin-left:2px}
+.phh-ay{margin:4px 0 0;font-size:12px;color:var(--tx3);font-weight:600}
+html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="oscuro"] .phh-gl em{background:#000}
+/* 21 nov: tu foto en la Comunidad y editar lo publicado */
+.av-i{display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-style:normal;border-radius:inherit;overflow:hidden}.av-i img{width:100%;height:100%;object-fit:cover;display:block}
+.cm-av-yo{position:relative;overflow:visible}.cm-av-cam{position:absolute;right:-2px;bottom:-2px;width:26px;height:26px;border-radius:13px;background:var(--neg);color:var(--neg-t);display:flex;align-items:center;justify-content:center;border:2px solid var(--card)}
+.cm-avh{width:132px;height:132px;border-radius:66px;overflow:hidden;margin:6px auto 2px;box-shadow:var(--sombra-s)}.cm-avh img{width:100%;height:100%;object-fit:cover;display:block}
+.cm-tufoto{flex-direction:row;align-items:center;gap:12px}.cm-tufoto .fr-t{flex:1;min-width:0;display:flex;flex-direction:column}.cm-tufoto small{color:var(--tx2)}
+.ced-l{font-size:14px;font-weight:800;margin-top:2px}.ced-f{display:flex;flex-direction:column;gap:8px}.ced-f .cm-foto{margin:0;width:min(220px,100%);align-self:center}.ced-f .cm-foto.cm-rcf{width:min(280px,100%);aspect-ratio:4/3}.ced-f .fila2 .btn-o{display:inline-flex;align-items:center;justify-content:center;gap:6px}
+.cp-crop:after{display:none}      /* 21 nov: el círculo es solo para la foto de perfil, no para la de una publicación */
 
 </style>
 </head>
@@ -2607,7 +2659,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.8.4';
+var YO_V = 'yo-1.9';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -2797,7 +2849,9 @@ A.cerrarHoja = function () { cerrarHoja(); };
 
 function tabbar() {
   var T = [['inicio', 'Inicio'], ['entreno', 'Entreno'], ['nutri', 'Nutrición'], ['comu', 'Comunidad'], ['prog', 'Progreso']];
-  return '<nav class="tabbar" aria-label="Secciones">' + T.map(function (t) { var on = S.tab === t[0] && !S.pant;
+  /* 21 nov (Chadín, captura con el hueco rodeado: «cuando subes la pantalla se ve ahí abajo… eso no puede ser»): un velo del color del fondo
+     desde la mitad de la barra hasta abajo del todo (también por debajo de la barra de Safari), para que no se vea lo que pasa por detrás */
+  return '<div class="tab-velo" aria-hidden="true"></div><nav class="tabbar" aria-label="Secciones">' + T.map(function (t) { var on = S.tab === t[0] && !S.pant;
     return '<button data-a="tab" data-v="' + t[0] + '"' + (on ? ' aria-current="page" class="on"' : '') + '><i class="tb-i">' + ic(t[0], 22, null, on ? 2.1 : 1.8) + '</i><span>' + t[1] + '</span></button>'; }).join('') + '</nav>';
 }
 function cab(tit, opts) {
@@ -3278,7 +3332,7 @@ function iniCarrera() {      // 08:38 (Chadín): «dale un tono más… gris osc
   if (!W.some(function (x) { return x.nrun; })) return '';
   var T = W[W.length - 1], mk = Math.max.apply(null, W.map(function (x) { return x.km; }).concat([1])), rt = T.km && T.rmin ? ritmoTxt(T.km, T.rmin).replace(' min/km', '') : '–';
   /* 08:40 (Chadín): «que no sea igual a lo que toca hoy, porque se confunde; que sea estilo series por grupo»: tarjeta blanca como esa, con los km resaltados */
-  return '<div class="card ini-ser run3"><span class="card-h"><b>Carrera · esta semana</b><span class="run3-a">' + (RUN_SH ? '<button class="z2-shb sm" data-a="runSemCompartir" aria-label="Compartir tu semana corriendo">' + ic('compartir', 15) + '</button>' : '') + '<button class="ico-b" data-a="iniVol" aria-label="Ver en Progreso">' + ic('sig', 16) + '</button></span></span>' +
+  return '<div class="card ini-ser run3"><span class="card-h"><b>Carrera · esta semana</b><span class="run3-a">' + (runSh() ? '<button class="z2-shb sm" data-a="runSemCompartir" aria-label="Compartir tu semana corriendo">' + ic('compartir', 15) + '</button>' : '') + '<button class="ico-b" data-a="iniVol" aria-label="Ver en Progreso">' + ic('sig', 16) + '</button></span></span>' +
     '<span class="run3-b"><span class="run3-km"><b>' + fN(Math.round(T.km * 10) / 10, 1) + '</b><small>km</small></span><span class="run3-k"><span><b>' + T.nrun + '</b>' + (T.nrun === 1 ? 'salida' : 'salidas') + '</span><span><b>' + rt + '</b>min/km</span></span>' +
     '<span class="run3-w" aria-label="Km por semana, las últimas 8">' + W.map(function (x, i) { return '<i class="' + (i === W.length - 1 ? 'u' : '') + '" style="height:' + Math.max(3, Math.round(x.km * 44 / mk)) + 'px"></i>'; }).join('') + '</span></span><small class="run3-p">Km por semana, las últimas 8</small></div>';
 }
@@ -3557,8 +3611,7 @@ function iniRutinas() {
 IC.lista = '<path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/>';
 
 /* 20 nov: «Mi semana corriendo» para compartir va en un segundo paso */
-var RUN_SH = false;
-A.runSemCompartir = function () { toast('Propuesta: aquí se abre «Mi semana corriendo» para compartir (Negro · Con tu foto · Transparente)'); };
+var RUN_SH = true;      // 21 nov, 00:40: publicado (carrera y cardio)
 
 ;
 /* ---------- Entreno: mis rutinas · ejercicios · programas ---------- */
@@ -5324,7 +5377,7 @@ function recsRecientes(dias) { var lim = sumar(hoyStr(), -dias), L = []; S.sesio
    Debajo, compartir en una sola tarjeta (estilo, tarjeta, la imagen y tres botones) y «¡Listo!» */
 VISTAS.fin = function () {
   var U = S.fin; if (!U) return '';
-  var R = U.recs || [], K = rpKpis(U) || blqKpis(U) || [[String(U.min), U.min === 1 ? 'minuto' : 'minutos'], [String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg']];
+  var R = U.recs || [], K = rpKpis(U) || blqKpis(U) || (runSh() && soloCardioYo(U) ? runFinK(U) : null) || [[String(U.min), U.min === 1 ? 'minuto' : 'minutos'], [String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg']];
   var t = finT(U), sl = U.slide || 0, v = num(U.rpe);
   var h = '<div class="pant pad fin fin2"><div class="fin2-top"><button class="redondo" data-a="finListo" aria-label="Cerrar">' + ic('x', 18) + '</button></div>';
   /* 09:16 (Chadín, la 6 · «Negro con barra»): negro, el nombre, los tres datos con líneas finas y el esfuerzo con su barra de 10 */
@@ -5333,9 +5386,11 @@ VISTAS.fin = function () {
     (R.length ? '<p class="fin3-r">' + ic('trofeo', 13) + (R.length === 1 ? 'Récord: <b>' + esc(R[0].e) + '</b> ' + (R[0].p ? fN(R[0].p) + ' kg × ' : '') + R[0].r : '<b>' + R.length + ' récords hoy</b>') + '</p>' : '') +
     '<button class="fin3-e" data-a="finRpeAbre" aria-label="' + (v ? 'Cambiar el esfuerzo' : 'Añadir el esfuerzo') + '"><span class="fin3-et"><small>Esfuerzo · RPE</small><b>' + (v ? v + ' · ' + RPE_T[v] : 'Añadir') + '</b></span><span class="fin3-seg">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<i class="' + (v && n <= v ? 'on' : '') + '"></i>'; }).join('') + '</span></button></section>';
   if (U.libreEj && U.libreEj.length) h += '<button class="card enlace fin2-g" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
-  h += '<section class="card fin2-sh"><div class="fin2-sht"><b>Compártelo</b><div class="seg-p mini" role="tablist" aria-label="Fondo">' + [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div></div>' +
+  var MD = [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].concat(shAj() ? [['sin', 'Sin fondo']] : []);      // 21 nov (Chadín): «una opción sin fondo»
+  h += '<section class="card fin2-sh"><div class="fin2-sht' + (MD.length > 3 ? ' c4' : '') + '"><b>Compártelo</b><div class="seg-p mini" role="tablist" aria-label="Fondo">' + MD.map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div></div>' +
     '<div class="chips fin-t fin2-t" role="tablist" aria-label="Tarjeta">' + t.map(function (x, i) { return '<button role="tab" aria-selected="' + (sl === i) + '" class="chip' + (sl === i ? ' on' : '') + '" data-a="finSlide" data-i="' + i + '">' + x[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="car"><button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button><div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div><button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button></div>' +
+    '<div class="car">' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button>' : '') + '<div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div>' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button>' : '') + '</div>' +
+    shExtras(U, 'fin') +
     (t[sl] && t[sl][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
     (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' :
       '<div class="fin2-ac"><button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="finGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button>' +
@@ -5353,7 +5408,8 @@ var FIN_T = [['res', 'Ejercicios', 'Tus ejercicios y sus series'], ['vol', 'Tu c
    con récords, una cuarta tarjeta «Tu récord» (uno, o todos hasta 3), en negro, en blanco o con tu foto */
 function recsTodos(U) { return ((U && U.recs) || []).filter(function (x) { return x && x.e; }); }
 function recsDe(U) { var R = recsTodos(U); return U.recSel != null && R[U.recSel] ? [R[U.recSel]] : R.slice(0, 3); }
-function finT(U) { var n = recsTodos(U).length; return FIN_T.concat(n ? [['rec', 'Récord', n > 1 ? 'Tus récords de hoy' : 'Tu récord de hoy']] : []); }
+function finT(U) { if (runSh() && soloCardioYo(U)) return [['run', (U.ej || []).some(function (e) { return e.tipo === 'run'; }) ? 'Tu carrera' : 'Tu cardio', 'Tu carrera o tu cardio de hoy']];      // 20 nov (borrador): la tarjeta de carrera y cardio aprobada en maqueta
+  var n = recsTodos(U).length; return FIN_T.concat(n ? [['rec', 'Récord', n > 1 ? 'Tus récords de hoy' : 'Tu récord de hoy']] : []); }
 A.finRecSel = function (el) { S.fin.recSel = el.dataset.v === 'todos' ? null : +el.dataset.v; pintar(); };
 A.compartirRec = function (el) { var s = S.sesiones.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!s) return; var T = finT(s);
   S.fin = Object.assign({}, s, { modo: 'negro', slide: T.length - 1, foto: null, primero: false, libreEj: null, recSel: el.dataset.i === 'todos' ? null : +el.dataset.i }); ir({ t: 'fin' }); };
@@ -5363,15 +5419,16 @@ function recKgReps(x, R, cx, y, px, FG, SUB) {
   x.textAlign = 'left'; P.forEach(function (s) { x.font = (s[1] ? '800 ' + px : '700 ' + Math.round(px * .42)) + 'px' + F; x.fillStyle = s[1] ? FG : SUB; x.fillText(s[0], xx, y); xx += x.measureText(s[0]).width; }); x.textAlign = 'center';
 }
 function tarjetaRecYo(U, modo, foto) {
-  var L = recsDe(U), n = L.length, bl = modo === 'blanco', ft = modo === 'foto' && foto, F = ' "Plus Jakarta Sans", sans-serif';
+  var L = recsDe(U), n = L.length, sn = /^sin/.test(modo), bl = modo === 'blanco' || modo === 'sinn', ft = (modo === 'foto' && foto) || sn, F = ' "Plus Jakarta Sans", sans-serif';
   var FG = bl ? '#111111' : '#FFFFFF', ORO = bl ? '#B8860B' : '#F3D27A', SUB = bl ? 'rgba(17,17,17,.62)' : 'rgba(255,255,255,.78)';
   return fontsListas().then(function () { return linImg('trophy', ORO, 1.6); }).then(function (tro) {
     var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), cx = W / 2;
-    if (ft) { var sc = Math.max(W / foto.width, H / foto.height), w = foto.width * sc, h = foto.height * sc; x.drawImage(foto, (W - w) / 2, (H - h) / 2, w, h); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.25)'); g.addColorStop(.4, 'rgba(0,0,0,.3)'); g.addColorStop(1, 'rgba(0,0,0,.78)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    if (ft && !sn) { fotoCover(x, W, H, foto); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.25)'); g.addColorStop(.4, 'rgba(0,0,0,.3)'); g.addColorStop(1, 'rgba(0,0,0,.78)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    else if (sn) { }      // 21 nov: sin fondo (transparente)
     else if (bl) { x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H); }
     else { var rg = x.createRadialGradient(cx, H * .42, 40, cx, H * .42, 900); rg.addColorStop(0, '#2B2414'); rg.addColorStop(1, '#0B0B0C'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
     var alto = n === 1 ? 190 + 60 + 110 + 220 + 60 + 70 + 80 : 190 + 60 + n * 250 + 60 + 70 + 80, y = ft ? H - alto - 230 : Math.max(160, (H - alto) / 2);
-    x.textAlign = 'center'; x.textBaseline = 'alphabetic';
+    x.textAlign = 'center'; x.textBaseline = 'alphabetic'; if (modo === 'sin') { x.shadowColor = 'rgba(0,0,0,.32)'; x.shadowBlur = 14; }
     x.strokeStyle = bl ? 'rgba(184,134,11,.55)' : 'rgba(243,210,122,.6)'; x.lineWidth = 4; x.beginPath(); x.arc(cx, y + 80, 80, 0, Math.PI * 2); x.stroke(); if (tro) x.drawImage(tro, cx - 48, y + 32, 96, 96); y += 190;
     x.fillStyle = ORO; x.font = '800 34px' + F; grEsp(x, '11px'); x.fillText(n === 1 ? 'NUEVO RÉCORD' : n + ' NUEVOS RÉCORDS', cx, y + 20); grEsp(x, '0px'); y += 60;
     if (n === 1) { x.fillStyle = FG; x.font = '800 84px' + F; var nm = grLin(x, L[0].e, W - 160, 2); nm.forEach(function (l, i) { x.fillText(l, cx, y + 70 + i * 92); }); y += 110 + (nm.length - 1) * 92; recKgReps(x, L[0], cx, y + 170, 200, FG, SUB); y += 220; }
@@ -5386,23 +5443,23 @@ function tarjetaRecYo(U, modo, foto) {
 A.finSlide = function (el) { var n = finT(S.fin).length, i = el && el.dataset.i != null ? +el.dataset.i : ((S.fin.slide || 0) + (el && el.dataset.d ? +el.dataset.d : 1) + n) % n; S.fin.slide = i; pintar(); };
 CH.finFoto = function (t) { var f = t.files && t.files[0]; if (!f) return; var u = URL.createObjectURL(f), im = new Image(); im.onload = function () { S.fin.foto = im; pintar(); }; im.src = u; };
 A.finGuardarRut = function () { var U = S.fin; S.x.ed = { id: nuevoId(), nombre: 'Mi entreno libre', dias: [], nuevo: true, ejercicios: U.libreEj.filter(function (e) { return !e.cal; }).map(function (e) { return { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', d: e.d || '90', sets: e.sets.map(function (s) { return { t: s.t || 'normal', r: String(s.reps || s.r || '10'), rir: '', kg: '' }; }) }; }) }; U.libreEj = null; ir({ t: 'rutina' }); };
-var tarjCache = {};
-function pintaTarjeta() {
-  var U = S.fin, box = $('#fin-img'); if (!U || !box) return; var k = U.id + '|' + U.slide + '|' + U.modo + '|' + (U.foto ? U.foto.src : '') + '|' + (U.recSel == null ? '' : U.recSel);
-  var T = finT(U)[U.slide || 0] || FIN_T[0], vieja = soloRunYo(U) && T[0] !== 'rec';      // solo carrera: la tarjeta de siempre
-  if (tarjCache[k]) { box.innerHTML = '<img src="' + tarjCache[k].url + '" alt="' + T[2] + '">'; return; }
-  (T[0] === 'rec' ? tarjetaRecYo(U, U.modo, U.foto) : vieja ? tarjeta(U, T[0] === 'res' ? 'res' : 'vol', U.modo === 'blanco' ? 'negro' : U.modo, U.foto) : tarjetaGrande(U, T[0], U.modo, U.foto)).then(function (cv) { if (U.modo === 'blanco' && vieja) blancoDe(cv); cv.toBlob(function (b) { tarjCache[k] = { blob: b, url: URL.createObjectURL(b) }; var bx = $('#fin-img'); if (bx) bx.innerHTML = '<img src="' + tarjCache[k].url + '" alt="Tu entreno">'; }, 'image/png'); });
+/* 21 nov: la imagen se pinta con cajaImg (compartir.js): «Sin fondo» y, con foto, moverla y hacer zoom encima de la tarjeta */
+function finSpec() {
+  var U = S.fin; if (!U) return null; var T = finT(U)[U.slide || 0] || FIN_T[0], vieja = soloRunYo(U) && T[0] !== 'rec' && U.modo !== 'sin';      // solo carrera: la tarjeta de siempre
+  return { k: 'fin|' + U.id + '|' + (U.slide || 0) + '|' + (U.recSel == null ? '' : U.recSel) + '|' + (U.rpe || ''), modo: U.modo, let: U.let, foto: U.foto, alt: T[2],
+    gen: function (m, f) { return T[0] === 'run' ? tarjetaDatos(runSesD(U), m, f) : T[0] === 'rec' ? tarjetaRecYo(U, m, f) : vieja ? tarjeta(U, T[0] === 'res' ? 'res' : 'vol', m === 'blanco' ? 'negro' : m, f).then(function (cv) { if (m === 'blanco') blancoDe(cv); return cv; }) : tarjetaGrande(U, T[0], m, f); } };
 }
+function pintaTarjeta() { var o = finSpec(); if (o) cajaImg('fin-img', o); }
 /* versión en blanco: la misma tarjeta con los colores al revés (fondo blanco, letras y dibujos en negro) */
 function blancoDe(cv) { var x = cv.getContext('2d'), d = x.getImageData(0, 0, cv.width, cv.height), a = d.data; for (var i = 0; i < a.length; i += 4) { a[i] = 255 - a[i]; a[i + 1] = 255 - a[i + 1]; a[i + 2] = 255 - a[i + 2]; } x.putImageData(d, 0, 0); return cv; }
-function tarjActual() { var U = S.fin; return tarjCache[U.id + '|' + U.slide + '|' + U.modo + '|' + (U.foto ? U.foto.src : '') + '|' + (U.recSel == null ? '' : U.recSel)]; }
+function tarjActual() { var o = finSpec(); return o && imgLista(o); }
 A.finCompartir = function () {
   var t = tarjActual(); if (!t) return toast('Un segundo, se está preparando');
-  var f = null; try { f = new File([t.blob], 'MOOD_ON_entreno.png', { type: 'image/png' }); } catch (e) { }
+  var f = null; try { f = new File([t.blob], 'MOOD_ON_entreno' + (S.fin.modo === 'sin' ? '_sin_fondo' : '') + extDe(t), { type: t.blob.type || 'image/png' }); } catch (e) { }
   if (f && navigator.canShare && navigator.canShare({ files: [f] })) return navigator.share({ files: [f], title: 'Mi entreno', text: '#MOODON' }).catch(function () { });
   A.finGuardar();
 };
-A.finGuardar = function () { var t = tarjActual(); if (!t) return; var a = document.createElement('a'); a.href = t.url; a.download = 'MOOD_ON_' + (['resumen', 'ejercicios', 'carga', 'record'][S.fin.slide || 0] || 'entreno') + '_' + S.fin.fecha + '.png'; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
+A.finGuardar = function () { var t = tarjActual(); if (!t) return toast('Un segundo, se está preparando'); var a = document.createElement('a'); a.href = t.url; a.download = 'MOOD_ON_' + (['resumen', 'ejercicios', 'carga', 'record'][S.fin.slide || 0] || 'entreno') + (S.fin.modo === 'sin' ? '_sin_fondo' : '') + '_' + S.fin.fecha + extDe(t); document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
 
 /* ---------- las tarjetas para historias (1080 × 1920) ---------- */
 function linSvg(k, s, c, w) { return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" style="color:' + c + '" stroke-width="' + (w || 1.5) + '" aria-hidden="true">' + (LIN[k] || '') + '</svg>'; }
@@ -5420,11 +5477,12 @@ function grLin(x, t, max, n) { var P = String(t).split(' '), L = [], a = ''; P.f
   if (L.length > n) { L = L.slice(0, n); L[n - 1] = recorta(x, L[n - 1] + ' …', max); } return L; }
 function grEsp(x, v) { try { x.letterSpacing = v; } catch (e) { } }
 function tarjetaGrande(U, tipo, modo, foto) {
-  var C = compVol(U.vol), R = U.recs || [], nr = R.length, rec = {}, bl = modo === 'blanco', ft = modo === 'foto' && foto; R.forEach(function (r) { rec[clave(r.e)] = 1; });
+  var C = compVol(U.vol), R = U.recs || [], nr = R.length, rec = {}, sn = /^sin/.test(modo), bl = modo === 'blanco' || modo === 'sinn', ft = (modo === 'foto' && foto) || sn; R.forEach(function (r) { rec[clave(r.e)] = 1; });
   var FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.62)' : 'rgba(255,255,255,.8)', ORO = bl ? '#B8860B' : '#F2C14E', F = ' "Plus Jakarta Sans", sans-serif';
   return fontsListas().then(function () { return Promise.all([linImg('trophy', ORO, 2.2), C ? linImg(C.img, FG, 1.15) : Promise.resolve(null)]); }).then(function (I) {
     var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), M = 90, AN = W - 2 * M, ops = [], add = function (h, f) { ops.push({ h: h, f: f }); };
-    if (ft) { var s = Math.max(W / foto.width, H / foto.height), w = foto.width * s, h = foto.height * s; x.drawImage(foto, (W - w) / 2, (H - h) / 2, w, h); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(.3, 'rgba(0,0,0,.08)'); g.addColorStop(.5, 'rgba(0,0,0,.18)'); g.addColorStop(1, 'rgba(0,0,0,.7)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    if (ft && !sn) { fotoCover(x, W, H, foto); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.35)'); g.addColorStop(.3, 'rgba(0,0,0,.08)'); g.addColorStop(.5, 'rgba(0,0,0,.18)'); g.addColorStop(1, 'rgba(0,0,0,.7)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    else if (sn) { }
     else if (bl) { x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H); }
     else { var rg = x.createRadialGradient(W / 2, 560, 50, W / 2, 560, 1300); rg.addColorStop(0, '#1d1d20'); rg.addColorStop(1, '#0b0b0c'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
     x.textAlign = 'left'; x.textBaseline = 'alphabetic';
@@ -5465,7 +5523,7 @@ function tarjetaGrande(U, tipo, modo, foto) {
     }
     add(71, function (y) { x.save(); var sc = 180 / 1600; x.translate(M, y + 44); x.scale(sc, sc); x.fillStyle = FG; x.fill(new Path2D(LOGO_D), 'evenodd'); x.restore(); });
     var tot = ops.reduce(function (a, o) { return a + o.h; }, 0), y = ft ? Math.max(230, (H - 330) - tot) : Math.max(200, Math.round((H - tot) / 2) - 30);
-    if (ft) { x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 18; }
+    if (ft && modo !== 'sinn') { x.shadowColor = sn ? 'rgba(0,0,0,.32)' : 'rgba(0,0,0,.45)'; x.shadowBlur = sn ? 14 : 18; }
     ops.forEach(function (o) { o.f(y); y += o.h; });
     return cv;
   });
@@ -5474,7 +5532,7 @@ function tarjeta(U, tipo, modo, foto) {
   var C = compVol(U.vol);
   return fontsListas().then(function () { return Promise.all([linImg(C ? C.img : rpKpis(U) ? 'run' : 'barbell', '#FFFFFF', 0.7), linImg('trophy', '#FFFFFF', 1.5), linImg('stopwatch', '#FFFFFF', 1.5), linImg('barbell', '#FFFFFF', 1.5), linImg('trophy', '#FFFFFF', 1.7)]); }).then(function (I) {
     var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), F = '"Plus Jakarta Sans", sans-serif', ft = modo === 'foto';
-    if (ft && foto) { var s = Math.max(W / foto.width, H / foto.height), w = foto.width * s, h = foto.height * s; x.drawImage(foto, (W - w) / 2, (H - h) / 2, w, h); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.45)'); g.addColorStop(.45, 'rgba(0,0,0,.15)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    if (ft && foto) { fotoCover(x, W, H, foto); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.45)'); g.addColorStop(.45, 'rgba(0,0,0,.15)'); g.addColorStop(1, 'rgba(0,0,0,.55)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
     else if (!ft) { var rg = x.createRadialGradient(W / 2, 560, 50, W / 2, 560, 1300); rg.addColorStop(0, '#1d1d20'); rg.addColorStop(1, '#0b0b0c'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
     if (ft) { x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 18; }
     var panel = ft ? 'rgba(0,0,0,.34)' : 'rgba(255,255,255,.06)', fecha = new Date(U.fecha + 'T12:00:00').toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }).toUpperCase();
@@ -6399,20 +6457,24 @@ function hojaCrop() {
   var fin = function () { ini = null; }; box.addEventListener('pointerup', fin); box.addEventListener('pointercancel', fin);
 }
 IN.cropZ = function (t) { if (!CROP) return; CROP.z = +t.value || 1; cropPinta(); };
-A.pfFotoCancelar = function () { if (CROP) URL.revokeObjectURL(CROP.url); CROP = null; cerrarHoja(); };
+A.pfFotoCancelar = function () { if (CROP) URL.revokeObjectURL(CROP.url); CROP = null; delete S.x.avCm; cerrarHoja(); };
 A.pfFotoGuardar = function () {
   var C = CROP; if (!C) return; var d = cropLim(), N = 320, k = N / CROP_B, cv = document.createElement('canvas'); cv.width = N; cv.height = N;
   var x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, N, N); x.drawImage(C.im, (CROP_B / 2 + C.x - d.W / 2) * k, (CROP_B / 2 + C.y - d.H / 2) * k, d.W * k, d.H * k);
   var url = cv.toDataURL('image/jpeg', 0.82); if (url.length > 120000) url = cv.toDataURL('image/jpeg', 0.6);
-  S.perfil.foto = url; guardaPerfil(); URL.revokeObjectURL(C.url); CROP = null; cerrarHoja(); toast('Foto guardada', 'ok'); pintar();
+  S.perfil.foto = url; if (S.x.avCm) { S.perfil.fotoCm = 1; delete S.x.avCm; } guardaPerfil(); URL.revokeObjectURL(C.url); CROP = null; cerrarHoja();
+  /* 21 nov: si se ve en la Comunidad, la de la Comunidad cambia también (una sola foto) */
+  if (S.perfil.fotoCm && typeof comuAv === 'function' && comuAv()) avSube().then(function () { toast('Foto guardada, también en la Comunidad', 'ok'); pintar(); }, function () { toast('Foto guardada. En la Comunidad no se ha podido cambiar: inténtalo luego'); pintar(); });
+  else { toast('Foto guardada', 'ok'); pintar(); }
 };
 A.pfFotoVer = function () { ir({ t: 'pfFoto' }); };
 VISTAS.pfFoto = function () {
   var f = fotoPf(); if (!f) return '<div class="pant pad">' + cab('Tu foto') + '<p class="mut">No tienes foto.</p></div>';
   return '<div class="pant pad">' + cab('Tu foto') + '<div class="pf-g"><img src="' + f + '" alt="Tu foto de perfil"></div>' +
-    '<label class="btn">' + ic('foto', 18, null) + 'Cambiar foto<input type="file" accept="image/*" data-ch="pfFoto" hidden></label><button class="btn sec" data-a="pfFotoQuitar">' + ic('papelera', 18) + 'Quitar foto</button><p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Tu foto de perfil solo la ves tú.</span></p></div>';
+    '<label class="btn">' + ic('foto', 18, null) + 'Cambiar foto<input type="file" accept="image/*" data-ch="pfFoto" hidden></label><button class="btn sec" data-a="pfFotoQuitar">' + ic('papelera', 18) + 'Quitar foto</button>' +
+    (typeof avMio === 'function' && avMio() ? '<p class="nota-p">' + ic('comu', 14, 'var(--tx2)') + '<span>También se ve en la Comunidad, junto a tu nombre. <button class="link izq" data-a="cAvQuitar">Quitar de la Comunidad</button></span></p>' : '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Tu foto de perfil solo la ves tú.</span></p>') + '</div>';
 };
-A.pfFotoQuitar = function () { delete S.perfil.foto; guardaPerfil(); toast('Foto quitada'); if (S.pant && S.pant.t === 'pfFoto') volver(); else pintar(); };
+A.pfFotoQuitar = function () { if (S.perfil.fotoCm) { delete S.perfil.fotoCm; avQuita().then(null, function () { toast('En la Comunidad no se ha podido quitar: inténtalo luego'); }); } delete S.perfil.foto; guardaPerfil(); toast('Foto quitada'); if (S.pant && S.pant.t === 'pfFoto') volver(); else pintar(); };
 
 ;
 /* ---------- Progreso: peso (con la media semanal), medidas, fotos privadas, récords y volumen (tablero 24) ---------- */
@@ -6765,6 +6827,28 @@ function phVal(o, m, corto) {
 A.phRango = function (el) { S.x.phR = +el.dataset.v; delete S.x.phSel; pintar(); };
 A.phMet = function (el) { S.x.phM = el.dataset.v; pintar(); };
 A.phSel = function (el) { S.x.phSel = +el.dataset.i; pintar(); };
+/* 21 nov (Chadín, captura del panel negro: «este panel lo necesito más claro… y otro diseño tipo Hevy»): dos propuestas para elegir, solo en las demos.
+   · 'claro': lo mismo de ahora (rango, qué ver, el número, la barra elegida y sus datos), en una tarjeta blanca y sin brillos.
+   · 'hevy': arriba, en grande, lo de la barra que tocas (al abrir, esta semana) y el rango en un desplegable; barras azules con su escala a la
+     derecha y debajo, Entrenos · Tiempo · Volumen. Sin elegir (PH_EST vacío), el de siempre ('osc'). */
+var PH_EST = 'claro';      // 21 nov, 00:40: «lo necesito más claro» → el claro; el tipo Hevy, en la demo para que Chadín elija
+function phEst() { return window.PH_EST_DEMO || PH_EST || 'osc'; }
+CH.phRangoS = function (t) { S.x.phR = +t.value; delete S.x.phSel; pintar(); };
+function phHevy(G, sel, ws, me, mx, gl, T, Tb, R, cuando, comp, pct, nd) {
+  var v = ws[me], vt = me === 'min' ? (v ? minTxt(v) : '0 min') : me === 'kg' ? fmil(v) + ' kg' : String(v), ut = me === 'n' ? (v === 1 ? ' entreno' : ' entrenos') : '';
+  var sub = ws.t.charAt(0).toUpperCase() + ws.t.slice(1), p = comp ? pct(T[me], Tb[me]) : '';
+  var tot = me === 'min' ? minTxt(T.min) + ' entrenando' : me === 'kg' ? fmil(T.kg) + ' kg de volumen' : T.n + (T.n === 1 ? ' entreno' : ' entrenos');
+  var h = '<section class="card phh"><div class="phh-top"><div class="phh-v"><b>' + esc(vt) + '<small>' + ut + '</small></b><span>' + esc(sub) + '</span></div>' +
+    '<label class="phh-sel">' + ic('cal', 14) + '<select data-ch="phRangoS" aria-label="Rango">' + PH_R.map(function (x) { return '<option value="' + x[0] + '"' + (x[0] === nd ? ' selected' : '') + '>' + (x[0] === 7 ? 'Últimos 7 días' : 'Últimos ' + x[1]) + '</option>'; }).join('') + '</select>' + ic('abajo', 13) + '</label></div>';
+  h += '<div class="phh-g" role="list" aria-label="' + esc({ n: 'Entrenos', min: 'Tiempo', kg: 'Volumen' }[me] + ' de cada ' + G.por) + '">' +
+    '<span class="phh-gl" style="bottom:100%"><em>' + esc(gl(mx)) + '</em></span><span class="phh-gl" style="bottom:50%"><em>' + esc(gl(mx / 2)) + '</em></span><span class="phh-gl cero" style="bottom:0"><em>0</em></span>' +
+    G.W.map(function (w, k) { var x = w[me];
+      return '<button class="phh-b' + (x ? ' ok' : '') + (k === sel ? ' sel' : '') + '" role="listitem" data-a="phSel" data-i="' + k + '" aria-label="' + esc(w.t + ': ' + phVal(w, me)) + '" aria-pressed="' + (k === sel) + '"><i style="height:' + (x ? Math.max(3, Math.round(x / mx * 100)) : 0) + '%"></i></button>'; }).join('') + '</div>' +
+    '<div class="phh-x">' + G.W.map(function (w, k) { return '<span class="' + (k === sel ? 'sel' : '') + '">' + esc(w.l) + '</span>'; }).join('') + '</div>';
+  h += '<div class="phh-m" role="tablist" aria-label="Qué ver">' + PH_M.map(function (x) { var on = x[0] === me; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="phMet" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
+  h += '<p class="phh-tot"><b>' + esc(tot) + '</b> ' + esc(cuando) + (p ? ' <span class="dlt' + (T[me] < Tb[me] ? ' gr' : '') + '">' + esc(p) + ' que ' + R[2] + '</span>' : '') + '</p>';
+  return h + '<p class="phh-ay">Cada barra es ' + (G.por === 'día' ? 'un día' : G.por === 'semana' ? 'una semana, de lunes a domingo' : 'un mes') + '. Tócala para ver sus datos arriba.</p></section>';
+}
 function progHero() {
   var hoy = hoyStr(), R = PH_R.filter(function (x) { return x[0] === (S.x.phR || 90); })[0] || PH_R[3], nd = R[0], me = S.x.phM || 'n';
   var dA = sumar(hoy, -(nd - 1)), dB = sumar(hoy, -(2 * nd - 1)), T = phTot(dA, sumar(hoy, 1)), Tb = phTot(dB, dA);
@@ -6776,7 +6860,7 @@ function progHero() {
   var big = me === 'min' ? [minTxt(T.min), 'entrenando ' + cuando] : me === 'kg' ? [fmil(T.kg) + ' kg', 'de volumen ' + cuando] : [String(T.n), (T.n === 1 ? 'entreno ' : 'entrenos ') + cuando];
   var per = G.por === 'día' ? 'ese día' : G.por === 'semana' ? 'esa semana' : 'ese mes', kmx = G.W.filter(function (w) { return w.kg >= 1000; }).map(function (w) { return w.kg; }).sort(function (x, y) { return y - x; })[0];
   var ley = me === 'n' ? 'tus entrenos de ' + per : me === 'min' ? 'el tiempo que entrenaste ' + per : 'el volumen (kilos × repeticiones) de ' + per + (kmx ? ' (' + phVal({ kg: kmx }, 'kg', true) + ' = ' + fmil(Math.round(kmx / 100) * 100) + ' kg)' : '');
-  var h = '<section class="hoy-c ph-c"><div class="hoy-l"><small>Tus entrenos</small></div>' +
+  var est = phEst(), h = est === 'hevy' ? phHevy(G, sel, ws, me, mx, gl, T, Tb, R, cuando, comp, pct, nd) : '<section class="hoy-c ph-c' + (est === 'claro' ? ' ph-claro' : '') + '"><div class="hoy-l"><small>Tus entrenos</small></div>' +
     '<div class="ph-rg" role="tablist" aria-label="Rango">' + PH_R.map(function (x) { var on = x[0] === nd; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="phRango" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
     '<div class="ph-mt" role="tablist" aria-label="Qué ver">' + PH_M.map(function (x) { var on = x[0] === me; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="phMet" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
     '<div class="sn-big ph-big"><b class="nm">' + esc(big[0]) + '</b><span>' + esc(big[1]) + '</span></div>' +
@@ -6932,8 +7016,8 @@ function cardEjercicio(E) {
     return '<button class="pe-r" data-a="verSes" data-id="' + esc(x.id) + '"><span class="f">' + esc(fCorta(x.f)) + '</span><span class="t"><b>' + esc(bestTxt(x.best, x.u)) + '</b><small>' + (Z ? Z.z.map(function (z) { return esc(setTxt(z, Z.u).replace(' × ', '×')); }).join(' · ') : '') + '</small></span>' + dif + '</button>'; }).join('') + '</section>';
   return h;
 }
-A.peMet = function (el) { S.x.peM = el.dataset.v; pintar(); };
-A.pePer = function (el) { S.x.peP = el.dataset.v; pintar(); };
+A.peMet = function (el) { S.x.peM = el.dataset.v; S.x.peTip = null; pintar(); };
+A.pePer = function (el) { S.x.peP = el.dataset.v; S.x.peTip = null; pintar(); };
 function peGraf(L, val, pr, uni) {
   var W = 340, H = 190, l = 36, r = 12, t = 26, b = 24, V = L.map(val), mn = Math.min.apply(null, V), mx = Math.max.apply(null, V);
   if (mx - mn < 1e-9) { mn -= Math.max(1, mn * 0.1); mx += Math.max(1, mx * 0.1); } var pad = (mx - mn) * 0.12; mn = Math.max(0, mn - pad); mx += pad;
@@ -6944,13 +7028,21 @@ function peGraf(L, val, pr, uni) {
   var xi = L.length > 2 ? [0, Math.floor((L.length - 1) / 2), L.length - 1] : L.length === 2 ? [0, 1] : [0];
   xi.forEach(function (i, k) { g += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 6) + '" text-anchor="' + (L.length === 1 ? 'middle' : k === 0 ? 'start' : k === xi.length - 1 ? 'end' : 'middle') + '" class="pe-gt">' + esc(fCorta(L[i].f)) + '</text>'; });
   if (L.length > 1) g += '<path d="' + path + ' L ' + X(L.length - 1).toFixed(1) + ' ' + (H - b) + ' L ' + l + ' ' + (H - b) + ' Z" fill="url(#' + id + 'a)"/><path d="' + path + '" fill="none" stroke="url(#' + id + 'l)" stroke-width="3.5" stroke-linejoin="round" stroke-linecap="round"/>';
-  var ip = pr ? L.indexOf(pr) : -1;
-  pts.forEach(function (p, i) { g += i === ip ? '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="7" fill="#0D0D10"/><circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.5" fill="#9ADFFF"/>' : '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="4" class="pe-gp"/>'; });
-  if (ip >= 0) { var px = pts[ip][0], py = pts[ip][1], tx = 'Récord ' + bestTxt(pr.best, pr.u).replace(' kg × ', ' × '), w = tx.length * 6.2 + 16, x0 = Math.max(l, Math.min(W - r - w, px - w / 2));
-    g += '<rect x="' + x0.toFixed(1) + '" y="' + Math.max(0, py - 30).toFixed(1) + '" width="' + w.toFixed(1) + '" height="20" rx="10" fill="#0D0D10"/><text x="' + (x0 + w / 2).toFixed(1) + '" y="' + (Math.max(0, py - 30) + 14).toFixed(1) + '" text-anchor="middle" class="pe-gr">' + esc(tx) + '</text>'; }
-  return g + '</svg>';
+  var ip = pr ? L.indexOf(pr) : -1, si = S.x.peTip != null && S.x.peTip < L.length ? S.x.peTip : -1;
+  /* 21 nov (Chadín: «en progresión, que puedas dar a los puntitos y salga el peso de esa fecha»): al tocar un punto, su línea y una pastilla con la fecha y el dato */
+  if (si >= 0) g += '<line x1="' + pts[si][0].toFixed(1) + '" x2="' + pts[si][0].toFixed(1) + '" y1="' + pts[si][1].toFixed(1) + '" y2="' + (H - b) + '" class="pe-gv"/>';
+  pts.forEach(function (p, i) { g += i === ip ? '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="7" fill="#0D0D10"/><circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="3.5" fill="#9ADFFF"/>' : '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="' + (i === si ? 6 : 4) + '" class="pe-gp' + (i === si ? ' on' : '') + '"/>'; });
+  var pastilla = function (k, tx, cls) { var px = pts[k][0], py = pts[k][1], w = tx.length * 6.2 + 18, x0 = Math.max(0, Math.min(W - w, px - w / 2)), y0 = py - 31 >= 0 ? py - 31 : py + 12;
+    return '<rect x="' + x0.toFixed(1) + '" y="' + y0.toFixed(1) + '" width="' + w.toFixed(1) + '" height="21" rx="10.5" class="' + cls + '"/><text x="' + (x0 + w / 2).toFixed(1) + '" y="' + (y0 + 14.5).toFixed(1) + '" text-anchor="middle" class="pe-gr">' + esc(tx) + '</text>'; };
+  if (ip >= 0 && (si < 0 || si === ip)) g += pastilla(ip, (si === ip ? fCorta(pr.f) + ' · ' : 'Récord ') + bestTxt(pr.best, pr.u).replace(' kg × ', ' × ') + (si === ip ? ' · récord' : ''), 'pe-gb');
+  if (si >= 0 && si !== ip) { var x = L[si], M = S.x.peM || 'max', v = val(x);
+    g += pastilla(si, fCorta(x.f) + ' · ' + (M === 'e1' && uni === 'kg' && x.e1 ? '1RM ≈ ' + fN(Math.round(x.e1 * 10) / 10) + ' kg' : M === 'vol' && uni === 'kg' ? fmtK(v) + ' kg' : bestTxt(x.best, x.u)), 'pe-gb'); }
+  /* los toques: un círculo invisible y grande en cada punto (más fácil de acertar con el dedo) */
+  pts.forEach(function (p, i) { var x = L[i]; g += '<circle cx="' + p[0].toFixed(1) + '" cy="' + p[1].toFixed(1) + '" r="16" class="pe-hit" data-a="peTip" data-i="' + i + '" role="button" aria-label="' + esc(fCorta(x.f) + ': ' + bestTxt(x.best, x.u)) + '"/>'; });
+  return g + '</svg>' + (L.length > 1 ? '<small class="mut pe-ayuda">Toca un punto para ver ' + (uni === 'kg' ? 'el peso' : 'lo que hiciste') + ' ese día.</small>' : '');
 }
-CH.peSel = function (t) { S.x.pe = t.value; delete S.x.peN; pintar(); };
+A.peTip = function (el) { var i = +el.dataset.i; S.x.peTip = S.x.peTip === i ? null : i; pintar(); };
+CH.peSel = function (t) { S.x.pe = t.value; delete S.x.peN; S.x.peTip = null; pintar(); };
 function grafEj(L, val, conKg, n) {
   var W = 340, H = 140, pl = 34, pr = 10, pt = 14, pb = 22, V = L.map(val), mn = Math.min.apply(null, V), mx = Math.max.apply(null, V);
   if (mx - mn < (conKg ? 4 : 2)) { var c = (mx + mn) / 2, a = conKg ? 2 : 1; mn = c - a; mx = c + a; } var pad = (mx - mn) * 0.15; mn -= pad; mx += pad;
@@ -7683,9 +7775,10 @@ VISTAS.napuntar = function () {
   var porPeso = r.olla > 0, T = recTot(r), q = arCuanto(r);
   var fsrc = recFotoSrc(r);
   var h = '<div class="pant pad con-pie">' + cab(esc(r.n)) + (fsrc ? '<div class="rec-img"><img src="' + esc(fsrc) + '" alt="" onerror="this.parentNode.remove()"></div>' : '') +
-    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? ' · olla de ' + fmil(r.olla) + ' g' : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
-  h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">Por peso</button></div>' : '');
-  if (X.modo === 'g' && porPeso) h += '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>' + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
+    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? (recUd(r) === 'ml' ? ' · ' + fmil(r.olla) + ' ml en total' : ' · olla de ' + fmil(r.olla) + ' g') : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
+  h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">' + (recUd(r) === 'ml' ? 'Por cantidad' : 'Por peso') + '</button></div>' : '');
+  if (X.modo === 'g' && porPeso) h += (recUd(r) === 'ml' ? '<label class="f">Mililitros en tu plato<span class="rc-u"><input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 350"><i>ml</i></span></label><small class="mut">Con un vaso medidor, o en la báscula (1 g ≈ 1 ml) · de ' + fmil(r.olla) + ' ml en total</small>'
+    : '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>') + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
   else h += '<div class="chips">' + [0.5, 1, 1.5, 2].map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === 0.5 ? '½' : v === 1.5 ? '1½' : v) + '</button>'; }).join('') + '</div><small class="mut">' + (X.r === 1 ? '1 ración' : fN(X.r, 1).replace(/,0$/, '') + ' raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small>';
   h += '</section><section class="card n-tot" id="ar-t">' + arTotHtml(q) + '</section>';
   h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
@@ -7697,7 +7790,7 @@ VISTAS.napuntar = function () {
 };
 function alNombre(id) { var a = NUT_OK ? AL_BASE.filter(function (x) { return x[0] === id; })[0] : null; return a ? a[1] + (a[2] ? ' (' + a[2] + ')' : '') : id; }
 /* cuánto de la receta: por raciones (× lo de una ración) o por peso (sobre la olla entera) */
-function arCuanto(r) { var X = S.x.ar, T = recTot(r); if (X.modo === 'g' && r.olla > 0) { var g = num(X.g) || 0, f = g / r.olla; return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: 'Tu plato: ' + fmil(g) + ' g de una olla de ' + fmil(r.olla) + ' g', ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
+function arCuanto(r) { var X = S.x.ar, T = recTot(r); if (X.modo === 'g' && r.olla > 0) { var g = num(X.g) || 0, f = g / r.olla, u = recUd(r); return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: u === 'ml' ? 'Tu plato: ' + fmil(g) + ' ml de ' + fmil(r.olla) + ' ml' : 'Tu plato: ' + fmil(g) + ' g de una olla de ' + fmil(r.olla) + ' g', ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
 function arTotHtml(q) { return '<span class="n-big"><b>' + fmil(q.k) + '</b><span>kcal</span></span><div class="n-mac">' + [['Proteína', q.p], ['Hidratos', q.h], ['Grasas', q.g]].map(function (m) { return '<span>' + m[0] + ' <b>' + Math.round(m[1]) + ' g</b></span>'; }).join('') + '</div>'; }
 A.arOlla = function () {
   var r = recDe(S.x.ar.key); if (!r || !r.mio) return; var ta = r.tara || +taraYo() || 0;
@@ -7717,7 +7810,7 @@ A.arR = function (el) { S.x.ar.r = +el.dataset.v; pintar(); };
 A.arC = function (el) { S.x.ar.c = +el.dataset.v; pintar(); };
 IN.arG = function (t) { S.x.ar.g = t.value; var r = recDe(S.x.ar.key), e = $('#ar-t'); if (r && e) e.innerHTML = arTotHtml(arCuanto(r)); };
 A.arOk = function () {
-  var X = S.x.ar, r = recDe(X.key); if (!r) return; var q = arCuanto(r); if (!q.ok) return toast('Escribe cuántos gramos hay en tu plato');
+  var X = S.x.ar, r = recDe(X.key); if (!r) return; var q = arCuanto(r); if (!q.ok) return toast(recUd(r) === 'ml' ? 'Escribe cuántos ml hay en tu plato' : 'Escribe cuántos gramos hay en tu plato');
   var o = { id: X.it ? X.it.id : rand(8), c: X.c, n: r.n, det: q.txt, g: null, k: Math.round(q.k), p: Math.round(q.p * 10) / 10, h: Math.round(q.h * 10) / 10, gr: Math.round(q.g * 10) / 10, ref: { t: 'rec', id: X.key }, rm: X.modo, rr: X.r, rg: X.g };
   var f = nd(), D = S.diario[f] = diaDe(f);
   if (X.it) { var i = D.it.findIndex(function (x) { return x.id === X.it.id; }); if (i >= 0) D.it[i] = o; } else D.it.push(o);
@@ -7727,7 +7820,7 @@ A.arQuitar = function () { var X = S.x.ar, f = nd(), D = diaDe(f); D.it = D.it.f
 
 /* nueva receta (o cambiarla): ingredientes en crudo, raciones y, si quiere, el peso de la olla cocinada */
 A.nRecNueva = function () { S.x.rec = { id: 'rc' + rand(8), n: '', ing: [], pasos: '', rac: 4, olla: '', tara: taraYo(), llena: '', foto: '', fotoN: 0, nueva: true }; ir({ t: 'nreceta' }); };
-A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false }; ir({ t: 'nreceta' }); };
+A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false, ud: r.ud || 'g' }; ir({ t: 'nreceta' }); };
 function recCalc(R) { var t = { k: 0, p: 0, h: 0, g: 0, peso: 0 }; R.ing.forEach(function (i) { t.k += i.k * i.g / 100; t.p += i.p * i.g / 100; t.h += i.h * i.g / 100; t.g += i.gr * i.g / 100; t.peso += i.g; }); return t; }
 VISTAS.nreceta = function () {
   var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = num(R.olla) || 0;
@@ -7741,7 +7834,8 @@ VISTAS.nreceta = function () {
   h += '<label class="f">Pasos (opcional)<textarea id="rc-p" data-in="rcP" rows="3" maxlength="2000">' + esc(R.pasos) + '</textarea></label>';
   h += '<label class="f">Raciones<span class="mut sm">Para cuántas personas sale</span><input data-in="rcRac" inputmode="numeric" value="' + rac + '"></label>';
   /* 17 nov (Javier, maqueta aprobada): el peso de la olla vacía se apunta una vez (la app lo recuerda); al cocinar, se pesa la olla llena y sale el peso de la receta */
-  h += '<section class="card rc-olla"><b>Peso de la olla</b><span class="mut sm">Opcional · para apuntar luego pesando tu plato</span>' +
+  h += '<section class="card rc-olla"><b>Peso de la olla</b><span class="mut sm">Opcional · para apuntar luego ' + (recMl() && R.ud === 'ml' ? 'midiendo' : 'pesando') + ' tu plato</span>' +
+    (recMl() ? '<div class="rc-ud"><span>Tu plato se mide en</span><div class="seg-p mini" role="tablist" aria-label="Unidad">' + [['g', 'Gramos'], ['ml', 'Mililitros']].map(function (u) { var on = (R.ud || 'g') === u[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="rcUd" data-v="' + u[0] + '">' + u[1] + '</button>'; }).join('') + '</div></div>' : '') +
     '<label class="f">Peso de la olla vacía (lo apuntas una vez)<span class="rc-u"><input data-in="rcTara" inputmode="numeric" value="' + esc(R.tara) + '" placeholder="Ej.: 1250"><i>g</i></span></label>' +
     '<label class="f">Cuando la cocines: pesa la olla con la comida<span class="rc-u"><input data-in="rcLlena" inputmode="numeric" value="' + esc(R.llena) + '" placeholder="' + (olla && !R.llena ? esc(fmil(olla + (num(R.tara) || 0)).replace('.', '')) : 'Ej.: 3050') + '"><i>g</i></span></label>' +
     '<div id="rc-ol">' + rcOllaHtml() + '</div></section>';
@@ -7752,7 +7846,7 @@ VISTAS.nreceta = function () {
 function rcTotHtml() { var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = Math.max(0, rcNeto(R));
   return '<div class="fila-r"><span><b>Receta entera</b></span><span>' + fmil(T.k) + ' kcal · P ' + Math.round(T.p) + ' · H ' + Math.round(T.h) + ' · G ' + Math.round(T.g) + '</span></div>' +
     '<div class="fila-r"><span><b>' + (rac === 1 ? '1 ración' : 'Cada ración (1 de ' + rac + ')') + '</b></span><span>' + fmil(T.k / rac) + ' kcal · P ' + Math.round(T.p / rac) + ' · H ' + Math.round(T.h / rac) + ' · G ' + Math.round(T.g / rac) + '</span></div>' +
-    (olla ? '<div class="fila-r"><span><b>Cada 100 g cocinados</b></span><span>' + fmil(T.k * 100 / olla) + ' kcal</span></div>' : ''); }
+    (olla ? '<div class="fila-r"><span><b>Cada 100 ' + (recUd(R) === 'ml' ? 'ml' : 'g cocinados') + '</b></span><span>' + fmil(T.k * 100 / olla) + ' kcal</span></div>' : ''); }
 function rcTot() { var e = $('#rc-t'); if (e) e.innerHTML = rcTotHtml(); var o = $('#rc-ol'); if (o) o.innerHTML = rcOllaHtml(); }
 /* la olla: vacía (la recuerda la app) y llena → el peso de la receta cocinada */
 function taraYo() { var t = S.perfil && +S.perfil.tara; return t > 0 ? String(t) : ''; }
@@ -7761,8 +7855,13 @@ function rcOllaHtml() {
   var R = S.x.rec, ll = num(R.llena) || 0, ta = num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), n = rcNeto(R);
   if (ll && ta && ll <= ta) return '<p class="rc-res mal">La olla llena tiene que pesar más que vacía.</p>';
   if (!n) return '<p class="mut sm">' + (ta ? 'La app recuerda el peso de tu olla: cuando cocines, solo pesas la olla llena.' : 'Pesa la olla vacía una vez; la próxima vez solo pesas la olla llena.') + '</p>';
+  var u = recUd(R); if (u === 'ml') return '<p class="rc-res">La receta: ' + fmil(n) + ' ml' + (rac > 1 ? ' · cada ración (de ' + rac + '): ' + fmil(n / rac) + ' ml' : '') + '</p><p class="mut sm">Se pesa igual, en la báscula: en sopas, cremas y batidos, 1 g ≈ 1 ml.</p>';
   return '<p class="rc-res">Peso de la receta: ' + fmil(n) + ' g' + (rac > 1 ? ' · cada ración (de ' + rac + '): ' + fmil(n / rac) + ' g' : '') + '</p>' + (ll && !ta ? '<p class="mut sm">Sin el peso de la olla vacía, cuento todo como comida.</p>' : '<p class="mut sm">La app recuerda el peso de tu olla: la próxima vez solo pesas la olla llena.</p>');
 }
+/* 20 nov (borrador, Chadín: «recetas en ml además de en gramos»): sopas, cremas y batidos se miden en ml; la olla se pesa igual (1 g ≈ 1 ml) */
+function recMl() { return true; }      // 21 nov, 00:40: publicado (recetas en ml)
+function recUd(r) { return recMl() && r && r.ud === 'ml' ? 'ml' : 'g'; }
+A.rcUd = function (el) { S.x.rec.ud = el.dataset.v; pintar(); };
 IN.rcTara = function (t) { S.x.rec.tara = t.value.replace(/\D/g, ''); rcTot(); };
 IN.rcLlena = function (t) { S.x.rec.llena = t.value.replace(/\D/g, ''); rcTot(); };
 /* la foto de la receta: recortada a 16:10 y reducida (800 × 500, JPEG); se guarda aparte y solo se pide al verla */
@@ -7799,7 +7898,7 @@ A.rcGuardar = function () {
   if (n.length < 2) { e.hidden = false; e.textContent = 'Ponle un nombre a la receta.'; return; }
   if (!R.ing.length || !T.k) { e.hidden = false; e.textContent = 'Añade al menos un ingrediente con sus gramos.'; return; }
   if (olla && olla < T.peso * 0.3) { e.hidden = false; e.textContent = 'El peso de la olla cocinada parece muy bajo para esos ingredientes. Revísalo o déjalo en blanco.'; return; }
-  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0,
+  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0, ud: recMl() && R.ud === 'ml' ? 'ml' : undefined,
     k: Math.round(T.k / rac), p: Math.round(T.p / rac * 10) / 10, h: Math.round(T.h / rac * 10) / 10, g: Math.round(T.g / rac * 10) / 10 };
   guardaBiblio(b);
   if (R.fotoN) { if (R.foto) RFOTO[b.id] = R.foto; else delete RFOTO[b.id]; rpc('yo_rec_foto_poner', { bid: b.id, foto: R.foto || null }).then(null, function () { toast('La receta se ha guardado, pero la foto no se ha podido subir'); }); }
@@ -8398,7 +8497,7 @@ function vDescubrir(C) {
 }
 function filaGente(g) {
   var sub = g.pubs ? g.pubs + (g.pubs === 1 ? ' publicación' : ' publicaciones') + (g.ult ? ' · el último ' + haceTxt(fechaDe(new Date(g.ult))) : '') : 'Acaba de llegar';
-  return '<div class="cm-fila"><button class="cm-av" data-a="cPersona" data-p="' + esc(g.pid) + '" aria-label="Ver a ' + esc(g.nombre) + '">' + esc(iniciales(g.nombre)) + '</button>' +
+  return '<div class="cm-fila"><button class="cm-av" data-a="cPersona" data-p="' + esc(g.pid) + '" aria-label="Ver a ' + esc(g.nombre) + '">' + avIn(g.pid, g.nombre) + '</button>' +
     '<button class="fr-t" data-a="cPersona" data-p="' + esc(g.pid) + '"><b>' + esc(g.nombre) + '</b><small>' + sub + '</small></button>' +
     (g.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">Siguiendo</button>' : '<button class="btn-neg sm" data-a="cSeguir" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">Seguir</button>') + '</div>';
 }
@@ -8406,7 +8505,7 @@ function filaGente(g) {
 /* una publicación (prev: la vista previa antes de publicar, sin botones) */
 function cardPub(x, prev) {
   var C = CMU(), ab = !prev && C.menu === x.id, A_ = function (a) { return prev ? '' : ' data-a="' + a + '"'; };
-  var h = '<section class="card cm-pub v2' + (prev ? ' prev' : '') + '"><div class="cm-quien"><button class="cm-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '"' + (prev ? ' tabindex="-1"' : '') + '>' + esc(iniciales(x.nombre)) + '</button>' +
+  var h = '<section class="card cm-pub v2' + (prev ? ' prev' : '') + '"><div class="cm-quien"><button class="cm-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '"' + (prev ? ' tabindex="-1"' : '') + '>' + avIn(x.pid, x.nombre) + '</button>' +
     '<button class="fr-t"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"' + (prev ? ' tabindex="-1"' : '') + '><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + (x.vis === 'seg' ? ' · ' + ic('comu', 12) + 'Solo seguidores' : '') + '</small></button>' +
     (prev ? '' : '<button class="cm-dots' + (ab ? ' on' : '') + '" data-a="cMenu" data-id="' + x.id + '" aria-label="Más opciones" aria-expanded="' + ab + '">' + ic('dots', 20) + '</button>') + '</div>';
   if (x.tipo === 'rec') return h + cardRec(x, prev, ab, A_);
@@ -8418,7 +8517,7 @@ function cardPub(x, prev) {
   if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
   else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !comuSh() ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.nej && !x.mio) h += '<button class="cm-copiar"' + A_('cCopiar') + ' data-id="' + x.id + '">' + ic('copiar', 15, null) + 'Copiar rutina</button>';
   else if (x.nej && x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá copiar la rutina' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona ha copiado tu rutina' : ' personas han copiado tu rutina') : 'Nadie ha copiado tu rutina todavía') + '</span>';
   h += '</div>';
@@ -8441,7 +8540,7 @@ function cardRec(x, prev, ab, A_) {
   else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto cm-rcf' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de la receta">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += recDatos(r);
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !comuSh() ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá ver y guardar' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'Nadie la ha guardado todavía') + '</span>';
   else h += '<button class="cm-copiar"' + A_('cRecVer') + ' data-id="' + x.id + '">Ver receta</button>';
   h += '</div>';
@@ -8454,7 +8553,7 @@ VISTAS.comuRec = function (p) {
   var r = x.rc, fsrc = x.foto ? (C.fotos || {})[x.id] : '', ya = recGuardadaDe(x.id);
   if (x.foto && !fsrc) setTimeout(cargaFotosComu, 0);
   var h = '<div class="pant pad con-pie">' + cab(esc(x.t)) + (x.foto ? '<div class="cm-foto cm-rcf rv' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="">' : '') + '</div>' : '');
-  h += '<div class="cm-quien rv"><span class="cm-av">' + esc(iniciales(x.nombre)) + '</span><span class="fr-t"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></span></div>' + (x.c ? '<p class="cm-dice">' + esc(x.c) + '</p>' : '');
+  h += '<div class="cm-quien rv"><span class="cm-av">' + avIn(x.pid, x.nombre) + '</span><span class="fr-t"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></span></div>' + (x.c ? '<p class="cm-dice">' + esc(x.c) + '</p>' : '');
   h += '<section class="card">' + recDatos(r) + '</section>';
   h += '<section class="card"><div class="card-h"><b>Ingredientes</b><small class="mut">' + ((r.rac || 1) > 1 ? 'la receta entera' : '1 ración') + '</small></div>' + (r.ing || []).map(function (i) { return '<div class="fila-r"><span>' + esc(i.n) + '</span><b>' + fmil(i.g) + ' g</b></div>'; }).join('') + '</section>';
   if (r.pasos) h += '<section class="card"><b>Cómo se hace</b><p class="txt">' + esc(r.pasos) + '</p></section>';
@@ -8492,6 +8591,7 @@ A.recComu = function (el) {
 function pintaPubRec() {
   var C = CMU(), d = S.x.crec, x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, c: d.c || '', tipo: 'rec', rc: d.mac ? d.rc : Object.assign({}, d.rc, { k: null }), fsrc: d.confoto ? d.fsrc : '', aj: 1, likes: 0, coms: 0, mio: true };
   hoja('<h2>Compartir la receta</h2><p class="mut sm">Así la verá la gente de la Comunidad:</p>' + cardPub(x, true) +
+    '<label class="f">Título<input id="cr-t" maxlength="60" value="' + esc(d.t) + '" data-in="crTit"></label>' +      // 21 nov (Chadín): «al publicar… poder editarlo» (el título ya lo guardaba el servidor)
     '<label class="f">Añade un comentario (opcional)<textarea id="cp-c" maxlength="200" rows="2" data-in="cpComR" placeholder="Ej.: la cena de los domingos, rinde para 4">' + esc(d.c || '') + '</textarea></label>' +
     (CPF ? cpfHtml() + (d.fsrc ? '' : '<label class="chk"><input type="checkbox" id="cr-g"' + (d.guarda !== false ? ' checked' : '') + ' data-ch="crGuarda"><span>Guardarla también como foto de la receta</span></label>') :
       d.fsrc ? '<label class="sw-f"><span>Con la foto de la receta</span><input type="checkbox" role="switch" id="cr-f"' + (d.confoto ? ' checked' : '') + ' data-ch="crFoto"><i></i></label><label class="link izq cp-otra">' + ic('foto', 15) + 'Usar otra foto<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>' : cpfHtml()) +      // 18 nov (Javier: «¿pueden adjuntar foto?»): la de la receta, otra o una nueva
@@ -8501,6 +8601,7 @@ function pintaPubRec() {
   cpfEnganchar();
 }
 CH.crGuarda = function (t) { if (S.x.crec) S.x.crec.guarda = t.checked; };
+IN.crTit = function (t) { if (S.x.crec) S.x.crec.t = t.value; var b = document.querySelector('.cm-pub.prev .cm-t'); if (b) b.textContent = t.value.trim() || ' '; };
 IN.cpComR = function (t) { if (S.x.crec) S.x.crec.c = t.value; var b = document.querySelector('.cm-pub.prev .cm-dice'); if (b) { b.textContent = t.value.trim(); b.hidden = !t.value.trim(); } };
 CH.crFoto = function (t) { if (S.x.crec) { S.x.crec.confoto = t.checked; pintaPubRec(); } };
 CH.crMac = function (t) { if (S.x.crec) { S.x.crec.mac = t.checked; pintaPubRec(); } };
@@ -8509,8 +8610,8 @@ A.crAjustar = function () { var d = S.x.crec; if (!d || !d.fsrc) return; var im 
   im.onload = function () { CPF_FM('h'); CPF = { im: im, url: d.fsrc, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), rec: 1, fm: 'h', fmOk: 1 }; pintaPubRec(); };
   im.onerror = function () { toast('No se ha podido abrir la foto'); }; im.src = d.fsrc; };
 A.cPublicarRec = function (el) {
-  var d = S.x.crec, C = CMU(); if (!d || el.disabled) return;
-  var dd = { t: String(d.t).slice(0, 60), tipo: 'rec', rc: d.mac ? d.rc : Object.assign({}, d.rc, { k: null, p: null, h: null, g: null }) }, cm = String(d.c || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200);
+  var d = S.x.crec, C = CMU(); if (!d || el.disabled) return; if (!String(d.t || '').trim()) return toast('Ponle un título');
+  var dd = { t: String(d.t).trim().slice(0, 60), tipo: 'rec', rc: d.mac ? d.rc : Object.assign({}, d.rc, { k: null, p: null, h: null, g: null }) }, cm = String(d.c || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200);
   var foto = CPF ? cpfJpeg() : d.confoto && /^data:image\/jpeg;base64,/.test(d.fsrc || '') ? d.fsrc : null;
   if (CPF && (CPF.rec || (!d.fsrc && d.guarda !== false))) { var fr = cpfJpeg(0.6), b = (S.biblio || []).filter(function (x) { return x.id === d.id; })[0];      // la foto nueva, también en la receta
     if (b && fr.length <= 300000) rpc('yo_rec_foto_poner', { bid: d.id, foto: fr }).then(function () { RFOTO[d.id] = fr; b.foto = 1; guardaBiblio(b); }, function () {}); }
@@ -8522,7 +8623,7 @@ A.cPublicarRec = function (el) {
   }, function (e) { el.disabled = false; el.textContent = 'Compartir'; toast(cErr(e)); });
 };
 function menuPub(x) {
-  var L = x.mio ? [['cEditarCom', x.c ? 'Editar comentario' : 'Añadir comentario'], ['cBorrarPub', 'Borrar publicación', 1]] : [[x.sigo ? 'cDejar' : 'cSeguir', x.sigo ? 'Dejar de seguir' : 'Seguir a ' + nom1(x.nombre)], ['cSilenciar', 'Silenciar'], ['cBloquear', 'Bloquear a ' + nom1(x.nombre)], ['cDenunciar', 'Denunciar publicación', 1]];
+  var L = x.mio ? (comuEd() ? [['cEditarPub', 'Editar publicación'], ['cBorrarPub', 'Borrar publicación', 1]] : [['cEditarCom', x.c ? 'Editar comentario' : 'Añadir comentario'], ['cBorrarPub', 'Borrar publicación', 1]]) : [[x.sigo ? 'cDejar' : 'cSeguir', x.sigo ? 'Dejar de seguir' : 'Seguir a ' + nom1(x.nombre)], ['cSilenciar', 'Silenciar'], ['cBloquear', 'Bloquear a ' + nom1(x.nombre)], ['cDenunciar', 'Denunciar publicación', 1]];
   return '<button class="cm-fondo" data-a="cMenuNo" aria-label="Cerrar el menú" tabindex="-1"></button><div class="cm-menu" role="menu">' + L.map(function (m) {
     return '<button role="menuitem" data-a="' + m[0] + '" data-id="' + x.id + '" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '"' + (m[2] ? ' class="rojo-t"' : '') + '>' + esc(m[1]) + '</button>'; }).join('') + '</div>';
 }
@@ -8619,7 +8720,7 @@ A.cDesbloquear = function (el) {
 
 function denunciaHoja(tipo, id, n) {
   S.x.den = { tipo: tipo, id: +id };
-  hoja('<h2>' + (tipo === 'pub' ? 'Denunciar publicación' : 'Denunciar comentario') + '</h2><p class="mut sm">¿Qué pasa? Lo revisa el equipo de MOOD ON. ' + esc(nom1(n) || 'La otra persona') + ' no sabrá quién lo ha denunciado.</p><div class="cm-mot">' +
+  hoja('<h2>' + (tipo === 'pub' ? 'Denunciar publicación' : tipo === 'ava' ? 'Denunciar su foto' : 'Denunciar comentario') + '</h2><p class="mut sm">¿Qué pasa? Lo revisa el equipo de MOOD ON. ' + esc(nom1(n) || 'La otra persona') + ' no sabrá quién lo ha denunciado.</p><div class="cm-mot">' +
     MOTIVOS.map(function (m, i) { return '<label class="chk"><input type="radio" name="den-mot" value="' + i + '" data-ch="denMot"><span>' + m + '</span></label>'; }).join('') +
     '</div><label class="f">Cuéntanos más (si quieres)<textarea id="den-t" maxlength="200" rows="2"></textarea></label><button class="btn rojo" id="den-go" data-a="cDenunciarSi" disabled>Enviar denuncia</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
 }
@@ -8633,6 +8734,7 @@ A.cDenunciarSi = function (el) {
   rpc('yo_comu_denunciar', { tipo: D.tipo, obj: D.id, motivo: mot }).then(function () {
     cerrarHoja(); var C = CMU();
     if (D.tipo === 'pub') ocultar(D.id);
+    else if (D.tipo === 'ava') { Object.keys(C.avs || {}).forEach(function (k) { if (C.avs[k] && C.avs[k].id === D.id) C.avs[k] = 0; }); }
     else if (C.coms && C.coms.L) { C.coms.L = C.coms.L.filter(function (c) { return c.id !== D.id; }); }
     toast('Gracias. Lo revisaremos pronto', 'ok'); repintaComu();
   }, function (e) { el.disabled = false; el.textContent = 'Enviar denuncia'; toast(cErr(e)); });
@@ -8681,13 +8783,13 @@ A.cComsRe = function () { cargaComs(); };
 VISTAS.comuComs = function (p) {
   var C = CMU(), K = C.coms && C.coms.id === p.id ? C.coms : null, x = unaPub(p.id);
   var h = '<div class="pant pad con-pie">' + cab('Comentarios');
-  if (x) h += '<section class="card cm-mini"><span class="cm-av">' + esc(iniciales(x.nombre)) + '</span><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + esc(x.nombre) + ' · ' + esc(cuandoTxt(x.creado)) + '</small></span></section>';
+  if (x) h += '<section class="card cm-mini"><span class="cm-av">' + avIn(x.pid, x.nombre) + '</span><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + esc(x.nombre) + ' · ' + esc(cuandoTxt(x.creado)) + '</small></span></section>';
   if (!K) return h + '</div>';
   if (K.err && !K.L) h += errCard(K.err, 'cComsRe');
   else if (!K.L) h += CARGANDO;
   else if (!K.L.length) h += '<section class="card vacio"><b>Aún no hay comentarios</b><small class="mut">Anima tú la primera.</small></section>';
   else h += '<section class="card cm-coms">' + K.L.map(function (c) {
-    return '<div class="cm-com"><button class="cm-av sm" data-a="cPersona" data-p="' + esc(c.pid) + '" aria-label="Ver a ' + esc(c.nombre) + '">' + esc(iniciales(c.nombre)) + '</button><span class="cm-ct"><span><b>' + esc(c.nombre) + '</b> <small class="mut">' + esc(cuandoTxt(c.creado)) + '</small></span><span class="cm-tx">' + esc(c.texto) + '</span></span>' +
+    return '<div class="cm-com"><button class="cm-av sm" data-a="cPersona" data-p="' + esc(c.pid) + '" aria-label="Ver a ' + esc(c.nombre) + '">' + avIn(c.pid, c.nombre) + '</button><span class="cm-ct"><span><b>' + esc(c.nombre) + '</b> <small class="mut">' + esc(cuandoTxt(c.creado)) + '</small></span><span class="cm-tx">' + esc(c.texto) + '</span></span>' +
       (c.borrable ? '<button class="redondo gris sm" data-a="cBorrarCom" data-id="' + c.id + '" aria-label="Borrar el comentario">' + ic('papelera', 15) + '</button>' : '<button class="redondo gris sm" data-a="cDenCom" data-id="' + c.id + '" data-n="' + esc(c.nombre) + '" aria-label="Denunciar el comentario">' + ic('bandera', 15) + '</button>') + '</div>'; }).join('') + '</section>';
   h += '<p class="mut sm center">Con respeto. Lo que no cumpla las normas se puede denunciar.</p>';
   h += '<form class="pie-fijo cm-escribe" data-f="cComentar"><input name="t" maxlength="300" data-in="cTxt" value="' + esc(K.txt || '') + '" placeholder="Escribe un comentario…" autocomplete="off" aria-label="Escribe un comentario"><button class="btn-neg" type="submit">Enviar</button></form>';
@@ -8724,17 +8826,19 @@ VISTAS.comuPersona = function (p) {
   var nS = P.seguidores || 0, L = P.pubs.filter(noOculta);
   var e = C.est || {}, nP = P.pubs.length, num3 = [[nP + (nP >= 20 ? '+' : ''), 'entrenos', ''], [P.yo ? e.seguidores || 0 : nS, 'seguidores', P.yo ? 'seguidores' : '']];
   if (P.yo) num3.push([e.siguiendo || 0, 'seguidos', 'siguiendo']);
-  h += '<section class="card cm-perfil2"><span class="cm-av gr xl">' + esc(iniciales(nom)) + '</span><b class="cm-nom">' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b>' +
+  h += '<section class="card cm-perfil2">' + (P.yo && comuAv() ? '<button class="cm-av gr xl cm-av-yo" data-a="cAvatar" aria-label="' + (avMio() ? 'Tu foto en la Comunidad' : 'Poner tu foto en la Comunidad') + '">' + avIn(P.pid, nom) + '<span class="cm-av-cam">' + ic('foto', 13, null, 2.2) + '</span></button>' : '<span class="cm-av gr xl">' + avIn(P.pid, nom) + '</span>') + '<b class="cm-nom">' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b>' +
     '<div class="cm-nums">' + num3.map(function (k) { return k[2] ? '<button data-a="cRed" data-v="' + k[2] + '"><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></button>' : '<span><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
     '<div class="fila2 cm-pb">' + (P.yo ? '<button class="btn-o" data-a="cAjustes">' + ic('ajustes', 16) + 'Ajustes</button>' : P.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">' + ic('check', 16) + 'Siguiendo</button>' : '<button class="btn" data-a="cSeguir" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') +
-    (COMU_SH ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div></section>';
+    (comuSh() && P.yo ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div></section>';
   if (P.silencio) h += '<section class="card cm-aviso"><small>Has silenciado a ' + esc(nom1(nom)) + ': sus entrenos no te salen en Comunidad.</small><button class="link izq" data-a="cQuitarSil" data-p="' + esc(P.pid) + '">Quitar el silencio</button></section>';
   h += L.length ? L.map(function (x) { return cardPub(x); }).join('') : '<p class="mut center sm">' + (P.yo ? 'Todavía no has publicado ningún entreno. Al terminar uno, pulsa «Publicar en la Comunidad».' : 'Todavía no ha compartido ningún entreno.') + '</p>';
   return h + '</div>';
 };
 A.cPerMenu = function () {
   var P = CMU().pers[S.pant && S.pant.p]; if (!P) return; var n = esc(nom1(P.nombre)), a = ' data-p="' + esc(P.pid) + '" data-n="' + esc(P.nombre) + '"';
+  var av = comuAv() && (CMU().avs || {})[P.pid];
   hoja('<h2>' + esc(P.nombre) + '</h2>' + (P.silencio ? '<button class="btn sec" data-a="cQuitarSilH"' + a + '>Quitar el silencio</button>' : '<button class="btn sec" data-a="cSilenciar"' + a + '>Silenciar a ' + n + '</button>') +
+    (av ? '<button class="btn sec" data-a="cDenAva" data-id="' + av.id + '"' + a + '>Denunciar su foto</button>' : '') +
     '<button class="btn rojo" data-a="cBloquear"' + a + '>Bloquear a ' + n + '</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
 };
 A.cQuitarSilH = function (el) { cerrarHoja(); A.cQuitarSil(el); };
@@ -8762,7 +8866,7 @@ function vActivar(pant) {
   var fila = function (k, t) { return '<span class="cm-si">' + (k ? ic('check', 15, 'var(--verde)', 2.6) : ic('x', 15, 'var(--rojo)', 2.6)) + '<span>' + t + '</span></span>'; };
   var h = pant ? cab('Comunidad') : '<div class="ini-cab"><h1 class="t1">Comunidad</h1></div>';
   h += '<section class="card cm-hola"><span class="cm-ic">' + ic('comu', 26) + '</span><b>' + (e ? 'Vuelve a la Comunidad' : 'Entrena con más gente') + '</b><p class="mut sm">Sigue a otras personas, publica tus entrenos y copia sus rutinas. Es voluntario: solo entras si quieres, y puedes salir cuando quieras.</p></section>';
-  h += '<section class="card"><b>Qué verán los demás</b><div class="cm-sis">' + fila(1, 'El nombre que elijas aquí abajo') + fila(1, 'Los entrenos que tú publiques: duración, series, kilos, tu récord y los ejercicios') + '</div>' +
+  h += '<section class="card"><b>Qué verán los demás</b><div class="cm-sis">' + fila(1, 'El nombre que elijas aquí abajo') + fila(1, 'Los entrenos que tú publiques: duración, series, kilos, tu récord y los ejercicios') + (comuAv() ? fila(1, 'Tu foto de perfil, solo si decides mostrarla') : '') + '</div>' +
     '<b class="mt">Lo que nunca sale</b><div class="cm-sis">' + fila(0, 'Tu peso y tus medidas') + fila(0, 'Tus fotos de progreso') + fila(0, 'Lo que comes y tus calorías') + fila(0, 'Tu email y los entrenos que no publiques') + '</div></section>';
   h += '<form class="card" data-f="cActivar"><label class="f">Tu nombre en Comunidad<input name="n" maxlength="30" value="' + esc(nom) + '" data-in="cActNom" placeholder="Por ejemplo: Laura M." autocomplete="off"></label><small class="mut">Mejor tu nombre y la inicial del apellido. Puedes cambiarlo cuando quieras.</small>' +
     '<div class="cm-normas"><b>Normas de la Comunidad</b><ul>' + NORMAS.map(function (n) { return '<li>' + n + '</li>'; }).join('') + '</ul></div>' +
@@ -8804,7 +8908,7 @@ VISTAS.comuRed = function () {
   if (!L.length) return h + '<section class="card cm-vac"><b>' + (v === 'seguidores' ? 'Aún no te sigue nadie' : 'Aún no sigues a nadie') + '</b><small class="mut">' + (v === 'seguidores' ? 'Cuando publiques tus entrenos y recetas, la gente que te siga saldrá aquí.' : 'Busca personas con la lupa o sigue a quien publique algo que te guste.') + '</small>' + (v === 'siguiendo' ? '<button class="btn sec" data-a="cBuscar">' + ic('buscar', 18) + 'Buscar personas</button>' : '') + '</section></div>';
   h += '<section class="card cm-lista">' + L.map(function (g) {
     var sub = v === 'seguidores' ? (g.sigo ? 'Os seguís' : 'Te sigue') : (g.meSigue ? 'Te sigue también' : '');
-    return '<div class="cm-fila"><button class="cm-av" data-a="cPersona" data-p="' + esc(g.pid) + '" aria-label="Ver a ' + esc(g.nombre) + '">' + esc(iniciales(g.nombre)) + '</button>' +
+    return '<div class="cm-fila"><button class="cm-av" data-a="cPersona" data-p="' + esc(g.pid) + '" aria-label="Ver a ' + esc(g.nombre) + '">' + avIn(g.pid, g.nombre) + '</button>' +
       '<button class="fr-t" data-a="cPersona" data-p="' + esc(g.pid) + '"><b>' + esc(g.nombre) + '</b>' + (sub ? '<small>' + sub + '</small>' : '') + '</button>' +
       (g.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">Siguiendo</button>' : '<button class="btn-neg sm" data-a="cSeguir" data-p="' + esc(g.pid) + '" data-n="' + esc(g.nombre) + '">' + (v === 'seguidores' ? 'Seguir también' : 'Seguir') + '</button>') + '</div>'; }).join('') + '</section>';
   return h + '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Estas listas solo las ves tú. Si no quieres que alguien te siga, bloquéale desde su perfil.</span></p></div>';
@@ -8813,7 +8917,8 @@ VISTAS.comuAjustes = function () {
   var e = CMU().est || {}, B = e.bloqueados || [];
   var h = '<div class="pant pad">' + cab('Tu Comunidad');
   h += '<div class="kpis k3 cm-kr">' + [[e.pubs || 0, (e.pubs === 1 ? 'publicación' : 'publicaciones'), ''], [e.siguiendo || 0, 'siguiendo', 'siguiendo'], [e.seguidores || 0, (e.seguidores === 1 ? 'seguidor' : 'seguidores'), 'seguidores']].map(function (k) { return k[2] ? '<button data-a="cRed" data-v="' + k[2] + '"><b>' + k[0] + '</b><span>' + k[1] + '</span>' + ic('sig', 13) + '</button>' : '<div><b>' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>';
-  h += '<form class="card" data-f="cNombre"><label class="f">Tu nombre en Comunidad<input name="n" maxlength="30" value="' + esc(e.nombre || '') + '" autocomplete="off"></label><small class="mut">Es lo único tuyo que ven los demás, junto a lo que publiques.</small><button class="btn sec" type="submit">Guardar el nombre</button></form>';
+  if (comuAv()) { var mf = avMio(); h += '<section class="card cm-tufoto"><span class="cm-av gr">' + avIn(e.pid, e.nombre || '') + '</span><span class="fr-t"><b>Tu foto</b><small>' + (mf ? 'Se ve en la Comunidad, junto a tu nombre' : 'Sin foto: se ven tus iniciales') + '</small></span><button class="btn-o" data-a="cAvatar">' + (mf ? 'Cambiar' : 'Poner') + '</button></section>'; }
+  h += '<form class="card" data-f="cNombre"><label class="f">Tu nombre en Comunidad<input name="n" maxlength="30" value="' + esc(e.nombre || '') + '" autocomplete="off"></label><small class="mut">' + (comuAv() ? 'Es lo que ven los demás, con tu foto si la pones y lo que publiques.' : 'Es lo único tuyo que ven los demás, junto a lo que publiques.') + '</small><button class="btn sec" type="submit">Guardar el nombre</button></form>';
   h += '<b class="tit-sec">PERSONAS BLOQUEADAS</b><section class="card cm-lista">' + (B.length ? B.map(function (b) {
     return '<div class="cm-fila"><span class="cm-av">' + esc(iniciales(b.nombre)) + '</span><span class="fr-t"><b>' + esc(b.nombre) + '</b></span><button class="btn-o" data-a="cDesbloquear" data-p="' + esc(b.pid) + '">Desbloquear</button></div>'; }).join('') : '<small class="mut">No has bloqueado a nadie.</small>') + '</section>';
   h += '<b class="tit-sec">NORMAS Y PRIVACIDAD</b><section class="card"><a class="fila-b" href="../condiciones.html#comunidad" target="_blank" rel="noopener"><b>Normas de la Comunidad</b><small>Las aceptaste al entrar</small></a><a class="fila-b" href="../privacidad.html#yo" target="_blank" rel="noopener"><b>Qué ven los demás</b><small>Política de privacidad</small></a></section>';
@@ -8903,7 +9008,10 @@ A.cPublicar = function (el) {
 var CPF = null, CPF_W = 240, CPF_H = 300;
 /* la forma del recorte: 'v' vertical 4:5 (la de siempre), 'h' 4:3 y 'q' cuadrada (recetas, 20 nov) */
 function CPF_FM(f) { var M = { v: [240, 300], h: [300, 225], q: [270, 270] }[f] || [240, 300]; CPF_W = M[0]; CPF_H = M[1]; }
-A.cpFm = function (el) { if (!CPF) return; CPF.fm = el.dataset.v; CPF_FM(CPF.fm); CPF.s0 = Math.max(CPF_W / CPF.im.width, CPF_H / CPF.im.height); CPF.x = 0; CPF.y = 0; CPF.z = 1; if (CPF.fmOk) pintaPubRec(); else pintaPub(); };
+A.cpFm = function (el) { if (!CPF) return; CPF.fm = el.dataset.v; CPF_FM(CPF.fm); CPF.s0 = Math.max(CPF_W / CPF.im.width, CPF_H / CPF.im.height); CPF.x = 0; CPF.y = 0; CPF.z = 1; cpRepinta(); };
+/* qué hoja está abierta con la foto: editar una publicación (21 nov), compartir una receta o publicar un entreno */
+function cpEnEd() { return !!(S.x.ced && document.querySelector('[data-a=cEditarPubSi]')); }
+function cpRepinta() { if (cpEnEd()) pintaEdPub(); else if (S.x.crec && document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); }
 function cpfHtml() {
   if (!CPF) return '<label class="btn sec cp-foto">' + ic('foto', 18) + 'Añadir una foto (opcional)<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>';
   return '<div class="cp-f"><div class="crop cp-crop" id="cp-crop" style="width:' + CPF_W + 'px;height:' + CPF_H + 'px"><img id="cp-i" src="' + CPF.url + '" alt="" draggable="false"></div>' +
@@ -8915,11 +9023,11 @@ function cpfHtml() {
 CH.cpFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { var rec = !!document.querySelector('[data-a=cPublicarRec]'); CPF_FM(rec ? 'h' : 'v'); CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), fm: rec ? 'h' : 'v', fmOk: rec ? 1 : 0 }; if (rec) pintaPubRec(); else pintaPub(); };
+  im.onload = function () { var rec = !!document.querySelector('[data-a=cPublicarRec]') || (cpEnEd() && S.x.ced.tipo === 'rec'); CPF_FM(rec ? 'h' : 'v'); CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), fm: rec ? 'h' : 'v', fmOk: rec ? 1 : 0 }; cpRepinta(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
-A.cpFotoQuitar = function () { if (CPF && !CPF.rec) URL.revokeObjectURL(CPF.url); CPF = null; CPF_FM('v'); if (S.x.crec && document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); };
+A.cpFotoQuitar = function () { if (CPF && !CPF.rec) URL.revokeObjectURL(CPF.url); CPF = null; CPF_FM('v'); cpRepinta(); };
 function cpfLim() { var C = CPF, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - CPF_W) / 2, Math.min((W - CPF_W) / 2, C.x)); C.y = Math.max(-(H - CPF_H) / 2, Math.min((H - CPF_H) / 2, C.y)); return { W: W, H: H }; }
 function cpfPinta() {
   var C = CPF, i = $('#cp-i'); if (!C || !i) return; var d = cpfLim();
@@ -8948,11 +9056,96 @@ function cargaFotosComu() {
   });
 }
 
+/* ---------- 21 nov 2026, 00:19 (Chadín: «que deje poner foto en la comunidad y que sea igual que la que te pones de perfil») ----------
+   Tu foto de perfil (privada) también en la Comunidad, si tú quieres: S.perfil.fotoCm = 1 y una copia pequeña (192 px, JPEG, sin datos de la cámara)
+   en la Comunidad (indep.comu_avatar, 015). Una sola foto: si la cambias en tu perfil, cambia en la Comunidad; si la quitas, se quita de los dos sitios.
+   Las fotos de los demás se piden juntas al verlas (yo_comu_avatares, con las mismas reglas que su perfil). Se pueden denunciar.
+   En borrador (COMU_AV y COMU_ED apagados, también editar lo publicado) hasta el OK y la 015 en Supabase. */
+var COMU_AV = false, COMU_ED = false;      // 21 nov, 00:40: aprobado, pero la 015 en Supabase quedó sin aplicar (la confirmación se canceló sola): siguen en la demo hasta aplicarla
+function comuAv() { return COMU_AV || rpBorr(); }
+function comuEd() { return COMU_ED || rpBorr(); }
+function avMio() { return !!(S.perfil && S.perfil.fotoCm && fotoPf()); }
+function avIn(pid, nom) {
+  var C = CMU(), a = comuAv() && pid ? (C.avs || {})[pid] : null;
+  if (comuAv() && pid && a === undefined) { clearTimeout(avIn.t); avIn.t = setTimeout(cargaAvs, 0); }
+  return '<i class="av-i" data-av="' + esc(pid || '') + '">' + (a && a.f ? '<img src="' + a.f + '" alt="">' : esc(iniciales(nom))) + '</i>';
+}
+function cargaAvs() {
+  var C = CMU(); C.avs = C.avs || {}; C.avPide = C.avPide || {};
+  var L = []; Array.prototype.forEach.call(document.querySelectorAll('i.av-i[data-av]'), function (el) { var p = el.getAttribute('data-av'); if (p && C.avs[p] === undefined && !C.avPide[p] && L.indexOf(p) < 0) L.push(p); });
+  if (!L.length || !comuActiva()) return; L = L.slice(0, 60); L.forEach(function (p) { C.avPide[p] = 1; });
+  rpc('yo_comu_avatares', { pids: L }).then(function (r) { r = r || {}; L.forEach(function (p) { C.avs[p] = r[p] && r[p].f ? r[p] : 0; delete C.avPide[p]; }); avPinta(L); },
+    function () { L.forEach(function (p) { delete C.avPide[p]; }); });
+}
+function avPinta(L) { var C = CMU(); L.forEach(function (p) { var a = C.avs[p]; Array.prototype.forEach.call(document.querySelectorAll('i.av-i[data-av="' + p + '"]'), function (el) { if (a && a.f) el.innerHTML = '<img src="' + a.f + '" alt="">'; }); }); }
+/* la copia pequeña para la Comunidad, desde tu foto de perfil (320 px) */
+function avDe(src) { return new Promise(function (ok, no) { var im = new Image(); im.onload = function () { var N = 192, cv = document.createElement('canvas'); cv.width = N; cv.height = N; var x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, N, N); x.drawImage(im, 0, 0, N, N); ok(cv.toDataURL('image/jpeg', 0.8)); }; im.onerror = no; im.src = src; }); }
+function avSube() {
+  var C = CMU(), f = fotoPf(); if (!f || !comuActiva()) return Promise.resolve();
+  return avDe(f).then(function (a) { return rpc('yo_comu_avatar_poner', { foto: a }).then(function () { if (C.est) { C.avs = C.avs || {}; C.avs[C.est.pid] = { f: a, id: 0 }; } }); });
+}
+function avQuita() { var C = CMU(); return rpc('yo_comu_avatar_poner', { foto: null }).then(function () { if (C.est && C.avs) C.avs[C.est.pid] = 0; }); }
+/* tocar tu foto en tu perfil de Comunidad (o «Tu foto» en Ajustes) */
+A.cAvatar = function () {
+  var f = fotoPf(), on = avMio(), nota = '<p class="cm-nunca">' + ic('escudo', 15) + '<span>La verán las personas de la Comunidad, junto a tu nombre. Puedes quitarla cuando quieras. No subas fotos de otras personas sin su permiso.</span></p>';
+  if (on) return hoja('<h2>Tu foto en la Comunidad</h2><div class="cm-avh"><img src="' + f + '" alt="Tu foto"></div><p class="mut sm center">Es la misma de tu perfil. Si la cambias, cambia en los dos sitios.</p>' +
+    '<label class="btn">' + ic('foto', 18, null) + 'Cambiar foto<input type="file" accept="image/*" data-ch="cAvFoto" hidden></label><button class="btn sec" data-a="cAvQuitar">Quitar de la Comunidad</button><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  if (f) return hoja('<h2>¿Poner tu foto en la Comunidad?</h2><div class="cm-avh"><img src="' + f + '" alt="Tu foto de perfil"></div><p class="mut sm center">Es tu foto de perfil. Ahora solo la ves tú.</p>' + nota +
+    '<button class="btn" data-a="cAvSi">Usar mi foto de perfil</button><label class="btn sec">' + ic('foto', 18) + 'Elegir otra<input type="file" accept="image/*" data-ch="cAvFoto" hidden></label><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
+  hoja('<h2>Tu foto en la Comunidad</h2><p class="mut sm">Será también tu foto de perfil: una sola foto para los dos sitios.</p>' + nota +
+    '<label class="btn">' + ic('foto', 18, null) + 'Elegir foto<input type="file" accept="image/*" data-ch="cAvFoto" hidden></label><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
+};
+A.cAvSi = function (el) { if (el.disabled) return; el.disabled = true; avSube().then(function () { S.perfil.fotoCm = 1; guardaPerfil(); cerrarHoja(); toast('Tu foto ya se ve en la Comunidad', 'ok'); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); }); };
+A.cAvQuitar = function (el) { if (el.disabled) return; el.disabled = true; avQuita().then(function () { delete S.perfil.fotoCm; guardaPerfil(); cerrarHoja(); toast('Tu foto ya no se ve en la Comunidad'); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); }); };
+/* elegir una foto desde la Comunidad: se coloca como la de perfil y, al guardarla, se guarda en tu perfil y se pone en la Comunidad */
+CH.cAvFoto = function (t) { S.x.avCm = 1; cerrarHoja(); CH.pfFoto(t); };
+A.cDenAva = function (el) { cerrarHoja(); denunciaHoja('ava', el.dataset.id, el.dataset.n); };
+
+/* ---------- 21 nov (Chadín: «que al publicar entreno o receta puedas editarlo también»): editar lo publicado ----------
+   El título, el comentario, la foto (cambiarla, colocarla o quitarla) y, en los entrenos, quién lo ve. Servidor: yo_comu_editar_pub2 (015) */
+A.cEditarPub = function (el) {
+  var C = CMU(), x = unaPub(el.dataset.id); C.menu = null; pintar(); if (!x) return;
+  if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } CPF_FM('v');
+  S.x.ced = { id: x.id, tipo: x.tipo || '', t: x.t || '', c: x.c || '', vis: x.vis || 'todos', foto: !!x.foto, fsrc: x.foto ? (C.fotos || {})[x.id] || '' : '', quitar: false };
+  if (x.foto && !S.x.ced.fsrc) { var d = S.x.ced; rpc('yo_comu_foto', { pub: +x.id }).then(function (f) { if (f) { C.fotos = C.fotos || {}; C.fotos[x.id] = f; d.fsrc = f; if (cpEnEd() && S.x.ced === d) pintaEdPub(); } }, function () { }); }
+  pintaEdPub();
+};
+function pintaEdPub() {
+  var d = S.x.ced; if (!d) return; var rec = d.tipo === 'rec', tf = $('#ce-t'), cf = $('#ce-c'); if (tf) d.t = tf.value; if (cf) d.c = cf.value;
+  var foto = CPF ? cpfHtml() : d.foto && !d.quitar ? '<div class="ced-f"><div class="cm-foto ok' + (rec ? ' cm-rcf' : '') + '">' + (d.fsrc ? '<img src="' + d.fsrc + '" alt="La foto de tu publicación">' : '<span class="mut sm">Cargando la foto…</span>') + '</div>' +
+      '<div class="fila2"><label class="btn-o">' + ic('foto', 16) + 'Cambiar foto<input type="file" accept="image/*" data-ch="cpFoto" hidden></label><button class="btn-o rojo-t" data-a="cedFotoQuitar">' + ic('papelera', 16) + 'Quitar foto</button></div></div>' :
+    '<label class="btn sec cp-foto">' + ic('foto', 18) + (d.quitar ? 'Poner otra foto' : 'Añadir una foto') + '<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>' + (d.quitar ? '<button class="link izq" data-a="cedFotoVuelve">Dejar la foto que tenía</button>' : '');
+  hoja('<h2>Editar ' + (rec ? 'la receta' : 'la publicación') + '</h2><p class="mut sm">Los cambios se ven al momento en la Comunidad. Los me gusta y los comentarios no se tocan.</p>' +
+    '<label class="f">Título<input id="ce-t" maxlength="60" value="' + esc(d.t) + '"></label>' +
+    '<label class="f">Comentario (opcional)<textarea id="ce-c" maxlength="200" rows="2" placeholder="' + (rec ? 'Ej.: la cena de los domingos, rinde para 4' : 'Ej.: entreno increíble para glúteos') + '">' + esc(d.c) + '</textarea></label>' +
+    (rec ? '' : '<div class="f cm-vis">¿Quién lo ve?<div class="seg2">' + [['todos', 'Todos'], ['seg', 'Solo mis seguidores']].map(function (v) { return '<button type="button" class="' + (d.vis === v[0] ? 'on' : '') + '" data-a="cedVis" data-v="' + v[0] + '">' + v[1] + '</button>'; }).join('') + '</div></div>') +
+    '<b class="ced-l">Foto</b>' + foto +
+    '<button class="btn" data-a="cEditarPubSi">Guardar cambios</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  cpfEnganchar();
+}
+A.cedVis = function (el) { if (S.x.ced) { S.x.ced.vis = el.dataset.v; pintaEdPub(); } };
+A.cedFotoQuitar = function () { if (S.x.ced) { S.x.ced.quitar = true; pintaEdPub(); } };
+A.cedFotoVuelve = function () { if (S.x.ced) { S.x.ced.quitar = false; pintaEdPub(); } };
+A.cEditarPubSi = function (el) {
+  var d = S.x.ced, C = CMU(); if (!d || el.disabled) return;
+  var t = String(($('#ce-t') || {}).value || '').replace(/\s+/g, ' ').trim(), c = String(($('#ce-c') || {}).value || '').replace(/\s+/g, ' ').trim().slice(0, 200);
+  if (!t) return toast('Ponle un título');
+  var foto = CPF ? cpfJpeg() : d.quitar && d.foto ? null : undefined, vis = d.tipo === 'rec' ? (d.vis || 'todos') : d.vis;
+  el.disabled = true; el.textContent = 'Guardando…';
+  var fin = function (msg, cls) { cerrarHoja(); if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } CPF_FM('v'); S.x.ced = null; toast(msg, cls); repintaComu(); };
+  rpc('yo_comu_editar_pub2', { pub: d.id, t: t.slice(0, 60), c: c, vis: vis }).then(function () {
+    cadaPub(d.id, function (p) { p.t = t.slice(0, 60); p.c = c; p.vis = vis; });
+    if (foto === undefined) return fin('Cambios guardados', 'ok');
+    rpc('yo_comu_foto_poner', { pub: d.id, foto: foto }).then(function () { C.fotos = C.fotos || {}; if (foto) C.fotos[d.id] = foto; else delete C.fotos[d.id]; cadaPub(d.id, function (p) { p.foto = !!foto; }); fin(foto ? 'Cambios guardados, con la foto nueva' : 'Cambios guardados, sin foto', 'ok'); },
+      function () { fin('Guardado, pero la foto no se ha podido cambiar'); });
+  }, function (e) { el.disabled = false; el.textContent = 'Guardar cambios'; toast(cErr(e)); });
+};
+
 /* ---------- 20 nov 2026 (Chadín, 08:03): compartir una publicación o un perfil por WhatsApp (o copiar el enlace).
    Fuera de la app solo se ve lo publicado «para todos» (nunca lo de «Solo mis seguidores»), sin likes ni comentarios, y el perfil solo si su dueña lo permite.
    Servidor: 014 (yo_comu_publico, sin sesión), por hacer con el OK ---------- */
 /* 20 nov, 09:38: compartir publicaciones y perfiles fuera de la app (solo como imagen, sin página pública) va en un segundo paso; hasta entonces, sin botón */
-var COMU_SH = false;
+var COMU_SH = true;      // 21 nov, 00:40: publicado (compartir como imagen)
 function enlaceComu(t, id) { return 'https://moodonapp.com/yo/c/?' + t + '=' + encodeURIComponent(id); }
 function hojaCompartir(tit, txt, url, nota) {
   S.x.csh = { txt: txt, url: url };
@@ -8960,18 +9153,227 @@ function hojaCompartir(tit, txt, url, nota) {
     '<button class="sh-b" data-a="cShCopiar">' + ic('copiar', 22) + '<small>Copiar enlace</small></button>' + (navigator.share ? '<button class="sh-b" data-a="cShMas">' + ic('compartir', 22) + '<small>Más</small></button>' : '') + '</div>' +
     '<p class="cm-nunca">' + ic('escudo', 15) + '<span>' + nota + '</span></p><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
 }
-A.cCompartir = function (el) {
-  var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
-  hojaCompartir(x.tipo === 'rec' ? 'Compartir la receta' : 'Compartir el entreno', (x.mio ? 'Mira mi ' + (x.tipo === 'rec' ? 'receta' : 'entreno') + ' en MOOD ON: «' : 'Mira ' + (x.tipo === 'rec' ? 'la receta' : 'el entreno') + ' de ' + nom1(x.nombre) + ' en MOOD ON: «') + x.t + '»', enlaceComu('p', x.id),
-    'Quien abra el enlace la verá aunque no tenga la app: el nombre, el título, el comentario y los datos. No verá los comentarios, ni quién ha dado me gusta, ni nada de «Solo mis seguidores».');
-};
-A.cPerCompartir = function (el) {
-  var C = CMU(), P = C.pers[el.dataset.p] || {};
-  hojaCompartir(P.yo ? 'Compartir tu perfil' : 'Compartir el perfil', P.yo ? 'Sígueme en MOOD ON' : 'Mira el perfil de ' + nom1(P.nombre) + ' en MOOD ON', enlaceComu('u', P.pid),
-    'Fuera de la app se ve el nombre, sus números y sus entrenos publicados «para todos». Nunca sus seguidores ni a quién sigue. Cada persona puede quitar en Ajustes que su perfil se comparta.');
-};
+/* A.cCompartir y A.cPerCompartir: ahora como imagen, en compartir.js */
 A.cShCopiar = function () { var u = S.x.csh && S.x.csh.url; try { navigator.clipboard.writeText(u); } catch (e) { } cerrarHoja(); toast('Enlace copiado', 'ok'); };
 A.cShMas = function () { var d = S.x.csh; if (!d) return; try { navigator.share({ title: 'MOOD ON', text: d.txt, url: d.url }); } catch (e) { } };
+
+;
+/* ===== Compartir como imagen (20 nov 2026, 23:33, Chadín: «vamos con esto») =====
+   · Carrera y cardio: «Mi semana corriendo» (Inicio → Carrera · esta semana) y la tarjeta de la carrera o del cardio al terminar.
+     Maquetas aprobadas el 20 nov (08:44–08:46): sin barritas, sin «Con tu reloj». Con la app de las tiendas y el reloj se añadirán
+     el recorrido (opcional), el pulso y el ritmo de cada serie; ahora salen los km y los minutos que apunta al marcarla hecha.
+   · Comunidad: una publicación (entreno o receta) o tu perfil, solo como imagen con «Descárgate la app · moodonapp.com»
+     (09:00: sin enlace ni página pública; nada nuevo en Supabase). El perfil, solo el tuyo; de otra persona, solo lo que publicó «para todos».
+   En borrador (COMU_SH y RUN_SH apagados): solo se ve en las demos («Por revisar») o con ?borradores, hasta el OK. */
+function comuSh() { return COMU_SH || rpBorr(); }
+function runSh() { return RUN_SH || rpBorr(); }
+
+/* ---------- la tarjeta (1080 × 1920), estilo «Grande» como las del fin del entreno ----------
+   D = { tit, sub, big, uni, kp: [[valor, ETIQUETA]], txt (comentario), oro (línea dorada), img (foto arriba en Negro y Blanco), pie } */
+function tarjetaDatos(D, modo, foto) {
+  var sn = /^sin/.test(modo), bl = modo === 'blanco' || modo === 'sinn', ft = (modo === 'foto' && foto) || sn, F = ' "Plus Jakarta Sans", sans-serif';
+  var FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.6)' : 'rgba(255,255,255,.72)', ORO = bl ? '#B8860B' : '#F2C14E';
+  return fontsListas().then(function () { return linImg('trophy', ORO, 2.2); }).then(function (tro) {
+    var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), M = 90, AN = W - 2 * M, ops = [], add = function (h, f) { ops.push({ h: h, f: f }); };
+    if (ft && !sn) { fotoCover(x, W, H, foto); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.3)'); g.addColorStop(.35, 'rgba(0,0,0,.06)'); g.addColorStop(.55, 'rgba(0,0,0,.25)'); g.addColorStop(1, 'rgba(0,0,0,.78)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    else if (sn) { }
+    else if (bl) { x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H); }
+    else { x.fillStyle = '#0C0C0E'; x.fillRect(0, 0, W, H); var rg = x.createRadialGradient(W * .92, 0, 40, W * .92, 0, 1500); rg.addColorStop(0, 'rgba(52,60,86,.75)'); rg.addColorStop(.55, 'rgba(26,28,38,.35)'); rg.addColorStop(1, 'rgba(12,12,14,0)'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
+    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+    if (D.img && !ft) { var ih = Math.round(AN * (D.img.height / D.img.width)); ih = Math.max(420, Math.min(ih, 760));
+      add(ih + 64, function (y) { var sc = Math.max(AN / D.img.width, ih / D.img.height), iw = D.img.width * sc, hh = D.img.height * sc; x.save(); rr(x, M, y, AN, ih, 36); x.clip(); x.drawImage(D.img, M + (AN - iw) / 2, y + (ih - hh) / 2, iw, hh); x.restore(); }); }
+    x.font = '800 60px' + F; var TL = grLin(x, String(D.tit || '').toUpperCase(), AN, 2);
+    add(TL.length * 70 - 4, function (y) { x.fillStyle = FG; x.font = '800 60px' + F; TL.forEach(function (t, i) { x.fillText(t, M, y + 58 + i * 70); }); });
+    if (D.sub) add(66, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.fillText(recorta(x, D.sub, AN), M, y + 34); grEsp(x, '0px'); });
+    if (D.txt) { x.font = '600 38px' + F; var CL = grLin(x, '«' + D.txt + '»', AN, 3); add(CL.length * 50 + 24, function (y) { x.fillStyle = bl ? 'rgba(17,17,17,.82)' : 'rgba(255,255,255,.9)'; x.font = '600 38px' + F; CL.forEach(function (t, i) { x.fillText(t, M, y + 46 + i * 50); }); }); }
+    if (D.big) add(250, function (y) { x.fillStyle = FG; var px = ajusta(x, D.big, AN - 200, 250, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-8px'); x.fillText(D.big, M - 6, y + 220); var w = x.measureText(D.big).width; grEsp(x, '2px');
+      if (D.uni) { x.font = '800 46px' + F; x.fillText(D.uni, M + w + 14, y + 220); } grEsp(x, '0px'); });
+    var K = (D.kp || []).filter(function (k) { return k && k[0]; });
+    if (K.length) add(150, function (y) { var cx = M, gap = K.length > 3 ? 44 : 64; K.forEach(function (k) { x.font = '800 66px' + F; var vw = x.measureText(k[0]).width; x.font = '700 22px' + F; grEsp(x, '3px'); var lw = x.measureText(k[1]).width; grEsp(x, '0px');
+      x.fillStyle = FG; x.font = '800 66px' + F; x.fillText(k[0], cx, y + 70); x.fillStyle = SUB; x.font = '700 22px' + F; grEsp(x, '3px'); x.fillText(k[1], cx, y + 112); grEsp(x, '0px'); cx += Math.max(vw, lw) + gap; }); });
+    if (D.oro) add(84, function (y) { if (tro) x.drawImage(tro, M, y + 14, 50, 50); x.fillStyle = ORO; x.font = '800 36px' + F; x.fillText(recorta(x, D.oro, AN - 70), M + 66, y + 52); });
+    add(D.pie ? 150 : 96, function (y) { x.save(); var sc = 190 / 1600; x.translate(M, y + 60); x.scale(sc, sc); x.fillStyle = FG; x.fill(new Path2D(LOGO_D), 'evenodd'); x.restore();
+      if (D.pie) { x.fillStyle = SUB; x.font = '700 30px' + F; x.fillText(D.pie, M, y + 136); } });
+    var tot = ops.reduce(function (a, o) { return a + o.h; }, 0), y = Math.max(150, (H - (ft ? 300 : 170)) - tot);      // abajo, como las maquetas (y encima de la barra de Instagram con foto)
+    if (ft && modo !== 'sinn') { x.shadowColor = sn ? 'rgba(0,0,0,.32)' : 'rgba(0,0,0,.45)'; x.shadowBlur = sn ? 14 : 18; }
+    ops.forEach(function (o) { o.f(y); y += o.h; });
+    return cv;
+  });
+}
+function mesC(d) { return d.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').toUpperCase(); }
+function diaLargo(f) { var d = aDate(f); return (d.toLocaleDateString('es-ES', { weekday: 'long' }) + ' ' + d.getDate() + ' ' + mesC(d)).toUpperCase(); }
+function hm(mn) { mn = Math.round(mn || 0); return mn >= 60 ? Math.floor(mn / 60) + ' h ' + ('0' + mn % 60).slice(-2) : mn + ' min'; }
+function km1(k) { return fN(Math.round(k * 10) / 10, 1); }
+
+/* ---------- carrera y cardio ---------- */
+function soloCardioYo(U) { var e = U.ej || []; return !U.vol && e.length > 0 && e.every(function (x) { return x.tipo === 'run' || x.tipo === 'cardio'; }); }
+function runSesD(U) {
+  var E = (U.ej || []).filter(function (e) { return e.hecho; }); if (!E.length) E = U.ej || [];
+  var run = E.some(function (e) { return e.tipo === 'run'; }), km = 0, rmn = 0, mn = 0;
+  E.forEach(function (e) { var k = e.tipo === 'run' ? num(e.km) : null, m = num(e.mn) || 0; if (k) { km += k; rmn += m; } mn += m; });
+  if (!mn) mn = U.min || 0;
+  var tit = E.length === 1 && !run ? E[0].n : (U.nombre || (run ? 'Carrera' : 'Cardio')), K = [];
+  if (km) { K.push([hm(mn), 'TIEMPO']); if (rmn) K.push([ritmoTxt(km, rmn).replace(' min/km', ''), 'MIN/KM']); }
+  else if (E.length > 1) K.push([String(E.length), 'EJERCICIOS']);
+  if (num(U.rpe)) K.push([U.rpe + '/10', 'ESFUERZO']);
+  return { tit: tit, sub: diaLargo(U.fecha || hoyStr()), big: km ? km1(km) : String(Math.round(mn)), uni: km ? 'KM' : 'MIN', kp: K };
+}
+/* arriba, en el resumen negro del fin: km, tiempo y ritmo (o los minutos) en vez de «minutos · series · kg» */
+function runFinK(U) { var D = runSesD(U); return [[D.big, D.uni === 'KM' ? 'km' : 'minutos']].concat(D.kp.filter(function (k) { return k[1] !== 'ESFUERZO'; }).map(function (k) { return [k[0], k[1] === 'TIEMPO' ? 'tiempo' : k[1] === 'MIN/KM' ? 'min/km' : k[1].toLowerCase()]; })).slice(0, 3); }
+function runSemD(l) {
+  var T = runSem(l), a = aDate(l), b = aDate(sumar(l, 6)), sub = a.getMonth() === b.getMonth() ? a.getDate() + ' – ' + b.getDate() + ' ' + mesC(b) : a.getDate() + ' ' + mesC(a) + ' – ' + b.getDate() + ' ' + mesC(b);
+  var K = [[String(T.nrun), T.nrun === 1 ? 'SALIDA' : 'SALIDAS']];
+  if (T.km && T.rmin) { K.push([ritmoTxt(T.km, T.rmin).replace(' min/km', ''), 'MIN/KM']); K.push([hm(T.rmin), 'CORRIENDO']); }
+  return T.km ? { tit: 'Mi semana corriendo', sub: sub, big: km1(T.km), uni: 'KM', kp: K } : { tit: 'Mi semana corriendo', sub: sub, big: String(T.nrun), uni: T.nrun === 1 ? 'SALIDA' : 'SALIDAS', kp: [] };
+}
+A.runSemCompartir = function () {
+  var l = lunesDe(hoyStr());
+  hojaImg({ k: 'sem|' + l + '|' + JSON.stringify(runSem(l)), tit: 'Mi semana corriendo', nom: 'MOOD_ON_semana_corriendo_' + l, texto: '#MOODON',
+    gen: function (m, f) { return tarjetaDatos(runSemD(l), m, f); } });
+};
+
+/* ---------- 21 nov (Chadín, captura de «Compártelo»: «me gusta el diseño, pero que haya una opción sin fondo, porque prefieren descargar sin fondo;
+   y con tu foto, que puedan ajustar y hacer zoom») ----------
+   · «Sin fondo»: la tarjeta en PNG transparente y recortada a lo que ocupa, con letras blancas (con sombra suave) o negras, para pegarla encima de su foto.
+   · Con foto: se arrastra para colocarla y se hace zoom con dos dedos o con la barra. Mientras se mueve, la foto va debajo y la tarjeta (en
+     transparente, con su degradado) encima; al soltar se prepara la imagen final. En borrador (SH_AJ apagado) hasta el OK. */
+var SH_AJ = true;      // 21 nov, 00:40: publicado (sin fondo y colocar la foto)
+function shAj() { return SH_AJ || rpBorr(); }
+var IMGC = {}, OVC = {}, VACIA = null, SH_ACT = null;
+function vacia() { if (!VACIA) { VACIA = document.createElement('canvas'); VACIA.width = 2; VACIA.height = 2; } return VACIA; }
+/* la foto que cubre la tarjeta, con su zoom (z ≥ 1) y su sitio (ox, oy de −1 a 1: cuánto de lo que sobra se mueve) */
+function fotoCover(x, W, H, f) { var a = f.aj || {}, s = Math.max(W / f.width, H / f.height) * (a.z || 1), w = f.width * s, h = f.height * s; x.drawImage(f, (W - w) / 2 + (a.ox || 0) * (w - W) / 2, (H - h) / 2 + (a.oy || 0) * (h - H) / 2, w, h); }
+function fotoId(f) { if (!f.fid) f.fid = 'f' + Math.random().toString(36).slice(2, 9); return f.fid; }
+function kImg(o) { var f = o.modo === 'foto' && o.foto, a = f && f.aj || {}; return o.k + '|' + o.modo + (o.modo === 'sin' ? (o.let || 'b') : '') + (f ? '|' + fotoId(f) + '|' + [a.z || 1, a.ox || 0, a.oy || 0].map(function (v) { return (+v).toFixed(3); }).join(',') : ''); }
+function imgLista(o) { return IMGC[kImg(o)] || null; }
+function modoGen(o) { return o.modo === 'sin' && o.let === 'n' ? 'sinn' : o.modo; }
+/* sin fondo: se recorta a lo que ocupa (más un margen), para que en Instagram sea una pegatina y no una imagen enorme vacía */
+function recorteSin(cv) {
+  var W = cv.width, H = cv.height, d = cv.getContext('2d').getImageData(0, 0, W, H).data, x0 = W, y0 = H, x1 = -1, y1 = -1;
+  for (var y = 0; y < H; y += 2) for (var x = 0; x < W; x += 2) if (d[(y * W + x) * 4 + 3] > 10) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+  if (x1 < 0) return cv; var m = 40; x0 = Math.max(0, x0 - m); y0 = Math.max(0, y0 - m); x1 = Math.min(W, x1 + m); y1 = Math.min(H, y1 + m);
+  var c = document.createElement('canvas'); c.width = x1 - x0; c.height = y1 - y0; c.getContext('2d').drawImage(cv, x0, y0, c.width, c.height, 0, 0, c.width, c.height); return c;
+}
+function aBlob(cv, k, fin, jpg) { cv.toBlob(function (b) { if (!b) return; IMGC[k] = { blob: b, url: URL.createObjectURL(b), ext: jpg ? '.jpg' : '.png' }; if (fin) fin(IMGC[k]); }, jpg ? 'image/jpeg' : 'image/png', jpg ? 0.92 : undefined); }
+function extDe(t) { return (t && t.ext) || '.png'; }
+/* pinta la imagen en la caja #id. o = { k, modo, let, foto, alt, gen(modo, foto) → Promise<canvas> } */
+function cajaImg(id, o) {
+  var box = $('#' + id); if (!box) return;
+  var f = o.modo === 'foto' && o.foto;
+  box.classList.toggle('sin-f', o.modo === 'sin'); box.classList.toggle('sin-n', o.modo === 'sin' && o.let === 'n');
+  if (f && shAj()) return cajaFoto(id, o);
+  SH_ACT = null; box.classList.remove('aj');
+  var k = kImg(o), pon = function (t) { var b = $('#' + id); if (b && b.dataset.k === k) b.innerHTML = '<img src="' + t.url + '" alt="' + esc(o.alt || 'Tu imagen') + '">'; };
+  box.dataset.k = k;
+  if (IMGC[k]) return pon(IMGC[k]);
+  box.innerHTML = '<span class="mut sm">Preparando…</span>';
+  o.gen(modoGen(o), f || null).then(function (cv) { if (o.modo === 'sin') cv = recorteSin(cv); aBlob(cv, k, pon); }, function () { var b = $('#' + id); if (b && b.dataset.k === k) b.innerHTML = '<span class="mut sm">No se ha podido preparar</span>'; });
+}
+function cajaFoto(id, o) {
+  var box = $('#' + id), f = o.foto, ko = o.k + '|ov'; f.aj = f.aj || { z: 1, ox: 0, oy: 0 };
+  SH_ACT = { id: id, o: o }; box.classList.add('aj'); box.dataset.k = 'aj|' + ko + '|' + fotoId(f);
+  var dibuja = function () { var b = $('#' + id); if (!b || !OVC[ko] || !SH_ACT || SH_ACT.o !== o) return;
+    if (!b.querySelector('.aj-f')) { b.innerHTML = '<img class="aj-f" src="' + f.src + '" alt="" draggable="false"><img class="aj-o" src="' + OVC[ko].url + '" alt="' + esc(o.alt || 'Tu imagen') + '" draggable="false">'; ajEngancha(b, o); }
+    ajPos(b, f); };
+  if (OVC[ko]) { dibuja(); return ajFinal(o); }
+  box.innerHTML = '<span class="mut sm">Preparando…</span>';
+  o.gen('foto', vacia()).then(function (cv) { cv.toBlob(function (b) { OVC[ko] = { cv: cv, url: URL.createObjectURL(b) }; dibuja(); ajFinal(o); }, 'image/png'); });
+}
+function ajMed(f, z) { var W = 1080, H = 1920, s = Math.max(W / f.width, H / f.height) * z; return { w: f.width * s, h: f.height * s }; }
+function ajPos(b, f) {
+  var i = b.querySelector('.aj-f'); if (!i) return; var k = b.clientWidth / 1080, a = f.aj, m = ajMed(f, a.z);
+  i.style.width = (m.w * k) + 'px'; i.style.height = (m.h * k) + 'px';
+  i.style.left = (((1080 - m.w) / 2 + a.ox * (m.w - 1080) / 2) * k) + 'px'; i.style.top = (((1920 - m.h) / 2 + a.oy * (m.h - 1920) / 2) * k) + 'px';
+  var z = document.querySelector('input[data-in=shZoom]'); if (z && document.activeElement !== z) z.value = a.z;
+}
+function ajLim(v) { return Math.max(-1, Math.min(1, v)); }
+function ajEngancha(b, o) {
+  var f = o.foto, act = {}, base = null;
+  var foto0 = function () { var ids = Object.keys(act); base = { a: { z: f.aj.z, ox: f.aj.ox, oy: f.aj.oy }, ids: ids, p: ids.map(function (i) { return { x: act[i].x, y: act[i].y }; }) }; };
+  var dist = function (p, q) { return Math.sqrt((p.x - q.x) * (p.x - q.x) + (p.y - q.y) * (p.y - q.y)) || 1; };
+  b.addEventListener('pointerdown', function (ev) { act[ev.pointerId] = { x: ev.clientX, y: ev.clientY }; try { b.setPointerCapture(ev.pointerId); } catch (e) { } foto0(); ev.preventDefault(); });
+  b.addEventListener('pointermove', function (ev) {
+    if (!act[ev.pointerId] || !base) return; act[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
+    var ids = Object.keys(act); if (ids.join() !== base.ids.join()) return foto0();
+    var k = b.clientWidth / 1080, a = f.aj;
+    if (ids.length === 1) { var m = ajMed(f, a.z), dx = (act[ids[0]].x - base.p[0].x) / k, dy = (act[ids[0]].y - base.p[0].y) / k;
+      a.ox = m.w > 1081 ? ajLim(base.a.ox + dx * 2 / (m.w - 1080)) : 0; a.oy = m.h > 1921 ? ajLim(base.a.oy + dy * 2 / (m.h - 1920)) : 0; }
+    else a.z = Math.max(1, Math.min(4, base.a.z * dist(act[ids[0]], act[ids[1]]) / dist(base.p[0], base.p[1])));
+    ajPos(b, f);
+  });
+  var suelta = function (ev) { delete act[ev.pointerId]; foto0(); if (!Object.keys(act).length) ajFinal(o); };
+  b.addEventListener('pointerup', suelta); b.addEventListener('pointercancel', suelta);
+}
+/* la imagen final (para Compartir y Guardar): la foto colocada y la tarjeta encima */
+function ajFinal(o) {
+  clearTimeout(ajFinal.t); ajFinal.t = setTimeout(function () {
+    var ov = OVC[o.k + '|ov'], k = kImg(o); if (!ov || IMGC[k]) return;
+    var cv = document.createElement('canvas'); cv.width = 1080; cv.height = 1920; var x = cv.getContext('2d'); fotoCover(x, 1080, 1920, o.foto); x.drawImage(ov.cv, 0, 0); aBlob(cv, k, null, true);      // con foto, en JPEG: se prepara mucho antes que en PNG (y la foto no tiene transparencias)
+  }, 160);
+}
+IN.shZoom = function (t) { var A0 = SH_ACT; if (!A0) return; var f = A0.o.foto; f.aj.z = +t.value || 1; var b = $('#' + A0.id); if (b) ajPos(b, f); ajFinal(A0.o); };
+/* debajo de la imagen: con «Sin fondo», el color de las letras; con foto, el zoom */
+function shExtras(o, c) {
+  if (!shAj()) return '';
+  if (o.modo === 'sin') return '<div class="shi-x"><div class="seg-p mini shi-let" role="radiogroup" aria-label="Color de las letras">' + [['b', 'Letras blancas'], ['n', 'Letras negras']].map(function (l) { var on = (o.let || 'b') === l[0]; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="shLet" data-c="' + c + '" data-v="' + l[0] + '">' + l[1] + '</button>'; }).join('') + '</div>' +
+    '<small class="mut">Sale sin fondo (PNG transparente): pégala encima de tu foto o tu vídeo en Instagram.</small></div>';
+  if (o.modo === 'foto' && o.foto) return '<div class="shi-x"><label class="f crop-z">Zoom<input type="range" min="1" max="4" step="0.01" value="' + ((o.foto.aj && o.foto.aj.z) || 1) + '" data-in="shZoom" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla. Con dos dedos, también haces zoom.</small></div>';
+  return '';
+}
+A.shLet = function (el) { if (el.dataset.c === 'fin') { if (S.fin) { S.fin.let = el.dataset.v; pintar(); } } else if (SHI) { SHI.let = el.dataset.v; pintaShi(); } };
+
+/* ---------- la hoja de compartir una imagen (Negro · Blanco · Foto · Sin fondo, la imagen, Compartir y Guardar) ---------- */
+var SHI = null;
+function hojaImg(o) { SHI = Object.assign({ modo: 'negro', foto: null, modos: [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']] }, o); if (shAj()) SHI.modos = SHI.modos.concat([['sin', 'Sin fondo']]); pintaShi(); }
+function shiSpec() { var o = SHI; return { k: 'shi|' + o.k, modo: o.modo, let: o.let, foto: o.modo === 'foto' ? o.foto : null, alt: o.tit, gen: o.gen }; }
+function pintaShi() {
+  var o = SHI; if (!o) return; var pideFoto = o.modo === 'foto' && !o.foto;
+  hoja('<h2>' + esc(o.tit) + '</h2>' + (o.nota ? '<p class="mut sm">' + o.nota + '</p>' : '') +
+    '<div class="seg-p mini shi-m' + (o.modos.length > 3 ? ' c4' : '') + '" role="tablist" aria-label="Fondo">' + o.modos.map(function (m) { return '<button role="tab" aria-selected="' + (o.modo === m[0]) + '" class="' + (o.modo === m[0] ? 'on' : '') + '" data-a="shiModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="car-img shi-img" id="shi-img">' + (pideFoto ? ic('foto', 30, 'var(--tx3)') : '<span class="mut sm">Preparando…</span>') + '</div>' + (pideFoto ? '' : shExtras(o, 'shi')) +
+    (pideFoto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' :
+      '<div class="fin2-ac shi-ac"><button class="btn" data-a="shiCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="shiGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button></div>') +
+    (o.modo === 'foto' && o.foto && !o.fotoFija ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' : '') +
+    '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  if (!pideFoto) cajaImg('shi-img', shiSpec());
+}
+A.shiModo = function (el) { if (!SHI) return; SHI.modo = el.dataset.v; pintaShi(); };
+CH.shiFoto = function (t) { var f = t.files && t.files[0]; if (!f || !SHI) return; var o = SHI, im = new Image(); im.onload = function () { o.foto = im; if (SHI === o) pintaShi(); }; im.src = URL.createObjectURL(f); };
+A.shiCompartir = function () {
+  var t = SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando');
+  var f = null; try { f = new File([t.blob], SHI.nom + (SHI.modo === 'sin' ? '_sin_fondo' : '') + extDe(t), { type: t.blob.type || 'image/png' }); } catch (e) { }
+  if (f && navigator.canShare && navigator.canShare({ files: [f] })) return navigator.share({ files: [f], title: 'MOOD ON', text: SHI.texto || '#MOODON' }).catch(function () { });
+  A.shiGuardar();
+};
+A.shiGuardar = function () { var t = SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando'); var a = document.createElement('a'); a.href = t.url; a.download = SHI.nom + (SHI.modo === 'sin' ? '_sin_fondo' : '') + extDe(t); document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
+
+/* ---------- Comunidad: una publicación o tu perfil ---------- */
+var PIE_APP = 'Descárgate la app · moodonapp.com';
+function imgDeSrc(src) { return new Promise(function (ok) { if (!src) return ok(null); var im = new Image(); if (!/^(data|blob):/.test(src)) im.crossOrigin = 'anonymous'; im.onload = function () { ok(im); }; im.onerror = function () { ok(null); }; im.src = src; }); }
+function pubD(x, img) {
+  var d = x.creado ? new Date(x.creado) : new Date(), sub = ((x.tipo === 'rec' ? 'Receta de ' : 'Entreno de ') + nom1(x.nombre) + ' · ' + d.getDate() + ' ' + mesC(d)).toUpperCase();
+  if (x.tipo === 'rec') { var r = x.rc || {}, mac = r.k != null, rac = r.rac || 1;
+    return { img: img, sub: sub, tit: x.t, txt: x.c, big: mac ? fmil(r.k || 0) : String(rac), uni: mac ? 'KCAL / RACIÓN' : (rac === 1 ? 'RACIÓN' : 'RACIONES'),
+      kp: mac ? [[Math.round(r.p || 0) + ' g', 'PROTEÍNA'], [Math.round(r.h || 0) + ' g', 'HIDRATOS'], [Math.round(r.g || 0) + ' g', 'GRASAS']] : [[String((r.ing || []).length), 'INGREDIENTES']], pie: PIE_APP }; }
+  return { sub: sub, tit: x.t, txt: x.c, big: String(x.min || 0), uni: 'MIN', kp: [[String(x.nser || 0), 'SERIES'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'VOLUMEN'] : [String(x.nej || 0), 'EJERCICIOS']], oro: x.rec ? 'Récord: ' + x.rec : '', pie: PIE_APP };
+}
+A.cCompartir = function (el) {
+  var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
+  var C = CMU(), src = x.foto ? (C.fotos || {})[x.id] : null;
+  (src || !x.foto ? Promise.resolve(src) : rpc('yo_comu_foto', { pub: +x.id }).then(function (f) { if (f) { C.fotos = C.fotos || {}; C.fotos[x.id] = f; } return f; }, function () { return null; })).then(imgDeSrc).then(function (im) {
+    var rec = x.tipo === 'rec', modos = [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
+    hojaImg({ k: 'pub|' + x.id, tit: rec ? 'Compartir la receta' : 'Compartir el entreno', nom: 'MOOD_ON_' + (rec ? 'receta' : 'entreno'), texto: 'Descárgate la app: moodonapp.com', modos: modos,
+      foto: im, fotoFija: !!im, nota: x.mio ? '' : 'Sale su nombre y lo que publicó para todos; nada de sus comentarios, sus me gusta ni lo de «Solo mis seguidores».',
+      gen: function (m, f) { return tarjetaDatos(pubD(x, rec && m !== 'foto' ? im : null), m, f); } });
+  });
+};
+A.cPerCompartir = function (el) {
+  var C = CMU(), P = C.pers[el.dataset.p] || {}; if (!P.yo) return;      // de otra persona, no: su perfil es suyo
+  var ses = S.sesiones || [], min = ses.reduce(function (a, s) { return a + (num(s.min) || 0); }, 0), nr = ses.reduce(function (a, s) { return a + (s.recs || []).filter(function (r) { return r && r.e; }).length; }, 0);
+  var km = ses.reduce(function (a, s) { return a + (s.ej || []).reduce(function (b, e) { return b + (e.tipo === 'run' && e.hecho ? num(e.km) || 0 : 0); }, 0); }, 0);
+  var D = { sub: 'MI PERFIL EN MOOD ON', tit: P.nombre || 'Mi perfil', big: fmtK(ses.length), uni: ses.length === 1 ? 'ENTRENO' : 'ENTRENOS', kp: [[fmtK(Math.round(min / 60)), 'HORAS'], [fmtK(nr), nr === 1 ? 'RÉCORD' : 'RÉCORDS']].concat(km >= 1 ? [[fmtK(km), 'KM']] : []), txt: 'Sígueme en la Comunidad', pie: PIE_APP };
+  hojaImg({ k: 'per|' + ses.length + '|' + nr, tit: 'Compartir tu perfil', nom: 'MOOD_ON_perfil', texto: 'Descárgate la app: moodonapp.com', gen: function (m, f) { return tarjetaDatos(D, m, f); } });
+};
 
 arrancar();
 </script>
