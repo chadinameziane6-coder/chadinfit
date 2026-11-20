@@ -3922,6 +3922,14 @@ button.pf-fe{cursor:pointer}
 .z2-hero .rp-v{margin-top:14px}.z2-hero .rp-v small{color:#9AA0B4}.z2-hero .rp-b{border-top:0;border-radius:16px}.z2-hero .rp-b .lista-ej{margin-top:6px}.z2-hero .rp+.rp{border-top:1px solid rgba(255,255,255,.1)}
 .z2-hero details.otras>summary{background:rgba(255,255,255,.06)}.z2-hero .ot-ch{background:rgba(255,255,255,.12);box-shadow:none;color:#fff}.z2-hero details.otras{background:none}
 .z2-hero .rp-desc b{font:800 25px Plus Jakarta Sans,sans-serif;text-transform:none}
+/* v53.4.177 (Chadín, 20 nov: «no se ve el entreno bien»): en la tarjeta negra de «Hoy toca», los nombres con vídeo, las letras (A1, 1…), «Serie gigante A» y «vídeo» salían en gris oscuro sobre negro */
+.z2-hero .li-v{color:#E4E7F0;font-weight:600}.z2-hero .li-v i{color:#9AA0B4}
+.z2-hero .grp-mini{color:#C9D2FF}
+.z2-hero .lista-ej .ej-lab{background:rgba(255,255,255,.1);color:#E4E7F0}
+.z2-hero .lista-ej li.en-grp .ej-lab{background:rgba(201,210,255,.16);color:#C9D2FF}
+.z2-hero .lista-ej li.li-mov .ej-lab{background:rgba(61,220,180,.14);color:#7FE3C9}
+.z2-hero .lista-ej li.li-bl .ej-lab{background:rgba(127,214,255,.14);color:#9FDCFF}
+.z2-hero .lista-ej li.li-sec{color:#9AA0B4}.z2-hero .lista-ej li.li-sec.mov{color:#7FE3C9}
 /* casillas */
 .z2-t{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:22px;margin:0 0 12px}
 .z2-t.an{flex-direction:row;align-items:center;gap:14px}.z2-t .z2-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
@@ -4048,7 +4056,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.176';
+var APP_V = 'v53.4.177';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -4815,7 +4823,8 @@ function resumenSets(e){ // "3 × 10-12 · RIR 2" o "4 series · 12/10/8/6 · RI
 }
 function resumenCardio(e){
   var o=e.obj||{}, m=e.m&&e.m.length?e.m:['tiempo'];
-  var t=m.map(function(k){ var v=o[k]; if(vacio(v)) return ''; return k==='tiempo'?v+' min':k==='km'?v+' km':k==='kcal'?v+' kcal':k==='pisos'?v+' pisos':k==='pasos'?v+' pasos':'nivel '+v; }).filter(String).join(' · ');
+  var t=m.map(function(k){ var v=o[k]; if(vacio(v)) return ''; if(k!=='nivel'&&/[a-záéíóúñ]/i.test(String(v))) return String(v);      // v53.4.177: «30 MIN» ya lleva la unidad (salía «30 MIN min»)
+    return k==='tiempo'?v+' min':k==='km'?v+' km':k==='kcal'?v+' kcal':k==='pisos'?v+' pisos':k==='pasos'?v+' pasos':'nivel '+v; }).filter(String).join(' · ');
   return t||m.map(function(k){ return CM[k][0].toLowerCase(); }).join(', ');
 }
 function resumenEj(e){ var t=tipoEj(e); return t==='run'?runSubT(e):t==='cardio'?'Cardio · '+resumenCardio(e)+((+e.s||1)>1?' · '+e.s+' veces':''):t==='bloque'?paramsTxt(e):resumenSets(e); }
