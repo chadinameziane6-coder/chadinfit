@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#EFEFF1">
-<script>/* el modo claro/oscuro elegido se pone antes de pintar nada, para que no parpadee */try{var t_=localStorage.getItem('yo_tema');if(t_==='claro'||t_==='oscuro')document.documentElement.setAttribute('data-tema',t_);var o_=t_?t_==='oscuro':matchMedia('(prefers-color-scheme: dark)').matches;document.querySelector('meta[name=theme-color]').setAttribute('content',o_?'#1D1F23':'#EFEFF1');}catch(e){}</script>
+<script>/* el modo claro/oscuro elegido se pone antes de pintar nada, para que no parpadee */try{var t_=localStorage.getItem('yo_tema');if(t_!=='claro'&&t_!=='oscuro')t_='';var o_=t_?t_==='oscuro':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-tema',o_?'oscuro':'claro');document.querySelector('meta[name=theme-color]').setAttribute('content',o_?'#1C1C1E':'#EDEDEA');}catch(e){}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MOOD ON">
@@ -1885,6 +1885,52 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
 .zb button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 [data-tema=oscuro] .z2-hero.zb,[data-tema=oscuro] .z2-hero.zb.z2-ok{background:#1C1C1E}[data-tema=oscuro] .zb-ot,[data-tema=oscuro] .zb-i,[data-tema=oscuro] .zb-c.gr{background:#2C2C2E}
 
+/* ---------- 20 nov, 10:51 · modo oscuro «J» (Chadín: el estilo de su referencia —negro, letra blanca, etiquetas en gris— pero con cada bloque separado:
+   tarjetas negras sobre fondo gris oscuro). Solo el panel de usuaria. Sustituye al modo «H» (tarjetas blancas). ---------- */
+html[data-tema="oscuro"],html[data-tema="oscuro"] .card:not(.n-hero):not(.rp-hero),html[data-tema="oscuro"] .cas3>div,html[data-tema="oscuro"] .tiles3>div,html[data-tema="oscuro"] .n-acc button,html[data-tema="oscuro"] .frase,html[data-tema="oscuro"] .tabbar,html[data-tema="oscuro"] .blq-wl,html[data-tema="oscuro"] .opc,html[data-tema="oscuro"] .opc2,html[data-tema="oscuro"] .libre,html[data-tema="oscuro"] .chks,html[data-tema="oscuro"] .av-f,html[data-tema="oscuro"] .buscar,html[data-tema="oscuro"] .cm-priv,html[data-tema="oscuro"] .cm-bus,html[data-tema="oscuro"] .seg3,html[data-tema="oscuro"] .seg-p,html[data-tema="oscuro"] .chips .chip,html[data-tema="oscuro"] .hoja-c,html[data-tema="oscuro"] .redondo:not(.gris):not(.av),html[data-tema="oscuro"] .seg2,html[data-tema="oscuro"] .btn.sec,html[data-tema="oscuro"] .btn-o{--fondo:#000000;--pie:#0A0A0B;--pie0:rgba(10,10,11,0);--marco:#050506;
+--tx:#FFFFFF;--tx2:#8E8E93;--tx3:#636366;
+--card:#000000;--card-g:#000000;--card-b:#1F1F21;--sombra:0 12px 30px rgba(0,0,0,.35);--sombra-s:0 6px 18px rgba(0,0,0,.3);
+--suave:#1C1C1E;--suave2:#2C2C2E;--gris:#3A3A41;--borde:#1F1F21;--borde2:rgba(255,255,255,.16);--linea:#1F1F21;
+--neg:#FFFFFF;--neg-t:#0D0D0F;--neg-m:#55555E;--neg-s:rgba(0,0,0,.08);
+--sec:#1C1C1E;--sec-b:rgba(255,255,255,.08);--seg:#1C1C1E;--seg-on:#2C2C2E;--chip:#1C1C1E;--chip-b:rgba(255,255,255,.08);--chip-t:#C9C9D0;--acc-s:rgba(255,255,255,.08);--btn-sh:0 8px 20px rgba(0,0,0,.4);
+--verde:#2BB673;--verde-bg:rgba(43,182,115,.14);--verde-tx:#7FDDAF;--rojo:#FF6B6B;--rojo-bg:rgba(255,107,107,.12);--rojo-tx:#FFB3B3;
+--ambar:#F2B33D;--ambar-bg:rgba(242,179,61,.12);--ambar-b:rgba(242,179,61,.35);--ambar-tx:#F5D08A;
+--pista:rgba(255,255,255,.10);
+--g-l:rgba(255,255,255,.08);--g-p:#5A5A62;--g-m:#F2F2F4;--g-a:rgba(124,140,255,.22);
+--tab:#000000;--tab-b:rgba(255,255,255,.08);--tab-sh:0 14px 34px rgba(0,0,0,.5);--tab-on:#FFFFFF;--tab-on-t:#0D0D0F;--tab-off:#8E8E96;
+--hero:radial-gradient(260px 160px at 85% 0%,rgba(255,255,255,.12),rgba(255,255,255,0) 70%) padding-box,linear-gradient(160deg,#2E2E34 0%,#1B1B1F 50%,#121214 100%) padding-box,linear-gradient(135deg,#FFFFFF 0%,#6E6E76 35%,#DADADF 60%,#4A4A51 100%) border-box;
+--hero-sh:0 18px 40px rgba(0,0,0,.5);--hero-m:#B9B9C1;--flota-b:rgba(255,255,255,.10);
+color-scheme:dark;--hero:#000;--hero-sh:none}
+html[data-tema="oscuro"] body,html[data-tema="oscuro"] .pant,html[data-tema="oscuro"] .pant.z2{background:#1C1C1E!important}
+html[data-tema="oscuro"] .semc{color:#FFFFFF!important;padding-top:4px!important;padding-bottom:16px!important}html[data-tema="oscuro"] .semc *{color:inherit}
+html[data-tema="oscuro"] .semc .zd,html[data-tema="oscuro"] .semc .zd small{color:#FFFFFF!important}html[data-tema="oscuro"] .semc .zd.sel{background:#FFFFFF!important;color:#000!important}html[data-tema="oscuro"] .semc .zd.sel small{color:#000!important}
+html[data-tema="oscuro"] .semc .z2-sd{background:#1C1C1E!important}html[data-tema="oscuro"] .semc .z2-sd small,html[data-tema="oscuro"] .semc .z2-sd b span{color:#8E8E93!important}
+html[data-tema="oscuro"] .semc button:not(.zd):not(.z2-sd):not(.sem-ob){background:#1C1C1E!important;color:#FFFFFF!important;border-color:transparent!important}html[data-tema="oscuro"] .semc .sem-ob{background:#FFFFFF!important;color:#000!important}
+html[data-tema="oscuro"] .z2-hero.zb,html[data-tema="oscuro"] .z2-hero.zb.z2-ok{background:#1C1C1E!important}html[data-tema="oscuro"] .zb-ot,html[data-tema="oscuro"] .zb-i,html[data-tema="oscuro"] .zb-c.gr{background:#2C2C2E!important}
+html[data-tema="oscuro"] .z2-cab h1{color:#FFFFFF!important}html[data-tema="oscuro"] .z2-cab small{color:#8E8E93!important}html[data-tema="oscuro"] .z2-top .redondo,html[data-tema="oscuro"] .z2-av{background:#1C1C1E!important;color:#FFFFFF!important;box-shadow:none!important}
+html[data-tema="oscuro"] .z2-t,html[data-tema="oscuro"] .z2-t b{color:#FFFFFF!important}html[data-tema="oscuro"] .z2-t .z2-tx>small:not(.k){color:#8E8E93!important}
+html[data-tema="oscuro"] .z2-gr{gap:0!important}html[data-tema="oscuro"] .z2-gr .z2-t+.z2-t{border-left:1px solid #1F1F21!important;padding-left:14px!important}
+html[data-tema="oscuro"] .z2-cyc .k{color:#FF8DB5!important}html[data-tema="oscuro"] .z2-cyc em{background:rgba(255,141,181,.12)!important;color:#FFB8D0!important}html[data-tema="oscuro"] .z2-cyc .z2-rg b,html[data-tema="oscuro"] .z2-cyc .z2-rg small{color:#FFFFFF!important}
+html[data-tema="oscuro"] .z2-rec .k,html[data-tema="oscuro"] .z2-obj .k{color:#F2C14E!important}
+html[data-tema="oscuro"] .n-acc button{background:#1C1C1E!important;color:#FFFFFF!important;border:0!important;box-shadow:none!important}html[data-tema="oscuro"] .n-acc button .ic{background:#2C2C2E!important;color:#FFFFFF!important}
+html[data-tema="oscuro"] .tabbar{background:#000!important;border-top:1px solid #1F1F21!important;box-shadow:none!important;border-radius:0!important;left:0!important;right:0!important;bottom:0!important;width:100%!important;max-width:none!important;margin:0!important;transform:none!important;height:calc(62px + env(safe-area-inset-bottom))!important;padding-bottom:env(safe-area-inset-bottom)!important}
+html[data-tema="oscuro"] .tabbar button.on .tb-i{background:transparent!important;color:#FFF!important}html[data-tema="oscuro"] .tabbar button.on{color:#FFF!important}html[data-tema="oscuro"] .tabbar button{color:#8E8E93!important}
+html[data-tema="oscuro"] .chips .chip,html[data-tema="oscuro"] .seg3,html[data-tema="oscuro"] .seg-p,html[data-tema="oscuro"] .seg2{box-shadow:none!important}
+html[data-tema="oscuro"] .hoja-c{background:#1C1C1E!important}
+html[data-tema="oscuro"] .kpis>div,html[data-tema="oscuro"] .kpis .kpi{background:#000!important;box-shadow:none!important;border-color:#1F1F21!important}html[data-tema="oscuro"] .kpis .ic,html[data-tema="oscuro"] .kpis>div>span:first-child{background:#1C1C1E!important;color:#fff!important}
+
+html[data-tema="oscuro"] .card,html[data-tema="oscuro"] .semc,html[data-tema="oscuro"] .kpis,html[data-tema="oscuro"] .n-hero,html[data-tema="oscuro"] .rp-hero,html[data-tema="oscuro"] .hoy-c{background:#000000!important;border:0!important;border-radius:22px!important;box-shadow:none!important}
+html[data-tema="oscuro"] .z2-gr{gap:10px!important}html[data-tema="oscuro"] .z2-gr .z2-t+.z2-t{border-left:0!important;padding-left:14px!important}
+html[data-tema="oscuro"] .tabbar{background:#1C1C1E!important}
+html[data-tema="oscuro"] .cm-pub.v2{background:#000000!important;border:0!important;border-radius:0!important;border-bottom:8px solid #1C1C1E!important}
+html[data-tema="oscuro"] .semc .z2-sd,html[data-tema="oscuro"] .semc button:not(.zd):not(.z2-sd):not(.sem-ob),html[data-tema="oscuro"] .n-acc button{background:#2C2C2E!important}html[data-tema="oscuro"] .z2-hero.zb,html[data-tema="oscuro"] .z2-hero.zb.z2-ok{background:#000!important}html[data-tema="oscuro"] .zb-ot,html[data-tema="oscuro"] .zb-i,html[data-tema="oscuro"] .zb-c.gr{background:#2C2C2E!important}/* J: las series del entreno en curso, también en oscuro (antes, casillas blancas) */
+html[data-tema="oscuro"] .st2 input{background:#1C1C1E!important;border-color:#2C2C2E!important;color:#fff!important}html[data-tema="oscuro"] .st2 input::placeholder{color:#6C6C70!important}
+html[data-tema="oscuro"] .st2.ya input{border-color:#fff!important}
+html[data-tema="oscuro"] .st2.ok,html[data-tema="oscuro"] .st.st2.ok{background:rgba(43,182,115,.14)!important;box-shadow:inset 0 0 0 1.5px rgba(43,182,115,.35)!important}
+html[data-tema="oscuro"] .st2.ok input,html[data-tema="oscuro"] .st2.ok .st-kg{background:#0E2A1C!important;border-color:transparent!important;color:#7FDDAF!important}
+html[data-tema="oscuro"] .st2 .st-ok{border-color:#3A3A3C!important;color:#8E8E93!important}html[data-tema="oscuro"] .st2.ok .st-ok,html[data-tema="oscuro"] .st2 .st-ok.on{background:#fff!important;border-color:#fff!important;color:#0F7A47!important}
+html[data-tema="oscuro"] .st2.ok .st-n i,html[data-tema="oscuro"] .st2.ya .st-n i{background:#fff!important;color:#000!important}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -2930,7 +2976,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.8.0';
+var YO_V = 'yo-1.8.1';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -2960,9 +3006,11 @@ function fmtK(v) { return String(Math.round(v || 0)).replace(/\B(?=(\d{3})+(?!\d
 /* ---------- modo claro / oscuro: «Como el móvil» (lo normal), «Claro» u «Oscuro»; se guarda en este navegador ---------- */
 function temaDe() { try { var v = localStorage.getItem('yo_tema'); return v === 'claro' || v === 'oscuro' ? v : 'auto'; } catch (e) { return 'auto'; } }
 function esOscuro() { var t = document.documentElement.getAttribute('data-tema'); return t ? t === 'oscuro' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
-function colorBarra() { var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', esOscuro() ? '#1D1F23' : '#EFEFF1'); }
-function ponTema(v) { var d = document.documentElement; if (v === 'claro' || v === 'oscuro') d.setAttribute('data-tema', v); else d.removeAttribute('data-tema'); colorBarra(); }
-try { var mqO = matchMedia('(prefers-color-scheme: dark)'); if (mqO.addEventListener) mqO.addEventListener('change', colorBarra); else if (mqO.addListener) mqO.addListener(colorBarra); } catch (e) { }
+function colorBarra() { var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', esOscuro() ? '#1C1C1E' : '#EDEDEA'); }
+/* 20 nov (modo oscuro J): «Como el móvil» también pone data-tema (el que toca ahora), para que todo el CSS mire solo data-tema; lo elegido se guarda aparte (yo_tema) */
+function ponTema(v) { var d = document.documentElement, o = v === 'oscuro' || (v !== 'claro' && !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)); d.setAttribute('data-tema', o ? 'oscuro' : 'claro'); colorBarra(); }
+function temaMovil() { if (temaDe() !== 'auto') return; ponTema('auto'); try { pintar(); } catch (e) { } }
+try { var mqO = matchMedia('(prefers-color-scheme: dark)'); if (mqO.addEventListener) mqO.addEventListener('change', temaMovil); else if (mqO.addListener) mqO.addListener(temaMovil); } catch (e) { }
 
 /* ---------- iconos (línea fina) ---------- */
 var IC = {
