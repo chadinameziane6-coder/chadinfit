@@ -1579,6 +1579,7 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
 .ph-bars .sn-b.sel i{outline:none;width:8px!important;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55)}
 .hbar .b{height:6px;border-radius:3px}.hbar .b i{border-radius:0 3px 3px 0}
 .vbar{justify-content:space-around;background:repeating-linear-gradient(to top,transparent 0,transparent 30px,var(--linea) 30px,var(--linea) 31px)}.vbar i{flex:0 0 8px;border-radius:4px 4px 0 0}
+.ej-clave{margin:12px 0 0;padding:10px 12px;border-radius:14px;background:var(--suave);font-size:13.5px;line-height:1.45}.ej-clave b{display:block;font-size:12px;margin-bottom:2px}
 
 </style>
 </head>
@@ -2233,7 +2234,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.7.2';
+var YO_V = 'yo-1.7.3';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3376,7 +3377,10 @@ VISTAS.ficha = function (p) {
   h += '<section class="card"><div class="tags">' + [b.grupo].concat(g2).filter(Boolean).map(function (g, i) { return '<span class="tag' + (i ? '' : ' neg') + '">' + esc(g) + '</span>'; }).join('') + '</div>' +
     '<div class="kv">' + [['Material', b.equipo], ['Movimiento', ({ puente: 'Puente de cadera', bisagra: 'Bisagra de cadera', sentadilla: 'Sentadilla', zancada: 'Zancada', empuje_h: 'Empuje horizontal', empuje_v: 'Empuje vertical', tiron_h: 'Tirón horizontal', tiron_v: 'Tirón vertical', aislamiento: 'Aislamiento', core: 'Core', movilidad: 'Movilidad', cardio: 'Cardio' })[b.patron] || b.patron], ['Nivel', b.nivel]].filter(function (x) { return x[1]; }).map(function (x) { return '<div><small>' + x[0] + '</small><b>' + esc(x[1]) + '</b></div>'; }).join('') + '</div></section>';
   if (b.indicaciones) { var pasos = String(b.indicaciones).split(/\n+/).map(function (x) { return x.replace(/^\s*(\d+[.)]|[-•·])\s*/, '').trim(); }).filter(Boolean);
-    h += '<section class="card"><b>Cómo se hace</b>' + (pasos.length > 1 ? '<ol class="pasos">' + pasos.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>' : '<p class="txt">' + esc(pasos[0] || '') + '</p>') + '</section>'; }
+    /* 20 nov: las descripciones de MOOD ON acaban con «Clave: …» (el fallo típico que hay que evitar); va aparte, no como un paso más */
+    var clave = pasos.filter(function (x) { return /^clave:/i.test(x); }).map(function (x) { return x.replace(/^clave:\s*/i, ''); }); pasos = pasos.filter(function (x) { return !/^clave:/i.test(x); });
+    h += '<section class="card"><b>Cómo se hace</b>' + (pasos.length > 1 ? '<ol class="pasos">' + pasos.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ol>' : '<p class="txt">' + esc(pasos[0] || '') + '</p>') +
+      clave.map(function (x) { return '<p class="ej-clave"><b>Clave</b>' + esc(x.charAt(0).toUpperCase() + x.slice(1)) + '</p>'; }).join('') + '</section>'; }
   var alt = alternativasDe(b);
   if (alt.length) h += '<section class="card lista-b"><b class="card-tt">Alternativas</b>' + alt.map(function (x) { return '<button class="fila-b" data-a="verEjAlt" data-n="' + esc(x.nombre) + '"><b>' + esc(x.nombre) + (x.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc([x.grupo, x.equipo].filter(Boolean).join(' · ')) + '</small></button>'; }).join('') + '</section>';
   if (b.mio) h += '<button class="btn sec" data-a="ejCrear" data-ed="' + esc(b.nombre) + '">' + ic('lapiz', 18) + 'Cambiar o borrar este ejercicio</button>';
