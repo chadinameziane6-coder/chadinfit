@@ -2986,7 +2986,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.8.2';
+var YO_V = 'yo-1.8.3';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3610,6 +3610,8 @@ function zbHecho(L) {
   return mn + ' min' + (ns ? ' · ' + ns + (ns === 1 ? ' serie' : ' series') : '') + (vol ? ' · ' + fmtK(vol) + ' kg' : '');
 }
 function primerDia(sem) { var i0 = DIAS7.indexOf(hoyLetra()); for (var k = 1; k < 7; k++) { var d = DIAS7[(i0 + k) % 7]; if (sem[d]) return 'Tu primer entreno, el ' + DIA_N[d].toLowerCase(); } return 'Tu primer entreno, cuando quieras'; }
+/* 20 nov, 12:15 (Chadín: «el de los pasos me gusta»): en descanso, las huellas y «A por tus N pasos» (sin la luna) */
+function pasosMeta() { if (!pasosOn()) return 'Camina, estira e hidrátate'; var m = +S.perfil.pasos.meta || 8000, p = pasosDia(hoyStr()); return p >= m ? 'Tus ' + fmil(m) + ' pasos de hoy, hechos' : 'A por tus ' + fmil(m) + ' pasos'; }
 function zbSh(id) { return '<button class="zb-i" data-a="compartirSes" data-id="' + esc(id) + '" aria-label="Compartir">' + ic('compartir', 18) + '</button>'; }
 function hoyZ2() {
   var hs = hoyStr(), sem = semEsta(), r = rutinaDe(sem[hoyLetra()]), H = S.sesiones.filter(function (s) { return s.fecha === hs; });
@@ -3619,7 +3621,7 @@ function hoyZ2() {
     return zbar({ cls: 'z2-ok', ini: zbC('verSes', u.id, 'check', 'Ver entreno', 'ok'), v: 1, sm: 'Hecho hoy' + (v ? ' · Esfuerzo ' + v : ''), nom: H.map(function (s) { return s.nombre || 'Entreno'; }).join(' + '), meta: zbHecho(H), txA: 'data-a="verSes" data-id="' + esc(u.id) + '"', fin: zbSh(u.id) });
   }
   if (!r) return S.rutinas.length
-    ? zbar({ ini: '<span class="zb-c gr">' + ic('luna', 20) + '</span>', sm: 'Hoy', nom: 'Descanso', meta: S.sesiones.length ? 'Camina, estira y recupera' : primerDia(sem), fin: '<button class="zb-ot" data-a="entrenarHoy">Entrenar</button>' })
+    ? zbar({ ini: '<span class="zb-c">' + ic('pasos', 22) + '</span>', sm: 'Hoy toca', nom: 'Descanso activo', meta: S.sesiones.length ? pasosMeta() : primerDia(sem), fin: '<button class="zb-ot" data-a="entrenarHoy">Entrenar</button>' })
     : zbar({ ini: zbC('entrenarHoy', '', 'play', 'Empezar un entreno'), sm: 'Hoy', nom: 'Tu primer entreno', meta: 'Elige un programa o crea tu rutina', txA: 'data-a="entrenarHoy"' });
   var sr = semTag(r);
   return zbar({ ini: zbC('empezarRut', r.id, 'play', 'Comenzar rutina'), sm: 'Hoy toca' + (!S.sesiones.length ? ' · Tu primer entreno' : sr ? ' · ' + sr : ''), nom: r.nombre, meta: zbMeta(r), txA: 'data-a="rutResumen" data-id="' + esc(r.id) + '"', fin: '<button class="zb-ot" data-a="entrenarHoy">Otra</button>' });
@@ -3631,7 +3633,7 @@ function otroDiaZ2(d) {
   if (L.length) { var u = L[L.length - 1], v = num(u.rpe); return zbar({ cls: 'z2-ok', ini: zbC('verSes', u.id, 'check', 'Ver entreno', 'ok'), v: 1, sm: sm + (v ? ' · Esfuerzo ' + v : ''), nom: L.map(function (s) { return s.nombre || 'Entreno'; }).join(' + '), meta: zbHecho(L), fin: zbSh(u.id) }); }
   if (r) return zbar({ ini: zbC('rutResumen', r.id, 'lista', 'Ver rutina', 'gr'), sm: sm, nom: r.nombre, meta: pas ? 'No lo hiciste' : zbMeta(r),
     fin: '<button class="zb-ot" data-a="' + (S.ses ? 'abrirSes' : 'empezarRut') + '" data-id="' + esc(r.id) + '">' + (S.ses ? 'Seguir' : 'Hacerlo hoy') + '</button>' });
-  return zbar({ ini: '<span class="zb-c gr">' + ic('luna', 20) + '</span>', sm: sm, nom: 'Descanso', meta: 'Ese día tu semana no tiene entreno' });
+  return zbar({ ini: '<span class="zb-c gr">' + ic('pasos', 22) + '</span>', sm: sm, nom: 'Descanso', meta: 'Ese día tu semana no tiene entreno' });
 }
 /* las casillas: el ciclo a lo ancho (o el objetivo, si no hay ciclo) y debajo, en fila, el objetivo y el último récord */
 function ultRec() { var L = S.sesiones.filter(function (s) { return (s.recs || []).some(function (x) { return x && x.e; }); }).sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }), s = L[L.length - 1]; if (!s) return null; var R = s.recs.filter(function (x) { return x && x.e; }); return { s: s, r: R[R.length - 1], i: s.recs.indexOf(R[R.length - 1]), n: R.length }; }

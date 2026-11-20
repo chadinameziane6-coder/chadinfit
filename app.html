@@ -4087,7 +4087,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.179';
+var APP_V = 'v53.4.180';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -4131,7 +4131,7 @@ function copia(o){ return JSON.parse(JSON.stringify(o)); }
 function limpiaErr(e){ return String((e&&e.message)||e||'Error').replace(/^(Exception|Error|ScriptError):\s*/i,''); }
 function primeraLinea(s){ return String(s||'').split('\n').filter(function(x){return x.trim();})[0]||''; }
 /* ---------------- iconos (línea, sobrios; sustituyen a los emoticonos) ---------------- */
-var ICONS={
+var ICONS={huellas:'<path d="M8.5 3.5c1.9 0 2.8 2 2.5 4.6-.2 1.9-.9 3.4-2.4 3.4S6 10.3 6 8.3c0-2.6.8-4.8 2.5-4.8zM6.5 14.5l4.3.6-.3 2.7a2.1 2.1 0 0 1-4.2-.5zM15.5 7c1.7 0 2.5 2.2 2.5 4.8 0 2-1.1 3.2-2.6 3.2s-2.2-1.5-2.4-3.4c-.3-2.6.6-4.6 2.5-4.6zM13.2 18.6l4.3-.6.2 2.8a2.1 2.1 0 0 1-4.2.5z"/>',
   clientes:'<circle cx="9" cy="8.4" r="3.4"/><path d="M3 19.6a6 6 0 0 1 12 0"/><path d="M15.4 5.3a3.3 3.3 0 0 1 0 6.3"/><path d="M17.4 14.1a5.8 5.8 0 0 1 3.6 5.4"/>',
   wa:'<path d="M4.5 19.5l1.2-3.9A8 8 0 1 1 8.6 18.4z"/><path d="M9.3 8.6c.3-.6.9-.6 1.2 0l.6 1.3c.1.3 0 .6-.2.8l-.5.5c.5 1.1 1.4 2 2.5 2.5l.5-.5c.2-.2.5-.3.8-.2l1.3.6c.6.3.6.9 0 1.2-.6.4-1.3.6-2 .4-2.3-.7-4.1-2.5-4.8-4.8-.2-.7 0-1.4.4-2z"/>',
   menos:'<path d="M5 12h14"/>',
@@ -7203,7 +7203,8 @@ function vHoy(){
       h+='<div class="z2-hero zbw">';
       hecho.forEach(function(s){ h+=zbClHecho([s]); });
       if(!d.rutinas.length) h+=zbCl({ini:'<span class="zb-c gr">'+ic('reloj')+'</span>',sm:'Hoy',nom:'Muy pronto',meta:'Tu coach todavía no te ha asignado rutinas'});
-      else if(!rh.length) h+=zbCl({ini:'<span class="zb-c gr">'+ic('luna')+'</span>',sm:'Hoy toca',nom:'Descanso',meta:'Camina, estira e hidrátate',fin:otras.length?'<button class="zb-ot" data-a="z2Otras">Entrenar</button>':''});
+      else if(!rh.length){ var pp=pasosOn()?z2Pasos(hoy):null;      // v53.4.180 (20 nov, 12:15, Chadín: «el de los pasos me gusta»; fuera la luna)
+        h+=zbCl({ini:'<span class="zb-c">'+ic('huellas')+'</span>',sm:'Hoy toca',nom:'Descanso activo',meta:pp&&pp.obj?(pp.n>=pp.obj?'Tus '+fP(pp.obj)+' pasos de hoy, hechos':'A por tus '+fP(pp.obj)+' pasos'):'Camina, estira e hidrátate',fin:otras.length?'<button class="zb-ot" data-a="z2Otras">Entrenar</button>':''}); }
       pend.forEach(function(r,k){ var O=ordenMov(r.ejercicios), nMov=O.filter(function(x){ return x.mov; }).length, series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), sr=semRut(r,hoy);
         h+=zbCl({ini:zbClC('empezar',r.id,'play','Comenzar '+r.nombre),sm:'Hoy toca'+(sr?' · Semana '+sr.n+'/'+sr.tot:''),nom:r.nombre,meta:cuentaEjCl(r.ejercicios,nMov)+' · '+minRutCl(r,series)+' min'+(series?' · '+series+' series':''),txA:'data-a="z2Rut" data-id="'+esc(r.id)+'"',fin:k===0&&otras.length?'<button class="zb-ot" data-a="z2Otras">Otra</button>':''}); });
       h+='</div>';
