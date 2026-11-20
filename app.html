@@ -3945,6 +3945,21 @@ button.pf-fe{cursor:pointer}
 .zb-i{width:42px;height:42px;min-height:0;border-radius:50%;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:0;padding:0;cursor:pointer;box-shadow:none}.zb-i .ic{width:18px;height:18px}
 .zb button:focus-visible{outline:2px solid #fff;outline-offset:2px}
 .zb-man{margin:8px 6px 0;font-size:13px;color:#6B6B67}.zb-man b{color:#111}.zb-man .zb-lk{background:none;border:0;padding:0;min-height:0;font:inherit;font-weight:700;color:#111;text-decoration:underline;text-underline-offset:3px;cursor:pointer;box-shadow:none}
+/* v53.4.179 · la rutina (al tocar el nombre en «Hoy toca»), diseño «Pastilla negra» */
+#modal .mbox.rz-mb{background:#F6F6F4;padding:0 0 calc(18px + env(safe-area-inset-bottom))}
+.rzw{padding:0 16px}.rz-hd{position:relative;padding:22px 2px 14px}.rz-hd h2{margin:0 0 4px;font-size:21px;font-weight:800;line-height:1.2;color:#111;padding-right:44px}.rz-hd small{color:#7A7A76;font-size:12.5px}
+.rz-hd .rz-x{position:absolute;right:0;top:16px;background:#EAEAE6}
+.rz-go{width:100%;margin-top:12px;height:48px;min-height:0;border-radius:14px;background:#111;color:#fff;font:inherit;font-weight:800;display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;border:0;cursor:pointer;box-shadow:none}.rz-go .ic{width:15px;height:15px;fill:currentColor;stroke:none}
+.rz-s{display:flex;align-items:center;gap:8px;margin:16px 2px 8px}.rz-s b{background:#111;color:#fff;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px}.rz-s small{font-size:12px;color:#7A7A76;font-weight:600}
+.rz-c{display:flex;gap:12px;align-items:center;background:#fff;border-radius:18px;padding:8px;margin:0 0 8px;width:100%;min-height:80px;text-align:left;border:0;font:inherit;color:inherit;box-shadow:none;cursor:default}button.rz-c{cursor:pointer}
+.rz-c.rz-ln{min-height:0;padding:12px}
+.rz-th{width:104px;height:64px;border-radius:12px;background:#222 center/cover no-repeat;position:relative;flex:none;overflow:hidden}.rz-th:after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.18)}
+.rz-th i{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:28px;height:28px;border-radius:50%;background:rgba(255,255,255,.92);color:#111;display:flex;align-items:center;justify-content:center;z-index:1}.rz-th i .ic{width:12px;height:12px;fill:currentColor;stroke:none}
+.rz-th em{position:absolute;left:6px;bottom:6px;z-index:1;background:#111;color:#fff;font-style:normal;font-size:11px;font-weight:800;padding:3px 7px;border-radius:7px}
+.rz-pl{width:30px;height:30px;border-radius:50%;background:#F1F1EE;color:#111;display:flex;align-items:center;justify-content:center;flex:none}.rz-pl .ic{width:11px;height:11px;fill:currentColor;stroke:none}
+.rz-bd{width:40px;height:40px;border-radius:12px;background:#111;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.rz-t{flex:1;min-width:0;display:flex;flex-direction:column}.rz-t b{font-size:14px;font-weight:700;color:#111;line-height:1.25}.rz-t small{color:#7A7A76;font-size:12px;margin-top:3px}
+.rz-t .ex-esp{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}.rz-t .ex-esp span{font-size:10.5px;font-weight:700;background:#FFF3D6;color:#7A5300;padding:2px 7px;border-radius:7px}
 .zb-otras .otra{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid rgba(28,30,38,.08)}.zb-otras .otra:first-child{border-top:0}
 /* casillas */
 .z2-t{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:22px;margin:0 0 12px}
@@ -4072,7 +4087,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.178';
+var APP_V = 'v53.4.179';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6962,9 +6977,26 @@ function z2Hecho(H,hoy,otras){
   var rm=rutDia(sumar(hoy,1));
   return '<div class="z2-hero zbw z2-ok" id="z2-ok">'+zbClHecho(H)+'<p class="zb-man">'+(rm.length?'Mañana: <b>'+esc(rm.map(function(r){ return r.nombre; }).join(' + '))+'</b>':'Mañana descansas')+(otras.length?' · <button class="zb-lk" data-a="z2Otras">Hacer otra</button>':'')+'</p></div>';
 }
-/* tocando el nombre, la rutina (con sus ejercicios y vídeos); «Otra», las demás rutinas */
-A.z2Rut=function(el){ var r=CL.d.rutinas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return;
-  modal('<div class="mh-sh"><div><h2>'+esc(r.nombre)+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+rutinaBloque(r,true,null,hoyStr()).replace('<details class="rp-d"','<details open class="rp-d"').replace('<div class="rut rp">','<div class="rut rp zb-rutm">')); };
+/* tocando el nombre, la rutina; «Otra», las demás rutinas.
+   v53.4.179 (20 nov, 11:11, Chadín: la 2 «Pastilla negra», «me encanta»): arriba el nombre, «Hoy · Semana n de N · ejercicios · ~min» y «Comenzar rutina»;
+   «Movilidad» y «Principal» en pastilla negra; cada ejercicio en su tarjeta, con la imagen de su vídeo si lo tiene (y A1, 1… en negro encima)
+   o, si no, fila corta con la letra en un cuadrado negro. Tocando el ejercicio, su vídeo y su técnica («no todos los ejercicios tienen vídeo») */
+function rzFila(r,x,lab){ var e=x.e, t=tipoEj(e), inf=t!=='bloque'?infoEj(e):{hay:false,video:''};
+  var tx='<span class="rz-t"><b>'+esc(tituloEj(e))+'</b><small>'+esc(resumenEj(e))+'</small>'+(t==='fuerza'?espLinea(e):'')+(t==='bloque'?'<small>'+esc((e.ej||[]).map(function(y){ return y.n+(y.r?' '+blRTxt(y.r):''); }).join(' · '))+'</small>':'')+'</span>';
+  /* 11:17 (Chadín: «quiero todos con número así»): sin la imagen del vídeo; todos con su número en negro y, si tiene vídeo, un play pequeño a la derecha */
+  var ini='<span class="rz-bd">'+esc(lab)+'</span>', fin=inf.video?'<span class="rz-pl">'+ic('play')+'</span>':'';
+  return inf.hay?'<button class="rz-c rz-ln" data-a="verEjRut" data-r="'+esc(r.id)+'" data-i="'+x.i+'" aria-label="'+esc(tituloEj(e))+': ver cómo se hace">'+ini+tx+fin+'</button>':'<div class="rz-c rz-ln">'+ini+tx+'</div>'; }
+A.z2Rut=function(el){ var r=CL.d.rutinas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return; var hoy=hoyStr();
+  var O=ordenMov(r.ejercicios), lista=O.map(function(x){ return x.e; }), L=etiquetasEj(lista), G=gruposDe(lista), nMov=O.filter(function(x){ return x.mov; }).length, series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), sr=semRut(r,hoy);
+  var sec=function(nom,det){ return '<div class="rz-s"><b>'+nom+'</b>'+(det?'<small>'+esc(det)+'</small>':'')+'</div>'; }, h='', j0=-1;
+  O.forEach(function(x,j){
+    if(x.mov&&j===0){ var g=G[0], v=g?setsPlan(x.e).length:0; h+=sec('Movilidad',g?g.label+' '+g.letra+(v>1?' · '+v+' vueltas':''):nMov+(nMov===1?' ejercicio':' ejercicios')); }
+    if(!x.mov&&j0<0){ j0=j; var n=O.length-nMov; h+=sec(nMov?'Principal':'Entrenamiento',n+(n===1?' ejercicio':' ejercicios')); }
+    h+=rzFila(r,x,L[j]);
+  });
+  modal('<div class="rzw zb-rutm"><div class="rz-hd"><button class="mh-x rz-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button><h2>'+esc(r.nombre)+'</h2><small>'+(rutDia(hoy).indexOf(r)>=0?'Hoy · ':'')+(sr?'Semana '+sr.n+' de '+sr.tot+' · ':'')+esc(cuentaEjCl(r.ejercicios,nMov))+' · ~'+minRutCl(r,series)+' min</small>'+
+    '<button class="rz-go" data-a="empezar" data-id="'+esc(r.id)+'">'+ic('play')+'Comenzar rutina</button></div>'+h+'</div>');
+  var b=document.querySelector('#modal .mbox'); if(b) b.classList.add('rz-mb'); };
 A.z2Otras=function(){ var hoy=hoyStr(), d=CL.d, rh=rutDia(hoy), hecho=d.sesiones.filter(function(s){ return s.fecha===hoy; });
   var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); }, otras=d.rutinas.filter(function(r){ return rh.indexOf(r)<0&&vigenteEn(r,hoy,d.rutinas); });
   if(!otras.length) return;
