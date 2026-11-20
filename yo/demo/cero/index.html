@@ -1931,6 +1931,16 @@ html[data-tema="oscuro"] .st2.ok input,html[data-tema="oscuro"] .st2.ok .st-kg{b
 html[data-tema="oscuro"] .st2 .st-ok{border-color:#3A3A3C!important;color:#8E8E93!important}html[data-tema="oscuro"] .st2.ok .st-ok,html[data-tema="oscuro"] .st2 .st-ok.on{background:#fff!important;border-color:#fff!important;color:#0F7A47!important}
 html[data-tema="oscuro"] .st2.ok .st-n i,html[data-tema="oscuro"] .st2.ya .st-n i{background:#fff!important;color:#000!important}
 
+/* 20 nov, 11:14 · «Ver rutina» como en la app de las clientas («Pastilla negra»; cada ejercicio con su número en negro) */
+.hoja-c.rz-h{background:#F6F6F4}.rzw{padding:0 2px}.rz-hd{position:relative;padding:4px 0 12px}.rz-hd h2{margin:0 0 4px;font-size:21px;font-weight:800;line-height:1.2;padding-right:46px}.rz-hd small{color:var(--tx3);font-size:12.5px}
+.rz-hd .rz-x{position:absolute;right:0;top:0;width:36px;height:36px}.rz-go{margin-top:12px;border-radius:14px}
+.rz-s{display:flex;align-items:center;gap:8px;margin:16px 2px 8px}.rz-s b{background:#111;color:#fff;font-size:12px;font-weight:800;padding:5px 11px;border-radius:999px}.rz-s small{font-size:12px;color:var(--tx3);font-weight:600}
+.rz-c{display:flex;gap:12px;align-items:center;background:#fff;border-radius:18px;padding:12px;margin:0 0 8px;width:100%;text-align:left;border:0;font:inherit;color:inherit;box-shadow:none}button.rz-c{cursor:pointer}
+.rz-bd{width:40px;height:40px;border-radius:12px;background:#111;color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.rz-t{flex:1;min-width:0;display:flex;flex-direction:column}.rz-t b{font-size:14px;font-weight:700;line-height:1.25}.rz-t small{color:var(--tx3);font-size:12px;margin-top:3px}
+.rz-pl{width:30px;height:30px;border-radius:50%;background:#F1F1EE;color:#111;display:flex;align-items:center;justify-content:center;flex:none}
+html[data-tema="oscuro"] .hoja-c.rz-h{background:#1C1C1E!important}html[data-tema="oscuro"] .rz-c{background:#000!important}html[data-tema="oscuro"] .rz-bd,html[data-tema="oscuro"] .rz-s b{background:#fff;color:#000}html[data-tema="oscuro"] .rz-pl{background:#2C2C2E;color:#fff}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -2976,7 +2986,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.8.1';
+var YO_V = 'yo-1.8.2';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3717,14 +3727,22 @@ function otroDiaCard(d, pv) {
     '<div class="hoy-t"><b class="plata">' + tit + '</b><span>' + sub + '</span></div>' + semanaHtml(true, true) + semPie('') + bt + '</section>';
 }
 /* resumen de una rutina en una ventana: sus ejercicios con series, repeticiones y descanso */
+/* 20 nov, 11:14 (Chadín: «eso aplica también al panel usuaria cuando le da a ver resumen de lo que entrenará hoy»): como la rutina de la app de las clientas
+   (v53.4.179, «Pastilla negra»): arriba el nombre, «Hoy · Semana n de N · ejercicios · ~min» y «Comenzar rutina»; «Movilidad» y «Principal» en pastilla negra;
+   cada ejercicio en su tarjeta con su número (M1, 1…) en negro; tocándolo, su ficha (cómo se hace) */
 A.rutResumen = function (el) {
   var r = rutinaDe(el.dataset.id); if (!r) return;
-  var L = (r.ejercicios || []), cal = L.filter(esCal), ej = L.filter(function (e) { return !esCal(e); });
-  hoja('<h2>' + esc(r.nombre) + '</h2><p class="mut sm">' + nEjTxt(r) + ' · unos ' + minRut(r) + ' min' + ((r.dias || []).length ? ' · ' + r.dias.map(function (x) { return DIA_N[x]; }).join(', ').toLowerCase() : '') + '</p>' +
-    (cal.length ? '<p class="sm rr-cal">' + ic('llama', 14) + '<span>Calentamiento: ' + esc(cal.map(function (e) { return e.n; }).join(', ')) + '</span></p>' : '') +
-    '<ol class="rr-l">' + ej.map(function (e) { return '<li><b>' + esc(e.n) + '</b><small class="mut">' + esc(setsTxt(e)) + (+e.d && e.tipo !== 'run' && e.tipo !== 'cardio' ? ' · descanso ' + mmss(+e.d) : '') + '</small></li>'; }).join('') + '</ol>' +
-    '<button class="btn" data-a="rrEmpezar" data-id="' + r.id + '">' + (S.ses ? 'Seguir con tu entreno' : 'Entrenarla hoy') + '</button><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  var L = (r.ejercicios || []), cal = L.filter(esCal), ej = L.filter(function (e) { return !esCal(e); }), sr = semTag(r), hoy = (semEsta() || {})[hoyLetra()] === r.id;
+  var fila = function (e, lab) { var ver = !e.tipo || e.tipo === 'fuerza', tx = '<span class="rz-t"><b>' + esc(e.n) + '</b><small>' + esc(setsTxt(e)) + (+e.d && e.tipo !== 'run' && e.tipo !== 'cardio' ? ' · descanso ' + mmss(+e.d) : '') + '</small></span>';
+    return ver ? '<button class="rz-c" data-a="rrVer" data-n="' + esc(e.n) + '" aria-label="' + esc(e.n) + ': cómo se hace"><span class="rz-bd">' + lab + '</span>' + tx + '<span class="rz-pl">' + ic('sig', 14) + '</span></button>' : '<div class="rz-c"><span class="rz-bd">' + lab + '</span>' + tx + '</div>'; };
+  var sec = function (n, d) { return '<div class="rz-s"><b>' + n + '</b><small>' + d + '</small></div>'; }, nn = function (n) { return n + (n === 1 ? ' ejercicio' : ' ejercicios'); };
+  hoja('<div class="rzw"><div class="rz-hd"><button class="redondo gris rz-x" data-a="cerrarHoja" aria-label="Cerrar">' + ic('x', 16) + '</button><h2>' + esc(r.nombre) + '</h2><small>' + (hoy ? 'Hoy · ' : '') + (sr ? sr.replace('/', ' de ') + ' · ' : '') + nn(ej.length) + ' · ~' + minRut(r) + ' min</small>' +
+    '<button class="btn rz-go" data-a="rrEmpezar" data-id="' + r.id + '">' + ic('play', 15, null) + (S.ses ? 'Seguir con tu entreno' : 'Comenzar rutina') + '</button></div>' +
+    (cal.length ? sec('Movilidad', nn(cal.length)) + cal.map(function (e, i) { return fila(e, 'M' + (i + 1)); }).join('') : '') +
+    (ej.length ? sec(cal.length ? 'Principal' : 'Entrenamiento', nn(ej.length)) + ej.map(function (e, i) { return fila(e, String(i + 1)); }).join('') : '') + '</div>');
+  var c = document.querySelector('#hoja .hoja-c'); if (c) c.classList.add('rz-h');
 };
+A.rrVer = function (el) { cerrarHoja(); ir({ t: 'ficha', n: el.dataset.n }); };
 A.rrEmpezar = function (el) { cerrarHoja(); S.x.diaV = null; if (S.ses) return A.abrirSes(); empezarSes(rutinaDe(el.dataset.id));
 };
 A.entrenarHoy = function () { if (S.ses) return A.abrirSes(); var sem = semEsta(); S.x.hoySel = sem[hoyLetra()] || 'libre'; ir({ t: 'hoy' }); };
