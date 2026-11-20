@@ -1941,6 +1941,19 @@ html[data-tema="oscuro"] .st2.ok .st-n i,html[data-tema="oscuro"] .st2.ya .st-n 
 .rz-pl{width:30px;height:30px;border-radius:50%;background:#F1F1EE;color:#111;display:flex;align-items:center;justify-content:center;flex:none}
 html[data-tema="oscuro"] .hoja-c.rz-h{background:#1C1C1E!important}html[data-tema="oscuro"] .rz-c{background:#000!important}html[data-tema="oscuro"] .rz-bd,html[data-tema="oscuro"] .rz-s b{background:#fff;color:#000}html[data-tema="oscuro"] .rz-pl{background:#2C2C2E;color:#fff}
 
+/* 20 nov, 12:26 · compartir una receta: la foto entera (con «Ajustar foto»), los macros «Cada ración» y los interruptores */
+.cm-foto.cm-rcf{aspect-ratio:4/3;position:relative}.cm-foto.cm-rcf.ok{aspect-ratio:auto}.cm-foto.cm-rcf.ok img{height:auto;max-height:480px;object-fit:cover}
+.cm-pub.v2 .cm-foto.cm-rcf{aspect-ratio:4/3}.cm-pub.v2 .cm-foto.cm-rcf.ok{aspect-ratio:auto}
+.cm-aj{pointer-events:auto;z-index:2;position:absolute;right:10px;bottom:10px;display:inline-flex;align-items:center;gap:6px;background:rgba(0,0,0,.62);color:#fff;border:0;border-radius:999px;padding:7px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.cm-pr{background:var(--suave);border-radius:12px;padding:8px 11px;margin-top:8px}.cm-pr>small{display:block;font-size:11.5px;color:var(--tx3);font-weight:700;margin-bottom:4px}
+.sw-f{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 2px;border-bottom:1px solid var(--linea);font-weight:600;font-size:14px;cursor:pointer}.sw-f>span small{display:block;font-weight:500;color:var(--tx3);font-size:12px;margin-top:1px}
+.sw-f input{position:absolute;opacity:0;width:1px;height:1px}.sw-f i{width:46px;height:28px;border-radius:14px;background:#D5D5D0;position:relative;flex:none;transition:background .15s}.sw-f i:after{content:"";position:absolute;left:3px;top:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .15s}
+.sw-f input:checked+i{background:#111}.sw-f input:checked+i:after{left:21px}.sw-f input:focus-visible+i{outline:2px solid #111;outline-offset:2px}
+html[data-tema="oscuro"] .sw-f input:checked+i{background:#fff}html[data-tema="oscuro"] .sw-f input:checked+i:after{background:#111}html[data-tema="oscuro"] .cm-pr{background:#1C1C1E}
+.cp-fm{margin:6px 0 2px}
+/* la vista previa de la hoja no se encoge (antes se aplastaba y la foto salía como una tira) */
+.hoja-c .cm-pub,.hoja-c .cp-f,.hoja-c .crop{flex-shrink:0}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -2986,7 +2999,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.8.3';
+var YO_V = 'yo-1.8.4';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -8765,7 +8778,7 @@ function vSiguiendo(C) {
 function vDescubrir(C) {
   var h = '', T0 = (C.top || []).filter(noOculta), T = C.ff === 'rec' ? [] : T0.filter(function (x) { return x.tipo !== 'rec'; }), TR = C.ff === 'ent' ? [] : T0.filter(function (x) { return x.tipo === 'rec'; }), G = C.ff ? [] : (C.gente || []).slice(0, 5), F = C.feed.d.filter(noOculta).filter(deFiltro);
   if (TR.length) h += '<h2 class="cm-h2">Recetas que más se guardan</h2><section class="card cm-lista">' + TR.map(function (x) {
-    return '<div class="cm-fila"><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + fmil(x.rk || 0) + ' kcal por ración · de ' + esc(x.nombre) + ' · ' + fN(x.copias, 0) + (x.copias === 1 ? ' la ha guardado' : ' la han guardado') + '</small></span>' +
+    return '<div class="cm-fila"><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + (x.rk != null ? fmil(x.rk) + ' kcal por ración · ' : '') + 'de ' + esc(x.nombre) + ' · ' + fN(x.copias, 0) + (x.copias === 1 ? ' la ha guardado' : ' la han guardado') + '</small></span>' +
       (x.mio ? '<span class="mio">TUYA</span>' : '<button class="btn-neg sm" data-a="cRecVer" data-id="' + x.id + '">Ver</button>') + '</div>'; }).join('') + '</section>';
   if (T.length) h += '<h2 class="cm-h2">Rutinas que más se copian</h2><section class="card cm-lista">' + T.map(function (x) {
     return '<div class="cm-fila"><span class="fr-t"><b>' + esc(x.t) + '</b><small>' + x.nej + (x.nej === 1 ? ' ejercicio' : ' ejercicios') + ' · ' + (x.min || 0) + ' min · de ' + esc(x.nombre) + ' · ' + fN(x.copias, 0) + (x.copias === 1 ? ' la ha copiado' : ' la han copiado') + '</small></span>' +
@@ -8806,15 +8819,19 @@ function cardPub(x, prev) {
 }
 /* 18 nov (PDF «fallos mejoras II (1)»: «compartir recetas en Comunidad y que la gente se las guarde, como los entrenos»):
    la receta con su foto, raciones, kcal y macros por ración e ingredientes; «Ver receta» y «Guardar en mis recetas» */
+function recDatos(r) {
+  var mac = r.k != null, K = [[String(r.rac || 1), (r.rac || 1) === 1 ? 'ración' : 'raciones']].concat(mac ? [[fmil(r.k || 0), 'kcal por ración']] : []).concat([[String((r.ing || []).length), 'ingredientes']]);
+  return '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
+    (mac ? '<div class="cm-pr"><small>Cada ración' + ((r.rac || 1) > 1 ? ' (de ' + r.rac + ')' : '') + '</small><div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div></div>' : '');
+}
 function cardRec(x, prev, ab, A_) {
   var C = CMU(), r = x.rc || {}, h = '<span class="cm-tipo">' + ic('olla', 14) + 'Receta</span><b class="cm-t">' + esc(x.t) + '</b>';
   if (x.c || prev) h += '<p class="cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';
-  if (prev && CPF) h += '<div class="cm-foto rc"><img id="cp-prev-img" alt=""></div>';
-  else if (prev && x.fsrc) h += '<div class="cm-foto rc ok"><img src="' + esc(x.fsrc) + '" alt=""></div>';
-  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto rc' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de la receta">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
-  var K = [[String(r.rac || 1), (r.rac || 1) === 1 ? 'ración' : 'raciones'], [fmil(r.k || 0), 'kcal por ración'], [String((r.ing || []).length), 'ingredientes']];
-  h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
-  h += '<div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div>';
+  /* 20 nov, 12:26 (Chadín): la foto se ve entera (antes, una tira: la clase «rc» chocaba), con «Ajustar foto»; los macros dicen que son de cada ración; y se pueden esconder */
+  if (prev && CPF) h += '<div class="cm-foto cm-rcf" style="aspect-ratio:' + CPF_W + '/' + CPF_H + '"><img id="cp-prev-img" alt=""></div>';
+  else if (prev && x.fsrc) h += '<div class="cm-foto cm-rcf ok"><img src="' + esc(x.fsrc) + '" alt="">' + (x.aj ? '<button class="cm-aj" data-a="crAjustar">' + ic('ajustes', 15) + 'Ajustar foto</button>' : '') + '</div>';
+  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto cm-rcf' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de la receta">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
+  h += recDatos(r);
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
     '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá ver y guardar' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'Nadie la ha guardado todavía') + '</span>';
@@ -8828,10 +8845,9 @@ VISTAS.comuRec = function (p) {
   var C = CMU(), x = unaPub(p.id); if (!x || !x.rc) return '<div class="pant pad">' + cab('Receta') + '<section class="card vacio"><b>Esa receta ya no está</b></section></div>';
   var r = x.rc, fsrc = x.foto ? (C.fotos || {})[x.id] : '', ya = recGuardadaDe(x.id);
   if (x.foto && !fsrc) setTimeout(cargaFotosComu, 0);
-  var h = '<div class="pant pad con-pie">' + cab(esc(x.t)) + (x.foto ? '<div class="cm-foto rc rv' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="">' : '') + '</div>' : '');
+  var h = '<div class="pant pad con-pie">' + cab(esc(x.t)) + (x.foto ? '<div class="cm-foto cm-rcf rv' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="">' : '') + '</div>' : '');
   h += '<div class="cm-quien rv"><span class="cm-av">' + esc(iniciales(x.nombre)) + '</span><span class="fr-t"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + '</small></span></div>' + (x.c ? '<p class="cm-dice">' + esc(x.c) + '</p>' : '');
-  h += '<section class="card"><div class="cm-k"><span><b>' + (r.rac || 1) + '</b><small>' + ((r.rac || 1) === 1 ? 'ración' : 'raciones') + '</small></span><span><b>' + fmil(r.k || 0) + '</b><small>kcal por ración</small></span><span><b>' + (r.min ? r.min + "'" : (r.ing || []).length) + '</b><small>' + (r.min ? 'minutos' : 'ingredientes') + '</small></span></div>' +
-    '<div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div></section>';
+  h += '<section class="card">' + recDatos(r) + '</section>';
   h += '<section class="card"><div class="card-h"><b>Ingredientes</b><small class="mut">' + ((r.rac || 1) > 1 ? 'la receta entera' : '1 ración') + '</small></div>' + (r.ing || []).map(function (i) { return '<div class="fila-r"><span>' + esc(i.n) + '</span><b>' + fmil(i.g) + ' g</b></div>'; }).join('') + '</section>';
   if (r.pasos) h += '<section class="card"><b>Cómo se hace</b><p class="txt">' + esc(r.pasos) + '</p></section>';
   h += '<div class="pie-fijo">' + (x.mio ? '<p class="mut sm center">Es tuya: ' + (x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'nadie la ha guardado todavía') + '</p>' :
@@ -8846,6 +8862,7 @@ A.cRecGuardar = function (el) {
     var b = { id: 'rc' + rand(8), tipo: 'rec', n: String(r.t || 'Receta').slice(0, 70), cpub: id, de: nom1(r.nombre),
       ing: rc.ing.slice(0, 40).map(function (i) { return { key: '', n: String(i.n).slice(0, 80), g: +i.g || 0, k: +i.k || 0, p: +i.p || 0, h: +i.h || 0, gr: +i.gr || 0 }; }),
       pasos: String(rc.pasos || '').slice(0, 2000), rac: Math.max(1, +rc.rac || 1), olla: 0, tara: 0, llena: 0, foto: 0, k: Math.round(+rc.k || 0), p: +rc.p || 0, h: +rc.h || 0, g: +rc.g || 0 };
+    if (rc.k == null) { var T = recCalc(b); b.k = Math.round(T.k / b.rac); b.p = T.p / b.rac; b.h = T.h / b.rac; b.g = T.g / b.rac; }      // la compartieron sin calorías: se calculan con sus ingredientes
     var f = (CMU().fotos || {})[id];
     guardaBiblio(b);
     if (f) { b.foto = 1; RFOTO[b.id] = f; guardaBiblio(b); rpc('yo_rec_foto_poner', { bid: b.id, foto: f }).then(null, function () {}); }
@@ -8859,33 +8876,39 @@ A.recComu = function (el) {
   if (C.est === undefined) return rpc('yo_comu_estado').then(function (e) { C.est = e || null; A.recComu(el); }, function (e) { toast(cErr(e)); });
   if (C.est && C.est.activo && C.est.suspendido) return toast('Tu cuenta de Comunidad está suspendida');
   if (!comuActiva()) return hoja('<h2>Compartir en la Comunidad</h2><p class="mut">Para compartir tus recetas, primero entra en la Comunidad: eliges el nombre que verán los demás y aceptas las normas.</p><button class="btn" data-a="cIrActivar">' + (C.est ? 'Volver a la Comunidad' : 'Activar Comunidad') + '</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
-  if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; }
-  S.x.crec = { key: r.key, id: r.id, t: r.n, c: '', fsrc: recFotoSrc(r), confoto: true,
+  if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } CPF_FM('v');
+  S.x.crec = { key: r.key, id: r.id, t: r.n, c: '', fsrc: recFotoSrc(r), confoto: true, mac: true,
     rc: { rac: r.rac || 1, min: r.min || 0, k: r.k, p: r.p, h: r.h, g: r.g, pasos: String(r.pasos || '').slice(0, 2000), ing: (r.ing || []).slice(0, 40).map(function (i) { return { n: String(i.n).slice(0, 80), g: i.g, k: i.k, p: i.p, h: i.h, gr: i.gr }; }) } };
   pintaPubRec();
 };
 function pintaPubRec() {
-  var C = CMU(), d = S.x.crec, x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, c: d.c || '', tipo: 'rec', rc: d.rc, fsrc: d.confoto ? d.fsrc : '', likes: 0, coms: 0, mio: true };
+  var C = CMU(), d = S.x.crec, x = { id: 0, pid: C.est.pid, nombre: C.est.nombre, creado: new Date().toISOString(), t: d.t, c: d.c || '', tipo: 'rec', rc: d.mac ? d.rc : Object.assign({}, d.rc, { k: null }), fsrc: d.confoto ? d.fsrc : '', aj: 1, likes: 0, coms: 0, mio: true };
   hoja('<h2>Compartir la receta</h2><p class="mut sm">Así la verá la gente de la Comunidad:</p>' + cardPub(x, true) +
     '<label class="f">Añade un comentario (opcional)<textarea id="cp-c" maxlength="200" rows="2" data-in="cpComR" placeholder="Ej.: la cena de los domingos, rinde para 4">' + esc(d.c || '') + '</textarea></label>' +
     (CPF ? cpfHtml() + (d.fsrc ? '' : '<label class="chk"><input type="checkbox" id="cr-g"' + (d.guarda !== false ? ' checked' : '') + ' data-ch="crGuarda"><span>Guardarla también como foto de la receta</span></label>') :
-      d.fsrc ? '<label class="chk"><input type="checkbox" id="cr-f"' + (d.confoto ? ' checked' : '') + ' data-ch="crFoto"><span>Con la foto de la receta</span></label><label class="link izq cp-otra">' + ic('foto', 15) + 'Usar otra foto<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>' : cpfHtml()) +      // 18 nov (Javier: «¿pueden adjuntar foto?»): la de la receta, otra o una nueva
-    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>Sale la receta: el nombre, los ingredientes con sus gramos, cómo se hace, las raciones y lo que tiene cada ración. Nunca lo que tú comes ni tu diario.</span></p>' +
+      d.fsrc ? '<label class="sw-f"><span>Con la foto de la receta</span><input type="checkbox" role="switch" id="cr-f"' + (d.confoto ? ' checked' : '') + ' data-ch="crFoto"><i></i></label><label class="link izq cp-otra">' + ic('foto', 15) + 'Usar otra foto<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>' : cpfHtml()) +      // 18 nov (Javier: «¿pueden adjuntar foto?»): la de la receta, otra o una nueva
+    '<label class="sw-f"><span>Calorías y macros<small>' + (d.mac ? 'Cada ración: kcal, proteína, hidratos y grasas' : 'No saldrán: solo las raciones y los ingredientes') + '</small></span><input type="checkbox" role="switch" id="cr-m"' + (d.mac ? ' checked' : '') + ' data-ch="crMac"><i></i></label>' +
+    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>Sale la receta: el nombre, los ingredientes con sus gramos, cómo se hace, las raciones' + (d.mac ? ' y lo que tiene cada ración' : '') + '. Nunca lo que tú comes ni tu diario.</span></p>' +
     '<button class="btn" data-a="cPublicarRec">Compartir</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
   cpfEnganchar();
 }
 CH.crGuarda = function (t) { if (S.x.crec) S.x.crec.guarda = t.checked; };
 IN.cpComR = function (t) { if (S.x.crec) S.x.crec.c = t.value; var b = document.querySelector('.cm-pub.prev .cm-dice'); if (b) { b.textContent = t.value.trim(); b.hidden = !t.value.trim(); } };
 CH.crFoto = function (t) { if (S.x.crec) { S.x.crec.confoto = t.checked; pintaPubRec(); } };
+CH.crMac = function (t) { if (S.x.crec) { S.x.crec.mac = t.checked; pintaPubRec(); } };
+/* «Ajustar foto»: la foto de la receta en el recorte (arrastrar, zoom y forma); lo ajustado sale en la Comunidad y se guarda también en la receta */
+A.crAjustar = function () { var d = S.x.crec; if (!d || !d.fsrc) return; var im = new Image();
+  im.onload = function () { CPF_FM('h'); CPF = { im: im, url: d.fsrc, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), rec: 1, fm: 'h', fmOk: 1 }; pintaPubRec(); };
+  im.onerror = function () { toast('No se ha podido abrir la foto'); }; im.src = d.fsrc; };
 A.cPublicarRec = function (el) {
   var d = S.x.crec, C = CMU(); if (!d || el.disabled) return;
-  var dd = { t: String(d.t).slice(0, 60), tipo: 'rec', rc: d.rc }, cm = String(d.c || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200);
+  var dd = { t: String(d.t).slice(0, 60), tipo: 'rec', rc: d.mac ? d.rc : Object.assign({}, d.rc, { k: null, p: null, h: null, g: null }) }, cm = String(d.c || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200);
   var foto = CPF ? cpfJpeg() : d.confoto && /^data:image\/jpeg;base64,/.test(d.fsrc || '') ? d.fsrc : null;
-  if (CPF && !d.fsrc && d.guarda !== false) { var fr = cpfJpeg(0.6), b = (S.biblio || []).filter(function (x) { return x.id === d.id; })[0];      // la foto nueva, también en la receta
+  if (CPF && (CPF.rec || (!d.fsrc && d.guarda !== false))) { var fr = cpfJpeg(0.6), b = (S.biblio || []).filter(function (x) { return x.id === d.id; })[0];      // la foto nueva, también en la receta
     if (b && fr.length <= 300000) rpc('yo_rec_foto_poner', { bid: d.id, foto: fr }).then(function () { RFOTO[d.id] = fr; b.foto = 1; guardaBiblio(b); }, function () {}); }
   el.disabled = true; el.textContent = 'Compartiendo…';
   rpc('yo_comu_publicar', { sid: 'rc:' + d.id + ':' + Date.now().toString(36), d: dd }).then(function (r) {
-    var id = r && r.id, fin = function (msg, cls) { cerrarHoja(); if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } olvidaFeeds(); if (C.est) C.est.pubs = (C.est.pubs || 0) + 1; C.pers = {}; S.x.crec = null; toast(msg, cls); pintar(); };
+    var id = r && r.id, fin = function (msg, cls) { cerrarHoja(); if (CPF) { URL.revokeObjectURL(CPF.url); CPF = null; } CPF_FM('v'); olvidaFeeds(); if (C.est) C.est.pubs = (C.est.pubs || 0) + 1; C.pers = {}; S.x.crec = null; toast(msg, cls); pintar(); };
     if (!foto || !id) return fin('Receta compartida en la Comunidad', 'ok');
     rpc('yo_comu_foto_poner', { pub: id, foto: foto }).then(function () { C.fotos = C.fotos || {}; C.fotos[id] = foto; fin('Receta compartida, con su foto', 'ok'); }, function () { fin('Compartida, pero la foto no se ha podido subir'); });
   }, function (e) { el.disabled = false; el.textContent = 'Compartir'; toast(cErr(e)); });
@@ -9270,21 +9293,25 @@ A.cPublicar = function (el) {
    Al volver a dibujarla en el móvil pierde la ubicación y los datos de la cámara (EXIF). Se guarda aparte (indep.comu_foto, 007)
    y solo se pide al verla (yo_comu_foto), con las mismas reglas que la publicación ---------- */
 var CPF = null, CPF_W = 240, CPF_H = 300;
+/* la forma del recorte: 'v' vertical 4:5 (la de siempre), 'h' 4:3 y 'q' cuadrada (recetas, 20 nov) */
+function CPF_FM(f) { var M = { v: [240, 300], h: [300, 225], q: [270, 270] }[f] || [240, 300]; CPF_W = M[0]; CPF_H = M[1]; }
+A.cpFm = function (el) { if (!CPF) return; CPF.fm = el.dataset.v; CPF_FM(CPF.fm); CPF.s0 = Math.max(CPF_W / CPF.im.width, CPF_H / CPF.im.height); CPF.x = 0; CPF.y = 0; CPF.z = 1; if (CPF.fmOk) pintaPubRec(); else pintaPub(); };
 function cpfHtml() {
   if (!CPF) return '<label class="btn sec cp-foto">' + ic('foto', 18) + 'Añadir una foto (opcional)<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>';
   return '<div class="cp-f"><div class="crop cp-crop" id="cp-crop" style="width:' + CPF_W + 'px;height:' + CPF_H + 'px"><img id="cp-i" src="' + CPF.url + '" alt="" draggable="false"></div>' +
     '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CPF.z + '" data-in="cpZ" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla.</small>' +
-    '<button class="link rojo-t izq" data-a="cpFotoQuitar">Quitar la foto</button></div>' +
+    (CPF.fmOk ? '<div class="seg3 cp-fm" role="radiogroup" aria-label="Forma de la foto">' + [['h', '4:3'], ['q', 'Cuadrada'], ['v', 'Vertical']].map(function (f) { var on = (CPF.fm || 'v') === f[0]; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="cpFm" data-v="' + f[0] + '">' + f[1] + '</button>'; }).join('') + '</div>' : '') +
+    '<button class="link rojo-t izq" data-a="cpFotoQuitar">' + (CPF.rec ? 'Dejar la foto como estaba' : 'Quitar la foto') + '</button></div>' +
     '<p class="cm-nunca">' + ic('escudo', 15) + '<span>La verán las personas de la Comunidad. Le quitamos la ubicación y los datos de la cámara. No subas fotos de otras personas sin su permiso.</span></p>';
 }
 CH.cpFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height) }; if (document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); };
+  im.onload = function () { var rec = !!document.querySelector('[data-a=cPublicarRec]'); CPF_FM(rec ? 'h' : 'v'); CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), fm: rec ? 'h' : 'v', fmOk: rec ? 1 : 0 }; if (rec) pintaPubRec(); else pintaPub(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
-A.cpFotoQuitar = function () { if (CPF) URL.revokeObjectURL(CPF.url); CPF = null; pintaPub(); };
+A.cpFotoQuitar = function () { if (CPF && !CPF.rec) URL.revokeObjectURL(CPF.url); CPF = null; CPF_FM('v'); if (S.x.crec && document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); };
 function cpfLim() { var C = CPF, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - CPF_W) / 2, Math.min((W - CPF_W) / 2, C.x)); C.y = Math.max(-(H - CPF_H) / 2, Math.min((H - CPF_H) / 2, C.y)); return { W: W, H: H }; }
 function cpfPinta() {
   var C = CPF, i = $('#cp-i'); if (!C || !i) return; var d = cpfLim();
