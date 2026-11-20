@@ -1572,6 +1572,13 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
 .ed-plr{display:flex;align-items:center;gap:4px;padding-left:6px}.ed-plr .ed-plb{flex:1;min-width:0;padding-left:8px}
 .ed-rir{background:var(--suave);padding:2px 8px 2px 10px;flex:none}.ed-rir .rep{width:42px;background:var(--card)}.ed-rir small{font-size:12px}
 .ed-plb>span{flex-direction:column;align-items:flex-start;gap:1px}.ed-plb>span>svg{display:none}
+/* 20 nov (Chadín: «las barras son muy gordas; haz más filas»): barras finas con líneas de fondo (Progreso) y finas también en Volumen */
+.ph-gl{position:absolute;left:0;right:0;height:0;border-top:1px dashed rgba(255,255,255,.13);pointer-events:none}.ph-gl.cero{border-top:1px solid rgba(255,255,255,.22)}
+.ph-gl em{position:absolute;right:0;top:-14px;font-style:normal;font-size:9.5px;font-weight:700;color:#7E8294}
+.ph-bars{position:relative;padding-right:26px;margin-top:8px}.ph-bars .sn-l{height:15px;line-height:15px}.ph-bars .sn-b i{width:6px!important;border-radius:3px;box-shadow:none}.ph-bars .sn-b.ok i{box-shadow:0 0 10px var(--luz-s)}
+.ph-bars .sn-b.sel i{outline:none;width:8px!important;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55)}
+.hbar .b{height:6px;border-radius:3px}.hbar .b i{border-radius:0 3px 3px 0}
+.vbar{justify-content:space-around;background:repeating-linear-gradient(to top,transparent 0,transparent 30px,var(--linea) 30px,var(--linea) 31px)}.vbar i{flex:0 0 8px;border-radius:4px 4px 0 0}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -1934,43 +1941,7 @@ function demoRunEmpezar() {
 /* los ejercicios nuevos del Word (pendientes de meter en la biblioteca de MOOD ON): una lista solo de la demo, por tipo */
 window.YO_NUEVOS = [];
 window.YO_REVISAR = [
-  /* 20 nov 2026 (06:25): lo que Chadín pidió al revisar */
-  { t: 'Nuevo · Tu rutina sin margen a la izquierda y movilidad sí/no (20 nov)', d: 'En «Entreno principal» el número va en la línea del nombre y lo demás ocupa todo el ancho; el RIR, junto a «Planificar series». En «Movilidad y calentamiento»: «Hacerla antes de entrenar» sí/no (con «no», el entreno empieza por lo principal y la movilidad se queda guardada). Al entrenar, «Hoy no» la quita solo ese día.',
-    ir: function () { var r = S.rutinas.filter(function (x) { return (x.ejercicios || []).some(function (e) { return e.cal; }); })[0]; if (!r) return toast('No hay rutinas con movilidad'); S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; A.abrirRut({ dataset: { id: r.id } }); setTimeout(function () { var c = document.querySelector('.ed-calc'); if (c) c.scrollIntoView({ block: 'start' }); }, 150); } },
-  { t: 'Nuevo · «Esta semana» sin gráfica (20 nov)', d: 'Entreno → Mis rutinas: los días con ✓ (hechos) y con aro (los que tocan); debajo, con palabras: «1 h 56 min entrenando» y «14.813 kg levantados». Las gráficas, en Progreso.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; pintar(); scrollTo(0, 0); } },
-  { t: 'Nuevo · Progreso: Entrenos, Tiempo y Kilos (20 nov)', d: 'Progreso → Tus entrenos: eliges qué ver (Entrenos · Tiempo · Kilos) y el rango (7 días… 1 año). Cada barra es un día, una semana o un mes; al tocarla, arriba sale con sus entrenos, su tiempo y sus kilos. Debajo, «Cada semana, de media»: entrenos, tiempo y kilos.',
-    ir: function () { S.pant = null; S.pila = []; S.x.pv = 'ent'; S.x.phM = 'min'; irTab('prog'); } },
-  /* 19 nov 2026: la lista de Chadín (23:16). En la app de verdad no está: esperan su OK. */
-  { t: 'Nuevo · Inicio: un solo «Compartir» (19 nov)', d: 'Con el entreno de hoy hecho ya no sale «Compartir» dos veces: solo en «Tu último entreno».',
-    ir: function () { S.pant = null; S.pila = []; irTab('inicio'); setTimeout(function () { var c = document.querySelector('.ult-c'); if (c) c.scrollIntoView({ block: 'center' }); }, 150); } },
-  { t: 'Nuevo · Tus rutinas, sin fotos (19 nov)', d: 'Las rutinas que creas tú salen con un icono (sin foto), también al abrirlas; las de los programas siguen con la suya. Entreno → Mis rutinas: «Mi glúteo del sábado» (de prueba).',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; pintar(); setTimeout(function () { var c = document.querySelector('.mr-ic'); if (c) c.scrollIntoView({ block: 'center' }); }, 150); } },
-  { t: 'Nuevo · Planificar cada serie, con su RIR (19 nov)', d: 'Al crear o editar tu rutina: «Planificar las series» en cada ejercicio. Cada serie con su tipo (aproximación, normal, top set, back-off, drop set…), sus repeticiones y su RIR; «+ Aproximación» la pone la primera. Junto a series y repeticiones, también el RIR. (Aquí, con «Mi glúteo del sábado».)',
-    ir: function () { var mi = S.rutinas.filter(function (r) { return rutPropia(r) && (r.ejercicios || []).length; })[0];
-      if (mi) { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas'; A.abrirRut({ dataset: { id: mi.id } }); }
-      else { var tres = function (r) { return [{ t: 'normal', r: r }, { t: 'normal', r: r }, { t: 'normal', r: r }]; }; S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'rutinas';
-        S.x.ed = { id: nuevoId(), nombre: 'Mi pierna (prueba)', nuevo: true, dias: [], ejercicios: [{ n: 'Hip thrust', tipo: 'fuerza', d: '120', sets: tres('10') }, { n: 'Sentadilla búlgara', tipo: 'fuerza', d: '90', sets: tres('10') }] }; ir({ t: 'rutina' }); }
-      setTimeout(function () { S.x.edAb = { 0: true }; pintar(); }, 60); } },
-  { t: 'Nuevo · Nutrición: varios alimentos sin salir (19 nov)', d: 'Toca «+» en la cena (o en cualquier comida) y añade varios: te quedas en el buscador, cada uno con «✓ Añadido» y abajo «2 añadidos · kcal · Listo». Al darle a «Listo» (o a la flecha) vuelves a esa comida, no arriba del todo.',
-    ir: function () { S.pant = null; S.pila = []; irTab('nutri'); var o = comOrden(); A.nBuscar({ dataset: { c: String(o[o.length - 1]) } }); } },
-  { t: 'Nuevo · La fibra al buscar y los gramos en crudo o cocinado (19 nov)', d: 'Al buscar, cada alimento dice su fibra («10,7 g fibra» en las lentejas en crudo). Lo que apuntas dice si son gramos en crudo o cocinado («80 g en crudo»).',
-    ir: function () { S.pant = null; S.pila = []; irTab('nutri'); A.nBuscar({ dataset: { c: '1' } }); setTimeout(function () { var q = document.getElementById('nb-q'); if (q) { q.value = 'lentejas'; q.dispatchEvent(new Event('input', { bubbles: true })); } }, 80); } },
-  { t: 'Nuevo · Tus seguidores y a quién sigues (19 nov)', d: 'Comunidad → tu perfil: «Tus seguidores y a quién sigues», con las dos listas (seguir o dejar de seguir desde ahí). Las tuyas solo las ves tú. En la app de verdad necesita un cambio en el servidor (011), que no aplico sin tu OK.',
-    ir: function () { S.pant = null; S.pila = []; irTab('comu'); A.cRed({ dataset: { v: 'seguidores' } }); } },
-  { t: 'Nuevo · Al publicar: «¿Quién lo ve?» (19 nov)', d: 'Al compartir un entreno en la Comunidad: «Todos» o «Solo mis seguidores» (el botón y la vista previa lo dicen). Si no quieres que lo vea nadie, «No publicar». Lo de solo seguidores no lo ven los demás ni en el perfil, ni pueden darle like, comentar o copiarlo. En la app de verdad necesita un cambio en el servidor (012), que no aplico sin tu OK.',
-    ir: function () { var s = S.sesiones[S.sesiones.length - 1]; if (!s) return toast('Haz antes un entreno'); A.compartirSes({ dataset: { id: s.id } }); setTimeout(function () { A.finComu(); }, 200); } },
-  { t: 'Nuevo · Progreso: «Tus entrenos» más claro (19 nov)', d: 'Dice qué es cada cosa: «N entrenos en los últimos 3 meses» y «Cada barra: tus entrenos de esa semana»; lo de color compara con el mismo tiempo de antes. (El 20 nov, además: Entrenos · Tiempo · Kilos.)',
-    ir: function () { S.pant = null; S.pila = []; S.x.pv = 'ent'; irTab('prog'); } },
-  /* 18 nov 2026: las notas del móvil de Javier, hechas y sin publicar */
-  { t: 'Crear ejercicio: grupo secundario y foto (18 nov)', d: 'Entreno → Ejercicios → «Crear ejercicio»: además del grupo principal, los secundarios (glúteo + isquios…) y «Añadir foto». Sale en tu lista con su foto y la etiqueta MÍO.',
-    ir: function () { S.pant = null; S.pila = []; S.tab = 'entreno'; S.sub = 'ejercicios'; pintar(); A.ejCrear({ dataset: {} }); } },
-  { t: 'Intervalos marcados por la app (18 nov)', d: 'En un fartlek, series o HIIT por tiempo: «Empezar con la app». En pantalla completa te va diciendo qué toca, su zona, cuánto queda y qué viene; dos pitidos agudos para apretar y uno grave para aflojar. Sin cronómetro aparte. Aquí, con la «Rutina fartlek».',
-    ir: function () { if (!S.ses) A.rsEmpezar({ dataset: { v: 'c1' } }); else A.abrirSes(); setTimeout(function () { if (!S.ses) return; var i = S.ses.ej.findIndex(function (e) { return e.tipo === 'run' || e.tipo === 'cardio'; }); if (i >= 0) { S.ses.ab = i; pintar(); var b = document.querySelector('.tr-box'); if (b) b.scrollIntoView({ block: 'center' }); } }, 300); } },
-  { t: 'Copiar una comida y mover alimentos (18 nov)', d: 'Nutrición: en cada comida, «Copiar» y luego, en otra (o en otro día), «Pegar desayuno · 420 kcal». Para cambiar un alimento de comida: mantenlo pulsado y llévalo a otra, o ábrelo y cambia «¿En qué comida?»; con Deshacer.',
-    ir: function () { S.pant = null; S.pila = []; irTab('nutri'); } },
-  { t: 'Competiciones y oposiciones con cuenta atrás (18 nov)', d: 'En Inicio: «¿Tienes una competición u oposición?». Al apuntarla, la tarjeta con los días que faltan y el anillo dorado de tu preparación («Semana 3 de 8»); al tocarla, la lista para añadir, cambiar o borrar.',
-    ir: function () { S.pant = null; S.pila = []; irTab('inicio'); setTimeout(function () { var c = document.querySelector('.mt-card, .mt-vac'); if (c) c.scrollIntoView({ block: 'center' }); }, 150); } }
+  /* 20 nov 2026: Chadín publicó todo lo de aquí en /yo (yo-1.7). Lo nuevo que tenga que revisarse vuelve a ir aquí. */
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -2635,7 +2606,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.6';
+var YO_V = 'yo-1.7';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -2678,7 +2649,7 @@ var IC = {
   foto: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
   papelera: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', grip: '<circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/>',
   lapiz: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>',
-  ajustes: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M4.2 6l2.2 1.6M17.6 16.4 19.8 18M2.5 12h3M18.5 12h3M4.2 18l2.2-1.6M17.6 7.6 19.8 6"/>',
+  ajustes: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',      // 20 nov (Chadín: «no me pega un sol»): ajustes como dos controles deslizantes
   codigo: '<path d="M4 6v12M7 6v12M10 6v12M14 6v12M16 6v12M20 6v12"/>', olla: '<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M9 6.5c0-1 1-1.5 1-2.5M13 6.5c0-1 1-1.5 1-2.5"/>',
   copiar: '<rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/>',
   cinta: '<path d="M4 9a8 4 0 0 1 16 0v6a8 4 0 0 1-16 0z"/><path d="M4 9a8 4 0 0 0 16 0M20 13h-5v4"/>',
@@ -6475,6 +6446,13 @@ function phGrupos(nd, hoy) {
     o.l = m ? dt.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').slice(0, 3) : 'este'; o.t = m ? dt.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : 'Este mes'; W.push(o); }
   return { W: W, por: 'mes' };
 }
+/* el tope de la gráfica, redondo (para las líneas de fondo): entrenos de 2 en 2, tiempo de 30 en 30 min (o por horas), kilos 1-2-2,5-5 */
+function phTope(v, m) {
+  if (!(v > 0)) return m === 'min' ? 60 : m === 'kg' ? 1000 : 2;
+  if (m === 'n') return Math.max(2, Math.ceil(v / 2) * 2);
+  if (m === 'min') return v > 180 ? Math.ceil(v / 60) * 60 : Math.ceil(v / 30) * 30;
+  var p = Math.pow(10, Math.floor(Math.log(v) / Math.LN10)); return [1, 2, 2.5, 5, 10].map(function (k) { return k * p; }).filter(function (x) { return x >= v; })[0];
+}
 /* el valor de una barra (corto, encima) o dicho entero */
 function phVal(o, m, corto) {
   if (m === 'min') return corto ? (o.min >= 60 ? Math.floor(o.min / 60) + 'h' + (o.min % 60 ? ('0' + Math.round(o.min % 60)).slice(-2) : '') : o.min ? Math.round(o.min) + '′' : '') : minTxt(o.min);
@@ -6490,7 +6468,7 @@ function progHero() {
   var mn = nd <= 7 ? 2 : nd <= 30 ? 3 : 4, comp = Tb.n >= mn;      // sin comparar si antes casi no había entrenos
   var pct = function (a2, b3) { if (!comp || !b3) return ''; var p = Math.round((a2 - b3) * 100 / b3); if (Math.abs(p) > 300 || !p) return ''; return (p > 0 ? '+' : '−') + Math.abs(p) + ' %'; };
   var G = phGrupos(nd, hoy), sel = S.x.phSel != null && G.W[S.x.phSel] ? S.x.phSel : G.W.length - 1, ws = G.W[sel];
-  var mx = Math.max.apply(null, G.W.map(function (w) { return w[me]; }).concat([me === 'n' ? 1 : 0.0001]));
+  var mx = phTope(Math.max.apply(null, G.W.map(function (w) { return w[me]; }).concat([0])), me), gl = function (v) { var o = {}; o[me] = v; return phVal(o, me, true) || '0'; };
   var cuando = nd === 7 ? 'en los últimos 7 días' : nd === 30 ? 'en los últimos 30 días' : nd === 365 ? 'en el último año' : 'en los últimos ' + R[1];
   var big = me === 'min' ? [minTxt(T.min), 'entrenando ' + cuando] : me === 'kg' ? [fmil(T.kg) + ' kg', 'levantados ' + cuando] : [String(T.n), (T.n === 1 ? 'entreno ' : 'entrenos ') + cuando];
   var per = G.por === 'día' ? 'ese día' : G.por === 'semana' ? 'esa semana' : 'ese mes', kmx = G.W.filter(function (w) { return w.kg >= 1000; }).map(function (w) { return w.kg; }).sort(function (x, y) { return y - x; })[0];
@@ -6501,8 +6479,9 @@ function progHero() {
     '<div class="sn-big ph-big"><b class="nm">' + esc(big[0]) + '</b><span>' + esc(big[1]) + '</span></div>' +
     (comp && pct(T[me], Tb[me]) ? '<span class="dlt' + (T[me] < Tb[me] ? ' gr' : '') + '">' + (T[me] >= Tb[me] ? ic('subir', 13, null, 2.8) : '') + pct(T[me], Tb[me]) + ' que ' + R[2] + '</span>' : '') +
     '<div class="ph-det"><b>' + esc(ws.t.charAt(0).toUpperCase() + ws.t.slice(1)) + '</b><span>' + (ws.n ? esc(phVal(ws, 'n') + ' · ' + phVal(ws, 'min') + (ws.kg ? ' · ' + phVal(ws, 'kg') : '')) : 'Sin entrenos') + '</span></div>' +
-    '<div class="sn-bars ph-bars" role="list" aria-label="' + esc('Cada barra: ' + ley) + '">' + G.W.map(function (w, k) { var v = w[me];
-      return '<button class="sn-b' + (v ? ' ok' : '') + (k === sel ? ' sel' : '') + (w.ah ? ' hoy' : '') + '" role="listitem" data-a="phSel" data-i="' + k + '" aria-label="' + esc(w.t + ': ' + phVal(w, me)) + '"><span class="sn-v">' + (G.W.length <= 9 || k === sel ? esc(phVal(w, me, true)) : '') + '</span><i style="height:' + (v ? Math.max(8, Math.round(v / mx * 64)) : 4) + 'px"></i><span class="sn-l">' + esc(w.l) + '</span></button>'; }).join('') + '</div>' +
+    /* 20 nov (Chadín: «las barras son muy gordas; haz más filas»): barras finas y líneas de fondo con su valor */
+    '<div class="sn-bars ph-bars" role="list" aria-label="' + esc('Cada barra: ' + ley) + '"><span class="ph-gl" style="bottom:84px"><em>' + esc(gl(mx)) + '</em></span><span class="ph-gl" style="bottom:52px"><em>' + esc(gl(mx / 2)) + '</em></span><span class="ph-gl cero" style="bottom:20px"></span>' + G.W.map(function (w, k) { var v = w[me];
+      return '<button class="sn-b' + (v ? ' ok' : '') + (k === sel ? ' sel' : '') + (w.ah ? ' hoy' : '') + '" role="listitem" data-a="phSel" data-i="' + k + '" aria-label="' + esc(w.t + ': ' + phVal(w, me)) + '"><span class="sn-v">' + (G.W.length <= 9 || k === sel ? esc(phVal(w, me, true)) : '') + '</span><i style="height:' + (v ? Math.max(4, Math.round(v / mx * 64)) : 0) + 'px"></i><span class="sn-l">' + esc(w.l) + '</span></button>'; }).join('') + '</div>' +
     '<p class="ph-ley2">Cada barra: ' + esc(ley) + '. Toca una para verla arriba.</p></section>';
   /* la media de cada semana (con 7 días, lo de esos 7 días); lo de color compara con el mismo tiempo de antes */
   var sem = nd / 7, fx = function (v) { return nd <= 7 ? v : v / sem; }, nR = S.sesiones.filter(function (x) { return x.fecha >= dA && x.fecha <= hoy; }).reduce(function (a2, x) { return a2 + (x.recs || []).length; }, 0);
