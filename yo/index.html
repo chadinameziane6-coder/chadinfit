@@ -1575,7 +1575,7 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
 /* 20 nov (Chadín: «las barras son muy gordas; haz más filas»): barras finas con líneas de fondo (Progreso) y finas también en Volumen */
 .ph-gl{position:absolute;left:0;right:0;height:0;border-top:1px dashed rgba(255,255,255,.13);pointer-events:none}.ph-gl.cero{border-top:1px solid rgba(255,255,255,.22)}
 .ph-gl em{position:absolute;right:0;top:-14px;font-style:normal;font-size:9.5px;font-weight:700;color:#7E8294}
-.ph-bars{position:relative;padding-right:26px;margin-top:8px}.ph-bars .sn-l{height:15px;line-height:15px}.ph-bars .sn-b i{width:6px!important;border-radius:3px;box-shadow:none}.ph-bars .sn-b.ok i{box-shadow:0 0 10px var(--luz-s)}
+.ph-bars{position:relative;padding-right:26px;margin-top:8px}.ph-bars .sn-l{height:15px;line-height:15px;white-space:nowrap;overflow:visible}.ph-bars .sn-b i{width:6px!important;border-radius:3px;box-shadow:none}.ph-bars .sn-b.ok i{box-shadow:0 0 10px var(--luz-s)}
 .ph-bars .sn-b.sel i{outline:none;width:8px!important;background:#fff;box-shadow:0 0 12px rgba(255,255,255,.55)}
 .hbar .b{height:6px;border-radius:3px}.hbar .b i{border-radius:0 3px 3px 0}
 .vbar{justify-content:space-around;background:repeating-linear-gradient(to top,transparent 0,transparent 30px,var(--linea) 30px,var(--linea) 31px)}.vbar i{flex:0 0 8px;border-radius:4px 4px 0 0}
@@ -2233,7 +2233,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.7';
+var YO_V = 'yo-1.7.1';
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
@@ -6059,18 +6059,19 @@ var PH_R = [[7, '7 días', 'la semana anterior'], [30, '30 días', 'los 30 días
 /* 20 nov (Chadín: «en progreso, en tus entrenos, una gráfica más clara del volumen, de la duración… y la media de entrenos por 7 días, 30 días, 2 meses,
    pero mucho más claro»): eliges qué ver (Entrenos · Tiempo · Kilos); cada barra es un día (7 días), una semana (30 días a 3 meses) o un mes (6 meses y 1 año);
    al tocar una barra, arriba sale ese día, semana o mes con sus entrenos, su tiempo y sus kilos; debajo, la media de cada semana */
-var PH_M = [['n', 'Entrenos'], ['min', 'Tiempo'], ['kg', 'Kilos']];
+/* 20 nov, 07:01 (Chadín: «en vez de kilos pon volumen en las gráficas, y en vez de “esta” el nombre del mes o semana») */
+var PH_M = [['n', 'Entrenos'], ['min', 'Tiempo'], ['kg', 'Volumen']];
 function phTot(a, b) { var L = S.sesiones.filter(function (x) { return x.fecha >= a && x.fecha < b; }); return { n: L.length, min: L.reduce(function (s2, x) { return s2 + (+x.min || 0); }, 0), kg: L.reduce(function (s2, x) { return s2 + (+x.vol || 0); }, 0) }; }
 function phGrupos(nd, hoy) {
   var W = [], mes = function (f) { return aDate(f).toLocaleDateString('es-ES', { month: 'short' }).replace('.', ''); }, o;
   if (nd <= 7) { for (var i = 6; i >= 0; i--) { var f = sumar(hoy, -i); o = phTot(f, sumar(f, 1)); o.l = i ? DIAS7[(aDate(f).getDay() + 6) % 7] : 'Hoy'; o.t = i ? aDate(f).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }) : 'Hoy'; o.ah = !i; W.push(o); }
     return { W: W, por: 'día' }; }
   if (nd <= 90) { var nw = nd <= 30 ? 5 : nd <= 60 ? 9 : 13, lun = lunesDe(hoy), ini = sumar(lun, -7 * (nw - 1));
-    for (var k = 0; k < nw; k++) { var a = sumar(ini, 7 * k); o = phTot(a, sumar(a, 7)); o.ah = k === nw - 1; o.l = o.ah ? 'esta' : nw <= 5 ? fCorta(a).replace(/ .*/, '') + ' ' + mes(a) : (k === 0 || aDate(a).getMonth() !== aDate(sumar(a, -7)).getMonth()) ? mes(a) : ''; o.t = o.ah ? 'Esta semana' : k === nw - 2 ? 'La semana pasada' : 'Semana del ' + fCorta(a); W.push(o); }
+    for (var k = 0; k < nw; k++) { var a = sumar(ini, 7 * k); o = phTot(a, sumar(a, 7)); o.ah = k === nw - 1; o.l = o.ah ? fCorta(a).replace(/ .*/, '') + ' ' + mes(a) : nw <= 5 ? fCorta(a).replace(/ .*/, '') + ' ' + mes(a) : (k === 0 || aDate(a).getMonth() !== aDate(sumar(a, -7)).getMonth()) ? mes(a) : ''; o.t = (o.ah ? 'Esta semana, del ' : k === nw - 2 ? 'La semana pasada, del ' : 'Semana del ') + fCorta(a); W.push(o); }
     return { W: W, por: 'semana' }; }
   var nm = nd > 200 ? 12 : 6, d0 = aDate(hoy);
   for (var m = nm - 1; m >= 0; m--) { var dt = new Date(d0.getFullYear(), d0.getMonth() - m, 1), dn = new Date(d0.getFullYear(), d0.getMonth() - m + 1, 1); o = phTot(fechaDe(dt), fechaDe(dn)); o.ah = !m;
-    o.l = m ? dt.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').slice(0, 3) : 'este'; o.t = m ? dt.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) : 'Este mes'; W.push(o); }
+    o.l = dt.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').slice(0, 3); o.t = dt.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }) + (m ? '' : ' (este mes)'); W.push(o); }
   return { W: W, por: 'mes' };
 }
 /* el tope de la gráfica, redondo (para las líneas de fondo): entrenos de 2 en 2, tiempo de 30 en 30 min (o por horas), kilos 1-2-2,5-5 */
@@ -6097,9 +6098,9 @@ function progHero() {
   var G = phGrupos(nd, hoy), sel = S.x.phSel != null && G.W[S.x.phSel] ? S.x.phSel : G.W.length - 1, ws = G.W[sel];
   var mx = phTope(Math.max.apply(null, G.W.map(function (w) { return w[me]; }).concat([0])), me), gl = function (v) { var o = {}; o[me] = v; return phVal(o, me, true) || '0'; };
   var cuando = nd === 7 ? 'en los últimos 7 días' : nd === 30 ? 'en los últimos 30 días' : nd === 365 ? 'en el último año' : 'en los últimos ' + R[1];
-  var big = me === 'min' ? [minTxt(T.min), 'entrenando ' + cuando] : me === 'kg' ? [fmil(T.kg) + ' kg', 'levantados ' + cuando] : [String(T.n), (T.n === 1 ? 'entreno ' : 'entrenos ') + cuando];
+  var big = me === 'min' ? [minTxt(T.min), 'entrenando ' + cuando] : me === 'kg' ? [fmil(T.kg) + ' kg', 'de volumen ' + cuando] : [String(T.n), (T.n === 1 ? 'entreno ' : 'entrenos ') + cuando];
   var per = G.por === 'día' ? 'ese día' : G.por === 'semana' ? 'esa semana' : 'ese mes', kmx = G.W.filter(function (w) { return w.kg >= 1000; }).map(function (w) { return w.kg; }).sort(function (x, y) { return y - x; })[0];
-  var ley = me === 'n' ? 'tus entrenos de ' + per : me === 'min' ? 'el tiempo que entrenaste ' + per : 'los kilos que levantaste ' + per + (kmx ? ' (' + phVal({ kg: kmx }, 'kg', true) + ' = ' + fmil(Math.round(kmx / 100) * 100) + ' kg)' : '');
+  var ley = me === 'n' ? 'tus entrenos de ' + per : me === 'min' ? 'el tiempo que entrenaste ' + per : 'el volumen (kilos × repeticiones) de ' + per + (kmx ? ' (' + phVal({ kg: kmx }, 'kg', true) + ' = ' + fmil(Math.round(kmx / 100) * 100) + ' kg)' : '');
   var h = '<section class="hoy-c ph-c"><div class="hoy-l"><small>Tus entrenos</small></div>' +
     '<div class="ph-rg" role="tablist" aria-label="Rango">' + PH_R.map(function (x) { var on = x[0] === nd; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="phRango" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
     '<div class="ph-mt" role="tablist" aria-label="Qué ver">' + PH_M.map(function (x) { var on = x[0] === me; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="phMet" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
@@ -6112,7 +6113,7 @@ function progHero() {
     '<p class="ph-ley2">Cada barra: ' + esc(ley) + '. Toca una para verla arriba.</p></section>';
   /* la media de cada semana (con 7 días, lo de esos 7 días); lo de color compara con el mismo tiempo de antes */
   var sem = nd / 7, fx = function (v) { return nd <= 7 ? v : v / sem; }, nR = S.sesiones.filter(function (x) { return x.fecha >= dA && x.fecha <= hoy; }).reduce(function (a2, x) { return a2 + (x.recs || []).length; }, 0);
-  var C = [['pesa', 'n', nd <= 7 ? String(T.n) : fN(Math.round(fx(T.n) * 10) / 10, 1), T.n === 1 && nd <= 7 ? 'entreno' : 'entrenos', pct(T.n, Tb.n)], ['reloj', '', minTxt(fx(T.min)), 'entrenando', pct(T.min, Tb.min)], ['subir', '', fmil(fx(T.kg)) + ' kg', 'levantados', pct(T.kg, Tb.kg)]];
+  var C = [['pesa', 'n', nd <= 7 ? String(T.n) : fN(Math.round(fx(T.n) * 10) / 10, 1), T.n === 1 && nd <= 7 ? 'entreno' : 'entrenos', pct(T.n, Tb.n)], ['reloj', '', minTxt(fx(T.min)), 'entrenando', pct(T.min, Tb.min)], ['subir', '', fmil(fx(T.kg)) + ' kg', 'de volumen', pct(T.kg, Tb.kg)]];
   var hayC = C.some(function (t) { return t[4]; });
   h += '<p class="ph-cas-t">' + (nd <= 7 ? 'En estos 7 días' : 'Cada semana, de media') + '</p><div class="cas3 ph-cas">' + C.map(function (t) { return '<div><span class="ci ' + t[1] + '">' + ic(t[0], 16) + '</span><b class="nm">' + esc(t[2]) + '</b><span>' + t[3] + '</span>' + (t[4] ? '<em' + (/^−/.test(t[4]) ? ' class="baja"' : '') + '>' + esc(t[4]) + '</em>' : '') + '</div>'; }).join('') + '</div>' +
     (hayC ? '<p class="ph-nota">Lo de color compara con ' + R[2] + '.</p>' : '') +
@@ -6322,8 +6323,8 @@ function progVol() {
   h += '<small class="mut">Para ganar músculo suelen bastar entre 10 y 20 series por grupo a la semana.</small></section>';
   var W = []; for (var i = 7; i >= 0; i--) { var l = sumar(lun, -7 * i), v = 0, n = 0; S.sesiones.forEach(function (s) { if (s.fecha >= l && s.fecha <= sumar(l, 6)) { v += s.vol || 0; n++; } }); W.push({ l: l, v: v, n: n }); }
   var mv = Math.max.apply(null, W.map(function (x) { return x.v; }).concat([1]));
-  h += '<section class="card"><div class="card-h"><b class="card-tt">Kilos por semana</b><small class="mut">últimas 8</small></div><div class="vbar">' + W.map(function (x, i) {
-    return '<i title="Semana del ' + esc(fCorta(x.l)) + ': ' + fmtK(x.v) + ' kg · ' + x.n + ' entrenos" class="' + (i === W.length - 1 ? 'u' : '') + '" style="height:' + Math.max(2, Math.round(x.v * 100 / mv)) + '%"' + (i === W.length - 1 ? ' data-v="' + fmtK(x.v) + '"' : '') + '></i>'; }).join('') + '</div><div class="vx"><span>hace 8 semanas</span><span>esta semana</span></div></section>';
+  h += '<section class="card"><div class="card-h"><b class="card-tt">Volumen por semana</b><small class="mut">últimas 8</small></div><div class="vbar">' + W.map(function (x, i) {
+    return '<i title="Semana del ' + esc(fCorta(x.l)) + ': ' + fmtK(x.v) + ' kg · ' + x.n + ' entrenos" class="' + (i === W.length - 1 ? 'u' : '') + '" style="height:' + Math.max(2, Math.round(x.v * 100 / mv)) + '%"' + (i === W.length - 1 ? ' data-v="' + fmtK(x.v) + '"' : '') + '></i>'; }).join('') + '</div><div class="vx"><span>' + esc(fCorta(W[0].l)) + '</span><span>' + esc(fCorta(W[W.length - 1].l)) + '</span></div></section>';
   if (run && !soloRun) h += run;
   return h;
 }
