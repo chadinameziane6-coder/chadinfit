@@ -1598,6 +1598,293 @@ body.n-arr{user-select:none;-webkit-user-select:none;touch-action:none}
 .rc-todos{display:flex;align-items:center;justify-content:center;gap:8px;height:42px}
 .mis-sem{display:flex;gap:12px;margin-bottom:12px}.mis-sem>span:nth-child(2){flex:1;display:flex;flex-direction:column;align-items:flex-start;text-align:left}.mis-sem .li-ic{flex:none}
 
+/* 20 nov (Chadín, 07:41): «Ver el mes» debajo de la semana y el calendario del mes */
+.sem-pie{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:-4px;min-height:32px}
+.sem-pie span{font-size:12px;font-weight:700;color:var(--hero-m)}
+.sem-mes{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 8px 0 12px;border-radius:16px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.08);color:#fff;font-size:12.5px;font-weight:700;white-space:nowrap}
+.mes-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:4px}
+.mes-nav h2{margin:0;flex:1;text-align:center;font-size:19px;font-weight:800}.mes-nav h2 small{font-size:inherit;font-weight:600;color:var(--tx3)}
+.mes-nav .redondo[disabled]{opacity:.3}
+.mes-sem,.mes-g{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}
+.mes-sem span{text-align:center;font-size:10.5px;font-weight:700;letter-spacing:.4px;color:var(--tx3)}
+.md{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;height:46px;min-width:0;padding:0;border-radius:13px;border:1px solid transparent;background:transparent;color:var(--tx)}
+.md b{font-size:15px;font-weight:700;line-height:1.2;font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;color:var(--tx)}
+.md i{width:15px;height:15px;border-radius:8px;display:flex;align-items:center;justify-content:center}
+.md.vac{visibility:hidden}.md.pas b{color:var(--tx3);font-weight:600}
+.md.plan{background:var(--suave)}.md.plan i:before{content:'';width:6px;height:6px;border-radius:3px;background:var(--tx)}
+.md.ok{background:var(--verde-bg)}.md.ok i{background:var(--verde);color:#fff}
+.md.cp{background:var(--ambar-bg);border-color:var(--ambar-b)}.md.cp i{background:none;color:#C99A1A}.md.cp.plan i:before{content:none}
+.md.hoy{background:var(--neg);border-color:var(--neg)}.md.hoy b{color:var(--neg-t)}.md.hoy.plan i:before{background:var(--neg-t)}
+.md.sel{box-shadow:0 0 0 2px var(--tx)}.md.hoy.sel{box-shadow:0 0 0 2px var(--card),0 0 0 4px var(--neg)}
+.mes-ley{flex-wrap:wrap;margin-top:4px;gap:6px 14px}.sem-ley .tr{width:12px;height:12px;border-radius:4px;background:var(--ambar-bg);border:1px solid #C99A1A}
+.mes-dt{font-size:15px;font-weight:800}
+.fila-b.mes-f{flex-direction:row;align-items:center;gap:12px}.mes-f .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.mes-f .col small{color:var(--tx2);font-size:12.5px}
+.md-i{width:34px;height:34px;border-radius:17px;display:flex;align-items:center;justify-content:center;flex:none}
+.md-i.ok{background:var(--verde);color:#fff}.md-i.cp{background:var(--ambar-bg);color:#C99A1A}.md-i.pl{background:var(--suave)}.md-i.pl i{width:8px;height:8px;border-radius:4px;background:var(--tx)}
+.mes-mt{flex-direction:row;align-items:center;gap:12px;text-align:left}.mes-mt>span:nth-child(2){flex:1;display:flex;flex-direction:column;gap:2px}
+/* 20 nov (Chadín, 08:01-08:04): Inicio de un vistazo: cambiar de día, el entreno de hoy (Ver · Redes · Comunidad), casillas, nutrición, pasos, series y rutinas */
+.hoy-ln{display:flex;justify-content:center;gap:26px;margin-top:-4px}.hoy-ln .bl2{display:inline-flex;align-items:center;gap:6px}
+.fila3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.fila3>*{min-width:0;margin:0!important;min-height:44px;padding:0 8px;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:6px}
+.pub-ok{color:var(--verde);background:var(--verde-bg);border-color:transparent}
+.ini-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ini-t{align-items:flex-start;text-align:left;gap:3px;min-width:0;padding:14px;width:100%}
+.ini-t>b{font-size:15px;font-weight:800;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:left}
+.ini-t>b.nm{font-size:22px}.ini-t>.mut{font-size:12px;line-height:1.3}
+.ini-k{font-size:10.5px;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--tx3);margin-top:8px}
+.ini-ti{width:64px;height:64px;border-radius:32px;background:var(--suave);display:flex;align-items:center;justify-content:center;flex:none;color:var(--tx)}
+.ini-ti.dor{background:#FBF1D6;color:#B8860B}.ini-ti.cy{background:#FDE8EC;color:#E5484D}.ini-ti.sm{width:40px;height:40px;border-radius:20px}
+.ini-nut2,.ini-ser,.ini-pasos{width:100%;text-align:left;align-items:stretch}
+.nut2{display:flex;align-items:center;gap:16px}.nut2-a{flex:none;display:flex}
+.nut2-a .ani-c{display:flex;flex-direction:column;align-items:center;line-height:1.1}.nut2-a .ani-c b{font-size:24px;font-weight:800}.nut2-a .ani-c small{font-size:11px;color:var(--tx3);font-weight:600}
+.nut2-m{flex:1;min-width:0;display:flex;flex-direction:column;gap:9px}
+.mac2{display:flex;flex-direction:column;gap:4px}.mac2-t{display:flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;color:var(--tx2)}.mac2-t i{width:8px;height:8px;border-radius:4px;flex:none}
+.mac2-t b{margin-left:auto;font-size:13.5px;color:var(--tx)}.mac2-t b small{font-size:11px;color:var(--tx3);font-weight:600}
+.mac2-b{height:6px;border-radius:3px;background:var(--pista);overflow:hidden;display:block}.mac2-b i{display:block;height:100%;border-radius:3px}
+.nut2-f{font-style:normal;font-size:12.5px;color:var(--tx2)}.nut2-f b{color:var(--tx)}
+.ini-ser .hbar{grid-template-columns:72px 1fr 26px}
+.ini-rut .card-h .link,.act-c .card-h .mut{font-size:13px}.card-h .link.sm{padding:4px 0;font-size:13px;color:var(--tx2)}
+.rut-sc{display:flex;gap:8px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -14px;padding:2px 14px 4px;scrollbar-width:none}.rut-sc::-webkit-scrollbar{display:none}
+.rut-m{flex:none;width:150px;scroll-snap-align:start;display:flex;flex-direction:column;align-items:flex-start;gap:4px;text-align:left;padding:12px;border-radius:18px;border:1px solid var(--borde);background:var(--card)}
+.rut-m b{font-size:14px;font-weight:800;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px}
+.rut-m small{font-size:12px;color:var(--tx2)}
+.rut-d{display:flex;gap:4px;margin-top:4px}.rut-d i{font-style:normal;width:22px;height:22px;border-radius:11px;background:var(--suave);color:var(--tx);font-size:11px;font-weight:800;display:flex;align-items:center;justify-content:center}
+.rut-d i.hoy{background:var(--neg);color:var(--neg-t)}.rut-d em{font-style:normal;font-size:11.5px;color:var(--tx3)}
+.rut-n{align-items:center;justify-content:center;border-style:dashed;color:var(--tx2)}.rut-n b{min-height:0;text-align:center}
+.cam-f{flex-direction:row;align-items:center;gap:12px}.cam-f .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.cam-f .col small{color:var(--tx2);font-size:12.5px}
+.cam-d{width:42px;height:46px;border-radius:12px;background:var(--suave);display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none;line-height:1.1}.cam-d small{font-size:10.5px;font-weight:700;color:var(--tx3)}.cam-d b{font-size:16px}
+/* el ciclo y el check-in */
+.cy-mini{position:relative;display:flex;width:64px;height:64px}.cy-mini>b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800}
+.cy-pt{display:inline-block;width:9px;height:9px;border-radius:5px;margin-right:6px;vertical-align:1px}
+.ck-c .card-h small{font-size:12px}
+.ck5{display:grid;grid-template-columns:repeat(5,1fr);gap:4px}.ck5 button{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:4px 0;min-width:0}
+.ck5 i{width:40px;height:40px;border-radius:20px;opacity:.9;box-shadow:inset 0 0 0 3px rgba(255,255,255,.35)}.ck5 small{font-size:11px;font-weight:700;color:var(--tx2);text-align:center;line-height:1.15}
+.ck5.sm i{width:34px;height:34px}.ck5 button.on i{box-shadow:0 0 0 3px var(--card),0 0 0 5px var(--tx)}.ck5 button.on small{color:var(--tx)}
+.ck-hecho{flex-direction:row;align-items:center;gap:12px;text-align:left;width:100%}.ck-hecho .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.ck-p{width:30px;height:30px;border-radius:15px;flex:none}
+.cy-c{align-items:center;gap:12px}.cy-big{position:relative;display:flex}
+.cy-cen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;line-height:1.2}.cy-cen small{font-size:12px;font-weight:700;color:var(--tx3)}.cy-cen b{font-size:24px;font-weight:800;margin:2px 0}.cy-cen span{font-size:13px;color:var(--tx2);font-weight:600;max-width:120px}
+.cy-t{margin:0;font-size:13.5px;color:var(--tx2);text-align:center;line-height:1.45}
+.cy-ley{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 12px;font-size:11.5px;color:var(--tx2)}.cy-ley span{display:flex;align-items:center;gap:5px}.cy-ley i{width:10px;height:10px;border-radius:5px}
+.cy-ley.sm{justify-content:flex-start}.cy-ley i.lt{background:#F7C6D3}.cy-ley i.hi{background:#9BD9B4}
+.cy-btn{background:#E5484D!important;color:#fff!important;width:100%}
+.cy-c .btn-o{width:100%}
+.pat-f{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;padding:6px 0;border-top:1px solid var(--linea)}.pat-f:first-of-type{border-top:0}
+.pat-i{width:28px;height:28px;border-radius:14px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--suave);color:var(--tx)}
+.pat-i.baja{background:#FDE8EC;color:#C2364A}.pat-i.rayo{background:#E3F4EA;color:#1E7A4A}.pat-i[style*="--c"]{box-shadow:inset 0 0 0 2px var(--c)}
+.cy-h{grid-template-columns:96px 1fr 30px}
+.cy-dd{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cy-d1{display:flex;flex-direction:column;align-items:center;justify-content:center;height:40px;border-radius:10px;background:var(--suave);line-height:1.1}.cy-d1 small{font-size:9.5px;color:var(--tx3);font-weight:700}.cy-d1 b{font-size:13px}
+.cy-d1.lt{background:#F7C6D3}.cy-d1.hi{background:#9BD9B4}.cy-d1.v{background:transparent;border:1px dashed var(--borde)}.cy-d1.hoy{box-shadow:0 0 0 2px var(--tx)}
+/* los pasos */
+.ps2{display:flex;align-items:flex-end;gap:16px}.ps2-n{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.ps2-n b{font-size:28px;font-weight:800;line-height:1}.ps2-n small{font-size:12.5px;color:var(--tx2)}
+.ps2-b{display:block;height:6px;border-radius:3px;background:var(--pista);overflow:hidden;margin-top:6px}.ps2-b i{display:block;height:100%;border-radius:3px;background:var(--prog,#7FD6FF)}
+.ps2-w{display:flex;gap:6px;align-items:flex-end;height:62px}.ps2-w span{display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:3px;height:100%}
+.ps2-w i{width:12px;border-radius:4px;background:var(--pista)}.ps2-w i.ok{background:var(--verde)}.ps2-w .hoy i{background:var(--tx)}.ps2-w .fut i{opacity:.4}.ps2-w small{font-size:9.5px;font-weight:700;color:var(--tx3)}
+.ini-pasos .card-h .mut{display:inline-flex;align-items:center;gap:4px;font-size:12.5px}
+.act-f{flex-direction:row;align-items:center;gap:12px}.act-f .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.act-f .col small{font-size:12.5px;color:var(--tx2)}.act-f em{font-style:normal;font-size:13px;font-weight:800;color:var(--tx)}
+.cy-btn2{width:100%;display:flex;align-items:center;justify-content:center;gap:6px;color:#C2364A;border-color:#F3C2CB}
+.fila3>*{font-size:13px;gap:5px;padding:0 6px}
+/* 20 nov (Chadín, 08:03): Comunidad · perfil con sus números y compartir por WhatsApp o enlace */
+.cm-perfil2{align-items:center;text-align:center;gap:10px;padding:18px 14px}
+.cm-av.xl{width:76px;height:76px;border-radius:38px;font-size:26px}
+.cm-nom{font-size:19px;font-weight:800}
+.cm-nums{display:flex;justify-content:center;gap:6px;width:100%}.cm-nums>*{flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;border:0;background:none;padding:6px 0;border-radius:14px}
+.cm-nums button:active{background:var(--suave)}.cm-nums b{font-size:20px;font-weight:800}.cm-nums small{font-size:12px;color:var(--tx2);font-weight:600}
+.cm-pb{width:100%}.cm-pb>*{display:flex;align-items:center;justify-content:center;gap:6px;min-height:42px;margin:0}
+.cm-sh{margin-left:auto}
+.sh-op{display:flex;justify-content:center;gap:18px;margin:6px 0 10px}.sh-b{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;color:var(--tx);text-decoration:none;font-weight:700;font-size:12px}
+.sh-b>.ic{width:58px;height:58px;padding:16px;border-radius:29px;background:var(--suave);box-sizing:border-box}.sh-b.wa>.ic{background:#25D366;color:#fff;stroke:#fff}
+/* 20 nov, 08:18 (Chadín): Inicio como «Hoy» de la app de las clientas (v53.4.175): logo, semana en blanco, «Hoy toca» en grafito, casillas y check-in */
+:root:not([data-tema=oscuro]) .pant.z2{background:linear-gradient(180deg,#E9ECF3 0,#F3F4F8 760px,#F6F6F9 1900px);min-height:100vh;position:relative}
+.pant.z2:before{content:"";position:absolute;top:-120px;right:-80px;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,rgba(130,150,255,.26),rgba(130,150,255,0) 70%);pointer-events:none}
+.pant.z2>*{position:relative}
+.z2-top{display:grid;grid-template-columns:44px 1fr 44px;align-items:center}.z2-logo{display:flex;justify-content:center}.z2-top .redondo{width:42px;height:42px}
+.z2-cab{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 2px}.z2-cab small{display:block;font-size:13px;font-weight:700;color:#6B7085}.z2-cab h1{margin:2px 0 0;font-size:30px;font-weight:800;letter-spacing:-.02em}
+.z2-av{width:42px;height:42px;border-radius:50%;border:0;background:#1C1E26;color:#C9D2FF;font-weight:800;font-size:16px;flex:none;display:flex;align-items:center;justify-content:center;overflow:hidden}.z2-av img{width:100%;height:100%;object-fit:cover}.z2-av b{color:#C9D2FF}
+.semc{background:rgba(255,255,255,.82);border:1px solid rgba(255,255,255,.95);box-shadow:0 10px 30px rgba(40,50,90,.08);border-radius:24px;padding:12px 14px}
+.semc .sem-n{display:flex;align-items:center;gap:8px;margin:0 0 4px}.semc .sem-n span{font-size:15px;font-weight:800}.semc .sem-n .ico{width:38px;height:38px;border-radius:19px;border:1px solid #E6E7EC;background:#fff;display:flex;align-items:center;justify-content:center;color:var(--tx)}
+.semc .cz-mb{display:inline-flex;align-items:center;gap:6px;border:1px solid #E6E7EC;background:#fff;border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px;color:var(--tx);margin-left:auto}
+.semc .zsem{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px}
+.semc .zd{position:relative;display:flex;flex-direction:column;align-items:center;background:none;border:0;border-radius:14px;padding:6px 0 21px;font-size:11px;font-weight:700;color:#9A9AA0;min-width:0}
+.semc .zd small{font-size:15.5px;font-weight:800;line-height:1.2;color:#111;margin-top:1px}
+.semc .zd i{position:absolute;left:50%;bottom:4px;transform:translateX(-50%);display:flex;align-items:center;justify-content:center}
+.semc .zd.plan i{width:5px;height:5px;bottom:9px;border-radius:50%;background:#111}
+.semc .zd.hc i{width:16px;height:16px;bottom:3px;border-radius:50%;background:#1FA45A;color:#fff}
+.semc .zd.hoy{box-shadow:inset 0 0 0 1.5px #111;color:#111}
+.semc .zd.sel{background:#111;color:#A9AEC0;box-shadow:0 4px 12px rgba(0,0,0,.18)}.semc .zd.sel small{color:#fff}.semc .zd.sel.plan i{background:#fff}.semc .zd.sel.hc i{box-shadow:0 0 0 2px #111}
+.semc .zd-tr{position:absolute;right:-2px;top:-4px;width:18px;height:18px;border-radius:9px;background:#F3D27A;color:#5C3B00;display:flex;align-items:center;justify-content:center}
+.semc .sem-or{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:6px 2px 0;padding-top:9px;border-top:1px solid #F0F0F3;font-size:11.5px;color:#6B7085}.sem-or b{color:var(--tx)}
+.sem-ob{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:16px;border:0;background:#111;color:#fff;font-weight:800;font-size:12.5px;flex:none}
+.z2-st{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}.z2-st.uno{grid-template-columns:1fr}
+.z2-sd{display:flex;flex-direction:column;align-items:stretch;text-align:left;background:rgba(28,30,38,.04);border:0;border-radius:16px;padding:9px 12px;color:inherit}
+.z2-sd small{font-size:11px;font-weight:700;color:#6B7085}.z2-sd b{font-size:17px;font-weight:800;margin:1px 0 6px}.z2-sd b span{font-size:12px;color:#9AA0B4}
+.z2-sd i{display:block;height:4px;border-radius:2px;background:rgba(28,30,38,.08);overflow:hidden}.z2-sd u{display:block;height:100%;background:linear-gradient(90deg,#3D4F66,#7C8FD8);border-radius:2px}
+.z2-hero{background:radial-gradient(120% 90% at 100% 0%,#33395A 0%,#17181F 55%);color:#fff;border-radius:28px;padding:18px;box-shadow:0 18px 40px rgba(23,24,31,.28);display:flex;flex-direction:column}
+.z2-hero.z2-ok{background:radial-gradient(120% 90% at 100% 0%,#1E4D3A 0%,#16191A 55%)}
+.z2-hl{display:flex;justify-content:space-between;align-items:center;gap:8px}.z2-tag{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:#C9D2FF}
+.z2-tag i{width:7px;height:7px;border-radius:50%;background:#9FB0FF;box-shadow:0 0 10px #9FB0FF}.z2-tag.ok{color:#9FE3BF}.z2-tag.ok i{background:#3DDC84;box-shadow:0 0 10px #3DDC84}.z2-sm{font-size:12px;font-weight:700;color:#9AA0B4}
+.z2-vh{border:0;background:rgba(255,255,255,.1);color:#fff;font-size:12px;font-weight:800;border-radius:999px;padding:6px 10px}
+.z2-hero h2{color:#fff;font-size:25px;font-weight:800;letter-spacing:-.02em;margin:10px 0 8px;line-height:1.15}.z2-hero .z2-tx{color:#BFC6D6;font-size:13.5px;margin:0 0 6px}
+.z2-ch{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 2px}.z2-ch>span{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;color:#D6DAEA;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:6px 10px;border-radius:999px;white-space:nowrap}
+.z2-ch .au{color:#F3D27A;border-color:rgba(243,210,122,.35);background:rgba(243,210,122,.1)}
+.z2-go{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;background:#fff;color:#111;border:0;border-radius:18px;padding:14px;font-weight:800;font-size:15px}
+.z2-b2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.z2-b2>button{display:flex;align-items:center;justify-content:center;gap:7px;border-radius:18px;padding:13px;font-weight:800;font-size:14px}
+.z2-w{background:#fff;color:#111;border:0}.z2-g{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2)}
+.z2-man{text-align:center;color:#9AA0B4;font-size:12.5px;margin:12px 0 0}.z2-man b{color:#fff}
+.z2-otra{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding:12px 12px 12px 16px;border-radius:16px;background:rgba(255,255,255,.06);border:0;color:#D6DAEA;text-align:left}.z2-otra b{font-size:14.5px;font-weight:800}
+.ot-ch{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}
+.z2-t{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:22px;text-align:left;width:100%}
+.z2-t.an{flex-direction:row;align-items:center;gap:14px}.z2-t .z2-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
+.z2-t .k{font-size:10px;font-weight:800;letter-spacing:.15em;text-transform:uppercase;color:#6B7085}.z2-t b{font-size:14px;font-weight:800;line-height:1.25}.z2-t.an b{font-size:15.5px}.z2-t .z2-tx>small:not(.k){font-size:11.5px;font-weight:600;color:#6B7085}
+.z2-t em{align-self:flex-start;font-style:normal;font-size:11px;font-weight:700;border-radius:12px;padding:4px 9px;margin-top:5px;background:#FCE8EF;color:#9A3A5E;line-height:1.35}
+.z2-rg{position:relative;width:64px;height:64px;flex:none;margin-bottom:8px;display:flex}.z2-t.an .z2-rg{width:70px;height:70px;margin:0}.z2-rg svg{width:100%;height:100%;display:block}
+.z2-rg>span{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}.z2-rg>span b{font-size:18px;font-weight:800}.z2-rg>span small{font-size:9.5px;font-weight:700;color:#8A8A90;margin-top:2px}
+.z2-rg .mt-w{width:100%!important;height:100%!important}
+.card.z2-cyc{background:linear-gradient(160deg,rgba(255,236,242,.92),rgba(255,255,255,.8))}.z2-cyc .k{color:#B76E8A!important}.z2-cyc>.ic{color:#B76E8A;flex:none}
+.z2-obj .k{color:#B8860B!important}
+.card.z2-rec{background:linear-gradient(160deg,rgba(255,246,222,.95),rgba(255,255,255,.8))}.z2-rec .k{color:#B8860B!important}.z2-rec .z2-tx>small:not(.k){color:#7D6E57!important}
+.z2-tro{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#F3D27A,#C99A1A);color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 6px 16px rgba(201,154,26,.35);margin-bottom:8px}.z2-t.an .z2-tro{margin:0}
+.z2-shb{width:40px;height:40px;border-radius:50%;background:#1C1E26;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:0}
+.z2-t:not(.an) .z2-shb{position:absolute;top:12px;right:12px;width:32px;height:32px}
+.z2-mas{display:inline-block;align-self:flex-start;font-size:11px;font-weight:800;color:#7A5A00;background:#F5E2A6;padding:1px 8px;border-radius:999px;margin-top:3px}
+.z2-gr{display:grid;grid-template-columns:1fr 1fr;gap:10px}.z2-gr .z2-t{margin:0}
+.ck5 i{position:relative;width:42px;height:42px;border-radius:21px;opacity:1;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff)}
+.ck5 i:after{content:"";position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:7px;background:var(--c)}
+.ck5.sm i{width:36px;height:36px}.ck5 button.on i{box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff),0 0 0 3px var(--card),0 0 0 5px var(--tx)}
+.run2{display:flex;align-items:flex-end;gap:14px}.run2 .kpis{flex:1}.run2 .kpis>span{display:flex;flex-direction:column;align-items:center;background:var(--suave);border-radius:14px;padding:8px 2px}.run2 .kpis b{font-size:18px}.run2 .kpis>span>span{font-size:11.5px;color:var(--tx2)}
+.run2-w{display:flex;gap:4px;align-items:flex-end;height:44px}.run2-w i{width:8px;border-radius:3px;background:var(--pista)}.run2-w i.u{background:var(--tx)}
+.ck-h{display:flex;flex-direction:column;gap:2px}.ck-h b{font-size:17px;font-weight:800}.ck-h small{font-size:12.5px}
+.semc{color:#111}.semc .ico,.semc .cz-mb{color:#111}.z2-sd b{color:#111}.z2-t{color:#111}
+.semc .sem-n .ico{color:#111}[data-tema=oscuro] .semc{background:#fff}
+/* 08:38 (Chadín): «Hoy toca» más pequeño y la carrera con más tono (grafito, los km grandes) */
+.z2-hero{padding:14px 15px;border-radius:24px}.z2-hero h2{font-size:21px;margin:6px 0 6px}
+.z2-ch{gap:5px;margin:2px 0 0}.z2-ch>span{font-size:11.5px;padding:4px 9px}
+.z2-go{margin-top:10px;padding:11px;border-radius:16px;font-size:14.5px}
+.z2-b2{margin-top:10px}.z2-b2>button{padding:10px;border-radius:16px;font-size:13.5px}
+.z2-man{margin:8px 0 0;font-size:12px}
+.z2-otra{margin-top:8px;padding:8px 8px 8px 14px;border-radius:14px}.z2-otra b{font-size:13.5px}.ot-ch{width:28px;height:28px}
+.run3{display:flex;flex-direction:column;gap:10px;width:100%;text-align:left;border:0;border-radius:24px;padding:15px;color:#fff;background:radial-gradient(120% 90% at 100% 0%,#3A4152 0%,#1A1C22 58%);box-shadow:0 14px 32px rgba(23,24,31,.22)}
+.run3-h{display:flex;justify-content:space-between;align-items:center;color:#9AA0B4}.run3 .z2-tag{color:#BFE6FF}.run3 .z2-tag i{background:#7FD6FF;box-shadow:0 0 10px #7FD6FF}
+.run3-b{display:flex;align-items:flex-end;gap:14px}
+.run3-km{display:flex;align-items:baseline;gap:5px}.run3-km b{font-family:'Space Grotesk','Plus Jakarta Sans',sans-serif;font-size:42px;font-weight:700;line-height:.95;letter-spacing:-1px}.run3-km small{font-size:15px;font-weight:700;color:#9AA0B4}
+.run3-k{display:flex;flex-direction:column;gap:3px;font-size:11.5px;color:#9AA0B4;font-weight:600}.run3-k b{color:#fff;font-size:15px;font-weight:800;margin-right:5px}
+.run3-w{margin-left:auto;display:flex;gap:4px;align-items:flex-end;height:46px}.run3-w i{width:8px;border-radius:3px;background:rgba(255,255,255,.16)}.run3-w i.u{background:linear-gradient(180deg,#7FD6FF,#9A8CFF)}
+.run3-p{font-size:11.5px;color:#7E8496}
+.run3.card{background:var(--card-g);color:var(--tx);box-shadow:var(--sombra);border:1px solid var(--card-b);padding:14px;gap:8px}
+.run3.card .run3-km b{color:var(--tx)}.run3.card .run3-km small,.run3.card .run3-k,.run3.card .run3-p{color:var(--tx2)}.run3.card .run3-k b{color:var(--tx)}
+.run3.card .run3-w i{background:var(--pista)}.run3.card .run3-w i.u{background:linear-gradient(180deg,#7FD6FF,#9A8CFF)}
+.run3-a{display:flex;align-items:center;gap:6px}.z2-shb.sm{width:32px;height:32px}.ico-b{border:0;background:none;color:var(--tx2);display:flex;padding:4px}
+.pant.z2{overflow-x:clip}
+/* 20 nov, 08:52 (Chadín, con una captura de referencia): Comunidad «muy elegante, deportiva»: cabecera limpia, título grande,
+   los datos en línea (la etiqueta arriba), la foto a lo ancho de la tarjeta y los iconos abajo */
+.cm-pub.v2{border-radius:22px;padding:14px 14px 8px;gap:10px;overflow:hidden}
+.cm-pub.v2 .cm-av{width:42px;height:42px;border-radius:21px;background:radial-gradient(120% 90% at 100% 0%,#33395A 0%,#17181F 60%);color:#C9D2FF}
+.cm-pub.v2 .fr-t b{font-size:15.5px;font-weight:800}.cm-pub.v2 .fr-t small{font-size:12px}
+.cm-pub.v2 .cm-t{display:block;background:none;padding:0;border-radius:0;font-size:19px;font-weight:800;letter-spacing:-.01em;line-height:1.2;margin-top:2px}
+.cm-pub.v2 .cm-dice{margin:-4px 0 0;font-size:14px;color:var(--tx2);line-height:1.4}
+.cm-pub.v2 .cm-k{display:flex;gap:24px}
+.cm-pub.v2 .cm-k span{background:none;padding:0;border-radius:0;flex-direction:column-reverse;gap:1px}
+.cm-pub.v2 .cm-k small{font-size:11.5px;color:var(--tx3);font-weight:600}
+.cm-pub.v2 .cm-k b{font-size:17px;font-weight:800;font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif}
+.cm-pub.v2 .cm-rec{background:#FBF1D6;color:#7A5A00;border-radius:999px;padding:5px 11px}
+.cm-pub.v2 .cm-foto{margin:2px -14px 0;border-radius:0;aspect-ratio:4/5;max-height:none}.cm-pub.v2 .cm-foto img{width:100%;height:100%;object-fit:cover;display:block}
+.cm-pub.v2 .cm-pie{padding-top:2px;min-height:40px}.cm-pub.v2 .cm-b{color:var(--tx);font-size:13.5px}.cm-pub.v2 .cm-b .ic{width:21px;height:21px}
+[data-tema=oscuro] .cm-pub.v2{background:#121318;border-color:#1E2027;color:#F2F3F7}[data-tema=oscuro] .cm-pub.v2 .cm-b,[data-tema=oscuro] .cm-pub.v2 .cm-t,[data-tema=oscuro] .cm-pub.v2 .fr-t b,[data-tema=oscuro] .cm-pub.v2 .cm-k b{color:#F2F3F7}
+.cm-pub.v2 .cm-k{background:none!important;padding:0!important;border-radius:0!important;display:flex!important;gap:26px!important}
+.cm-pub.v2 .cm-k span{text-align:left;align-items:flex-start!important;flex-direction:column-reverse}
+.cm-pub.v2 .cm-k b{color:var(--tx)!important;font-size:18px!important}.cm-pub.v2 .cm-k small{color:var(--tx3)!important;font-size:11.5px}
+[data-tema=oscuro] .cm-pub.v2 .cm-k b{color:#F2F3F7!important}[data-tema=oscuro] .cm-pub.v2 .cm-k small{color:#8A8F9C!important}
+.cm-pub.v2 .cm-av{background:var(--luz)!important;color:#0D0D10!important}
+/* 08:54 (Chadín): «sin saltos de publi a publi»: una tras otra, de lado a lado, separadas solo por una línea fina */
+.cm-pub.v2:not(.prev){margin:0 -16px;border-radius:0!important;border:0!important;border-bottom:1px solid var(--linea)!important;box-shadow:none!important;padding:14px 16px 8px}
+.cm-pub.v2:not(.prev)+.cm-pub.v2:not(.prev){margin-top:-12px}
+.cm-pub.v2:not(.prev) .cm-foto{margin:2px -16px 0}
+[data-tema=oscuro] .cm-pub.v2:not(.prev){border-bottom-color:#22242C!important}
+/* 20 nov, 08:55: el RPE al terminar el entreno */
+.rpe-c{gap:10px}.rpe-h{display:flex;flex-direction:column;gap:2px}.rpe-h b{font-size:16px;font-weight:800}
+.rpe-r{display:grid;grid-template-columns:repeat(10,1fr);gap:4px}
+.rpe-r button{height:40px;border-radius:12px;border:0;font-weight:800;font-size:14px;background:color-mix(in srgb,var(--c) 14%,var(--card));color:var(--tx);min-width:0;padding:0}
+.rpe-r button.on{background:var(--c);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--c) 45%,transparent);transform:translateY(-2px)}
+.rpe-l{display:flex;justify-content:space-between;font-size:11px;color:var(--tx3);font-weight:700}
+/* 20 nov, 08:58: fin del entreno más corto y deportivo (negro arriba, compartir en una tarjeta) */
+.fin2{gap:10px}.fin2-top{display:flex}
+.fin2-h h2{font-size:24px;margin:8px 0 10px}
+.fin2-k{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:10px 0;border-top:1px solid rgba(255,255,255,.1);border-bottom:1px solid rgba(255,255,255,.1)}
+.fin2-k span{display:flex;flex-direction:column;gap:1px}.fin2-k b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:26px;font-weight:700;line-height:1.05;color:#fff;letter-spacing:-.5px}.fin2-k small{font-size:11.5px;color:#9AA0B4;font-weight:600}
+.fin2-r{display:flex;flex-direction:column;gap:5px;margin-top:10px}.fin2-r span{display:flex;align-items:center;gap:6px;font-size:12.5px;color:#F3D27A;font-weight:600}.fin2-r span b{color:#F3D27A;font-weight:800;margin-right:2px}.fin2-r .mas{color:#9AA0B4}
+.fin2-rpe{margin-top:12px;display:flex;flex-direction:column;gap:7px}.fin2-rpe small{font-size:12.5px;color:#BFC6D6;font-weight:700}.fin2-rpe small b{color:#fff}
+.rpe-r.dk button{background:rgba(255,255,255,.08);color:#fff;height:34px;border-radius:10px;font-size:13px}.rpe-r.dk button.on{background:var(--c);color:#fff}
+.fin2-sh{gap:10px}.fin2-sht{display:flex;justify-content:space-between;align-items:center;gap:8px}.fin2-sht b{font-size:16px;font-weight:800}
+.seg-p.mini{display:flex;background:var(--suave);border-radius:999px;padding:3px}.seg-p.mini button{border:0;background:none;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:700;color:var(--tx2)}.seg-p.mini button.on{background:var(--neg);color:var(--neg-t)}
+.fin2-t{flex-wrap:nowrap;overflow-x:auto}.fin2-t .chip{flex:none}
+.fin2-ac{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:stretch}.fin2-ac .btn{margin:0}
+.fin2-ib{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:72px;border:1px solid var(--borde);background:var(--card);border-radius:16px;color:var(--tx);padding:6px 8px}.fin2-ib small{font-size:10.5px;font-weight:700;color:var(--tx2)}.fin2-ib.ok small{color:var(--verde)}
+.fin2-pr{align-self:center;font-size:13px;color:var(--tx2)}
+/* 09:00 (Chadín): «el cuadrado de hoy, todo un poco más pequeño» */
+.z2-hero{padding:12px 14px;border-radius:22px}.z2-tag{font-size:10px}.z2-sm{font-size:11px}
+.z2-hero h2{font-size:19px;margin:4px 0 6px}.z2-ch>span{font-size:11px;padding:3px 8px;gap:4px}.z2-ch .ic{width:12px;height:12px}
+.z2-fila{display:flex;gap:8px;margin-top:10px}.z2-fila .z2-go{margin:0;flex:1;padding:9px;border-radius:14px;font-size:14px}
+.z2-otra2{flex:none;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.08);color:#fff;border-radius:14px;padding:0 14px;font-weight:800;font-size:13px}
+.z2-b2{margin-top:8px;gap:6px}.z2-b2>button{padding:8px;border-radius:14px;font-size:13px}
+.z2-man{margin:8px 0 0;font-size:11.5px}.z2-lk{border:0;background:none;color:#fff;font-weight:800;font-size:11.5px;padding:0;text-decoration:underline;text-underline-offset:2px}
+/* 09:05 (Chadín): el esfuerzo «tipo Hevy»: una fila en la tarjeta y una hoja con el número grande */
+.fin2-rpe2{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:12px;padding:10px 12px;border:0;border-radius:14px;background:rgba(255,255,255,.07);color:#fff;text-align:left}
+.fin2-rpe2 span{display:flex;flex-direction:column;gap:1px}.fin2-rpe2 small{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#9AA0B4;font-weight:800}.fin2-rpe2 b{font-size:15px;font-weight:800}
+.fin2-rpe2 em{font-style:normal;display:inline-flex;align-items:center;gap:2px;font-size:12.5px;font-weight:800;color:#C9D2FF}
+.rpe-s{display:flex;flex-direction:column;align-items:center;text-align:center;gap:2px;padding-top:4px}
+.rpe-k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);font-weight:800}
+.rpe-n{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:76px;font-weight:700;line-height:1;letter-spacing:-2px;margin-top:6px}
+.rpe-t{font-size:18px;font-weight:800}.rpe-d{margin:4px 0 14px;font-size:13.5px;color:var(--tx2);min-height:38px;max-width:280px}
+.rpe-f{display:grid;grid-template-columns:repeat(10,1fr);gap:4px;width:100%;margin-bottom:14px}
+.rpe-f button{height:42px;border-radius:12px;border:1px solid var(--borde);background:var(--card);font-weight:800;font-size:14px;color:var(--tx2);min-width:0;padding:0}
+.rpe-f button.on{background:var(--neg);color:var(--neg-t);border-color:var(--neg)}
+.rpe-s .btn{width:100%}
+/* 09:07: en el resumen, el esfuerzo elegido con su número */
+.fin2-rpe3{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:8px 12px 8px 8px;border:0;border-radius:14px;background:rgba(255,255,255,.07);color:#fff;text-align:left}
+.fin2-rpe3 .n{width:42px;height:42px;border-radius:12px;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:22px;font-weight:700;flex:none}
+.fin2-rpe3 .t{flex:1;display:flex;flex-direction:column;gap:1px}.fin2-rpe3 small{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:#9AA0B4;font-weight:800}.fin2-rpe3 b{font-size:15px;font-weight:800}.fin2-rpe3>.ic{color:#9AA0B4}
+/* 09:16 (Chadín): el resumen del final, «Negro con barra» */
+.fin3{background:#0A0A0A;color:#fff;border-radius:22px;padding:16px;display:flex;flex-direction:column;gap:12px}
+.fin3-tt{display:flex;justify-content:space-between;align-items:center}.fin3-tt span{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}.fin3-tt small{font-size:12px;font-weight:700;color:#8E8E93}
+.fin3 h2{font-size:24px;font-weight:800;margin:0;letter-spacing:-.02em;line-height:1.15}
+.fin3-k{display:grid;grid-template-columns:repeat(3,1fr)}.fin3-k span{display:flex;flex-direction:column;padding:0 12px;border-left:1px solid #262626;min-width:0}.fin3-k span:first-child{padding-left:0;border:0}
+.fin3-k b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:24px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fin3-k small{font-size:11.5px;font-weight:600;color:#8E8E93}
+.fin3-r{margin:0;display:flex;align-items:center;gap:6px;font-size:12.5px;color:#F3D27A;font-weight:600}.fin3-r b{font-weight:800}
+.fin3-e{display:flex;flex-direction:column;gap:7px;width:100%;border:0;background:none;padding:0;color:#fff;text-align:left}
+.fin3-et{display:flex;justify-content:space-between;align-items:baseline}.fin3-et small{font-size:12px;font-weight:700;color:#8E8E93}.fin3-et b{font-size:13px;font-weight:800}
+.fin3-seg{display:grid;grid-template-columns:repeat(10,1fr);gap:3px}.fin3-seg i{display:block;height:6px;border-radius:2px;background:#262626}.fin3-seg i.on{background:#fff}
+/* 09:18 (Chadín: «este estilo me gusta mucho, no tan tecnológico»): «Hoy» en negro, como el final («Negro con barra») */
+.z2-hero,.z2-hero.z2-ok{background:#0A0A0A;box-shadow:0 10px 26px rgba(0,0,0,.18);border-radius:22px;padding:16px}
+.z2-tag{color:#fff;letter-spacing:.1em;font-size:11px}.z2-tag i{display:none}.z2-tag.ok{color:#4ADE80}.z2-sm{color:#8E8E93}
+.z2-hero h2{font-size:22px;margin:8px 0 10px}
+.hx-k{display:grid;grid-template-columns:repeat(3,1fr)}.hx-k span{display:flex;flex-direction:column;padding:0 12px;border-left:1px solid #262626;min-width:0}.hx-k span:first-child{padding-left:0;border:0}
+.hx-k b{font-family:'Space Grotesk','Plus Jakarta Sans',system-ui,sans-serif;font-size:21px;font-weight:700;color:#fff;white-space:nowrap}.hx-k small{font-size:11px;font-weight:600;color:#8E8E93}
+.z2-hero .fin3-r{margin:10px 0 0}
+.hx-e{display:flex;flex-direction:column;gap:6px;margin-top:12px}.hx-e>div{display:flex;justify-content:space-between;font-size:12px;font-weight:700;color:#8E8E93}.hx-e>div b{color:#fff}
+.z2-fila{margin-top:14px}.z2-fila .z2-go{background:#fff;color:#000;border-radius:14px;padding:11px}.z2-otra2{background:#1C1C1E;border:0;border-radius:14px}
+.z2-b2{margin-top:14px}.z2-w{background:#fff;color:#000}.z2-g{background:#1C1C1E;border:0;color:#fff}
+.z2-man{color:#8E8E93}
+/* 09:23 (Chadín): sin el morado. Por defecto, claro con el gris piedra; en oscuro, negro (cada una lo cambia con la luna/el sol) */
+:root:not([data-tema=oscuro]) .pant.z2{background:#EDEDEA}.pant.z2:before{display:none}
+:root:not([data-tema=oscuro]) body{background:#EDEDEA}
+[data-tema=oscuro] .pant.z2{background:#000}[data-tema=oscuro] body{background:#000}
+[data-tema=oscuro] .z2-cab h1,[data-tema=oscuro] .z2-cab small{color:#fff}
+[data-tema=oscuro] .z2-hero{background:#151517}
+
+/* 20 nov, 09:38 (Chadín, la B1): «Hoy toca» en barra negra */
+.z2-hero.zb,.z2-hero.zb.z2-ok{background:#111;border-radius:24px;padding:14px;box-shadow:none;color:#fff}
+.zb-r{display:flex;align-items:center;gap:14px}
+.zb-c{width:58px;height:58px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;flex:none;border:0;padding:0;cursor:pointer}
+.zb-c.ok{background:#22A35A;color:#fff}.zb-c.gr{background:#262626;color:#fff}
+.zb-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer}div.zb-tx{cursor:default}
+.zb-tx small{font-size:12px;color:#9B9B98;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zb-tx small.v{color:#5FD08E}
+.zb-tx b{font-size:18px;font-weight:800;letter-spacing:-.01em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#fff}
+.zb-tx span{font-size:13px;color:#BDBDBA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb-ot{background:#262626;color:#fff;height:36px;padding:0 14px;border-radius:18px;font:inherit;font-weight:700;font-size:13px;flex:none;border:0;cursor:pointer}
+.zb-i{width:42px;height:42px;border-radius:50%;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:0;padding:0;cursor:pointer}
+.zb-vh{background:none;border:0;padding:0;color:#fff;font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer}
+.zb button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+[data-tema=oscuro] .z2-hero.zb,[data-tema=oscuro] .z2-hero.zb.z2-ok{background:#1C1C1E}[data-tema=oscuro] .zb-ot,[data-tema=oscuro] .zb-i,[data-tema=oscuro] .zb-c.gr{background:#2C2C2E}
+
 </style>
 </head>
 <body>
@@ -2251,7 +2538,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.7.4';
+var YO_V = 'yo-1.8.0';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -2371,6 +2658,7 @@ function cargar() {
     S.medidas = (d.medidas || []).map(function (x) { return Object.assign({ fecha: x.f }, x.d); }); S.fotos = null;
     S.diario = {}; (d.diario || []).forEach(function (x) { S.diario[x.f] = x.d && x.d.it ? x.d : { it: [] }; });
     S.biblio = (d.biblio || []).map(function (x) { return Object.assign({ id: x.id, tipo: x.t }, x.d); });
+    S.salud = {}; (d.salud || []).forEach(function (x) { if (x && x.f && x.d) S.salud[x.f] = x.d; });      // 20 nov: ciclo, check-ins y pasos (013)
     // lo que quedó en la cola y aún no está en el servidor
     colaLee().forEach(function (q) {
       if (q.fn === 'yo_guardar_sesion' && !S.sesiones.some(function (s) { return s.id === q.a.sid; })) S.sesiones.push(Object.assign({ id: q.a.sid, fecha: q.a.f }, q.a.d));
@@ -2378,6 +2666,7 @@ function cargar() {
       if (q.fn === 'yo_guardar_perfil') S.perfil = q.a.d;
       if (q.fn === 'yo_guardar_dia') { if (q.a.d && q.a.d.it && q.a.d.it.length) S.diario[q.a.f] = q.a.d; else delete S.diario[q.a.f]; }
       if (q.fn === 'yo_guardar_biblio') { var bi = S.biblio.findIndex(function (x) { return x.id === q.a.bid; }), bo = Object.assign({ id: q.a.bid, tipo: q.a.tipo }, q.a.d); if (bi >= 0) S.biblio[bi] = bo; else S.biblio.push(bo); }
+      if (q.fn === 'yo_guardar_salud') { if (q.a.d) S.salud[q.a.f] = q.a.d; else delete S.salud[q.a.f]; }
       if (q.fn === 'yo_borrar_biblio') S.biblio = S.biblio.filter(function (x) { return x.id !== q.a.bid; });
       if (q.fn === 'yo_guardar_medida') { var m = S.medidas.filter(function (x) { return x.fecha === q.a.f; })[0]; if (!m) { m = { fecha: q.a.f }; S.medidas.push(m); } Object.keys(q.a.d).forEach(function (k) { if (q.a.d[k] == null) delete m[k]; else m[k] = q.a.d[k]; }); }
     });
@@ -2775,7 +3064,7 @@ function lunesDe(f) { var d = aDate(f), w = (d.getDay() + 6) % 7; d.setDate(d.ge
 function hechosSemana() { var lun = lunesDe(hoyStr()), o = {}; S.sesiones.forEach(function (s) { if (s.fecha >= lun) o[DIAS7[(aDate(s.fecha).getDay() + 6) % 7]] = 1; }); return o; }
 /* la semana: cada día con su fecha, si toca entrenar (punto), si ya está hecho (check) y hoy resaltado */
 function semanaHtml(oscura, toca) {
-  var sem = (S.perfil && S.perfil.semana) || {}, H = hechosSemana(), hoy = hoyLetra(), lun = lunesDe(hoyStr()), hs = hoyStr(), dv = toca ? diaVer() : null;
+  var sem = semEsta(), H = hechosSemana(), hoy = hoyLetra(), lun = lunesDe(hoyStr()), hs = hoyStr(), dv = toca ? diaVer() : null;
   return '<div class="sem7 v2' + (oscura ? ' osc' : '') + '" role="list" aria-label="Esta semana">' + DIAS7.map(function (d, i) {
     var f = sumar(lun, i), r = sem[d] ? rutinaDe(sem[d]) : null, cl = H[d] ? 'ok' : sem[d] ? (f < hs ? 'perd' : 'plan') : 'lib';
     var est = H[d] ? 'hecho' : sem[d] ? (f < hs ? 'no lo hiciste' : 'toca ' + (r ? r.nombre : 'entrenar')) : 'descanso';
@@ -2813,31 +3102,112 @@ function fotoPf() { var f = S.perfil && S.perfil.foto; return typeof f === 'stri
 function avatarIn(nom, t) { var f = fotoPf(); return f ? '<img src="' + f + '" alt="">' : nom ? '<b>' + esc(nom.charAt(0).toUpperCase()) + '</b>' : ic('usuario', t || 22); }
 /* compartir el entreno de hoy desde Inicio (abre las tarjetas listas para compartir) · 19 nov (Chadín: «sale 2 veces compartir»): ya solo en «Tu último entreno» */
 A.compartirHoy = function () { var L = S.sesiones.filter(function (s) { return s.fecha === hoyStr(); }); if (!L.length) return; A.compartirSes({ dataset: { id: L[L.length - 1].id } }); };
+/* 20 nov 2026, 08:18 (Chadín): «que saliese igual que en el panel de la clienta… un logo igual». Inicio como «Hoy» de la app de las clientas (v53.4.175):
+   el logo arriba, «Viernes 20 nov / Hola, Marta», la semana en blanco (✓ verde lo hecho, punto lo que toca, hoy con borde, el elegido en negro, «Mes»,
+   «Ordenar» y las casillas de entrenos y pasos), «Hoy toca» en grafito o «Hecho hoy» en verde, las casillas (ciclo a lo ancho; objetivo y último récord)
+   y el check-in. Debajo, lo de /yo: nutrición, series por grupo, carrera (si corre) y tus rutinas */
 function vInicio() {
-  var nom = nombreYo(), sem = (S.perfil && S.perfil.semana) || {}, hoy = hoyLetra(), r = rutinaDe(sem[hoy]), hecho = S.sesiones.some(function (s) { return s.fecha === hoyStr(); });
-  var f = new Date(), fecha = f.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).replace('.', ''), ra = racha(), pv = planVa();
-  var h = '<div class="pant pad-tab"><div class="ini-cab ini-h"><span><small class="lab-s">' + esc(fecha.charAt(0).toUpperCase() + fecha.slice(1)) + '</small><h1 class="t1 t-xl">Hola' + (nom ? ', ' + esc(nom) : '') + '</h1></span>' +
-    '<span class="ini-der">' + (ra ? '<span class="racha" title="' + ra + (ra > 1 ? ' semanas seguidas' : ' semana') + ' entrenando" aria-label="' + ra + (ra > 1 ? ' semanas seguidas' : ' semana') + ' entrenando">' + ic('llama', 15) + '<b class="nm">' + ra + '</b> sem</span>' : '') +
-    '<button class="redondo tema-b" data-a="temaRapido" aria-label="' + (esOscuro() ? 'Pasar a modo claro' : 'Pasar a modo oscuro') + '">' + ic(esOscuro() ? 'sol' : 'luna', 19) + '</button><button class="redondo av' + (fotoPf() ? ' con-f' : '') + '" data-a="perfil" aria-label="Tu perfil">' + avatarIn(nom, 22) + '</button></span></div>';
-  var nH = Object.keys(hechosSemana()).length, nP = DIAS7.filter(function (d) { return sem[d]; }).length;
-  if (diaVer()) h += otroDiaCard(diaVer(), pv); else
-  h += '<section class="hoy-c"><div class="hoy-l"><small>Hoy' + (pv && !pv.antes && !pv.fin ? ' · Semana ' + pv.sem + ' de ' + pv.de : r && r.plan && progSem(r.plan) && progSem(r.plan).w ? ' · Semana ' + progSem(r.plan).w + ' de ' + progSem(r.plan).de + (progSem(r.plan).desc ? ' · descarga' : '') : '') + '</small>' + (!hecho && nP ? '<em>' + nH + ' de ' + nP + ' esta semana</em>' : '') + '</div>' +
-    '<div class="hoy-t"><b class="plata">' + (hecho ? 'Entreno hecho' : r ? esc(r.nombre) : 'Día libre') + '</b><span>' + (hecho ? '¡Bien hecho! Descansa o haz algo suave.' : r ? nEjTxt(r) + ' · unos ' + minRut(r) + ' min' : (nP ? 'Hoy tu plan no tiene entreno' : 'Elige qué entrenar')) + '</span></div>' + semanaHtml(true, true) +
-    (S.ses ? '<button class="btn bl" data-a="abrirSes">' + ic('play', 16) + 'Seguir con tu entreno</button>' : r && !hecho ? '<button class="btn bl" data-a="empezarRut" data-id="' + r.id + '">' + ic('play', 16) + 'Empezar entreno</button><button class="link bl2" data-a="entrenarHoy">Hacer otro</button>' : '<button class="btn bl" data-a="entrenarHoy">' + ic('play', 16) + 'Entrenar hoy</button>') +
-    (pv ? '<div class="hoy-p"><i style="width:' + (pv.antes ? 0 : pv.pc) + '%"></i></div><small class="hoy-ps">Plan «' + esc(pv.nom) + '» · ' + (pv.antes ? 'empieza el ' + esc(fCorta(pv.desde)) : pv.fin ? 'terminado el ' + esc(fCorta(pv.hasta)) : pv.pc + ' % hecho · acaba el ' + esc(fCorta(pv.hasta))) + '</small>' : '') + '</section>';
-  h += metaCard();      // 18 nov: su competición u oposición, con la cuenta atrás
-  /* 20 nov, 07:23 (Chadín): Inicio más limpio: la semana (en «Hoy»), la competición si la hay, el entreno de hoy cuando esté hecho y sus récords (para compartir) */
-  var hs = S.sesiones.filter(function (s) { return s.fecha === hoyStr(); }), uh = hs[hs.length - 1];
-  if (uh) {
-    h += '<section class="card ult-c"><div class="card-h"><b>Tu entreno de hoy</b><span class="ult-ok">' + ic('check', 13, null, 3) + 'Completado</span></div><small class="mut">' + esc(uh.nombre || 'Entreno') + '</small><div class="kpis k-neg">' + (rpKpis(uh) || blqKpis(uh) || [[String(uh.nser || 0), 'series'], [fmtK(uh.vol), 'kg de volumen'], [String(uh.min || 0), 'min']]).map(function (k) { return '<div><b>' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>' + ultDelta(uh) + '<div class="fila2"><button class="btn-o" data-a="verSes" data-id="' + uh.id + '">Ver el entreno</button><button class="btn" data-a="compartirSes" data-id="' + uh.id + '">' + ic('compartir', 15, null) + 'Compartir</button></div></section>';
-    var RH = (uh.recs || []).filter(function (x) { return x && x.e; });
-    if (RH.length) h += '<section class="card rec-hoy"><div class="card-h"><b>' + (RH.length === 1 ? 'Tu récord de hoy' : 'Tus ' + RH.length + ' récords de hoy') + '</b></div>' + RH.map(function (x, k) { return '<div class="fila-rc"><span class="rc-i">' + ic('trofeo', 16) + '</span><span class="rc-t"><b>' + esc(x.e) + '</b><small>' + (num(x.p) ? fN(x.p) + ' kg × ' : '') + x.r + (num(x.p) ? '' : ' repeticiones') + '</small></span><button class="rc-sh" data-a="compartirRec" data-id="' + uh.id + '" data-i="' + k + '" aria-label="Compartir el récord de ' + esc(x.e) + '">' + ic('compartir', 16) + '</button></div>'; }).join('') +
-      (RH.length > 1 ? '<button class="btn-o rc-todos" data-a="compartirRec" data-id="' + uh.id + '" data-i="todos">' + ic('compartir', 15, null) + 'Compartir todos</button>' : '') + '</section>';
-  } else if (!S.sesiones.length) h += '<section class="card"><b>Tu primer entreno</b><p class="mut sm">Cuando termines un entreno, aquí verás tus series, tus kilos y tus récords.</p></section>';
-  var Nn = S.perfil && S.perfil.nut, kh = (S.diario && S.diario[hoyStr()] ? S.diario[hoyStr()].it : []).reduce(function (a, x) { return a + (+x.k || 0); }, 0);
-  var kOn = Nn && Nn.kcal && Nn.on !== false;
-  h += '<button class="card enlace ini-nut" data-a="tab" data-v="nutri">' + (kOn ? anillo(Math.round(kh * 100 / Nn.kcal), 46, 6, '', Math.round(kh) + ' de ' + Nn.kcal + ' kcal') : '<span class="li-ic">' + ic('nutri', 22) + '</span>') + '<span><b>Nutrición</b><small class="mut">' + (Nn && Nn.kcal && Nn.on !== false ? 'Hoy: ' + fmil(kh) + ' de ' + fmil(Nn.kcal) + ' kcal' : kh ? 'Hoy: ' + Math.round(kh) + ' kcal apuntadas' : 'Tu objetivo de calorías, el diario y las recetas') + '</small></span>' + ic('sig', 18) + '</button>';
+  var nom = nombreYo(), hs = hoyStr(), dt = aDate(hs), fecha = dt.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).replace('.', '').replace(',', '');
+  var h = '<div class="pant pad-tab z2"><div class="z2-top"><span class="hueco"></span><span class="z2-logo">' + logo(128) + '</span><button class="redondo tema-b" data-a="temaRapido" aria-label="' + (esOscuro() ? 'Pasar a modo claro' : 'Pasar a modo oscuro') + '">' + ic(esOscuro() ? 'sol' : 'luna', 19) + '</button></div>' +
+    '<div class="z2-cab"><div><small>' + esc(fecha.charAt(0).toUpperCase() + fecha.slice(1)) + '</small><h1>Hola' + (nom ? ', ' + esc(nom.split(' ')[0]) : '') + '</h1></div><button class="z2-av' + (fotoPf() ? ' con-f' : '') + '" data-a="perfil" aria-label="Tu perfil">' + avatarIn(nom, 20) + '</button></div>';
+  h += semCard();
+  var dv = diaVer();
+  h += dv ? otroDiaZ2(dv) : hoyZ2();
+  h += casillasZ2();
+  // 08:51 (Chadín): «¿Cómo te sientes hoy?» no pega en Inicio del panel de usuaria: va dentro de «Tu ciclo»
+  h += iniSeries() + iniCarrera();      // 08:42 (Chadín): sin «Nutrición de hoy» (está en su pestaña)      // 08:38 (Chadín): sin «Tus rutinas» aquí: ya están en Entreno
+  if (!cicOn() || !pasosOn()) h += iniActivar();
   return h + '</div>';
+}
+/* la semana, en blanco: con las flechas, otras semanas (al tocar un día de otra semana se abre el mes en ese día) */
+function semCard() {
+  var off = S.x.semOff || 0, hs = hoyStr(), lh = lunesDe(hs), l = sumar(lh, 7 * off), sem = off ? (S.perfil && S.perfil.semana) || {} : semEsta(), dv = diaVer(), sel = off ? '' : dv ? sumar(lh, DIAS7.indexOf(dv)) : hs;
+  var M = {}; metas().forEach(function (m) { M[m.f] = m; });
+  var h = '<section class="semc"><div class="sem-n"><button class="ico" data-a="semOff" data-v="-1" aria-label="Semana anterior">' + ic('atras', 18) + '</button><span>' + (off === 0 ? 'Esta semana' : off === -1 ? 'Semana pasada' : off === 1 ? 'Semana que viene' : 'Semana del ' + esc(fCorta(l))) + '</span><button class="ico" data-a="semOff" data-v="1" aria-label="Semana siguiente">' + ic('sig', 18) + '</button><button class="cz-mb" data-a="mes">' + ic('cal', 15) + 'Mes</button></div><div class="zsem">';
+  DIAS7.forEach(function (d, i) { var f = sumar(l, i), hc = S.sesiones.some(function (s) { return s.fecha === f; }), pl = !hc && !!rutinaDe(sem[d]) && f >= hs, m = M[f];
+    h += '<button class="zd' + (f === hs ? ' hoy' : '') + (f === sel ? ' sel' : '') + (hc ? ' hc' : '') + (pl ? ' plan' : '') + '" data-a="' + (off ? 'mesEn' : 'diaVer') + '" data-d="' + d + '" data-f="' + f + '"' + (off ? '' : ' aria-pressed="' + (f === sel) + '"') + ' aria-label="' + esc(DIA_N[d] + ' ' + aDate(f).getDate() + (hc ? ': hecho' : pl ? ': toca entrenar' : '') + (m ? ' · ' + m.n : '')) + '">' + d + '<small>' + aDate(f).getDate() + '</small><i>' + (hc ? ic('check', 10, null, 3.4) : '') + '</i>' + (m ? '<b class="dia-tr">' + ic('trofeo', 11) + '</b>' : '') + '</button>'; });
+  h += '</div>';
+  if (!off) {
+    var mov = S.perfil && S.perfil.semMov && S.perfil.semMov.l === lh;
+    h += '<div class="sem-or"><span>' + (mov ? '<b>Ordenada por ti</b> · solo esta semana' : 'Toca un día para verlo') + '</span>' + (S.rutinas.length ? '<button class="sem-ob" data-a="camDia">' + ic('cambiar', 14) + 'Ordenar</button>' : '') + '</div>';
+    var k = 0, t = 0; DIAS7.forEach(function (d, i) { var f = sumar(lh, i), hc = S.sesiones.some(function (s) { return s.fecha === f; }); if (hc) k++; if (hc || rutinaDe(sem[d])) t++; });
+    var ps = pasosOn(), meta = ps ? +S.perfil.pasos.meta || 8000 : 0, p = ps ? pasosDia(hs) : 0;
+    if (t || ps) h += '<div class="z2-st' + (t && ps ? '' : ' uno') + '">' + (t ? '<div class="z2-sd"><small>Entrenos</small><b>' + k + '<span>/' + t + '</span></b><i><u style="width:' + Math.min(100, Math.round(k * 100 / t)) + '%"></u></i></div>' : '') +
+      (ps ? '<button class="z2-sd" data-a="pasosApuntar" aria-label="Apuntar tus pasos"><small>Pasos</small><b>' + fmil(p) + '<span>/' + fmil(meta) + '</span></b><i><u style="width:' + Math.min(100, Math.round(p * 100 / meta)) + '%"></u></i></button>' : '') + '</div>';
+  }
+  return h + '</section>';
+}
+A.semOff = function (el) { S.x.semOff = Math.max(-26, Math.min(26, (S.x.semOff || 0) + (+el.dataset.v))); S.x.diaV = null; pintar(); };
+A.mesEn = function (el) { var f = el.dataset.f; S.x.mes = f.slice(0, 7); S.x.mesD = f; ir({ t: 'mes' }); };
+/* 09:18 (Chadín: «este estilo me gusta mucho, no tan tecnológico»): «Hoy» como el final, en negro, con los datos en fila */
+function chipsRut(r) { var ej = (r.ejercicios || []).filter(function (e) { return !esCal(e); }), ns = 0; ej.forEach(function (e) { ns += (e.sets || []).length; });
+  return '<div class="hx-k"><span><b>' + ej.length + '</b><small>' + (ej.length === 1 ? 'ejercicio' : 'ejercicios') + '</small></span><span><b>~' + minRut(r) + '</b><small>minutos</small></span>' + (ns ? '<span><b>' + ns + '</b><small>series</small></span>' : '') + '</div>'; }
+function rpeBarra(v) { return v ? '<div class="hx-e"><div><span>Esfuerzo · RPE</span><b>' + v + ' · ' + RPE_T[v] + '</b></div><span class="fin3-seg">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<i class="' + (n <= v ? 'on' : '') + '"></i>'; }).join('') + '</span></div>' : ''; }
+function semTag(r) { var pv = planVa(), X = r && r.plan && progSem(r.plan); return pv && !pv.antes && !pv.fin ? 'Semana ' + pv.sem + '/' + pv.de : X && X.w ? 'Semana ' + X.w + '/' + X.de : ''; }
+function otraZ2(txt) { return '<button class="z2-otra" data-a="entrenarHoy"><b>' + txt + '</b><span class="ot-ch">' + ic('sig', 16) + '</span></button>'; }
+/* 20 nov, 09:38 (Chadín, la B1): «Hoy toca» en una barra negra. A la izquierda el círculo blanco para empezar (hecho: ✓ verde, abre el entreno),
+   en medio el nombre y los datos (tocándolo se ve la rutina) y a la derecha «Otra» (hecho: compartir) */
+function zbar(o) {
+  var tx = '<small' + (o.v ? ' class="v"' : '') + '>' + o.sm + '</small><b>' + esc(o.nom) + '</b>' + (o.meta ? '<span>' + o.meta + '</span>' : '');
+  return '<section class="z2-hero zb' + (o.cls ? ' ' + o.cls : '') + '"><div class="zb-r">' + o.ini + (o.txA ? '<button class="zb-tx" ' + o.txA + '>' + tx + '</button>' : '<div class="zb-tx">' + tx + '</div>') + (o.fin || '') + '</div></section>';
+}
+function zbC(a, id, ico, lab, cls) { return '<button class="zb-c' + (cls ? ' ' + cls : '') + '" data-a="' + a + '"' + (id ? ' data-id="' + esc(id) + '"' : '') + ' aria-label="' + lab + '">' + ic(ico, ico === 'check' ? 22 : 20, null, ico === 'check' ? 2.6 : null) + '</button>'; }
+function zbMeta(r) { var ej = (r.ejercicios || []).filter(function (e) { return !esCal(e); }), ns = 0; ej.forEach(function (e) { ns += (e.sets || []).length; });
+  return ej.length + (ej.length === 1 ? ' ejercicio' : ' ejercicios') + ' · ' + minRut(r) + ' min' + (ns ? ' · ' + ns + ' series' : ''); }
+function zbHecho(L) {
+  var kp = L.length === 1 ? (rpKpis(L[0]) || blqKpis(L[0])) : null; if (kp) return esc(kp.map(function (k) { return k[0] + ' ' + k[1]; }).join(' · '));
+  var mn = 0, ns = 0, vol = 0; L.forEach(function (s) { mn += +s.min || 0; ns += +s.nser || 0; vol += +s.vol || 0; });
+  return mn + ' min' + (ns ? ' · ' + ns + (ns === 1 ? ' serie' : ' series') : '') + (vol ? ' · ' + fmtK(vol) + ' kg' : '');
+}
+function primerDia(sem) { var i0 = DIAS7.indexOf(hoyLetra()); for (var k = 1; k < 7; k++) { var d = DIAS7[(i0 + k) % 7]; if (sem[d]) return 'Tu primer entreno, el ' + DIA_N[d].toLowerCase(); } return 'Tu primer entreno, cuando quieras'; }
+function zbSh(id) { return '<button class="zb-i" data-a="compartirSes" data-id="' + esc(id) + '" aria-label="Compartir">' + ic('compartir', 18) + '</button>'; }
+function hoyZ2() {
+  var hs = hoyStr(), sem = semEsta(), r = rutinaDe(sem[hoyLetra()]), H = S.sesiones.filter(function (s) { return s.fecha === hs; });
+  if (S.ses) return zbar({ ini: zbC('abrirSes', '', 'play', 'Seguir con tu entreno'), sm: 'Entreno en curso', nom: S.ses.nombre || 'Entreno', meta: 'Toca para seguir', txA: 'data-a="abrirSes"' });
+  if (H.length) {
+    var u = H[H.length - 1], v = num(u.rpe);
+    return zbar({ cls: 'z2-ok', ini: zbC('verSes', u.id, 'check', 'Ver entreno', 'ok'), v: 1, sm: 'Hecho hoy' + (v ? ' · Esfuerzo ' + v : ''), nom: H.map(function (s) { return s.nombre || 'Entreno'; }).join(' + '), meta: zbHecho(H), txA: 'data-a="verSes" data-id="' + esc(u.id) + '"', fin: zbSh(u.id) });
+  }
+  if (!r) return S.rutinas.length
+    ? zbar({ ini: '<span class="zb-c gr">' + ic('luna', 20) + '</span>', sm: 'Hoy', nom: 'Descanso', meta: S.sesiones.length ? 'Camina, estira y recupera' : primerDia(sem), fin: '<button class="zb-ot" data-a="entrenarHoy">Entrenar</button>' })
+    : zbar({ ini: zbC('entrenarHoy', '', 'play', 'Empezar un entreno'), sm: 'Hoy', nom: 'Tu primer entreno', meta: 'Elige un programa o crea tu rutina', txA: 'data-a="entrenarHoy"' });
+  var sr = semTag(r);
+  return zbar({ ini: zbC('empezarRut', r.id, 'play', 'Comenzar rutina'), sm: 'Hoy toca' + (!S.sesiones.length ? ' · Tu primer entreno' : sr ? ' · ' + sr : ''), nom: r.nombre, meta: zbMeta(r), txA: 'data-a="rutResumen" data-id="' + esc(r.id) + '"', fin: '<button class="zb-ot" data-a="entrenarHoy">Otra</button>' });
+}
+/* otro día de esta semana: lo que hizo o lo que toca, con la misma barra */
+function otroDiaZ2(d) {
+  var sem = semEsta(), f = sumar(lunesDe(hoyStr()), DIAS7.indexOf(d)), r = rutinaDe(sem[d]), L = S.sesiones.filter(function (s) { return s.fecha === f; }), pas = f < hoyStr(), nomD = DIA_N[d] + ' ' + aDate(f).getDate();
+  var sm = esc(nomD) + ' · <button class="zb-vh" data-a="diaHoy">Volver a hoy</button>';
+  if (L.length) { var u = L[L.length - 1], v = num(u.rpe); return zbar({ cls: 'z2-ok', ini: zbC('verSes', u.id, 'check', 'Ver entreno', 'ok'), v: 1, sm: sm + (v ? ' · Esfuerzo ' + v : ''), nom: L.map(function (s) { return s.nombre || 'Entreno'; }).join(' + '), meta: zbHecho(L), fin: zbSh(u.id) }); }
+  if (r) return zbar({ ini: zbC('rutResumen', r.id, 'lista', 'Ver rutina', 'gr'), sm: sm, nom: r.nombre, meta: pas ? 'No lo hiciste' : zbMeta(r),
+    fin: '<button class="zb-ot" data-a="' + (S.ses ? 'abrirSes' : 'empezarRut') + '" data-id="' + esc(r.id) + '">' + (S.ses ? 'Seguir' : 'Hacerlo hoy') + '</button>' });
+  return zbar({ ini: '<span class="zb-c gr">' + ic('luna', 20) + '</span>', sm: sm, nom: 'Descanso', meta: 'Ese día tu semana no tiene entreno' });
+}
+/* las casillas: el ciclo a lo ancho (o el objetivo, si no hay ciclo) y debajo, en fila, el objetivo y el último récord */
+function ultRec() { var L = S.sesiones.filter(function (s) { return (s.recs || []).some(function (x) { return x && x.e; }); }).sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }), s = L[L.length - 1]; if (!s) return null; var R = s.recs.filter(function (x) { return x && x.e; }); return { s: s, r: R[R.length - 1], i: s.recs.indexOf(R[R.length - 1]), n: R.length }; }
+function casillasZ2() {
+  var C = cicOn() ? cicEstado() : null, m = metaSig(), R = ultRec(), pr = C ? 'cyc' : m ? 'obj' : null, rest = (pr === 'cyc' && m ? ['obj'] : []).concat(R ? ['rec'] : []);
+  var T = function (k, an) {
+    var c = an ? ' an' : '';
+    if (k === 'cyc') { var P = cicPat(), tip = P.ok ? (P.L.filter(function (x) { return x.fase === (C.f === 'fertil' || C.f === 'ovulacion' ? 'ovulatoria' : C.f); })[0] || P.L[0]) : null;
+      return '<button class="card z2-t an z2-cyc" data-a="ciclo"><span class="z2-rg">' + cicAnillo(C, 70) + '<span><b>' + C.d + '</b><small>día</small></span></span><span class="z2-tx"><small class="k">Tu ciclo</small><b>Fase ' + CIC_N[C.f].toLowerCase() + '</b><small>' + esc(cicFalta(C)) + ' · ' + esc(fCorta(C.prox)) + '</small>' + (tip ? '<em>' + esc(tip.t) + '</em>' : '') + '</span>' + ic('sig', 16) + '</button>'; }
+    if (k === 'obj') return '<button class="card z2-t' + c + ' z2-obj" data-a="metas"><span class="z2-rg">' + metaAnillo(m, an ? 70 : 64) + '</span><span class="z2-tx"><small class="k">' + esc(META_K[m.k] ? META_K[m.k][0] : 'Objetivo') + '</small><b>' + esc(m.n) + '</b><small>' + esc([fCorta(m.f), m.lugar].filter(Boolean).join(' · ')) + '</small></span></button>';
+    var r = R.r, cuando = R.s.fecha === hoyStr() ? 'Hoy' : dDias(R.s.fecha, hoyStr()) === 1 ? 'Ayer' : 'Hace ' + dDias(R.s.fecha, hoyStr()) + ' días';
+    return '<div class="card z2-t' + c + ' z2-rec"><span class="z2-tro">' + ic('trofeo', 24) + '</span><span class="z2-tx"><small class="k">Último récord</small><b>' + esc(r.e) + '</b><small>' + (num(r.p) ? fN(r.p) + ' kg × ' : '') + r.r + (num(r.p) ? '' : ' rep.') + ' · ' + cuando + '</small>' + (R.n > 1 ? '<span class="z2-mas">+' + (R.n - 1) + ' más</span>' : '') + '</span><button class="z2-shb" data-a="compartirRec" data-id="' + esc(R.s.id) + '" data-i="' + (R.n > 1 ? 'todos' : R.i) + '" aria-label="Compartir el récord">' + ic('compartir', 15) + '</button></div>';
+  };
+  var h = pr ? T(pr, 1) : '<button class="card z2-t an z2-obj" data-a="metaNueva"><span class="z2-tro" style="background:var(--suave);color:#B8860B;box-shadow:none">' + ic('trofeo', 24) + '</span><span class="z2-tx"><small class="k">Tu objetivo</small><b>¿Competición u oposición?</b><small>Apúntala y te hago la cuenta atrás</small></span>' + ic('mas', 18) + '</button>';
+  if (rest.length >= 2) h += '<div class="z2-gr">' + rest.map(function (k) { return T(k, 0); }).join('') + '</div>'; else if (rest.length) h += T(rest[0], 1);
+  return h;
+}
+/* carrera esta semana, solo a quien corre (km, salidas, ritmo y los km de las últimas 8 semanas) */
+function iniCarrera() {      // 08:38 (Chadín): «dale un tono más… gris oscuro, resaltar los números, los kilómetros»
+  var lun = lunesDe(hoyStr()), W = []; for (var i = 7; i >= 0; i--) { var l = sumar(lun, -7 * i); W.push(Object.assign({ l: l }, runSem(l))); }
+  if (!W.some(function (x) { return x.nrun; })) return '';
+  var T = W[W.length - 1], mk = Math.max.apply(null, W.map(function (x) { return x.km; }).concat([1])), rt = T.km && T.rmin ? ritmoTxt(T.km, T.rmin).replace(' min/km', '') : '–';
+  /* 08:40 (Chadín): «que no sea igual a lo que toca hoy, porque se confunde; que sea estilo series por grupo»: tarjeta blanca como esa, con los km resaltados */
+  return '<div class="card ini-ser run3"><span class="card-h"><b>Carrera · esta semana</b><span class="run3-a">' + (RUN_SH ? '<button class="z2-shb sm" data-a="runSemCompartir" aria-label="Compartir tu semana corriendo">' + ic('compartir', 15) + '</button>' : '') + '<button class="ico-b" data-a="iniVol" aria-label="Ver en Progreso">' + ic('sig', 16) + '</button></span></span>' +
+    '<span class="run3-b"><span class="run3-km"><b>' + fN(Math.round(T.km * 10) / 10, 1) + '</b><small>km</small></span><span class="run3-k"><span><b>' + T.nrun + '</b>' + (T.nrun === 1 ? 'salida' : 'salidas') + '</span><span><b>' + rt + '</b>min/km</span></span>' +
+    '<span class="run3-w" aria-label="Km por semana, las últimas 8">' + W.map(function (x, i) { return '<i class="' + (i === W.length - 1 ? 'u' : '') + '" style="height:' + Math.max(3, Math.round(x.km * 44 / mk)) + 'px"></i>'; }).join('') + '</span></span><small class="run3-p">Km por semana, las últimas 8</small></div>';
 }
 function fCorta(f) { var d = aDate(f); return d.toLocaleDateString('es-ES', { day: 'numeric', month: 'short' }); }
 /* yo-0.9: iconos del estilo MOOD ON */
@@ -2881,7 +3251,7 @@ function ordenRut(a, b) { return (a.plan ? 0 : 1) - (b.plan ? 0 : 1) || String(a
 
 /* ---------- ¿qué entrenas hoy? ---------- */
 VISTAS.hoy = function () {
-  var sel = S.x.hoySel || 'libre', sem = (S.perfil && S.perfil.semana) || {}, hoy = hoyLetra();
+  var sel = S.x.hoySel || 'libre', sem = semEsta(), hoy = hoyLetra();
   var plan = S.rutinas.filter(function (r) { return r.plan; }).sort(ordenRut), mias = S.rutinas.filter(function (r) { return !r.plan; }).sort(ordenRut);
   var op = function (r) { var on = sel === r.id, cuando = DIAS7.filter(function (d) { return sem[d] === r.id; }).map(function (d) { return DIA_N[d].toLowerCase(); }).join(', ');
     return '<button class="opc2' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-a="hoySel" data-v="' + r.id + '"><span><b>' + esc(r.nombre) + '</b><small>' + nEjTxt(r) + (cuando ? ' · ' + cuando : '') + '</small></span><i class="punto"></i></button>'; };
@@ -2898,13 +3268,13 @@ function diaVer() { var d = S.x.diaV; return d && d !== hoyLetra() ? d : null; }
 A.diaVer = function (el) { var d = el.dataset.d; S.x.diaV = d === hoyLetra() || d === S.x.diaV ? null : d; pintar(); };
 A.diaHoy = function () { S.x.diaV = null; pintar(); };
 function otroDiaCard(d, pv) {
-  var sem = (S.perfil && S.perfil.semana) || {}, i = DIAS7.indexOf(d), f = sumar(lunesDe(hoyStr()), i), r = rutinaDe(sem[d]), ses = S.sesiones.filter(function (s) { return s.fecha === f; }), pasado = f < hoyStr();
+  var sem = semEsta(), i = DIAS7.indexOf(d), f = sumar(lunesDe(hoyStr()), i), r = rutinaDe(sem[d]), ses = S.sesiones.filter(function (s) { return s.fecha === f; }), pasado = f < hoyStr();
   var nomD = DIA_N[d] + ' ' + aDate(f).getDate(), tit, sub, bt;
   if (ses.length) { var u = ses[ses.length - 1]; tit = 'Entreno hecho'; sub = esc(u.nombre || 'Entreno') + ' · ' + (u.min || 0) + ' min'; bt = '<button class="btn bl" data-a="verSes" data-id="' + u.id + '">Ver entreno</button>'; }
   else if (r) { tit = esc(r.nombre); sub = (pasado ? 'No lo hiciste · ' : '') + nEjTxt(r) + ' · unos ' + minRut(r) + ' min'; bt = '<div class="fila2 hoy-2"><button class="btn sec osc" data-a="rutResumen" data-id="' + r.id + '">Ver rutina</button><button class="btn bl" data-a="' + (S.ses ? 'abrirSes' : 'empezarRut') + '" data-id="' + r.id + '">' + (S.ses ? 'Seguir con tu entreno' : 'Entrenarlo hoy') + '</button></div>'; }
   else { tit = 'Descanso'; sub = 'Ese día tu plan no tiene entreno'; bt = '<button class="btn sec osc" data-a="semana">Cambiar mi semana</button>'; }
   return '<section class="hoy-c otro"><div class="hoy-l"><small>' + esc(nomD) + (pv && !pv.antes && !pv.fin ? ' · Semana ' + pv.sem + ' de ' + pv.de : '') + '</small><button class="hoy-sh" data-a="diaHoy">Volver a hoy</button></div>' +
-    '<div class="hoy-t"><b class="plata">' + tit + '</b><span>' + sub + '</span></div>' + semanaHtml(true, true) + bt + '</section>';
+    '<div class="hoy-t"><b class="plata">' + tit + '</b><span>' + sub + '</span></div>' + semanaHtml(true, true) + semPie('') + bt + '</section>';
 }
 /* resumen de una rutina en una ventana: sus ejercicios con series, repeticiones y descanso */
 A.rutResumen = function (el) {
@@ -2917,7 +3287,7 @@ A.rutResumen = function (el) {
 };
 A.rrEmpezar = function (el) { cerrarHoja(); S.x.diaV = null; if (S.ses) return A.abrirSes(); empezarSes(rutinaDe(el.dataset.id));
 };
-A.entrenarHoy = function () { if (S.ses) return A.abrirSes(); var sem = (S.perfil && S.perfil.semana) || {}; S.x.hoySel = sem[hoyLetra()] || 'libre'; ir({ t: 'hoy' }); };
+A.entrenarHoy = function () { if (S.ses) return A.abrirSes(); var sem = semEsta(); S.x.hoySel = sem[hoyLetra()] || 'libre'; ir({ t: 'hoy' }); };
 A.hoySel = function (el) { S.x.hoySel = el.dataset.v; pintar(); };
 A.hoyEmpezar = function () { var s = S.x.hoySel || 'libre'; if (s === 'libre') empezarSes(null); else empezarSes(rutinaDe(s)); };
 A.empezarRut = function (el) { empezarSes(rutinaDe(el.dataset.id)); };
@@ -2988,6 +3358,126 @@ F.meta = function () {
 A.metaBorrar = function () { var id = S.x.meta.id; hoja('<h2>¿Borrar?</h2><p class="mut">Se quita de tu lista y de Inicio.</p><button class="btn rojo" data-a="metaBorrarSi" data-id="' + esc(id) + '">Borrar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
 A.metaBorrarSi = function (el) { S.perfil.metas = (S.perfil.metas || []).filter(function (m) { return m.id !== el.dataset.id; }); guardaPerfil(); cerrarHoja(); toast('Borrado'); pintar(); };
 
+
+/* ---------- 20 nov 2026 (Chadín, 07:41): «no hay un acceso al mes para ver su calendario mensual, los entrenamientos que ha hecho
+   durante el mes… si tiene una competición que pueda verla en el calendario». Se abre tocando «Ver el mes», debajo de la semana en Inicio.
+   Cada día: hecho (verde), lo que toca de hoy en adelante (punto), su competición u objetivo (trofeo) y hoy en negro. Al tocar un día, qué hizo o qué toca. ---------- */
+function semPie(txt) { return '<div class="sem-pie"><span>' + esc(txt || '') + '</span><button class="sem-mes" data-a="mes">' + ic('cal', 15) + 'Ver el mes' + ic('sig', 14) + '</button></div>'; }
+function mesNom(ym) { var p = ym.split('-'), t = new Date(+p[0], +p[1] - 1, 1).toLocaleDateString('es-ES', { month: 'long' }); return t.charAt(0).toUpperCase() + t.slice(1); }
+function mesMin() { var m = hoyStr().slice(0, 7); S.sesiones.forEach(function (s) { var x = String(s.fecha || '').slice(0, 7); if (x && x < m) m = x; }); var c = String((S.perfil && S.perfil.creado) || '').slice(0, 7); if (/^\d{4}-\d{2}$/.test(c) && c < m) m = c; return m; }
+function mesMax() { var d = new Date(); d.setDate(1); d.setMonth(d.getMonth() + 12); var m = fechaDe(d).slice(0, 7); metas().forEach(function (x) { var y = String(x.f).slice(0, 7); if (y > m) m = y; }); return m; }
+/* ¿qué toca ese día? solo de hoy en adelante, según su semana (y si la rutina es de un plan que ya terminó, nada) */
+function mesPlan(f) {
+  if (f < hoyStr()) return null; var sem = lunesDe(f) === lunesDe(hoyStr()) ? semEsta() : ((S.perfil && S.perfil.semana) || {}), r = rutinaDe(sem[DIAS7[(aDate(f).getDay() + 6) % 7]]), p = S.perfil && S.perfil.plan;
+  if (!r) return null; if (p && p.hasta && r.plan && r.plan === p.id && f > p.hasta) return null; return r;
+}
+function mesHm(m) { m = Math.round(m || 0); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + (m % 60 < 10 ? '0' : '') + (m % 60) : ''); }      // 7 h 27 (en la casilla)
+A.mes = function () { S.x.mes = hoyStr().slice(0, 7); S.x.mesD = hoyStr(); ir({ t: 'mes' }); };
+A.mesMover = function (el) {
+  var p = (S.x.mes || hoyStr().slice(0, 7)).split('-'), ym = fechaDe(new Date(+p[0], +p[1] - 1 + (+el.dataset.v), 1)).slice(0, 7);
+  if (ym < mesMin() || ym > mesMax()) return; S.x.mes = ym; S.x.mesD = ym === hoyStr().slice(0, 7) ? hoyStr() : null; pintar();
+};
+A.mesDia = function (el) { S.x.mesD = el.dataset.f; pintar(); };
+VISTAS.mes = function () {
+  var hs = hoyStr(), ym = S.x.mes || hs.slice(0, 7), p = ym.split('-'), y = +p[0], m = +p[1] - 1, nd = new Date(y, m + 1, 0).getDate(), w0 = (new Date(y, m, 1).getDay() + 6) % 7;
+  var SS = {}, nS = 0, mn = 0, vol = 0, MT = {};
+  S.sesiones.forEach(function (s) { if (String(s.fecha).slice(0, 7) !== ym) return; (SS[s.fecha] = SS[s.fecha] || []).push(s); nS++; mn += +s.min || 0; vol += +s.vol || 0; });
+  metas().forEach(function (x) { if (String(x.f).slice(0, 7) === ym) (MT[x.f] = MT[x.f] || []).push(x); });
+  var nom = mesNom(ym), sel = S.x.mesD && S.x.mesD.slice(0, 7) === ym ? S.x.mesD : null;
+  var h = '<div class="pant pad">' + cab('Tu mes');
+  h += '<section class="card mes-c"><div class="mes-nav"><button class="redondo" data-a="mesMover" data-v="-1" aria-label="Mes anterior"' + (ym <= mesMin() ? ' disabled' : '') + '>' + ic('atras', 18) + '</button>' +
+    '<h2>' + nom + ' <small>' + y + '</small></h2><button class="redondo" data-a="mesMover" data-v="1" aria-label="Mes siguiente"' + (ym >= mesMax() ? ' disabled' : '') + '>' + ic('sig', 18) + '</button></div>';
+  h += '<div class="mes-sem" aria-hidden="true">' + DIAS7.map(function (d) { return '<span>' + d + '</span>'; }).join('') + '</div><div class="mes-g">';
+  for (var i = 0; i < w0; i++) h += '<span class="md vac"></span>';
+  for (var d = 1; d <= nd; d++) {
+    var f = ym + '-' + (d < 10 ? '0' : '') + d, ss = SS[f], mt = MT[f], r = !ss && mesPlan(f);
+    var est = [ss ? (ss.length > 1 ? ss.length + ' entrenos hechos' : 'entreno hecho') : '', mt ? mt.map(function (x) { return x.n; }).join(', ') : '', r ? 'toca ' + r.nombre : ''].filter(Boolean).join(' · ') || (f < hs ? 'sin entreno' : 'descanso');
+    h += '<button class="md' + (ss ? ' ok' : '') + (mt ? ' cp' : '') + (r ? ' plan' : '') + (f < hs && !ss ? ' pas' : '') + (f === hs ? ' hoy' : '') + (f === sel ? ' sel' : '') + '" data-a="mesDia" data-f="' + f + '" aria-pressed="' + (f === sel) + '" aria-label="' + esc(d + ' de ' + nom.toLowerCase() + (f === hs ? ' (hoy)' : '') + ': ' + est) + '">' +
+      '<b>' + d + '</b><i>' + (mt ? ic('trofeo', 12, null, 2.4) : ss ? ic('check', 10, null, 3.4) : '') + '</i></button>';
+  }
+  h += '</div><div class="sem-ley mes-ley"><span><i class="ck"></i>Hecho</span><span><i class="pt"></i>Toca</span><span><i class="tr"></i>Competición u objetivo</span></div></section>';
+  h += mesDiaCard(sel);
+  h += '<section class="card"><div class="card-h"><b>En ' + nom.toLowerCase() + '</b></div><div class="kpis"><div><b>' + nS + '</b><span>' + (nS === 1 ? 'entreno' : 'entrenos') + '</span></div><div><b>' + mesHm(mn) + '</b><span>entrenando</span></div><div><b>' + fmtK(vol) + '</b><span>kg de volumen</span></div></div></section>';
+  h += '<button class="card enlace mes-mt" data-a="metas"><span class="md-i cp">' + ic('trofeo', 18) + '</span><span><b>Competiciones y objetivos</b><small class="mut">Apunta una y te sale aquí, con la cuenta atrás en Inicio</small></span>' + ic('sig', 18) + '</button>';
+  return h + '</div>';
+};
+function mesDiaCard(f) {
+  if (!f) return '<section class="card mes-d"><p class="mut sm">Toca un día para ver qué entrenaste o qué te toca.</p></section>';
+  var hs = hoyStr(), t = aDate(f).toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'long' }), L = S.sesiones.filter(function (s) { return s.fecha === f; }), T = metas().filter(function (x) { return x.f === f; }), r = L.length ? null : mesPlan(f);
+  var h = '<section class="card mes-d"><b class="mes-dt">' + esc(t.charAt(0).toUpperCase() + t.slice(1)) + (f === hs ? ' · hoy' : '') + '</b>';
+  T.forEach(function (x) { h += '<button class="fila-b mes-f" data-a="metas"><span class="md-i cp">' + ic('trofeo', 16) + '</span><span class="col"><b>' + esc(x.n) + '</b><small>' + esc([META_K[x.k] ? META_K[x.k][0] : '', x.lugar].filter(Boolean).join(' · ')) + '</small></span>' + ic('sig', 16) + '</button>'; });
+  L.forEach(function (s) { var nr = (s.recs || []).length; h += '<button class="fila-b mes-f" data-a="verSes" data-id="' + esc(s.id) + '"><span class="md-i ok">' + ic('check', 14, null, 3) + '</span><span class="col"><b>' + esc(s.nombre || 'Entreno') + '</b><small>' + esc([minTxt(s.min), num(s.vol) ? fmtK(s.vol) + ' kg' : '', nr ? nr + (nr === 1 ? ' récord' : ' récords') : ''].filter(Boolean).join(' · ')) + '</small></span>' + ic('sig', 16) + '</button>'; });
+  if (r) h += '<button class="fila-b mes-f" data-a="rutResumen" data-id="' + esc(r.id) + '"><span class="md-i pl"><i></i></span><span class="col"><b>Toca ' + esc(r.nombre) + '</b><small>' + esc(nEjTxt(r) + ' · unos ' + minRut(r) + ' min') + '</small></span>' + ic('sig', 16) + '</button>';
+  if (!L.length && !T.length && !r) h += '<p class="mut sm">' + (f < hs ? 'Ese día no entrenaste.' : 'Descanso: ese día tu semana no tiene entreno.') + '</p>';
+  return h + '</section>';
+}
+
+/* ---------- 20 nov 2026 (Chadín, 08:01): cambiar el orden solo esta semana («tienes un entreno hoy y al final descansas»).
+   Se guarda en su perfil: semMov = { l: lunes de la semana, m: { L: id o null… } }; la semana de su plan no cambia ---------- */
+function semEsta() {
+  var b = (S.perfil && S.perfil.semana) || {}, x = S.perfil && S.perfil.semMov; if (!x || x.l !== lunesDe(hoyStr())) return b;
+  var o = Object.assign({}, b); Object.keys(x.m || {}).forEach(function (k) { o[k] = x.m[k]; }); return o;
+}
+function camQuedan() { var i = DIAS7.indexOf(hoyLetra()); return DIAS7.slice(i + 1); }
+A.camDia = function () {
+  var sem = semEsta(), hoy = hoyLetra(), r = rutinaDe(sem[hoy]), lun = lunesDe(hoyStr()), Q = camQuedan(), x = S.perfil.semMov && S.perfil.semMov.l === lun;
+  var fila = function (d) { var o = rutinaDe(sem[d]), f = sumar(lun, DIAS7.indexOf(d));
+    return '<button class="fila-b cam-f" data-a="camDiaSi" data-d="' + d + '"><span class="cam-d"><small>' + DIA_N[d].slice(0, 3) + '</small><b>' + aDate(f).getDate() + '</b></span><span class="col"><b>' + (o ? esc(o.nombre) : 'Descanso') + '</b><small>' + (r ? (o ? 'Se cambian: hoy harías ' + esc(o.nombre) : 'Hoy descansas y lo haces este día') : 'Lo haces hoy y ese día descansas') + '</small></span>' + ic('sig', 16) + '</button>'; };
+  var L = r ? Q : Q.filter(function (d) { return sem[d]; });
+  hoja('<h2>' + (r ? 'Cambiar de día' : 'Traer un entreno a hoy') + '</h2><p class="mut sm">' + (r ? 'Hoy toca <b>' + esc(r.nombre) + '</b>. ¿A qué día lo pasas?' : 'Elige qué entreno de esta semana haces hoy.') + ' Solo cambia esta semana: tu plan sigue igual.</p>' +
+    (L.length ? '<div class="lista">' + L.map(fila).join('') + '</div>' : '<p class="mut sm">Es el último día de la semana: ya no queda otro día.</p>') +
+    (r ? '<button class="btn sec" data-a="camDiaSi" data-d="">Hoy descanso (no lo hago esta semana)</button>' : '') +
+    (x ? '<button class="link" data-a="camDiaQuitar">' + ic('deshacer', 15) + 'Dejar la semana como en mi plan</button>' : ''));
+};
+A.camDiaSi = function (el) {
+  var d = el.dataset.d, h = hoyLetra(), sem = semEsta(), lun = lunesDe(hoyStr()), a = sem[h] || null, b = d ? sem[d] || null : null, x = S.perfil.semMov;
+  if (!x || x.l !== lun) x = S.perfil.semMov = { l: lun, m: {} };
+  x.m[h] = b; if (d) x.m[d] = a; guardaPerfil(); cerrarHoja(); S.x.diaV = null;
+  toast(!d ? 'Hoy descansas' : a && b ? 'Cambiados: hoy toca ' + (rutinaDe(b) || {}).nombre : a ? 'Pasado al ' + DIA_N[d].toLowerCase() : 'Hoy haces ' + (rutinaDe(b) || {}).nombre, 'ok'); pintar();
+};
+A.camDiaQuitar = function () { S.perfil.semMov = null; guardaPerfil(); cerrarHoja(); toast('Tu semana, como en tu plan', 'ok'); pintar(); };
+/* publicar en la Comunidad el entreno de hoy, desde Inicio (como al terminar) */
+A.comuHoy = function (el) { var s = S.sesiones.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!s) return; if (!(S.fin && S.fin.id === s.id)) S.fin = Object.assign({}, s, { modo: 'negro', slide: 0, foto: null, primero: false, libreEj: null }); A.finComu(); };
+
+/* ---------- las casillas de Inicio ---------- */
+function iniMeta() {
+  var m = metaSig();
+  if (!m) return '<button class="card ini-t" data-a="metaNueva"><span class="ini-ti dor">' + ic('trofeo', 24) + '</span><small class="ini-k">Tu objetivo</small><b>¿Competición u oposición?</b><small class="mut">Apúntala y te hago la cuenta atrás</small></button>';
+  return '<button class="card ini-t" data-a="metas">' + metaAnillo(m, 64) + '<small class="ini-k">' + esc(META_K[m.k] ? META_K[m.k][0] : 'Objetivo') + '</small><b>' + esc(m.n) + '</b><small class="mut">' + esc([fCorta(m.f), m.lugar].filter(Boolean).join(' · ')) + '</small></button>';
+}
+/* nutrición: el anillo de las calorías y los tres macros con su barra (los colores de Nutrición) */
+function iniNut() {
+  var Nn = S.perfil && S.perfil.nut, it = S.diario && S.diario[hoyStr()] ? S.diario[hoyStr()].it : [], t = totDe(it), kOn = Nn && Nn.kcal && Nn.on !== false;
+  var h = '<button class="card ini-nut2" data-a="tab" data-v="nutri"><span class="card-h"><b>Nutrición de hoy</b>' + ic('sig', 16) + '</span>';
+  if (!kOn) return h + '<span class="mut sm">' + (t.k ? 'Hoy llevas ' + fmil(t.k) + ' kcal apuntadas.' : 'Apunta lo que comes y aquí verás tus calorías y tus macros.') + '</span></button>';
+  var pc = Math.round(t.k * 100 / Nn.kcal), falta = Math.round(Nn.kcal - t.k);
+  var M = [['Proteína', t.p, Nn.p, 'var(--tx)'], ['Hidratos', t.h, Nn.c, '#9A8CFF'], ['Grasa', t.g, Nn.g, '#7FD6FF']];
+  h += '<span class="nut2"><span class="nut2-a">' + anillo(pc, 116, 11, '<b class="nm">' + fmil(t.k) + '</b><small>de ' + fmil(Nn.kcal) + ' kcal</small>', fmil(t.k) + ' de ' + fmil(Nn.kcal) + ' kcal') + '</span><span class="nut2-m">' +
+    M.map(function (m) { var o = +m[2] || 0, v = Math.round(m[1] || 0); return '<span class="mac2"><span class="mac2-t"><i style="background:' + m[3] + '"></i>' + m[0] + '<b class="nm">' + v + '<small> / ' + (o || '–') + ' g</small></b></span><span class="mac2-b"><i style="width:' + (o ? Math.min(100, Math.round(v * 100 / o)) : 0) + '%;background:' + m[3] + '"></i></span></span>'; }).join('') +
+    '<em class="nut2-f">' + (falta > 0 ? 'Te faltan <b>' + fmil(falta) + ' kcal</b>' : 'Objetivo del día cumplido') + '</em></span></span>';
+  return h + '</button>';
+}
+/* series por grupo muscular esta semana (lo de Progreso → Volumen) */
+function iniSeries() {
+  var lun = lunesDe(hoyStr()), G = seriesGrupo(lun, sumar(lun, 6)), mx = Math.max.apply(null, G.map(function (x) { return x[1]; }).concat([10]));
+  var h = '<button class="card ini-ser" data-a="iniVol"><span class="card-h"><b>Series por grupo · esta semana</b>' + ic('sig', 16) + '</span>';
+  h += G.length ? G.slice(0, 6).map(function (x) { return '<span class="hbar"><span>' + x[0] + '</span><span class="b"><i style="width:' + Math.round(x[1] * 100 / mx) + '%"></i></span><b>' + x[1] + '</b></span>'; }).join('') : '<span class="mut sm">Cuando entrenes esta semana, aquí verás cuántas series llevas de cada grupo.</span>';
+  return h + '</button>';
+}
+A.iniVol = function () { S.x.pv = 'vol'; irTab('prog'); };
+/* tus rutinas: las de tu plan y las tuyas, en fila; al tocar una, sus ejercicios */
+function iniRutinas() {
+  var L = S.rutinas.slice().sort(ordenRut), sem = semEsta();
+  var h = '<section class="card ini-rut"><div class="card-h"><b>Tus rutinas</b><button class="link sm" data-a="tab" data-v="entreno">Ver todas</button></div><div class="rut-sc">';
+  h += L.slice(0, 10).map(function (r) { var dd = DIAS7.filter(function (d) { return sem[d] === r.id; });
+    return '<button class="rut-m" data-a="rutResumen" data-id="' + esc(r.id) + '"><b>' + esc(r.nombre) + '</b><small>' + esc(nEjTxt(r)) + ' · ' + minRut(r) + ' min</small><span class="rut-d">' + (dd.length ? dd.map(function (d) { return '<i' + (d === hoyLetra() ? ' class="hoy"' : '') + '>' + d + '</i>'; }).join('') : '<em>Sin día</em>') + '</span></button>'; }).join('');
+  return h + '<button class="rut-m rut-n" data-a="nuevaRut">' + ic('mas', 22) + '<b>Nueva rutina</b></button></div></section>';
+}
+IC.lista = '<path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01"/>';
+
+/* 20 nov: «Mi semana corriendo» para compartir va en un segundo paso */
+var RUN_SH = false;
+A.runSemCompartir = function () { toast('Propuesta: aquí se abre «Mi semana corriendo» para compartir (Negro · Con tu foto · Transparente)'); };
 
 ;
 /* ---------- Entreno: mis rutinas · ejercicios · programas ---------- */
@@ -4743,34 +5233,41 @@ A.terminarSi = function () {
   S.fin = Object.assign({ id: X.id, fecha: f, primero: S.sesiones.length === 1, libreEj: X.libre ? X.ej : null }, d); S.fin.modo = 'negro'; S.fin.slide = 0; S.fin.foto = null;
   serNotasVistas(X); S.ses = null; DESC.fin = 0; try { localStorage.removeItem(ecK()); } catch (e) { }
   S.pant = null; S.pila = []; ir({ t: 'fin' });
+  S.x.rpeT = 7; S.x.rpeAuto = 1; setTimeout(rpeHoja, 60);      // 09:07 (Chadín): «cuando des a finalizar entreno, que salga esto (el esfuerzo) y ya el resumen»
 };
 function recsRecientes(dias) { var lim = sumar(hoyStr(), -dias), L = []; S.sesiones.forEach(function (s) { if (s.fecha >= lim) (s.recs || []).forEach(function (r) { L.push(r); }); }); return L.reverse(); }
 
 /* ---------- fin del entreno (como el de los clientes) ---------- */
+/* 20 nov, 08:58 (Chadín): «más reducida y simple, se hace muy larga; juega con el negro, más deportivo».
+   Arriba, en negro: «Entreno completado», el nombre, los datos en grande, los récords en dorado y el RPE de un toque.
+   Debajo, compartir en una sola tarjeta (estilo, tarjeta, la imagen y tres botones) y «¡Listo!» */
 VISTAS.fin = function () {
   var U = S.fin; if (!U) return '';
-  var C = compVol(U.vol), R = U.recs || [];
-  var h = '<div class="pant pad fin"><button class="redondo" data-a="finListo" aria-label="Cerrar">' + ic('x', 18) + '</button><div class="fin-top"><span class="big-ok">' + ic('trofeo', 34, null, 1.8) + '</span><h1>' + (U.primero ? '¡Tu primer entreno en MOOD ON!' : '¡Enhorabuena, has completado tu entrenamiento!') + '</h1></div>';
-  h += '<div class="kpis k3">' + (rpKpis(U) || blqKpis(U) || [[String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg levantados'], [String(U.min), U.min === 1 ? 'minuto' : 'minutos']]).map(function (k) { return '<div><b>' + k[0] + '</b><span>' + k[1] + '</span></div>'; }).join('') + '</div>';
-  if (C) h += '<div class="card cmp"><span class="cmp-i">' + linSvg(C.img, 36, 'var(--tx)', 1.1) + '</span><span><b>' + esc(C.txt) + '</b><small class="mut">' + fmtK(U.vol) + ' kg entre todas tus series</small></span></div>';
-  if (R.length) h += '<div class="card recs"><b class="verde-t">' + ic('trofeo', 18, 'var(--verde)') + (R.length === 1 ? '¡1 récord hoy!' : '¡' + R.length + ' récords hoy!') + '</b>' + R.slice(0, 5).map(function (r) { return '<div class="fila-r"><b>' + esc(r.e) + '</b><span>' + (r.p ? fN(r.p) + ' kg × ' : '') + r.r + '</span></div>'; }).join('') + '</div>';
-  if (U.libreEj && U.libreEj.length) h += '<button class="card enlace" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
-  h += '<section class="card sh"><b>Compártelo</b><div class="seg-p ancho" role="tablist" aria-label="Estilo">' + [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Con tu foto']].map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="seg-p ancho fin-t" role="tablist" aria-label="Tarjeta">' + finT(U).map(function (t, i) { return '<button role="tab" aria-selected="' + (U.slide === i) + '" class="' + (U.slide === i ? 'on' : '') + '" data-a="finSlide" data-i="' + i + '">' + t[1] + '</button>'; }).join('') + '</div>' +
+  var R = U.recs || [], K = rpKpis(U) || blqKpis(U) || [[String(U.min), U.min === 1 ? 'minuto' : 'minutos'], [String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg']];
+  var t = finT(U), sl = U.slide || 0, v = num(U.rpe);
+  var h = '<div class="pant pad fin fin2"><div class="fin2-top"><button class="redondo" data-a="finListo" aria-label="Cerrar">' + ic('x', 18) + '</button></div>';
+  /* 09:16 (Chadín, la 6 · «Negro con barra»): negro, el nombre, los tres datos con líneas finas y el esfuerzo con su barra de 10 */
+  h += '<section class="fin3"><div class="fin3-tt"><span>' + (U.primero ? 'Tu primer entreno' : 'Entreno completado') + '</span><small>' + esc(fCorta(U.fecha || hoyStr())) + '</small></div><h2>' + esc(U.nombre || 'Entreno libre') + '</h2>' +
+    '<div class="fin3-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
+    (R.length ? '<p class="fin3-r">' + ic('trofeo', 13) + (R.length === 1 ? 'Récord: <b>' + esc(R[0].e) + '</b> ' + (R[0].p ? fN(R[0].p) + ' kg × ' : '') + R[0].r : '<b>' + R.length + ' récords hoy</b>') + '</p>' : '') +
+    '<button class="fin3-e" data-a="finRpeAbre" aria-label="' + (v ? 'Cambiar el esfuerzo' : 'Añadir el esfuerzo') + '"><span class="fin3-et"><small>Esfuerzo · RPE</small><b>' + (v ? v + ' · ' + RPE_T[v] : 'Añadir') + '</b></span><span class="fin3-seg">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<i class="' + (v && n <= v ? 'on' : '') + '"></i>'; }).join('') + '</span></button></section>';
+  if (U.libreEj && U.libreEj.length) h += '<button class="card enlace fin2-g" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
+  h += '<section class="card fin2-sh"><div class="fin2-sht"><b>Compártelo</b><div class="seg-p mini" role="tablist" aria-label="Fondo">' + [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div></div>' +
+    '<div class="chips fin-t fin2-t" role="tablist" aria-label="Tarjeta">' + t.map(function (x, i) { return '<button role="tab" aria-selected="' + (sl === i) + '" class="chip' + (sl === i ? ' on' : '') + '" data-a="finSlide" data-i="' + i + '">' + x[1] + '</button>'; }).join('') + '</div>' +
     '<div class="car"><button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button><div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div><button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button></div>' +
-    (finT(U)[U.slide || 0] && finT(U)[U.slide || 0][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
-    '<div class="puntos">' + finT(U).map(function (t, i) { return '<i class="' + (U.slide === i ? 'on' : '') + '"></i>'; }).join('') + '</div><small class="mut center">' + (finT(U)[U.slide || 0] || finT(U)[0])[2] + ' · desliza con las flechas</small>' +
-    (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '<button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><small class="mut center">Instagram, WhatsApp o guardarla en tu galería</small>') +
-    '<button class="btn sec" data-a="finGuardar">' + ic('descargar', 18) + 'Guardar imagen</button>' +
-    (U.pub ? '<span class="cm-hecho">' + ic('check', 17, 'var(--verde)', 2.6) + 'Publicado en la Comunidad</span>' : '<button class="btn sec" data-a="finComu">' + ic('comu', 18) + 'Publicar en la Comunidad</button>') + (U.foto ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '') + '</section>';
-  h += '<button class="btn sec" data-a="tab" data-v="prog">Ver tu entreno en Progreso</button><button class="btn" data-a="finListo">¡Listo!</button></div>';
+    (t[sl] && t[sl][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
+    (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' :
+      '<div class="fin2-ac"><button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="finGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button>' +
+      (U.pub ? '<span class="fin2-ib ok">' + ic('check', 19, 'var(--verde)', 2.6) + '<small>Publicado</small></span>' : '<button class="fin2-ib" data-a="finComu" aria-label="Publicar en la Comunidad">' + ic('comu', 19) + '<small>Comunidad</small></button>') + '</div>') +
+    (U.foto ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '') + '</section>';
+  h += '<button class="btn fin2-ok" data-a="finListo">¡Listo!</button><button class="link fin2-pr" data-a="tab" data-v="prog">Ver tu entreno en Progreso</button></div>';
   return h;
 };
 var trasPintar = function () { if (S.pant && S.pant.t === 'fin') pintaTarjeta(); };
 A.finListo = function () { S.fin = null; irTab('inicio'); };
 A.finModo = function (el) { S.fin.modo = el.dataset.v; pintar(); };
 /* 19 nov (Chadín: «tipo Hevy», estilo «Grande»): tres tarjetas, como en la app de los clientes */
-var FIN_T = [['sum', 'Resumen', 'El resumen de tu entreno'], ['res', 'Ejercicios', 'Tus ejercicios y sus series'], ['vol', 'Tu carga', 'Lo que has levantado hoy']];
+var FIN_T = [['res', 'Ejercicios', 'Tus ejercicios y sus series'], ['vol', 'Tu carga', 'Lo que has levantado hoy'], ['sum', 'Resumen', 'El resumen de tu entreno']];      // 09:11 (Chadín): primero Ejercicios, luego Tu carga y luego Resumen
 /* 20 nov, 07:23 (Chadín: «los récords de esa sesión, como en el perfil de la clienta, que puedan compartirlo en redes sociales»):
    con récords, una cuarta tarjeta «Tu récord» (uno, o todos hasta 3), en negro, en blanco o con tu foto */
 function recsTodos(U) { return ((U && U.recs) || []).filter(function (x) { return x && x.e; }); }
@@ -5103,6 +5600,37 @@ function ctaFinTiempo() {
 }
 A.ctaAutoNo = function () { CTA.auto = null; pintaDescanso(); toast('La siguiente serie la empiezas tú'); };
 setInterval(function () { var a = CTA.auto; if (!a || CTA.on) return; if (!S.ses) { CTA.auto = null; return; } if (Date.now() >= a.fin) { CTA.auto = null; ctaSerie(a.i, true); } }, 250);
+
+/* ---------- 20 nov 2026, 08:55 (Chadín): el RPE al terminar (para todos): «¿Cuánto te ha costado?», del 1 al 10, de un toque.
+   Se guarda en el entreno (rpe) y, si tiene el ciclo activado, le dice en qué fase le cuestan más ---------- */
+var RPE_T = { 1: 'Muy, muy fácil', 2: 'Muy fácil', 3: 'Fácil', 4: 'Cómodo', 5: 'Moderado', 6: 'Algo duro', 7: 'Duro', 8: 'Muy duro', 9: 'Casi al límite', 10: 'Al límite' };
+var RPE_D = { 1: 'Como un paseo.', 2: 'Apenas lo has notado.', 3: 'Podrías haber seguido mucho más.', 4: 'Has trabajado, pero sin agobio.', 5: 'Te ha hecho trabajar, con margen de sobra.', 6: 'Te ha costado, pero aún te quedaba bastante.', 7: 'Te ha costado: te quedaban 2 o 3 repeticiones en cada serie.', 8: 'Muy exigente: te quedaban 1 o 2 repeticiones.', 9: 'Casi no podías más: quizá 1 repetición.', 10: 'No podías hacer ni una repetición más.' };
+var RPE_C = ['#2BB673', '#4CBF6B', '#79C760', '#A6CE55', '#D1C94A', '#E8B23F', '#EE8F3B', '#EC6B3A', '#E04B3A', '#C9323A'];
+function rpeCard(U) {
+  var v = num(U.rpe);
+  return '<section class="card rpe-c"><div class="rpe-h"><b>¿Cuánto te ha costado?</b><small class="mut">' + (v ? v + ' · ' + RPE_T[v] : 'Esfuerzo del 1 al 10 (RPE)') + '</small></div><div class="rpe-r" role="radiogroup" aria-label="Esfuerzo del 1 al 10">' +
+    [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { var on = v === n; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" style="--c:' + RPE_C[n - 1] + '" data-a="finRpe" data-v="' + n + '" aria-label="' + n + ': ' + RPE_T[n] + '">' + n + '</button>'; }).join('') +
+    '</div><div class="rpe-l"><span>Muy fácil</span><span>Al máximo</span></div></section>';
+}
+A.finRpe = function (el) {
+  var U = S.fin, n = +el.dataset.v; if (!U) return; U.rpe = n;
+  var s = S.sesiones.filter(function (x) { return x.id === U.id; })[0];
+  if (s) { s.rpe = n; var d = Object.assign({}, s); delete d.id; delete d.fecha; guardar('yo_guardar_sesion', { sid: s.id, f: s.fecha, d: d }, 'ses_' + s.id); }
+  pintar();
+};
+
+/* 09:05 (Chadín): «tipo Hevy»: una fila discreta en el final y, al tocarla, una hoja con el número grande, qué significa y la fila de números */
+A.finRpeAbre = function () { var U = S.fin; if (!U) return; S.x.rpeT = num(U.rpe) || 7; rpeHoja(); };
+function rpeHoja() {
+  var v = S.x.rpeT;
+  hoja('<div class="rpe-s"><small class="rpe-k">Esfuerzo del entreno · RPE</small><b class="rpe-n">' + v + '</b><b class="rpe-t">' + RPE_T[v] + '</b><p class="rpe-d">' + RPE_D[v] + '</p>' +
+    '<div class="rpe-f" role="radiogroup" aria-label="Esfuerzo del 1 al 10">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<button role="radio" aria-checked="' + (n === v) + '" class="' + (n === v ? 'on' : '') + '" data-a="rpeElige" data-v="' + n + '">' + n + '</button>'; }).join('') + '</div>' +
+    '<button class="btn" data-a="rpeListo">Listo</button>' + (num(S.fin && S.fin.rpe) ? '<button class="link" data-a="rpeQuitar">Quitar</button>' : S.x.rpeAuto ? '<button class="link" data-a="rpeAhoraNo">Ahora no</button>' : '') + '</div>');
+}
+A.rpeElige = function (el) { S.x.rpeT = +el.dataset.v; rpeHoja(); };
+A.rpeListo = function () { S.x.rpeAuto = 0; cerrarHoja(); A.finRpe({ dataset: { v: S.x.rpeT } }); };
+A.rpeAhoraNo = function () { S.x.rpeAuto = 0; cerrarHoja(); };
+A.rpeQuitar = function () { var U = S.fin; cerrarHoja(); if (!U) return; delete U.rpe; var s2 = S.sesiones.filter(function (x) { return x.id === U.id; })[0]; if (s2) { delete s2.rpe; var d = Object.assign({}, s2); delete d.id; delete d.fecha; guardar('yo_guardar_sesion', { sid: s2.id, f: s2.fecha, d: d }, 'ses_' + s2.id); } pintar(); };
 
 ;
 /* ---------- La vista de cada ejercicio en el entreno, como la de los clientes de los entrenadores (17 nov 2026, Word de programación) ----------
@@ -7462,6 +7990,233 @@ A.comQuitar = function () {
 
 
 ;
+/* ---------- 20 nov 2026 (Chadín, 08:04): «mete ciclo y pasos». El ciclo, como en el perfil de las clientas: apunta su última regla, la app
+   calcula sus fases y, con sus check-ins de cada día, le dice cómo le sienta cada fase (cuándo suele estar cansada y cuándo está más on fire).
+   Los pasos: en la app de las tiendas se leerán solos de Apple Salud o Health Connect; en la web, se apuntan a mano.
+   Son datos de salud (RGPD, art. 9): cada cosa se activa aparte, con su consentimiento expreso, y se puede quitar y borrar cuando quiera.
+   Dónde: el perfil (S.perfil.cic = { on, ok, ult, L, dur }, S.perfil.pasos = { on, ok, meta }) y cada día en S.salud[f] = { e, regla, sint, sueno, nota, pasos },
+   aparte de todo lo demás (servidor: indep.yo_salud, 013). Solo los ve ella. ---------- */
+var CIC_C = { menstrual: '#E5484D', folicular: '#F7B6C8', fertil: '#2BB3A3', ovulacion: '#12857A', lutea: '#B9A8EC', premenstrual: '#F0A020' };
+var CIC_N = { menstrual: 'Menstrual', folicular: 'Folicular', fertil: 'Fértil', ovulacion: 'Ovulación', lutea: 'Lútea', premenstrual: 'Premenstrual', largo: 'Ciclo largo' };
+var CIC_T = { menstrual: 'Escucha a tu cuerpo: si te encuentras bien, entrena normal; si no, baja un poco la intensidad.', folicular: 'La energía suele ir subiendo: buen momento para apretar y buscar marcas.',
+  fertil: 'Muchas mujeres se notan con más fuerza estos días.', ovulacion: 'Muchas mujeres se notan con más fuerza estos días.', lutea: 'Puede costar algo más recuperar: cuida el descanso y bebe agua.',
+  premenstrual: 'Es normal notar más cansancio o más hambre: ajusta sin culparte.', largo: 'Tu ciclo va más largo de lo normal en ti. Si te pasa a menudo, coméntalo con tu médico.' };
+var FASES5 = [['menstrual', 'Menstrual'], ['folicular', 'Folicular'], ['ovulatoria', 'Ovulatoria'], ['lutea', 'Lútea'], ['premenstrual', 'Premenstrual']];
+var SINT = { cansancio: 'Cansancio', dolor: 'Dolor o cólicos', cabeza: 'Dolor de cabeza', hinchazon: 'Hinchazón', animo: 'Ánimo bajo', antojos: 'Antojos', sueno: 'Dormí mal' };
+var SINT_F = { cansancio: 'cansancio', dolor: 'dolor o cólicos', cabeza: 'dolor de cabeza', hinchazon: 'hinchazón', animo: 'el ánimo bajo', antojos: 'más hambre o antojos', sueno: 'que duermes peor' };
+var CK5 = [[2, 'Agotada', '#E5484D'], [4, 'Cansada', '#F08A4B'], [6, 'Normal', '#C9B458'], [8, 'A tope', '#5DBB7A'], [10, 'Súper a tope', '#1E8E5A']];
+
+S.salud = S.salud || {};
+function salud(f) { return S.salud[f] || null; }
+function guardaSalud(f) { var d = S.salud[f]; if (d && !Object.keys(d).length) { delete S.salud[f]; d = null; } return guardar('yo_guardar_salud', { f: f, d: d }, 'salud_' + f); }
+function esHombreYo() { var q = (S.perfil && S.perfil.q) || {}, n = (S.perfil && S.perfil.nut) || {}; return (n.sexo || q.sexo) === 'hombre'; }
+/* 20 nov, 09:41: el ciclo y los pasos son datos de salud; Chadín dio el OK al texto de la política de privacidad («todo ok»). Con false se ocultan */
+var SALUD_ON = true;
+function cicOn() { var c = S.perfil && S.perfil.cic; return SALUD_ON && !!(c && c.on && c.ok && c.ult) && !esHombreYo(); }
+function pasosOn() { var p = S.perfil && S.perfil.pasos; return SALUD_ON && !!(p && p.on && p.ok); }
+
+/* ---------- el ciclo: dónde empezó cada regla, cuánto suele durar y en qué fase está cada día ---------- */
+function cicPerfil() {
+  var c = S.perfil.cic, F = Object.keys(S.salud).filter(function (f) { return S.salud[f].regla; }).sort(), ini = [];
+  F.forEach(function (f) { if (!(S.salud[sumar(f, -1)] || {}).regla) ini.push(f); });
+  if (c.ult && !ini.some(function (f) { return Math.abs(dDias(f, c.ult)) <= 10; })) ini.push(c.ult);
+  ini.sort(); var I = []; ini.forEach(function (f) { if (!I.length || dDias(I[I.length - 1], f) >= 15) I.push(f); });
+  var G = []; for (var i = 1; i < I.length; i++) { var g = dDias(I[i - 1], I[i]); if (g >= 20 && g <= 45) G.push(g); }
+  G = G.slice(-6); var L = G.length ? Math.round(G.reduce(function (a, b) { return a + b; }, 0) / G.length) : +c.L || 28;
+  var D = []; I.forEach(function (f) { var n = 0; while ((S.salud[sumar(f, n)] || {}).regla && n < 12) n++; if (n >= 2) D.push(n); });
+  var dur = D.length ? Math.round(D.reduce(function (a, b) { return a + b; }, 0) / D.length) : +c.dur || 5;
+  return { ini: I, L: L, dur: Math.min(dur, 10) };
+}
+function cicEstado(hoy) {
+  hoy = hoy || hoyStr(); if (!cicOn()) return null;
+  var P = cicPerfil(), I = P.ini.filter(function (f) { return f <= hoy; }); if (!I.length) return null;
+  var ult = I[I.length - 1], L = P.L, dur = P.dur, d = dDias(ult, hoy) + 1, e = salud(hoy) || {}, ov = Math.max(dur + 2, L - 14), enRegla = !!e.regla || (d <= dur && e.regla !== false);
+  var f = enRegla ? 'menstrual' : d > L + 7 ? 'largo' : d >= L - 4 ? 'premenstrual' : d === ov ? 'ovulacion' : d >= ov - 5 && d <= ov + 1 ? 'fertil' : d < ov - 5 ? 'folicular' : 'lutea';
+  return { P: P, ult: ult, L: L, dur: dur, d: d, ov: ov, f: f, prox: sumar(ult, L), retraso: d > L ? d - L : 0, reglaHoy: !!e.regla };
+}
+function faseDia(k, C) { return k <= C.dur ? 'menstrual' : k === C.ov ? 'ovulacion' : k >= C.ov - 5 && k <= C.ov + 1 ? 'fertil' : k >= C.L - 4 ? 'premenstrual' : k < C.ov - 5 ? 'folicular' : 'lutea'; }
+/* en qué día y fase estaba un día pasado (para sus patrones): la de 5 días antes de la siguiente regla, premenstrual */
+function cicInfo(f, P) {
+  var I = P.ini, ini = null, sig = null; for (var i = I.length - 1; i >= 0; i--) if (I[i] <= f) { ini = I[i]; sig = I[i + 1] || null; break; }
+  if (!ini) return null; var dia = dDias(ini, f) + 1; if (dia > 45) return null;
+  var x = salud(f) || {}, C = { L: P.L, dur: P.dur, ov: Math.max(P.dur + 2, P.L - 14) };
+  var fa = x.regla || (dia <= P.dur && x.regla !== false) ? 'menstrual' : sig && dDias(f, sig) <= 5 ? 'premenstrual' : !sig && dia >= P.L - 4 ? 'premenstrual' : faseDia(dia, C);
+  return { dia: dia, fase: fa === 'menstrual' ? 'menstrual' : fa === 'fertil' || fa === 'ovulacion' ? 'ovulatoria' : fa };
+}
+function arco(cx, cy, r, a0, a1) { var p = function (a) { var t = (a - 90) * Math.PI / 180; return (cx + r * Math.cos(t)).toFixed(2) + ' ' + (cy + r * Math.sin(t)).toFixed(2); }; return 'M' + p(a0) + ' A' + r + ' ' + r + ' 0 ' + (a1 - a0 > 180 ? 1 : 0) + ' 1 ' + p(a1); }
+function cicAnillo(C, tam) {
+  var L = C.L, R = 78, gap = L > 30 ? 1 : 1.4, seg = 360 / L, col = CIC_C[C.f === 'largo' ? 'premenstrual' : C.f];
+  var h = '<svg class="cy-svg" width="' + tam + '" height="' + tam + '" viewBox="0 0 200 200" aria-hidden="true">';
+  for (var k = 1; k <= L; k++) h += '<path d="' + arco(100, 100, R, (k - 1) * seg + gap / 2, k * seg - gap / 2) + '" stroke="' + CIC_C[faseDia(k, C)] + '" stroke-width="15" fill="none"/>';
+  var am = (Math.min(C.d, L) - 0.5) * seg, t = (am - 90) * Math.PI / 180, x = 100 + R * Math.cos(t), y = 100 + R * Math.sin(t);
+  return h + '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="13" fill="var(--card)" stroke="' + col + '" stroke-width="4"/><circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5" fill="' + col + '"/></svg>';
+}
+function cicFalta(C) { var q = dDias(hoyStr(), C.prox); return C.f === 'menstrual' ? 'Día ' + C.d + ' de tu periodo' : C.retraso ? C.retraso + (C.retraso === 1 ? ' día' : ' días') + ' de retraso' : q <= 0 ? 'Te podría venir hoy' : q === 1 ? 'Periodo mañana' : 'Periodo en ' + q + ' días'; }
+
+/* ---------- lo que dicen sus datos: su energía en cada fase, los días que suele estar muy cansada y los más on fire, y lo que nota ---------- */
+function media(l) { return l.length ? l.reduce(function (a, b) { return a + b; }, 0) / l.length : null; }
+function cicPat() {
+  var P = cicPerfil(), F = {}, todos = [], porDia = {}, nCk = 0, R = { ok: false, P: P, F: F, porDia: porDia, L: [], n: 0 };
+  FASES5.forEach(function (f) { F[f[0]] = { e: [], sin: {}, n: 0 }; });
+  Object.keys(S.salud).forEach(function (f) { var x = S.salud[f], e = num(x.e); if (e == null) return; nCk++; var i = cicInfo(f, P); if (!i) return; var o = F[i.fase]; o.n++; o.e.push(e); todos.push(e); (x.sint || []).forEach(function (k) { o.sin[k] = (o.sin[k] || 0) + 1; }); (porDia[i.dia] = porDia[i.dia] || []).push(e); });
+  R.n = nCk; if (todos.length < 12) return R;
+  var mE = media(todos), L = R.L; R.mE = mE;
+  var dias = function (lista, txt) { if (!lista.length) return; var g = [], a = lista[0], b = lista[0]; lista.slice(1).concat([null]).forEach(function (k) { if (k !== null && k <= b + 2) { b = k; return; } g.push(a === b ? 'el día ' + a : 'los días ' + a + ' a ' + b); a = b = k; });
+    var v = []; lista.forEach(function (k) { v = v.concat(porDia[k]); }); var t = listaY(g); return t.charAt(0).toUpperCase() + t.slice(1) + ' de tu ciclo ' + txt + ' (' + fN(media(v)) + '/10 de media; lo normal en ti, ' + fN(mE) + '/10).'; };
+  var K = Object.keys(porDia).map(Number).filter(function (k) { return porDia[k].length >= 2; }).sort(function (a, b) { return a - b; });
+  var bajo = dias(K.filter(function (k) { return media(porDia[k]) <= Math.min(mE - 1.8, 5); }), 'sueles estar muy cansada'), alto = dias(K.filter(function (k) { return media(porDia[k]) >= Math.max(mE + 1.3, 7.5); }), 'son tus días más on fire');
+  if (bajo) L.push({ ic: 'baja', t: bajo }); if (alto) L.push({ ic: 'rayo', t: alto });
+  FASES5.forEach(function (f) { var o = F[f[0]], e = media(o.e), nf = f[1].toLowerCase();
+    if (e != null && o.e.length >= 3 && e <= mE - 1) L.push({ ic: 'baja', fase: f[0], t: 'En tu fase ' + nf + ' tu energía baja: ' + fN(e) + '/10 de media.' });
+    if (e != null && o.e.length >= 3 && e >= mE + 1) L.push({ ic: 'rayo', fase: f[0], t: 'En tu fase ' + nf + ' estás más on fire: ' + fN(e) + '/10 de media.' });
+    var top = Object.keys(o.sin).filter(function (k) { return o.n >= 3 && o.sin[k] / o.n >= 0.5; }).sort(function (a, b) { return o.sin[b] - o.sin[a]; });
+    if (top.length) L.push({ ic: 'nota', fase: f[0], t: 'En tu fase ' + nf + ' sueles notar ' + listaY(top.map(function (k) { return SINT_F[k] || k; })) + ' (' + Math.round(100 * o.sin[top[0]] / o.n) + ' % de los días).' }); });
+  /* 08:55: el esfuerzo (RPE) de sus entrenos en cada fase */
+  var Rf = {}, Rt = []; S.sesiones.forEach(function (s) { var r = num(s.rpe); if (r == null) return; Rt.push(r); var i = cicInfo(s.fecha, P); if (i) (Rf[i.fase] = Rf[i.fase] || []).push(r); });
+  var mR = media(Rt); if (mR != null) FASES5.forEach(function (f) { var o = Rf[f[0]] || [], r = media(o); if (r != null && o.length >= 3 && r >= mR + 0.7) L.push({ ic: 'baja', fase: f[0], t: 'En tu fase ' + f[1].toLowerCase() + ' los entrenos te cuestan más: esfuerzo ' + fN(r) + ' de media (lo normal en ti, ' + fN(mR) + ').' }); });
+  R.ok = true; return R;
+}
+function listaY(l) { return l.length < 2 ? (l[0] || '') : l.slice(0, -1).join(', ') + ' y ' + l[l.length - 1]; }
+
+/* ---------- en Inicio: la casilla del ciclo, el check-in de hoy, los pasos y «Añade a tu Inicio» ---------- */
+function iniCiclo() {
+  var C = cicEstado(); if (!C) return '<button class="card ini-t" data-a="cicActivar"><span class="ini-ti cy">' + ic('gota', 24) + '</span><small class="ini-k">Tu ciclo</small><b>Apunta tu última regla</b></button>';
+  return '<button class="card ini-t" data-a="ciclo"><span class="cy-mini">' + cicAnillo(C, 64) + '<b class="nm">' + C.d + '</b></span><small class="ini-k">Tu ciclo</small><b><i class="cy-pt" style="background:' + CIC_C[C.f === 'largo' ? 'premenstrual' : C.f] + '"></i>' + CIC_N[C.f] + '</b><small class="mut">' + esc(cicFalta(C)) + '</small></button>';
+}
+function ckHoyCard() {
+  var x = salud(hoyStr()) || {}, e = num(x.e);
+  if (e != null) { var k = CK5.filter(function (c) { return c[0] >= e; })[0] || CK5[4];
+    return '<button class="card ck-hecho" data-a="ckAfinar"><span class="ck-p" style="background:' + k[2] + '"></span><span class="col"><b>Hoy te sientes: ' + k[1].toLowerCase() + '</b><small class="mut">' + esc([x.regla ? 'Con la regla' : '', (x.sint || []).map(function (s) { return SINT[s]; }).join(', '), x.sueno ? x.sueno + ' h de sueño' : ''].filter(Boolean).join(' · ') || 'Toca para añadir cómo has dormido o lo que notas') + '</small></span>' + ic('lapiz', 16) + '</button>'; }
+  return '<section class="card ck-c"><div class="ck-h"><b>¿Cómo te sientes hoy?</b><small class="mut">Toca cómo estás y, si quieres, completa lo demás</small></div><div class="ck5">' +
+    CK5.map(function (c) { return '<button data-a="ckE" data-v="' + c[0] + '" aria-label="' + c[1] + '"><i style="--c:' + c[2] + '"></i><small>' + c[1] + '</small></button>'; }).join('') + '</div></section>';
+}
+function pasosDia(f) { return num((salud(f) || {}).pasos) || 0; }
+function iniPasos(mini) {
+  if (!pasosOn()) return mini ? '<button class="card ini-t" data-a="pasosActivar"><span class="ini-ti">' + ic('pasos', 24) + '</span><small class="ini-k">Tus pasos</small><b>Activa tus pasos</b><small class="mut">En la app se apuntan solos</small></button>' : '';
+  var meta = +S.perfil.pasos.meta || 8000, p = pasosDia(hoyStr()), pc = Math.round(p * 100 / meta);
+  if (mini) return '<button class="card ini-t" data-a="pasosApuntar">' + anillo(pc, 64, 7, '<b class="nm">' + Math.min(pc, 999) + '%</b>', fmil(p) + ' de ' + fmil(meta) + ' pasos') + '<small class="ini-k">Pasos</small><b class="nm">' + fmil(p) + '</b><small class="mut">de ' + fmil(meta) + '</small></button>';
+  var lun = lunesDe(hoyStr()), W = DIAS7.map(function (d, i) { var f = sumar(lun, i); return { d: d, f: f, p: pasosDia(f) }; }), mx = Math.max.apply(null, W.map(function (x) { return x.p; }).concat([meta]));
+  return '<button class="card ini-pasos" data-a="pasosApuntar"><span class="card-h"><b>Pasos</b><small class="mut">' + ic('lapiz', 14) + 'Apuntar</small></span><span class="ps2"><span class="ps2-n"><b class="nm">' + fmil(p) + '</b><small>de ' + fmil(meta) + ' pasos hoy</small><span class="ps2-b"><i style="width:' + Math.min(100, pc) + '%"></i></span></span>' +
+    '<span class="ps2-w">' + W.map(function (x) { return '<span class="' + (x.f === hoyStr() ? 'hoy' : x.f > hoyStr() ? 'fut' : '') + '"><i style="height:' + Math.max(3, Math.round(x.p * 44 / mx)) + 'px" class="' + (x.p >= meta ? 'ok' : '') + '"></i><small>' + x.d + '</small></span>'; }).join('') + '</span></span></button>';
+}
+function iniActivar() {
+  if (!SALUD_ON) return '';
+  var L = [];
+  if (!cicOn() && !esHombreYo()) L.push('<button class="fila-b act-f" data-a="cicActivar"><span class="ini-ti cy sm">' + ic('gota', 18) + '</span><span class="col"><b>Tu ciclo</b><small>Tus fases, cuándo te toca el periodo y cómo te sienta cada fase</small></span><em>Activar</em></button>');
+  if (!pasosOn()) L.push('<button class="fila-b act-f" data-a="pasosActivar"><span class="ini-ti sm">' + ic('pasos', 18) + '</span><span class="col"><b>Tus pasos</b><small>En la app del móvil, se apuntan solos desde Apple Salud o Health Connect</small></span><em>Activar</em></button>');
+  return L.length ? '<section class="card act-c"><div class="card-h"><b>Añade a tu Inicio</b><small class="mut">Opcional</small></div>' + L.join('') + '</section>' : '';
+}
+
+/* ---------- el check-in: 5 círculos de un toque; al tocar uno, se abre para afinar (regla, lo que notas, sueño y una nota) ---------- */
+A.ckE = function (el) { var f = hoyStr(), x = S.salud[f] = Object.assign({}, S.salud[f] || {}); x.e = +el.dataset.v; guardaSalud(f); pintar(); A.ckAfinar(); };
+A.ckAfinar = function () {
+  var f = hoyStr(), x = salud(f) || {}, C = cicEstado();
+  hoja('<h2>Hoy</h2><p class="mut sm">Cuanto más lo apuntes, mejor te digo cómo te sienta cada fase. Solo lo ves tú.</p>' +
+    '<b class="lab">¿Cómo te sientes?</b><div class="ck5 sm">' + CK5.map(function (c) { return '<button data-a="ckE2" data-v="' + c[0] + '" class="' + (num(x.e) === c[0] ? 'on' : '') + '"><i style="--c:' + c[2] + '"></i><small>' + c[1] + '</small></button>'; }).join('') + '</div>' +
+    (C ? '<b class="lab">¿Tienes la regla hoy?</b><div class="seg2"><button class="' + (x.regla ? 'on' : '') + '" data-a="ckRegla" data-v="1">Sí</button><button class="' + (x.regla === false || (!x.regla && C.f !== 'menstrual') ? 'on' : '') + '" data-a="ckRegla" data-v="0">No</button></div>' : '') +
+    '<b class="lab">¿Notas algo?</b><div class="chips">' + Object.keys(SINT).map(function (k) { var on = (x.sint || []).indexOf(k) >= 0; return '<button class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="ckSint" data-v="' + k + '">' + SINT[k] + '</button>'; }).join('') + '</div>' +
+    '<b class="lab">¿Cuánto has dormido?</b><div class="chips">' + [5, 6, 7, 8, 9].map(function (h) { return '<button class="chip' + (num(x.sueno) === h ? ' on' : '') + '" data-a="ckSueno" data-v="' + h + '">' + (h === 5 ? '5 h o menos' : h === 9 ? '9 h o más' : h + ' h') + '</button>'; }).join('') + '</div>' +
+    '<button class="btn" data-a="cerrarHoja">Listo</button>');
+};
+function ckPon(k, v) { var f = hoyStr(), x = S.salud[f] = Object.assign({}, S.salud[f] || {}); if (v == null) delete x[k]; else x[k] = v; guardaSalud(f); A.ckAfinar(); pintar(); }
+A.ckE2 = function (el) { ckPon('e', +el.dataset.v); };
+A.ckRegla = function (el) { ckPon('regla', el.dataset.v === '1' ? true : false); };
+A.ckSint = function (el) { var x = salud(hoyStr()) || {}, L = (x.sint || []).slice(), i = L.indexOf(el.dataset.v); if (i >= 0) L.splice(i, 1); else L.push(el.dataset.v); ckPon('sint', L.length ? L : null); };
+A.ckSueno = function (el) { var x = salud(hoyStr()) || {}; ckPon('sueno', num(x.sueno) === +el.dataset.v ? null : +el.dataset.v); };
+A.reglaHoy = function () { var f = hoyStr(), x = S.salud[f] = Object.assign({}, S.salud[f] || {}); x.regla = true; guardaSalud(f); toast('Apuntado: hoy empieza tu periodo', 'ok'); pintar(); };
+A.reglaNo = function () { var f = hoyStr(), x = S.salud[f] = Object.assign({}, S.salud[f] || {}); x.regla = false; guardaSalud(f); pintar(); };
+
+/* ---------- «Tu ciclo» ---------- */
+A.ciclo = function () { ir({ t: 'ciclo' }); };
+VISTAS.ciclo = function () {
+  var C = cicEstado(), h = '<div class="pant pad">' + cab('Tu ciclo', { der: '<button class="redondo" data-a="cicAjustes" aria-label="Ajustes del ciclo">' + ic('ajustes', 19) + '</button>' });
+  if (!C) return h + '<section class="card"><p class="mut sm">Apunta cuándo empezó tu última regla para ver tus fases.</p><button class="btn" data-a="cicActivar">Apuntarla</button></section></div>';
+  var col = CIC_C[C.f === 'largo' ? 'premenstrual' : C.f];
+  h += '<section class="card cy-c"><span class="cy-big">' + cicAnillo(C, 220) + '<span class="cy-cen"><small>Día ' + C.d + ' de ' + C.L + '</small><b>' + CIC_N[C.f] + '</b><span>' + esc(cicFalta(C)) + '</span></span></span>' +
+    '<p class="cy-t"><i class="cy-pt" style="background:' + col + '"></i>' + esc(CIC_T[C.f]) + '</p>' +
+    '<div class="cy-ley">' + [['menstrual', 'Periodo'], ['folicular', 'Folicular'], ['fertil', 'Fértil'], ['lutea', 'Lútea'], ['premenstrual', 'Premenstrual']].map(function (x) { return '<span><i style="background:' + CIC_C[x[0]] + '"></i>' + x[1] + '</span>'; }).join('') + '</div>' +
+    (C.f === 'menstrual' ? (C.reglaHoy ? '' : '<button class="btn-o" data-a="reglaNo">Hoy ya no tengo la regla</button>') : '<button class="' + (C.f === 'premenstrual' || C.f === 'largo' ? 'btn cy-btn' : 'btn-o cy-btn2') + '" data-a="reglaHoy">' + ic('gota', 16) + 'Me ha venido hoy</button>') +
+    '<small class="mut center">Próximo periodo, hacia el ' + esc(fCorta(C.prox)) + ' · tu ciclo dura unos ' + C.L + ' días</small></section>';
+  h += ckHoyCard();
+  var R = cicPat();
+  h += '<section class="card"><div class="card-h"><b>Lo que dicen tus datos</b></div>';
+  if (!R.ok) h += '<p class="mut sm">Con ' + Math.max(0, 12 - R.n) + ' check-ins más empiezo a decirte cómo te sienta cada fase: cuándo sueles estar cansada y cuándo estás más on fire.</p><span class="ps2-b"><i style="width:' + Math.min(100, Math.round(R.n * 100 / 12)) + '%"></i></span>';
+  else h += (R.L.length ? R.L.slice(0, 5).map(function (p) { return '<div class="pat-f"><span class="pat-i ' + p.ic + '"' + (p.fase ? ' style="--c:' + (CIC_C[p.fase === 'ovulatoria' ? 'fertil' : p.fase]) + '"' : '') + '>' + ic(p.ic === 'rayo' ? 'rayo' : p.ic === 'baja' ? 'bajar' : 'nota', 15) + '</span><span>' + esc(p.t) + '</span></div>'; }).join('') : '<p class="mut sm">De momento te sientes parecida en todas las fases.</p>') +
+    '<small class="mut">Son tendencias tuyas, con ' + R.n + ' check-ins. No es un consejo médico.</small>';
+  h += '</section>';
+  if (R.ok) {
+    h += '<section class="card"><div class="card-h"><b>Tu energía en cada fase</b><small class="mut">de 1 a 10</small></div>' + FASES5.map(function (f) { var e = media(R.F[f[0]].e); return '<span class="hbar cy-h"><span>' + f[1] + '</span><span class="b"><i style="width:' + (e ? Math.round(e * 10) : 0) + '%;background:' + CIC_C[f[0] === 'ovulatoria' ? 'fertil' : f[0]] + '"></i></span><b>' + (e ? fN(e) : '–') + '</b></span>'; }).join('') + '</section>';
+    var mx = Math.min(35, Math.max(C.L, Math.max.apply(null, Object.keys(R.porDia).map(Number).concat([28])))), dd = '';
+    for (var k = 1; k <= mx; k++) { var v = R.porDia[k] ? media(R.porDia[k]) : null; dd += '<span class="cy-d1' + (v == null ? ' v' : v <= Math.min(R.mE - 1.2, 5.5) ? ' lt' : v >= Math.max(R.mE + 1, 7.5) ? ' hi' : '') + (k === C.d ? ' hoy' : '') + '"><small>' + k + '</small><b>' + (v == null ? '' : fN(v, 0)) + '</b></span>'; }
+    h += '<section class="card"><div class="card-h"><b>Tu energía, día a día del ciclo</b></div><div class="cy-dd">' + dd + '</div><div class="cy-ley sm"><span><i class="lt"></i>Sueles estar cansada</span><span><i class="hi"></i>Más on fire</span></div></section>';
+  }
+  return h + '<p class="cm-nunca">' + ic('escudo', 15) + '<span>Solo lo ves tú: ni tu coach ni la Comunidad. Puedes quitarlo y borrarlo cuando quieras en los ajustes de arriba.</span></p></div>';
+};
+
+/* ---------- activar (con su consentimiento), ajustes y quitar ---------- */
+A.cicActivar = function () {
+  if (!SALUD_ON) return;
+  var c = (S.perfil && S.perfil.cic) || {};
+  hoja('<h2>Tu ciclo</h2><p class="mut sm">Te digo en qué fase estás y cuándo te toca el periodo y, con lo que apuntes cada día, cómo te sienta cada fase para entrenar.</p><form class="acc-f" data-f="cic" novalidate>' +
+    '<label class="f">¿Cuándo empezó tu última regla?<input type="date" id="cy-u" max="' + hoyStr() + '" min="' + sumar(hoyStr(), -60) + '" value="' + esc(c.ult || '') + '"></label>' +
+    '<div class="fila2"><label class="f">Tu ciclo dura <span class="mut">(días)</span><input id="cy-l" inputmode="numeric" value="' + esc(c.L || 28) + '"></label><label class="f">Tu regla dura <span class="mut">(días)</span><input id="cy-d" inputmode="numeric" value="' + esc(c.dur || 5) + '"></label></div>' +
+    '<p class="mut sm">Si no lo sabes, deja 28 y 5: la app lo va ajustando con tus reglas.</p>' +
+    '<label class="chk"><input type="checkbox" id="cy-ok"' + (c.ok ? ' checked' : '') + '><span>Acepto que MOOD ON guarde mis datos del ciclo y de cómo me siento (son <b>datos de salud</b>) solo para enseñármelos a mí. Nadie más los ve y puedo borrarlos cuando quiera. <a href="../privacidad.html#yo" target="_blank" rel="noopener">Privacidad</a></span></label>' +
+    '<p class="msg err" id="cy-err" hidden></p><button class="btn" type="submit">Activar</button></form>');
+};
+F.cic = function () {
+  var u = $('#cy-u').value, L = parseInt($('#cy-l').value, 10), d = parseInt($('#cy-d').value, 10), e = $('#cy-err'), err = function (t) { e.hidden = false; e.textContent = t; };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(u) || u > hoyStr()) return err('Elige el día en que empezó tu última regla.');
+  if (!(L >= 20 && L <= 45)) return err('El ciclo suele durar entre 20 y 45 días.');
+  if (!(d >= 2 && d <= 10)) return err('La regla suele durar entre 2 y 10 días.');
+  if (!$('#cy-ok').checked) return err('Para guardarlo, marca que aceptas.');
+  var c = S.perfil.cic || {}; S.perfil.cic = { on: 1, ok: c.ok || new Date().toISOString(), ult: u, L: L, dur: d }; guardaPerfil(); cerrarHoja(); toast('Tu ciclo, activado', 'ok'); pintar();
+};
+A.cicAjustes = function () {
+  hoja('<h2>Ajustes del ciclo</h2><div class="lista"><button class="fila-b" data-a="cicActivar"><b>Cambiar mi última regla o lo que dura</b></button><button class="fila-b rojo" data-a="saludQuitar" data-v="cic"><b>Quitar el ciclo y borrar sus datos</b><small>Se borran tus reglas y tus check-ins. No se puede deshacer.</small></button></div>');
+};
+A.pasosActivar = function () {
+  if (!SALUD_ON) return;
+  var p = (S.perfil && S.perfil.pasos) || {};
+  hoja('<h2>Tus pasos</h2><p class="mut sm">En la app del móvil, con tu permiso, se leen solos de Apple Salud o Health Connect (también los de tu reloj). En la web los apuntas tú.</p><form class="acc-f" data-f="pasos" novalidate>' +
+    '<label class="f">Tu objetivo de pasos al día<input id="ps-m" inputmode="numeric" value="' + esc(p.meta || 8000) + '"></label>' +
+    '<label class="chk"><input type="checkbox" id="ps-ok"' + (p.ok ? ' checked' : '') + '><span>Acepto que MOOD ON guarde mis pasos para enseñármelos a mí. Puedo quitarlo y borrarlos cuando quiera. <a href="../privacidad.html#yo" target="_blank" rel="noopener">Privacidad</a></span></label>' +
+    '<p class="msg err" id="ps-err" hidden></p><button class="btn" type="submit">Activar</button>' + (p.on ? '<button class="btn sec rojo-t" type="button" data-a="saludQuitar" data-v="pasos">Quitar los pasos y borrarlos</button>' : '') + '</form>');
+};
+F.pasos = function () {
+  var m = parseInt(String($('#ps-m').value).replace(/\D/g, ''), 10), e = $('#ps-err'), err = function (t) { e.hidden = false; e.textContent = t; };
+  if (!(m >= 1000 && m <= 50000)) return err('Pon un objetivo entre 1.000 y 50.000 pasos.');
+  if (!$('#ps-ok').checked) return err('Para guardarlo, marca que aceptas.');
+  var p = S.perfil.pasos || {}; S.perfil.pasos = { on: 1, ok: p.ok || new Date().toISOString(), meta: m }; guardaPerfil(); cerrarHoja(); toast('Tus pasos, activados', 'ok'); pintar();
+};
+A.pasosApuntar = function () {
+  var f = S.x.psF || hoyStr(), p = pasosDia(f);
+  hoja('<h2>Tus pasos</h2><div class="seg2">' + [[hoyStr(), 'Hoy'], [sumar(hoyStr(), -1), 'Ayer']].map(function (x) { return '<button class="' + (f === x[0] ? 'on' : '') + '" data-a="psDia" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>' +
+    '<form class="acc-f" data-f="psApunta" novalidate><label class="f">Pasos<input id="ps-n" inputmode="numeric" value="' + (p || '') + '" placeholder="Ej.: 7500"></label><button class="btn" type="submit">Guardar</button></form>' +
+    '<p class="mut sm">En la app del móvil se apuntan solos.</p><button class="link" data-a="pasosActivar">Cambiar mi objetivo</button>');
+};
+A.psDia = function (el) { S.x.psF = el.dataset.v; A.pasosApuntar(); };
+F.psApunta = function () {
+  var f = S.x.psF || hoyStr(), n = parseInt(String($('#ps-n').value).replace(/\D/g, ''), 10), x = S.salud[f] = Object.assign({}, S.salud[f] || {});
+  if (n >= 0 && n <= 100000) x.pasos = n; else delete x.pasos; guardaSalud(f); S.x.psF = null; cerrarHoja(); pintar();
+};
+A.saludQuitar = function (el) {
+  var k = el.dataset.v;
+  hoja('<h2>¿Quitar ' + (k === 'cic' ? 'el ciclo' : 'los pasos') + '?</h2><p class="mut">Se borran ' + (k === 'cic' ? 'tus reglas y tus check-ins' : 'tus pasos') + ' y deja de salir en Inicio. No se puede deshacer.</p><button class="btn rojo" data-a="saludQuitarSi" data-v="' + k + '">Quitar y borrar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+};
+A.saludQuitarSi = function (el) {
+  var k = el.dataset.v, campos = k === 'cic' ? ['e', 'regla', 'sint', 'sueno', 'nota'] : ['pasos'];
+  if (k === 'cic') S.perfil.cic = null; else S.perfil.pasos = null; guardaPerfil();
+  Object.keys(S.salud).forEach(function (f) { campos.forEach(function (c) { delete S.salud[f][c]; }); if (!Object.keys(S.salud[f]).length) delete S.salud[f]; });
+  guardar('yo_borrar_salud', { que: k }, 'salud_borrar_' + k);
+  cerrarHoja(); if (S.pant && S.pant.t === 'ciclo') volver(); toast(k === 'cic' ? 'Ciclo quitado y borrado' : 'Pasos quitados y borrados', 'ok'); pintar();
+};
+IC.gota = '<path d="M12 3.5c3.2 4 5.5 7.1 5.5 10a5.5 5.5 0 0 1-11 0c0-2.9 2.3-6 5.5-10z"/>';
+IC.pasos = '<path d="M8.5 3.5c1.9 0 2.8 2 2.5 4.6-.2 1.9-.9 3.4-2.4 3.4S6 10.3 6 8.3c0-2.6.8-4.8 2.5-4.8zM6.5 14.5l4.3.6-.3 2.7a2.1 2.1 0 0 1-4.2-.5zM15.5 7c1.7 0 2.5 2.2 2.5 4.8 0 2-1.1 3.2-2.6 3.2s-2.2-1.5-2.4-3.4c-.3-2.6.6-4.6 2.5-4.6zM13.2 18.6l4.3-.6.2 2.8a2.1 2.1 0 0 1-4.2.5z"/>';
+IC.bajar = '<path d="M12 5v14M6 13l6 6 6-6"/>';
+IC.nota = '<path d="M6 4h9l3 3v13H6zM9 10h6M9 14h6"/>';
+
+;
 /* ---------- Comunidad (tablero 23) ----------
    Es voluntaria: se activa con un nombre visible y aceptando las normas. Solo sale lo que cada persona publica
    (un entreno: título, duración, series, kilos, un récord y los ejercicios para copiar la rutina, sin pesos).
@@ -7519,7 +8274,7 @@ function olvidaFeeds() { var C = CMU(); C.feed = { s: null, d: null }; C.ts = {}
 
 /* ---------- la pestaña ---------- */
 function cabComu(on) {
-  return '<div class="ini-cab"><h1 class="t1">Comunidad</h1>' + (on ? '<span class="cm-acc"><button class="redondo" data-a="cBuscar" aria-label="Buscar personas">' + ic('buscar', 19) + '</button><button class="redondo" data-a="cAjustes" aria-label="Tu Comunidad: nombre, bloqueos y salir">' + ic('ajustes', 19) + '</button></span>' : '') + '</div>';
+  return '<div class="ini-cab"><h1 class="t1">Comunidad</h1>' + (on ? '<span class="cm-acc"><button class="redondo" data-a="cBuscar" aria-label="Buscar personas">' + ic('buscar', 19) + '</button>' + (CMU().est && CMU().est.pid ? '<button class="redondo" data-a="cPersona" data-p="' + esc(CMU().est.pid) + '" aria-label="Tu perfil">' + ic('usuario', 19) + '</button>' : '') + '<button class="redondo" data-a="cAjustes" aria-label="Tu Comunidad: nombre, bloqueos y salir">' + ic('ajustes', 19) + '</button></span>' : '') + '</div>';
 }
 function errCard(m, a) { return '<section class="card vacio"><b>No se ha podido cargar</b><small class="mut">' + esc(m) + '</small><button class="btn sec" data-a="' + (a || 'cRecargar') + '">Reintentar</button></section>'; }
 var CARGANDO = '<p class="mut center sm cm-carga">Cargando…</p>';
@@ -7570,19 +8325,19 @@ function filaGente(g) {
 /* una publicación (prev: la vista previa antes de publicar, sin botones) */
 function cardPub(x, prev) {
   var C = CMU(), ab = !prev && C.menu === x.id, A_ = function (a) { return prev ? '' : ' data-a="' + a + '"'; };
-  var h = '<section class="card cm-pub' + (prev ? ' prev' : '') + '"><div class="cm-quien"><button class="cm-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '"' + (prev ? ' tabindex="-1"' : '') + '>' + esc(iniciales(x.nombre)) + '</button>' +
+  var h = '<section class="card cm-pub v2' + (prev ? ' prev' : '') + '"><div class="cm-quien"><button class="cm-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '"' + (prev ? ' tabindex="-1"' : '') + '>' + esc(iniciales(x.nombre)) + '</button>' +
     '<button class="fr-t"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"' + (prev ? ' tabindex="-1"' : '') + '><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + (x.vis === 'seg' ? ' · ' + ic('comu', 12) + 'Solo seguidores' : '') + '</small></button>' +
     (prev ? '' : '<button class="cm-dots' + (ab ? ' on' : '') + '" data-a="cMenu" data-id="' + x.id + '" aria-label="Más opciones" aria-expanded="' + ab + '">' + ic('dots', 20) + '</button>') + '</div>';
   if (x.tipo === 'rec') return h + cardRec(x, prev, ab, A_);
   h += '<b class="cm-t">' + esc(x.t) + '</b>';
   if (x.c || prev) h += '<p class="cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';      // 17 nov (Javier): un comentario del entreno, «entreno increíble para glúteos»
-  if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
-  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   var K = [[(x.min || 0) + ' min', 'duración'], [String(x.nser || 0), 'series'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'volumen'] : [String(x.nej || 0), 'ejercicios']];
   h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
   if (x.rec) h += '<span class="cm-rec">' + ic('trofeo', 15) + 'Récord: ' + esc(x.rec) + '</span>';
+  if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
+  else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>';
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.nej && !x.mio) h += '<button class="cm-copiar"' + A_('cCopiar') + ' data-id="' + x.id + '">' + ic('copiar', 15, null) + 'Copiar rutina</button>';
   else if (x.nej && x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá copiar la rutina' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona ha copiado tu rutina' : ' personas han copiado tu rutina') : 'Nadie ha copiado tu rutina todavía') + '</span>';
   h += '</div>';
@@ -7601,7 +8356,7 @@ function cardRec(x, prev, ab, A_) {
   h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
   h += '<div class="cm-mac">' + [['p', 'Proteína', r.p], ['h', 'Hidratos', r.h], ['g', 'Grasas', r.g]].map(function (m) { return '<span class="' + m[0] + '"><i></i>' + m[1] + ' <b>' + Math.round(m[2] || 0) + ' g</b></span>'; }).join('') + '</div>';
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>';
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá ver y guardar' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'Nadie la ha guardado todavía') + '</span>';
   else h += '<button class="cm-copiar"' + A_('cRecVer') + ' data-id="' + x.id + '">Ver receta</button>';
   h += '</div>';
@@ -7876,9 +8631,12 @@ VISTAS.comuPersona = function (p) {
   var h = '<div class="pant pad">' + cab(esc(nom || 'Comunidad'), { der: nom && !P.yo ? '<button class="redondo" data-a="cPerMenu" aria-label="Más opciones">' + ic('dots', 18) + '</button>' : '' });
   if (!P.pubs) return h + (P.err ? errCard(P.err, 'cPersonaRe') : CARGANDO) + '</div>';
   var nS = P.seguidores || 0, L = P.pubs.filter(noOculta);
-  h += '<section class="card cm-perfil"><span class="cm-av gr">' + esc(iniciales(nom)) + '</span><span class="fr-t"><b>' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b><small>' + nS + (nS === 1 ? ' seguidor' : ' seguidores') + ' · ' + P.pubs.length + (P.pubs.length >= 20 ? '+' : '') + (P.pubs.length === 1 ? ' entreno compartido' : ' entrenos compartidos') + '</small></span></section>';
-  if (P.yo) h += '<button class="btn sec" data-a="cRed" data-v="seguidores">' + ic('comu', 18) + 'Tus seguidores y a quién sigues</button><button class="btn sec" data-a="cAjustes">' + ic('ajustes', 18) + 'Tu nombre, bloqueos y salir</button>';
-  else h += P.sigo ? '<button class="btn sec" data-a="cDejar" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">' + ic('check', 18) + 'Siguiendo · dejar de seguir</button>' : '<button class="btn" data-a="cSeguir" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir a ' + esc(nom1(nom)) + '</button>';
+  var e = C.est || {}, nP = P.pubs.length, num3 = [[nP + (nP >= 20 ? '+' : ''), 'entrenos', ''], [P.yo ? e.seguidores || 0 : nS, 'seguidores', P.yo ? 'seguidores' : '']];
+  if (P.yo) num3.push([e.siguiendo || 0, 'seguidos', 'siguiendo']);
+  h += '<section class="card cm-perfil2"><span class="cm-av gr xl">' + esc(iniciales(nom)) + '</span><b class="cm-nom">' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b>' +
+    '<div class="cm-nums">' + num3.map(function (k) { return k[2] ? '<button data-a="cRed" data-v="' + k[2] + '"><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></button>' : '<span><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
+    '<div class="fila2 cm-pb">' + (P.yo ? '<button class="btn-o" data-a="cAjustes">' + ic('ajustes', 16) + 'Ajustes</button>' : P.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">' + ic('check', 16) + 'Siguiendo</button>' : '<button class="btn" data-a="cSeguir" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') +
+    (COMU_SH ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div></section>';
   if (P.silencio) h += '<section class="card cm-aviso"><small>Has silenciado a ' + esc(nom1(nom)) + ': sus entrenos no te salen en Comunidad.</small><button class="link izq" data-a="cQuitarSil" data-p="' + esc(P.pid) + '">Quitar el silencio</button></section>';
   h += L.length ? L.map(function (x) { return cardPub(x); }).join('') : '<p class="mut center sm">' + (P.yo ? 'Todavía no has publicado ningún entreno. Al terminar uno, pulsa «Publicar en la Comunidad».' : 'Todavía no ha compartido ningún entreno.') + '</p>';
   return h + '</div>';
@@ -8094,6 +8852,31 @@ function cargaFotosComu() {
     rpc('yo_comu_foto', { pub: +id }).then(function (f) { if (!f) return; C.fotos[id] = f; Array.prototype.forEach.call(document.querySelectorAll('.cm-foto[data-pf="' + id + '"]'), function (e2) { e2.classList.add('ok'); e2.innerHTML = '<img src="' + f + '" alt="">'; }); }, function () { C.fotoPide[id] = 0; });
   });
 }
+
+/* ---------- 20 nov 2026 (Chadín, 08:03): compartir una publicación o un perfil por WhatsApp (o copiar el enlace).
+   Fuera de la app solo se ve lo publicado «para todos» (nunca lo de «Solo mis seguidores»), sin likes ni comentarios, y el perfil solo si su dueña lo permite.
+   Servidor: 014 (yo_comu_publico, sin sesión), por hacer con el OK ---------- */
+/* 20 nov, 09:38: compartir publicaciones y perfiles fuera de la app (solo como imagen, sin página pública) va en un segundo paso; hasta entonces, sin botón */
+var COMU_SH = false;
+function enlaceComu(t, id) { return 'https://moodonapp.com/yo/c/?' + t + '=' + encodeURIComponent(id); }
+function hojaCompartir(tit, txt, url, nota) {
+  S.x.csh = { txt: txt, url: url };
+  hoja('<h2>' + tit + '</h2><div class="sh-op"><a class="sh-b wa" href="https://wa.me/?text=' + encodeURIComponent(txt + ' ' + url) + '" target="_blank" rel="noopener">' + ic('coment', 22) + '<small>WhatsApp</small></a>' +
+    '<button class="sh-b" data-a="cShCopiar">' + ic('copiar', 22) + '<small>Copiar enlace</small></button>' + (navigator.share ? '<button class="sh-b" data-a="cShMas">' + ic('compartir', 22) + '<small>Más</small></button>' : '') + '</div>' +
+    '<p class="cm-nunca">' + ic('escudo', 15) + '<span>' + nota + '</span></p><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+}
+A.cCompartir = function (el) {
+  var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
+  hojaCompartir(x.tipo === 'rec' ? 'Compartir la receta' : 'Compartir el entreno', (x.mio ? 'Mira mi ' + (x.tipo === 'rec' ? 'receta' : 'entreno') + ' en MOOD ON: «' : 'Mira ' + (x.tipo === 'rec' ? 'la receta' : 'el entreno') + ' de ' + nom1(x.nombre) + ' en MOOD ON: «') + x.t + '»', enlaceComu('p', x.id),
+    'Quien abra el enlace la verá aunque no tenga la app: el nombre, el título, el comentario y los datos. No verá los comentarios, ni quién ha dado me gusta, ni nada de «Solo mis seguidores».');
+};
+A.cPerCompartir = function (el) {
+  var C = CMU(), P = C.pers[el.dataset.p] || {};
+  hojaCompartir(P.yo ? 'Compartir tu perfil' : 'Compartir el perfil', P.yo ? 'Sígueme en MOOD ON' : 'Mira el perfil de ' + nom1(P.nombre) + ' en MOOD ON', enlaceComu('u', P.pid),
+    'Fuera de la app se ve el nombre, sus números y sus entrenos publicados «para todos». Nunca sus seguidores ni a quién sigue. Cada persona puede quitar en Ajustes que su perfil se comparta.');
+};
+A.cShCopiar = function () { var u = S.x.csh && S.x.csh.url; try { navigator.clipboard.writeText(u); } catch (e) { } cerrarHoja(); toast('Enlace copiado', 'ok'); };
+A.cShMas = function () { var d = S.x.csh; if (!d) return; try { navigator.share({ title: 'MOOD ON', text: d.txt, url: d.url }); } catch (e) { } };
 
 arrancar();
 </script>
