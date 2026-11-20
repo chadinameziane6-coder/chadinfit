@@ -3930,6 +3930,22 @@ button.pf-fe{cursor:pointer}
 .z2-hero .lista-ej li.li-mov .ej-lab{background:rgba(61,220,180,.14);color:#7FE3C9}
 .z2-hero .lista-ej li.li-bl .ej-lab{background:rgba(127,214,255,.14);color:#9FDCFF}
 .z2-hero .lista-ej li.li-sec{color:#9AA0B4}.z2-hero .lista-ej li.li-sec.mov{color:#7FE3C9}
+/* v53.4.178 (20 nov, Chadín: «aplica solo el modo claro igual que está ahora en usuaria para clienta»): fondo gris piedra y «Hoy toca» en barra negra, como el panel de usuaria (B1) */
+:where(html.s2),:where(html.s2) body{background:#EDEDEA}:where(html.s2) body:before{display:none}:where(html.s2) header.top{background:rgba(237,237,234,.82)}
+.z2-hero.zbw,.z2-hero.zbw.z2-ok{background:none;border:0;padding:0;box-shadow:none;border-radius:0;margin:0 0 14px;color:inherit}
+.zb{background:#111;border-radius:24px;padding:14px;color:#fff}.zb+.zb{margin-top:10px}
+.zb-r{display:flex;align-items:center;gap:12px}
+.zb-c{width:58px;height:58px;min-height:0;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;flex:none;border:0;padding:0;cursor:pointer;box-shadow:none}
+.zb-c .ic{width:22px;height:22px;stroke-width:2.2}.zb-c.ok{background:#22A35A;color:#fff}.zb-c.gr{background:#262626;color:#fff}
+.zb-tx{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:stretch;gap:2px;text-align:left;background:none;border:0;padding:0;color:inherit;font:inherit;cursor:pointer;box-shadow:none}div.zb-tx{cursor:default}
+.zb-tx small{font-size:12px;color:#9B9B98;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.zb-tx small.v{color:#5FD08E}
+.zb-tx b{font-size:18px;font-weight:800;letter-spacing:-.01em;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb-tx span{font-size:12.5px;color:#BDBDBA;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb-ot{background:#262626;color:#fff;height:36px;min-height:0;padding:0 14px;border-radius:18px;font:inherit;font-weight:700;font-size:13px;flex:none;border:0;cursor:pointer;box-shadow:none}
+.zb-i{width:42px;height:42px;min-height:0;border-radius:50%;background:#262626;color:#fff;display:flex;align-items:center;justify-content:center;flex:none;border:0;padding:0;cursor:pointer;box-shadow:none}.zb-i .ic{width:18px;height:18px}
+.zb button:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.zb-man{margin:8px 6px 0;font-size:13px;color:#6B6B67}.zb-man b{color:#111}.zb-man .zb-lk{background:none;border:0;padding:0;min-height:0;font:inherit;font-weight:700;color:#111;text-decoration:underline;text-underline-offset:3px;cursor:pointer;box-shadow:none}
+.zb-otras .otra{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 0;border-top:1px solid rgba(28,30,38,.08)}.zb-otras .otra:first-child{border-top:0}
 /* casillas */
 .z2-t{position:relative;cursor:pointer;display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px;border-radius:22px;margin:0 0 12px}
 .z2-t.an{flex-direction:row;align-items:center;gap:14px}.z2-t .z2-tx{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1}
@@ -4056,7 +4072,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.177';
+var APP_V = 'v53.4.178';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -6934,16 +6950,27 @@ function z2Cab(hoy){ var d=CL.d, nombre=String(d.clienta.nombre||'').split(' ')[
 /* la cita o la videollamada, arriba solo el mismo día (con su «Unirse» o «Cómo llegar»); antes, en «Lo próximo» */
 function z2CitaHoy(hoy){ var l=llProx(), c=czCitas()[0]; return (c&&c.fecha===hoy?citaClHtml():'')+(l&&l.fecha===hoy?llamadaClHtml():''); }
 /* ---------- Hoy toca · hecho ---------- */
-function z2Hecho(H,hoy,otrasH){
-  var mins=0, ser=0, vol=0, recs=[], nom=[], sr=null;
-  H.forEach(function(s){ var U=ultDeSesion(s); mins+=U.r.min||0; ser+=U.r.efectivas||0; vol+=U.r.vol||0; recs=recs.concat(recsPorEj(U.prs)); nom.push(s.rutina||'Entreno');
-    if(!sr){ var r=CL.d.rutinas.filter(function(x){ return x.id===s.rutina_id; })[0]; if(r) sr=semRut(r,hoy); } });
-  var rm=rutDia(sumar(hoy,1)), u=H[H.length-1];
-  return '<div class="card hl z2-hero z2-ok" id="z2-ok"><div class="z2-hl"><span class="z2-tag ok"><i></i>Hecho hoy</span>'+(sr?'<span class="z2-sm">Semana '+sr.n+'/'+sr.tot+'</span>':'')+'</div><h2>'+esc(nom.join(' + '))+'</h2>'+
-    '<div class="z2-ch">'+(mins?'<span>'+fN(mins,0)+' min</span>':'')+(ser?'<span>'+ser+' series</span>':'')+(vol?'<span>'+fP(Math.round(vol))+' kg</span>':'')+(recs.length?'<span class="au">'+ic('trofeo')+recs.length+(recs.length===1?' récord':' récords')+'</span>':'')+'</div>'+
-    '<div class="z2-b2"><button class="btn z2-w" data-a="z2VerSes" data-id="'+esc(u.id)+'">'+ic('lista')+'Ver entreno</button><button class="btn z2-g" data-a="z2Sh" data-id="'+esc(u.id)+'">'+ic('compartir')+(esPrimeraSes(u)?'Súbelo':'Compartir')+'</button></div>'+
-    '<p class="z2-man">'+(rm.length?'Mañana: <b>'+esc(rm.map(function(r){ return r.nombre; }).join(' + '))+'</b>':'Mañana descansas')+'</p>'+otrasH+'</div>';
+/* v53.4.178 · la barra negra (B1): a la izquierda el círculo (empezar o ✓ verde), en medio el nombre y los datos, a la derecha «Otra» o compartir */
+function zbCl(o){ var tx='<small'+(o.v?' class="v"':'')+'>'+o.sm+'</small><b>'+esc(o.nom)+'</b>'+(o.meta?'<span>'+o.meta+'</span>':'');
+  return '<div class="zb'+(o.cls?' '+o.cls:'')+'"><div class="zb-r">'+o.ini+(o.txA?'<button class="zb-tx" '+o.txA+'>'+tx+'</button>':'<div class="zb-tx">'+tx+'</div>')+(o.fin||'')+'</div></div>'; }
+function zbClC(a,id,n,lab,cls){ return '<button class="zb-c'+(cls?' '+cls:'')+'" data-a="'+a+'"'+(id?' data-id="'+esc(id)+'"':'')+' aria-label="'+esc(lab)+'">'+ic(n)+'</button>'; }
+function zbClHecho(L){ var mins=0, ser=0, vol=0, nom=[], rpe=null;
+  L.forEach(function(s){ var U=ultDeSesion(s); mins+=U.r.min||0; ser+=U.r.efectivas||0; vol+=U.r.vol||0; nom.push(s.rutina||'Entreno'); if(num(s.rpe)) rpe=num(s.rpe); });
+  var u=L[L.length-1], meta=[mins?fN(mins,0)+' min':'',ser?ser+(ser===1?' serie':' series'):'',vol?fP(Math.round(vol))+' kg':''].filter(Boolean).join(' · ');
+  return zbCl({cls:'zb-ok',ini:zbClC('z2VerSes',u.id,'ok','Ver tu entreno','ok'),v:1,sm:'Hecho hoy'+(rpe?' · Esfuerzo '+fN(rpe,0):''),nom:nom.join(' + '),meta:meta,txA:'data-a="z2VerSes" data-id="'+esc(u.id)+'"',fin:'<button class="zb-i" data-a="z2Sh" data-id="'+esc(u.id)+'" aria-label="'+(esPrimeraSes(u)?'Súbelo':'Compartir')+'">'+ic('compartir')+'</button>'}); }
+function z2Hecho(H,hoy,otras){
+  var rm=rutDia(sumar(hoy,1));
+  return '<div class="z2-hero zbw z2-ok" id="z2-ok">'+zbClHecho(H)+'<p class="zb-man">'+(rm.length?'Mañana: <b>'+esc(rm.map(function(r){ return r.nombre; }).join(' + '))+'</b>':'Mañana descansas')+(otras.length?' · <button class="zb-lk" data-a="z2Otras">Hacer otra</button>':'')+'</p></div>';
 }
+/* tocando el nombre, la rutina (con sus ejercicios y vídeos); «Otra», las demás rutinas */
+A.z2Rut=function(el){ var r=CL.d.rutinas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return;
+  modal('<div class="mh-sh"><div><h2>'+esc(r.nombre)+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+rutinaBloque(r,true,null,hoyStr()).replace('<details class="rp-d"','<details open class="rp-d"').replace('<div class="rut rp">','<div class="rut rp zb-rutm">')); };
+A.z2Otras=function(){ var hoy=hoyStr(), d=CL.d, rh=rutDia(hoy), hecho=d.sesiones.filter(function(s){ return s.fecha===hoy; });
+  var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); }, otras=d.rutinas.filter(function(r){ return rh.indexOf(r)<0&&vigenteEn(r,hoy,d.rutinas); });
+  if(!otras.length) return;
+  modal('<div class="mh-sh"><div><h2>'+(rh.length||hecho.length?'Hacer otra rutina':'¿Quieres entrenar igualmente?')+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div><div class="zb-otras">'+otras.map(function(r){
+    return '<div class="otra"><div><b>'+esc(r.nombre)+'</b><div class="muted sm">'+r.ejercicios.length+' ejercicios'+(r.dias.length?' · '+r.dias.map(function(x){return DL[x];}).join(' '):'')+(hechaR(r)?' · hecha hoy':'')+'</div></div><button class="btn sm'+(hechaR(r)?' sec':'')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(hechaR(r)?'Repetir':'Empezar')+'</button></div>';
+  }).join('')+'</div>'); };
 A.z2VerSes=function(el){ var s=CL.d.sesiones.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!s) return;
   modal('<div class="mh-sh"><div><h2>Tu entreno de hoy</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div>'+sesFila(s,CL.d,calcMarcas(CL.d.series),false,false,{hoy:1}).replace('<details class="ses sxf"','<details open class="ses sxf"')+
     (s.rutina_id&&CL.d.rutinas.some(function(r){ return r.id===s.rutina_id; })?'<button class="btn sec mt" data-a="z2Rep" data-id="'+esc(s.rutina_id)+'">'+ic('reinicio')+'Repetir esta rutina</button>':'')); };
@@ -7138,19 +7165,16 @@ function vHoy(){
     var hecho=d.sesiones.filter(function(s){ return s.fecha===hoy; }), rh=rutDia(hoy);      // v53.4.151: con su semana ordenada
     var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); }, pend=rh.filter(function(r){ return !hechaR(r); });
     var otras=d.rutinas.filter(function(r){ return rh.indexOf(r)<0&&vigenteEn(r,hoy,d.rutinas); });
-    /* v53.4.172: «Hacer otra rutina» / «¿Quieres entrenar igualmente?», cerrado; se abre al tocarlo */
-    var otrasH=otras.length?'<details class="otras"'+(CL.otAb?' open':'')+'><summary><span class="ot-t">'+(rh.length||hecho.length?'<b>Hacer otra rutina</b>':'<b>¿Quieres entrenar igualmente?</b><small>Elige rutina · '+otras.length+(otras.length===1?' rutina':' rutinas')+'</small>')+'</span><span class="ot-ch">'+ic('abajo')+'</span></summary>'+otras.map(function(r){
-      return '<div class="otra"><div><b>'+esc(r.nombre)+'</b><div class="muted sm">'+r.ejercicios.length+' ejercicios'+(r.dias.length?' · '+r.dias.map(function(x){return DL[x];}).join(' '):'')+(hechaR(r)?' · hecha hoy':'')+'</div></div><button class="btn sm'+(hechaR(r)?' sec':'')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(hechaR(r)?'Repetir':'Empezar')+'</button></div>';
-    }).join('')+'</details>':'';
-    if(hecho.length&&!pend.length) h+=z2Hecho(hecho,hoy,otrasH);
+    /* v53.4.178: «Otra» (o «Entrenar» en descanso) abre las demás rutinas en una hoja (antes, «Hacer otra rutina» desplegable, v53.4.172) */
+    if(hecho.length&&!pend.length) h+=z2Hecho(hecho,hoy,otras);
     else {
-      var sr=pend.length?semRut(pend[0],hoy):null;
-      h+='<div class="card hl z2-hero"><div class="z2-hl"><span class="z2-tag"><i></i>Hoy toca</span>'+(sr?'<span class="z2-sm">Semana '+sr.n+'/'+sr.tot+'</span>':'')+'</div>';
-      hecho.forEach(function(s){ h+='<div class="z2-ya hoy-ok">'+ic('okc')+'<span>Ya has hecho <b>'+esc(s.rutina||'Entreno')+'</b></span><button class="link" data-a="z2Sh" data-id="'+esc(s.id)+'">'+ic('compartir')+'Compartir</button></div>'; });
-      if(!d.rutinas.length) h+='<h2>Muy pronto</h2><p class="z2-tx">Tu coach todavía no te ha asignado rutinas.</p>';
-      else if(!rh.length) h+='<div class="rp-desc z2-des"><b>Descanso</b><span>'+esc(fLarga(hoy))+'</span></div><p class="z2-tx">Hoy toca recuperar: camina, estira, hidrátate y cuida la alimentación.</p>';
-      pend.forEach(function(r){ h+=rutinaBloque(r,true,null,hoy,true); });
-      h+=otrasH+'</div>';
+      h+='<div class="z2-hero zbw">';
+      hecho.forEach(function(s){ h+=zbClHecho([s]); });
+      if(!d.rutinas.length) h+=zbCl({ini:'<span class="zb-c gr">'+ic('reloj')+'</span>',sm:'Hoy',nom:'Muy pronto',meta:'Tu coach todavía no te ha asignado rutinas'});
+      else if(!rh.length) h+=zbCl({ini:'<span class="zb-c gr">'+ic('luna')+'</span>',sm:'Hoy toca',nom:'Descanso',meta:'Camina, estira e hidrátate',fin:otras.length?'<button class="zb-ot" data-a="z2Otras">Entrenar</button>':''});
+      pend.forEach(function(r,k){ var O=ordenMov(r.ejercicios), nMov=O.filter(function(x){ return x.mov; }).length, series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), sr=semRut(r,hoy);
+        h+=zbCl({ini:zbClC('empezar',r.id,'play','Comenzar '+r.nombre),sm:'Hoy toca'+(sr?' · Semana '+sr.n+'/'+sr.tot:''),nom:r.nombre,meta:cuentaEjCl(r.ejercicios,nMov)+' · '+minRutCl(r,series)+' min'+(series?' · '+series+' series':''),txA:'data-a="z2Rut" data-id="'+esc(r.id)+'"',fin:k===0&&otras.length?'<button class="zb-ot" data-a="z2Otras">Otra</button>':''}); });
+      h+='</div>';
     }
   }
   // v21: el check-in de hoy solo hoy; en un día pasado, el que hizo ese día; en uno futuro, nada
@@ -7570,6 +7594,7 @@ function nombreOp(o,i){ return o.nombre||('Opción '+(i+1)); }
 function resumenOp(c){ var ops=c.opciones||[], o=ops[0]||{}; return (ops.length>1?ops.length+' opciones · ':'')+(o.nombre||primeraLinea(o.texto)); }
 /* ---------- ENTRENO ---------- */
 A.empezar=function(el){
+  if(document.querySelector('#modal.open .zb-otras, #modal.open .zb-rutm')) cerrarModal();      // v53.4.178: desde la hoja de «Otra» o de la rutina
   var r=CL.d.rutinas.filter(function(x){ return x.id===el.dataset.id; })[0]; if(!r) return;
   try{ var pf0=prefCl(), k0='dt|'+hoyStr(); if(pf0.n&&num(pf0.n[k0])===2){ delete pf0.n[k0]; guardarPref(); CL.planSel=null; } }catch(e){}      // v53.4.151: si entrena, su dieta de hoy pasa a la de entreno
   avisosHechos(function(a){ return a.tipo!=='dieta'; });      // v38
