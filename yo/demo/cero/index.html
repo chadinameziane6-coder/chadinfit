@@ -1953,6 +1953,9 @@ html[data-tema="oscuro"] .sw-f input:checked+i{background:#fff}html[data-tema="o
 .cp-fm{margin:6px 0 2px}
 /* la vista previa de la hoja no se encoge (antes se aplastaba y la foto salía como una tira) */
 .hoja-c .cm-pub,.hoja-c .cp-f,.hoja-c .crop{flex-shrink:0}
+/* 20 nov (borrador): hoja de compartir una imagen (carrera, Comunidad) */
+.shi-m{margin:6px 0 0}.shi-img{margin:14px auto 16px;width:216px;height:384px}.shi-ac{margin-bottom:6px}
+.rc-ud{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 2px}.rc-ud>span{font-size:13px;font-weight:600;color:var(--tx2)}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -2333,8 +2336,28 @@ function demoRunEmpezar() {
 }
 /* los ejercicios nuevos del Word (pendientes de meter en la biblioteca de MOOD ON): una lista solo de la demo, por tipo */
 window.YO_NUEVOS = [];
+/* 20 nov, 23:33 (Chadín: «vamos con esto»): para ver la carrera en la demo, 3 salidas de prueba esta semana (solo en memoria) */
+function demoRuns() {
+  var l = lunesDe(hoyStr()), hoy = hoyStr(); if (runSem(l).nrun) return;
+  [[0, 'Rodaje suave', '6,2', '36'], [2, 'Series 6 × 800 m', '8,2', '52'], [4, 'Rodaje largo', '14,2', '83']].forEach(function (r) {
+    var f = sumar(l, r[0]); if (f > hoy) f = hoy;
+    S.sesiones.push({ id: 'demo_run_' + r[0], fecha: f, nombre: r[1], min: +r[3], nser: 1, vol: 0, rpe: 7, ej: [{ n: r[1], tipo: 'run', hecho: 1, km: r[2], mn: r[3] }] }); });
+}
+function demoIr(tab) { S.pant = null; S.pila = []; S.tab = tab; pintar(); }
 window.YO_REVISAR = [
   /* 20 nov 2026: Chadín publicó todo lo de aquí en /yo (yo-1.7). Lo nuevo que tenga que revisarse vuelve a ir aquí. */
+  { t: 'Nuevo · Compartir una publicación como imagen (20 nov)', d: 'Comunidad → el icono de compartir de una publicación «para todos»: Negro, Blanco o Foto, con «Descárgate la app · moodonapp.com». Sin enlace ni página pública.',
+    ir: function () { demoIr('comu'); setTimeout(function () { var b = document.querySelector('[data-a=cCompartir]'); if (b) { b.scrollIntoView({ block: 'center' }); b.click(); } else toast('Aún no hay publicaciones «para todos»'); }, 700); } },
+  { t: 'Nuevo · Compartir tu perfil como imagen (20 nov)', d: 'Comunidad → tu perfil → «Compartir perfil»: tus entrenos, horas y récords. Solo el tuyo (el de otra persona no se puede).',
+    ir: function () { demoIr('comu'); setTimeout(function () { var e = CMU().est; if (e && e.pid) A.cPersona({ dataset: { p: e.pid } }); setTimeout(function () { var b = document.querySelector('[data-a=cPerCompartir]'); if (b) b.click(); }, 700); }, 700); } },
+  { t: 'Nuevo · «Mi semana corriendo» para compartir (20 nov)', d: 'Inicio → «Carrera · esta semana» → el icono de compartir. En la demo se añaden 3 salidas de prueba.',
+    ir: function () { demoRuns(); demoIr('inicio'); setTimeout(function () { A.runSemCompartir(); }, 300); } },
+  { t: 'Nuevo · Tu carrera o tu cardio al terminar (20 nov)', d: 'Al terminar un entreno que es solo carrera o cardio: km, tiempo, ritmo y esfuerzo, en Negro, Blanco o con tu foto.',
+    ir: function () { demoRuns(); var s = S.sesiones.filter(function (x) { return soloCardioYo(x); }).pop(); if (!s) return; S.fin = Object.assign({}, s, { modo: 'negro', slide: 0, foto: null }); S.pant = null; S.pila = []; ir({ t: 'fin' }); } },
+  { t: 'Nuevo · Recetas en ml (sopas, cremas, batidos) (20 nov)', d: 'Nutrición → Recetas → tu receta → «Peso de la olla»: «Tu plato se mide en Gramos | Mililitros». En ml, al apuntarla: «Mililitros en tu plato». En la demo, una crema de calabaza de prueba.',
+    ir: function () { demoIr('nutri'); var I = [['Calabaza', 1000, 26, 1, 6.5, 0.1], ['Patata', 300, 77, 2, 17, 0.1], ['Cebolla', 150, 40, 1.1, 9, 0.1], ['Aceite de oliva virgen extra', 20, 884, 0, 0, 100], ['Caldo de verduras', 700, 6, 0.3, 1, 0.2]];
+      S.x.rec = { id: 'rcdemoml', n: 'Crema de calabaza', ing: I.map(function (a, k) { return { key: 'demo' + k, n: a[0], g: a[1], k: a[2], p: a[3], h: a[4], gr: a[5] }; }), pasos: '', rac: 4, olla: '', tara: '1250', llena: '3420', foto: '', fotoN: 0, nueva: true, ud: 'ml' }; ir({ t: 'nreceta' });
+      setTimeout(function () { var o = document.querySelector('.rc-olla'); if (o) o.scrollIntoView({ block: 'center' }); }, 200); } }
 ];
 document.addEventListener('DOMContentLoaded', function () {
   VISTAS.demoNuevos = function () {
@@ -3670,7 +3693,7 @@ function iniCarrera() {      // 08:38 (Chadín): «dale un tono más… gris osc
   if (!W.some(function (x) { return x.nrun; })) return '';
   var T = W[W.length - 1], mk = Math.max.apply(null, W.map(function (x) { return x.km; }).concat([1])), rt = T.km && T.rmin ? ritmoTxt(T.km, T.rmin).replace(' min/km', '') : '–';
   /* 08:40 (Chadín): «que no sea igual a lo que toca hoy, porque se confunde; que sea estilo series por grupo»: tarjeta blanca como esa, con los km resaltados */
-  return '<div class="card ini-ser run3"><span class="card-h"><b>Carrera · esta semana</b><span class="run3-a">' + (RUN_SH ? '<button class="z2-shb sm" data-a="runSemCompartir" aria-label="Compartir tu semana corriendo">' + ic('compartir', 15) + '</button>' : '') + '<button class="ico-b" data-a="iniVol" aria-label="Ver en Progreso">' + ic('sig', 16) + '</button></span></span>' +
+  return '<div class="card ini-ser run3"><span class="card-h"><b>Carrera · esta semana</b><span class="run3-a">' + (runSh() ? '<button class="z2-shb sm" data-a="runSemCompartir" aria-label="Compartir tu semana corriendo">' + ic('compartir', 15) + '</button>' : '') + '<button class="ico-b" data-a="iniVol" aria-label="Ver en Progreso">' + ic('sig', 16) + '</button></span></span>' +
     '<span class="run3-b"><span class="run3-km"><b>' + fN(Math.round(T.km * 10) / 10, 1) + '</b><small>km</small></span><span class="run3-k"><span><b>' + T.nrun + '</b>' + (T.nrun === 1 ? 'salida' : 'salidas') + '</span><span><b>' + rt + '</b>min/km</span></span>' +
     '<span class="run3-w" aria-label="Km por semana, las últimas 8">' + W.map(function (x, i) { return '<i class="' + (i === W.length - 1 ? 'u' : '') + '" style="height:' + Math.max(3, Math.round(x.km * 44 / mk)) + 'px"></i>'; }).join('') + '</span></span><small class="run3-p">Km por semana, las últimas 8</small></div>';
 }
@@ -3950,7 +3973,6 @@ IC.lista = '<path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5
 
 /* 20 nov: «Mi semana corriendo» para compartir va en un segundo paso */
 var RUN_SH = false;
-A.runSemCompartir = function () { toast('Propuesta: aquí se abre «Mi semana corriendo» para compartir (Negro · Con tu foto · Transparente)'); };
 
 ;
 /* ---------- Entreno: mis rutinas · ejercicios · programas ---------- */
@@ -5716,7 +5738,7 @@ function recsRecientes(dias) { var lim = sumar(hoyStr(), -dias), L = []; S.sesio
    Debajo, compartir en una sola tarjeta (estilo, tarjeta, la imagen y tres botones) y «¡Listo!» */
 VISTAS.fin = function () {
   var U = S.fin; if (!U) return '';
-  var R = U.recs || [], K = rpKpis(U) || blqKpis(U) || [[String(U.min), U.min === 1 ? 'minuto' : 'minutos'], [String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg']];
+  var R = U.recs || [], K = rpKpis(U) || blqKpis(U) || (runSh() && soloCardioYo(U) ? runFinK(U) : null) || [[String(U.min), U.min === 1 ? 'minuto' : 'minutos'], [String(U.nser), U.nser === 1 ? 'serie' : 'series'], [fmtK(U.vol), 'kg']];
   var t = finT(U), sl = U.slide || 0, v = num(U.rpe);
   var h = '<div class="pant pad fin fin2"><div class="fin2-top"><button class="redondo" data-a="finListo" aria-label="Cerrar">' + ic('x', 18) + '</button></div>';
   /* 09:16 (Chadín, la 6 · «Negro con barra»): negro, el nombre, los tres datos con líneas finas y el esfuerzo con su barra de 10 */
@@ -5727,7 +5749,7 @@ VISTAS.fin = function () {
   if (U.libreEj && U.libreEj.length) h += '<button class="card enlace fin2-g" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
   h += '<section class="card fin2-sh"><div class="fin2-sht"><b>Compártelo</b><div class="seg-p mini" role="tablist" aria-label="Fondo">' + [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div></div>' +
     '<div class="chips fin-t fin2-t" role="tablist" aria-label="Tarjeta">' + t.map(function (x, i) { return '<button role="tab" aria-selected="' + (sl === i) + '" class="chip' + (sl === i ? ' on' : '') + '" data-a="finSlide" data-i="' + i + '">' + x[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="car"><button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button><div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div><button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button></div>' +
+    '<div class="car">' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button>' : '') + '<div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div>' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button>' : '') + '</div>' +
     (t[sl] && t[sl][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
     (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' :
       '<div class="fin2-ac"><button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="finGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button>' +
@@ -5745,7 +5767,8 @@ var FIN_T = [['res', 'Ejercicios', 'Tus ejercicios y sus series'], ['vol', 'Tu c
    con récords, una cuarta tarjeta «Tu récord» (uno, o todos hasta 3), en negro, en blanco o con tu foto */
 function recsTodos(U) { return ((U && U.recs) || []).filter(function (x) { return x && x.e; }); }
 function recsDe(U) { var R = recsTodos(U); return U.recSel != null && R[U.recSel] ? [R[U.recSel]] : R.slice(0, 3); }
-function finT(U) { var n = recsTodos(U).length; return FIN_T.concat(n ? [['rec', 'Récord', n > 1 ? 'Tus récords de hoy' : 'Tu récord de hoy']] : []); }
+function finT(U) { if (runSh() && soloCardioYo(U)) return [['run', (U.ej || []).some(function (e) { return e.tipo === 'run'; }) ? 'Tu carrera' : 'Tu cardio', 'Tu carrera o tu cardio de hoy']];      // 20 nov (borrador): la tarjeta de carrera y cardio aprobada en maqueta
+  var n = recsTodos(U).length; return FIN_T.concat(n ? [['rec', 'Récord', n > 1 ? 'Tus récords de hoy' : 'Tu récord de hoy']] : []); }
 A.finRecSel = function (el) { S.fin.recSel = el.dataset.v === 'todos' ? null : +el.dataset.v; pintar(); };
 A.compartirRec = function (el) { var s = S.sesiones.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!s) return; var T = finT(s);
   S.fin = Object.assign({}, s, { modo: 'negro', slide: T.length - 1, foto: null, primero: false, libreEj: null, recSel: el.dataset.i === 'todos' ? null : +el.dataset.i }); ir({ t: 'fin' }); };
@@ -5783,7 +5806,7 @@ function pintaTarjeta() {
   var U = S.fin, box = $('#fin-img'); if (!U || !box) return; var k = U.id + '|' + U.slide + '|' + U.modo + '|' + (U.foto ? U.foto.src : '') + '|' + (U.recSel == null ? '' : U.recSel);
   var T = finT(U)[U.slide || 0] || FIN_T[0], vieja = soloRunYo(U) && T[0] !== 'rec';      // solo carrera: la tarjeta de siempre
   if (tarjCache[k]) { box.innerHTML = '<img src="' + tarjCache[k].url + '" alt="' + T[2] + '">'; return; }
-  (T[0] === 'rec' ? tarjetaRecYo(U, U.modo, U.foto) : vieja ? tarjeta(U, T[0] === 'res' ? 'res' : 'vol', U.modo === 'blanco' ? 'negro' : U.modo, U.foto) : tarjetaGrande(U, T[0], U.modo, U.foto)).then(function (cv) { if (U.modo === 'blanco' && vieja) blancoDe(cv); cv.toBlob(function (b) { tarjCache[k] = { blob: b, url: URL.createObjectURL(b) }; var bx = $('#fin-img'); if (bx) bx.innerHTML = '<img src="' + tarjCache[k].url + '" alt="Tu entreno">'; }, 'image/png'); });
+  (T[0] === 'run' ? tarjetaDatos(runSesD(U), U.modo, U.foto) : T[0] === 'rec' ? tarjetaRecYo(U, U.modo, U.foto) : vieja ? tarjeta(U, T[0] === 'res' ? 'res' : 'vol', U.modo === 'blanco' ? 'negro' : U.modo, U.foto) : tarjetaGrande(U, T[0], U.modo, U.foto)).then(function (cv) { if (U.modo === 'blanco' && vieja && T[0] !== 'run') blancoDe(cv); cv.toBlob(function (b) { tarjCache[k] = { blob: b, url: URL.createObjectURL(b) }; var bx = $('#fin-img'); if (bx) bx.innerHTML = '<img src="' + tarjCache[k].url + '" alt="Tu entreno">'; }, 'image/png'); });
 }
 /* versión en blanco: la misma tarjeta con los colores al revés (fondo blanco, letras y dibujos en negro) */
 function blancoDe(cv) { var x = cv.getContext('2d'), d = x.getImageData(0, 0, cv.width, cv.height), a = d.data; for (var i = 0; i < a.length; i += 4) { a[i] = 255 - a[i]; a[i + 1] = 255 - a[i + 1]; a[i + 2] = 255 - a[i + 2]; } x.putImageData(d, 0, 0); return cv; }
@@ -8075,9 +8098,10 @@ VISTAS.napuntar = function () {
   var porPeso = r.olla > 0, T = recTot(r), q = arCuanto(r);
   var fsrc = recFotoSrc(r);
   var h = '<div class="pant pad con-pie">' + cab(esc(r.n)) + (fsrc ? '<div class="rec-img"><img src="' + esc(fsrc) + '" alt="" onerror="this.parentNode.remove()"></div>' : '') +
-    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? ' · olla de ' + fmil(r.olla) + ' g' : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
-  h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">Por peso</button></div>' : '');
-  if (X.modo === 'g' && porPeso) h += '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>' + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
+    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? (recUd(r) === 'ml' ? ' · ' + fmil(r.olla) + ' ml en total' : ' · olla de ' + fmil(r.olla) + ' g') : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
+  h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">' + (recUd(r) === 'ml' ? 'Por cantidad' : 'Por peso') + '</button></div>' : '');
+  if (X.modo === 'g' && porPeso) h += (recUd(r) === 'ml' ? '<label class="f">Mililitros en tu plato<span class="rc-u"><input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 350"><i>ml</i></span></label><small class="mut">Con un vaso medidor, o en la báscula (1 g ≈ 1 ml) · de ' + fmil(r.olla) + ' ml en total</small>'
+    : '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>') + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
   else h += '<div class="chips">' + [0.5, 1, 1.5, 2].map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === 0.5 ? '½' : v === 1.5 ? '1½' : v) + '</button>'; }).join('') + '</div><small class="mut">' + (X.r === 1 ? '1 ración' : fN(X.r, 1).replace(/,0$/, '') + ' raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small>';
   h += '</section><section class="card n-tot" id="ar-t">' + arTotHtml(q) + '</section>';
   h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
@@ -8089,7 +8113,7 @@ VISTAS.napuntar = function () {
 };
 function alNombre(id) { var a = NUT_OK ? AL_BASE.filter(function (x) { return x[0] === id; })[0] : null; return a ? a[1] + (a[2] ? ' (' + a[2] + ')' : '') : id; }
 /* cuánto de la receta: por raciones (× lo de una ración) o por peso (sobre la olla entera) */
-function arCuanto(r) { var X = S.x.ar, T = recTot(r); if (X.modo === 'g' && r.olla > 0) { var g = num(X.g) || 0, f = g / r.olla; return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: 'Tu plato: ' + fmil(g) + ' g de una olla de ' + fmil(r.olla) + ' g', ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
+function arCuanto(r) { var X = S.x.ar, T = recTot(r); if (X.modo === 'g' && r.olla > 0) { var g = num(X.g) || 0, f = g / r.olla, u = recUd(r); return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: u === 'ml' ? 'Tu plato: ' + fmil(g) + ' ml de ' + fmil(r.olla) + ' ml' : 'Tu plato: ' + fmil(g) + ' g de una olla de ' + fmil(r.olla) + ' g', ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
 function arTotHtml(q) { return '<span class="n-big"><b>' + fmil(q.k) + '</b><span>kcal</span></span><div class="n-mac">' + [['Proteína', q.p], ['Hidratos', q.h], ['Grasas', q.g]].map(function (m) { return '<span>' + m[0] + ' <b>' + Math.round(m[1]) + ' g</b></span>'; }).join('') + '</div>'; }
 A.arOlla = function () {
   var r = recDe(S.x.ar.key); if (!r || !r.mio) return; var ta = r.tara || +taraYo() || 0;
@@ -8109,7 +8133,7 @@ A.arR = function (el) { S.x.ar.r = +el.dataset.v; pintar(); };
 A.arC = function (el) { S.x.ar.c = +el.dataset.v; pintar(); };
 IN.arG = function (t) { S.x.ar.g = t.value; var r = recDe(S.x.ar.key), e = $('#ar-t'); if (r && e) e.innerHTML = arTotHtml(arCuanto(r)); };
 A.arOk = function () {
-  var X = S.x.ar, r = recDe(X.key); if (!r) return; var q = arCuanto(r); if (!q.ok) return toast('Escribe cuántos gramos hay en tu plato');
+  var X = S.x.ar, r = recDe(X.key); if (!r) return; var q = arCuanto(r); if (!q.ok) return toast(recUd(r) === 'ml' ? 'Escribe cuántos ml hay en tu plato' : 'Escribe cuántos gramos hay en tu plato');
   var o = { id: X.it ? X.it.id : rand(8), c: X.c, n: r.n, det: q.txt, g: null, k: Math.round(q.k), p: Math.round(q.p * 10) / 10, h: Math.round(q.h * 10) / 10, gr: Math.round(q.g * 10) / 10, ref: { t: 'rec', id: X.key }, rm: X.modo, rr: X.r, rg: X.g };
   var f = nd(), D = S.diario[f] = diaDe(f);
   if (X.it) { var i = D.it.findIndex(function (x) { return x.id === X.it.id; }); if (i >= 0) D.it[i] = o; } else D.it.push(o);
@@ -8119,7 +8143,7 @@ A.arQuitar = function () { var X = S.x.ar, f = nd(), D = diaDe(f); D.it = D.it.f
 
 /* nueva receta (o cambiarla): ingredientes en crudo, raciones y, si quiere, el peso de la olla cocinada */
 A.nRecNueva = function () { S.x.rec = { id: 'rc' + rand(8), n: '', ing: [], pasos: '', rac: 4, olla: '', tara: taraYo(), llena: '', foto: '', fotoN: 0, nueva: true }; ir({ t: 'nreceta' }); };
-A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false }; ir({ t: 'nreceta' }); };
+A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false, ud: r.ud || 'g' }; ir({ t: 'nreceta' }); };
 function recCalc(R) { var t = { k: 0, p: 0, h: 0, g: 0, peso: 0 }; R.ing.forEach(function (i) { t.k += i.k * i.g / 100; t.p += i.p * i.g / 100; t.h += i.h * i.g / 100; t.g += i.gr * i.g / 100; t.peso += i.g; }); return t; }
 VISTAS.nreceta = function () {
   var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = num(R.olla) || 0;
@@ -8133,7 +8157,8 @@ VISTAS.nreceta = function () {
   h += '<label class="f">Pasos (opcional)<textarea id="rc-p" data-in="rcP" rows="3" maxlength="2000">' + esc(R.pasos) + '</textarea></label>';
   h += '<label class="f">Raciones<span class="mut sm">Para cuántas personas sale</span><input data-in="rcRac" inputmode="numeric" value="' + rac + '"></label>';
   /* 17 nov (Javier, maqueta aprobada): el peso de la olla vacía se apunta una vez (la app lo recuerda); al cocinar, se pesa la olla llena y sale el peso de la receta */
-  h += '<section class="card rc-olla"><b>Peso de la olla</b><span class="mut sm">Opcional · para apuntar luego pesando tu plato</span>' +
+  h += '<section class="card rc-olla"><b>Peso de la olla</b><span class="mut sm">Opcional · para apuntar luego ' + (recMl() && R.ud === 'ml' ? 'midiendo' : 'pesando') + ' tu plato</span>' +
+    (recMl() ? '<div class="rc-ud"><span>Tu plato se mide en</span><div class="seg-p mini" role="tablist" aria-label="Unidad">' + [['g', 'Gramos'], ['ml', 'Mililitros']].map(function (u) { var on = (R.ud || 'g') === u[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="rcUd" data-v="' + u[0] + '">' + u[1] + '</button>'; }).join('') + '</div></div>' : '') +
     '<label class="f">Peso de la olla vacía (lo apuntas una vez)<span class="rc-u"><input data-in="rcTara" inputmode="numeric" value="' + esc(R.tara) + '" placeholder="Ej.: 1250"><i>g</i></span></label>' +
     '<label class="f">Cuando la cocines: pesa la olla con la comida<span class="rc-u"><input data-in="rcLlena" inputmode="numeric" value="' + esc(R.llena) + '" placeholder="' + (olla && !R.llena ? esc(fmil(olla + (num(R.tara) || 0)).replace('.', '')) : 'Ej.: 3050') + '"><i>g</i></span></label>' +
     '<div id="rc-ol">' + rcOllaHtml() + '</div></section>';
@@ -8144,7 +8169,7 @@ VISTAS.nreceta = function () {
 function rcTotHtml() { var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = Math.max(0, rcNeto(R));
   return '<div class="fila-r"><span><b>Receta entera</b></span><span>' + fmil(T.k) + ' kcal · P ' + Math.round(T.p) + ' · H ' + Math.round(T.h) + ' · G ' + Math.round(T.g) + '</span></div>' +
     '<div class="fila-r"><span><b>' + (rac === 1 ? '1 ración' : 'Cada ración (1 de ' + rac + ')') + '</b></span><span>' + fmil(T.k / rac) + ' kcal · P ' + Math.round(T.p / rac) + ' · H ' + Math.round(T.h / rac) + ' · G ' + Math.round(T.g / rac) + '</span></div>' +
-    (olla ? '<div class="fila-r"><span><b>Cada 100 g cocinados</b></span><span>' + fmil(T.k * 100 / olla) + ' kcal</span></div>' : ''); }
+    (olla ? '<div class="fila-r"><span><b>Cada 100 ' + (recUd(R) === 'ml' ? 'ml' : 'g cocinados') + '</b></span><span>' + fmil(T.k * 100 / olla) + ' kcal</span></div>' : ''); }
 function rcTot() { var e = $('#rc-t'); if (e) e.innerHTML = rcTotHtml(); var o = $('#rc-ol'); if (o) o.innerHTML = rcOllaHtml(); }
 /* la olla: vacía (la recuerda la app) y llena → el peso de la receta cocinada */
 function taraYo() { var t = S.perfil && +S.perfil.tara; return t > 0 ? String(t) : ''; }
@@ -8153,8 +8178,13 @@ function rcOllaHtml() {
   var R = S.x.rec, ll = num(R.llena) || 0, ta = num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), n = rcNeto(R);
   if (ll && ta && ll <= ta) return '<p class="rc-res mal">La olla llena tiene que pesar más que vacía.</p>';
   if (!n) return '<p class="mut sm">' + (ta ? 'La app recuerda el peso de tu olla: cuando cocines, solo pesas la olla llena.' : 'Pesa la olla vacía una vez; la próxima vez solo pesas la olla llena.') + '</p>';
+  var u = recUd(R); if (u === 'ml') return '<p class="rc-res">La receta: ' + fmil(n) + ' ml' + (rac > 1 ? ' · cada ración (de ' + rac + '): ' + fmil(n / rac) + ' ml' : '') + '</p><p class="mut sm">Se pesa igual, en la báscula: en sopas, cremas y batidos, 1 g ≈ 1 ml.</p>';
   return '<p class="rc-res">Peso de la receta: ' + fmil(n) + ' g' + (rac > 1 ? ' · cada ración (de ' + rac + '): ' + fmil(n / rac) + ' g' : '') + '</p>' + (ll && !ta ? '<p class="mut sm">Sin el peso de la olla vacía, cuento todo como comida.</p>' : '<p class="mut sm">La app recuerda el peso de tu olla: la próxima vez solo pesas la olla llena.</p>');
 }
+/* 20 nov (borrador, Chadín: «recetas en ml además de en gramos»): sopas, cremas y batidos se miden en ml; la olla se pesa igual (1 g ≈ 1 ml) */
+function recMl() { return rpBorr(); }
+function recUd(r) { return recMl() && r && r.ud === 'ml' ? 'ml' : 'g'; }
+A.rcUd = function (el) { S.x.rec.ud = el.dataset.v; pintar(); };
 IN.rcTara = function (t) { S.x.rec.tara = t.value.replace(/\D/g, ''); rcTot(); };
 IN.rcLlena = function (t) { S.x.rec.llena = t.value.replace(/\D/g, ''); rcTot(); };
 /* la foto de la receta: recortada a 16:10 y reducida (800 × 500, JPEG); se guarda aparte y solo se pide al verla */
@@ -8191,7 +8221,7 @@ A.rcGuardar = function () {
   if (n.length < 2) { e.hidden = false; e.textContent = 'Ponle un nombre a la receta.'; return; }
   if (!R.ing.length || !T.k) { e.hidden = false; e.textContent = 'Añade al menos un ingrediente con sus gramos.'; return; }
   if (olla && olla < T.peso * 0.3) { e.hidden = false; e.textContent = 'El peso de la olla cocinada parece muy bajo para esos ingredientes. Revísalo o déjalo en blanco.'; return; }
-  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0,
+  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0, ud: recMl() && R.ud === 'ml' ? 'ml' : undefined,
     k: Math.round(T.k / rac), p: Math.round(T.p / rac * 10) / 10, h: Math.round(T.h / rac * 10) / 10, g: Math.round(T.g / rac * 10) / 10 };
   guardaBiblio(b);
   if (R.fotoN) { if (R.foto) RFOTO[b.id] = R.foto; else delete RFOTO[b.id]; rpc('yo_rec_foto_poner', { bid: b.id, foto: R.foto || null }).then(null, function () { toast('La receta se ha guardado, pero la foto no se ha podido subir'); }); }
@@ -8810,7 +8840,7 @@ function cardPub(x, prev) {
   if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
   else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !comuSh() ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.nej && !x.mio) h += '<button class="cm-copiar"' + A_('cCopiar') + ' data-id="' + x.id + '">' + ic('copiar', 15, null) + 'Copiar rutina</button>';
   else if (x.nej && x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá copiar la rutina' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona ha copiado tu rutina' : ' personas han copiado tu rutina') : 'Nadie ha copiado tu rutina todavía') + '</span>';
   h += '</div>';
@@ -8833,7 +8863,7 @@ function cardRec(x, prev, ab, A_) {
   else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto cm-rcf' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de la receta">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += recDatos(r);
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
-    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !COMU_SH ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
+    '<button class="cm-b"' + A_('cComs') + ' data-id="' + x.id + '" aria-label="Comentarios"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('coment', 19, null, 1.9) + '<span>' + (x.coms || 0) + '</span></button>' + (prev || x.vis === 'seg' || !comuSh() ? '' : '<button class="cm-b cm-sh" data-a="cCompartir" data-id="' + x.id + '" aria-label="Compartir">' + ic('compartir', 18, null, 1.9) + '</button>');
   if (x.mio) h += '<span class="cm-cop">' + (prev ? 'Se podrá ver y guardar' : x.copias ? fN(x.copias, 0) + (x.copias === 1 ? ' persona la ha guardado' : ' personas la han guardado') : 'Nadie la ha guardado todavía') + '</span>';
   else h += '<button class="cm-copiar"' + A_('cRecVer') + ' data-id="' + x.id + '">Ver receta</button>';
   h += '</div>';
@@ -9119,7 +9149,7 @@ VISTAS.comuPersona = function (p) {
   h += '<section class="card cm-perfil2"><span class="cm-av gr xl">' + esc(iniciales(nom)) + '</span><b class="cm-nom">' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b>' +
     '<div class="cm-nums">' + num3.map(function (k) { return k[2] ? '<button data-a="cRed" data-v="' + k[2] + '"><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></button>' : '<span><b class="nm">' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
     '<div class="fila2 cm-pb">' + (P.yo ? '<button class="btn-o" data-a="cAjustes">' + ic('ajustes', 16) + 'Ajustes</button>' : P.sigo ? '<button class="btn-o" data-a="cDejar" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">' + ic('check', 16) + 'Siguiendo</button>' : '<button class="btn" data-a="cSeguir" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') +
-    (COMU_SH ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div></section>';
+    (comuSh() && P.yo ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div></section>';
   if (P.silencio) h += '<section class="card cm-aviso"><small>Has silenciado a ' + esc(nom1(nom)) + ': sus entrenos no te salen en Comunidad.</small><button class="link izq" data-a="cQuitarSil" data-p="' + esc(P.pid) + '">Quitar el silencio</button></section>';
   h += L.length ? L.map(function (x) { return cardPub(x); }).join('') : '<p class="mut center sm">' + (P.yo ? 'Todavía no has publicado ningún entreno. Al terminar uno, pulsa «Publicar en la Comunidad».' : 'Todavía no ha compartido ningún entreno.') + '</p>';
   return h + '</div>';
@@ -9352,18 +9382,139 @@ function hojaCompartir(tit, txt, url, nota) {
     '<button class="sh-b" data-a="cShCopiar">' + ic('copiar', 22) + '<small>Copiar enlace</small></button>' + (navigator.share ? '<button class="sh-b" data-a="cShMas">' + ic('compartir', 22) + '<small>Más</small></button>' : '') + '</div>' +
     '<p class="cm-nunca">' + ic('escudo', 15) + '<span>' + nota + '</span></p><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
 }
-A.cCompartir = function (el) {
-  var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
-  hojaCompartir(x.tipo === 'rec' ? 'Compartir la receta' : 'Compartir el entreno', (x.mio ? 'Mira mi ' + (x.tipo === 'rec' ? 'receta' : 'entreno') + ' en MOOD ON: «' : 'Mira ' + (x.tipo === 'rec' ? 'la receta' : 'el entreno') + ' de ' + nom1(x.nombre) + ' en MOOD ON: «') + x.t + '»', enlaceComu('p', x.id),
-    'Quien abra el enlace la verá aunque no tenga la app: el nombre, el título, el comentario y los datos. No verá los comentarios, ni quién ha dado me gusta, ni nada de «Solo mis seguidores».');
-};
-A.cPerCompartir = function (el) {
-  var C = CMU(), P = C.pers[el.dataset.p] || {};
-  hojaCompartir(P.yo ? 'Compartir tu perfil' : 'Compartir el perfil', P.yo ? 'Sígueme en MOOD ON' : 'Mira el perfil de ' + nom1(P.nombre) + ' en MOOD ON', enlaceComu('u', P.pid),
-    'Fuera de la app se ve el nombre, sus números y sus entrenos publicados «para todos». Nunca sus seguidores ni a quién sigue. Cada persona puede quitar en Ajustes que su perfil se comparta.');
-};
+/* A.cCompartir y A.cPerCompartir: ahora como imagen, en compartir.js */
 A.cShCopiar = function () { var u = S.x.csh && S.x.csh.url; try { navigator.clipboard.writeText(u); } catch (e) { } cerrarHoja(); toast('Enlace copiado', 'ok'); };
 A.cShMas = function () { var d = S.x.csh; if (!d) return; try { navigator.share({ title: 'MOOD ON', text: d.txt, url: d.url }); } catch (e) { } };
+
+;
+/* ===== Compartir como imagen (20 nov 2026, 23:33, Chadín: «vamos con esto») =====
+   · Carrera y cardio: «Mi semana corriendo» (Inicio → Carrera · esta semana) y la tarjeta de la carrera o del cardio al terminar.
+     Maquetas aprobadas el 20 nov (08:44–08:46): sin barritas, sin «Con tu reloj». Con la app de las tiendas y el reloj se añadirán
+     el recorrido (opcional), el pulso y el ritmo de cada serie; ahora salen los km y los minutos que apunta al marcarla hecha.
+   · Comunidad: una publicación (entreno o receta) o tu perfil, solo como imagen con «Descárgate la app · moodonapp.com»
+     (09:00: sin enlace ni página pública; nada nuevo en Supabase). El perfil, solo el tuyo; de otra persona, solo lo que publicó «para todos».
+   En borrador (COMU_SH y RUN_SH apagados): solo se ve en las demos («Por revisar») o con ?borradores, hasta el OK. */
+function comuSh() { return COMU_SH || rpBorr(); }
+function runSh() { return RUN_SH || rpBorr(); }
+
+/* ---------- la tarjeta (1080 × 1920), estilo «Grande» como las del fin del entreno ----------
+   D = { tit, sub, big, uni, kp: [[valor, ETIQUETA]], txt (comentario), oro (línea dorada), img (foto arriba en Negro y Blanco), pie } */
+function tarjetaDatos(D, modo, foto) {
+  var bl = modo === 'blanco', ft = modo === 'foto' && foto, F = ' "Plus Jakarta Sans", sans-serif';
+  var FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.6)' : 'rgba(255,255,255,.72)', ORO = bl ? '#B8860B' : '#F2C14E';
+  return fontsListas().then(function () { return linImg('trophy', ORO, 2.2); }).then(function (tro) {
+    var W = 1080, H = 1920, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var x = cv.getContext('2d'), M = 90, AN = W - 2 * M, ops = [], add = function (h, f) { ops.push({ h: h, f: f }); };
+    if (ft) { var s = Math.max(W / foto.width, H / foto.height), w = foto.width * s, h = foto.height * s; x.drawImage(foto, (W - w) / 2, (H - h) / 2, w, h); var g = x.createLinearGradient(0, 0, 0, H); g.addColorStop(0, 'rgba(0,0,0,.3)'); g.addColorStop(.35, 'rgba(0,0,0,.06)'); g.addColorStop(.55, 'rgba(0,0,0,.25)'); g.addColorStop(1, 'rgba(0,0,0,.78)'); x.fillStyle = g; x.fillRect(0, 0, W, H); }
+    else if (bl) { x.fillStyle = '#FFFFFF'; x.fillRect(0, 0, W, H); }
+    else { x.fillStyle = '#0C0C0E'; x.fillRect(0, 0, W, H); var rg = x.createRadialGradient(W * .92, 0, 40, W * .92, 0, 1500); rg.addColorStop(0, 'rgba(52,60,86,.75)'); rg.addColorStop(.55, 'rgba(26,28,38,.35)'); rg.addColorStop(1, 'rgba(12,12,14,0)'); x.fillStyle = rg; x.fillRect(0, 0, W, H); }
+    x.textAlign = 'left'; x.textBaseline = 'alphabetic';
+    if (D.img && !ft) { var ih = Math.round(AN * (D.img.height / D.img.width)); ih = Math.max(420, Math.min(ih, 760));
+      add(ih + 64, function (y) { var sc = Math.max(AN / D.img.width, ih / D.img.height), iw = D.img.width * sc, hh = D.img.height * sc; x.save(); rr(x, M, y, AN, ih, 36); x.clip(); x.drawImage(D.img, M + (AN - iw) / 2, y + (ih - hh) / 2, iw, hh); x.restore(); }); }
+    x.font = '800 60px' + F; var TL = grLin(x, String(D.tit || '').toUpperCase(), AN, 2);
+    add(TL.length * 70 - 4, function (y) { x.fillStyle = FG; x.font = '800 60px' + F; TL.forEach(function (t, i) { x.fillText(t, M, y + 58 + i * 70); }); });
+    if (D.sub) add(66, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.fillText(recorta(x, D.sub, AN), M, y + 34); grEsp(x, '0px'); });
+    if (D.txt) { x.font = '600 38px' + F; var CL = grLin(x, '«' + D.txt + '»', AN, 3); add(CL.length * 50 + 24, function (y) { x.fillStyle = bl ? 'rgba(17,17,17,.82)' : 'rgba(255,255,255,.9)'; x.font = '600 38px' + F; CL.forEach(function (t, i) { x.fillText(t, M, y + 46 + i * 50); }); }); }
+    if (D.big) add(250, function (y) { x.fillStyle = FG; var px = ajusta(x, D.big, AN - 200, 250, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-8px'); x.fillText(D.big, M - 6, y + 220); var w = x.measureText(D.big).width; grEsp(x, '2px');
+      if (D.uni) { x.font = '800 46px' + F; x.fillText(D.uni, M + w + 14, y + 220); } grEsp(x, '0px'); });
+    var K = (D.kp || []).filter(function (k) { return k && k[0]; });
+    if (K.length) add(150, function (y) { var cx = M, gap = K.length > 3 ? 44 : 64; K.forEach(function (k) { x.font = '800 66px' + F; var vw = x.measureText(k[0]).width; x.font = '700 22px' + F; grEsp(x, '3px'); var lw = x.measureText(k[1]).width; grEsp(x, '0px');
+      x.fillStyle = FG; x.font = '800 66px' + F; x.fillText(k[0], cx, y + 70); x.fillStyle = SUB; x.font = '700 22px' + F; grEsp(x, '3px'); x.fillText(k[1], cx, y + 112); grEsp(x, '0px'); cx += Math.max(vw, lw) + gap; }); });
+    if (D.oro) add(84, function (y) { if (tro) x.drawImage(tro, M, y + 14, 50, 50); x.fillStyle = ORO; x.font = '800 36px' + F; x.fillText(recorta(x, D.oro, AN - 70), M + 66, y + 52); });
+    add(D.pie ? 150 : 96, function (y) { x.save(); var sc = 190 / 1600; x.translate(M, y + 60); x.scale(sc, sc); x.fillStyle = FG; x.fill(new Path2D(LOGO_D), 'evenodd'); x.restore();
+      if (D.pie) { x.fillStyle = SUB; x.font = '700 30px' + F; x.fillText(D.pie, M, y + 136); } });
+    var tot = ops.reduce(function (a, o) { return a + o.h; }, 0), y = Math.max(150, (H - (ft ? 300 : 170)) - tot);      // abajo, como las maquetas (y encima de la barra de Instagram con foto)
+    if (ft) { x.shadowColor = 'rgba(0,0,0,.45)'; x.shadowBlur = 18; }
+    ops.forEach(function (o) { o.f(y); y += o.h; });
+    return cv;
+  });
+}
+function mesC(d) { return d.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '').toUpperCase(); }
+function diaLargo(f) { var d = aDate(f); return (d.toLocaleDateString('es-ES', { weekday: 'long' }) + ' ' + d.getDate() + ' ' + mesC(d)).toUpperCase(); }
+function hm(mn) { mn = Math.round(mn || 0); return mn >= 60 ? Math.floor(mn / 60) + ' h ' + ('0' + mn % 60).slice(-2) : mn + ' min'; }
+function km1(k) { return fN(Math.round(k * 10) / 10, 1); }
+
+/* ---------- carrera y cardio ---------- */
+function soloCardioYo(U) { var e = U.ej || []; return !U.vol && e.length > 0 && e.every(function (x) { return x.tipo === 'run' || x.tipo === 'cardio'; }); }
+function runSesD(U) {
+  var E = (U.ej || []).filter(function (e) { return e.hecho; }); if (!E.length) E = U.ej || [];
+  var run = E.some(function (e) { return e.tipo === 'run'; }), km = 0, rmn = 0, mn = 0;
+  E.forEach(function (e) { var k = e.tipo === 'run' ? num(e.km) : null, m = num(e.mn) || 0; if (k) { km += k; rmn += m; } mn += m; });
+  if (!mn) mn = U.min || 0;
+  var tit = E.length === 1 && !run ? E[0].n : (U.nombre || (run ? 'Carrera' : 'Cardio')), K = [];
+  if (km) { K.push([hm(mn), 'TIEMPO']); if (rmn) K.push([ritmoTxt(km, rmn).replace(' min/km', ''), 'MIN/KM']); }
+  else if (E.length > 1) K.push([String(E.length), 'EJERCICIOS']);
+  if (num(U.rpe)) K.push([U.rpe + '/10', 'ESFUERZO']);
+  return { tit: tit, sub: diaLargo(U.fecha || hoyStr()), big: km ? km1(km) : String(Math.round(mn)), uni: km ? 'KM' : 'MIN', kp: K };
+}
+/* arriba, en el resumen negro del fin: km, tiempo y ritmo (o los minutos) en vez de «minutos · series · kg» */
+function runFinK(U) { var D = runSesD(U); return [[D.big, D.uni === 'KM' ? 'km' : 'minutos']].concat(D.kp.filter(function (k) { return k[1] !== 'ESFUERZO'; }).map(function (k) { return [k[0], k[1] === 'TIEMPO' ? 'tiempo' : k[1] === 'MIN/KM' ? 'min/km' : k[1].toLowerCase()]; })).slice(0, 3); }
+function runSemD(l) {
+  var T = runSem(l), a = aDate(l), b = aDate(sumar(l, 6)), sub = a.getMonth() === b.getMonth() ? a.getDate() + ' – ' + b.getDate() + ' ' + mesC(b) : a.getDate() + ' ' + mesC(a) + ' – ' + b.getDate() + ' ' + mesC(b);
+  var K = [[String(T.nrun), T.nrun === 1 ? 'SALIDA' : 'SALIDAS']];
+  if (T.km && T.rmin) { K.push([ritmoTxt(T.km, T.rmin).replace(' min/km', ''), 'MIN/KM']); K.push([hm(T.rmin), 'CORRIENDO']); }
+  return T.km ? { tit: 'Mi semana corriendo', sub: sub, big: km1(T.km), uni: 'KM', kp: K } : { tit: 'Mi semana corriendo', sub: sub, big: String(T.nrun), uni: T.nrun === 1 ? 'SALIDA' : 'SALIDAS', kp: [] };
+}
+A.runSemCompartir = function () {
+  var l = lunesDe(hoyStr());
+  hojaImg({ k: 'sem|' + l + '|' + JSON.stringify(runSem(l)), tit: 'Mi semana corriendo', nom: 'MOOD_ON_semana_corriendo_' + l, texto: '#MOODON',
+    gen: function (m, f) { return tarjetaDatos(runSemD(l), m, f); } });
+};
+
+/* ---------- la hoja de compartir una imagen (Negro · Blanco · Foto, la imagen, Compartir y Guardar) ---------- */
+var SHI = null, shiCache = {};
+function hojaImg(o) { SHI = Object.assign({ modo: 'negro', foto: null, modos: [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']] }, o); pintaShi(); }
+function shiK() { var o = SHI; return o.k + '|' + o.modo + '|' + (o.modo === 'foto' && o.foto ? o.foto.src.slice(-60) + o.foto.src.length : ''); }
+function pintaShi() {
+  var o = SHI; if (!o) return; var pideFoto = o.modo === 'foto' && !o.foto;
+  hoja('<h2>' + esc(o.tit) + '</h2>' + (o.nota ? '<p class="mut sm">' + o.nota + '</p>' : '') +
+    '<div class="seg-p mini shi-m" role="tablist" aria-label="Fondo">' + o.modos.map(function (m) { return '<button role="tab" aria-selected="' + (o.modo === m[0]) + '" class="' + (o.modo === m[0] ? 'on' : '') + '" data-a="shiModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="car-img shi-img" id="shi-img">' + (pideFoto ? ic('foto', 30, 'var(--tx3)') : '<span class="mut sm">Preparando…</span>') + '</div>' +
+    (pideFoto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' :
+      '<div class="fin2-ac shi-ac"><button class="btn" data-a="shiCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="shiGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button></div>') +
+    (o.modo === 'foto' && o.foto && !o.fotoFija ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' : '') +
+    '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  if (pideFoto) return;
+  var k = shiK(), pon = function () { var b = $('#shi-img'); if (b && SHI === o && shiK() === k) b.innerHTML = '<img src="' + shiCache[k].url + '" alt="' + esc(o.tit) + '">'; };
+  if (shiCache[k]) return pon();
+  o.gen(o.modo, o.modo === 'foto' ? o.foto : null).then(function (cv) { cv.toBlob(function (b) { shiCache[k] = { blob: b, url: URL.createObjectURL(b) }; pon(); }, 'image/png'); }, function () { var b = $('#shi-img'); if (b) b.innerHTML = '<span class="mut sm">No se ha podido preparar</span>'; });
+}
+A.shiModo = function (el) { if (!SHI) return; SHI.modo = el.dataset.v; pintaShi(); };
+CH.shiFoto = function (t) { var f = t.files && t.files[0]; if (!f || !SHI) return; var o = SHI, im = new Image(); im.onload = function () { o.foto = im; if (SHI === o) pintaShi(); }; im.src = URL.createObjectURL(f); };
+A.shiCompartir = function () {
+  var t = SHI && shiCache[shiK()]; if (!t) return toast('Un segundo, se está preparando');
+  var f = null; try { f = new File([t.blob], SHI.nom + '.png', { type: 'image/png' }); } catch (e) { }
+  if (f && navigator.canShare && navigator.canShare({ files: [f] })) return navigator.share({ files: [f], title: 'MOOD ON', text: SHI.texto || '#MOODON' }).catch(function () { });
+  A.shiGuardar();
+};
+A.shiGuardar = function () { var t = SHI && shiCache[shiK()]; if (!t) return; var a = document.createElement('a'); a.href = t.url; a.download = SHI.nom + '.png'; document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
+
+/* ---------- Comunidad: una publicación o tu perfil ---------- */
+var PIE_APP = 'Descárgate la app · moodonapp.com';
+function imgDeSrc(src) { return new Promise(function (ok) { if (!src) return ok(null); var im = new Image(); if (!/^(data|blob):/.test(src)) im.crossOrigin = 'anonymous'; im.onload = function () { ok(im); }; im.onerror = function () { ok(null); }; im.src = src; }); }
+function pubD(x, img) {
+  var d = x.creado ? new Date(x.creado) : new Date(), sub = ((x.tipo === 'rec' ? 'Receta de ' : 'Entreno de ') + nom1(x.nombre) + ' · ' + d.getDate() + ' ' + mesC(d)).toUpperCase();
+  if (x.tipo === 'rec') { var r = x.rc || {}, mac = r.k != null, rac = r.rac || 1;
+    return { img: img, sub: sub, tit: x.t, txt: x.c, big: mac ? fmil(r.k || 0) : String(rac), uni: mac ? 'KCAL / RACIÓN' : (rac === 1 ? 'RACIÓN' : 'RACIONES'),
+      kp: mac ? [[Math.round(r.p || 0) + ' g', 'PROTEÍNA'], [Math.round(r.h || 0) + ' g', 'HIDRATOS'], [Math.round(r.g || 0) + ' g', 'GRASAS']] : [[String((r.ing || []).length), 'INGREDIENTES']], pie: PIE_APP }; }
+  return { sub: sub, tit: x.t, txt: x.c, big: String(x.min || 0), uni: 'MIN', kp: [[String(x.nser || 0), 'SERIES'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'VOLUMEN'] : [String(x.nej || 0), 'EJERCICIOS']], oro: x.rec ? 'Récord: ' + x.rec : '', pie: PIE_APP };
+}
+A.cCompartir = function (el) {
+  var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
+  var C = CMU(), src = x.foto ? (C.fotos || {})[x.id] : null;
+  (src || !x.foto ? Promise.resolve(src) : rpc('yo_comu_foto', { pub: +x.id }).then(function (f) { if (f) { C.fotos = C.fotos || {}; C.fotos[x.id] = f; } return f; }, function () { return null; })).then(imgDeSrc).then(function (im) {
+    var rec = x.tipo === 'rec', modos = [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
+    hojaImg({ k: 'pub|' + x.id, tit: rec ? 'Compartir la receta' : 'Compartir el entreno', nom: 'MOOD_ON_' + (rec ? 'receta' : 'entreno'), texto: 'Descárgate la app: moodonapp.com', modos: modos,
+      foto: im, fotoFija: !!im, nota: x.mio ? '' : 'Sale su nombre y lo que publicó para todos; nada de sus comentarios, sus me gusta ni lo de «Solo mis seguidores».',
+      gen: function (m, f) { return tarjetaDatos(pubD(x, rec && m !== 'foto' ? im : null), m, f); } });
+  });
+};
+A.cPerCompartir = function (el) {
+  var C = CMU(), P = C.pers[el.dataset.p] || {}; if (!P.yo) return;      // de otra persona, no: su perfil es suyo
+  var ses = S.sesiones || [], min = ses.reduce(function (a, s) { return a + (num(s.min) || 0); }, 0), nr = ses.reduce(function (a, s) { return a + (s.recs || []).filter(function (r) { return r && r.e; }).length; }, 0);
+  var km = ses.reduce(function (a, s) { return a + (s.ej || []).reduce(function (b, e) { return b + (e.tipo === 'run' && e.hecho ? num(e.km) || 0 : 0); }, 0); }, 0);
+  var D = { sub: 'MI PERFIL EN MOOD ON', tit: P.nombre || 'Mi perfil', big: fmtK(ses.length), uni: ses.length === 1 ? 'ENTRENO' : 'ENTRENOS', kp: [[fmtK(Math.round(min / 60)), 'HORAS'], [fmtK(nr), nr === 1 ? 'RÉCORD' : 'RÉCORDS']].concat(km >= 1 ? [[fmtK(km), 'KM']] : []), txt: 'Sígueme en la Comunidad', pie: PIE_APP };
+  hojaImg({ k: 'per|' + ses.length + '|' + nr, tit: 'Compartir tu perfil', nom: 'MOOD_ON_perfil', texto: 'Descárgate la app: moodonapp.com', gen: function (m, f) { return tarjetaDatos(D, m, f); } });
+};
 
 arrancar();
 </script>
