@@ -2071,6 +2071,7 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 .p3-mf.on{border-color:var(--p3a);box-shadow:0 0 0 1px var(--p3a) inset;background:var(--p3s)}
 .p3-bts{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.p3-bts .btn-mini{margin:0}
 .p3-fot{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.p3-fot button{position:relative;aspect-ratio:3/4;border:0;border-radius:12px;overflow:hidden;background:var(--suave);padding:0}.p3-fot img{width:100%;height:100%;object-fit:cover;display:block}.p3-fot span{position:absolute;left:6px;bottom:6px;font-size:10.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.n-m3.solo{margin:8px 0 2px;padding-top:8px;border-top:1px solid var(--linea)}.n-m3.solo .n-m3f>span b{font-size:13px}      /* 21 nov: los macros de la comida en «Libre» */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -2469,6 +2470,8 @@ window.YO_REVISAR = [
      «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
      y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
      21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
+  { t: 'Por aprobar · Nutrición: los macros de cada comida también en «Libre» (21 nov)', d: 'Debajo de cada comida, la proteína, los hidratos y la grasa de lo que has apuntado. Con reparto por comidas sigue igual (lo que llevas / lo que te toca, con su barra).',
+    ir: function () { S.perfil.nut = S.perfil.nut || {}; S.perfil.nut.libre = 1; demoIr('nutri'); } },
   { t: 'Por aprobar · Progreso en 3 pestañas: Actividad, Rendimiento y Mi cuerpo (21 nov)', d: 'El prompt de Chadín: Actividad (entrenamientos por semana e historial), Rendimiento (carga, 1RM estimada y volumen de cada ejercicio, récords reales, comparar entrenamientos, series por grupo y carrera) y Mi cuerpo (peso, medidas y fotos).',
     ir: function () { S.x.p3 = 'act'; demoIr('prog'); } },
   /* 21 nov, 10:37: publicados en yo-1.11 compartir (negro, blanco o sin fondo y los accesos de las apps) y colocar las fotos con los dedos */
@@ -8117,6 +8120,15 @@ var MAC3 = [['p', 'Proteína', 'p', 'mucha proteína aquí'], ['h', 'Hidratos', 
 function gramosVer(x) { return x.est && x.gin ? x.gin : x.g; }
 function uniTxt(x) { if (!x.g) return x.det || ''; var m = String(x.det || '').match(/^([\d,]+ [^·(]+?)\s·/); return x.mu === 'u' && m ? m[1] : x.est && x.gin ? fmil(x.gin) + ' g ' + (x.est === 'co' ? 'cocinado' : 'en crudo') : ''; }      // 19 nov (Chadín): con los gramos
 function macOk(v, o) { return Math.abs(v - o) <= Math.max(3, o * 0.15); }
+/* 21 nov, 10:35 (Chadín: «aunque pongan Libre, cuando metan comida o desayuno que salga abajo los macros de todo lo que ha metido; con reparto por
+   comidas, igual pero con la barra 21/40»): sin objetivo por comida, los mismos tres macros con lo que suma la comida (sin barra ni objetivo).
+   En borrador (NUT21) hasta su OK. */
+var NUT21 = false;
+function nut21() { return NUT21 || rpBorr(); }
+function macSolo(t) {
+  return '<div class="n-m3 solo">' + MAC3.map(function (m) { var v = Math.round(t[m[0] === 'gr' ? 'g' : m[0]]);
+    return '<div class="n-m3f" title="' + m[1] + ': ' + v + ' g"><span><small>' + m[1].slice(0, m[0] === 'gr' ? 5 : 4) + '.</small> <b>' + v + ' g</b></span></div>'; }).join('') + '</div>';
+}
 function macBarras(t, oc) {
   return '<div class="n-m3">' + MAC3.map(function (m) { var v = Math.round(t[m[0] === 'gr' ? 'g' : m[0]]), o = Math.round(oc[m[2]] || 0), ok = macOk(v, o), pasa = !ok && v > o, pc = o ? Math.min(100, Math.round(v * 100 / o)) : (v ? 100 : 0);
     return '<div class="n-m3f' + (pasa ? ' pasa' : ok ? ' ok' : '') + '" title="' + m[1] + ': ' + v + ' de ' + o + ' g"><span><small>' + m[1].slice(0, m[0] === 'gr' ? 5 : 4) + '.</small> <b>' + v + '/' + o + '</b>' + (pasa ? ic('subir', 11, null, 2.8) : ok ? ic('check', 11, null, 3) : '') + '</span><i><i style="width:' + pc + '%"></i></i></div>'; }).join('') + '</div>';
@@ -8272,6 +8284,7 @@ function comidaCard(nom, i, L, oc, f, cop) {
     return '<div class="n-sw" data-id="' + esc(x.id) + '"><button class="n-sw-q" data-a="nSwQuita" data-id="' + esc(x.id) + '" tabindex="-1" aria-hidden="true">' + ic('papelera', 18) + 'Quitar</button><button class="n-it' + (r ? ' rojo' : '') + '" data-a="nItem" data-id="' + esc(x.id) + '"><span class="col"><b>' + esc(x.n) + '</b>' + (u || r || gv ? '<small class="mut">' + esc(u || (gv ? fmil(gv) + ' g' : '')) + (r ? ' <em class="n-tag">' + esc(r) + '</em>' : '') + '</small>' : '') + '</span>' +
       '<span class="n-g">' + fmil(x.k) + '<small> kcal</small></span></button></div>'; }).join('');
   if (conMac && L.length) h += macBarras(t, oc) + omLinea(i, t, oc);
+  else if (L.length && nut21()) h += macSolo(t);      // 21 nov: en «Libre» (o sin macros por comida), lo que suma esta comida
   var cq = conMac && L.some(function (x) { return x.g; }) ? '<button class="btn-mini n-cqb" data-a="cqHaz" data-c="' + i + '">' + ic('varita', 14) + 'Cuadrar</button>' : '';
   var PP = S.x.nPP, pg = PP && !(PP.f === f && PP.c === i) ? '<button class="btn-mini n-pegar" data-a="nPegar" data-c="' + i + '">' + ic('pegar', 14) + 'Pegar ' + esc(PP.nom.toLowerCase()) + ' · ' + fmil(PP.k) + ' kcal</button>' : '';
   var cp = L.length && !pg ? '<button class="link n-cop n-cop3" data-a="nCopiarYa" data-c="' + i + '">' + ic('copiar', 14) + 'Copiar</button>' : '';      // 18 nov: copiar esta comida y pegarla en otra (o en otro día)
