@@ -5079,7 +5079,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.182';
+var APP_V = 'v53.4.183';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -23120,10 +23120,54 @@ function pushInstalada(){ var W=pushW(); try{ return !!W.navigator.standalone||!
 function pushTiempo(p,ms){ return new Promise(function(ok,ko){ var t=setTimeout(function(){ ko(new Error('tiempo')); },ms); p.then(function(v){ clearTimeout(t); ok(v); },function(e){ clearTimeout(t); ko(e); }); }); }
 function pushReg(){ var sw=pushW().navigator.serviceWorker; return sw.getRegistration().then(function(r){ return r||sw.register('sw.js'); }).then(function(){ return sw.ready; }); }
 function pushTok(q){ return q==='co'?CO.pin:BOOT.token; }
+/* v53.4.183 (21 nov 2026) · la app de iPhone (app-tiendas/, Capacitor): ahí los avisos van por Apple, no por el navegador.
+   Solo actúa dentro de esa app (en el navegador no cambia nada). El iPhone se guarda como una suscripción más, con su
+   dirección de Apple y claves de relleno (ver supabase/functions/api/apns.js). Mientras esté en pruebas, el servidor solo
+   guarda el iPhone de Javier (candado SOLO en apns.js). De momento solo para clientes (el entrenador, en la web). */
+var PUSH_NAT_P='BAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', PUSH_NAT_A='AAAAAAAAAAAAAAAAAAAAAA';
+function pushNat(){ var W=pushW(); try{ var C=W.Capacitor; return C&&C.isNativePlatform&&C.isNativePlatform()&&C.Plugins&&C.Plugins.PushNotifications||null; }catch(e){ return null; } }
+function pushNatEnt(){ var q=''; try{ q=pushW().location.search; }catch(e){}
+  if(/[?&]apns=production\b/.test(q)) LS.set('mo_apns_ent','production'); else if(/[?&]apns=sandbox\b/.test(q)) LS.set('mo_apns_ent','sandbox');
+  return LS.get('mo_apns_ent')==='production'?'production':'sandbox'; }
+function pushNatSub(t){ return {endpoint:'https://api.'+(pushNatEnt()==='production'?'':'sandbox.')+'push.apple.com/3/device/'+String(t||'').toLowerCase(),keys:{p256dh:PUSH_NAT_P,auth:PUSH_NAT_A}}; }
+function pushNatToken(P){ return new Promise(function(ok,ko){ var hs=[],listo=false,fin=function(f,v){ if(listo) return; listo=true; hs.forEach(function(h){ Promise.resolve(h).then(function(x){ if(x&&x.remove) x.remove(); }).catch(function(){}); }); f(v); };
+  hs.push(P.addListener('registration',function(t){ fin(ok,t&&t.value); }));
+  hs.push(P.addListener('registrationError',function(){ fin(ko,new Error('No se han podido activar los avisos en este iPhone.')); }));
+  Promise.resolve(P.register()).catch(function(e){ fin(ko,e); }); }); }
+function pushNatEstado(q){
+  if(q==='co') return Promise.resolve('no');
+  return Promise.resolve(pushNat().checkPermissions()).then(function(r){
+    var p=r&&r.receive, s=LS.get('mo_apns_sub');
+    if(p==='denied') return 'bloq';
+    PUSH.sub=s&&s.endpoint?s:null; return PUSH.sub&&p==='granted'&&!LS.get('mo_push_off_'+q)?'on':'off';
+  },function(){ return 'no'; });
+}
+function pushNatActivar(q){
+  var P=pushNat(), tok=pushTok(q);
+  if(q==='co') return Promise.reject(new Error('En la app de iPhone, los avisos del entrenador llegarán más adelante. De momento, actívalos en la web.'));
+  if(!tok) return Promise.reject(new Error('Entra en tu cuenta primero.'));
+  return Promise.resolve(P.requestPermissions()).then(function(r){
+    var p=r&&r.receive;
+    if(p!=='granted'){ PUSH.est=p==='denied'?'bloq':'off'; throw new Error(p==='denied'?'Has bloqueado los avisos. Mira cómo volver a permitirlos.':'No se han activado. Vuelve a tocar «Activar avisos» y elige «Permitir».'); }
+    return pushTiempo(pushNatToken(P),15000);
+  }).then(function(t){
+    if(!t) throw new Error('No se han podido activar los avisos en este iPhone.');
+    var s=pushNatSub(t); PUSH.sub=s; LS.set('mo_apns_sub',s); LS.del('mo_push_off_'+q);
+    return api('pushGuardar',tok,s,pushInfo());
+  }).then(function(r){
+    PUSH.est='on'; PUSH.guardado[q]=1;
+    if(r&&r.cfg&&CL.d&&CL.d.clienta) CL.d.clienta.push=r.cfg;
+    return r;
+  });
+}
+/* al tocar un aviso de Apple (con la app cerrada o abierta): abrir lo suyo, como el clic del aviso de la web */
+function pushNatOir(){ var P=pushNat(); if(!P||pushNatOir.ya) return; pushNatOir.ya=1;
+  try{ P.addListener('pushNotificationActionPerformed',function(e){ var d=e&&e.notification&&e.notification.data||{}; if(d.url){ IR=irDe(String(d.url)); irAplicar(); } }); }catch(e){} }
 function pushInfo(){ var u=navigator.userAgent, d=/iPad/.test(u)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)?'iPad':/iPhone/.test(u)?'iPhone':/Android/.test(u)?'Android':/Mac/.test(u)?'Mac':/Windows/.test(u)?'Windows':'Ordenador';
-  var b=/Edg\//.test(u)?'Edge':/Firefox\//.test(u)?'Firefox':/Chrome\//.test(u)&&!/Edg\//.test(u)?'Chrome':/Safari\//.test(u)?'Safari':''; return d+(b&&!/^i/.test(d)?' · '+b:'')+(pushInstalada()?' · app':''); }
+  var b=/Edg\//.test(u)?'Edge':/Firefox\//.test(u)?'Firefox':/Chrome\//.test(u)&&!/Edg\//.test(u)?'Chrome':/Safari\//.test(u)?'Safari':''; return d+(b&&!/^i/.test(d)?' · '+b:'')+(pushNat()?' · app de la tienda':pushInstalada()?' · app':''); }
 function pushEstado(q){
   if(DEMO||PRUEBA) return Promise.resolve('no');
+  if(pushNat()) return pushNatEstado(q);      // v53.4.183: dentro de la app de iPhone
   var W=pushW();
   if(pushIOS()&&!pushInstalada()) return Promise.resolve('ios');
   if(!('serviceWorker' in W.navigator)||!('PushManager' in W)||!('Notification' in W)) return Promise.resolve('no');
@@ -23154,6 +23198,7 @@ function pushPintar(q,antes){
 function pushB64(t){ var s=atob(String(t).replace(/-/g,'+').replace(/_/g,'/')+'==='.slice((String(t).length+3)%4)), u=new Uint8Array(s.length); for(var i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }
 /* activar: el permiso se pide AHORA (dentro del toque), luego la clave, la suscripción y se guarda en su cuenta */
 function pushActivar(q){
+  if(pushNat()) return pushNatActivar(q);      // v53.4.183: dentro de la app de iPhone
   var W=pushW(), tok=pushTok(q), perm;
   if(!tok) return Promise.reject(new Error('Entra en tu cuenta primero.'));
   try{ perm=W.Notification.requestPermission(); }catch(e){ perm=null; }
@@ -23202,6 +23247,7 @@ function irAplicar(){
   }
 }
 window.addEventListener('message',function(ev){ if(ev.origin!==location.origin) return; var d=ev.data||{}; if(d&&d.chadinfit&&d.ir){ IR=irDe(String(d.ir)); irAplicar(); } });
+try{ pushNatOir(); }catch(e){}      // v53.4.183: tocar un aviso de Apple en la app de iPhone
 
 /* ---------- el cliente: su tarjeta en Perfil y el aviso en Hoy ---------- */
 function pushPasosIOS(){
