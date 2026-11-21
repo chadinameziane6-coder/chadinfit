@@ -1219,7 +1219,8 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .nl .ch-tx small{color:var(--tx);font-weight:600}
 .ch-r{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex:none}.ch-r small{font-size:10.5px;color:var(--mu)}
 .ch-r .dot-n{position:static;margin:0}
-#mchat{position:fixed;z-index:55;right:20px;bottom:20px;width:380px;height:min(600px,calc(100vh - 40px));background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(20,20,20,.2);display:flex;flex-direction:column;overflow:hidden;animation:mcIn .18s ease-out}
+/* v53.4.185: color y padding propios: el chat compartía la clase .mc con la tarjeta negra de macros (letra blanca y relleno), y los mensajes del cliente salían en blanco sobre blanco */
+#mchat{color:var(--tx);padding:0;position:fixed;z-index:55;right:20px;bottom:20px;width:380px;height:min(600px,calc(100vh - 40px));background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 18px 50px rgba(20,20,20,.2);display:flex;flex-direction:column;overflow:hidden;animation:mcIn .18s ease-out}
 @keyframes mcIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 #mchat.lista{height:min(520px,calc(100vh - 40px))}
 .mc-h{display:flex;align-items:center;gap:9px;padding:10px 10px 10px 12px;border-bottom:1px solid var(--line2);flex:none;background:#fff}
@@ -5093,7 +5094,9 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.184';
+var APP_V = 'v53.4.185';
+/* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
+   (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
    --sat / --sab (CSS) en vez de env() suelto; las cabeceras .top se estiran por detrás de la hora; las pantallas sin cabecera bajan
    ese hueco y body:after lo tapa al deslizar. iosHueco: si dentro del marco el iPhone no lo da, vale el que mide la página de inicio.
