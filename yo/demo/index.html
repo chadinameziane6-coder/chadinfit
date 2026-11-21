@@ -2473,8 +2473,7 @@ window.YO_REVISAR = [
      21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
   { t: 'Por aprobar · Compartir una receta con sus ingredientes y pasos (21 nov)', d: 'Comunidad → una receta → compartir: «Receta» (foto, nombre, kcal y macros por ración, ingredientes y cómo se hace) o «Macros» (la de antes).',
     ir: function () { demoIr('comu'); setTimeout(function () { var b = null; document.querySelectorAll('[data-a=cCompartir]').forEach(function (x) { var p = null; cadaPub(x.dataset.id, function (y) { p = y; }); if (!b && p && p.tipo === 'rec') b = x; }); if (b) b.click(); }, 1200); } },
-  { t: 'Por aprobar · Nutrición: los macros de cada comida también en «Libre» (21 nov)', d: 'Debajo de cada comida, la proteína, los hidratos y la grasa de lo que has apuntado. Con reparto por comidas sigue igual (lo que llevas / lo que te toca, con su barra).',
-    ir: function () { S.perfil.nut = S.perfil.nut || {}; S.perfil.nut.libre = 1; demoIr('nutri'); } },
+  /* 21 nov, 11:03: publicados en yo-1.13 los macros de cada comida en «Libre» */
   { t: 'Por aprobar · Progreso en 3 pestañas: Actividad, Rendimiento y Mi cuerpo (21 nov)', d: 'El prompt de Chadín: Actividad (entrenamientos por semana e historial), Rendimiento (carga, 1RM estimada y volumen de cada ejercicio, récords reales, comparar entrenamientos, series por grupo y carrera) y Mi cuerpo (peso, medidas y fotos).',
     ir: function () { S.x.p3 = 'act'; demoIr('prog'); } },
   /* 21 nov, 10:37: publicados en yo-1.11 compartir (negro, blanco o sin fondo y los accesos de las apps) y colocar las fotos con los dedos */
@@ -3147,7 +3146,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.12';
+var YO_V = 'yo-1.13';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -8126,7 +8125,7 @@ function macOk(v, o) { return Math.abs(v - o) <= Math.max(3, o * 0.15); }
 /* 21 nov, 10:35 (Chadín: «aunque pongan Libre, cuando metan comida o desayuno que salga abajo los macros de todo lo que ha metido; con reparto por
    comidas, igual pero con la barra 21/40»): sin objetivo por comida, los mismos tres macros con lo que suma la comida (sin barra ni objetivo).
    En borrador (NUT21) hasta su OK. */
-var NUT21 = false;
+var NUT21 = true;      // 21 nov, 11:03: Chadín, «esto bien, aplica» (yo-1.13)
 function nut21() { return NUT21 || rpBorr(); }
 function macSolo(t) {
   return '<div class="n-m3 solo">' + MAC3.map(function (m) { var v = Math.round(t[m[0] === 'gr' ? 'g' : m[0]]);
