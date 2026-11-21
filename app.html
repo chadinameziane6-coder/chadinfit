@@ -3739,6 +3739,31 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-dplus{display:none;width:20px;height:20px;border-radius:7px;background:#111;color:#fff;align-items:center;justify-content:center;text-decoration:none}
 .aa-dplus svg{width:13px;height:13px;stroke:#fff}
 @media(hover:hover){.aa-d:not(.pas):hover{border-color:#111}.aa-d:not(.pas):hover .aa-dplus{display:inline-flex}}
+/* PC21 · calendario: la celda elige el día; el + (aparte) agenda */
+.aa-dw{position:relative;display:flex;min-width:0}.aa-dw>.aa-d{flex:1;min-width:0}
+.aa-dmas2{position:absolute;top:5px;right:5px;width:24px;height:24px;border-radius:8px;border:0;background:#111;color:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:.0;transition:opacity .12s}
+.aa-dmas2 svg{width:14px;height:14px;stroke:#fff;margin:0}
+.aa-dw:hover .aa-dmas2,.aa-dmas2:focus-visible{opacity:1}
+@media (hover:none){.aa-dmas2{opacity:1;width:20px;height:20px;top:3px;right:3px;border-radius:6px}}
+.aa-mas2{font-style:normal;font-size:11px;font-weight:800;color:#111;padding:1px 4px;text-decoration:underline}
+.aa-selh{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:14px 2px 8px}.aa-selh b{font-size:16px}.aa-selh span{display:flex;gap:8px}
+/* PC21 · «No renueva» y el próximo cobro */
+.pg-r.pg-rr>.pg-a{display:flex;flex-direction:row;gap:6px;justify-content:flex-end;align-items:center;flex-wrap:nowrap;white-space:nowrap}
+.btn.nr-b{color:#B3261E}.btn.nr-ya{color:#B3261E;border-color:#F2B8B5}
+.bad-b{background:#B3261E;border-color:#B3261E}
+.pgc-k>div.pgc-px{background:#111;color:#fff}.pgc-k>div.pgc-px small,.pgc-k>div.pgc-px span{color:rgba(255,255,255,.75)}
+.pgc-k>div.pgc-px.pronto{background:#111;box-shadow:inset 0 0 0 2px #F5A524}
+.pgc-k>div.pgc-px.venc{background:#D93025}.pgc-k>div.pgc-px.venc small,.pgc-k>div.pgc-px.venc span{color:rgba(255,255,255,.9)}
+/* PC21 · «Con quién» con buscador */
+.ci-ql{display:block;font-size:13px;font-weight:700;margin-bottom:6px}
+.ci-ql2{display:flex;flex-direction:column;gap:2px;max-height:210px;overflow-y:auto;border:1px solid var(--line);border-radius:12px;padding:4px;margin-top:6px}
+.ci-qo{display:flex;align-items:center;gap:9px;border:0;background:none;padding:7px 8px;border-radius:9px;font:inherit;text-align:left;cursor:pointer;color:inherit}.ci-qo:hover{background:var(--card2,#F5F5F7)}.ci-qo.on{background:#111;color:#fff}
+.ci-qo>svg{width:28px;height:28px;padding:6px;border-radius:50%;background:#ECECF0;stroke:#111;margin:0;flex:none}.ci-qo.on>svg{background:#fff}
+.ci-qav{width:28px;height:28px;border-radius:50%;background:#ECECF0;color:#111;font-size:10.5px;font-weight:800;flex:none;display:inline-flex;align-items:center;justify-content:center;overflow:hidden}.ci-qav img{width:100%;height:100%;object-fit:cover}.ci-qo.on .ci-qav{background:#fff}
+.ci-qo[hidden],.ci-qno[hidden]{display:none}
+.aa-dw>.aa-d.sel{box-shadow:none;border:2px solid #111;background:#F5F5F7}
+.ci-qs{display:flex;align-items:center;justify-content:space-between;gap:10px;border:1px solid var(--line);border-radius:12px;padding:8px 10px}.ci-qc{display:flex;align-items:center;gap:9px}
+.ci-qno{margin:6px 8px}
 .aa-dia.con-mas{display:flex;align-items:center;gap:8px}.aa-dia.con-mas>span{flex:1}
 .aa-lib{font-size:11.5px;font-weight:700;color:var(--mu);text-transform:none;letter-spacing:0}
 .aa-dmas{width:28px;height:28px;border-radius:9px;border:1px solid var(--line);background:#fff;display:inline-flex;align-items:center;justify-content:center;padding:0;cursor:pointer;flex-shrink:0}
@@ -5094,7 +5119,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.185';
+var APP_V = 'v53.4.186';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8131,6 +8156,11 @@ var SHM=['negro','foto','trans'], SHM_N={negro:'Negro',foto:'Con tu foto',trans:
    Negro · Blanco · Sin fondo (el blanco, la misma tarjeta en negro con los colores al revés y el dorado más oscuro), Copiar en los accesos
    y, en «Ajusta tu foto», sin barra: con los dedos. Publicado para todas en v53.4.182 (SH21). */
 var SH21=true;      // 21 nov, 11:36 (Chadín): «a todos los paneles» (v53.4.182)
+/* 21 nov, 17:57 (Chadín, «panel coach mejoras»): «No renueva» al lado de «Renovar», buscador al agendar, calendario (el + agenda, tocar un día
+   enseña abajo solo lo de ese día, «N más» funciona) y el próximo cobro resaltado (en rojo si ya pasó). En borrador (PC21) hasta su OK;
+   21 nov, 18:25: «publícalo» → a todos los paneles (v53.4.186). */
+var PC21=true;
+function pc21(){ if(PC21) return true; try{ return localStorage.getItem('co_pc21')==='1'; }catch(e){ return false; } }
 function sh21(){ if(SH21) return true; try{ return localStorage.getItem('cl_sh21')==='1'; }catch(e){ return false; } }
 function aBlanco(cv){
   var x=cv.getContext('2d'), d=x.getImageData(0,0,cv.width,cv.height), a=d.data;
@@ -13009,7 +13039,7 @@ function citaPintar(){
   modal((CAL?'<div class="ci-g"><div class="ci-fm">':'')+'<h2>'+(E.id?'Cambiar la cita':'Agendar')+'</h2>'+
     '<div class="aa-q">'+Object.keys(CITA_T).map(function(k){ return '<button class="'+(E.tipo===k?'on':'')+'" data-a="ciTipo" data-v="'+k+'" aria-pressed="'+(E.tipo===k)+'">'+ic(CITA_T[k][0])+'<span>'+CITA_T[k][1]+'</span></button>'; }).join('')+'</div>'+
     '<label class="f">¿Qué es?'+(E.tipo==='otra'?'':' <span class="muted">(opcional)</span>')+'<input id="ci-t" maxlength="80" value="'+esc(E.tit)+'" placeholder="'+esc(ph)+'"></label>'+
-    '<label class="f">Con quién<select id="ci-c" data-c="ciCon"><option value="">Solo yo · algo mío</option>'+act.map(function(z){ return '<option value="'+esc(z.id)+'"'+(z.id===E.cid?' selected':'')+'>'+esc(z.nombre)+'</option>'; }).join('')+'</select></label>'+
+    (pc21()&&act.length>5?ciQuienHtml(E,act):'<label class="f">Con quién<select id="ci-c" data-c="ciCon"><option value="">Solo yo · algo mío</option>'+act.map(function(z){ return '<option value="'+esc(z.id)+'"'+(z.id===E.cid?' selected':'')+'>'+esc(z.nombre)+'</option>'; }).join('')+'</select></label>')+
     '<div class="lab ci-lab"><span>Cuándo</span><button class="link" data-a="ciCal" aria-expanded="'+!!E.cal+'">'+ic('cal')+(E.cal?'Ocultar calendario':'Ver calendario')+'</button></div><div class="aa-cu"><div class="tipos">'+[['hoy','Hoy'],['man','Mañana'],['otro','Otro día']].map(function(o){ return '<button class="'+(dia===o[0]?'on':'')+'" data-a="ciDia" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div><input type="time" id="ci-h" step="300" value="'+esc(E.hora)+'" aria-label="Hora" data-c="ciHora"></div>'+
     (dia==='otro'?'<label class="f">Día<input type="date" id="ci-f" min="'+hoy+'" value="'+esc(E.fecha)+'" data-c="ciFecha"></label>':'')+
     (E.cal&&!vistaAncha()?ciCalHtml(E):'')+
@@ -13034,6 +13064,17 @@ A.ciTipo=function(el){ ciLeer(); CO.ciEd.tipo=el.dataset.v; citaPintar(); var t=
 A.ciDia=function(el){ ciLeer(); var E=CO.ciEd, hoy=CO.hoy||hoyStr(), v=el.dataset.v; E.otro=v==='otro'; if(v==='hoy') E.fecha=hoy; else if(v==='man') E.fecha=sumar(hoy,1); else if(E.fecha<=sumar(hoy,1)) E.fecha=sumar(hoy,2); citaPintar(); };
 A.ciVis=function(){ ciLeer(); CO.ciEd.vis=!CO.ciEd.vis; citaPintar(); };
 CH.ciCon=function(){ ciLeer(); citaPintar(); };
+/* PC21: con muchos clientes, «Con quién» con buscador (se filtra al escribir, sin perder lo demás) */
+function ciQuienHtml(E,act){
+  var c=E.cid?act.filter(function(z){ return z.id===E.cid; })[0]:null;
+  if(c&&!E.qAb) return '<div class="f"><span class="ci-ql">Con quién</span><div class="ci-qs"><span class="ci-qc">'+avCo(c.id,c.nombre,'ci-qav')+'<b>'+esc(c.nombre)+'</b></span><button class="link" data-a="ciQCambiar">Cambiar</button></div><input type="hidden" id="ci-c" value="'+esc(c.id)+'"></div>';
+  return '<div class="f"><span class="ci-ql">Con quién</span><input type="hidden" id="ci-c" value="'+esc(E.cid||'')+'"><input type="search" id="ci-qb" data-v29="ciQB" placeholder="Busca por nombre ('+act.length+' clientes)" autocomplete="off">'+
+    '<div class="ci-ql2" id="ci-ql"><button class="ci-qo'+(!E.cid?' on':'')+'" data-a="ciQSel" data-v="">'+ic('user')+'<span>Solo yo · algo mío</span></button>'+act.map(function(z){ return '<button class="ci-qo'+(z.id===E.cid?' on':'')+'" data-a="ciQSel" data-v="'+esc(z.id)+'" data-n="'+esc(sinTil(z.nombre))+'">'+avCo(z.id,z.nombre,'ci-qav')+'<span>'+esc(z.nombre)+'</span></button>'; }).join('')+
+    '<p class="muted sm ci-qno" hidden>Nadie con ese nombre.</p></div></div>';
+}
+(window.IN29=window.IN29||{}).ciQB=function(t){ var q=sinTil(t.value).trim(), n=0; document.querySelectorAll('#ci-ql .ci-qo[data-n]').forEach(function(b){ var ok=!q||q.split(/\s+/).every(function(w){ return b.dataset.n.indexOf(w)>=0; }); b.hidden=!ok; if(ok) n++; }); var no=document.querySelector('#ci-ql .ci-qno'); if(no) no.hidden=n>0; };
+A.ciQSel=function(el){ ciLeer(); CO.ciEd.cid=el.dataset.v; CO.ciEd.qAb=false; citaPintar(); };
+A.ciQCambiar=function(){ ciLeer(); CO.ciEd.qAb=true; citaPintar(); var q=document.getElementById('ci-qb'); if(q) q.focus(); };
 A.ciGuardar=function(el){
   ciLeer(); var E=CO.ciEd, er=document.getElementById('ci-err'), hoy=CO.hoy||hoyStr();
   function mal(m){ if(er){ er.hidden=false; er.textContent=m; } }
@@ -13114,6 +13155,9 @@ A.verAgenda=function(){ CO.vista='agenda'; CO.agM=CO.agM||String(CO.hoy).slice(0
 A.agMes=function(el){ var p=CO.agM.split('-').map(Number); CO.agM=fechaDe(new Date(p[0],p[1]-1+(+el.dataset.v),1)).slice(0,7); CO.agD=null; pintarAgenda(); };
 A.agHoy=function(){ CO.agM=String(CO.hoy).slice(0,7); CO.agD=null; pintarAgenda(); };
 A.agFiltro=function(el){ CO.agF=el.dataset.t||''; pintarAgenda(); };
+/* PC21: tocar un día lo elige (abajo, solo lo de ese día; otra vez, todo el mes); el + agenda ese día */
+A.agSel=function(el){ var f=el.dataset.f; CO.agD=CO.agD===f?null:f; pintarAgenda(); var l=document.getElementById('ag-lista'); if(l&&CO.agD) l.scrollIntoView({behavior:'smooth',block:'start'}); };
+A.agNueva=function(el){ citaModal(null,'',el.dataset.f); };
 A.agDia=function(el){ var f=el.dataset.f; if(f>=(CO.hoy||hoyStr())) return citaModal(null,'',f); /* v53.4.162: de hoy en adelante, a agendar directamente */
   CO.agD=CO.agD===f?null:f; pintarAgenda(); var l=document.getElementById('ag-lista'); if(l&&CO.agD) l.scrollIntoView({behavior:'smooth',block:'start'}); };
 /* v26: en cada día del calendario, qué hay que hacer y con quién */
@@ -13200,12 +13244,14 @@ function pintarAgenda(){
     h+=agFiltros(cnt2,F)+'<div class="card aa-mes"><div class="aa-mg">'+['L','M','X','J','V','S','D'].map(function(x){ return '<span class="aa-dh">'+x+'</span>'; }).join('')+(off?'<span style="grid-column:span '+off+'"></span>':'');
     for(var dd=1;dd<=+ult.slice(8);dd++){
       var f2=fechaDe(new Date(Y,m,dd)), l=aaJuntar(agOrden(porD[f2]||[]));
-      h+='<button class="aa-d'+(f2===hoy?' hoy':'')+(CO.agD===f2?' sel':'')+(f2<hoy?' pas':'')+'" data-a="agDia" data-f="'+f2+'" aria-label="'+esc(fLarga(f2)+(l.length?' · '+l.length+(l.length>1?' cosas':' cosa'):''))+'"><b>'+dd+(f2>=hoy?'<u class="aa-dplus" aria-hidden="true">'+ic('mas')+'</u>':'')+'</b>'+l.slice(0,3).map(agChip).join('')+(l.length>3?'<em>+'+(l.length-3)+' más</em>':'')+'</button>';
+      if(pc21()) h+='<div class="aa-dw"><button class="aa-d'+(f2===hoy?' hoy':'')+(CO.agD===f2?' sel':'')+(f2<hoy?' pas':'')+'" data-a="agSel" data-f="'+f2+'" aria-pressed="'+(CO.agD===f2)+'" aria-label="'+esc(fLarga(f2)+(l.length?' · '+l.length+(l.length>1?' cosas':' cosa'):' · nada'))+'. Ver lo de ese día"><b>'+dd+'</b>'+l.slice(0,3).map(agChip).join('')+(l.length>3?'<em class="aa-mas2">+'+(l.length-3)+' más</em>':'')+'</button>'+(f2>=hoy?'<button class="aa-dmas2" data-a="agNueva" data-f="'+f2+'" aria-label="Agendar el '+esc(fLarga(f2))+'">'+ic('mas')+'</button>':'')+'</div>';
+      else h+='<button class="aa-d'+(f2===hoy?' hoy':'')+(CO.agD===f2?' sel':'')+(f2<hoy?' pas':'')+'" data-a="agDia" data-f="'+f2+'" aria-label="'+esc(fLarga(f2)+(l.length?' · '+l.length+(l.length>1?' cosas':' cosa'):''))+'"><b>'+dd+(f2>=hoy?'<u class="aa-dplus" aria-hidden="true">'+ic('mas')+'</u>':'')+'</b>'+l.slice(0,3).map(agChip).join('')+(l.length>3?'<em>+'+(l.length-3)+' más</em>':'')+'</button>';
     }
     h+='</div></div><div id="ag-lista">';
     var atr=esta&&!CO.agD?V2.filter(function(t){ return t.f<p1; }):[];
     if(atr.length) h+='<section class="card aa-c"><div class="aa-dia r">Atrasado de meses anteriores</div>'+aaJuntar(atr).map(function(x){ return aaFila(x,'atr'); }).join('')+'</section>';
     var dias=Object.keys(porD).sort().filter(function(f){ return CO.agD?f===CO.agD:(!esta||f>=hoy||porD[f].some(function(t){ return agCat(t)==='atr'; })); });
+    if(pc21()&&CO.agD) h+='<div class="aa-selh"><span class="muted">Solo este día</span><span>'+(CO.agD>=hoy?'<button class="btn sm" data-a="agNueva" data-f="'+CO.agD+'">'+ic('mas')+'Agendar este día</button>':'')+'<button class="btn sm sec" data-a="agSel" data-f="'+CO.agD+'">Ver todo el mes</button></span></div>';
     h+=dias.length?'<section class="card aa-c">'+dias.map(function(f){ return agDiaHtml(f,porD[f],hoy); }).join('')+'</section>':'<div class="card"><p class="muted" style="margin:0">'+(CO.agD?'Ese día no hay nada.':'Nada '+(esta?'más ':'')+'este mes'+(F?' de este tipo':'')+'.')+'</p></div>';
     h+='</div>'+(vistaAncha()?'':'<div class="aa-vm"><button class="link" data-a="agVista" data-v="sem">'+ic('lista')+'Ver por semanas</button></div>');
   }
@@ -13647,6 +13693,12 @@ A.rnPagado=function(el){
   var p=rnPlan(), x={plan_id:p?p.id:'',plan:p?'':(RN.r.clienta.plan_det||''),importe:String(RN.importe),fecha:RN.r.hoy,metodo:RN.metodo,meses:RN.meses,desde:RN.desde,hasta:RN.hasta,nota:val('rn-no'),renovar:true};
   cargando(api('coachRegistrarPago',CO.pin,RN.cid,x)).then(function(r){ rnFin(r,'Pagado y renovado hasta el '+fAnio(r.plan_hasta)); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 };
+/* PC21: «No renueva» directo (sin abrir «Renovar»), con un paso de confirmación */
+A.nrAbrir=function(el){ var id=el.dataset.id, c=(CO.lista||[]).filter(function(z){ return z.id===id; })[0]||(CO.d&&CO.d.clienta&&CO.d.clienta.id===id?CO.d.clienta:{}), nm=primerNombre(c.nombre||'')||'Este cliente', h=c.planHasta||c.plan_hasta||'';
+  modal('<h2>¿'+esc(nm)+' no renueva?</h2><p class="muted">'+(h?'Sigue con su plan hasta el '+esc(fLarga(h).toLowerCase())+'. Después, ':'')+'deja de salirte para renovar y no se te recuerda más. Sus datos se quedan guardados y lo puedes quitar cuando quieras.</p>'+
+    '<button class="btn mt bad-b" data-a="nrSi" data-id="'+esc(id)+'">Sí, no renueva</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); };
+A.nrSi=function(el){ if(el.disabled) return; el.disabled=true; RN={cid:el.dataset.id};
+  cargando(api('coachRegistrarPlan',CO.pin,RN.cid,{resultado:'baja'})).then(function(r){ rnFin({plan_hasta:r.plan_hasta,plan_estado:'baja'},'Apuntado: no renueva. Ya no te avisará de su plan.'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.rnNo=function(el){
   if(!RN.no){ RN.no=true; el.classList.add('bad'); el.textContent='Toca otra vez: no renueva'; return; }
   if(el.disabled) return; el.disabled=true;
@@ -22311,7 +22363,7 @@ function pgCliHtml(R){
         '<span data-l="Vence"><i class="pg-e e-'+x.e.k+'">'+esc(x.e.t)+'</i></span>'+
         '<span data-l="Renovaría">'+(x.ren?esc(fCorta(x.ren)):'–')+'</span>'+
         '<span data-l="Pagado"><b>'+eur(x.tot)+'</b><small>'+(x.meses?mesesTxt(x.meses)+' pagados':'')+'</small></span>'+
-        '<span class="pg-a">'+(x.e.k==='venc'||x.e.k==='pronto'||x.e.k==='baja'||x.ped?'<button class="btn sm" data-a="rnAbrir" data-id="'+esc(c.id)+'">Renovar</button>':'<button class="btn sm sec" data-a="pgNuevo" data-id="'+esc(c.id)+'">Registrar pago</button>')+'</span></div>'; }).join('')+'</div>';
+        '<span class="pg-a">'+(x.e.k==='venc'||x.e.k==='pronto'||x.e.k==='baja'||x.ped?'<button class="btn sm" data-a="rnAbrir" data-id="'+esc(c.id)+'">Renovar</button>'+(pc21()&&(x.e.k==='venc'||x.e.k==='pronto')?'<button class="btn sm sec nr-b" data-a="nrAbrir" data-id="'+esc(c.id)+'">No renueva</button>':''):'<button class="btn sm sec" data-a="pgNuevo" data-id="'+esc(c.id)+'">Registrar pago</button>')+'</span></div>'; }).join('')+'</div>';
   return h;
 }
 IN29.pgQ=function(t){ CO.pgF.q=t.value; clearTimeout(IN29.pq); IN29.pq=setTimeout(function(){ var v=t.value; pintarPagos(false); var i=document.querySelector('[data-v29=pgQ]'); if(i){ i.focus(); i.setSelectionRange(v.length,v.length); } },250); };
@@ -22326,7 +22378,7 @@ function pgResHtml(R){
   h+=ren.length?ren.map(function(x){ var c=x.c, d=diff(hoy,c.plan_hasta), g=c.plan_hasta?sumar(c.plan_hasta,3):'', est;
       if(x.e.k==='venc') est=c.sinAcceso?'<i class="pg-e e-venc">'+ic('candado')+'Sin acceso desde el '+esc(fCorta(sumar(c.plan_hasta,4)))+'</i>':g>=hoy?'<i class="pg-e e-cort">Cortesía: '+(diff(hoy,g)>1?'le quedan '+diff(hoy,g)+' días':diff(hoy,g)===1?'le queda 1 día':'último día')+'</i>':'<i class="pg-e e-venc">Vencido hace '+(-d)+' d</i>';
       else est='<i class="pg-e e-pronto">'+(d===0?'Vence hoy':'Vence en '+d+' d · '+esc(fCorta(c.plan_hasta)))+'</i>';
-      return fila(x,(x.ped?'<i class="pg-e e-ped">Pide renovar</i>':'')+est,'<button class="btn sm" data-a="rnAbrir" data-id="'+esc(c.id)+'">Renovar</button>'); }).join('')
+      return fila(x,(x.ped?'<i class="pg-e e-ped">Pide renovar</i>':'')+est,(pc21()?'<button class="btn sm sec nr-b" data-a="nrAbrir" data-id="'+esc(c.id)+'">No renueva</button>':'')+'<button class="btn sm" data-a="rnAbrir" data-id="'+esc(c.id)+'">Renovar</button>'); }).join('')
     :'<p class="muted sm">Nadie pendiente: todas al día.</p>';
   h+='<p class="tip pg-nota">Al vencer, cada cliente tiene 3 días de cortesía en los que sigue entrando y la app le avisa; después pierde el acceso hasta que renueva.</p></div>';
   // cobros del mes
@@ -22551,10 +22603,13 @@ function vPagosCl(){
     (pc!=null?'<div class="pgc-bar'+(hoy<des?' fut':'')+'"><i style="width:'+pc+'%"></i>'+(hoy>=des&&hoy<=fp?'<span style="left:'+Math.max(4,Math.min(96,pc))+'%">hoy</span>':'')+'</div><div class="pgc-bl"><span>'+esc(fCorta(des))+(hoy<des?' · empieza en '+diff(hoy,des)+(diff(hoy,des)===1?' día':' días'):'')+'</span><span>'+esc(fCorta(fp))+'</span></div>':'')+
     (c.plan_estado==='baja'?'<p class="seg-ok warn">'+ic('alerta')+'<span>Marcada como «No renueva».</span></p>':'')+
     ((P.pedidos||[]).some(function(x){ return x.cid===cid; })?'<p class="seg-ok warn">'+ic('alerta')+'<span>Ha pedido renovar desde su app.</span></p>':'')+
-    '<div class="pgc-b"><button class="btn sm" data-a="pgNuevo" data-id="'+esc(cid)+'">'+ic('euro')+'Registrar pago</button><button class="btn sm sec" data-a="rnAbrir" data-id="'+esc(cid)+'">Renovar</button><button class="link" data-a="segEditPlan">Cambiar de plan</button></div></section>';
+    '<div class="pgc-b"><button class="btn sm" data-a="pgNuevo" data-id="'+esc(cid)+'">'+ic('euro')+'Registrar pago</button><button class="btn sm sec" data-a="rnAbrir" data-id="'+esc(cid)+'">Renovar</button>'+(pc21()?(c.plan_estado==='baja'?'<button class="btn sm sec nr-ya" data-a="rnAbrir" data-id="'+esc(cid)+'">'+ic('ok')+'No renueva</button>':'<button class="btn sm sec nr-b" data-a="nrAbrir" data-id="'+esc(cid)+'">No renueva</button>'):'')+'<button class="link" data-a="segEditPlan">Cambiar de plan</button></div></section>';
   var prox=c.plan_estado==='baja'?['No renueva','']:c.plan_hasta?[fCorta(sumar(c.plan_hasta,1))+' · '+eur(pl?pl.precio:(ult?ult.importe:0)),'si renueva igual']:['–',''];
   h+='<section class="card pgc-k"><div><small>Total pagado</small><b>'+eur(tot)+'</b><span>'+L.length+(L.length===1?' pago':' pagos')+'</span></div><div><small>'+cG('Clienta','Cliente')+' desde</small><b>'+(ini?esc(fAnio(ini)):'–')+'</b><span>'+(meses?mesesTxt(meses):'')+'</span></div>'+
-    '<div><small>Media al mes</small><b>'+(meses?eur(Math.round(media)):'–')+'</b><span>lo pagado ÷ meses con nosotras</span></div><div><small>Próximo cobro</small><b>'+esc(prox[0])+'</b><span>'+esc(prox[1])+'</span></div></section></div>';
+    '<div><small>Media al mes</small><b>'+(meses?eur(Math.round(media)):'–')+'</b><span>lo pagado ÷ meses con nosotras</span></div>'+
+    (function(){ if(!pc21()||c.plan_estado==='baja'||!c.plan_hasta) return '<div><small>Próximo cobro</small><b>'+esc(prox[0])+'</b><span>'+esc(prox[1])+'</span></div>';
+      var fc=sumar(c.plan_hasta,1), dd=diff(hoy,fc), vc=c.plan_hasta<hoy, dv=diff(c.plan_hasta,hoy), imp=eur(pl?pl.precio:(ult?ult.importe:0));
+      return '<div class="pgc-px'+(vc?' venc':dd<=5?' pronto':'')+'"><small>'+(vc?'Cobro pendiente':'Próximo cobro')+'</small><b>'+esc(fCorta(fc))+'</b><span>'+esc(imp)+' · '+(vc?'venció hace '+dv+(dv===1?' día':' días'):dd===0?'hoy':dd===1?'mañana':'en '+dd+' días')+'</span></div>'; })()+'</section></div>';
   // meses pagados
   var iv=L.filter(function(p){ return p.desde&&p.hasta; }).map(function(p){ return [p.desde,p.hasta]; }).sort(function(a,b){ return a[0]<b[0]?-1:1; });
   if(c.plan_desde&&c.plan_hasta&&!iv.some(function(x){ return x[0]<=c.plan_hasta&&x[1]>=c.plan_desde; })) iv.push([c.plan_desde,c.plan_hasta]);
