@@ -2006,11 +2006,12 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 .ced-l{font-size:14px;font-weight:800;margin-top:2px}.ced-f{display:flex;flex-direction:column;gap:8px}.ced-f .cm-foto{margin:0;width:min(220px,100%);align-self:center}.ced-f .cm-foto.cm-rcf{width:min(280px,100%);aspect-ratio:4/3}.ced-f .fila2 .btn-o{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .cp-crop:after{display:none}      /* 21 nov: el círculo es solo para la foto de perfil, no para la de una publicación */
 /* 21 nov, 09:48 (Chadín: «en compartir que haya accesos directos, que es más cómodo»): una fila de botones redondos de un toque */
-.sh-ac{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;margin:2px 0 4px}
+.sh-ac{display:flex;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:none;margin:2px -6px 4px;padding:2px 30px 2px 6px;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent)}.sh-ac::-webkit-scrollbar{display:none}
+.sh-ac .sh-b{flex:0 0 68px;scroll-snap-align:start}
 .sh-b{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:2px 0;color:var(--tx);font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.sh-b i{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--suave);color:var(--tx);transition:transform .12s ease}
+.sh-b i{display:flex;align-items:center;justify-content:center;width:54px;height:54px;border-radius:50%;background:var(--suave);color:var(--tx);transition:transform .12s ease}
 .sh-b.pri i{background:var(--neg);color:var(--neg-t)}
-.sh-b small{font-size:11.5px;font-weight:700;color:var(--tx2);line-height:1.1}
+.sh-b small{font-size:11px;font-weight:700;color:var(--tx2);line-height:1.1;white-space:nowrap;letter-spacing:-.1px}
 .sh-b:active i{transform:scale(.94)}.sh-b:focus-visible{outline:none}.sh-b:focus-visible i{box-shadow:0 0 0 3px var(--borde2)}
 .sh-b.ok{cursor:default}.sh-b.ok small{color:var(--verde)}
 .fin2-sh .sh-ac{margin-top:4px}
@@ -2415,7 +2416,7 @@ window.YO_REVISAR = [
      «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
      y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
      21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
-  { t: 'Por aprobar · Compartir: negro, blanco o sin fondo y accesos directos (21 nov)', d: 'Al compartir un entreno (y en la Comunidad, tu perfil y la carrera): ya no sale «Tu foto». Debajo de la imagen, botones de un toque: Compartir, Copiar (para pegarla en tu historia o en un chat), Guardar y Comunidad.',
+  { t: 'Por aprobar · Compartir: negro, blanco o sin fondo y accesos directos (21 nov)', d: 'Al compartir un entreno (y en la Comunidad, tu perfil y la carrera): ya no sale «Tu foto». Debajo, botones de un toque: Historias, WhatsApp e Instagram (en la app de las tiendas abren la app directamente; en la web, el menú del móvil), Comunidad, Guardar, Copiar y Más.',
     ir: function () { demoIr('inicio'); var L = S.sesiones.slice().sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }); if (L.length) setTimeout(function () { A.compartirSes({ dataset: { id: L[L.length - 1].id } }); }, 200); } },
   { t: 'Por aprobar · Colocar las fotos con los dedos, sin barra (21 nov)', d: 'Foto de perfil, la foto al publicar en la Comunidad y la de tus recetas: un dedo la mueve y dos dedos la acercan o la alejan. Pruébalo en el móvil: toca «Poner una foto» en tu perfil.',
     ir: function () { demoIr('inicio'); setTimeout(function () { A.perfil && A.perfil(); }, 200); } },
@@ -5858,8 +5859,7 @@ VISTAS.fin = function () {
     '<div class="car">' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button>' : '') + '<div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div>' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button>' : '') + '</div>' +
     shExtras(U, 'fin') +
     (t[sl] && t[sl][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
-    (n21 ? shBotones([['finCompartir', 'Compartir', 'compartir', 1]].concat(puedeCopiar() ? [['shCopiar', 'Copiar', 'copiar', 0, '', 'fin']] : []).concat([['finGuardar', 'Guardar', 'descargar'],
-      U.pub ? ['', 'Publicado', '', 0, '<i>' + ic('check', 21, 'var(--verde)', 2.6) + '</i>'] : ['finComu', 'Comunidad', 'comu']])) :      // 21 nov, 09:48: accesos directos
+    (n21 ? shFila('fin', [U.pub ? ['', 'Publicado', '', 0, '<i>' + ic('check', 21, 'var(--verde)', 2.6) + '</i>'] : ['finComu', 'Comunidad', 'comu']]) :      // 21 nov, 09:48 y 10:10: accesos directos con las apps
     (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' :
       '<div class="fin2-ac"><button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="finGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button>' +
       (U.pub ? '<span class="fin2-ib ok">' + ic('check', 19, 'var(--verde)', 2.6) + '<small>Publicado</small></span>' : '<button class="fin2-ib" data-a="finComu" aria-label="Publicar en la Comunidad">' + ic('comu', 19) + '<small>Comunidad</small></button>') + '</div>') +
@@ -9814,9 +9814,38 @@ function hojaImg(o) { SHI = Object.assign({ modo: 'negro', foto: null, modos: [[
 var SH_MODOS = [['negro', 'Negro'], ['blanco', 'Blanco'], ['sin', 'Sin fondo']];
 function puedeCopiar() { try { return !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem); } catch (e) { return false; } }
 function shBotones(L) { return '<div class="sh-ac" role="group" aria-label="Compartir la imagen">' + L.map(function (b) { return b[4] ? '<span class="sh-b ok">' + b[4] + '<small>' + b[1] + '</small></span>' :
-  '<button class="sh-b' + (b[3] ? ' pri' : '') + '" data-a="' + b[0] + '"' + (b[5] ? ' data-c="' + b[5] + '"' : '') + '><i>' + ic(b[2], 21, null, 2) + '</i><small>' + b[1] + '</small></button>'; }).join('') + '</div>'; }
+  '<button class="sh-b' + (b[3] ? ' pri' : '') + '" data-a="' + b[0] + '"' + (b[5] ? ' data-c="' + b[5] + '"' : '') + (b[6] ? ' data-v="' + b[6] + '"' : '') + '><i>' + ic(b[2], 21, null, 2) + '</i><small>' + b[1] + '</small></button>'; }).join('') + '</div>'; }
+/* 21 nov, 10:10 (Chadín: «ya sé que en web no funciona el acceso directo, pero piensa que la vamos a subir a app»): los accesos de las apps.
+   En la app de las tiendas, la app nativa pone window.MoodonNativo.compartir({ app, imagen (base64), tipo, nombre, texto, sinFondo }) y
+   abre esa app con la imagen ya puesta (Historias con la imagen sin fondo como pegatina). En la web abren el menú del móvil, donde se elige la app.
+   Los iconos son nuestros (sin logos de otras marcas); en la app de las tiendas se ponen los oficiales de cada marca, como piden sus normas. */
+IC.historia = '<circle cx="12" cy="12" r="9" stroke-dasharray="3.4 2.3"/><path d="M12 8.3v7.4M8.3 12h7.4"/>';
+IC.chat = '<path d="M5.5 4.5h13a2.5 2.5 0 0 1 2.5 2.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 3.2v-3.2h-1A2.5 2.5 0 0 1 3 15V7a2.5 2.5 0 0 1 2.5-2.5z"/>';
+IC.imagen = '<rect x="3.5" y="4.5" width="17" height="15" rx="2.5"/><circle cx="9" cy="10" r="1.7"/><path d="M20.5 16.5l-5-5-9.5 8"/>';
+var SH_APPS = [['historia', 'Historias', 'historia', 'Instagram y luego «Historia»'], ['wa', 'WhatsApp', 'chat', 'WhatsApp'], ['ig', 'Instagram', 'imagen', 'Instagram']];
+function shFila(c, extra) {      // c: 'fin' (al terminar) o 'shi' (la hoja); extra: lo de en medio (Comunidad, al terminar)
+  return shBotones(SH_APPS.map(function (a) { return ['shApp', a[1], a[2], 1, '', c, a[0]]; }).concat(extra || [])
+    .concat([[c === 'fin' ? 'finGuardar' : 'shiGuardar', 'Guardar', 'descargar']]).concat(puedeCopiar() ? [['shCopiar', 'Copiar', 'copiar', 0, '', c]] : []).concat([['shApp', 'Más', 'dots', 0, '', c, 'mas']]));
+}
+function shCtx(c) {
+  if (c === 'fin') { var U = S.fin; return U ? { t: tarjActual(), nom: 'MOOD_ON_entreno' + (U.modo === 'sin' ? '_sin_fondo' : ''), tit: 'Mi entreno', texto: '#MOODON', sin: U.modo === 'sin', guarda: A.finGuardar } : {}; }
+  var o = SHI; return o ? { t: imgLista(shiSpec()), nom: o.nom + (o.modo === 'sin' ? '_sin_fondo' : ''), tit: 'MOOD ON', texto: o.texto || '#MOODON', sin: o.modo === 'sin', guarda: A.shiGuardar } : {};
+}
+function aB64(b) { return new Promise(function (ok, ko) { var r = new FileReader(); r.onload = function () { ok(String(r.result).split(',')[1]); }; r.onerror = ko; r.readAsDataURL(b); }); }
+/* el menú del móvil con la imagen (y si no se puede, se guarda) */
+function shMenu(x, app) {
+  var f = null; try { f = new File([x.t.blob], x.nom + extDe(x.t), { type: x.t.blob.type || 'image/png' }); } catch (e) { }
+  if (f && navigator.canShare && navigator.canShare({ files: [f] })) { if (app) toast('Se abre el menú del móvil: toca ' + app); return navigator.share({ files: [f], title: x.tit, text: x.texto }).catch(function () { }); }
+  x.guarda(); if (app) toast('Imagen guardada: súbela desde ' + app.split(' ')[0]);
+}
+A.shApp = function (el) {
+  var x = shCtx(el.dataset.c); if (!x.t) return toast('Un segundo, se está preparando');
+  var v = el.dataset.v, ap = SH_APPS.filter(function (a) { return a[0] === v; })[0], N = window.MoodonNativo;
+  if (N && typeof N.compartir === 'function') return aB64(x.t.blob).then(function (b) { return N.compartir({ app: v, imagen: b, tipo: x.t.blob.type || 'image/png', nombre: x.nom + extDe(x.t), texto: x.texto, sinFondo: !!x.sin }); }).catch(function () { shMenu(x); });
+  shMenu(x, ap ? ap[3] : '');
+};
 A.shCopiar = function (el) {
-  var t = el.dataset.c === 'fin' ? tarjActual() : SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando');
+  var t = shCtx(el.dataset.c).t; if (!t) return toast('Un segundo, se está preparando');
   var mal = function () { toast('No se ha podido copiar: usa Compartir o Guardar'); };
   try { var it = {}; it[t.blob.type || 'image/png'] = t.blob; navigator.clipboard.write([new ClipboardItem(it)]).then(function () { toast('Copiada: pégala en tu historia o en un chat', 'ok'); }, mal); } catch (e) { mal(); }
 };
@@ -9827,7 +9856,7 @@ function pintaShi() {
     '<div class="seg-p mini shi-m' + (o.modos.length > 3 ? ' c4' : '') + '" role="tablist" aria-label="Fondo">' + o.modos.map(function (m) { return '<button role="tab" aria-selected="' + (o.modo === m[0]) + '" class="' + (o.modo === m[0] ? 'on' : '') + '" data-a="shiModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
     '<div class="car-img shi-img" id="shi-img">' + (pideFoto ? ic('foto', 30, 'var(--tx3)') : '<span class="mut sm">Preparando…</span>') + '</div>' + (pideFoto ? '' : shExtras(o, 'shi')) +
     (pideFoto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' :
-      (f21() ? shBotones([['shiCompartir', 'Compartir', 'compartir', 1]].concat(puedeCopiar() ? [['shCopiar', 'Copiar', 'copiar', 0, '', 'shi']] : []).concat([['shiGuardar', 'Guardar', 'descargar']])) :
+      (f21() ? shFila('shi') :
       '<div class="fin2-ac shi-ac"><button class="btn" data-a="shiCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="shiGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button></div>')) +
     (o.modo === 'foto' && o.foto && !o.fotoFija ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' : '') +
     '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
