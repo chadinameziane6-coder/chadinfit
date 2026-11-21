@@ -2072,6 +2072,7 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 .p3-bts{display:flex;align-items:center;gap:16px;flex-wrap:wrap}.p3-bts .btn-mini{margin:0}
 .p3-fot{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.p3-fot button{position:relative;aspect-ratio:3/4;border:0;border-radius:12px;overflow:hidden;background:var(--suave);padding:0}.p3-fot img{width:100%;height:100%;object-fit:cover;display:block}.p3-fot span{position:absolute;left:6px;bottom:6px;font-size:10.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 .n-m3.solo{margin:8px 0 2px;padding-top:8px;border-top:1px solid var(--linea)}.n-m3.solo .n-m3f>span b{font-size:13px}      /* 21 nov: los macros de la comida en «Libre» */
+.shi-tj{margin:8px 0 -4px}      /* 21 nov: Receta · Macros */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -2470,6 +2471,8 @@ window.YO_REVISAR = [
      «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
      y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
      21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
+  { t: 'Por aprobar · Compartir una receta con sus ingredientes y pasos (21 nov)', d: 'Comunidad → una receta → compartir: «Receta» (foto, nombre, kcal y macros por ración, ingredientes y cómo se hace) o «Macros» (la de antes).',
+    ir: function () { demoIr('comu'); setTimeout(function () { var b = null; document.querySelectorAll('[data-a=cCompartir]').forEach(function (x) { var p = null; cadaPub(x.dataset.id, function (y) { p = y; }); if (!b && p && p.tipo === 'rec') b = x; }); if (b) b.click(); }, 1200); } },
   { t: 'Por aprobar · Nutrición: los macros de cada comida también en «Libre» (21 nov)', d: 'Debajo de cada comida, la proteína, los hidratos y la grasa de lo que has apuntado. Con reparto por comidas sigue igual (lo que llevas / lo que te toca, con su barra).',
     ir: function () { S.perfil.nut = S.perfil.nut || {}; S.perfil.nut.libre = 1; demoIr('nutri'); } },
   { t: 'Por aprobar · Progreso en 3 pestañas: Actividad, Rendimiento y Mi cuerpo (21 nov)', d: 'El prompt de Chadín: Actividad (entrenamientos por semana e historial), Rendimiento (carga, 1RM estimada y volumen de cada ejercicio, récords reales, comparar entrenamientos, series por grupo y carrera) y Mi cuerpo (peso, medidas y fotos).',
@@ -10281,11 +10284,12 @@ A.shCopiar = function (el) {
   var mal = function () { toast('No se ha podido copiar: usa Compartir o Guardar'); };
   try { var it = {}; it[t.blob.type || 'image/png'] = t.blob; navigator.clipboard.write([new ClipboardItem(it)]).then(function () { toast('Copiada: pégala en tu historia o en un chat', 'ok'); }, mal); } catch (e) { mal(); }
 };
-function shiSpec() { var o = SHI; return { k: 'shi|' + o.k, modo: o.modo, let: o.let, foto: o.modo === 'foto' ? o.foto : null, alt: o.tit, gen: o.gen }; }
+function shiSpec() { var o = SHI; return { k: 'shi|' + o.k + (o.tj ? '|' + o.tj : ''), modo: o.modo, let: o.let, foto: o.modo === 'foto' ? o.foto : null, alt: o.tit, gen: o.gen }; }
 function pintaShi() {
   var o = SHI; if (!o) return; var pideFoto = o.modo === 'foto' && !o.foto;
   hoja('<h2>' + esc(o.tit) + '</h2>' + (o.nota ? '<p class="mut sm">' + o.nota + '</p>' : '') +
     '<div class="seg-p mini shi-m' + (o.modos.length > 3 ? ' c4' : '') + '" role="tablist" aria-label="Fondo">' + o.modos.map(function (m) { return '<button role="tab" aria-selected="' + (o.modo === m[0]) + '" class="' + (o.modo === m[0] ? 'on' : '') + '" data-a="shiModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
+    (o.tarjetas ? '<div class="chips fin-t shi-tj" role="tablist" aria-label="Tarjeta">' + o.tarjetas.map(function (t) { var on = o.tj === t[0]; return '<button role="tab" aria-selected="' + on + '" class="chip' + (on ? ' on' : '') + '" data-a="shiTj" data-v="' + t[0] + '">' + t[1] + '</button>'; }).join('') + '</div>' : '') +
     '<div class="car-img shi-img" id="shi-img">' + (pideFoto ? ic('foto', 30, 'var(--tx3)') : '<span class="mut sm">Preparando…</span>') + '</div>' + (pideFoto ? '' : shExtras(o, 'shi')) +
     (pideFoto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' :
       (f21() ? shFila('shi') :
@@ -10295,6 +10299,7 @@ function pintaShi() {
   if (!pideFoto) cajaImg('shi-img', shiSpec());
 }
 A.shiModo = function (el) { if (!SHI) return; SHI.modo = el.dataset.v; pintaShi(); };
+A.shiTj = function (el) { if (!SHI) return; SHI.tj = el.dataset.v; pintaShi(); };
 CH.shiFoto = function (t) { var f = t.files && t.files[0]; if (!f || !SHI) return; var o = SHI, im = new Image(); im.onload = function () { o.foto = im; if (SHI === o) pintaShi(); }; im.src = URL.createObjectURL(f); };
 A.shiCompartir = function () {
   var t = SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando');
@@ -10303,6 +10308,51 @@ A.shiCompartir = function () {
   A.shiGuardar();
 };
 A.shiGuardar = function () { var t = SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando'); var a = document.createElement('a'); a.href = t.url; a.download = SHI.nom + (SHI.modo === 'sin' ? '_sin_fondo' : '') + extDe(t); document.body.appendChild(a); a.click(); setTimeout(function () { a.remove(); }, 500); };
+
+/* ---------- 21 nov, 10:37 (Chadín: «el de recetas le daría una vuelta: que puedan salir los pasos u otro formato que no sea solo calorías y macros»):
+   la receta entera en una historia: la foto (si la tiene), el nombre, una línea con kcal y macros por ración, los ingredientes y cómo se hace
+   (lo que no cabe se corta con «Receta completa en la app»). La de antes queda como «Macros». En borrador (REC21) hasta su OK. ---------- */
+var REC21 = false;
+function rec21() { return REC21 || rpBorr(); }
+function pasosDe(t) { var L = String(t || '').split(/\n+/).map(function (x) { return x.replace(/^\s*(\d+[.)-]|[-•·*])\s*/, '').trim(); }).filter(Boolean);
+  if (L.length === 1 && L[0].length > 140) L = L[0].replace(/\.\s+(?=[A-ZÁÉÍÓÚÑ¿¡])/g, '.\n').split('\n').filter(Boolean); return L; }
+function tarjetaReceta(x, img, modo) {
+  var sn = /^sin/.test(modo), bl = modo === 'blanco' || modo === 'sinn', F = ' "Plus Jakarta Sans", sans-serif';
+  var FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.62)' : 'rgba(255,255,255,.74)', AC = bl ? '#5B4BD6' : '#B7A8FF', LN = bl ? 'rgba(17,17,17,.12)' : 'rgba(255,255,255,.16)';
+  return fontsListas().then(function () {
+    var W = 1080, H = 1920, M = 90, AN = W - 2 * M, cv = document.createElement('canvas'); cv.width = W; cv.height = H; var c = cv.getContext('2d'), r = x.rc || {}, rac = r.rac || 1;
+    if (sn) { } else if (bl) { c.fillStyle = '#FFFFFF'; c.fillRect(0, 0, W, H); }
+    else { c.fillStyle = '#0C0C0E'; c.fillRect(0, 0, W, H); var rg = c.createRadialGradient(W * .92, 0, 40, W * .92, 0, 1500); rg.addColorStop(0, 'rgba(52,60,86,.75)'); rg.addColorStop(.55, 'rgba(26,28,38,.35)'); rg.addColorStop(1, 'rgba(12,12,14,0)'); c.fillStyle = rg; c.fillRect(0, 0, W, H); }
+    if (sn && modo !== 'sinn') { c.shadowColor = 'rgba(0,0,0,.32)'; c.shadowBlur = 14; }
+    c.textAlign = 'left'; c.textBaseline = 'alphabetic';
+    var pie = 170, y = 110, ING = (r.ing || []).filter(function (i) { return i && i.n; }), PS = pasosDe(r.pasos);
+    /* la foto: más pequeña si hay mucho que contar */
+    if (img && !sn) { var fh = ING.length + PS.length > 10 ? 420 : 560; c.save(); rr(c, M, y, AN, fh, 36); c.clip(); var sc = Math.max(AN / img.width, fh / img.height), iw = img.width * sc, ih = img.height * sc; c.drawImage(img, M + (AN - iw) / 2, y + (fh - ih) / 2, iw, ih); c.restore(); y += fh + 56; }
+    var d = x.creado ? new Date(x.creado) : new Date();
+    c.fillStyle = SUB; c.font = '700 26px' + F; grEsp(c, '4px'); c.fillText(recorta(c, ('Receta de ' + nom1(x.nombre) + ' · ' + d.getDate() + ' ' + mesC(d)).toUpperCase(), AN), M, y + 26); grEsp(c, '0px'); y += 50;
+    c.fillStyle = FG; c.font = '800 62px' + F; var TL = grLin(c, String(x.t || 'Mi receta').toUpperCase(), AN, 2); TL.forEach(function (t, i) { c.fillText(t, M, y + 58 + i * 70); }); y += TL.length * 70 + 18;
+    var mac = r.k != null ? [fmil(r.k || 0) + ' kcal', Math.round(r.p || 0) + ' g prot.', Math.round(r.h || 0) + ' g hidr.', Math.round(r.g || 0) + ' g grasa'].join(' · ') + ' por ración' : rac + (rac === 1 ? ' ración' : ' raciones');
+    c.fillStyle = SUB; c.font = '700 30px' + F; c.fillText(recorta(c, mac + (r.min ? ' · ' + r.min + ' min' : ''), AN), M, y + 30); y += 64;
+    if (x.c) { c.fillStyle = bl ? 'rgba(17,17,17,.82)' : 'rgba(255,255,255,.9)'; c.font = 'italic 600 32px' + F; var CL = grLin(c, '«' + x.c + '»', AN, 2); CL.forEach(function (t, i) { c.fillText(t, M, y + 32 + i * 42); }); y += CL.length * 42 + 22; }
+    var tit = function (t, ex) { c.fillStyle = LN; c.fillRect(M, y, AN, 2); y += 46; c.fillStyle = AC; c.font = '800 26px' + F; grEsp(c, '4px'); c.fillText(t, M, y); var w = c.measureText(t).width; grEsp(c, '0px'); if (ex) { c.fillStyle = SUB; c.font = '600 26px' + F; c.fillText(ex, M + w + 16, y); } y += 22; };
+    /* los ingredientes: en dos columnas si son más de 5 */
+    if (ING.length) { tit('INGREDIENTES', rac > 1 ? 'para ' + rac + ' raciones' : '');
+      var dos = ING.length > 5, cw = dos ? (AN - 40) / 2 : AN, filas = Math.min(dos ? 6 : 5, Math.ceil(ING.length / (dos ? 2 : 1))), vis = ING.slice(0, filas * (dos ? 2 : 1)), lh = 50;
+      vis.forEach(function (i, k) { var col = dos ? Math.floor(k / filas) : 0, fil = dos ? k % filas : k, xx = M + col * (cw + 40), yy = y + 38 + fil * lh, g = num(i.g) ? fmil(i.g) + ' g' : '';
+        c.font = '800 30px' + F; c.fillStyle = FG; var gw = g ? c.measureText(g).width + 14 : 0; if (g) c.fillText(g, xx, yy);
+        c.font = '600 30px' + F; c.fillStyle = bl ? 'rgba(17,17,17,.86)' : 'rgba(255,255,255,.9)'; c.fillText(recorta(c, String(i.n), cw - gw), xx + gw, yy); });
+      y += filas * lh + 16; if (ING.length > vis.length) { c.fillStyle = SUB; c.font = '600 26px' + F; c.fillText('y ' + (ING.length - vis.length) + ' más', M, y + 18); y += 34; } y += 10; }
+    /* cómo se hace: los pasos numerados hasta donde quepan */
+    if (PS.length) { tit('CÓMO SE HACE'); y += 6; var tope = H - pie - 60, corto = false;
+      for (var k = 0; k < PS.length; k++) { c.font = '600 31px' + F; var PL = grLin(c, PS[k], AN - 64, 3), alto = PL.length * 42 + 18;
+        if (y + alto > tope) { corto = true; break; }
+        c.fillStyle = AC; c.font = '800 31px' + F; c.fillText(String(k + 1), M, y + 34); c.fillStyle = bl ? 'rgba(17,17,17,.86)' : 'rgba(255,255,255,.9)'; c.font = '600 31px' + F; PL.forEach(function (t, i) { c.fillText(t, M + 52, y + 34 + i * 42); }); y += alto; }
+      if (corto) { c.fillStyle = FG; c.font = '800 28px' + F; c.fillText('Receta completa en la app →', M, y + 30); y += 50; } }
+    var yp = sn ? Math.min(H - pie, y + 40) : H - pie; c.save(); var ls = 190 / 1600; c.translate(M, yp + 30); c.scale(ls, ls); c.fillStyle = FG; c.fill(new Path2D(LOGO_D), 'evenodd'); c.restore();
+    c.fillStyle = SUB; c.font = '700 28px' + F; c.fillText(PIE_APP, M, yp + 104);
+    return cv;
+  });
+}
 
 /* ---------- Comunidad: una publicación o tu perfil ---------- */
 var PIE_APP = 'Descárgate la app · moodonapp.com';
@@ -10319,9 +10369,11 @@ A.cCompartir = function (el) {
   var C = CMU(), src = x.foto ? (C.fotos || {})[x.id] : null;
   (src || !x.foto ? Promise.resolve(src) : rpc('yo_comu_foto', { pub: +x.id }).then(function (f) { if (f) { C.fotos = C.fotos || {}; C.fotos[x.id] = f; } return f; }, function () { return null; })).then(imgDeSrc).then(function (im) {
     var rec = x.tipo === 'rec', n21 = f21(), modos = n21 ? SH_MODOS.slice() : [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
+    var r21 = rec && rec21();
     hojaImg({ k: 'pub|' + x.id, tit: rec ? 'Compartir la receta' : 'Compartir el entreno', nom: 'MOOD_ON_' + (rec ? 'receta' : 'entreno'), texto: 'Descárgate la app: moodonapp.com', modos: modos,
+      tarjetas: r21 ? [['rec', 'Receta'], ['mac', 'Macros']] : null, tj: r21 ? 'rec' : '',
       foto: im, fotoFija: !!im, nota: x.mio ? '' : 'Sale su nombre y lo que publicó para todos; nada de sus comentarios, sus me gusta ni lo de «Solo mis seguidores».',
-      gen: function (m, f) { return tarjetaDatos(pubD(x, (rec || n21) && m !== 'foto' ? im : null), m, f); } });      // 21 nov: sin «Foto», la de la publicación va arriba, como en las recetas
+      gen: function (m, f) { if (r21 && SHI && SHI.tj !== 'mac') return tarjetaReceta(x, im, m); return tarjetaDatos(pubD(x, (rec || n21) && m !== 'foto' ? im : null), m, f); } });      // 21 nov: sin «Foto», la de la publicación va arriba, como en las recetas
   });
 };
 A.cPerCompartir = function (el) {
