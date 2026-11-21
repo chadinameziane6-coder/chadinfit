@@ -2005,6 +2005,18 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 .cm-tufoto{flex-direction:row;align-items:center;gap:12px}.cm-tufoto .fr-t{flex:1;min-width:0;display:flex;flex-direction:column}.cm-tufoto small{color:var(--tx2)}
 .ced-l{font-size:14px;font-weight:800;margin-top:2px}.ced-f{display:flex;flex-direction:column;gap:8px}.ced-f .cm-foto{margin:0;width:min(220px,100%);align-self:center}.ced-f .cm-foto.cm-rcf{width:min(280px,100%);aspect-ratio:4/3}.ced-f .fila2 .btn-o{display:inline-flex;align-items:center;justify-content:center;gap:6px}
 .cp-crop:after{display:none}      /* 21 nov: el círculo es solo para la foto de perfil, no para la de una publicación */
+/* 21 nov, 09:48 (Chadín: «en compartir que haya accesos directos, que es más cómodo»): una fila de botones redondos de un toque */
+.sh-ac{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:6px;margin:2px 0 4px}
+.sh-b{display:flex;flex-direction:column;align-items:center;gap:6px;background:none;border:0;padding:2px 0;color:var(--tx);font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.sh-b i{display:flex;align-items:center;justify-content:center;width:56px;height:56px;border-radius:50%;background:var(--suave);color:var(--tx);transition:transform .12s ease}
+.sh-b.pri i{background:var(--neg);color:var(--neg-t)}
+.sh-b small{font-size:11.5px;font-weight:700;color:var(--tx2);line-height:1.1}
+.sh-b:active i{transform:scale(.94)}.sh-b:focus-visible{outline:none}.sh-b:focus-visible i{box-shadow:0 0 0 3px var(--borde2)}
+.sh-b.ok{cursor:default}.sh-b.ok small{color:var(--verde)}
+.fin2-sh .sh-ac{margin-top:4px}
+/* 21 nov: la foto se coloca con los dedos; con el teclado, con el contorno de siempre */
+.crop:focus-visible{outline:3px solid var(--borde2);outline-offset:3px}
+.shi-m button{flex:1}      /* 21 nov: los tres fondos ocupan todo el ancho */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -2401,7 +2413,12 @@ function demoIr(tab) { S.pant = null; S.pila = []; S.tab = tab; pintar(); try { 
 window.YO_REVISAR = [
   /* 21 nov 2026, 00:40: Chadín publicó en /yo (yo-1.9) todo lo de aquí: compartir como imagen (Comunidad, perfil, carrera y cardio, «Mi semana corriendo»),
      «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
-     y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos»: */
+     y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
+     21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
+  { t: 'Por aprobar · Compartir: negro, blanco o sin fondo y accesos directos (21 nov)', d: 'Al compartir un entreno (y en la Comunidad, tu perfil y la carrera): ya no sale «Tu foto». Debajo de la imagen, botones de un toque: Compartir, Copiar (para pegarla en tu historia o en un chat), Guardar y Comunidad.',
+    ir: function () { demoIr('inicio'); var L = S.sesiones.slice().sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }); if (L.length) setTimeout(function () { A.compartirSes({ dataset: { id: L[L.length - 1].id } }); }, 200); } },
+  { t: 'Por aprobar · Colocar las fotos con los dedos, sin barra (21 nov)', d: 'Foto de perfil, la foto al publicar en la Comunidad y la de tus recetas: un dedo la mueve y dos dedos la acercan o la alejan. Pruébalo en el móvil: toca «Poner una foto» en tu perfil.',
+    ir: function () { demoIr('inicio'); setTimeout(function () { A.perfil && A.perfil(); }, 200); } },
   { t: 'Propuesta · «Tus entrenos» tipo Hevy (21 nov)', d: 'Progreso → Tus entrenos: arriba, en grande, lo de la barra que tocas; el rango en un desplegable; barras azules y debajo Entrenos · Tiempo · Volumen. En la app ya está el claro: si prefieres este, se cambia.',
     ir: function () { window.PH_EST_DEMO = 'hevy'; S.x.pv = 'ent'; demoIr('prog'); } },
   { t: 'Falta Supabase · Tu foto en la Comunidad (21 nov)', d: 'Aprobado. Comunidad → tu perfil → toca tu círculo: la misma foto de tu perfil (una sola foto). Sale en tus publicaciones, comentarios y listas; la de los demás se puede denunciar. Se publica al aplicar la 015 en Supabase.',
@@ -3251,6 +3268,41 @@ function guardaEnCurso() {
   try { if (S.ses) localStorage.setItem(ecK(), JSON.stringify(S.ses)); else localStorage.removeItem(ecK()); } catch (e) { }
   clearTimeout(ecT); ecT = setTimeout(function () { rpc('yo_en_curso', { d: S.ses || null }).catch(function () { }); }, 2500);
 }
+
+/* ===== 21 nov 2026, 09:48 (Chadín: «los zoom me gustaría que se hiciese con el dedo, no con la barra de zoom: que con los dos dedos
+   pueda ampliar o alejar o mover; eso del zoom para todo, al igual en foto perfil, subir recetas, no que haya una barra») =====
+   Una sola forma de colocar una foto en toda la app: un dedo (o el ratón) la mueve y dos dedos la acercan, la alejan y la mueven a la vez,
+   sin soltar lo que hay debajo de los dedos. En el ordenador, la rueda del ratón (o el pellizco del panel táctil) y las teclas + − y flechas.
+   G = { st() → { z, x, y } (z ≥ 1; x e y, en px de la caja, cuánto se aparta el centro de la foto del centro de la caja), pinta(), fin(), zmax } */
+var F21 = false;      // borrador hasta el OK de Chadín: sin barras de zoom, compartir solo en negro, blanco o sin fondo y los accesos directos
+function f21() { return F21 || rpBorr(); }
+function gestoFoto(box, G) {
+  if (!box || box._gesto) return; box._gesto = 1; box.setAttribute('tabindex', '0');
+  var act = {}, b0 = null, zmax = G.zmax || 4;
+  var lista = function () { return Object.keys(act).sort(); };
+  var med = function (p) { return p.length > 1 ? { x: (p[0].x + p[1].x) / 2, y: (p[0].y + p[1].y) / 2 } : p[0]; };
+  var dis = function (p) { return p.length > 1 ? Math.max(8, Math.sqrt((p[0].x - p[1].x) * (p[0].x - p[1].x) + (p[0].y - p[1].y) * (p[0].y - p[1].y))) : 1; };
+  var cen = function () { var r = box.getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2 }; };
+  var ini = function () { var s = G.st(), ids = lista(); b0 = s && ids.length ? { z: s.z || 1, x: s.x || 0, y: s.y || 0, ids: ids.join(), p: ids.map(function (i) { return act[i]; }) } : null; };
+  /* acerca o aleja z veces alrededor del punto (px, py) de la pantalla, que se queda donde está */
+  var zoomEn = function (s, z0, x0, y0, z, m0, m) { var c = cen(); z = Math.max(1, Math.min(zmax, z)); s.z = z; s.x = (m.x - c.x) - ((m0.x - c.x) - x0) * z / z0; s.y = (m.y - c.y) - ((m0.y - c.y) - y0) * z / z0; };
+  box.addEventListener('pointerdown', function (ev) { act[ev.pointerId] = { x: ev.clientX, y: ev.clientY }; try { box.setPointerCapture(ev.pointerId); } catch (e) { } ini(); ev.preventDefault(); });
+  box.addEventListener('pointermove', function (ev) {
+    if (!act[ev.pointerId]) return; act[ev.pointerId] = { x: ev.clientX, y: ev.clientY };
+    var ids = lista(); if (!b0 || ids.join() !== b0.ids) return ini();
+    var s = G.st(); if (!s) return; var p = ids.map(function (i) { return act[i]; });
+    zoomEn(s, b0.z, b0.x, b0.y, b0.z * dis(p) / dis(b0.p), med(b0.p), med(p)); G.pinta();
+  });
+  var suelta = function (ev) { if (!act[ev.pointerId]) return; delete act[ev.pointerId]; ini(); if (!lista().length && G.fin) G.fin(); };
+  box.addEventListener('pointerup', suelta); box.addEventListener('pointercancel', suelta); box.addEventListener('lostpointercapture', suelta);
+  box.addEventListener('wheel', function (ev) { var s = G.st(); if (!s) return; ev.preventDefault(); var z0 = s.z || 1, m = { x: ev.clientX, y: ev.clientY };
+    zoomEn(s, z0, s.x || 0, s.y || 0, z0 * Math.exp(-ev.deltaY * (ev.ctrlKey ? 0.01 : 0.0015)), m, m); G.pinta(); clearTimeout(box._tw); box._tw = setTimeout(function () { if (G.fin) G.fin(); }, 250); }, { passive: false });
+  box.addEventListener('keydown', function (ev) { var s = G.st(); if (!s) return; var k = ev.key, z0 = s.z || 1, c = cen(), d = { ArrowLeft: [-12, 0], ArrowRight: [12, 0], ArrowUp: [0, -12], ArrowDown: [0, 12] }[k];
+    if (k === '+' || k === '=' || k === '-') zoomEn(s, z0, s.x || 0, s.y || 0, z0 * (k === '-' ? 1 / 1.15 : 1.15), c, c); else if (d) { s.x = (s.x || 0) + d[0]; s.y = (s.y || 0) + d[1]; } else return;
+    ev.preventDefault(); G.pinta(); if (G.fin) G.fin(); });
+}
+/* el texto de ayuda debajo de la foto, según sea el móvil o el ordenador */
+function gestoAyuda() { var fino = false; try { fino = matchMedia('(hover: hover) and (pointer: fine)').matches; } catch (e) { } return fino ? 'Arrastra la foto para moverla y usa la rueda del ratón para acercarla o alejarla.' : 'Arrastra con un dedo para moverla. Con dos dedos, acércala o aléjala.'; }
 
 ;
 /* ---------- acciones, navegación y pintado ---------- */
@@ -5803,16 +5855,18 @@ VISTAS.fin = function () {
     (R.length ? '<p class="fin3-r">' + ic('trofeo', 13) + (R.length === 1 ? 'Récord: <b>' + esc(R[0].e) + '</b> ' + (R[0].p ? fN(R[0].p) + ' kg × ' : '') + R[0].r : '<b>' + R.length + ' récords hoy</b>') + '</p>' : '') +
     '<button class="fin3-e" data-a="finRpeAbre" aria-label="' + (v ? 'Cambiar el esfuerzo' : 'Añadir el esfuerzo') + '"><span class="fin3-et"><small>Esfuerzo · RPE</small><b>' + (v ? v + ' · ' + RPE_T[v] : 'Añadir') + '</b></span><span class="fin3-seg">' + [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(function (n) { return '<i class="' + (v && n <= v ? 'on' : '') + '"></i>'; }).join('') + '</span></button></section>';
   if (U.libreEj && U.libreEj.length) h += '<button class="card enlace fin2-g" data-a="finGuardarRut"><span><b>Guardar como rutina</b><small class="mut">Para repetir este entreno otro día</small></span>' + ic('sig', 18) + '</button>';
-  var MD = [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].concat(shAj() ? [['sin', 'Sin fondo']] : []);      // 21 nov (Chadín): «una opción sin fondo»
+  var n21 = f21(), MD = n21 ? SH_MODOS : [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']].concat(shAj() ? [['sin', 'Sin fondo']] : []);      // 21 nov (Chadín): «una opción sin fondo»; 09:48: sin «Tu foto»
   h += '<section class="card fin2-sh"><div class="fin2-sht' + (MD.length > 3 ? ' c4' : '') + '"><b>Compártelo</b><div class="seg-p mini" role="tablist" aria-label="Fondo">' + MD.map(function (m) { return '<button role="tab" aria-selected="' + (U.modo === m[0]) + '" class="' + (U.modo === m[0] ? 'on' : '') + '" data-a="finModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div></div>' +
     '<div class="chips fin-t fin2-t" role="tablist" aria-label="Tarjeta">' + t.map(function (x, i) { return '<button role="tab" aria-selected="' + (sl === i) + '" class="chip' + (sl === i ? ' on' : '') + '" data-a="finSlide" data-i="' + i + '">' + x[1] + '</button>'; }).join('') + '</div>' +
     '<div class="car">' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="-1" aria-label="Anterior">' + ic('atras', 16) + '</button>' : '') + '<div class="car-img" id="fin-img"><span class="mut sm">Preparando…</span></div>' + (t.length > 1 ? '<button class="redondo gris" data-a="finSlide" data-d="1" aria-label="Siguiente">' + ic('sig', 16) + '</button>' : '') + '</div>' +
     shExtras(U, 'fin') +
     (t[sl] && t[sl][0] === 'rec' && recsTodos(U).length > 1 ? '<div class="chips fin-rc">' + [['todos', 'Todos']].concat(recsTodos(U).slice(0, 3).map(function (r, k) { return [String(k), r.e]; })).map(function (c) { var on = c[0] === 'todos' ? U.recSel == null : U.recSel === +c[0]; return '<button class="chip' + (on ? ' on' : '') + '" data-a="finRecSel" data-v="' + c[0] + '">' + esc(c[1]) + '</button>'; }).join('') + '</div>' : '') +
+    (n21 ? shBotones([['finCompartir', 'Compartir', 'compartir', 1]].concat(puedeCopiar() ? [['shCopiar', 'Copiar', 'copiar', 0, '', 'fin']] : []).concat([['finGuardar', 'Guardar', 'descargar'],
+      U.pub ? ['', 'Publicado', '', 0, '<i>' + ic('check', 21, 'var(--verde)', 2.6) + '</i>'] : ['finComu', 'Comunidad', 'comu']])) :      // 21 nov, 09:48: accesos directos
     (U.modo === 'foto' && !U.foto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' :
       '<div class="fin2-ac"><button class="btn" data-a="finCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="finGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button>' +
       (U.pub ? '<span class="fin2-ib ok">' + ic('check', 19, 'var(--verde)', 2.6) + '<small>Publicado</small></span>' : '<button class="fin2-ib" data-a="finComu" aria-label="Publicar en la Comunidad">' + ic('comu', 19) + '<small>Comunidad</small></button>') + '</div>') +
-    (U.foto ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '') + '</section>';
+    (U.foto ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="finFoto" hidden></label>' : '')) + '</section>';
   h += '<button class="btn fin2-ok" data-a="finListo">¡Listo!</button><button class="link fin2-pr" data-a="tab" data-v="prog">Ver tu entreno en Progreso</button></div>';
   return h;
 };
@@ -6862,16 +6916,14 @@ CH.pfFoto = function (t) {
   im.src = u;
 };
 function cropLim() { var C = CROP, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - CROP_B) / 2, Math.min((W - CROP_B) / 2, C.x)); C.y = Math.max(-(H - CROP_B) / 2, Math.min((H - CROP_B) / 2, C.y)); return { W: W, H: H }; }
-function cropPinta() { var C = CROP, i = $('#crop-i'); if (!C || !i) return; var d = cropLim(); i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (CROP_B / 2 + C.x - d.W / 2) + 'px'; i.style.top = (CROP_B / 2 + C.y - d.H / 2) + 'px'; }
+function cropPinta() { var C = CROP, i = $('#crop-i'); if (!C || !i) return; var d = cropLim(); i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (CROP_B / 2 + C.x - d.W / 2) + 'px'; i.style.top = (CROP_B / 2 + C.y - d.H / 2) + 'px'; var z = $('input[data-in=cropZ]'); if (z && document.activeElement !== z) z.value = C.z; }
 function hojaCrop() {
-  hoja('<h2>Coloca tu foto</h2><p class="mut sm">Arrastra para moverla y usa la barra para acercarla.</p><div class="crop" id="crop" style="width:' + CROP_B + 'px;height:' + CROP_B + 'px"><img id="crop-i" src="' + CROP.url + '" alt="" draggable="false"><span class="crop-m"></span></div>' +
-    '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CROP.z + '" data-in="cropZ" aria-label="Zoom"></label>' +
+  var n = f21();      // 21 nov: sin barra, con los dedos (gestoFoto, en base.js)
+  hoja('<h2>Coloca tu foto</h2><p class="mut sm">' + (n ? gestoAyuda() : 'Arrastra para moverla y usa la barra para acercarla.') + '</p><div class="crop" id="crop" role="application" aria-label="Tu foto: arrástrala para moverla y acércala o aléjala con dos dedos" style="width:' + CROP_B + 'px;height:' + CROP_B + 'px"><img id="crop-i" src="' + CROP.url + '" alt="" draggable="false"><span class="crop-m"></span></div>' +
+    (n ? '' : '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CROP.z + '" data-in="cropZ" aria-label="Zoom"></label>') +
     '<button class="btn" data-a="pfFotoGuardar">Guardar foto</button><button class="btn sec" data-a="pfFotoCancelar">Cancelar</button>');
   cropPinta();
-  var box = $('#crop'), ini = null;
-  box.addEventListener('pointerdown', function (ev) { ini = { px: ev.clientX, py: ev.clientY, x: CROP.x, y: CROP.y }; try { box.setPointerCapture(ev.pointerId); } catch (e) { } ev.preventDefault(); });
-  box.addEventListener('pointermove', function (ev) { if (!ini) return; CROP.x = ini.x + ev.clientX - ini.px; CROP.y = ini.y + ev.clientY - ini.py; cropPinta(); });
-  var fin = function () { ini = null; }; box.addEventListener('pointerup', fin); box.addEventListener('pointercancel', fin);
+  gestoFoto($('#crop'), { st: function () { return CROP; }, pinta: cropPinta, zmax: n ? 4 : 3 });
 }
 IN.cropZ = function (t) { if (!CROP) return; CROP.z = +t.value || 1; cropPinta(); };
 A.pfFotoCancelar = function () { if (CROP) URL.revokeObjectURL(CROP.url); CROP = null; delete S.x.avCm; cerrarHoja(); };
@@ -8297,10 +8349,27 @@ function fotoRecJpeg(im) {
 CH.rcFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { var j = fotoRecJpeg(im); URL.revokeObjectURL(u); S.x.rec.foto = j; S.x.rec.fotoN = 1; pintar(); };
+  im.onload = function () { if (f21()) { RCROP = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(RC_W / im.width, RC_H / im.height) }; return hojaRcCrop(); }
+    var j = fotoRecJpeg(im); URL.revokeObjectURL(u); S.x.rec.foto = j; S.x.rec.fotoN = 1; pintar(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
+/* 21 nov (Chadín: «eso del zoom para todo, al igual en subir recetas»): antes de guardarla, la foto se coloca con los dedos en el mismo 16:10 */
+var RCROP = null, RC_W = 288, RC_H = 180;
+function rcCropLim() { var C = RCROP, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - RC_W) / 2, Math.min((W - RC_W) / 2, C.x)); C.y = Math.max(-(H - RC_H) / 2, Math.min((H - RC_H) / 2, C.y)); return { W: W, H: H }; }
+function rcCropPinta() { var C = RCROP, i = $('#rc-ci'); if (!C || !i) return; var d = rcCropLim(); i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (RC_W / 2 + C.x - d.W / 2) + 'px'; i.style.top = (RC_H / 2 + C.y - d.H / 2) + 'px'; }
+function hojaRcCrop() {
+  hoja('<h2>Coloca la foto</h2><p class="mut sm">' + gestoAyuda() + '</p><div class="crop cp-crop" id="rc-crop" role="application" aria-label="La foto de la receta: arrástrala para moverla y acércala o aléjala con dos dedos" style="width:' + RC_W + 'px;height:' + RC_H + 'px"><img id="rc-ci" src="' + RCROP.url + '" alt="" draggable="false"></div>' +
+    '<button class="btn" data-a="rcCropOk">Usar esta foto</button><button class="btn sec" data-a="rcCropNo">Cancelar</button>');
+  rcCropPinta(); gestoFoto($('#rc-crop'), { st: function () { return RCROP; }, pinta: rcCropPinta });
+}
+A.rcCropOk = function () {
+  var C = RCROP; if (!C || !S.x.rec) return; var d = rcCropLim(), W = 800, H = 500, k = W / RC_W, cv = document.createElement('canvas'); cv.width = W; cv.height = H;
+  var x = cv.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, W, H); x.drawImage(C.im, (RC_W / 2 + C.x - d.W / 2) * k, (RC_H / 2 + C.y - d.H / 2) * k, d.W * k, d.H * k);
+  var u = cv.toDataURL('image/jpeg', 0.75); if (u.length > 280000) u = cv.toDataURL('image/jpeg', 0.55);
+  URL.revokeObjectURL(C.url); RCROP = null; S.x.rec.foto = u; S.x.rec.fotoN = 1; cerrarHoja(); pintar();
+};
+A.rcCropNo = function () { if (RCROP) URL.revokeObjectURL(RCROP.url); RCROP = null; cerrarHoja(); };
 A.rcFotoQuitar = function () { S.x.rec.foto = ''; S.x.rec.fotoN = 1; pintar(); };
 IN.rcN = function (t) { S.x.rec.n = t.value; };
 IN.rcP = function (t) { S.x.rec.pasos = t.value; };
@@ -9431,8 +9500,9 @@ function cpEnEd() { return !!(S.x.ced && document.querySelector('[data-a=cEditar
 function cpRepinta() { if (cpEnEd()) pintaEdPub(); else if (S.x.crec && document.querySelector('[data-a=cPublicarRec]')) pintaPubRec(); else pintaPub(); }
 function cpfHtml() {
   if (!CPF) return '<label class="btn sec cp-foto">' + ic('foto', 18) + 'Añadir una foto (opcional)<input type="file" accept="image/*" data-ch="cpFoto" hidden></label>';
-  return '<div class="cp-f"><div class="crop cp-crop" id="cp-crop" style="width:' + CPF_W + 'px;height:' + CPF_H + 'px"><img id="cp-i" src="' + CPF.url + '" alt="" draggable="false"></div>' +
-    '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CPF.z + '" data-in="cpZ" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla.</small>' +
+  return '<div class="cp-f"><div class="crop cp-crop" id="cp-crop" role="application" aria-label="La foto: arrástrala para moverla y acércala o aléjala con dos dedos" style="width:' + CPF_W + 'px;height:' + CPF_H + 'px"><img id="cp-i" src="' + CPF.url + '" alt="" draggable="false"></div>' +
+    (f21() ? '<small class="mut">' + gestoAyuda() + '</small>' :      // 21 nov: sin barra, con los dedos
+    '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CPF.z + '" data-in="cpZ" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla.</small>') +
     (CPF.fmOk ? '<div class="seg3 cp-fm" role="radiogroup" aria-label="Forma de la foto">' + [['h', '4:3'], ['q', 'Cuadrada'], ['v', 'Vertical']].map(function (f) { var on = (CPF.fm || 'v') === f[0]; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="cpFm" data-v="' + f[0] + '">' + f[1] + '</button>'; }).join('') + '</div>' : '') +
     '<button class="link rojo-t izq" data-a="cpFotoQuitar">' + (CPF.rec ? 'Dejar la foto como estaba' : 'Quitar la foto') + '</button></div>' +
     '<p class="cm-nunca">' + ic('escudo', 15) + '<span>La verán las personas de la Comunidad. Le quitamos la ubicación y los datos de la cámara. No subas fotos de otras personas sin su permiso.</span></p>';
@@ -9448,14 +9518,12 @@ A.cpFotoQuitar = function () { if (CPF && !CPF.rec) URL.revokeObjectURL(CPF.url)
 function cpfLim() { var C = CPF, W = C.im.width * C.s0 * C.z, H = C.im.height * C.s0 * C.z; C.x = Math.max(-(W - CPF_W) / 2, Math.min((W - CPF_W) / 2, C.x)); C.y = Math.max(-(H - CPF_H) / 2, Math.min((H - CPF_H) / 2, C.y)); return { W: W, H: H }; }
 function cpfPinta() {
   var C = CPF, i = $('#cp-i'); if (!C || !i) return; var d = cpfLim();
-  i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (CPF_W / 2 + C.x - d.W / 2) + 'px'; i.style.top = (CPF_H / 2 + C.y - d.H / 2) + 'px';
+  i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (CPF_W / 2 + C.x - d.W / 2) + 'px'; i.style.top = (CPF_H / 2 + C.y - d.H / 2) + 'px'; var zr = $('input[data-in=cpZ]'); if (zr && document.activeElement !== zr) zr.value = C.z;
   var pv = $('#cp-prev-img'); if (pv && !cpfPinta.t) cpfPinta.t = setTimeout(function () { cpfPinta.t = 0; var q = $('#cp-prev-img'); if (q && CPF) q.src = cpfJpeg(0.6, 0.4); }, 120);
 }
 function cpfEnganchar() {
-  var box = $('#cp-crop'); if (!box || !CPF) return; cpfPinta(); var ini = null;
-  box.addEventListener('pointerdown', function (ev) { ini = { px: ev.clientX, py: ev.clientY, x: CPF.x, y: CPF.y }; try { box.setPointerCapture(ev.pointerId); } catch (e) { } ev.preventDefault(); });
-  box.addEventListener('pointermove', function (ev) { if (!ini) return; CPF.x = ini.x + ev.clientX - ini.px; CPF.y = ini.y + ev.clientY - ini.py; cpfPinta(); });
-  var fin = function () { ini = null; }; box.addEventListener('pointerup', fin); box.addEventListener('pointercancel', fin);
+  var box = $('#cp-crop'); if (!box || !CPF) return; cpfPinta();
+  gestoFoto(box, { st: function () { return CPF; }, pinta: cpfPinta, zmax: f21() ? 4 : 3 });      // 21 nov: también con dos dedos
 }
 IN.cpZ = function (t) { if (!CPF) return; CPF.z = +t.value || 1; cpfPinta(); };
 function cpfJpeg(q, esc_) {
@@ -9733,15 +9801,28 @@ IN.shZoom = function (t) { var A0 = SH_ACT; if (!A0) return; var f = A0.o.foto; 
 function shExtras(o, c) {
   if (!shAj()) return '';
   if (o.modo === 'sin') return '<div class="shi-x"><div class="seg-p mini shi-let" role="radiogroup" aria-label="Color de las letras">' + [['b', 'Letras blancas'], ['n', 'Letras negras']].map(function (l) { var on = (o.let || 'b') === l[0]; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="shLet" data-c="' + c + '" data-v="' + l[0] + '">' + l[1] + '</button>'; }).join('') + '</div>' +
-    '<small class="mut">Sale sin fondo (PNG transparente): pégala encima de tu foto o tu vídeo en Instagram.</small></div>';
-  if (o.modo === 'foto' && o.foto) return '<div class="shi-x"><label class="f crop-z">Zoom<input type="range" min="1" max="4" step="0.01" value="' + ((o.foto.aj && o.foto.aj.z) || 1) + '" data-in="shZoom" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla. Con dos dedos, también haces zoom.</small></div>';
+    '<small class="mut">' + (f21() ? 'Sale sin fondo: cópiala o guárdala y pégala encima de tu foto o tu vídeo en tus historias.' : 'Sale sin fondo (PNG transparente): pégala encima de tu foto o tu vídeo en Instagram.') + '</small></div>';
+  if (o.modo === 'foto' && o.foto && !f21()) return '<div class="shi-x"><label class="f crop-z">Zoom<input type="range" min="1" max="4" step="0.01" value="' + ((o.foto.aj && o.foto.aj.z) || 1) + '" data-in="shZoom" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla. Con dos dedos, también haces zoom.</small></div>';
   return '';
 }
 A.shLet = function (el) { if (el.dataset.c === 'fin') { if (S.fin) { S.fin.let = el.dataset.v; pintar(); } } else if (SHI) { SHI.let = el.dataset.v; pintaShi(); } };
 
 /* ---------- la hoja de compartir una imagen (Negro · Blanco · Foto · Sin fondo, la imagen, Compartir y Guardar) ---------- */
 var SHI = null;
-function hojaImg(o) { SHI = Object.assign({ modo: 'negro', foto: null, modos: [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']] }, o); if (shAj()) SHI.modos = SHI.modos.concat([['sin', 'Sin fondo']]); pintaShi(); }
+function hojaImg(o) { SHI = Object.assign({ modo: 'negro', foto: null, modos: [['negro', 'Negro'], ['blanco', 'Blanco'], ['foto', 'Foto']] }, o); if (f21()) SHI.modos = SH_MODOS.slice(); else if (shAj()) SHI.modos = SHI.modos.concat([['sin', 'Sin fondo']]); pintaShi(); }
+/* 21 nov, 09:48 (Chadín: «aplica a todo lo que se comparta: lo de "tu foto" quítalo, deja solo negro, blanco o sin fondo, y en compartir
+   que haya accesos directos, que es más cómodo»): tres fondos y, debajo, una fila de botones redondos de un toque: Compartir (el menú del
+   móvil, con sus apps), Copiar (para pegarla en una historia o un chat; solo si el móvil deja copiar imágenes) y Guardar.
+   En la web el móvil no deja abrir una app concreta con la imagen ya puesta: eso llegará con la app de las tiendas. */
+var SH_MODOS = [['negro', 'Negro'], ['blanco', 'Blanco'], ['sin', 'Sin fondo']];
+function puedeCopiar() { try { return !!(navigator.clipboard && navigator.clipboard.write && window.ClipboardItem); } catch (e) { return false; } }
+function shBotones(L) { return '<div class="sh-ac" role="group" aria-label="Compartir la imagen">' + L.map(function (b) { return b[4] ? '<span class="sh-b ok">' + b[4] + '<small>' + b[1] + '</small></span>' :
+  '<button class="sh-b' + (b[3] ? ' pri' : '') + '" data-a="' + b[0] + '"' + (b[5] ? ' data-c="' + b[5] + '"' : '') + '><i>' + ic(b[2], 21, null, 2) + '</i><small>' + b[1] + '</small></button>'; }).join('') + '</div>'; }
+A.shCopiar = function (el) {
+  var t = el.dataset.c === 'fin' ? tarjActual() : SHI && imgLista(shiSpec()); if (!t) return toast('Un segundo, se está preparando');
+  var mal = function () { toast('No se ha podido copiar: usa Compartir o Guardar'); };
+  try { var it = {}; it[t.blob.type || 'image/png'] = t.blob; navigator.clipboard.write([new ClipboardItem(it)]).then(function () { toast('Copiada: pégala en tu historia o en un chat', 'ok'); }, mal); } catch (e) { mal(); }
+};
 function shiSpec() { var o = SHI; return { k: 'shi|' + o.k, modo: o.modo, let: o.let, foto: o.modo === 'foto' ? o.foto : null, alt: o.tit, gen: o.gen }; }
 function pintaShi() {
   var o = SHI; if (!o) return; var pideFoto = o.modo === 'foto' && !o.foto;
@@ -9749,7 +9830,8 @@ function pintaShi() {
     '<div class="seg-p mini shi-m' + (o.modos.length > 3 ? ' c4' : '') + '" role="tablist" aria-label="Fondo">' + o.modos.map(function (m) { return '<button role="tab" aria-selected="' + (o.modo === m[0]) + '" class="' + (o.modo === m[0] ? 'on' : '') + '" data-a="shiModo" data-v="' + m[0] + '">' + m[1] + '</button>'; }).join('') + '</div>' +
     '<div class="car-img shi-img" id="shi-img">' + (pideFoto ? ic('foto', 30, 'var(--tx3)') : '<span class="mut sm">Preparando…</span>') + '</div>' + (pideFoto ? '' : shExtras(o, 'shi')) +
     (pideFoto ? '<label class="btn">' + ic('foto', 18, null) + 'Elegir mi foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' :
-      '<div class="fin2-ac shi-ac"><button class="btn" data-a="shiCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="shiGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button></div>') +
+      (f21() ? shBotones([['shiCompartir', 'Compartir', 'compartir', 1]].concat(puedeCopiar() ? [['shCopiar', 'Copiar', 'copiar', 0, '', 'shi']] : []).concat([['shiGuardar', 'Guardar', 'descargar']])) :
+      '<div class="fin2-ac shi-ac"><button class="btn" data-a="shiCompartir">' + ic('compartir', 18, null) + 'Compartir</button><button class="fin2-ib" data-a="shiGuardar" aria-label="Guardar imagen">' + ic('descargar', 19) + '<small>Guardar</small></button></div>')) +
     (o.modo === 'foto' && o.foto && !o.fotoFija ? '<label class="link">Cambiar foto<input type="file" accept="image/*" data-ch="shiFoto" hidden></label>' : '') +
     '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
   if (!pideFoto) cajaImg('shi-img', shiSpec());
@@ -9772,16 +9854,16 @@ function pubD(x, img) {
   if (x.tipo === 'rec') { var r = x.rc || {}, mac = r.k != null, rac = r.rac || 1;
     return { img: img, sub: sub, tit: x.t, txt: x.c, big: mac ? fmil(r.k || 0) : String(rac), uni: mac ? 'KCAL / RACIÓN' : (rac === 1 ? 'RACIÓN' : 'RACIONES'),
       kp: mac ? [[Math.round(r.p || 0) + ' g', 'PROTEÍNA'], [Math.round(r.h || 0) + ' g', 'HIDRATOS'], [Math.round(r.g || 0) + ' g', 'GRASAS']] : [[String((r.ing || []).length), 'INGREDIENTES']], pie: PIE_APP }; }
-  return { sub: sub, tit: x.t, txt: x.c, big: String(x.min || 0), uni: 'MIN', kp: [[String(x.nser || 0), 'SERIES'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'VOLUMEN'] : [String(x.nej || 0), 'EJERCICIOS']], oro: x.rec ? 'Récord: ' + x.rec : '', pie: PIE_APP };
+  return { img: img, sub: sub, tit: x.t, txt: x.c, big: String(x.min || 0), uni: 'MIN', kp: [[String(x.nser || 0), 'SERIES'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'VOLUMEN'] : [String(x.nej || 0), 'EJERCICIOS']], oro: x.rec ? 'Récord: ' + x.rec : '', pie: PIE_APP };
 }
 A.cCompartir = function (el) {
   var x = null; cadaPub(el.dataset.id, function (p) { x = p; }); if (!x || x.vis === 'seg') return toast('Esta publicación es solo para seguidores');
   var C = CMU(), src = x.foto ? (C.fotos || {})[x.id] : null;
   (src || !x.foto ? Promise.resolve(src) : rpc('yo_comu_foto', { pub: +x.id }).then(function (f) { if (f) { C.fotos = C.fotos || {}; C.fotos[x.id] = f; } return f; }, function () { return null; })).then(imgDeSrc).then(function (im) {
-    var rec = x.tipo === 'rec', modos = [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
+    var rec = x.tipo === 'rec', n21 = f21(), modos = n21 ? SH_MODOS.slice() : [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
     hojaImg({ k: 'pub|' + x.id, tit: rec ? 'Compartir la receta' : 'Compartir el entreno', nom: 'MOOD_ON_' + (rec ? 'receta' : 'entreno'), texto: 'Descárgate la app: moodonapp.com', modos: modos,
       foto: im, fotoFija: !!im, nota: x.mio ? '' : 'Sale su nombre y lo que publicó para todos; nada de sus comentarios, sus me gusta ni lo de «Solo mis seguidores».',
-      gen: function (m, f) { return tarjetaDatos(pubD(x, rec && m !== 'foto' ? im : null), m, f); } });
+      gen: function (m, f) { return tarjetaDatos(pubD(x, (rec || n21) && m !== 'foto' ? im : null), m, f); } });      // 21 nov: sin «Foto», la de la publicación va arriba, como en las recetas
   });
 };
 A.cPerCompartir = function (el) {
