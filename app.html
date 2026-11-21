@@ -3797,6 +3797,17 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .rut-fe2-n{margin:6px 0 0;opacity:.75}
 .pg-vacio h3{margin:0 0 4px}.pg-vacio .op-sol{width:100%;text-align:left;margin-top:8px}.pg-vacio .op-sol b{display:flex;align-items:center;gap:8px}.pg-vacio .op-sol b svg{width:17px;height:17px}
 .pg-plan .tipos{flex-wrap:wrap}
+.pg-fe{display:flex;gap:10px;flex-wrap:wrap;align-items:flex-end;margin-bottom:8px}.pg-fe .f{flex:1 1 140px;margin:0}
+.pg-fe-h{display:flex;flex-direction:column;padding:0 4px 9px;flex:1 1 140px}.pg-fe-h small{font-size:12px;color:var(--mu);font-weight:700}.pg-fe-h b{font-size:15px;font-weight:800}
+.pgbar-r .pgb{transition:transform .18s ease;min-width:0}
+.pgb[data-drag]{cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}.pgb[data-drag]:focus-visible{outline:3px solid #0B6B40;outline-offset:2px}
+.pgb.drag{cursor:grabbing;z-index:3;transition:none;box-shadow:inset 0 0 0 2px #0B6B40,0 12px 24px rgba(4,48,27,.25)}
+.pgb[data-drag] .pgb-o{padding-right:12px}.pgb-g{position:absolute;right:7px;top:5px;font-style:normal;font-size:14px;line-height:1;opacity:.55}
+.pgb.mal{box-shadow:inset 0 0 0 2px #E28A84}
+.pg-hint{display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--mu);margin:2px 0 0}.pg-hint i{font-style:normal;font-size:15px;color:#0B6B40}
+.dg-kc{display:flex;align-items:center;gap:10px}.dg-kc input{width:130px;font:inherit;font-size:17px;font-weight:800;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:#fff}.dg-kc span{font-weight:700;color:var(--mu)}
+.dg-fe2{margin-top:6px}
+.pg-plan.inl .pg-plan-c{min-width:0}.pg-plan.inl .pgbar{margin-top:6px}
 .cal-per.pg-cp b{margin-right:4px}
 .aa-dia.con-mas{display:flex;align-items:center;gap:8px}.aa-dia.con-mas>span{flex:1}
 .aa-lib{font-size:11.5px;font-weight:700;color:var(--mu);text-transform:none;letter-spacing:0}
@@ -5153,7 +5164,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.187';
+var APP_V = 'v53.4.188';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -11726,7 +11737,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
+function ponerResumen(r){ PG22=!!(r&&(r.casa===true||r.demo===true))||(typeof DEMO!=='undefined'&&DEMO); if(LS.get('chadin_pg22')===0) PG22=false; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
   CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.citasMias=r.citasMias||[]; CO.nuevos=r.nuevos||[]; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
@@ -11913,7 +11924,7 @@ function precargarHoy(){
   ids.slice(0,8).forEach(function(id,i){ setTimeout(function(){ precargar(id); },1200+i*1300); });
 }
 function normalizarDieta(D){ D.notas=D.notas||''; D.desde=D.desde||''; D.hasta=D.hasta||''; D.planes=(D.planes||[]); D.planes.forEach(function(p){ p.comidas=p.comidas||[]; p.comidas.forEach(function(c){ if(!c.opciones||!c.opciones.length) c.opciones=[nuevaOp()]; c.opciones.forEach(function(o){ if(!o.id) o.id='o'+rand(6); o.items=o.items||[]; if(CO.nutM) o.items.forEach(hidratarIt); }); }); }); return D; }
-function resetEdicion(){ CO.opVis={}; CO.rut=copia(CO.d.rutinas); CO.die=CO.d.dieta?normalizarDieta(copia(CO.d.dieta)):null; CO.dieSucia=false; CO.planI=0; CO.cqe=null; CO.cqeSucio=false; CO.cqeAbierto=false; if(typeof undoReset==='function') undoReset(); }
+function resetEdicion(){ CO.dieSel='a'; CO.opVis={}; CO.rut=copia(CO.d.rutinas); CO.die=CO.d.dieta?normalizarDieta(copia(CO.d.dieta)):null; CO.dieSucia=false; CO.planI=0; CO.cqe=null; CO.cqeSucio=false; CO.cqeAbierto=false; if(typeof undoReset==='function') undoReset(); }
 function haySinGuardar(){ return CO.rut.some(function(r){return r._s;})||CO.dieSucia||!!CO.cqeSucio||!!(CO.md&&CO.mdSucio); }
 function siCambios(fn){
   if(!haySinGuardar()) return fn();
@@ -12396,10 +12407,11 @@ function faseEn(d,tipo,f){ return (d.fases||[]).filter(function(z){ return z.tip
 /* v53.4.187: lo de ahora en entreno = su programación de ahora (con su objetivo, hasta cuando acaba ella) */
 function pgFaseAhora(){ if(!CO.d) return null; var z=pgSeg('ahora'); if(z&&z.fase) return {id:z.fase.id,tipo:'entreno',fases:z.fase.fases||[],prioridad:z.fase.prioridad||[],desde:z.fase.desde,hasta:z.hasta||z.fase.hasta,nota:z.fase.nota}; return z?null:faseEn(CO.d,'entreno',pgHoy()); }
 function faseHoyTxt(d){
-  var hoy=CO.hoy||hoyStr(), n=faseEn(d,'nutricion',hoy), e=PG21&&d===CO.d?pgFaseAhora():faseEn(d,'entreno',hoy);
-  if(!n&&!e) return '';
+  var hoy=CO.hoy||hoyStr(), pg=PG21&&d===CO.d, p2=pg&&PG22, n=p2?null:faseEn(d,'nutricion',hoy), e=pg?pgFaseAhora():faseEn(d,'entreno',hoy), dz=p2?dgSegs().filter(function(z){ return z.dr; })[0]:null;
+  if(!n&&!e&&!dz) return '';
   function t(z){ return '<button class="fase-chip" data-a="verFase" data-id="'+esc(z.id)+'"><i style="background:'+fondoFases(z.fases)+'"></i>'+esc(nombreFase(z))+' <span class="muted">hasta el '+fCorta(z.hasta)+'</span></button>'; }
-  return '<div class="fase-hoy"><span class="muted sm">Ahora:</span>'+(n?t(n):'')+(e?t(e):'')+'</div>';
+  var td=dz?'<button class="fase-chip" data-a="pgBloque" data-t="die" data-k="ahora"><i style="background:'+pgCol(dz)+'"></i>'+esc(pgNom(dz))+' <span class="muted">'+(dz.hasta?'hasta el '+fCorta(dz.hasta):'sin fin')+'</span></button>':'';      // v53.4.188: su dieta de ahora (la misma que en Dieta)
+  return '<div class="fase-hoy"><span class="muted sm">Ahora:</span>'+td+(n?t(n):'')+(e?t(e):'')+'</div>';
 }
 function nombreMes(Y,m){ var s=new Date(Y,m,1).toLocaleDateString('es-ES',{month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }
 function vCalendario(){
@@ -12418,7 +12430,7 @@ function pgFasesCal(){ var hoy=pgHoy(), us={}, out=[];
   return out.sort(function(a,b){ return a.desde<b.desde?-1:1; }); }
 function pgRaya(c){ return 'repeating-linear-gradient(135deg,'+c+' 0 4px,'+c+'55 4px 8px)'; }
 function calTipo(d,tipo,Y){
-  var F=PG21&&tipo==='entreno'?pgFasesCal():(d.fases||[]).filter(function(f){ return f.tipo===tipo; }), hoy=CO.hoy||hoyStr(), KT=tipo==='nutricion'?['dieta']:['rutina','revision','plan','tarea'], EVY=CO._evY||{}, vistos={}, EVD={};
+  var F=PG21&&tipo==='entreno'?pgFasesCal():PG22&&tipo==='nutricion'?dgFasesCal():(d.fases||[]).filter(function(f){ return f.tipo===tipo; }), hoy=CO.hoy||hoyStr(), KT=tipo==='nutricion'?['dieta']:['rutina','revision','plan','tarea'], EVY=CO._evY||{}, vistos={}, EVD={};
   (d.eventos||[]).forEach(function(e){ (EVD[e.fecha]=EVD[e.fecha]||[]).push(e); });      // v52.11: el día de cada competición, con su trofeo
   Object.keys(EVY).forEach(function(f){ EVY[f].forEach(function(e){ if(KT.indexOf(e.tipo)>=0) vistos[e.tipo]=1; }); });
   var LEY={dieta:'fin o cambio de dieta',rutina:'rutinas',revision:'revisión',plan:'plan',tarea:'tarea'};
@@ -12436,7 +12448,7 @@ function calTipo(d,tipo,Y){
   }
   h+='</div>';
   var anio=F.filter(function(z){ return z.hasta>=Y+'-01-01'&&z.desde<=Y+'-12-31'; });
-  h+=anio.length?'<div class="cal-lista">'+anio.map(function(z){ var EV=(d.eventos||[]).filter(function(e){ return evFz(e).indexOf(z.id)>=0; }); return '<button class="cal-per'+(z.pgk?' pg-cp':'')+'" '+(z.pgk?'data-a="pgBloque" data-k="'+esc(z.pgk)+'"':'data-a="verFase" data-id="'+esc(z.id)+'"')+'><i style="background:'+(z.pend?pgRaya(colFase(z)):fondoFases(z.fases))+'"></i><div><b>'+esc(z.pgk&&!(z.fases||[]).length&&!(z.prioridad||[]).length?'Programación':nombreFase(z))+'</b>'+(z.pgk?(z.ahora?' <span class="pg-ah">Ahora</span>':z.pend?' <span class="pg-am">! Faltan las rutinas</span>':' <span class="pg-ok">✓ Lista</span>'):'')+' <span class="muted sm">· '+fCorta(z.desde)+' – '+fCorta(z.hasta)+' ('+semanasTxt(z)+')</span>'+(z.nota?'<div class="muted sm clamp">'+esc(primeraLinea(z.nota))+'</div>':'')+(EV.length?'<div class="ev-fz">'+ic('trofeo')+'Prepara: '+esc(EV.map(function(e){ return e.nombre+' ('+fCorta(e.fecha)+')'; }).join(', '))+'</div>':'')+'</div></button>'; }).join('')+'</div>'
+  h+=anio.length?'<div class="cal-lista">'+anio.map(function(z){ var EV=(d.eventos||[]).filter(function(e){ return evFz(e).indexOf(z.id)>=0; }); return '<button class="cal-per'+(z.pgk?' pg-cp':'')+'" '+(z.pgk?'data-a="pgBloque" data-k="'+esc(z.pgk)+'"'+(z.pgt?' data-t="'+z.pgt+'"':''):'data-a="verFase" data-id="'+esc(z.id)+'"')+'><i style="background:'+(z.pend?pgRaya(colFase(z)):fondoFases(z.fases))+'"></i><div><b>'+esc(z.pgt==='die'?z.nom:z.pgk&&!(z.fases||[]).length&&!(z.prioridad||[]).length?'Programación':nombreFase(z))+'</b>'+(z.pgk?(z.ahora?' <span class="pg-ah">Ahora</span>':z.pend?' <span class="pg-am">'+(z.pgt==='die'?'! Falta hacerla':'! Faltan las rutinas')+'</span>':' <span class="pg-ok">✓ Lista</span>'):'')+' <span class="muted sm">· '+fCorta(z.desde)+' – '+fCorta(z.hasta)+' ('+semanasTxt(z)+')</span>'+(z.nota?'<div class="muted sm clamp">'+esc(primeraLinea(z.nota))+'</div>':'')+(EV.length?'<div class="ev-fz">'+ic('trofeo')+'Prepara: '+esc(EV.map(function(e){ return e.nombre+' ('+fCorta(e.fecha)+')'; }).join(', '))+'</div>':'')+'</div></button>'; }).join('')+'</div>'
     :'<p class="muted sm mt">Sin periodos en '+Y+'.</p>';
   return h+'</div>';
 }
@@ -12444,9 +12456,10 @@ function semanasTxt(z){ var n=diff(z.desde,z.hasta)+1; return n<14?n+' día'+(n>
 A.calY=function(el){ CO.calY=(CO.calY||+String(CO.hoy||hoyStr()).slice(0,4))+(+el.dataset.v); CO.calSel=null; pintarClienta(false); };
 A.calDia=function(el){
   var t=el.dataset.t, f=el.dataset.f;
-  if(PG21&&t==='entreno'){      // v53.4.187: en Entrenamiento, lo que marcas es una programación (y tocar una abre sus opciones)
-    if(CO.calSel&&CO.calSel.tipo===t){ var a2=CO.calSel.a<f?CO.calSel.a:f, b2=CO.calSel.a<f?f:CO.calSel.a; CO.calSel=null; pintarClienta(false); if(b2<pgHoy()) return toast('Elige días de hoy en adelante','err'); return pgNuevaAbrir({d:a2<pgHoy()?pgHoy():a2,h:b2}); }
-    if(el.dataset.id&&!CO.calSel){ var ids2=el.dataset.id.split(','), Fc=pgFasesCal().filter(function(x){ return ids2.indexOf(x.id)>=0&&x.pgk; })[0]; if(Fc){ CO.calDiaSel={tipo:t,f:f}; return A.pgBloque({dataset:{k:Fc.pgk,f:f>=pgHoy()?f:''}}); } }
+  if(PG21&&(t==='entreno'||PG22&&t==='nutricion')){      // v53.4.187/188: en Entrenamiento y Nutrición, lo que marcas es una programación o una dieta (y tocar una abre sus opciones)
+    var TT=t==='nutricion'?'die':'';
+    if(CO.calSel&&CO.calSel.tipo===t){ var a2=CO.calSel.a<f?CO.calSel.a:f, b2=CO.calSel.a<f?f:CO.calSel.a; CO.calSel=null; pintarClienta(false); if(b2<pgHoy()) return toast('Elige días de hoy en adelante','err'); return pgNuevaAbrir({t:TT,d:a2<pgHoy()?pgHoy():a2,h:b2}); }
+    if(el.dataset.id&&!CO.calSel){ var ids2=el.dataset.id.split(','), Fc=(TT?dgFasesCal():pgFasesCal()).filter(function(x){ return ids2.indexOf(x.id)>=0&&x.pgk; })[0]; if(Fc){ CO.calDiaSel={tipo:t,f:f}; return A.pgBloque({dataset:{k:Fc.pgk,t:TT,f:f>=pgHoy()?f:''}}); } }
   }
   if(CO.calSel&&CO.calSel.tipo===t){ var a=CO.calSel.a<f?CO.calSel.a:f, b=CO.calSel.a<f?f:CO.calSel.a; CO.calSel=null; pintarClienta(false); return faseModal({tipo:t,fases:[],prioridad:[],desde:a,hasta:b,nota:''}); }
   if(el.dataset.id&&!CO.calSel){                 // v35: ver el periodo o empezar uno nuevo desde ese día
@@ -12462,12 +12475,12 @@ A.calDia=function(el){
 A.calDesde=function(){ var x=CO.calDiaSel; if(!x) return cerrarModal(); cerrarModal(); CO.calSel={tipo:x.tipo,a:x.f}; pintarClienta(false); var b=document.querySelector('.cal-sel'); if(b) b.scrollIntoView({block:'center',behavior:'smooth'}); };
 var MK_L={revision:'R',dieta:'D',rutina:'E',plan:'€',tarea:'T'};      // v52.11: las competiciones van con su trofeo (cal-tr), no con letra
 function colFase(z){ return FASE_C[(z.fases||[])[0]]||'#8A8A8E'; }
-A.calSelUno=function(){ var c=CO.calSel; if(!c) return; CO.calSel=null; pintarClienta(false); if(PG21&&c.tipo==='entreno') return pgNuevaAbrir({d:c.a<pgHoy()?pgHoy():c.a,h:c.a<pgHoy()?pgHoy():c.a}); faseModal({tipo:c.tipo,fases:[],prioridad:[],desde:c.a,hasta:c.a,nota:''}); };
+A.calSelUno=function(){ var c=CO.calSel; if(!c) return; CO.calSel=null; pintarClienta(false); if(PG21&&(c.tipo==='entreno'||PG22&&c.tipo==='nutricion')) return pgNuevaAbrir({t:c.tipo==='nutricion'?'die':'',d:c.a<pgHoy()?pgHoy():c.a,h:c.a<pgHoy()?pgHoy():c.a}); faseModal({tipo:c.tipo,fases:[],prioridad:[],desde:c.a,hasta:c.a,nota:''}); };
 A.calSelNo=function(){ CO.calSel=null; pintarClienta(false); };
 A.faseNueva=function(){ var hoy=CO.hoy||hoyStr(); faseModal({tipo:'entreno',fases:[],prioridad:[],desde:hoy,hasta:sumar(hoy,55),nota:'',nuevo:true}); };
 A.verFase=function(el){
   var z=(CO.d.fases||[]).filter(function(x){ return x.id===el.dataset.id; })[0]; if(!z) return; CO.faseVer=z;
-  if(PG21&&z.tipo==='entreno'){ var Fc=pgFasesCal().filter(function(x){ return x.id===z.id&&x.pgk; })[0]; if(Fc) return A.pgBloque({dataset:{k:Fc.pgk,f:el.dataset.f||''}}); }
+  if(PG21&&(z.tipo==='entreno'||PG22&&z.tipo==='nutricion')){ var TT=z.tipo==='nutricion'?'die':'', Fc=(TT?dgFasesCal():pgFasesCal()).filter(function(x){ return x.id===z.id&&x.pgk; })[0]; if(Fc) return A.pgBloque({dataset:{k:Fc.pgk,t:TT,f:el.dataset.f||''}}); }
   modal('<div class="fase-t"><i style="background:'+fondoFases(z.fases)+'"></i><h2>'+esc(nombreFase(z))+'</h2></div><div class="muted">'+(z.tipo==='entreno'?'Entrenamiento':'Nutrición')+' · del '+fMedia(z.desde)+' al '+fMedia(z.hasta)+' ('+semanasTxt(z)+')</div>'+
     (z.nota?'<div class="nota">'+br(z.nota)+'</div>':'<p class="muted sm mt">Sin notas.</p>')+
     (el.dataset.f&&CO.calDiaSel?'<button class="op-sol mt" data-a="calDesde"><b>'+ic('mas')+'Planificar un periodo desde el '+esc(fCorta(el.dataset.f))+'</b><small>Después toca el día en que termina. Si se cruza con este, eliges: entre medias, sustituir o los dos a la vez.</small></button>':'')+
@@ -13834,6 +13847,7 @@ A.irRutinas=function(){ siCambios(function(){ CO.sub='entrenos'; pintarClienta(t
 A.segProrrogar=function(el){
   if(haySinGuardar()){ cerrarModal(); return toast('Guarda antes los cambios'); }
   if(PG21&&el.dataset.t==='rutina'&&pgSeg('ahora')) return A.pgFechas({dataset:{k:'ahora'}});      // v53.4.187: «Cambiar fechas» de la de ahora (las de detrás se mueven)
+  if(PG22&&el.dataset.t==='dieta'&&dgSegs().some(function(z){ return z.dr; })){ cerrarModal(); return A.pgFechas({dataset:{k:'ahora',t:'die'}}); }      // v53.4.188: y la dieta, igual
   var t=el.dataset.t, hoy=CO.hoy||hoyStr(), d=CO.d, act=t==='dieta'?(d.dieta&&d.dieta.hasta):d.rutinas.filter(function(r){ return vigenteEn(r,hoy,d.rutinas)&&r.hasta; }).map(function(r){ return r.hasta; }).sort().slice(-1)[0];
   var base=act&&act>hoy?act:hoy;
   modal('<h2>Prorrogar '+(t==='dieta'?'la dieta':'las rutinas')+'</h2><p class="muted">'+(act?'Ahora '+(t==='dieta'?'termina':'terminan')+' el '+esc(fLarga(act))+'.':'Ahora no tiene fecha de fin.')+'</p>'+
@@ -15415,8 +15429,8 @@ function dieCabSimple(P){
   var D=CO.d.dieta, dos=P.length>1, f=function(x){ return x?fCorta(x):'—'; };
   var acc=[D?['nuevaDieta','docMas','Dieta nueva']:null,D?['bdGuardarAbrir','marcador','Guardar en mi banco']:null,['bdAbrir','libros','Poner de mi banco'],CO.d.otras.length?['copiarDieta','copiar','Copiar']:null].filter(Boolean);
   return '<div class="card die-cab"><div class="die-ct"><b>Su dieta</b><span class="pill warn'+(CO.dieSucia?'':' hidden')+'" id="ds">Sin guardar</span></div>'+
-    '<div class="die-fch"><label><span>Empieza</span><b>'+f(CO.die.desde)+'</b><input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'" aria-label="Empieza"></label>'+ic('flecha','die-fa')+
-      '<label><span>Termina</span><b>'+(CO.die.hasta?f(CO.die.hasta):'Sin fin')+'</b><input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'" aria-label="Termina"></label><small id="die-dur">'+duracionDieta()+'</small></div>'+
+    (PG22?dgFechasHtml(f):'<div class="die-fch"><label><span>Empieza</span><b>'+f(CO.die.desde)+'</b><input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'" aria-label="Empieza"></label>'+ic('flecha','die-fa')+
+      '<label><span>Termina</span><b>'+(CO.die.hasta?f(CO.die.hasta):'Sin fin')+'</b><input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'" aria-label="Termina"></label><small id="die-dur">'+duracionDieta()+'</small></div>')+
     '<div class="die-dias"><button class="'+(dos?'':'on')+'" data-a="dieUnPlan">Igual todos los días</button><button class="'+(dos?'on':'')+'" data-a="dieDosPlanes">Entreno y descanso</button></div>'+
     (dos?'<div class="tipos die-pl">'+P.map(function(x,i){ return '<button class="'+(i===CO.planI?'on':'')+'" data-a="planI" data-i="'+i+'">'+esc(x.nombre||('Plan '+(i+1)))+'</button>'; }).join('')+'</div><p class="muted sm" style="margin:4px 0 0">Los días que tiene rutina ve el de entreno; el resto, el de descanso.</p>':'')+
     '<div class="die-acc">'+acc.map(function(x){ return '<button data-a="'+x[0]+'">'+ic(x[1])+'<span>'+x[2]+'</span></button>'; }).join('')+'</div></div>';
@@ -15445,8 +15459,8 @@ function vDietaPlan(){
     '<div class="tipos">'+P.map(function(x,i){ return '<button class="'+(i===CO.planI?'on':'')+'" data-a="planI" data-i="'+i+'">'+esc(x.nombre||('Plan '+(i+1)))+'</button>'; }).join('')+'</div>'+
     '<p class="muted sm mt6">'+(P.length===1?'Un único plan para todos los días. Si quieres uno para días de entreno y otro para descanso, pulsa Separar.':'Cada día '+cG('la clienta','el cliente')+' ve el plan que le toca: el de entreno los días que tiene rutina (o si ya ha entrenado) y el de descanso el resto.')+'</p>'+
     '<div class="row mt">'+(P.length===1?'<button class="btn sm" data-a="dividirPlan">Separar en entreno y descanso</button>':'')+(P.length<4?'<button class="btn sm sec" data-a="dupPlan">Duplicar este plan</button>':'')+(P.length>1?'<button class="link danger" data-a="borrarPlan">Borrar este plan</button>':'')+'</div>'+
-    '<div class="lab">Vigencia de esta dieta</div><div class="grid2"><label class="f" style="margin-top:0">Empieza<input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'"></label><label class="f" style="margin-top:0">Termina<input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'"></label></div>'+
-    '<div class="muted sm mt6" id="die-dur">'+duracionDieta()+'</div>'+
+    '<div class="lab">Vigencia de esta dieta</div>'+(PG22?dgFechasHtml(function(x){ return x?fCorta(x):'—'; }):'<div class="grid2"><label class="f" style="margin-top:0">Empieza<input type="date" data-dk="desde" value="'+esc(CO.die.desde||'')+'"></label><label class="f" style="margin-top:0">Termina<input type="date" data-dk="hasta" value="'+esc(CO.die.hasta||'')+'"></label></div>'+
+    '<div class="muted sm mt6" id="die-dur">'+duracionDieta()+'</div>')+
     (CO.d.dieta?'<div class="die-pdf mt"><button class="btn sm sec" data-a="diePdf">'+ic('descargar')+'Descargar en PDF</button><button class="btn sm sec" data-a="dieMail">'+ic('enviar')+'Enviársela por email</button></div>':'')+      // v53.4.47
     dieOpcHtml()+'</div>';
   if(gdOn()) cab=gdRevHtml()+dieCabSimple(P);      // v53.4.91 (nº 1): arriba, solo lo que se usa; lo demás en «Más opciones»
@@ -15758,11 +15772,16 @@ function guiaDieHtml(){
     ['Genera los platos','Eliges cuántas comidas y cómo repartes el día; la app pone platos de la biblioteca con los gramos cuadrados.',hl('<span class="btn sm">'+ic('ajuste')+'Generar con sus macros</span>')],
     ['Publica','Hasta que lo pulses, el cliente no ve nada. Si te equivocas, «Deshacer».',hl('<span class="btn gu-w">Guardar y publicar dieta</span>')],
     ['Cambiar un plato','Toca el alimento o los gramos que quieras. Para cuadrar el plato con su comida:',hl('<span class="btn sm sec">'+ic('ajuste')+'Ajustar gramos al objetivo</span>')],
-    ['Dieta nueva','Kcal nuevas y eliges: generar platos nuevos o copiar la de ahora con los gramos ajustados. La anterior queda en «Dietas anteriores».',hl(tile('docMas','Empezar una dieta nueva','La actual se guarda en el historial'))],
+  ].concat(PG22?[
+    ['Dieta nueva','Lo primero, <b>cuándo</b>: Empieza y Acaba (o 2, 4, 6 u 8 semanas). En la barra, <b>arrastra la verde</b> para ponerla después de la de ahora, de la próxima o al final; las de detrás se retrasan solas si hace falta. Luego su fase (mantenimiento, déficit o volumen), sus kcal y «¿Y su dieta?»: hacerla ahora, copiar la de ahora (los gramos, recalculados a esas kcal) o más tarde.',hl(tile('docMas','Dieta nueva','Fecha, fase y calorías'))],
+    ['Dietas preparadas','Arriba, «Dieta actual» y sus «Próximas» con <b>«✓ Lista»</b> o <b>«! Falta hacerla»</b>. Cada una tiene su pestaña: la preparas o la cambias cuando quieras y <b>le llega sola el día que empieza</b> (la de antes, a «Dietas anteriores»). Toca una para cambiar sus fechas, su fase o quitarla.',hl('<span class="pg-am">! Falta hacerla</span>')]
+  ]:[
+    ['Dieta nueva','Kcal nuevas y eliges: generar platos nuevos o copiar la de ahora con los gramos ajustados. La anterior queda en «Dietas anteriores».',hl(tile('docMas','Empezar una dieta nueva','La actual se guarda en el historial'))]
+  ]).concat([
     ['Entreno y descanso','Dos planes; cada día ve el que le toca.',hl('<span class="btn sm">Separar en entreno y descanso</span>')],
     ['Intercambios','Por qué puede cambiar el cliente cada alimento, con los gramos ya ajustados. Tócalo para ver y desmarcar los que no quieras.','<span class="gu-it">Pechuga de pollo <span class="gu-g">150 g</span>'+hl('<span class="it-x on">'+ic('lado')+'<span>8</span></span>')+'</span>'],
     ['Más opciones','Guarda la dieta en tu banco para otros clientes, cópiala a otro cliente o envíasela en PDF o por email.','<span class="gu-row">'+tile('marcador','Guardar en tu banco de dietas','Para ponérsela a otros clientes')+'<span class="btn sm sec">'+ic('descargar')+'PDF</span></span>']
-  ];
+  ]);
   return '<div class="gu-h"><b>Guía rápida de dietas</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">El recuadro señala dónde tocar.</p>'+
     P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p><div class="gu-im" inert>'+x[2]+'</div></div>'; }).join('');
 }
@@ -15776,7 +15795,7 @@ A.dieGuiaNo=function(){ LS.set('chadin_guia_die',1); var b=document.querySelecto
 function vDietaEd(){
   var v=CO.dieV==='calc'?'calc':'plan';
   return '<div class="die-top"><div class="seg die-seg"><button class="'+(v==='plan'?'on':'')+'" data-a="dieVista" data-v="plan">Plan de dieta</button><button class="'+(v==='calc'?'on':'')+'" data-a="dieVista" data-v="calc">'+ic('calc')+'Calculadora</button></div>'+
-    '<button class="gu-btn" data-a="dieGuia">'+ic('ayuda')+'¿Cómo funciona?</button></div>'+(LS.get('chadin_guia_die')?'':'<div class="gu-ban">'+ic('idea')+'<span><b>¿Primera dieta?</b> Mira cómo se hace en 1 minuto.</span><button class="link" data-a="dieGuia">Ver guía</button><button class="link" data-a="dieGuiaNo">No volver a mostrar</button></div>')+(v==='calc'?vCalc():vDietaPlan());
+    '<button class="gu-btn" data-a="dieGuia">'+ic('ayuda')+'¿Cómo funciona?</button></div>'+(LS.get('chadin_guia_die')?'':'<div class="gu-ban">'+ic('idea')+'<span><b>¿Primera dieta?</b> Mira cómo se hace en 1 minuto.</span><button class="link" data-a="dieGuia">Ver guía</button><button class="link" data-a="dieGuiaNo">No volver a mostrar</button></div>')+(v==='calc'?vCalc():PG22?dgCard()+dgTabsHtml()+dgCuerpo():vDietaPlan());      // v53.4.188: dietas preparadas
 }
 A.dieVista=function(el){ CO.dieV=el.dataset.v; repintar(); };
 function calcEstado(){
@@ -15901,13 +15920,15 @@ function planesParaGuardar(){
   return P;
 }
 function guardarDietaP(){
+  if(PG22&&CO.dieSel&&CO.dieSel!=='a'){ var kp=CO.dieSel, dp=CO.die.desde;      // v53.4.188: una dieta preparada se guarda en su bloque
+    return cargando(api('coachDietaRellenar',CO.pin,CO.cid,{desde:kp,planes:planesParaGuardar(),notas:CO.die.notas})).then(function(){ CO.dieSucia=false; return pgRecargar(kp,'','die').then(function(){ return dp&&dp>pgHoy()?{prep:dp}:{tipo:'dieta',nueva:true,que:''}; }); },function(e){ toast(limpiaErr(e),'err'); throw e; }); }
   return cargando(api('coachGuardarDieta',CO.pin,CO.cid,{planes:planesParaGuardar(),notas:CO.die.notas,desde:CO.die.desde,hasta:CO.die.hasta})).then(function(r){
     CO.d.dieta={planes:copia(r.planes),notas:CO.die.notas,actualizado:hoyStr(),desde:CO.die.desde||hoyStr(),hasta:CO.die.hasta||''};
     CO.die=normalizarDieta(copia(CO.d.dieta)); CO.planI=Math.min(CO.planI,CO.die.planes.length-1); CO.dieSucia=false; CO.gdRev=false; setTimeout(undoReset,0);
     refrescarCambios(); var av={tipo:'dieta',nueva:!!CO.dietaNueva,que:''}; CO.dietaNueva=false; return av;
   },function(e){ toast(limpiaErr(e),'err'); throw e; });
 }
-A.guardarDieta=function(){ if(cuadraAntes(A.guardarDieta)) return; guardarDietaP().then(function(av){ toast('Dieta publicada','ok'); repintar(); preguntarAviso(av); },function(){}); };
+A.guardarDieta=function(){ if(cuadraAntes(A.guardarDieta)) return; guardarDietaP().then(function(av){ if(av&&av.prep!==undefined) return toast('Guardada. Le llega sola el '+(av.prep&&av.prep>pgHoy()?fCorta(av.prep):'día que empieza'),'ok'); toast('Dieta publicada','ok'); repintar(); preguntarAviso(av); },function(){}); };
 /* v53.4.47 · su dieta en PDF: descargarla o mandársela por email (sale lo guardado) */
 A.diePdf=function(el){ if(CO.dieSucia) return toast('Guarda antes la dieta: el PDF sale con lo guardado'); if(el.disabled) return; el.disabled=true;
   cargando(api('coachDietaPdf',CO.pin,CO.cid)).then(function(r){ el.disabled=false; bajarArchivo(r,'Su dieta en PDF','Guárdala o envíasela como quieras.'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
@@ -16325,6 +16346,7 @@ A.gdHacer=function(el){
   var N=CO.nd; if(!CO.nut){ cargando(cargarNut()).then(function(){ A.gdHacer(el); },function(e){ toast(limpiaErr(e),'err'); }); return; }
   if(N.modo==='gen'&&N.planes.some(function(p){ return p.obj.slice(1).some(function(x){ return num(x)==null; }); })) return toast('Pon proteína, hidratos y grasa para generar los platos (paso 1)','err');
   var gen=N.modo==='copiar'?null:N.planes.map(function(p){ return {rep:copia(p.rep),opc:p.opc,mano:N.modo==='mano'}; });
+  if(N.bloque&&N.modo==='copiar'){ cerrarModal(); CO.nd=null; return A.dgVCopiar({dataset:{k:N.bloque}}); }      // v53.4.188: en una dieta preparada, «copiar» = la de antes con sus calorías
   CO.gdRev=true;
   if(!N.sin) return ndEnviar(el,{desde:N.desde,hasta:N.hasta,obj:ndObjEnvio(),ajustar:N.modo==='copiar'},gen);
   CO.die={notas:'',desde:N.desde,hasta:N.hasta,planes:N.planes.map(function(p){ var o={id:'p'+rand(5),nombre:p.nombre,tipo:'todos',comidas:comidasBase()}; ND_K.forEach(function(k,i){ o[k]=p.obj[i]||''; }); if(!o.kcal&&ndKcalMac(p.obj)!=null) o.kcal=String(ndKcalMac(p.obj)); return o; })};
@@ -22722,7 +22744,7 @@ function faseSolapeModal(z,L){
 A.faseSolOk=function(el){ var z=CO.faseEd; if(!z) return; z.solape=el.dataset.v; faseEnviar(z,el); };
 A.faseSolVolver=function(){ var z=CO.faseEd; if(z){ delete z.solape; faseModal(z); } };
 function faseEnviar(z,el){
-  if(PG21&&z.tipo==='entreno'&&!z.id){ cerrarModal(); if(z.hasta<pgHoy()) return toast('Elige días de hoy en adelante','err'); return pgNuevaAbrir({d:z.desde<pgHoy()?pgHoy():z.desde,h:z.hasta,fases:(z.fases||[]).slice(),prio:(z.prioridad||[]).slice(0,4)}); }      // v53.4.187
+  if(PG21&&(z.tipo==='entreno'||PG22&&z.tipo==='nutricion')&&!z.id){ cerrarModal(); if(z.hasta<pgHoy()) return toast('Elige días de hoy en adelante','err'); return pgNuevaAbrir({t:z.tipo==='nutricion'?'die':'',d:z.desde<pgHoy()?pgHoy():z.desde,h:z.hasta,fases:(z.fases||[]).slice(0,z.tipo==='nutricion'?1:9),prio:(z.prioridad||[]).slice(0,4)}); }      // v53.4.187
   if(el&&el.disabled) return; if(el) el.disabled=true;
   cargando(api('coachGuardarFase',CO.pin,CO.cid,{id:z.id||'',tipo:z.tipo,fases:z.fases,prioridad:z.tipo==='entreno'?z.prioridad:[],desde:z.desde,hasta:z.hasta,nota:z.nota,solape:z.solape||''})).then(function(r){
     CO.d.fases=r.fases; cerrarModal(); toast(z.solape==='medio'?'Periodo metido entre medias':z.solape==='sustituir'?'Periodo guardado: lo posterior se ha quitado':z.solape==='ambos'?'Los dos periodos quedan a la vez':'Periodo guardado','ok'); if(CO.sub==='calendario'){ CO.calY=+z.desde.slice(0,4); } pintarClienta(false);
@@ -24030,25 +24052,26 @@ var PLN_SEMS=[4,6,8];
    Cada programación es un bloque (sus rutinas, todas con las mismas fechas, y su periodo del calendario con su objetivo y prioridad).
    La barra de bloques sale al programar una nueva, al cambiar fechas y al quitar; Entrenos se ve como antes. Mismo criterio que
    progSegs_ del servidor. Diseño aprobado: especificaciones/programaciones/ESPEC_PROGRAMACIONES.md */
-var PG21=true;
+var PG21=true, PG22=false;      // PG22 (v53.4.188): panel nº 1 y demo; se pone al recibir su resumen (ponerResumen)
 function pgHoy(){ return CO.hoy||hoyStr(); }
-function pgSegs(){
+function pgSegs(t){ if(t==='die') return dgSegs();
   var d=CO.d||{}, hoy=pgHoy(), R=d.rutinas||[], F=(d.fases||[]).filter(function(x){ return x.tipo==='entreno'; });
   var fin=function(L){ return L.map(function(r){ return r.hasta||''; }).sort().slice(-1)[0]||''; };
   var act=R.filter(function(r){ return !r.desde||r.desde<=hoy; }), G={}, S=[], us={};
   R.forEach(function(r){ if(r.desde&&r.desde>hoy) (G[r.desde]=G[r.desde]||[]).push(r); });
   if(act.length) S.push({k:'ahora',ahora:true,desde:act.map(function(r){ return r.desde; }).filter(String).sort()[0]||'',hasta:fin(act),rut:act,fase:null});
-  Object.keys(G).sort().forEach(function(k){ S.push({k:k,desde:k,hasta:fin(G[k]),rut:G[k],fase:null}); });
+  Object.keys(G).sort().forEach(function(k){ var hh=fin(G[k]); S.push({k:k,desde:k,hasta:hh&&hh>=k?hh:'',mal:!!(hh&&hh<k),rut:G[k],fase:null}); });      // v53.4.188: fin antes del inicio → «revisa sus fechas»
   S.forEach(function(z){ var f=F.filter(function(x){ return !us[x.id]&&(x.desde===z.desde||(z.ahora&&x.desde<=hoy&&x.hasta>=hoy)); })[0]; if(f){ z.fase=f; us[f.id]=1; } });
   F.forEach(function(x){ if(us[x.id]||x.hasta<hoy) return; if(S.some(function(z){ return (z.desde||'0000-00-00')<=x.hasta&&(z.hasta||'9999-12-31')>=x.desde; })) return;
     var ah=x.desde<=hoy&&!act.length; S.push({k:ah?'ahora':x.desde,desde:x.desde,hasta:x.hasta,rut:[],fase:x,pend:true,ahora:ah}); us[x.id]=1; });
   S.sort(function(a,b){ return a.ahora&&!b.ahora?-1:b.ahora&&!a.ahora?1:a.desde<b.desde?-1:1; });
   return S;
 }
-function pgSeg(k){ return pgSegs().filter(function(z){ return z.k===k; })[0]||null; }
+function pgSeg(k,t){ return pgSegs(t).filter(function(z){ return z.k===k; })[0]||null; }
 function pgObj(z){ return z&&z.fase?(z.fase.fases||[]):[]; }
 function pgPrio(z){ return z&&z.fase?(z.fase.prioridad||[]):[]; }
-function pgNom(z){ var f=pgObj(z), p=pgPrio(z); return (f.length?fasesTxt(f):'Programación')+(p.length?' · '+listaY(p.map(function(x){ return x.toLowerCase(); })):''); }
+function pgNom(z){ var f=pgObj(z), p=pgPrio(z); if(z&&z.t==='die') return (f.length?fasesTxt(f):'Dieta')+(z.kcal?' · '+fN(z.kcal,0)+' kcal':'');
+  return (f.length?fasesTxt(f):'Programación')+(p.length?' · '+listaY(p.map(function(x){ return x.toLowerCase(); })):''); }
 function pgCol(z){ return FASE_C[pgObj(z)[0]]||'#8A8A8E'; }
 function pgSemTxt(n){ n=Math.abs(n); return n%7===0?(n/7)+(n===7?' semana':' semanas'):n+(n===1?' día':' días'); }
 function pgDur(a,b){ if(!a||!b) return ''; var n=diff(a,b)+1; return n%7===0?(n/7)+' sem':n<14?n+(n===1?' día':' días'):Math.round(n/7)+' sem'; }
@@ -24056,25 +24079,25 @@ function pgFin(S){ return S.map(function(z){ return z.hasta; }).filter(String).s
 function pgDentro(S,d){ return S.filter(function(z){ return (z.ahora?'0000-00-00':z.desde)<d&&(!z.hasta||z.hasta>=d); })[0]||null; }
 
 /* ---- la barra ---- */
-function pgBloqueHtml(z,o){ o=o||{}; var c=z.cls||'', del=c.indexOf('del')>=0;
-  return '<button type="button" class="pgb '+c+(z.pend?' pend':'')+'"'+(o.a?' data-a="'+o.a+'" data-k="'+esc(z.k)+'"':' tabindex="-1"')+' aria-label="'+esc(pgNom(z)+': '+(z.desde?fLarga(z.desde):'')+' → '+(z.hasta?fLarga(z.hasta):'sin fin'))+'">'+
-    (z.tag?'<span class="pgb-t">'+z.tag+'</span>':'')+'<span class="pgb-o"><i style="background:'+pgCol(z)+'"></i>'+esc(pgObj(z).length?fasesTxt(pgObj(z)):'Sin objetivo')+'</span>'+
-    '<b>'+(z.desde?fCorta(z.desde):'…')+'</b><small>→ '+(z.hasta?fCorta(z.hasta):'sin fin')+'</small><em>'+(z.old?'era '+esc(z.old):z.pend?'faltan las rutinas':pgDur(z.desde,z.hasta))+'</em>'+(del?'<i class="pgb-x">✕</i>':'')+'</button>'; }
+function pgBloqueHtml(z,o){ o=o||{}; var c=z.cls||'', del=c.indexOf('del')>=0, dr=!!(o.drag&&z.nueva), tg=o.a||!PG22?'button':'div';
+  var lab=pgNom(z)+': '+(z.desde?fLarga(z.desde):'')+' → '+(z.hasta?fLarga(z.hasta):'sin fin')+(dr?'. Arrástrala o usa las flechas para ponerla en otro sitio.':'');
+  var at=o.a?' type="button" data-a="'+o.a+'" data-k="'+esc(z.k)+'"'+(z.t?' data-t="'+z.t+'"':''):dr?' data-drag="'+o.drag+'" tabindex="0" role="button"':PG22?'':' tabindex="-1"';
+  return '<'+tg+' class="pgb '+c+(z.pend?' pend':'')+(z.mal?' mal':'')+'"'+at+' aria-label="'+esc(lab)+'">'+
+    (z.tag?'<span class="pgb-t">'+z.tag+'</span>':'')+'<span class="pgb-o"><i style="background:'+pgCol(z)+'"></i>'+esc(pgObj(z).length?fasesTxt(pgObj(z)):z.lbl||(z.t==='die'?'Sin fase':'Sin objetivo'))+'</span>'+
+    '<b>'+(z.desde?fCorta(z.desde):'…')+'</b><small>→ '+(z.hasta?fCorta(z.hasta):'sin fin')+'</small><em>'+(z.old?'era '+esc(z.old):z.pend?(z.t==='die'?'falta hacerla':'faltan las rutinas'):z.mal?'revisa sus fechas':(z.kcal?fN(z.kcal,0)+' kcal · ':'')+pgDur(z.desde,z.hasta))+'</em>'+(del?'<i class="pgb-x">✕</i>':'')+(dr?'<i class="pgb-g" aria-hidden="true">⠿</i>':'')+'</'+tg+'>'; }
 function pgBarra(L,o){ o=o||{}; return '<div class="pgbar'+(o.mini?' mini':'')+(L.length>(o.mini?4:3)?' sc':'')+'"><div class="pgbar-r">'+L.map(function(z){ return pgBloqueHtml(z,o); }).join('')+'</div></div>'; }
 
 /* ---- simulación (lo que hará el servidor) ---- */
-function pgCopia(S){ return S.map(function(z){ return {k:z.k,ahora:z.ahora,desde:z.desde,hasta:z.hasta,fase:z.fase,pend:z.pend,rut:z.rut,cls:z.ahora?'now':'prep',tag:z.ahora?'Ahora':''}; }); }
+function pgCopia(S){ return S.map(function(z){ return {k:z.k,t:z.t,kcal:z.kcal,prep:z.prep,dr:z.dr,ahora:z.ahora,desde:z.desde,hasta:z.hasta,fase:z.fase,pend:z.pend,mal:z.mal,rut:z.rut,cls:z.ahora?'now':'prep',tag:z.ahora?'Ahora':''}; }); }
 function pgMover(z,n){ if(!n) return; if(z.desde) z.desde=sumar(z.desde,n); if(z.hasta) z.hasta=sumar(z.hasta,n); z.n=(z.n||0)+n; z.cls=z.cls.replace(/ (mv|up)/g,'')+(z.n>0?' mv':z.n<0?' up':''); }
-function pgEnc(L,h){ if(!L.length||!h) return; var ini=[sumar(h,1),sumar(pgHoy(),1)].sort().slice(-1)[0], n=diff(L[0].desde,ini); L.forEach(function(z){ pgMover(z,n); }); }
+function pgEnc(L,h,solo){ if(!L.length||!h) return; var ini=[sumar(h,1),sumar(pgHoy(),1)].sort().slice(-1)[0], n=diff(L[0].desde,ini); if(solo&&n<=0) return; L.forEach(function(z){ pgMover(z,n); }); }
 function pgOrden(L){ return L.sort(function(a,b){ return a.ahora&&!b.ahora?-1:b.ahora&&!a.ahora?1:(a.desde||'')<(b.desde||'')?-1:1; }); }
 function pgSimNueva(S,x){
   var L=pgCopia(S), d=x.d, h=x.h, ini=function(z){ return z.ahora?'0000-00-00':z.desde; };
-  var dentro=L.filter(function(z){ return ini(z)<d&&(!z.hasta||z.hasta>=d); })[0]||null, tras=L.filter(function(z){ return !z.ahora&&z.desde>=d&&z!==dentro; }), resto=null;
-  if(dentro){ var q=dentro.hasta?diff(d,dentro.hasta)+1:0;
-    if(x.modo==='pausa'&&q>0) resto={k:'resto',desde:sumar(h,1),hasta:sumar(h,q),fase:dentro.fase,cls:'prep rest',tag:'Sigue'};
-    dentro.old=dentro.hasta?'hasta el '+fCorta(dentro.hasta):''; dentro.hasta=sumar(d,-1); dentro.cls+=' cut'; dentro.cut=1; }
-  pgEnc(tras,resto?resto.hasta:h);
-  L.push({k:'nueva',desde:d,hasta:h,fase:{fases:x.fases||[],prioridad:x.prio||[]},cls:'new',tag:'Nueva',nueva:1}); if(resto) L.push(resto);
+  var dentro=L.filter(function(z){ return ini(z)<d&&(!z.hasta||z.hasta>=d); })[0]||null, tras=L.filter(function(z){ return !z.ahora&&z.desde>=d&&z!==dentro; });
+  if(dentro){ dentro.old=dentro.hasta?'hasta el '+fCorta(dentro.hasta):''; dentro.hasta=sumar(d,-1); dentro.cls+=' cut'; dentro.cut=1; }
+  pgEnc(tras,h,true);
+  L.push({k:'nueva',t:x.t,kcal:x.kcal,desde:d,hasta:h,fase:{fases:x.fases||[],prioridad:x.prio||[]},cls:'new',tag:x.tag||'Nueva',lbl:x.lbl,nueva:1});
   return pgOrden(L);
 }
 function pgSimFechas(S,k,h){ var L=pgCopia(S), z=L.filter(function(y){ return y.k===k; })[0]; if(!z) return L;
@@ -24097,50 +24120,75 @@ function pgCh(L,on,a,extra){ return '<div class="tipos pg-ch">'+L.map(function(x
 function pgCaja(html){ var b=document.getElementById('pg-m'); if(b){ b.innerHTML=html; return; } modal('<div id="pg-m">'+html+'</div>'); }
 
 /* ---- nueva programación (a mano, desde el calendario, desde «Empezar programación nueva») ---- */
-function pgNuevaAbrir(o){ o=o||{}; var S=pgSegs(), fut=S.filter(function(z){ return !z.ahora; }), a=S.filter(function(z){ return z.ahora; })[0];
-  CO.pg={modo:o.d?'otro':fut.length?'fin':a?'tras':'fin',d:o.d||'',hfijo:o.h||'',dur:o.dur||42,fases:o.fases||[],prio:o.prio||[],sol:'sustituir',rut:'ahora'};
+function pgDefD(S){ var hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fin=pgFin(S);      // por defecto: al final (no mueve nada)
+  if(S.some(function(z){ return !z.ahora; })) return fin&&fin>=hoy?sumar(fin,1):hoy;
+  return a&&a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy; }
+function pgSlotFecha(S,i){ var hoy=pgHoy(), z=i>0?S[i-1]:null; return z&&z.hasta&&z.hasta>=hoy?sumar(z.hasta,1):hoy; }      // «después de la i-ésima»
+function pgNuevaAbrir(o){ if(!PG22) return pgNuevaAbrir0(o); o=o||{}; var t=o.t==='die'?'die':'', S=pgSegs(t), d=o.d&&o.d>=pgHoy()?o.d:pgDefD(S);
+  CO.pg={t:t,d:d,dur:o.h&&o.h>=d?diff(d,o.h)+1:(o.dur||(t?28:42)),fases:o.fases||[],prio:o.prio||[],rut:'ahora',kcal:o.kcal||(t?dgKcalBase():'')};
   pgNuevaPintar(); }
-function pgFechasNueva(){ var P=CO.pg, S=pgSegs(), hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fin=pgFin(S), d, h;
-  if(P.modo==='fin') d=fin&&fin>=hoy?sumar(fin,1):hoy; else if(P.modo==='tras') d=a&&a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy; else d=P.d&&P.d>=hoy?P.d:hoy;
-  h=P.hfijo&&P.hfijo>=d?P.hfijo:sumar(d,(P.dur||42)-1);
-  if(P.modo==='otro'&&P.sol==='final'&&pgDentro(S,d)){ var n=diff(d,h); d=fin&&fin>=hoy?sumar(fin,1):hoy; h=sumar(d,n); }
-  return {d:d,h:h}; }
-function pgNuevaPintar(){
-  var P=CO.pg, S=pgSegs(), hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fut=S.filter(function(z){ return !z.ahora; }), fin=pgFin(S), F=pgFechasNueva();
-  var dentro=P.modo==='otro'&&P.d?pgDentro(S,P.d):null, modo=dentro&&P.sol==='pausa'?'pausa':'sustituir', L=pgSimNueva(S,{d:F.d,h:F.h,modo:modo,fases:P.fases,prio:P.prio});
-  var E=[]; if(fut.length) E.push(['fin','Al final · '+fCorta(sumar(fin,1))]);
-  if(a) E.push(['tras',(fut.length?'Después de la de ahora':'Cuando acabe la de ahora')+' · '+fCorta(a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy)]);
-  if(!a&&!fut.length) E.push(['fin','Hoy']);
-  E.push(['otro','Otro día']);
+function pgFechasNueva(){ if(!PG22) return pgFechasNueva0(); var P=CO.pg, hoy=pgHoy(), d=P.d&&P.d>=hoy?P.d:hoy; return {d:d,h:sumar(d,Math.max(1,P.dur||42)-1)}; }
+function pgCuandoHtml(S,L,F,o){      // fechas + barra arrastrable (nueva programación y plan automático)
+  var hoy=pgHoy();
+  return '<div class="pg-fe"><label class="f">Empieza<input type="date" data-c="'+o.cD+'" min="'+hoy+'" value="'+esc(F.d)+'"></label>'+
+    (o.cH?'<label class="f">Acaba<input type="date" data-c="'+o.cH+'" min="'+esc(F.d)+'" value="'+esc(F.h)+'"></label>':'<span class="pg-fe-h"><small>Acaba</small><b>'+fMedia(F.h)+'</b></span>')+'</div>'+
+    pgCh(o.durs,o.durOn,o.durA)+pgBarra(L,{drag:o.ctx})+
+    (S.length?'<p class="pg-hint"><i aria-hidden="true">⠿</i>Arrastra '+(o.ctx==='plan'?'el verde':'la verde')+' para ponerl'+(o.ctx==='plan'?'o':'a')+' después de otra o al final. Las de detrás se retrasan solas si hace falta.</p>':'')+pgFrase(L); }
+function pgNuevaPintar(){ if(!PG22) return pgNuevaPintar0(); if(CO.pg&&CO.pg.t==='die') return dgNuevaPintar();
+  var P=CO.pg, S=pgSegs(), F=pgFechasNueva(), L=pgSimNueva(S,{d:F.d,h:F.h,fases:P.fases,prio:P.prio});
   var prev=S.filter(function(z){ return (z.ahora?'0000-00-00':z.desde)<F.d&&z.rut.length; }).slice(-1)[0];
-  var h='<h2>Nueva programación</h2>'+pgBarra(L)+pgFrase(L)+
+  var h='<h2>Nueva programación</h2><div class="lab">¿Cuándo?</div>'+
+    pgCuandoHtml(S,L,F,{ctx:'pg',cD:'pgD',cH:'pgH',durs:[['28','4 semanas'],['42','6 semanas'],['56','8 semanas']],durOn:String(P.dur),durA:'pgDura'})+
     '<div class="lab">Objetivo</div>'+pgCh(FASES_T.entreno.map(function(k){ return [k,FASE_L[k]]; }),P.fases,'pgObjT')+
     '<div class="lab">Prioridad <span class="muted">(opcional)</span></div>'+pgCh(prioL().slice(0,11).map(function(g){ return [g,g]; }),P.prio,'pgPrioT')+
-    '<div class="lab">Empieza</div>'+pgCh(E,P.modo,'pgModo')+(P.modo==='otro'?'<label class="f pg-f">Día<input type="date" id="pg-d" data-c="pgD" min="'+hoy+'" value="'+esc(P.d||hoy)+'"></label>':'');
-  if(dentro) h+='<div class="lab">¿Qué hago con lo que había?</div>'+[['sustituir','Sustituye lo que quedaba',(dentro.ahora?'La de ahora':'La del '+fCorta(dentro.desde))+' acaba el '+fCorta(sumar(P.d,-1))+'.'],['pausa','Lo que quedaba sigue después','Vuelve a '+(dentro.ahora?'sus rutinas de ahora':'esa programación')+' los días que le faltaban.'],['final','Ponerla al final, después de todas','No toca nada de lo que hay: empieza el '+fCorta(sumar(fin,1))+'.']].map(function(o){
-      var nD=P.hfijo&&P.hfijo>=P.d?diff(P.d,P.hfijo):(P.dur||42)-1, d2=sumar(fin,1), Lo=o[0]==='final'?pgSimNueva(S,{d:d2,h:sumar(d2,nD),modo:'sustituir',fases:P.fases}):pgSimNueva(S,{d:P.d,h:sumar(P.d,nD),modo:o[0],fases:P.fases});
-      return '<button class="op-sol pg-op'+(P.sol===o[0]?' on':'')+'" data-a="pgSol" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+esc(o[2])+'</small>'+pgBarra(Lo,{mini:true})+'</button>'; }).join('');
-  h+='<div class="lab">Dura</div>'+pgCh([['28','4 semanas'],['42','6 semanas'],['56','8 semanas'],['otro',P.hfijo?'Hasta el '+fCorta(F.h):'Hasta un día…']],P.hfijo?'otro':String(P.dur),'pgDura')+
-    (P.hfijo||P.durOtro?'<label class="f pg-f">Acaba<input type="date" id="pg-h" data-c="pgH" min="'+esc(F.d)+'" value="'+esc(F.h)+'"></label>':'')+
-    '<div class="lab">¿Y sus rutinas?</div>'+[['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas'+(prev.ahora?' que tiene ahora':'')+'.']:null,['tarde','Más tarde','Queda marcada «faltan las rutinas» y te avisamos antes de que empiece. Mientras, sigue con las de antes.']].filter(Boolean).map(function(o){
+    '<div class="lab">¿Y sus rutinas?</div>'+[['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas, con estas fechas.']:null,['tarde','Más tarde','Queda en el calendario como «faltan las rutinas» y te avisamos antes de que empiece.']].filter(Boolean).map(function(o){
       return '<button class="op-sol pg-op'+(P.rut===o[0]?' on':'')+'" data-a="pgRut" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join('')+
     '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
-  pgCaja(h);
+  pgCaja(h); setTimeout(pgVerNueva,0);
 }
 A.pgObjT=function(el){ var P=CO.pg, v=el.dataset.v, i=P.fases.indexOf(v); if(i>=0) P.fases.splice(i,1); else P.fases.push(v); pgNuevaPintar(); };
 A.pgPrioT=function(el){ var P=CO.pg, v=el.dataset.v, i=P.prio.indexOf(v); if(i>=0) P.prio.splice(i,1); else if(P.prio.length<4) P.prio.push(v); pgNuevaPintar(); };
-A.pgModo=function(el){ var P=CO.pg; P.modo=el.dataset.v; if(P.modo==='otro'&&!P.d) P.d=pgHoy(); if(P.modo!=='otro') P.sol='sustituir'; if(P.hfijo&&P.hfijo<pgFechasNueva().d) P.hfijo=''; pgNuevaPintar(); };
-A.pgSol=function(el){ CO.pg.sol=el.dataset.v; pgNuevaPintar(); };
 A.pgRut=function(el){ CO.pg.rut=el.dataset.v; pgNuevaPintar(); };
-A.pgDura=function(el){ var P=CO.pg, v=el.dataset.v; if(v==='otro'){ P.durOtro=true; if(!P.hfijo) P.hfijo=pgFechasNueva().h; } else { P.dur=+v; P.hfijo=''; P.durOtro=false; } pgNuevaPintar(); };
-CH.pgD=function(t){ if(!t.value) return; CO.pg.d=t.value<pgHoy()?pgHoy():t.value; if(CO.pg.hfijo&&CO.pg.hfijo<CO.pg.d) CO.pg.hfijo=''; pgNuevaPintar(); };
-CH.pgH=function(t){ if(!t.value) return; var F=pgFechasNueva(); CO.pg.hfijo=t.value<F.d?F.d:t.value; CO.pg.durOtro=true; pgNuevaPintar(); };
-function pgRecargar(k,msg){ var cid=CO.cid; delete CCACHE[cid]; return abrirClienta(cid,'entrenos').then(function(){ if(k){ CO.progSel=k==='ahora'?'a':k; CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; } repintar(); if(msg) toast(msg,'ok'); }); }
-A.pgNuevaOk=function(el){
+A.pgDura=function(el){ if(!PG22) return A.pgDura0(el); CO.pg.dur=+el.dataset.v; pgNuevaPintar(); };
+CH.pgD=function(t){ if(!PG22) return CH.pgD0(t); if(!t.value) return; CO.pg.d=t.value<pgHoy()?pgHoy():t.value; pgNuevaPintar(); };
+CH.pgH=function(t){ if(!PG22) return CH.pgH0(t); if(!t.value) return; var F=pgFechasNueva(); CO.pg.dur=t.value<F.d?1:diff(F.d,t.value)+1; pgNuevaPintar(); };
+/* arrastrar la nueva con el ratón o el dedo (o con las flechas): cae después de una de las que hay */
+var PGDRAG={pg:function(i){ CO.pg.d=pgSlotFecha(pgSegs(CO.pg.t),i); pgNuevaPintar(); },plan:function(i){ var Q=CO.pgPlan||(CO.pgPlan={}); Q.d=pgSlotFecha(pgSegs(Q.t),i); CO.plnDest=null; plnRep0(); }}, PGFOCO=0;
+function pgVerNueva(){ var b=document.querySelector('.pgb[data-drag]'); if(!b) return; var bar=b.closest('.pgbar'), br=bar.getBoundingClientRect(), r=b.getBoundingClientRect();
+  if(r.right>br.right) bar.scrollLeft+=r.right-br.right+12; else if(r.left<br.left) bar.scrollLeft-=br.left-r.left+12;
+  if(PGFOCO){ PGFOCO=0; try{ b.focus({preventScroll:true}); }catch(e){} } }
+(function(){ var D=null;
+  function cx(bar,x){ return x-bar.getBoundingClientRect().left+bar.scrollLeft; }
+  function pos(bar,el){ var r=el.getBoundingClientRect(); return r.left-bar.getBoundingClientRect().left+bar.scrollLeft+r.width/2; }
+  function min(otros){ return otros[0]&&otros[0].classList.contains('now')?1:0; }      // nunca antes de la de ahora
+  function soltar(ok){ if(!D) return; var d=D; D=null; try{ d.b.releasePointerCapture(d.id); }catch(e){}
+    if(ok&&d.mov&&d.slot!==d.p){ PGDRAG[d.ctx](d.slot); return; }
+    d.b.classList.remove('drag'); d.b.style.transform=''; d.otros.forEach(function(x){ x.style.transform=''; }); }
+  document.addEventListener('pointerdown',function(e){ var b=e.target.closest&&e.target.closest('.pgb[data-drag]'); if(!b||e.button>0) return;
+    var bar=b.closest('.pgbar'), ch=[].slice.call(b.parentNode.children), otros=ch.filter(function(x){ return x!==b; });
+    if(!otros.length) return;
+    D={b:b,bar:bar,id:e.pointerId,ctx:b.dataset.drag,p:ch.indexOf(b),slot:ch.indexOf(b),mov:false,x0:cx(bar,e.clientX),bc:pos(bar,b),W:b.offsetWidth+6,otros:otros,oc:otros.map(function(x){ return pos(bar,x); }),min:min(otros)};
+    try{ b.setPointerCapture(e.pointerId); }catch(er){} e.preventDefault(); });
+  document.addEventListener('pointermove',function(e){ if(!D||e.pointerId!==D.id) return;
+    var br=D.bar.getBoundingClientRect(); if(e.clientX<br.left+28) D.bar.scrollLeft-=10; else if(e.clientX>br.right-28) D.bar.scrollLeft+=10;
+    var dx=cx(D.bar,e.clientX)-D.x0; if(!D.mov&&Math.abs(dx)<6) return; D.mov=true; D.b.classList.add('drag');
+    D.b.style.transform='translateX('+dx+'px)';
+    var c=D.bc+dx, s=Math.max(D.min,D.oc.filter(function(o){ return o<c; }).length); D.slot=s;
+    D.otros.forEach(function(x,j){ x.style.transform=j>=s&&j<D.p?'translateX('+D.W+'px)':j<s&&j>=D.p?'translateX(-'+D.W+'px)':''; }); });
+  document.addEventListener('pointerup',function(e){ if(D&&e.pointerId===D.id) soltar(true); });
+  document.addEventListener('pointercancel',function(e){ if(D&&e.pointerId===D.id) soltar(false); });
+  document.addEventListener('keydown',function(e){ var b=e.target.closest&&e.target.closest('.pgb[data-drag]'); if(!b||(e.key!=='ArrowLeft'&&e.key!=='ArrowRight')) return;
+    var ch=[].slice.call(b.parentNode.children), p=ch.indexOf(b), otros=ch.filter(function(x){ return x!==b; }), s=e.key==='ArrowLeft'?Math.max(min(otros),p-1):Math.min(otros.length,p+1);
+    e.preventDefault(); if(s!==p){ PGFOCO=1; PGDRAG[b.dataset.drag](s); } });
+})();
+function pgRecargar(k,msg,t){ var cid=CO.cid; delete CCACHE[cid];
+  if(t==='die') return abrirClienta(cid,'dieta').then(function(){ CO.dieSel=!k||k==='ahora'?'a':k; dgCargar(); repintar(); if(msg) toast(msg,'ok'); });
+  return abrirClienta(cid,'entrenos').then(function(){ if(k){ CO.progSel=k==='ahora'?'a':k; CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; } repintar(); if(msg) toast(msg,'ok'); }); }
+A.pgNuevaOk=function(el){ if(!PG22) return A.pgNuevaOk0(el); if(CO.pg&&CO.pg.t==='die') return dgNuevaOk(el);
   if(el.disabled) return; if(haySinGuardar&&haySinGuardar()) return toast('Guarda antes los cambios de sus rutinas','err');
-  var P=CO.pg, S=pgSegs(), F=pgFechasNueva(), dentro=P.modo==='otro'&&P.sol!=='final'?pgDentro(S,F.d):null;
+  var P=CO.pg, F=pgFechasNueva();
   if(F.h<F.d) return toast('Acaba antes de empezar: revisa las fechas','err');
-  var x={desde:F.d,hasta:F.h,modo:dentro&&P.sol==='pausa'?'pausa':'sustituir',fases:P.fases,prioridad:P.prio,copiar:P.rut==='copiar'};
+  var x={desde:F.d,hasta:F.h,modo:'sustituir',fases:P.fases,prioridad:P.prio,copiar:P.rut==='copiar',soloRetrasar:true};
   el.disabled=true;
   cargando(api('coachProgNueva',CO.pin,CO.cid,x)).then(function(r){ cerrarModal(); var k=F.d<=pgHoy()?'ahora':F.d;
     return pgRecargar(k,P.rut==='copiar'?(r.rutinas+(r.rutinas===1?' rutina copiada':' rutinas copiadas')+' · '+fCorta(F.d)+' → '+fCorta(F.h)):'Programada del '+fCorta(F.d)+' al '+fCorta(F.h)+(P.rut==='tarde'?' · faltan las rutinas':''));
@@ -24148,11 +24196,11 @@ A.pgNuevaOk=function(el){
 };
 
 /* ---- tocar un bloque: cambiar fechas, rutinas, objetivo o quitar ---- */
-A.pgGestion=function(){ var S=pgSegs(); if(!S.length) return pgNuevaAbrir();
-  pgCaja('<h2>Sus programaciones</h2><p class="muted sm">Toca una para cambiar sus fechas, sus rutinas, su objetivo o quitarla.</p>'+pgBarra(pgCopia(S),{a:'pgBloque'})+'<button class="btn mt" data-a="pgNueva">+ Nueva programación</button><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
-A.pgNueva=function(){ pgNuevaAbrir(); };
+A.pgGestion=function(el){ var t=el&&el.dataset&&el.dataset.t==='die'?'die':'', S=pgSegs(t); if(!S.length) return pgNuevaAbrir({t:t});
+  pgCaja('<h2>'+(t?'Sus dietas':'Sus programaciones')+'</h2><p class="muted sm">'+(t?'Toca una para cambiar sus fechas, sus platos, su fase o quitarla.':'Toca una para cambiar sus fechas, sus rutinas, su objetivo o quitarla.')+'</p>'+pgBarra(pgCopia(S),{a:'pgBloque'})+'<button class="btn mt" data-a="pgNueva"'+(t?' data-t="die">+ Nueva dieta':'>+ Nueva programación')+'</button><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
+A.pgNueva=function(el){ pgNuevaAbrir({t:el&&el.dataset&&el.dataset.t}); };
 A.pgFechasRut=function(el){ var r=CO.rut[+el.dataset.r]; if(!r) return; if(haySinGuardar()) return toast('Guarda antes los cambios de sus rutinas','err'); var g=CO.d.rutinas.filter(function(x){ return x.id===r.id; })[0]||r, k=g.desde&&g.desde>pgHoy()?g.desde:'ahora'; A.pgFechas({dataset:{k:k}}); };
-A.pgBloque=function(el){ var k=el.dataset.k, z=pgSeg(k); if(!z) return toast('Esa programación ya no está','err'); CO.pgK=k;
+A.pgBloque=function(el){ var k=el.dataset.k, t=el.dataset.t==='die'?'die':'', z=pgSeg(k,t); if(!z) return toast(t?'Esa dieta ya no está':'Esa programación ya no está','err'); CO.pgK=k; if(t) return dgBloque(z,el.dataset.f||'');
   var dia=el.dataset.f||'';
   pgCaja('<div class="fase-t"><i style="background:'+pgCol(z)+'"></i><h2>'+esc(pgNom(z))+'</h2></div><p class="muted">'+(z.ahora?'La de ahora · ':'')+(z.desde?fMedia(z.desde):'…')+' → '+(z.hasta?fMedia(z.hasta):'sin fin')+(z.desde&&z.hasta?' ('+pgDur(z.desde,z.hasta)+')':'')+' · '+(z.pend?'<b class="pg-am">! Faltan las rutinas</b>':'<b class="pg-ok">✓ '+z.rut.length+(z.rut.length===1?' rutina':' rutinas')+'</b>')+'</p>'+
     '<div class="pg-acts">'+
@@ -24165,9 +24213,9 @@ A.pgBloque=function(el){ var k=el.dataset.k, z=pgSeg(k); if(!z) return toast('Es
     '</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
 A.pgRutinas=function(el){ var k=el.dataset.k; cerrarModal(); siCambios(function(){ CO.sub='entrenos'; CO.progSel=k==='ahora'?'a':k; CO.rut&&CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; pintarClienta(true); window.scrollTo(0,0); }); };
 /* cambiar fechas (y «terminar antes», que es lo mismo con la de ahora) */
-A.pgFechas=function(el){ var k=el.dataset.k, z=pgSeg(k); if(!z) return; if(!z.hasta&&!z.desde){ return toast('Esta programación no tiene fechas: ponle inicio y fin a sus rutinas','err'); }
-  CO.pgF={k:k,h:z.hasta||sumar(pgHoy(),41),orig:z.hasta}; pgFechasPintar(); };
-function pgFechasPintar(){ var F=CO.pgF, z=pgSeg(F.k); if(!z) return cerrarModal(); var S=pgSegs(), L=pgSimFechas(S,F.k,F.h), hoy=pgHoy(), min=z.ahora?hoy:(z.desde||hoy);
+A.pgFechas=function(el){ var k=el.dataset.k, t=el.dataset.t==='die'?'die':'', z=pgSeg(k,t); if(!z) return; if(!z.hasta&&!z.desde){ return toast('Esta programación no tiene fechas: ponle inicio y fin a sus rutinas','err'); }
+  CO.pgF={k:k,t:t,h:z.hasta||sumar(pgHoy(),t?27:41),orig:z.hasta}; pgFechasPintar(); };
+function pgFechasPintar(){ var F=CO.pgF, z=pgSeg(F.k,F.t); if(!z) return cerrarModal(); var S=pgSegs(F.t), L=pgSimFechas(S,F.k,F.h), hoy=pgHoy(), min=z.ahora?hoy:(z.desde||hoy);
   var delta=F.orig?diff(F.orig,F.h):0, ops=[[-14,'−2 semanas'],[-7,'−1 semana'],[7,'+1 semana'],[14,'+2 semanas']];
   pgCaja('<h2>Cambiar fechas</h2><p class="muted sm">'+esc(pgNom(z))+(z.ahora?' · la de ahora':'')+' · empieza el '+(z.desde?fCorta(z.desde):'…')+'</p>'+pgBarra(L)+pgFrase(L)+
     '<div class="lab">Acaba</div><div class="tipos pg-ch">'+ops.map(function(o){ var h=F.orig?sumar(F.orig,o[0]):''; return '<button class="'+(F.orig&&delta===o[0]?'on':'')+'" data-a="pgFDelta" data-v="'+o[0]+'"'+(h&&h<min?' disabled':'')+'>'+o[1]+'</button>'; }).join('')+(z.ahora?'<button class="'+(F.h===hoy?'on':'')+'" data-a="pgFHoy">Terminar hoy</button>':'')+'</div>'+
@@ -24177,21 +24225,22 @@ function pgFechasPintar(){ var F=CO.pgF, z=pgSeg(F.k); if(!z) return cerrarModal
 A.pgFDelta=function(el){ var F=CO.pgF; if(!F.orig) return; F.h=sumar(F.orig,+el.dataset.v); pgFechasPintar(); };
 A.pgFHoy=function(){ CO.pgF.h=pgHoy(); pgFechasPintar(); };
 CH.pgFH=function(t){ if(t.value) { CO.pgF.h=t.value; pgFechasPintar(); } };
-A.pgFechasOk=function(el){ if(el.disabled) return; if(haySinGuardar&&haySinGuardar()) return toast('Guarda antes los cambios de sus rutinas','err'); var F=CO.pgF; el.disabled=true;
-  cargando(api('coachProgFechas',CO.pin,CO.cid,{desde:F.k,hasta:F.h})).then(function(){ cerrarModal(); return pgRecargar(F.k,'Acaba el '+fCorta(F.h)); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+A.pgFechasOk=function(el){ if(el.disabled) return; var F=CO.pgF; if(pgSinGuardar(F.t)) return; el.disabled=true;
+  cargando(api(F.t?'coachDietaFechas':'coachProgFechas',CO.pin,CO.cid,{desde:F.k,hasta:F.h})).then(function(){ cerrarModal(); return pgRecargar(F.k,'Acaba el '+fCorta(F.h),F.t); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 /* quitar: a su historial (se recupera) o para siempre */
-A.pgQuitarAbrir=function(el){ CO.pgQ={k:el.dataset.k,modo:'historial'}; pgQuitarPintar(); };
-function pgQuitarPintar(){ var Q=CO.pgQ, z=pgSeg(Q.k); if(!z) return cerrarModal(); var L=pgSimQuitar(pgSegs(),Q.k);
+function pgSinGuardar(t){ if(t==='die'){ if(CO.dieSucia){ toast('Guarda antes los cambios de la dieta','err'); return true; } return false; } if(haySinGuardar&&haySinGuardar()){ toast('Guarda antes los cambios de sus rutinas','err'); return true; } return false; }
+A.pgQuitarAbrir=function(el){ CO.pgQ={k:el.dataset.k,t:el.dataset.t==='die'?'die':'',modo:'historial'}; pgQuitarPintar(); };
+function pgQuitarPintar(){ var Q=CO.pgQ, z=pgSeg(Q.k,Q.t); if(!z) return cerrarModal(); var L=pgSimQuitar(pgSegs(Q.t),Q.k);
   pgCaja('<h2>Quitar '+(z.desde?fCorta(z.desde):'')+' → '+(z.hasta?fCorta(z.hasta):'')+'</h2><p class="muted sm">'+esc(pgNom(z))+(z.rut.length?' · '+z.rut.length+(z.rut.length===1?' rutina':' rutinas'):'')+'</p>'+pgBarra(L)+pgFrase(L)+
-    (z.rut.length?[['historial','Guardarla en su historial','Deja de estar programada, pero la puedes recuperar cuando quieras.'],['eliminar','Eliminarla para siempre','No se puede recuperar.']].map(function(o){ return '<button class="op-sol pg-op'+(Q.modo===o[0]?' on':'')+(o[0]==='eliminar'?' pg-red':'')+'" data-a="pgQModo" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join(''):'<p class="muted sm">No tiene rutinas: se quita del calendario.</p>')+
+    (z.rut.length||z.prep?[['historial','Guardarla en su historial','Deja de estar programada, pero la puedes recuperar cuando quieras.'],['eliminar','Eliminarla para siempre','No se puede recuperar.']].map(function(o){ return '<button class="op-sol pg-op'+(Q.modo===o[0]?' on':'')+(o[0]==='eliminar'?' pg-red':'')+'" data-a="pgQModo" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join(''):'<p class="muted sm">'+(Q.t?'Todavía no tiene platos':'No tiene rutinas')+': se quita del calendario.</p>')+
     '<button class="btn mt pg-btn-red" data-a="pgQuitarOk">Quitar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); }
 A.pgQModo=function(el){ CO.pgQ.modo=el.dataset.v; pgQuitarPintar(); };
-A.pgQuitarOk=function(el){ if(el.disabled) return; if(haySinGuardar&&haySinGuardar()) return toast('Guarda antes los cambios de sus rutinas','err'); var Q=CO.pgQ, z=pgSeg(Q.k);
-  var ir=function(){ el.disabled=true; cargando(api('coachProgQuitar',CO.pin,CO.cid,{desde:Q.k,modo:Q.modo})).then(function(){ cerrarModal(); return pgRecargar('ahora',Q.modo==='eliminar'?'Eliminada':'Guardada en su historial'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
-  if(Q.modo==='eliminar'&&z&&z.rut.length) return confirmar('¿Eliminar para siempre esta programación ('+z.rut.length+(z.rut.length===1?' rutina':' rutinas')+')? No se puede recuperar.','Eliminar para siempre',function(){ cargando(api('coachProgQuitar',CO.pin,CO.cid,{desde:Q.k,modo:'eliminar'})).then(function(){ cerrarModal(); return pgRecargar('ahora','Eliminada'); },function(e){ toast(limpiaErr(e),'err'); }); },'Cancelar');
-  ir(); };
+A.pgQuitarOk=function(el){ if(el.disabled) return; var Q=CO.pgQ, z=pgSeg(Q.k,Q.t), fn=Q.t?'coachDietaQuitar':'coachProgQuitar'; if(pgSinGuardar(Q.t)) return;
+  var ir=function(b){ if(b) b.disabled=true; cargando(api(fn,CO.pin,CO.cid,{desde:Q.k,modo:Q.modo})).then(function(){ cerrarModal(); return pgRecargar('ahora',Q.modo==='eliminar'?'Eliminada':'Guardada en su historial',Q.t); },function(e){ if(b) b.disabled=false; toast(limpiaErr(e),'err'); }); };
+  if(Q.modo==='eliminar'&&z&&(z.rut.length||z.prep)) return confirmar(Q.t?'¿Eliminar para siempre esta dieta y sus platos? No se puede recuperar.':'¿Eliminar para siempre esta programación ('+z.rut.length+(z.rut.length===1?' rutina':' rutinas')+')? No se puede recuperar.','Eliminar para siempre',function(){ ir(null); },'Cancelar');
+  ir(el); };
 /* objetivo y prioridad (su periodo del calendario) */
-A.pgObjAbrir=function(el){ var z=pgSeg(el.dataset.k); if(!z) return; CO.pgO={k:z.k,fases:pgObj(z).slice(),prio:pgPrio(z).slice()}; pgObjPintar(); };
+A.pgObjAbrir=function(el){ if(el.dataset.t==='die') return dgObjAbrir(el.dataset.k); var z=pgSeg(el.dataset.k); if(!z) return; CO.pgO={k:z.k,fases:pgObj(z).slice(),prio:pgPrio(z).slice()}; pgObjPintar(); };
 function pgObjPintar(){ var O=CO.pgO;
   pgCaja('<h2>Objetivo y prioridad</h2><div class="lab">Objetivo</div>'+pgCh(FASES_T.entreno.map(function(k){ return [k,FASE_L[k]]; }),O.fases,'pgOF')+'<div class="lab">Prioridad <span class="muted">(hasta 4)</span></div>'+pgCh(prioL().map(function(g){ return [g,g]; }),O.prio,'pgOP')+
     '<p class="muted sm mt">Sale en el calendario, en «Prioridad ahora» y en el plan automático.</p><button class="btn mt" data-a="pgObjOk">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); }
@@ -24201,7 +24250,7 @@ A.pgObjOk=function(el){ if(el.disabled) return; var O=CO.pgO; el.disabled=true;
   cargando(api('coachProgObjetivo',CO.pin,CO.cid,{desde:O.k,fases:O.fases,prioridad:O.prio})).then(function(r){ CO.d.fases=r.fases; cerrarModal(); repintar(); toast('Guardado','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 
 /* ---- «faltan las rutinas»: cómo hacerlas ---- */
-function pgVacioHtml(z){
+function pgVacioHtml(z){ if(z.t==='die') return dgVacioHtml(z);
   return '<div class="card pg-vacio"><h3>Todavía no tiene rutinas</h3><p class="muted">'+esc(nomCl())+' no la ve hasta el '+fCorta(z.desde)+'. ¿Cómo la haces?</p>'+
     '<button class="op-sol pg-op on" data-a="pgVAuto" data-k="'+esc(z.k)+'"><b>✦ Automática</b><small>La hace la app'+(pgPrio(z).length?', ya con prioridad '+esc(listaY(pgPrio(z).map(function(x){ return x.toLowerCase(); }))):'')+'.</small></button>'+
     '<button class="op-sol" data-a="pgVBanco" data-k="'+esc(z.k)+'"><b>'+ic('libros')+'De mi banco</b><small>Eliges una de tus rutinas guardadas.</small></button>'+
@@ -24211,14 +24260,206 @@ A.pgVCopiar=function(el){ var k=el.dataset.k; cargando(api('coachProgRellenar',C
 A.pgVBanco=function(el){ CO.mdProg={k:el.dataset.k}; A.desdeModelo(); };
 A.pgVAuto=function(el){ var z=pgSeg(el.dataset.k); if(!z) return; CO.plnDest={k:z.k,desde:z.desde,hasta:z.hasta}; siCambios(function(){ CO.sub='plan'; pintarClienta(true); window.scrollTo(0,0); }); };
 
+/* ======================= v53.4.188 · DIETAS PREPARADAS (Chadín, 21 nov 2026) =======================
+   «Dejar una dieta de 2000 calorías de mantenimiento de una fecha hasta otra, luego un déficit de 1900 y luego un volumen de 3000…
+   que salga ya automático». Igual que las programaciones: cada dieta es un bloque (su periodo de Nutrición del calendario, con su fase
+   y sus kcal); una detrás de otra; la preparada pasa a ser la suya sola el día que empieza. Lo primero, la fecha; la nueva se arrastra. */
+function dgSegs(){ var d=CO.d||{}, hoy=pgHoy(), D=d.dieta, F=(d.fases||[]).filter(function(x){ return x.tipo==='nutricion'; }), P=d.dietasPrep||[], S=[], us={};
+  var kc=function(L){ var k=L&&L[0]?num(L[0].kcal):null; return k?Math.round(k):''; };
+  if(D&&(D.planes||[]).length){ var a={k:'ahora',t:'die',ahora:true,desde:D.desde||'',hasta:D.hasta||'',dr:D,rut:[],fase:null};
+    var vale=!D.desde||!D.hasta||D.hasta>=D.desde, f=vale?F.filter(function(x){ return (D.desde&&x.desde===D.desde)||(x.desde<=hoy&&x.hasta>=hoy); })[0]:null; if(f){ a.fase=f; us[f.id]=1; } if(!vale) a.sigue=1;
+    a.kcal=kc(D.planes)||(f&&num(f.kcal))||''; S.push(a); }
+  F.forEach(function(x){ if(us[x.id]||x.hasta<hoy) return; if(S.some(function(z){ return (z.desde||'0000-00-00')<=x.hasta&&(z.hasta||'9999-12-31')>=x.desde; })) return;
+    var ah=x.desde<=hoy&&!S.some(function(z){ return z.ahora; }), pr=x.prep?P.filter(function(p){ return p.desde===x.desde; })[0]||null:null;
+    S.push({k:ah?'ahora':x.desde,t:'die',desde:x.desde,hasta:x.hasta,fase:x,kcal:(pr&&kc(pr.planes))||num(x.kcal)||'',pend:!x.prep,prep:pr,rut:[],ahora:ah}); us[x.id]=1; });
+  return S.sort(function(a,b){ return a.ahora&&!b.ahora?-1:b.ahora&&!a.ahora?1:a.desde<b.desde?-1:1; }); }
+function dgKcalBase(){ var D=CO.d&&CO.d.dieta, k=D&&D.planes&&D.planes[0]?num(D.planes[0].kcal):null; return k?Math.round(k):''; }
+function dgFasesCal(){ var hoy=pgHoy(), us={}, out=[];
+  dgSegs().forEach(function(z){ if(z.fase) us[z.fase.id]=1; if(!z.hasta) return; var de=z.desde||(z.fase?z.fase.desde:'')||hoy; if(z.ahora&&z.fase&&z.fase.desde<de) de=z.fase.desde;
+    out.push({id:z.fase?z.fase.id:'dg_'+z.k,pgk:z.k,pgt:'die',nom:pgNom(z),tipo:'nutricion',fases:pgObj(z),prioridad:[],desde:de,hasta:z.hasta,nota:z.fase?z.fase.nota:'',pend:z.pend,ahora:z.ahora,kcal:z.kcal}); });
+  (CO.d.fases||[]).forEach(function(x){ if(x.tipo==='nutricion'&&!us[x.id]) out.push(x); });
+  return out.sort(function(a,b){ return a.desde<b.desde?-1:1; }); }
+
+/* ---- nueva dieta: ¿cuándo? (arrastrable), fase, calorías y «¿y su dieta?» ---- */
+function dgNuevaPintar(){
+  var P=CO.pg, S=pgSegs('die'), F=pgFechasNueva(), kc=num(P.kcal), L=pgSimNueva(S,{d:F.d,h:F.h,t:'die',fases:P.fases,kcal:kc?Math.round(kc):''});
+  var prev=S.filter(function(z){ return (z.ahora?'0000-00-00':z.desde)<F.d&&(z.dr||z.prep); }).slice(-1)[0];
+  var h='<h2>Nueva dieta</h2><div class="lab">¿Cuándo?</div>'+
+    pgCuandoHtml(S,L,F,{ctx:'pg',cD:'pgD',cH:'pgH',durs:[['14','2 semanas'],['28','4 semanas'],['42','6 semanas'],['56','8 semanas']],durOn:String(P.dur),durA:'pgDura'})+
+    '<div class="lab">Fase</div>'+pgCh(FASES_T.nutricion.map(function(k){ return [k,FASE_L[k]]; }),P.fases,'dgFaseT')+
+    '<div class="lab">Calorías</div><label class="dg-kc"><input type="number" inputmode="numeric" min="800" max="8000" step="10" data-c="dgKc" value="'+esc(P.kcal)+'" placeholder="2000" aria-label="Calorías al día"><span>kcal al día</span></label>'+
+    (prev&&prev.kcal&&kc&&Math.round(kc)!==prev.kcal?'<p class="muted sm mt6">'+(prev.ahora?'La de ahora':'La de antes')+' tiene '+fN(prev.kcal,0)+' kcal ('+(kc>prev.kcal?'+':'−')+fN(Math.abs(Math.round(kc)-prev.kcal),0)+').</p>':'')+
+    '<div class="lab">¿Y su dieta?</div>'+[['ahora','Hacerla ahora','Te lleva a Dieta con esta dieta abierta: automática, de tu banco o desde cero.'],prev?['copiar','Copiar la de '+(prev.ahora?'ahora':'antes'),'Los mismos platos, con los gramos recalculados'+(kc?' a '+fN(Math.round(kc),0)+' kcal':'')+'.']:null,['tarde','Más tarde','Queda en el calendario como «falta hacerla» y te avisamos antes de que empiece.']].filter(Boolean).map(function(o){
+      return '<button class="op-sol pg-op'+(P.rut===o[0]?' on':'')+'" data-a="pgRut" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join('')+
+    '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
+  pgCaja(h); setTimeout(pgVerNueva,0); }
+A.dgFaseT=function(el){ var P=CO.pg, v=el.dataset.v; P.fases=P.fases[0]===v?[]:[v]; pgNuevaPintar(); };
+CH.dgKc=function(t){ CO.pg.kcal=t.value; pgNuevaPintar(); };
+function dgNuevaOk(el){ if(el.disabled||pgSinGuardar('die')) return; var P=CO.pg, F=pgFechasNueva(), kc=num(P.kcal);
+  if(F.h<F.d) return toast('Acaba antes de empezar: revisa las fechas','err');
+  if(kc&&(kc<800||kc>8000)) return toast('Revisa las calorías (entre 800 y 8000)','err');
+  el.disabled=true;
+  cargando(api('coachDietaNueva',CO.pin,CO.cid,{desde:F.d,hasta:F.h,modo:'sustituir',fase:P.fases[0]||'',kcal:kc?Math.round(kc):'',copiar:P.rut==='copiar'})).then(function(r){ cerrarModal();
+    var k=F.d<=pgHoy()&&r.hecha?'ahora':F.d;
+    return pgRecargar(k,P.rut==='copiar'?'Copiada con sus calorías · '+fCorta(F.d)+' → '+fCorta(F.h):'Programada del '+fCorta(F.d)+' al '+fCorta(F.h)+(P.rut==='tarde'?' · falta hacerla':''),'die');
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); }
+
+/* ---- tocar una dieta: cambiar fechas, hacerla o editarla, fase y calorías, quitar ---- */
+function dgBloque(z,dia){ var k=z.k;
+  pgCaja('<div class="fase-t"><i style="background:'+pgCol(z)+'"></i><h2>'+esc(pgNom(z))+'</h2></div><p class="muted">'+(z.dr?'La de ahora · ':'')+(z.desde?fMedia(z.desde):'…')+' → '+(z.hasta?fMedia(z.hasta):'sin fin')+(z.desde&&z.hasta?' ('+pgDur(z.desde,z.hasta)+')':'')+'</p>'+
+    (z.pend?'<p class="pg-say amb">Falta hacer su dieta. Mientras, sigue con la de antes.</p>':'')+
+    '<div class="pg-acts">'+
+    '<button class="op-sol" data-a="pgFechas" data-t="die" data-k="'+esc(k)+'"><b>'+ic('cal')+(z.dr?'Cambiar fechas o terminar antes':'Cambiar fechas')+'</b><small>Las de detrás se mueven solas.</small></button>'+
+    '<button class="op-sol" data-a="dgHacer" data-k="'+esc(z.dr?'a':k)+'"><b>'+ic('dieta')+(z.pend?'Hacer su dieta':'Ver y editar su dieta')+'</b><small>'+(z.pend?'Automática, de tu banco, copiando la de antes o desde cero.':'En Dieta.')+'</small></button>'+
+    '<button class="op-sol" data-a="pgObjAbrir" data-t="die" data-k="'+esc(k)+'"><b>'+ic('diana')+'Fase y calorías</b><small>'+esc(pgObj(z).length||z.kcal?pgNom(z):'Sin fase todavía')+'</small></button>'+
+    (z.dr?'':'<button class="op-sol pg-red" data-a="pgQuitarAbrir" data-t="die" data-k="'+esc(k)+'"><b>'+ic('papelera')+'Quitar</b><small>A su historial o para siempre. Las de detrás se adelantan.</small></button>')+
+    (dia?'<button class="op-sol" data-a="calDesde"><b>'+ic('mas')+'Planificar otra desde el '+esc(fCorta(dia))+'</b><small>Después toca el día en que termina.</small></button>':'')+
+    '</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); }
+A.dgHacer=function(el){ var k=el.dataset.k||'a'; cerrarModal(); if(CO.dieSucia&&CO.sub==='dieta'&&(CO.dieSel||'a')!==k) return toast('Guarda antes los cambios de la dieta','err');
+  siCambios(function(){ CO.sub='dieta'; CO.dieV='plan'; CO.dieSel=k==='ahora'?'a':k; dgCargar(); pintarClienta(true); window.scrollTo(0,0); }); };
+/* fase y calorías: las kcal de una dieta ya hecha salen de sus platos (se cambian en Dieta); las de una sin hacer, aquí */
+function dgObjAbrir(k){ var z=pgSeg(k,'die'); if(!z) return; CO.pgO={k:k,t:'die',fase:pgObj(z)[0]||'',kcal:z.kcal||'',hecha:!!(z.dr||z.prep)}; dgObjPintar(); }
+function dgObjPintar(){ var O=CO.pgO;
+  pgCaja('<h2>Fase y calorías</h2><div class="lab">Fase</div>'+pgCh(FASES_T.nutricion.map(function(k){ return [k,FASE_L[k]]; }),O.fase,'dgOF')+
+    '<div class="lab">Calorías</div>'+(O.hecha?'<p class="muted sm">'+(O.kcal?fN(O.kcal,0)+' kcal: ':'')+'salen de sus platos. Para cambiarlas, ajusta su dieta en Dieta.</p>':'<label class="dg-kc"><input type="number" inputmode="numeric" min="800" max="8000" step="10" id="dg-okc" value="'+esc(O.kcal)+'" placeholder="2000" aria-label="Calorías al día"><span>kcal al día</span></label>')+
+    '<p class="muted sm mt">Sale en el calendario de Nutrición y en su resumen de Dieta.</p><button class="btn mt" data-a="dgObjOk">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); }
+A.dgOF=function(el){ var O=CO.pgO, i=document.getElementById('dg-okc'); if(i) O.kcal=i.value; O.fase=O.fase===el.dataset.v?'':el.dataset.v; dgObjPintar(); };
+A.dgObjOk=function(el){ if(el.disabled) return; var O=CO.pgO, i=document.getElementById('dg-okc'), kc=num(i?i.value:O.kcal);
+  if(!O.hecha&&kc&&(kc<800||kc>8000)) return toast('Revisa las calorías (entre 800 y 8000)','err'); el.disabled=true;
+  cargando(api('coachDietaObjetivo',CO.pin,CO.cid,{desde:O.k,fase:O.fase,kcal:kc?Math.round(kc):''})).then(function(r){ CO.d.fases=r.fases; cerrarModal(); repintar(); toast('Guardado','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+
+/* ---- «falta hacerla»: cómo hacerla ---- */
+function dgVacioHtml(z){ var prev=pgSegs('die').some(function(y){ return (y.ahora?'0000-00-00':y.desde)<z.desde&&(y.dr||y.prep); });
+  return '<div class="card pg-vacio"><h3>Todavía no tiene platos</h3><p class="muted">'+esc(nomCl())+(z.ahora?' sigue con la de antes hasta que la hagas':' no la ve hasta el '+fCorta(z.desde))+'. ¿Cómo la haces?</p>'+
+    '<button class="op-sol pg-op on" data-a="dgVAuto" data-k="'+esc(z.k)+'"><b>✦ Automática</b><small>La hace la app'+(z.kcal?', con '+fN(z.kcal,0)+' kcal':'')+' y sus gustos.</small></button>'+
+    '<button class="op-sol" data-a="dgVBanco" data-k="'+esc(z.k)+'"><b>'+ic('libros')+'De mi banco</b><small>Eliges una de tus dietas guardadas.</small></button>'+
+    (prev?'<button class="op-sol" data-a="dgVCopiar" data-k="'+esc(z.k)+'"><b>'+ic('copiar')+'Copiar la de ahora</b><small>Los mismos platos, con los gramos recalculados'+(z.kcal?' a '+fN(z.kcal,0)+' kcal':'')+'.</small></button>':'')+
+    '<button class="op-sol" data-a="dgVCero" data-k="'+esc(z.k)+'"><b>'+ic('mas')+'Desde cero</b><small>Montas tú sus comidas y platos.</small></button></div>'; }
+A.dgVCopiar=function(el){ var k=el.dataset.k; cargando(api('coachDietaRellenar',CO.pin,CO.cid,{desde:k,copiar:true})).then(function(){ return pgRecargar(k,'Copiada: los mismos platos, con sus calorías','die'); },function(e){ toast(limpiaErr(e),'err'); }); };
+A.dgVBanco=function(el){ A.bdAbrir(); };
+A.dgVCero=function(el){ var z=pgSeg(el.dataset.k,'die'); if(!z) return;
+  if(gdOn()){ gdEmpezar(); var N=CO.nd; if(N){ N.sin=true; N.bloque=z.k; N.desde=z.desde; N.hasta=z.hasta; ndPintar(); } return; }      // la guía de siempre, pero se queda en su bloque (no toca la de ahora)
+  crearDieta0(); if(CO.die){ CO.die.desde=z.desde; CO.die.hasta=z.hasta; } };
+A.dgVAuto=function(el){ var z=pgSeg(el.dataset.k,'die'); if(!z) return; CO.plnDest={k:z.k,t:'die',desde:z.desde,hasta:z.hasta}; var X=plnCargar(); X.que='dieta'; X.modo='app'; plnGuarda();
+  siCambios(function(){ CO.sub='plan'; pintarClienta(true); window.scrollTo(0,0); }); };
+
+/* ---- en Dieta: resumen arriba (como en Entrenos) y una pestaña por dieta ---- */
+function dgCargar(){ var k=CO.dieSel||'a', z=k==='a'?null:pgSeg(k,'die');
+  if(k!=='a'&&!z) k=CO.dieSel='a';
+  if(k==='a'||z.dr){ CO.dieSel='a'; CO.die=CO.d.dieta?normalizarDieta(copia(CO.d.dieta)):null; }
+  else CO.die=z.prep?normalizarDieta({planes:copia(z.prep.planes),notas:z.prep.notas||'',desde:z.desde,hasta:z.hasta}):null;
+  CO.planI=0; CO.dieSucia=false; setTimeout(function(){ try{ undoReset(); }catch(e){} },0); }
+function dgClave(){ return (CO.dieSel||'a')==='a'?(CO.d.dieta?'ahora':''):CO.dieSel; }      // la dieta abierta, como la llama el servidor
+function dgCard(){ var S=pgSegs('die'); if(!S.length) return '';
+  var hoy=pgHoy(), a=S.filter(function(z){ return z.dr; })[0], fut=S.filter(function(z){ return !z.dr; }), pd=fut.filter(function(z){ return z.pend; })[0];
+  var h='<div class="card prog dg-card"><div class="card-t">Dieta actual</div>';
+  if(a){ var d=a.desde, h2=a.hasta, tot=d&&h2&&!a.sigue?diff(d,h2)+1:0, va=d?diff(d,hoy)+1:0, pc=tot>0?Math.max(0,Math.min(100,Math.round(va*100/tot))):0, qd=h2?diff(hoy,h2):null, sem=d?Math.floor(Math.max(0,diff(d,hoy))/7)+1:0, ns=tot?Math.ceil(tot/7):0;
+    h+='<div class="pg-ya"><div class="pg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+esc(pgNom(a))+'</b><em>'+(a.sigue?'Sigue con ella hasta que hagas la nueva':(d?fMedia(d):'…')+' → '+(h2?fMedia(h2):'sin fin')+(sem&&ns?' · semana '+Math.min(sem,ns)+' de '+ns:''))+'</em></div>'+
+      (tot>0?'<div class="pgx-bar" role="img" aria-label="'+pc+' % hecho"><i style="width:'+pc+'%"></i></div>':'')+
+      (qd!=null&&qd>=0&&qd<=7&&fut.length&&!fut[0].pend?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': la siguiente ya está hecha</p>':'')+'</div>'+
+      (qd!=null&&qd>=0&&qd<=7&&!fut.length?'<p class="pgx-av">'+ic('alerta')+(qd===0?'Acaba hoy':'Acaba en '+qd+(qd===1?' día':' días'))+' y no hay nada preparado después</p>':'');
+  } else h+='<p class="sm muted" style="margin:0">Todavía no tiene una dieta en marcha.</p>';
+  if(fut.length) h+='<div class="pg-fut pg-fut2"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span>'+fut.map(function(z){ var q=diff(hoy,z.desde);
+    return '<button type="button" class="pg-fr" data-a="pgBloque" data-t="die" data-k="'+esc(z.k)+'"><span class="pg-fd"><b>'+fMedia(z.desde)+'</b><small>'+(q<=0?'desde hoy':q===1?'mañana':'en '+q+' días')+'</small></span><span class="pg-fn">'+esc(pgNom(z))+'<small>hasta el '+fCorta(z.hasta)+'</small></span>'+(z.pend?'<span class="pg-am">! Falta hacerla</span>':'<span class="pg-ok">✓ Lista</span>')+'</button>'; }).join('')+'</div>';
+  if(pd) h+='<div class="pg-falta">'+ic('alerta')+'<span><b>Falta hacer la dieta de '+esc(pgNom(pd).toLowerCase())+'</b><small>Empieza el '+fCorta(pd.desde)+'. Mientras, sigue con la de antes.</small></span><button class="btn sm" data-a="dgHacer" data-k="'+esc(pd.k)+'">Hacerla</button></div>';
+  return h+'<div class="row mt"><button class="btn sm" data-a="pgNueva" data-t="die">Dieta nueva</button><button class="btn sm sec" data-a="pgGestion" data-t="die">Cambiar fechas o quitar</button></div></div>'; }
+function dgTabsHtml(){ var S=pgSegs('die'), a=S.filter(function(z){ return z.dr; })[0], fut=S.filter(function(z){ return !z.dr; }); if(!fut.length) return '';
+  var sel=CO.dieSel||'a', hoy=pgHoy(), zs=sel==='a'?null:pgSeg(sel,'die');
+  return '<div class="pgt'+(fut.length+(a?1:0)>2?' pgt-sc':'')+'" role="tablist" aria-label="Dietas">'+(a?'<button role="tab" class="pgt-b pgt-a'+(sel==='a'?' on':'')+'" data-a="dgSel" data-v="a" aria-selected="'+(sel==='a')+'"><span class="pgt-t"><span class="pg-tag pg-ok">Ahora</span><b>'+(a.desde?fCorta(a.desde):'…')+' → '+(a.hasta?fCorta(a.hasta):'sin fin')+'</b></span><small>'+esc(pgNom(a))+'</small></button>':'')+
+    fut.map(function(z){ var q=diff(hoy,z.desde);
+      return '<button role="tab" class="pgt-b pgt-p'+(z.pend?' pgt-pend':'')+(sel===z.k?' on':'')+'" data-a="dgSel" data-v="'+esc(z.k)+'" aria-selected="'+(sel===z.k)+'"><span class="pgt-t"><span class="pg-tag '+(z.pend?'pg-amb':'pg-ind')+'">'+ic('reloj')+(z.pend?'Falta hacerla':'Próxima')+'</span><b>'+fCorta(z.desde)+' → '+fCorta(z.hasta)+'</b></span><small>'+esc(pgNom(z))+' · '+(q<=0?'desde hoy':q===1?'mañana':'en '+q+' días')+'</small></button>'; }).join('')+'</div>'+
+    (zs&&!zs.ahora?'<div class="pgx-av pgt-av">'+ic('reloj')+'Empieza el '+fMedia(zs.desde)+'. '+cG('Ella','Él')+' no la ve hasta entonces: puedes prepararla y cambiarla tranquilo.</div>':''); }
+A.dgSel=function(el){ var v=el.dataset.v; if(v===(CO.dieSel||'a')) return; if(CO.dieSucia) return toast('Guarda antes los cambios de esta dieta','err'); CO.dieSel=v; dgCargar(); repintar(); };
+function dgCuerpo(){ var k=CO.dieSel||'a', z=k==='a'?(CO.d.dieta?null:pgSeg('ahora','die')):pgSeg(k,'die');
+  if(z&&z.pend&&!CO.die) return dgVacioHtml(z);
+  return vDietaPlan(); }
+/* sus fechas: las de su bloque («Cambiar fechas» mueve también las de detrás) */
+function dgFechasHtml(f){ var k=dgClave();
+  return '<div class="rut-fe2 dg-fe2"><span><small>Empieza</small><b>'+(CO.die.desde?f(CO.die.desde):'Al guardarla')+'</b></span><span><small>Termina</small><b>'+(CO.die.hasta?f(CO.die.hasta):'Sin fin')+'</b></span>'+
+    (k?'<button class="btn sm sec" data-a="pgFechas" data-t="die" data-k="'+esc(k)+'">'+ic('cal')+'Cambiar fechas</button>':'')+'</div>'; }
+var _ndPG=A.nuevaDieta; A.nuevaDieta=function(){ if(PG22) return pgNuevaAbrir({t:'die'}); return _ndPG.apply(this,arguments); };      // «Dieta nueva»: la misma ventana (fecha primero)
+
 /* ---- en Plan (automático): ¿cuándo va este plan? ---- */
-function pgPlanFechas(P){ var S=pgSegs(), hoy=pgHoy(), D=CO.plnDest, a=S.filter(function(z){ return z.ahora; })[0], fin=pgFin(S), Q=CO.pgPlan||(CO.pgPlan={modo:S.some(function(z){ return !z.ahora; })?'fin':'tras',d:''}), d;
+function pgPlanFechas(P,t){ t=t==='die'?'die':''; var S=pgSegs(t), hoy=pgHoy(), D=CO.plnDest, Q=CO.pgPlan||(CO.pgPlan={d:''});
+  if(Q.t!==t){ Q.t=t; Q.d=''; }
+  if(D&&(D.t||'')===t){ var z=pgSeg(D.k,t); if(z) return {d:z.desde,h:z.hasta,dest:z}; CO.plnDest=null; }
+  var d=Q.d&&Q.d>=hoy?Q.d:pgDefD(S); return {d:d,h:sumar(d,P.sem*7-1)}; }
+function pgPlanCard(P,o){ o=o||{}; var t=o.t==='die'?'die':'', S=pgSegs(t), F=pgPlanFechas(P,t);
+  var ab=o.inl?'<div class="pln-row pg-plan inl"><div class="pln-rl">¿Cuándo?</div><div class="pg-plan-c">':'<div class="card pg-plan"><div class="card-t">¿Cuándo va '+(t?'esta dieta':'este plan')+'?</div>', ci=o.inl?'</div></div>':'</div>';
+  if(F.dest) return ab+'<p class="muted sm">En '+(t?'la dieta':'la programación')+' que ya tenías fijada: <b>'+esc(pgNom(F.dest))+'</b>, del '+fCorta(F.d)+' al '+fCorta(F.h)+'. Al aprobarlo, se llena con '+(t?'estos platos':'estas rutinas')+'.</p><button class="link" data-a="pgPlanOtra">Ponerlo en otras fechas</button>'+ci;
+  var L=pgSimNueva(S,{d:F.d,h:F.h,t:t,tag:'Este plan',lbl:'Automático'}); setTimeout(pgVerNueva,0);
+  return ab+pgCuandoHtml(S,L,F,{ctx:'plan',cD:'pgPlanD',durs:PLN_SEMS.map(function(n){ return [String(n),n+' semanas']; }),durOn:String(P.sem),durA:'pgPlanSem'})+
+    (o.both?'<p class="muted sm mt6">'+ic('dieta')+'La dieta va con las mismas fechas.</p>':'')+ci; }
+CH.pgPlanD=function(t){ if(t.value){ (CO.pgPlan||(CO.pgPlan={})).d=t.value<pgHoy()?pgHoy():t.value; plnRep0(); } };
+A.pgPlanSem=function(el){ A.plnPd({dataset:{k:'sem',v:el.dataset.v}}); };
+A.pgPlanOtra=function(){ CO.plnDest=null; plnRep0(); };
+
+/* ======================= v53.4.188 solo en el panel nº 1 y en la demo (Chadín, 21:14: «hazlo solo en el mío y la demo») =======================
+   PG22: lo nuevo (lo primero la fecha, arrastrar, dietas preparadas). Los demás paneles siguen exactamente con la v53.4.187 (lo de abajo,
+   copiado tal cual con un 0 al final). Para probar lo antiguo en el panel nº 1: localStorage chadin_pg22 = 0. */
+function pgSimNueva0(S,x){
+  var L=pgCopia(S), d=x.d, h=x.h, ini=function(z){ return z.ahora?'0000-00-00':z.desde; };
+  var dentro=L.filter(function(z){ return ini(z)<d&&(!z.hasta||z.hasta>=d); })[0]||null, tras=L.filter(function(z){ return !z.ahora&&z.desde>=d&&z!==dentro; }), resto=null;
+  if(dentro){ var q=dentro.hasta?diff(d,dentro.hasta)+1:0;
+    if(x.modo==='pausa'&&q>0) resto={k:'resto',desde:sumar(h,1),hasta:sumar(h,q),fase:dentro.fase,cls:'prep rest',tag:'Sigue'};
+    dentro.old=dentro.hasta?'hasta el '+fCorta(dentro.hasta):''; dentro.hasta=sumar(d,-1); dentro.cls+=' cut'; dentro.cut=1; }
+  pgEnc(tras,resto?resto.hasta:h);
+  L.push({k:'nueva',desde:d,hasta:h,fase:{fases:x.fases||[],prioridad:x.prio||[]},cls:'new',tag:'Nueva',nueva:1}); if(resto) L.push(resto);
+  return pgOrden(L);
+}
+function pgNuevaAbrir0(o){ o=o||{}; var S=pgSegs(), fut=S.filter(function(z){ return !z.ahora; }), a=S.filter(function(z){ return z.ahora; })[0];
+  CO.pg={modo:o.d?'otro':fut.length?'fin':a?'tras':'fin',d:o.d||'',hfijo:o.h||'',dur:o.dur||42,fases:o.fases||[],prio:o.prio||[],sol:'sustituir',rut:'ahora'};
+  pgNuevaPintar0(); }
+function pgFechasNueva0(){ var P=CO.pg, S=pgSegs(), hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fin=pgFin(S), d, h;
+  if(P.modo==='fin') d=fin&&fin>=hoy?sumar(fin,1):hoy; else if(P.modo==='tras') d=a&&a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy; else d=P.d&&P.d>=hoy?P.d:hoy;
+  h=P.hfijo&&P.hfijo>=d?P.hfijo:sumar(d,(P.dur||42)-1);
+  if(P.modo==='otro'&&P.sol==='final'&&pgDentro(S,d)){ var n=diff(d,h); d=fin&&fin>=hoy?sumar(fin,1):hoy; h=sumar(d,n); }
+  return {d:d,h:h}; }
+function pgNuevaPintar0(){
+  var P=CO.pg, S=pgSegs(), hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fut=S.filter(function(z){ return !z.ahora; }), fin=pgFin(S), F=pgFechasNueva0();
+  var dentro=P.modo==='otro'&&P.d?pgDentro(S,P.d):null, modo=dentro&&P.sol==='pausa'?'pausa':'sustituir', L=pgSimNueva0(S,{d:F.d,h:F.h,modo:modo,fases:P.fases,prio:P.prio});
+  var E=[]; if(fut.length) E.push(['fin','Al final · '+fCorta(sumar(fin,1))]);
+  if(a) E.push(['tras',(fut.length?'Después de la de ahora':'Cuando acabe la de ahora')+' · '+fCorta(a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy)]);
+  if(!a&&!fut.length) E.push(['fin','Hoy']);
+  E.push(['otro','Otro día']);
+  var prev=S.filter(function(z){ return (z.ahora?'0000-00-00':z.desde)<F.d&&z.rut.length; }).slice(-1)[0];
+  var h='<h2>Nueva programación</h2>'+pgBarra(L)+pgFrase(L)+
+    '<div class="lab">Objetivo</div>'+pgCh(FASES_T.entreno.map(function(k){ return [k,FASE_L[k]]; }),P.fases,'pgObjT')+
+    '<div class="lab">Prioridad <span class="muted">(opcional)</span></div>'+pgCh(prioL().slice(0,11).map(function(g){ return [g,g]; }),P.prio,'pgPrioT')+
+    '<div class="lab">Empieza</div>'+pgCh(E,P.modo,'pgModo')+(P.modo==='otro'?'<label class="f pg-f">Día<input type="date" id="pg-d" data-c="pgD" min="'+hoy+'" value="'+esc(P.d||hoy)+'"></label>':'');
+  if(dentro) h+='<div class="lab">¿Qué hago con lo que había?</div>'+[['sustituir','Sustituye lo que quedaba',(dentro.ahora?'La de ahora':'La del '+fCorta(dentro.desde))+' acaba el '+fCorta(sumar(P.d,-1))+'.'],['pausa','Lo que quedaba sigue después','Vuelve a '+(dentro.ahora?'sus rutinas de ahora':'esa programación')+' los días que le faltaban.'],['final','Ponerla al final, después de todas','No toca nada de lo que hay: empieza el '+fCorta(sumar(fin,1))+'.']].map(function(o){
+      var nD=P.hfijo&&P.hfijo>=P.d?diff(P.d,P.hfijo):(P.dur||42)-1, d2=sumar(fin,1), Lo=o[0]==='final'?pgSimNueva0(S,{d:d2,h:sumar(d2,nD),modo:'sustituir',fases:P.fases}):pgSimNueva0(S,{d:P.d,h:sumar(P.d,nD),modo:o[0],fases:P.fases});
+      return '<button class="op-sol pg-op'+(P.sol===o[0]?' on':'')+'" data-a="pgSol" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+esc(o[2])+'</small>'+pgBarra(Lo,{mini:true})+'</button>'; }).join('');
+  h+='<div class="lab">Dura</div>'+pgCh([['28','4 semanas'],['42','6 semanas'],['56','8 semanas'],['otro',P.hfijo?'Hasta el '+fCorta(F.h):'Hasta un día…']],P.hfijo?'otro':String(P.dur),'pgDura')+
+    (P.hfijo||P.durOtro?'<label class="f pg-f">Acaba<input type="date" id="pg-h" data-c="pgH" min="'+esc(F.d)+'" value="'+esc(F.h)+'"></label>':'')+
+    '<div class="lab">¿Y sus rutinas?</div>'+[['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas'+(prev.ahora?' que tiene ahora':'')+'.']:null,['tarde','Más tarde','Queda marcada «faltan las rutinas» y te avisamos antes de que empiece. Mientras, sigue con las de antes.']].filter(Boolean).map(function(o){
+      return '<button class="op-sol pg-op'+(P.rut===o[0]?' on':'')+'" data-a="pgRut" data-v="'+o[0]+'"><b><i class="pg-r"></i>'+o[1]+'</b><small>'+o[2]+'</small></button>'; }).join('')+
+    '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
+  pgCaja(h);
+}
+A.pgModo=function(el){ var P=CO.pg; P.modo=el.dataset.v; if(P.modo==='otro'&&!P.d) P.d=pgHoy(); if(P.modo!=='otro') P.sol='sustituir'; if(P.hfijo&&P.hfijo<pgFechasNueva0().d) P.hfijo=''; pgNuevaPintar0(); };
+A.pgSol=function(el){ CO.pg.sol=el.dataset.v; pgNuevaPintar0(); };
+A.pgDura0=function(el){ var P=CO.pg, v=el.dataset.v; if(v==='otro'){ P.durOtro=true; if(!P.hfijo) P.hfijo=pgFechasNueva0().h; } else { P.dur=+v; P.hfijo=''; P.durOtro=false; } pgNuevaPintar0(); };
+CH.pgD0=function(t){ if(!t.value) return; CO.pg.d=t.value<pgHoy()?pgHoy():t.value; if(CO.pg.hfijo&&CO.pg.hfijo<CO.pg.d) CO.pg.hfijo=''; pgNuevaPintar0(); };
+CH.pgH0=function(t){ if(!t.value) return; var F=pgFechasNueva0(); CO.pg.hfijo=t.value<F.d?F.d:t.value; CO.pg.durOtro=true; pgNuevaPintar0(); };
+A.pgNuevaOk0=function(el){
+  if(el.disabled) return; if(haySinGuardar&&haySinGuardar()) return toast('Guarda antes los cambios de sus rutinas','err');
+  var P=CO.pg, S=pgSegs(), F=pgFechasNueva0(), dentro=P.modo==='otro'&&P.sol!=='final'?pgDentro(S,F.d):null;
+  if(F.h<F.d) return toast('Acaba antes de empezar: revisa las fechas','err');
+  var x={desde:F.d,hasta:F.h,modo:dentro&&P.sol==='pausa'?'pausa':'sustituir',fases:P.fases,prioridad:P.prio,copiar:P.rut==='copiar'};
+  el.disabled=true;
+  cargando(api('coachProgNueva',CO.pin,CO.cid,x)).then(function(r){ cerrarModal(); var k=F.d<=pgHoy()?'ahora':F.d;
+    return pgRecargar(k,P.rut==='copiar'?(r.rutinas+(r.rutinas===1?' rutina copiada':' rutinas copiadas')+' · '+fCorta(F.d)+' → '+fCorta(F.h)):'Programada del '+fCorta(F.d)+' al '+fCorta(F.h)+(P.rut==='tarde'?' · faltan las rutinas':''));
+  },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
+};
+
+function pgPlanFechas0(P){ var S=pgSegs(), hoy=pgHoy(), D=CO.plnDest, a=S.filter(function(z){ return z.ahora; })[0], fin=pgFin(S), Q=CO.pgPlan||(CO.pgPlan={modo:S.some(function(z){ return !z.ahora; })?'fin':'tras',d:''}), d;
   if(D){ var z=pgSeg(D.k); if(z) return {d:z.desde,h:z.hasta,dest:z}; CO.plnDest=null; }
   if(Q.modo==='fin') d=fin&&fin>=hoy?sumar(fin,1):hoy; else if(Q.modo==='tras') d=a&&a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy; else d=Q.d&&Q.d>=hoy?Q.d:hoy;
   return {d:d,h:sumar(d,P.sem*7-1)}; }
-function pgPlanCard(P){ var S=pgSegs(), F=pgPlanFechas(P), Q=CO.pgPlan, hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fut=S.filter(function(z){ return !z.ahora; }), fin=pgFin(S);
+function pgPlanCard0(P){ var S=pgSegs(), F=pgPlanFechas0(P), Q=CO.pgPlan, hoy=pgHoy(), a=S.filter(function(z){ return z.ahora; })[0], fut=S.filter(function(z){ return !z.ahora; }), fin=pgFin(S);
   if(F.dest) return '<div class="card pg-plan"><div class="card-t">¿Cuándo va este plan?</div><p class="muted sm">En la programación que ya tenías fijada: <b>'+esc(pgNom(F.dest))+'</b>, del '+fCorta(F.d)+' al '+fCorta(F.h)+'. Al aprobarlo, se llena con estas rutinas.</p><button class="link" data-a="pgPlanOtra">Ponerlo en otras fechas</button></div>';
-  var L=pgSimNueva(S,{d:F.d,h:F.h,modo:'sustituir'}), E=[];
+  var L=pgSimNueva0(S,{d:F.d,h:F.h,modo:'sustituir'}), E=[];
   if(fut.length) E.push(['fin','Al final · '+fCorta(sumar(fin,1))]);
   if(a) E.push(['tras',(fut.length?'Después de la de ahora':'Cuando acabe la de ahora')+' · '+fCorta(a.hasta&&a.hasta>=hoy?sumar(a.hasta,1):hoy)]);
   if(!a&&!fut.length) E.push(['fin','Hoy']);
@@ -24227,10 +24468,8 @@ function pgPlanCard(P){ var S=pgSegs(), F=pgPlanFechas(P), Q=CO.pgPlan, hoy=pgHo
     '<div class="lab">Empieza</div>'+pgCh(E,Q.modo,'pgPlanModo')+(Q.modo==='otro'?'<label class="f pg-f">Día<input type="date" data-c="pgPlanD" min="'+hoy+'" value="'+esc(F.d)+'"></label>':'')+
     '<div class="lab">Dura</div>'+pgCh(PLN_SEMS.map(function(n){ return [String(n),n+' semanas']; }),String(P.sem),'pgPlanSem')+'</div>'; }
 A.pgPlanModo=function(el){ var Q=CO.pgPlan||(CO.pgPlan={}); Q.modo=el.dataset.v; if(Q.modo==='otro'&&!Q.d) Q.d=pgHoy(); plnRep0(); };
-CH.pgPlanD=function(t){ if(t.value){ (CO.pgPlan||(CO.pgPlan={})).d=t.value; plnRep0(); } };
-A.pgPlanSem=function(el){ A.plnPd({dataset:{k:'sem',v:el.dataset.v}}); };
-A.pgPlanOtra=function(){ CO.plnDest=null; plnRep0(); };
 
+/* ======================= fin de la v53.4.187 para los demás paneles ======================= */
 function plnOn(){ return BOOT.mode!=='clienta'; }      // v53.4.122: para todos los entrenadores (Javier, 15 nov 2026: «aplícaselo a todo el mundo ya»)
 function plnL(L,k){ for(var i=0;i<L.length;i++) if(L[i][0]===k) return L[i][1]; return ''; }
 function plnNivN(k){ return {ini:0,int:1,ava:2}[k]||0; }
@@ -24875,6 +25114,7 @@ function plnPedidoHtml(P,X){
   var h='<div class="card pln-ped"><div class="pln-tt"><div><div class="card-t">'+(hay?'Cambiar tus indicaciones':'Tus indicaciones')+'</div><small class="muted">Viene marcado con su cuestionario. Toca lo que quieras cambiar: se guarda solo.</small></div>'+(hay?'<button class="link" data-a="plnVerPed">Cerrar</button>':'<button class="link" data-a="plnModo" data-v="">'+ic('atras')+'Volver</button>')+'</div>';
   (P.atencion||[]).forEach(function(a){ h+='<div class="pln-at '+(a.bloq?'bad':'warn')+'">'+ic('alerta')+'<span>'+esc(a.t)+'</span></div>'; });
   h+='<div class="seg pln-que">'+PLN_QUE.map(function(o){ return '<button class="'+(que===o[0]?'on':'')+'" data-a="plnQue" data-v="'+o[0]+'">'+o[1]+(sg[0]===o[0]?'<small>sugerido</small>':'')+'</button>'; }).join('')+'</div><p class="muted sm mt6">'+esc(sg[1])+'</p>';
+  if(PG22) h+=pgPlanCard(P,{inl:true,t:ent?'':'die',both:ent&&die});      // v53.4.188: lo primero, la fecha (Chadín, 21 nov)
   h+=plnFila(P,'obj','Objetivo',PLN_OBJ,false,F.indexOf('obj')>=0);
   if(ent) h+=plnFila(P,'niv','Nivel',PLN_NIV,false,F.indexOf('niv')>=0);
   h+=plnFila(P,'sexo','Sexo',[['mujer','Mujer'],['hombre','Hombre']]);
@@ -24886,7 +25126,7 @@ function plnPedidoHtml(P,X){
       plnFila(P,'prio','Priorizar <small>(hasta 3)</small>',PLN_PRIO,true)+plnSerFilas(P)+plnFila(P,'les','Molestias',PLN_LES,true)+
       plnFila(P,'cv','Cardio',PLN_CV)+plnFila(P,'cvT','Tipo de cardio',PLN_CVT,true)+(P.dCarr?plnFila(P,'dCarr','Días de carrera <small>(de sus '+(P.dias||3)+')</small>',[1,2,3,4].filter(function(n){ return n<=(P.dias||3)-1; }).map(function(n){ return [n,String(n)]; })):'')+plnFila(P,'tec','Técnicas',PLN_TECS);
   }
-  h+=plnFila(P,'sem','Bloque',PLN_SEMS.map(function(n){ return [n,n+' semanas']; }));
+  if(!PG22) h+=plnFila(P,'sem','Bloque',PLN_SEMS.map(function(n){ return [n,n+' semanas']; }));
   if(die) h+=plnFila(Pv,'cms','Comidas al día',[3,4,5,6].map(function(n){ return [n,String(n)]; }))+plnFila(P,'opc','Platos por comida',[1,2,3].map(function(n){ return [n,String(n)]; }))+
     '<div class="pln-row'+(['edad','peso','altura'].some(function(k){ return F.indexOf(k)>=0; })?' falta':'')+'"><div class="pln-rl">Cuerpo</div><div class="pln-fn">'+[['edad','Edad','años'],['peso','Peso','kg'],['altura','Altura','cm']].map(function(z){ return '<label class="pln-in">'+z[1]+'<input data-v29="plnPdIn" data-k="'+z[0]+'" inputmode="decimal" value="'+esc(P[z[0]]==null?'':(z[0]==='peso'?fN(P[z[0]]):P[z[0]]))+'"> <small>'+z[2]+'</small></label>'; }).join('')+'</div></div>';
   if(ent) h+='<div class="pln-row"><div class="pln-rl">Prefiere evitar</div><div><input class="pln-ev" data-v29="plnPdIn" data-k="evitar" maxlength="300" value="'+esc(P.evitar)+'" placeholder="Burpees, sentadilla búlgara…">'+(P.dispTxt?'<p class="muted sm mt6">Escribió: «'+esc(P.dispTxt)+'»</p>':'')+'</div></div>';
@@ -24989,13 +25229,13 @@ function plnPropHtml(P,X){
   var h='', C=[], W=[];
   if(X.E){
     var E=X.E;
-    if(PG21){ var PF=pgPlanFechas(P); E.desde=PF.d; E.hasta=PF.h; h+=pgPlanCard(P); }      // v53.4.187
+    if(PG21){ var PF=PG22?pgPlanFechas(P):pgPlanFechas0(P); E.desde=PF.d; E.hasta=PF.h; if(!PG22) h+=pgPlanCard0(P); else if(!X.verPed) h+=pgPlanCard(P,{both:!!X.Di}); }      // v53.4.187 (si «Tus indicaciones» está abierto, va ahí)
     h+='<div class="card pln-ent"><div class="pln-tt"><div><div class="card-t">Entreno</div><b class="pln-est">'+esc(E.est.n)+'</b><small class="muted"> · '+fCorta(E.desde)+' – '+fCorta(E.hasta)+' ('+P.sem+' semanas)</small></div><button class="btn sm sec" data-a="plnOtra" data-v="entreno">'+ic('reinicio')+(E.banco?'Que la haga la app':'Otra propuesta')+'</button></div>'+
       (E.alts.length>1?'<div class="tipos ops pln-alts">'+E.alts.map(function(a){ return '<button class="'+(a.id===E.est.id?'on':'')+'" data-a="plnEst" data-v="'+a.id+'">'+esc(a.n)+'</button>'; }).join('')+'</div>':'')+
       plnSemHtml(E)+'<div class="pln-cols">'+E.rutinas.map(function(r,ri){ return plnRutHtml(r,ri,X); }).join('')+'</div></div>';
     C=C.concat(plnChecks(E,P)); W=W.concat(plnPorque(E,P));
   }
-  if(X.Di){ h+=plnDieHtml(X); (X.Di.K.av||[]).forEach(function(a){ C.push({t:'warn',x:a}); }); W=W.concat(X.Di.K.por||[]); if(X.E) W.push('La dieta empieza el día que la apruebes.'); }
+  if(X.Di){ if(PG22&&!X.E&&!X.verPed) h+=pgPlanCard(P,{t:'die'}); h+=plnDieHtml(X); (X.Di.K.av||[]).forEach(function(a){ C.push({t:'warn',x:a}); }); W=W.concat(X.Di.K.por||[]); if(X.E&&!PG22) W.push('La dieta empieza el día que la apruebes.'); }
   if(C.length||W.length) h+='<div class="card pln-chk">'+(C.length?plnRevHtml(C):'')+
     (W.length?'<details class="pln-por"><summary>Por qué es así</summary><ul>'+W.map(function(w){ return '<li>'+esc(w)+'</li>'; }).join('')+'</ul></details>':'')+'</div>';
   h+='<div class="pln-pie"><button class="btn" data-a="plnAprobar">'+ic('ok')+'Aprobar y ponérsela</button>'+(X.E&&X.Di?'<button class="btn sec" data-a="plnOtra" data-v="ambos">'+ic('reinicio')+'Otra propuesta</button>':'')+(X.E?'<button class="btn sec" data-a="plnAlBanco">'+ic('modelo')+'Guardar en tu banco</button>':'')+'<button class="link" data-a="plnDescartar">Descartar</button></div>';
@@ -25079,18 +25319,20 @@ A.plnAprobar=function(el){
   var X=plnCargar(), P=plnPerfil(), nom=P.nombre||'', hoy=CO.hoy||hoyStr(), R=CO.d.rutinas||[], D=CO.d.dieta;
   if(haySinGuardar&&haySinGuardar()) return toast('Guarda o descarta antes los cambios a medias de Entrenos o Dieta','err');
   var bl=plnBloq(P,X.Di&&X.E?'ambos':X.E?'entreno':'dieta'); if(bl) return toast(bl.t,'err');
-  var PFa=PG21&&X.E?pgPlanFechas(P):null; if(PFa){ X.E.desde=PFa.d; X.E.hasta=PFa.h; }
+  var PFa=PG21&&X.E?(PG22?pgPlanFechas(P):pgPlanFechas0(P)):null; if(PFa){ X.E.desde=PFa.d; X.E.hasta=PFa.h; }
   if(X.E&&X.E.rutinas.some(function(r){ return !r.ejercicios.some(function(e){ return !(e._p&&e._p.mov); }); })) return toast('Hay una rutina sin ejercicios: añade alguno o quítala','err');
   var t=[];
-  if(PFa) t.push('El entreno va del '+fCorta(PFa.d)+' al '+fCorta(PFa.h)+(PFa.dest?', en la programación que ya tenías fijada.':'. Lo que tengas preparado después va a continuación.'));
+  if(PFa) t.push('El entreno va del '+fCorta(PFa.d)+' al '+fCorta(PFa.h)+(PFa.dest?', en la programación que ya tenías fijada.':PG22?'. Si choca con lo que tienes preparado, eso se retrasa.':'. Lo que tengas preparado después va a continuación.'));
   else if(X.E) t.push(R.length?(X.E.desde>hoy?'Sus rutinas de ahora siguen hasta el '+fCorta(sumar(X.E.desde,-1))+' y las nuevas empiezan el '+fCorta(X.E.desde)+'.':'Sus rutinas de ahora pasan al historial y las nuevas empiezan hoy.'):'Las rutinas empiezan el '+fCorta(X.E.desde)+'.');
-  if(X.Di) t.push(D?'Su dieta de ahora pasa al historial y la nueva empieza hoy.':'La dieta empieza hoy.');
+  var PDa=PG22&&X.Di?(PFa||pgPlanFechas(P,'die')):null;      // v53.4.188: la dieta, con las mismas fechas que el entreno (o las suyas si es solo dieta)
+  if(PDa) t.push('La dieta va del '+fCorta(PDa.d)+' al '+fCorta(PDa.h)+(PDa.d<=hoy&&D?' (la de ahora pasa a su historial).':'.'));
+  else if(X.Di) t.push(D?'Su dieta de ahora pasa al historial y la nueva empieza hoy.':'La dieta empieza hoy.');
   confirmar('¿Ponerle este plan a '+nom+'? '+t.join(' ')+' Todo se puede cambiar después en Entrenos y Dieta.','Aprobar',function(){
     if(el) el.disabled=true;
     var p=Promise.resolve(), E=X.E, Di=X.Di, hecho=[];
     if(E){
       if(PFa){ var RR=E.rutinas.map(function(r,i){ return {nombre:String(r.nombre||'').trim()||'Rutina '+(i+1),dias:r.dias,ejercicios:r.ejercicios.map(plnLimpioEj),video:''}; });      // v53.4.187: en su sitio, sin romper lo que ya hay
-        p=p.then(function(){ return PFa.dest?api('coachProgRellenar',CO.pin,CO.cid,{desde:PFa.dest.k,rutinas:RR,origen:'auto'}):api('coachProgNueva',CO.pin,CO.cid,{desde:PFa.d,hasta:PFa.h,modo:'sustituir',rutinas:RR,origen:'auto'}); });
+        p=p.then(function(){ return PFa.dest?api('coachProgRellenar',CO.pin,CO.cid,{desde:PFa.dest.k,rutinas:RR,origen:'auto'}):api('coachProgNueva',CO.pin,CO.cid,{desde:PFa.d,hasta:PFa.h,modo:'sustituir',rutinas:RR,origen:'auto',soloRetrasar:PG22}); });
         p=p.then(function(){ CO.plnDest=null; CO.pgPlan=null; });
       } else {
       if(R.length) p=p.then(function(){ return api('coachNuevaProgramacion',CO.pin,CO.cid,{desde:E.desde,hasta:E.hasta,copiar:false}); });
@@ -25100,10 +25342,16 @@ A.plnAprobar=function(el){
     }
     if(Di){
       var K=Di.K, ob=[{kcal:String(K.kcal),proteina:String(K.p),carbohidratos:String(K.c),grasa:String(K.g)}], hasta=E?E.hasta:sumar(hoy,P.sem*7-1);
+      if(PDa){ p=p.then(function(){ var PL=copia(Di.planes); PL.forEach(function(pl){ pl.comidas.forEach(function(c){ c.opciones.forEach(function(o){ (o.items||[]).forEach(function(it){ var a=CO.nutM&&CO.nutM[it.a]; if(a&&(it.x||'')===(a.x||'')) delete it.x; }); }); }); });
+          var fs=({grasa:'deficit',recomp:'deficit',musculo:'volumen'})[P.obj]||'mantenimiento';
+          return PDa.dest&&!E?api('coachDietaRellenar',CO.pin,CO.cid,{desde:PDa.dest.k,planes:PL,notas:(D&&D.notas)||''}):api('coachDietaNueva',CO.pin,CO.cid,{desde:PDa.d,hasta:PDa.h,modo:'sustituir',planes:PL,kcal:Math.round(K.kcal),fase:fs,notas:(D&&D.notas)||''}); });
+        p=p.then(function(){ CO.plnDest=null; hecho.push({tipo:'dieta',nueva:true,que:''}); });
+      } else {
       if(D) p=p.then(function(){ return api('coachNuevaDieta',CO.pin,CO.cid,{desde:hoy,hasta:hasta,obj:ob,ajustar:false}); });
       p=p.then(function(){ var PL=copia(Di.planes); PL.forEach(function(pl){ pl.comidas.forEach(function(c){ c.opciones.forEach(function(o){ (o.items||[]).forEach(function(it){ var a=CO.nutM&&CO.nutM[it.a]; if(a&&(it.x||'')===(a.x||'')) delete it.x; }); }); }); });
         return api('coachGuardarDieta',CO.pin,CO.cid,{planes:PL,notas:(D&&D.notas)||'',desde:hoy,hasta:hasta}); });
       p=p.then(function(){ hecho.push({tipo:'dieta',nueva:true,que:''}); });
+      }
     }
     cargando(p).then(function(){
       var cid=CO.cid; delete CCACHE[cid]; X.E=null; X.Di=null; X.fecha=''; LS.del('chadin_pln_'+cid); CO.pln=null;
@@ -25304,8 +25552,12 @@ function guiaPlnHtml(){
     ['Tus indicaciones','Vienen marcadas con su cuestionario. <b>✎</b>: lo ha deducido la app, revísalo. <b>En rojo</b>: falta. Cada toque se guarda solo en su ficha.','<span class="tipos ops" style="margin:0"><button class="on" tabindex="-1">Perder grasa</button>'+hl('<button tabindex="-1">Recomposición</button>')+'</span>'],
     ['Genera y revisa','Sale la semana, las rutinas y la dieta. <b>Todavía no le llega nada.</b> «Otra propuesta» cambia ejercicios y variantes.',hl('<span class="btn sm">Generar plan</span>')],
     ['Retócala','Toca un ejercicio para cambiar series, repeticiones, RIR, descanso, técnica o el ejercicio; «+ Añadir ejercicio» busca en tu banco.','<span class="gu-it">Hip thrust <span class="gu-g">3 × 10-12</span></span>'],
-    ['Aprobar y ponérsela','Arriba, <b>«¿Cuándo va este plan?»</b>: al final, después de la de ahora u otro día (la barra enseña cómo queda). Sus rutinas aparecen en <b>Entrenos</b> con esas fechas y la dieta en <b>Dieta</b>. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')],
-    ['¿Y lo de antes?','Nada se rompe: una programación va detrás de otra. Si la nueva empieza antes de que acabe la de ahora, la de ahora acaba la víspera (y ese día pasa sola al <b>Historial de rutinas</b>); las que ya tenías preparadas se mueven detrás. La dieta anterior, a <b>Dietas anteriores</b>. Sus entrenos registrados no se pierden nunca.',''],
+  ].concat(PG22?[
+    ['¿Cuándo?','Lo primero de «Tus indicaciones»: el día que empieza y cuántas semanas dura. En la barra, <b>arrastra el verde</b> para ponerlo después de la de ahora, de la próxima o al final; las de detrás se retrasan solas si hace falta. La dieta va con las mismas fechas.',hl('<span class="pgb new" style="display:inline-flex;min-height:0;padding:6px 10px"><b>Este plan</b></span>')],
+    ['Aprobar y ponérsela','Sus rutinas aparecen en <b>Entrenos</b> y la dieta en <b>Dieta</b>, con esas fechas. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')]
+  ]:[
+    ['Aprobar y ponérsela','Arriba, <b>«¿Cuándo va este plan?»</b>: al final, después de la de ahora u otro día (la barra enseña cómo queda). Sus rutinas aparecen en <b>Entrenos</b> con esas fechas y la dieta en <b>Dieta</b>. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')]
+  ]).concat([PG22?['¿Y lo de antes?','Nada se rompe: una programación va detrás de otra. Si la nueva empieza antes de que acabe la de ahora, la de ahora acaba la víspera (y ese día pasa sola al <b>Historial de rutinas</b>); las que ya tenías preparadas se retrasan solo si chocan. Con la dieta, igual (la anterior, a <b>Dietas anteriores</b>). Sus entrenos registrados no se pierden nunca.','']:['¿Y lo de antes?','Nada se rompe: una programación va detrás de otra. Si la nueva empieza antes de que acabe la de ahora, la de ahora acaba la víspera (y ese día pasa sola al <b>Historial de rutinas</b>); las que ya tenías preparadas se mueven detrás. La dieta anterior, a <b>Dietas anteriores</b>. Sus entrenos registrados no se pierden nunca.','']]).concat([
     ['Lo de ahora y lo que viene','En Entrenos, «Programación actual»: lo de ahora en negro, con su semana y lo que lleva; debajo, «Próximas», cada una con <b>«✓ Lista»</b> o <b>«! Faltan las rutinas»</b>. <b>Toca una</b> para cambiar sus fechas, ver o preparar sus rutinas, su objetivo o quitarla. Todas sus rutinas van con las fechas de su programación, y el calendario sale igual.',hl('<span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span>')],
     ['La rutina por dentro','Arriba, <b>«Cuándo la hace»</b>: sus días, las fechas y en qué semana va (la barra). Cada bloque (movilidad, principal, cardio) se pliega en su línea: queda abierto el que trabajas y, con «Listo» en su último ejercicio, se cierra y se abre el siguiente. <b>«Abrir todos»</b> para verlo todo a la vez.',hl('<span class="blq-todos">'+ic('abrir2')+'Abrir todos</span>')],      // v53.4.147
     ['Cambiar después','En Entrenos y en Dieta, como siempre: tocas lo que quieras y «Guardar». También puedes volver a «Plan» y preparar otro.',hl('<span class="btn sm">Guardar</span>')],
@@ -25313,7 +25565,7 @@ function guiaPlnHtml(){
     ['Recuperar del historial','Una rutina: se añade a las de ahora. «Volver a esta programación»: sustituye a las de ahora (que pasan al historial).',hl('<span class="btn sm sec">Recuperar</span>')],
     ['Renovar','Cuando terminan, Inicio te avisa: «Preparar renovación». La app tiene en cuenta lo anterior para no repetirlo. O «Cambiar fechas o quitar» para alargar la de ahora (las de detrás se mueven solas).',hl('<span class="btn sm sec">Preparar renovación</span>')],
     ['Tu banco de rutinas','Guarda cualquier propuesta (con tus retoques) para otros clientes y elígela luego con «Desde tu banco de rutinas».',hl('<span class="btn sm sec">'+ic('modelo')+'Guardar en tu banco</span>')]
-  ];
+  ]);
   return '<div class="gu-h"><b>Guía rápida: plan y entrenos</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">El recuadro señala dónde tocar.</p>'+
     P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p>'+(x[2]?'<div class="gu-im" inert>'+x[2]+'</div>':'')+'</div>'; }).join('');
 }
