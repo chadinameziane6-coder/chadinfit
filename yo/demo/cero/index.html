@@ -2421,10 +2421,7 @@ window.YO_REVISAR = [
     ir: function () { demoIr('inicio'); setTimeout(function () { A.perfil && A.perfil(); }, 200); } },
   { t: 'Propuesta · «Tus entrenos» tipo Hevy (21 nov)', d: 'Progreso → Tus entrenos: arriba, en grande, lo de la barra que tocas; el rango en un desplegable; barras azules y debajo Entrenos · Tiempo · Volumen. En la app ya está el claro: si prefieres este, se cambia.',
     ir: function () { window.PH_EST_DEMO = 'hevy'; S.x.pv = 'ent'; demoIr('prog'); } },
-  { t: 'Falta Supabase · Tu foto en la Comunidad (21 nov)', d: 'Aprobado. Comunidad → tu perfil → toca tu círculo: la misma foto de tu perfil (una sola foto). Sale en tus publicaciones, comentarios y listas; la de los demás se puede denunciar. Se publica al aplicar la 015 en Supabase.',
-    ir: function () { demoIr('comu'); setTimeout(function () { var e = CMU().est; if (e && e.pid) A.cPersona({ dataset: { p: e.pid } }); setTimeout(function () { A.cAvatar(); }, 700); }, 700); } },
-  { t: 'Falta Supabase · Editar lo que publicas (21 nov)', d: 'Aprobado. Comunidad → tu publicación → ••• → «Editar publicación»: título, comentario, foto y quién lo ve. Se publica al aplicar la 015 en Supabase (el título al compartir una receta ya está en la app).',
-    ir: function () { demoIr('comu'); setTimeout(function () { var e = CMU().est; if (e && e.pid) A.cPersona({ dataset: { p: e.pid } }); setTimeout(function () { var b = document.querySelector('.cm-pub [data-a=cMenu]'); if (b) { b.click(); setTimeout(function () { var m = document.querySelector('[data-a=cEditarPub]'); if (m) m.click(); }, 200); } }, 900); }, 700); } },
+  /* 21 nov, 10:12: la 015 aplicada; tu foto en la Comunidad y editar lo que publicas, publicados en yo-1.10 */
   { t: 'Para comparar · «Tus entrenos» en claro (el de la app ahora)', d: 'El mismo panel de antes, en una tarjeta blanca y sin brillos.',
     ir: function () { window.PH_EST_DEMO = 'claro'; S.x.pv = 'ent'; demoIr('prog'); } },
   { t: 'Para comparar · «Tus entrenos» en negro (el de antes)', d: 'Como estaba hasta el 21 nov.',
@@ -3093,7 +3090,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.9';
+var YO_V = 'yo-1.10';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -9546,7 +9543,7 @@ function cargaFotosComu() {
    en la Comunidad (indep.comu_avatar, 015). Una sola foto: si la cambias en tu perfil, cambia en la Comunidad; si la quitas, se quita de los dos sitios.
    Las fotos de los demás se piden juntas al verlas (yo_comu_avatares, con las mismas reglas que su perfil). Se pueden denunciar.
    En borrador (COMU_AV y COMU_ED apagados, también editar lo publicado) hasta el OK y la 015 en Supabase. */
-var COMU_AV = false, COMU_ED = false;      // 21 nov, 00:40: aprobado, pero la 015 en Supabase quedó sin aplicar (la confirmación se canceló sola): siguen en la demo hasta aplicarla
+var COMU_AV = true, COMU_ED = true;      // 21 nov, 00:40: aprobado; 10:12: la 015 aplicada en Supabase (Chadín: «lo de la comunidad aplícalo sí»), publicado en yo-1.10
 function comuAv() { return COMU_AV || rpBorr(); }
 function comuEd() { return COMU_ED || rpBorr(); }
 function avMio() { return !!(S.perfil && S.perfil.fotoCm && fotoPf()); }
