@@ -11737,7 +11737,7 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ PG22=!!(r&&(r.casa===true||r.demo===true))||(typeof DEMO!=='undefined'&&DEMO); if(LS.get('chadin_pg22')===0) PG22=false; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
+function ponerResumen(r){ PG22=LS.get('chadin_pg22')!==0; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
   CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.citasMias=r.citasMias||[]; CO.nuevos=r.nuevos||[]; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
@@ -24052,7 +24052,7 @@ var PLN_SEMS=[4,6,8];
    Cada programación es un bloque (sus rutinas, todas con las mismas fechas, y su periodo del calendario con su objetivo y prioridad).
    La barra de bloques sale al programar una nueva, al cambiar fechas y al quitar; Entrenos se ve como antes. Mismo criterio que
    progSegs_ del servidor. Diseño aprobado: especificaciones/programaciones/ESPEC_PROGRAMACIONES.md */
-var PG21=true, PG22=false;      // PG22 (v53.4.188): panel nº 1 y demo; se pone al recibir su resumen (ponerResumen)
+var PG21=true, PG22=true;      // PG22 (v53.4.188): para todos (Chadín, 21:33: «aplica a todos»); antes solo panel nº 1 y demo
 function pgHoy(){ return CO.hoy||hoyStr(); }
 function pgSegs(t){ if(t==='die') return dgSegs();
   var d=CO.d||{}, hoy=pgHoy(), R=d.rutinas||[], F=(d.fases||[]).filter(function(x){ return x.tipo==='entreno'; });
