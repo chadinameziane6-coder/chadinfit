@@ -162,6 +162,18 @@ if (/(^|[#&])t=/.test(location.hash)) {
   setTimeout(listo, 9000);
   f.addEventListener('load', function () { setTimeout(listo, 2500); });
 
+  /* v53.4.184 · app de iPhone (Capacitor): le pasa a la app, que va en este marco, el hueco de la hora, el wifi y la batería
+     y el de la raya de abajo, por si dentro del marco el iPhone no lo da. En el navegador no hace nada. */
+  function nativa() { try { return !!(window.Capacitor && Capacitor.isNativePlatform && Capacitor.isNativePlatform()); } catch (er) { return false; } }
+  function hueco() {
+    if (!nativa() || !document.body) return;
+    var p = document.createElement('div'); p.style.cssText = 'position:fixed;left:0;top:0;visibility:hidden;pointer-events:none;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)';
+    document.body.appendChild(p); var cs = getComputedStyle(p), sa = { t: parseFloat(cs.paddingTop) || 0, b: parseFloat(cs.paddingBottom) || 0 }; p.parentNode.removeChild(p);
+    if (sa.t || sa.b) { try { f.contentWindow.postMessage({ chadinfit: 1, sa: sa }, location.origin); } catch (er) {} }
+  }
+  f.addEventListener('load', function () { hueco(); setTimeout(hueco, 700); setTimeout(hueco, 2500); });
+  window.addEventListener('resize', hueco);
+
 
   /* mensajes de la app: está lista, mensajes sin leer (número en la pestaña) y avisos */
   var SES = { cl: 'mo_ses_cl', co: 'mo_ses_co', dcl: 'mo_disp_cl', dco: 'mo_disp_co' };
