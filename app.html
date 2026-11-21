@@ -3298,6 +3298,8 @@ button.arel-bt{border:0;font:600 13px Plus Jakarta Sans,sans-serif}
 .rest-b .rest-son{display:flex;align-items:center;justify-content:center;padding:10px;min-width:40px}.rest-son .ic{width:18px;height:18px;margin:0}.rest-son.off{opacity:.75}
 .dsc-f{gap:12px;align-items:center;padding:12px 0;border-top:1px solid var(--line2)}.card-t+.dsc-f{border-top:0;padding-top:4px}.dsc-f>span:first-child{flex:1;min-width:0;font-weight:600}
 .dsc-pr{width:auto;margin-top:10px}
+.dsc-modo{display:grid;gap:8px;padding:12px 0 2px;border-top:1px solid var(--line2)}.dsc-modo>b{font-size:14px}
+.son-o{text-align:left;border:1.5px solid var(--line);border-radius:14px;padding:11px 13px;background:transparent;color:inherit;font:inherit;display:grid;gap:3px;cursor:pointer}.son-o b{font-size:14.5px}.son-o small{color:var(--mu);font-size:12.5px;line-height:1.35;font-weight:500}.son-o.on{border-color:var(--tx);box-shadow:inset 0 0 0 1px var(--tx)}
 /* ===== v52.5 · foto de perfil: «Ajusta tu foto» (mover, acercar y ver cómo queda en su círculo) ===== */
 .fc-st{position:relative;width:min(100%,300px);aspect-ratio:1/1;margin:14px auto 10px;overflow:hidden;border-radius:18px;background:#111;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none;outline:0}.fc-st.mv{cursor:grabbing}.fc-st:focus-visible{box-shadow:0 0 0 3px #111}
 .fc-st img{position:absolute;left:50%;top:50%;max-width:none;max-height:none;pointer-events:none;-webkit-user-drag:none}
@@ -5170,7 +5172,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.189';
+var APP_V = 'v53.4.190';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -7066,11 +7068,13 @@ function cmpLienzo(c,pares){
   return fuentes.then(function(){ return Promise.all(jobs); }).then(function(){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d');
     x.fillStyle='#0E0E10'; x.fillRect(0,0,W,H);
-    var M=44, G=22, colW=(W-2*M-G)/2, n=pares.length, lab=n>1?52:0, gapR=n>1?34:0, cabH=128, difH=96, zona=H-90-210;
+    /* 21 nov, 23:50 (Chadín): MOOD ON arriba a la derecha, en la línea de los días, y todo dentro de lo que no tapan las historias (arriba 250, abajo 300) */
+    var M=44, G=22, colW=(W-2*M-G)/2, n=pares.length, lab=n>1?52:0, gapR=n>1?34:0, cabH=128, difH=0, TOP=330, zona=H-300-TOP;
     var dias=Math.abs(diff(c.a,c.b)), maxBox=(zona-cabH-difH-(n-1)*gapR)/n-lab;
+    cabLogoCl(x,W,dias?(dias+(dias===1?' DÍA':' DÍAS')+' ENTRE UNA Y OTRA'):'MI PROGRESO','rgba(255,255,255,.78)','negro');
     var tam=function(im){ if(!im) return null; var k=Math.min(colW/im.naturalWidth,maxBox/im.naturalHeight); return {w:im.naturalWidth*k,h:im.naturalHeight*k}; };
     pares.forEach(function(p){ p.ta=tam(p.ai); p.tb=tam(p.bi); p.h=Math.max(p.ta?p.ta.h:0,p.tb?p.tb.h:0)||Math.min(maxBox,colW*4/3); });
-    var total=cabH+pares.reduce(function(s,p){ return s+lab+p.h; },0)+(n-1)*gapR+(dias?difH:0), y=90+Math.max(0,(zona-total)/2);
+    var total=cabH+pares.reduce(function(s,p){ return s+lab+p.h; },0)+(n-1)*gapR, y=TOP+Math.max(0,(zona-total)/2);
     // cabecera: Antes | Después, con su fecha
     x.textAlign='center'; x.textBaseline='alphabetic';
     [['ANTES',c.a],['DESPUÉS',c.b]].forEach(function(z,k){ var cx=M+k*(colW+G)+colW/2;
@@ -7086,8 +7090,7 @@ function cmpLienzo(c,pares){
       });
       y+=p.h+(r<n-1?gapR:0);
     });
-    if(dias){ var tx=dias+(dias===1?' día':' días')+' entre una y otra'; x.font='700 30px '+FF; var tw=x.measureText(tx).width+56; x.fillStyle='#1C1C1E'; redondo((W-tw)/2,y+28,tw,62,31); x.fill(); x.fillStyle='#fff'; x.textAlign='center'; x.fillText(tx,W/2,y+70); }
-    logoCanvas(x,(W-300)/2,H-150,300,'#fff',true);
+    // (los días y el logo, arriba)
     var url=cv.toDataURL('image/jpeg',0.9);
     return new Promise(function(res){ try{ cv.toBlob(function(b){ res({url:url,blob:b}); },'image/jpeg',0.9); }catch(e){ res({url:url}); } });
   });
@@ -8823,6 +8826,7 @@ function nuevoEntreno(r){
   resetSync();
   CL.dr={id:'s'+rand(14),rutina_id:r.id,rutina:r.nombre,fecha:hoyStr(),t0:Date.now(),v34:1,ej:ordenMov(r.ejercicios).map(function(x){ var b=itemEntreno(x.e); b.ri=x.i; return b; })};
   CL.diaSel=null; guardarBorrador(true); CL.tab='entreno'; pintarCl(); window.scrollTo(0,0);
+  prepararAudio(); campana(1,0.6);      // 21 nov, 23:50: suena al empezar el entreno (y deja el sonido listo)
 }
 /* borradores guardados con versiones anteriores */
 function normalizarDr(dr){
@@ -9456,8 +9460,8 @@ var restI=null;
 function descanso(seg,lab){ CL.restFin=Date.now()+seg*1000; CL.restAv=false; CL.restLab=lab||'Descanso'; prepararAudio(); mostrarRest(); }
 /* v52.6 · avisos del descanso: sonido (se puede silenciar), vibración (donde el móvil lo deja) y la pantalla encendida durante el entreno.
    Sus ajustes van en este móvil (chadin_desc). Los pitidos se dejan programados en el reloj del sonido (restProg) para que suenen a su hora aunque el navegador frene la página. */
-function descCfg(){ var c=LS.get('chadin_desc')||{}, son=c.son!==false; return {son:son,cta:son&&c.cta!==false,vib:son}; }      // v52.7: dos preguntas: el aviso al acabar (y vibra donde se puede) y la cuenta atrás 3, 2, 1; la pantalla encendida, siempre
-function descGuardar(k,v){ var c=LS.get('chadin_desc')||{}; c[k]=v; LS.set('chadin_desc',{son:c.son!==false,cta:c.cta!==false}); }      // lo que eligió (no lo calculado)
+function descCfg(){ var c=LS.get('chadin_desc')||{}, son=c.son!==false; return {son:son,cta:son&&c.cta!==false,vib:son,siempre:c.modo==='siempre'}; }      // v52.7: dos preguntas: el aviso al acabar (y vibra donde se puede) y la cuenta atrás 3, 2, 1; la pantalla encendida, siempre
+function descGuardar(k,v){ var c=LS.get('chadin_desc')||{}; c[k]=v; LS.set('chadin_desc',{son:c.son!==false,cta:c.cta!==false,modo:c.modo==='siempre'?'siempre':'mezcla'}); }      // lo que eligió (no lo calculado)
 function vibraOk(){ return typeof navigator!=='undefined'&&typeof navigator.vibrate==='function'; }
 function vibrar(p){ if(!descCfg().vib||!vibraOk()) return; try{ navigator.vibrate(p); }catch(e){} }
 function restCancelar(){ (CL.restNodos||[]).forEach(function(o){ try{ o.stop(); }catch(e){} }); CL.restNodos=[]; CL.restProg=0; CL.restAcFin=0; }
@@ -9467,7 +9471,7 @@ function pitidoEn(t0,fr,ms,vol){ var ac=CL.ac, o=ac.createOscillator(), g=ac.cre
 var CAMP=[[1,0.55,2.4],[2,0.24,1.5],[2.76,0.2,1.2],[5.4,0.09,0.7],[8.93,0.05,0.4]];
 function campanaEn(t0,alto,vol){ var ac=CL.ac; if(!ac) return; var f0=880*(alto||1), M=ac.createGain(); M.gain.value=vol||0.9; M.connect(ac.destination);
   CAMP.forEach(function(p){ var o=ac.createOscillator(), g=ac.createGain(); o.type='sine'; o.frequency.value=f0*p[0]; g.gain.setValueAtTime(0.0001,t0); g.gain.exponentialRampToValueAtTime(p[1],t0+0.008); g.gain.exponentialRampToValueAtTime(0.0001,t0+p[2]); o.connect(g); g.connect(M); o.start(t0); o.stop(t0+p[2]+0.05); (CL.restNodos=CL.restNodos||[]).push(o); }); }
-function campana(alto,vol){ if(!descCfg().son) return; try{ var ac=CL.ac; if(!ac) return; if(ac.state==='suspended') ac.resume(); campanaEn(ac.currentTime+0.02,alto,vol); }catch(e){} }
+function campana(alto,vol){ if(!descCfg().son) return; try{ var ac=CL.ac; if(!ac) return; if(ac.state!=='running') ac.resume(); campanaEn(ac.currentTime+0.02,alto,vol); }catch(e){} }
 function campanaFin(){ campana(); setTimeout(function(){ campana(1.26,0.7); },700); }
 function restProgramar(){
   restCancelar(); var ac=CL.ac; if(!ac||ac.state!=='running'||!descCfg().son||!CL.restFin) return;
@@ -9504,9 +9508,12 @@ A.restSon=function(){ var on=!descCfg().son; descGuardar('son',on); if(on){ prep
 document.addEventListener('pointerdown',function(){ if(BOOT.mode==='clienta'&&CL.dr) prepararAudio(); },true);
 A.restMas=function(el){ var ca=CL.ctaAuto&&CL.ctaAuto.fin===CL.restFin; CL.restFin=Math.max(Date.now(),CL.restFin)+(+el.dataset.v)*1000; if(ca) CL.ctaAuto.fin=CL.restFin; CL.restAv=false; restCancelar(); mostrarRest(); };
 A.restFin=function(){ ocultarRest(); };
-function prepararAudio(){ try{ if(!CL.ac){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) CL.ac=new AC(); } if(CL.ac&&CL.ac.state==='suspended'){ var pr=CL.ac.resume(); if(pr&&pr.then) pr.then(function(){ if(CL.restFin>Date.now()&&CL.restProg!==CL.restFin) restProgramar(); },function(){}); }
+/* 21 nov, 23:50 (Chadín): «sigue sin sonar». En iPhone, con el modo silencio, una web solo suena en modo «reproductor» (pausa la música de otras apps):
+   lo elige ella en «Aviso del descanso» → «¿Cuándo suena?» (por defecto, encima de su música). Se reanuda si el móvil paró el sonido */
+function prepararAudio(){ try{ if(navigator.audioSession) navigator.audioSession.type=descCfg().siempre?'playback':'ambient'; }catch(e){}
+  try{ if(!CL.ac){ var AC=window.AudioContext||window.webkitAudioContext; if(AC) CL.ac=new AC(); } if(CL.ac&&CL.ac.state!=='running'){ var pr=CL.ac.resume(); if(pr&&pr.then) pr.then(function(){ if(CL.restFin>Date.now()&&CL.restProg!==CL.restFin) restProgramar(); },function(){}); }
   if(CL.ac&&!CL.acOk){ var b=CL.ac.createBuffer(1,1,22050), x=CL.ac.createBufferSource(); x.buffer=b; x.connect(CL.ac.destination); x.start(0); CL.acOk=1; } }catch(e){} }      // v44: un sonido mudo al tocar para que el móvil deje sonar el aviso
-function pitido(fr,ms,vol){ if(!descCfg().son) return; try{ var ac=CL.ac; if(!ac) return; if(ac.state==='suspended') ac.resume(); var o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime; o.type='triangle'; o.frequency.value=fr; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.3,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+ms/1000+0.02); }catch(e){} }
+function pitido(fr,ms,vol){ if(!descCfg().son) return; try{ var ac=CL.ac; if(!ac) return; if(ac.state!=='running') ac.resume(); var o=ac.createOscillator(), g=ac.createGain(), t=ac.currentTime; o.type='triangle'; o.frequency.value=fr; g.gain.setValueAtTime(0.0001,t); g.gain.exponentialRampToValueAtTime(vol||0.3,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+ms/1000); o.connect(g); g.connect(ac.destination); o.start(t); o.stop(t+ms/1000+0.02); }catch(e){} }
 function avisar(){
   vibrar([300,120,300,120,500]);
   campanaFin();      // 21 nov: la campana (antes, tres pitidos)
@@ -20948,7 +20955,7 @@ function finModoAct(){ return CL.finModo==='trans'&&CL.finFoto?'foto':CL.finModo
 function finCanvas(t,m){
   CL.finCv=CL.finCv||{}; var k=t+'|'+m;
   if(CL.finCv[k]) return Promise.resolve(CL.finCv[k]);
-  var nueva=(t==='sum'||t==='res'||t==='vol')&&!soloCarrera(CL.ultEntreno||{}), dib=function(mo){ return nueva?tarjetaGrande(t,mo):tarjetaEntreno(t==='sum'?'vol':t,mo,m==='foto'); };      // v53.4.176
+  var run=t!=='res'&&soloCarrera(CL.ultEntreno||{}), nueva=(t==='sum'||t==='res'||t==='vol')&&!run, dib=function(mo){ return run?tarjetaRunCl(mo):nueva?tarjetaGrande(t,mo):tarjetaEntreno(t==='sum'?'vol':t,mo,m==='foto'); };      // v53.4.176 · 21 nov, 23:50: la carrera, como en la app de usuaria
   return (m==='foto'?dib('trans').then(componerFoto):m==='blanco'?dib('negro').then(aBlanco):dib(m)).then(function(cv){
     var o={cv:cv,url:cv.toDataURL('image/png')}; CL.finCv[k]=o; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); return o; });
 }
@@ -21071,6 +21078,28 @@ function logoCard(x,W,y){ logoCanvas(x,(W-300)/2,y,300,'#FFFFFF',true); }      /
 /* v53.4.33 · una carrera sola (sin fuerza ni bloques): la tarjeta, como una pegatina tipo Strava (propuesta C que eligió Javier):
    qué carrera y el día, distancia y ritmo, el tiempo y el logo, en el centro (con su foto, en la parte de abajo) */
 function soloCarrera(U){ var r=U.r||{}; return !!(r.runKm&&!(r.efectivas||r.vol)&&!(U.ej||[]).some(function(e){ return e.bl; })); }
+/* 21 nov, 23:50 (Chadín, con la tarjeta «Tu carrera»: «MOOD ON a la derecha a la altura de la fecha, respetando margen, que se vea bien en las historias»):
+   la de carrera como la de la app de usuaria: el nombre, la fecha con el logo a su derecha, los km en grande y debajo tiempo, ritmo y esfuerzo.
+   Todo dentro de lo que no tapan las historias (arriba 250, abajo 300 sin foto y 330 con ella) */
+function tarjetaRunCl(modo){
+  var U=CL.ultEntreno||{}, r=U.r||{}, R=(U.ej||[]).filter(function(e){ return e.run; }), km=num(r.runKm)||R.reduce(function(a,e){ return a+(num(e.km)||0); },0), sg=R.reduce(function(a,e){ return a+(num(e.sg)||0); },0);
+  var rit=r.runRit||(km&&sg?sg/km:null), nom=R.length===1?R[0].n:(U.rutina||'Carrera'), rpe=num(U.rpe!=null?U.rpe:r.rpe);
+  return fuentesListas().then(function(){
+    var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), M=90, AN=W-2*M, LW=250, ops=[], add=function(h,f){ ops.push({h:h,f:f}); };
+    fondoCard(x,W,H,modo); x.textAlign='left'; x.textBaseline='alphabetic';
+    var logoDer=function(base,fin){ var w=LW, lx=W-M-w; if(fin+34>lx){ w=Math.max(150,W-M-fin-34); lx=W-M-w; } x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,lx,base-w*0.14,w,'#FFFFFF',true); x.restore(); };
+    add(76,function(y){ x.fillStyle='#fff'; var T=String(nom).toUpperCase(), px=textoAjustado(x,T,AN,60,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+58); });
+    add(84,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); var t=recortar(x,grFecha(U),AN-LW-40); x.fillText(t,M,y+50); var w=x.measureText(t).width; grEsp(x,'0px'); logoDer(y+55,M+w); });
+    var big=km?fN(km,km>=10?1:2):String(r.min||0), uni=km?'KM':'MIN';
+    add(250,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,big,AN-200,250,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-8px'); x.fillText(big,M-6,y+220); var w=x.measureText(big).width; grEsp(x,'2px'); x.font='800 46px'+FCV; x.fillText(uni,M+w+14,y+220); grEsp(x,'0px'); });
+    var K=[]; if(km) K.push([sg?runT(sg):(r.min||0)+' min','TIEMPO']); if(rit&&km) K.push([runT(rit),'MIN/KM']); if(rpe) K.push([rpe+'/10','ESFUERZO']);
+    if(K.length) add(150,function(y){ var cx=M, gap=K.length>3?44:64; K.forEach(function(k){ x.font='800 66px'+FCV; var vw=x.measureText(k[0]).width; x.font='700 22px'+FCV; grEsp(x,'3px'); var lw=x.measureText(k[1]).width; grEsp(x,'0px');
+      x.fillStyle='#fff'; x.font='800 66px'+FCV; x.fillText(k[0],cx,y+70); x.fillStyle='rgba(255,255,255,.72)'; x.font='700 22px'+FCV; grEsp(x,'3px'); x.fillText(k[1],cx,y+112); grEsp(x,'0px'); cx+=Math.max(vw,lw)+gap; }); });
+    var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=Math.max(250,(H-(modo==='trans'?330:300))-tot);
+    sombraCard(x,modo); ops.forEach(function(o){ o.f(y); y+=o.h; });
+    return cv;
+  });
+}
 function pegatinaRun(x,W,H,U,modo,enFoto){
   var r=U.r||{}, R=(U.ej||[]).filter(function(e){ return e.run; }), km=num(r.runKm)||R.reduce(function(a,e){ return a+(num(e.km)||0); },0), sg=R.reduce(function(a,e){ return a+(num(e.sg)||0); },0);
   var rit=r.runRit||(km&&sg?sg/km:null), nom=R.length===1?R[0].n:'Carrera', cab=(U.primero?'Mi primer entreno':nom)+' · '+fCorta(U.fecha||hoyStr());
@@ -21116,14 +21145,14 @@ function tarjetaGrande(tipo,modo){
       add(68,function(y){ x.fillStyle='#fff'; var T=tit.toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+56); });
       add(66,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); var t=recortar(x,sub,AN-LW-40); x.fillText(t,M,y+40); var w=x.measureText(t).width; grEsp(x,'0px'); logoDer(y+44,M+w); }); };
     if(tipo==='sum'){
-      cab(grFecha(U));
+      cabL(grFecha(U));      // 21 nov, 23:50 (Chadín): el logo, a la altura de la fecha (en todo lo que se comparte)
       if(wod&&BL.length) add(64,function(y){ x.fillStyle='#fff'; x.font='800 38px'+FCV; grEsp(x,'2px'); x.fillText(recortar(x,BL.map(function(e){ return String((e.bl.nb||e.n)+(e.txt?' · '+e.txt:'')).toUpperCase(); }).join('  +  '),AN),M,y+44); grEsp(x,'0px'); });
       var L=[durGrCl(r.min)];
       if(wod){ var nE=BL.reduce(function(a,e){ return a+((e.bl.ej||[]).length||1); },0)+(U.ej||[]).filter(function(e){ return !e.bl; }).length; L.push([String(nE),nE===1?'EJERCICIO':'EJERCICIOS']); if(BL.length>1) L.push([String(BL.length),'BLOQUES']); }
       if(r.vol) L.push([fN(r.vol,0),'KG']);
       if(r.runKm) L.push([fN(r.runKm,1),'KM']);
       if(nr) L.push([String(nr),nr===1?'RÉCORD':'RÉCORDS',1]); else if(nser&&!wod) L.push([String(nser),nser===1?'SERIE':'SERIES']);
-      var iL=L.length-1;
+      var iL=-1;      // (antes, el logo iba en la de los récords)
       L.forEach(function(l,li){ add(172,function(y){ x.fillStyle=l[2]?GR_ORO:'#fff'; var px=textoAjustado(x,l[0],AN-230-(li===iL?LW:0),170,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-6px'); x.fillText(l[0],M,y+150); var w=x.measureText(l[0]).width; grEsp(x,'3px');
         x.fillStyle=l[2]?GR_ORO:'rgba(255,255,255,.92)'; x.font='800 44px'+FCV; x.fillText(l[1],M+w+18,y+150); var w2=x.measureText(l[1]).width; grEsp(x,'0px'); if(li===iL) logoDer(y+150,M+w+18+w2); }); });
     } else if(tipo==='res'){
@@ -21153,8 +21182,9 @@ function tarjetaGrande(tipo,modo){
         add(96,function(y){ var kg=fN(r.vol,0)+' kg'; x.font='800 34px'+FCV; var w=x.measureText(kg).width; x.save(); x.shadowColor='transparent'; x.fillStyle='#fff'; rrect(x,M,y+26,w+48,62,31); x.fill(); x.restore();
           x.fillStyle='#111'; x.save(); x.shadowColor='transparent'; x.fillText(kg,M+24,y+70); x.restore(); x.fillStyle='rgba(255,255,255,.95)'; x.font='600 32px'+FCV; x.fillText(recortar(x,'en '+tit,AN-w-70),M+w+66,y+69); });
       } else {
+        add(66,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); var t=recortar(x,grFecha(U),AN-LW-40); x.fillText(t,M,y+40); var w=x.measureText(t).width; grEsp(x,'0px'); logoDer(y+44,M+w); });
         add(150,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,'¡ENTRENO HECHO!',AN,130,'800'); x.font='800 '+px+'px'+FCV; x.fillText('¡ENTRENO HECHO!',M,y+125); });
-        add(70,function(y){ x.fillStyle='rgba(255,255,255,.9)'; x.font='700 40px'+FCV; var t=durLargoCl(r.min)+' DÁNDOLO TODO'; x.fillText(recortar(x,t,AN-LW-40),M,y+52); logoDer(y+56,M+x.measureText(t).width); });
+        add(70,function(y){ x.fillStyle='rgba(255,255,255,.9)'; x.font='700 40px'+FCV; var t=durLargoCl(r.min)+' DÁNDOLO TODO'; x.fillText(recortar(x,t,AN),M,y+52); });
       }
     }
     var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=modo==='negro'?Math.max(200,Math.round((H-tot)/2)-30):Math.max(230,(H-330)-tot);
@@ -21776,12 +21806,16 @@ function descClCard(){ var c=descCfg();
   return '<div class="card dsc-pf"><div class="card-t">'+ic('reloj')+'Aviso del descanso</div>'+
     fila('son','¿Quieres que te avise cuando acaba el descanso?','Una campana al terminar.',c.son)+
     (c.son?fila('cta','¿Quieres la cuenta atrás 3, 2, 1?','Un pitido corto en cada uno de los 3 últimos segundos.',c.cta):'')+
+    (c.son?'<div class="dsc-modo"><b>¿Cuándo suena?</b>'+
+      '<button class="son-o'+(c.siempre?'':' on')+'" data-a="descModo" data-v="mezcla" aria-pressed="'+!c.siempre+'"><b>Encima de mi música</b><small>Suena a la vez que Spotify u otra app. Con el iPhone en silencio no suena.</small></button>'+
+      '<button class="son-o'+(c.siempre?' on':'')+'" data-a="descModo" data-v="siempre" aria-pressed="'+c.siempre+'"><b>Siempre, aunque esté en silencio</b><small>Suena aunque tengas el modo silencio, pero pausa la música de otras apps mientras entrenas.</small></button></div>':'')+
     '<button class="btn sm sec dsc-pr" data-a="descProbar">'+ic('son')+'Probar el aviso</button></div>'; }
 A.descTog=function(el){ var k=el.dataset.k, on=!descCfg()[k]; descGuardar(k,on); CL.keep=true; pintarCl();
   toast({son:on?'Te avisará al acabar el descanso':'Sin aviso al acabar el descanso',cta:on?'Con la cuenta atrás 3, 2, 1':'Sin la cuenta atrás'}[k],'ok'); };
+A.descModo=function(el){ descGuardar('modo',el.dataset.v); prepararAudio(); CL.keep=true; pintarCl(); toast(el.dataset.v==='siempre'?'Sonará aunque el móvil esté en silencio':'Sonará encima de tu música','ok'); };
 A.descProbar=function(){ prepararAudio(); var c=descCfg(); if(!c.son) return toast('Tienes el aviso quitado: actívalo para probarlo','err');
   var t=0; if(c.cta){ [0,1,2].forEach(function(k){ setTimeout(function(){ pitido(660,90,0.45); },150+k*1000); }); t=3150; }
-  setTimeout(function(){ avisar(); },t||150); toast('¿Lo oyes? Si no, sube el volumen del móvil','ok'); };
+  setTimeout(function(){ avisar(); },t||150); toast(descCfg().siempre?'¿Lo oyes? Si no, sube el volumen del móvil':'¿No lo oyes? Quita el modo silencio o elige «Siempre» y sube el volumen','ok'); };
 /* v52.11 · sus competiciones en Hoy: la próxima con su cuenta atrás y, después, «¿Cómo te fue?»
    v53.4.4: la cuenta atrás con otro estilo (negra, los días en grande); v53.4.5: en Hoy, en una línea; al tocar una, la cuenta atrás grande
    con «Semana 6 de 11 de tu preparación» (evDiasGrande, evPrepHtml) */
@@ -23851,21 +23885,24 @@ function fraseCard(x,W,y,fr,px){
   if(!fr) return y; x.fillStyle='rgba(255,255,255,.9)'; x.font='600 '+(px||50)+'px'+FCV; x.textAlign='center';
   var L=lineasTxt(x,'«'+fr+'»',W-200).slice(0,3); L.forEach(function(l,i){ x.fillText(l,W/2,y+i*(px||50)*1.32); }); return y+L.length*(px||50)*1.32;
 }
+/* 21 nov, 23:50 (Chadín): «MOOD ON a la altura de la fecha, a la derecha, respetando margen» en todo lo que se comparte: la fecha arriba a la
+   izquierda (debajo de lo que tapan las historias) y el logo a su derecha */
+function cabLogoCl(x,W,txt,color,modo){ var M=90, LW=250; x.save(); x.textAlign='left'; x.fillStyle=color; x.font='700 30px'+FCV; grEsp(x,'4px'); var t=recortar(x,txt,W-2*M-LW-40); x.fillText(t,M,290); var w=x.measureText(t).width; grEsp(x,'0px');
+  var lw=LW, lx=W-M-lw; if(M+w+34>lx){ lw=Math.max(150,W-M-(M+w)-34); lx=W-M-lw; } logoCanvas(x,lx,294-lw*0.14,lw,'#FFFFFF',true); x.restore(); }
 function tarjetaPasos(o,modo){
   modo=modo==='trans'?'trans':'negro';
   return fuentesListas().then(function(){ return svgImg(ICONS.pasos,'#FFFFFF',1.4); }).then(function(icp){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), ok=o.n>=o.obj;
     fondoCard(x,W,H,modo); sombraCard(x,modo); x.textAlign='center';
-    x.fillStyle='rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(fLarga(o.f).toUpperCase(),W/2,176);
+    cabLogoCl(x,W,fLarga(o.f).toUpperCase(),modo==='trans'?'#FFFFFF':'rgba(255,255,255,.7)',modo);
     /* v53.4.28: sin la gráfica de la semana (lo pidió Javier): sus pasos, el objetivo y la frase, más centrados */
-    if(icp) x.drawImage(icp,W/2-55,330,110,110);
-    x.fillStyle='#FFFFFF'; var px=textoAjustado(x,fP(o.n),W-160,250,'800'); x.font='800 '+px+'px'+FCV; x.fillText(fP(o.n),W/2,700);
-    x.fillStyle='rgba(255,255,255,.72)'; x.font='500 52px'+FCV; x.fillText('pasos hoy',W/2,785);
+    if(icp) x.drawImage(icp,W/2-55,400,110,110);
+    x.fillStyle='#FFFFFF'; var px=textoAjustado(x,fP(o.n),W-160,250,'800'); x.font='800 '+px+'px'+FCV; x.fillText(fP(o.n),W/2,750);
+    x.fillStyle='rgba(255,255,255,.72)'; x.font='500 52px'+FCV; x.fillText('pasos hoy',W/2,835);
     var pill=ok?'Objetivo de '+fP(o.obj)+' cumplido · '+o.ok+' de 7 días':'Objetivo '+fP(o.obj)+' · faltan '+fP(o.obj-o.n);
-    x.font='700 38px'+FCV; var pw=x.measureText(pill).width+110; x.fillStyle='#FFFFFF'; rrect(x,(W-pw)/2,880,pw,88,44); x.fill();
-    x.fillStyle='#111111'; x.fillText(pill,W/2,937);
-    var yF=fraseCard(x,W,1070,o.fr,46);
-    logoCard(x,W,Math.min(H-420,yF+62));      // v49: el logo, más arriba (justo debajo de la frase, sin pisarla)
+    x.font='700 38px'+FCV; var pw=x.measureText(pill).width+110; x.fillStyle='#FFFFFF'; rrect(x,(W-pw)/2,930,pw,88,44); x.fill();
+    x.fillStyle='#111111'; x.fillText(pill,W/2,987);
+    fraseCard(x,W,1120,o.fr,46);      // 21 nov, 23:50: el logo, arriba con la fecha
     return cv;
   });
 }
@@ -23874,17 +23911,16 @@ function tarjetaLogro(g,modo){
   return fuentesListas().then(function(){ return svgImg(ICONS[g.ic]||ICONS.medalla,'#FFFFFF',1.5); }).then(function(im){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), tr=modo==='trans';
     fondoCard(x,W,H,modo); sombraCard(x,modo); x.textAlign='center';
-    x.fillStyle=tr?'#FFFFFF':'rgba(255,255,255,.62)'; x.font='600 34px'+FCV; x.fillText(fLarga(g.f||hoyStr()).toUpperCase(),W/2,176);
-    var cy=540; if(!tr){ x.fillStyle='rgba(255,255,255,.06)'; x.beginPath(); x.arc(W/2,cy,260,0,Math.PI*2); x.fill(); }
+    cabLogoCl(x,W,fLarga(g.f||hoyStr()).toUpperCase(),tr?'#FFFFFF':'rgba(255,255,255,.7)',modo);
+    var cy=620; if(!tr){ x.fillStyle='rgba(255,255,255,.06)'; x.beginPath(); x.arc(W/2,cy,260,0,Math.PI*2); x.fill(); }
     x.fillStyle='#C7C7CC'; x.beginPath(); x.arc(W/2,cy,200,0,Math.PI*2); x.fill(); x.shadowColor='transparent';
     x.fillStyle='#111111'; x.beginPath(); x.arc(W/2,cy,158,0,Math.PI*2); x.fill(); x.strokeStyle='#2E2E31'; x.lineWidth=6; x.stroke(); if(im) x.drawImage(im,W/2-100,cy-100,200,200);
     if(g.n>1){ x.fillStyle='#FFFFFF'; x.beginPath(); x.arc(W/2+150,cy+150,56,0,Math.PI*2); x.fill(); x.fillStyle='#111111'; x.font='800 44px'+FCV; x.fillText('×'+g.n,W/2+150,cy+166); }
     sombraCard(x,modo);
-    x.fillStyle=tr?'#FFFFFF':'#C7C7CC'; x.font='800 40px'+FCV; if(x.letterSpacing!==undefined) x.letterSpacing='10px'; x.fillText('NUEVA MEDALLA',W/2,870); if(x.letterSpacing!==undefined) x.letterSpacing='0px';
-    x.fillStyle='#FFFFFF'; var t=g.t, px=textoAjustado(x,t,W-140,108,'800'); x.font='800 '+px+'px'+FCV; x.fillText(t,W/2,995);
-    if(g.sub){ x.fillStyle=tr?'#FFFFFF':'rgba(255,255,255,.7)'; x.font='500 44px'+FCV; x.fillText(recortar(x,g.sub,W-160),W/2,1072); }
-    var yF=fraseCard(x,W,1200,g.fr,50);
-    logoCard(x,W,Math.min(H-520,yF+70));      // v49: el logo, más arriba (justo debajo de la frase)
+    x.fillStyle=tr?'#FFFFFF':'#C7C7CC'; x.font='800 40px'+FCV; if(x.letterSpacing!==undefined) x.letterSpacing='10px'; x.fillText('NUEVA MEDALLA',W/2,950); if(x.letterSpacing!==undefined) x.letterSpacing='0px';
+    x.fillStyle='#FFFFFF'; var t=g.t, px=textoAjustado(x,t,W-140,108,'800'); x.font='800 '+px+'px'+FCV; x.fillText(t,W/2,1075);
+    if(g.sub){ x.fillStyle=tr?'#FFFFFF':'rgba(255,255,255,.7)'; x.font='500 44px'+FCV; x.fillText(recortar(x,g.sub,W-160),W/2,1152); }
+    fraseCard(x,W,1280,g.fr,50);      // 21 nov, 23:50: el logo, arriba con la fecha
     return cv;
   });
 }
