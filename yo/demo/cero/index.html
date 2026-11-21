@@ -2416,12 +2416,7 @@ window.YO_REVISAR = [
      «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
      y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
      21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
-  { t: 'Por aprobar · Compartir: negro, blanco o sin fondo y accesos directos (21 nov)', d: 'Al compartir un entreno (y en la Comunidad, tu perfil y la carrera): ya no sale «Tu foto». Debajo, botones de un toque: Historias, WhatsApp e Instagram (en la app de las tiendas abren la app directamente; en la web, el menú del móvil), Comunidad, Guardar, Copiar y Más.',
-    ir: function () { demoIr('inicio'); var L = S.sesiones.slice().sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }); if (L.length) setTimeout(function () { A.compartirSes({ dataset: { id: L[L.length - 1].id } }); }, 200); } },
-  { t: 'Por aprobar · Colocar las fotos con los dedos, sin barra (21 nov)', d: 'Foto de perfil, la foto al publicar en la Comunidad y la de tus recetas: un dedo la mueve y dos dedos la acercan o la alejan. Pruébalo en el móvil: toca «Poner una foto» en tu perfil.',
-    ir: function () { demoIr('inicio'); setTimeout(function () { A.perfil && A.perfil(); }, 200); } },
-  { t: 'Propuesta · «Tus entrenos» tipo Hevy (21 nov)', d: 'Progreso → Tus entrenos: arriba, en grande, lo de la barra que tocas; el rango en un desplegable; barras azules y debajo Entrenos · Tiempo · Volumen. En la app ya está el claro: si prefieres este, se cambia.',
-    ir: function () { window.PH_EST_DEMO = 'hevy'; S.x.pv = 'ent'; demoIr('prog'); } },
+  /* 21 nov, 10:37: publicados en yo-1.11 compartir (negro, blanco o sin fondo y los accesos de las apps) y colocar las fotos con los dedos */
   /* 21 nov, 10:12: la 015 aplicada; tu foto en la Comunidad y editar lo que publicas, publicados en yo-1.10 */
   { t: 'Para comparar · «Tus entrenos» en claro (el de la app ahora)', d: 'El mismo panel de antes, en una tarjeta blanca y sin brillos.',
     ir: function () { window.PH_EST_DEMO = 'claro'; S.x.pv = 'ent'; demoIr('prog'); } },
@@ -3091,7 +3086,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.10';
+var YO_V = 'yo-1.11';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3272,7 +3267,7 @@ function guardaEnCurso() {
    Una sola forma de colocar una foto en toda la app: un dedo (o el ratón) la mueve y dos dedos la acercan, la alejan y la mueven a la vez,
    sin soltar lo que hay debajo de los dedos. En el ordenador, la rueda del ratón (o el pellizco del panel táctil) y las teclas + − y flechas.
    G = { st() → { z, x, y } (z ≥ 1; x e y, en px de la caja, cuánto se aparta el centro de la foto del centro de la caja), pinta(), fin(), zmax } */
-var F21 = false;      // borrador hasta el OK de Chadín: sin barras de zoom, compartir solo en negro, blanco o sin fondo y los accesos directos
+var F21 = true;      // 21 nov, 10:37: Chadín, «sí» (publicado en yo-1.11): sin barras de zoom, compartir solo en negro, blanco o sin fondo y los accesos directos
 function f21() { return F21 || rpBorr(); }
 function gestoFoto(box, G) {
   if (!box || box._gesto) return; box._gesto = 1; box.setAttribute('tabindex', '0');
