@@ -2073,6 +2073,28 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 .p3-fot{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.p3-fot button{position:relative;aspect-ratio:3/4;border:0;border-radius:12px;overflow:hidden;background:var(--suave);padding:0}.p3-fot img{width:100%;height:100%;object-fit:cover;display:block}.p3-fot span{position:absolute;left:6px;bottom:6px;font-size:10.5px;font-weight:700;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 .n-m3.solo{margin:8px 0 2px;padding-top:8px;border-top:1px solid var(--linea)}.n-m3.solo .n-m3f>span b{font-size:13px}      /* 21 nov: los macros de la comida en «Libre» */
 .shi-tj{margin:8px 0 -4px}      /* 21 nov: Receta · Macros */
+/* 21 nov, 11:02 · Progreso «deportivo» (P3_EST 'dep'): pestañas subrayadas y la tarjeta principal en negro, con números enormes y barras que brillan */
+.p3.dep .p3-tabs{display:flex;gap:22px;background:none;border-radius:0;padding:0 4px;border-bottom:1px solid var(--linea);margin:4px 0 14px}
+.p3.dep .p3-tabs button{flex:0 0 auto;height:42px;padding:0;background:none!important;box-shadow:none!important;border-radius:0;font-size:12.5px;font-weight:800;letter-spacing:.09em;text-transform:uppercase;color:var(--tx3);position:relative}
+.p3.dep .p3-tabs button.on{color:var(--tx)}.p3.dep .p3-tabs button.on:after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,#4F7DFF,#9A6BFF)}
+.p3.dep .p3-hero{--tx:#FFFFFF;--tx2:rgba(255,255,255,.66);--tx3:rgba(255,255,255,.44);--linea:rgba(255,255,255,.09);--borde:rgba(255,255,255,.12);--borde2:rgba(255,255,255,.22);--suave:rgba(255,255,255,.07);--pista:rgba(255,255,255,.1);--card:#17181F;--seg:rgba(255,255,255,.08);--seg-on:#FFFFFF;
+  background:radial-gradient(420px 260px at 100% 0%,rgba(110,95,255,.32),rgba(110,95,255,0) 70%),radial-gradient(360px 240px at 0% 100%,rgba(70,130,255,.2),rgba(70,130,255,0) 70%),#0D0E13!important;color:#fff;border:0!important;box-shadow:0 10px 30px rgba(10,12,40,.28)!important}
+.p3.dep .p3-hero .p3-tt{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#A9B6FF}
+.p3.dep .p3-hero .seg-p button{color:rgba(255,255,255,.62)}.p3.dep .p3-hero .seg-p button.on{background:#fff;color:#0D0E13}
+.p3.dep .p3-hero .p3-big b{font-size:76px;letter-spacing:-3px}.p3.dep .p3-hero .p3-big span{font-size:15px;text-transform:uppercase;letter-spacing:.08em;font-weight:800}
+.p3.dep .p3-hero .p3-dato b{font-size:46px;letter-spacing:-1.5px}
+.p3.dep .p3-hero .p3-b{opacity:.6;filter:brightness(1.45) saturate(1.15)}.p3.dep .p3-hero .p3-b.sel{opacity:1;filter:brightness(1.6) saturate(1.2) drop-shadow(0 0 10px rgba(130,120,255,.85))}
+.p3.dep .p3-hero .p3-p{fill:#0D0E13}.p3.dep .p3-hero .p3-p.sel{fill:#fff;stroke:#7C8CFF;filter:drop-shadow(0 0 6px rgba(124,140,255,.9))}.p3.dep .p3-hero .p3-p.pe{fill:#9DB0FF}
+.p3.dep .p3-hero .p3-gv,.p3.dep .p3-hero .p3-gx.sel{fill:#fff}
+.p3.dep .p3-hero .p3-inf{background:rgba(255,255,255,.06);border-left:3px solid #7C8CFF;border-radius:4px 14px 14px 4px}
+.p3.dep .p3-hero .f-s,.p3.dep .p3-hero select{background:rgba(255,255,255,.07);color:#fff;border-color:rgba(255,255,255,.14)}.p3.dep .p3-hero select option{color:#111}
+.p3.dep .p3-hero .link,.p3.dep .p3-hero .p3-dato .link{color:#A9B6FF}
+.p3.dep .p3-hero .btn-mini{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18)}
+.p3.dep .p3-hero .p3-vac{background:rgba(255,255,255,.06)}
+.p3.dep .p3-c:not(.p3-hero)>.p3-tt,.p3.dep .p3-c:not(.p3-hero) .p3-h .p3-tt{font-size:12.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--tx2)}
+.p3.dep .p3-rd{background:#15161C;color:#F2C14E}
+.p3.dep .p3-ri{background:linear-gradient(135deg,#4F7DFF,#9A6BFF);color:#fff}
+.p3.dep .p3-hb u{box-shadow:0 0 10px rgba(110,100,255,.35)}
 
 </style>
 </head>
@@ -2727,7 +2749,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.13';
+var YO_V = 'yo-1.14';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -7227,12 +7249,16 @@ function borrarFotosTodas() {
    · Récords: solo si mejoran algo que ya habías hecho (la primera vez no es récord): de carga (más kilos que nunca), de N repeticiones
      (más kilos que nunca para N repeticiones o más) o más repeticiones con los mismos kilos; sin kilos, más repeticiones; con tiempo, más tiempo.
    · Series por grupo: cada serie de trabajo cuenta una vez, en el músculo principal del ejercicio (sin movilidad, cardio ni cuerpo completo). */
-var PROG3 = false;
+var PROG3 = true;      // 21 nov, 11:09: Chadín, «vale, aplica ese sí» (el deportivo), yo-1.14
 function prog3() { return PROG3 || rpBorr(); }
-var P3_T = [['act', 'Actividad'], ['ren', 'Rendimiento'], ['cue', 'Mi cuerpo']], P3N = 0;
+var P3_T = [['act', 'Actividad'], ['ren', 'Rendimiento'], ['cue', 'Métricas']], P3N = 0;      // 11:13 (Chadín): «en vez de Mi cuerpo, pon Métricas»
+/* 21 nov, 11:02 (Chadín: «me gusta, pero me has puesto un diseño tipo iPhone… ¿no hay otro, más deportivo?»): dos estilos para elegir en la demo.
+   'dep': la tarjeta principal de cada pestaña en negro (números enormes, barras que brillan) y las pestañas subrayadas; 'claro': el de antes */
+var P3_EST = 'dep';
+function p3Est() { return window.P3_EST_DEMO || P3_EST; }
 function vProg3() {
   var pv = S.x.p3 || 'act';
-  var h = '<div class="pant pad-tab p3"><div class="ini-cab"><h1 class="t1">Progreso</h1></div>' + p3Seg('p3Tab', pv, P3_T, 'p3-tabs ancho', 'Progreso');
+  var h = '<div class="pant pad-tab p3' + (p3Est() === 'dep' ? ' dep' : '') + '"><div class="ini-cab"><h1 class="t1">Progreso</h1></div>' + p3Seg('p3Tab', pv, P3_T, 'p3-tabs ancho', 'Progreso');
   return h + ({ act: p3Act, ren: p3Ren, cue: p3Cue })[pv]() + '</div>';
 }
 A.p3Tab = function (el) { S.x.p3 = el.dataset.v; if (el.dataset.v === 'cue') cargaFotos(); pintar(); };
@@ -7309,7 +7335,7 @@ function p3Act() {
   if (!S.sesiones.length) return '<section class="card p3-c">' + p3Vacio('Todavía no hay entrenamientos', 'Cuando termines el primero, aquí verás cuántos haces cada semana.') + '<button class="btn" data-a="tab" data-v="entreno">' + ic('pesa', 18, null) + 'Ir a Entrenar</button></section>';
   var nw = S.x.a3 || 4, R = p3Grupos(nw), G = R.G, tot = G.reduce(function (a, x) { return a + x.v; }, 0), f0 = p3Ini(), desde = G.length ? (G[0].a > f0 ? G[0].a : f0) : f0;
   var sel = S.x.a3s != null && G[S.x.a3s] ? S.x.a3s : G.length - 1, w = G[sel];
-  var h = '<section class="card p3-c"><div class="p3-h"><b class="p3-tt">Actividad</b>' + p3Seg('p3Per', nw, P3_PER) + '</div>' +
+  var h = '<section class="card p3-c p3-hero"><div class="p3-h"><b class="p3-tt">Actividad</b>' + p3Seg('p3Per', nw, P3_PER) + '</div>' +
     '<div class="p3-big"><b>' + tot + '</b><span>' + (tot === 1 ? 'entrenamiento' : 'entrenamientos') + '</span><small>Desde el ' + esc(p3Largo(desde)) + '</small></div>' +
     '<p class="p3-gtt">Entrenamientos por ' + R.por + '</p>' +
     p3Barras(G.map(function (x) { return { v: x.v, l: x.l, cur: x.cur, ar: x.t + ': ' + x.v + (x.v === 1 ? ' entrenamiento' : ' entrenamientos') }; }), { sel: sel, act: 'p3ASel', ent: 1, ar: 'Entrenamientos por ' + R.por });
@@ -7375,7 +7401,7 @@ function p3EjIni(E) {
 function p3CardEj(E) {
   var n = p3EjIni(E);
   var A0 = S.sesiones.map(function (s) { return p3Datos(s, n); }).filter(Boolean).sort(function (a, b) { return a.f < b.f ? -1 : a.f > b.f ? 1 : 0; });
-  var h = '<section class="card p3-c"><b class="p3-tt">Progresión por ejercicio</b><label class="f-s ancho p3-sel">' + ic('pesa', 14) + '<select data-ch="p3Ej" aria-label="Ejercicio">' + E.map(function (e) { return '<option' + (clave(e) === clave(n) ? ' selected' : '') + '>' + esc(e) + '</option>'; }).join('') + '</select>' + ic('abajo', 13) + '</label>';
+  var h = '<section class="card p3-c p3-hero"><b class="p3-tt">Progresión por ejercicio</b><label class="f-s ancho p3-sel">' + ic('pesa', 14) + '<select data-ch="p3Ej" aria-label="Ejercicio">' + E.map(function (e) { return '<option' + (clave(e) === clave(n) ? ' selected' : '') + '>' + esc(e) + '</option>'; }).join('') + '</select>' + ic('abajo', 13) + '</label>';
   if (!A0.length) return h + p3Vacio('Todavía no hay series de trabajo de este ejercicio') + '</section>';
   var ti = p3TipoEj(n, A0), MT = P3_MET[ti], M = MT.some(function (x) { return x[0] === S.x.p3m; }) ? S.x.p3m : MT[0][0], P = S.x.p3pp || '3m', u = A0[A0.length - 1].u;
   if (MT.length > 1) h += p3Seg('p3Met', M, MT, 'p3-met ancho', 'Qué ver');
@@ -7507,7 +7533,7 @@ VISTAS.p3run = function () {
   var hayR = W.some(function (x) { return x.nrun; }), hayK = W.some(function (x) { return x.km; }), hayC = W.some(function (x) { return x.cmin; }), h = '<div class="pant pad p3">' + cab('Carrera y cardio');
   var et = function (x, i) { return i === W.length - 1 ? 'En curso' : p3Dia(x.l); }, tw = function (x, i) { return i === W.length - 1 ? 'Esta semana, en curso' : 'Semana del ' + p3Dia(x.l) + ' al ' + p3Dia(sumar(x.l, 6)); };
   if (hayR) { var si = S.x.r3s != null && W[S.x.r3s] ? S.x.r3s : W.length - 1, w = W[si];
-    h += '<section class="card p3-c"><b class="p3-tt">Distancia por semana</b>' + (hayK ? '<div class="p3-big"><b>' + fN(Math.round(w.km * 10) / 10, 1) + '</b><span>km</span><small>' + esc(tw(w, si)) + '</small></div>' +
+    h += '<section class="card p3-c p3-hero"><b class="p3-tt">Distancia por semana</b>' + (hayK ? '<div class="p3-big"><b>' + fN(Math.round(w.km * 10) / 10, 1) + '</b><span>km</span><small>' + esc(tw(w, si)) + '</small></div>' +
       p3Barras(W.map(function (x, i) { return { v: Math.round(x.km * 10) / 10, l: et(x, i), cur: i === W.length - 1, ar: tw(x, i) + ': ' + fN(Math.round(x.km * 10) / 10, 1) + ' km' }; }), { sel: si, act: 'p3RSel', ar: 'Kilómetros por semana', fmt: function (v) { return fN(v, v % 1 ? 1 : 0); } }) : '') +
       '<div class="p3-inf"><b>' + w.nrun + (w.nrun === 1 ? ' salida' : ' salidas') + (w.km && w.rmin ? ' · ritmo medio ' + esc(ritmoTxt(w.km, w.rmin)) : '') + '</b>' + (w.sinKm ? '<small>Para ver tus km y tu ritmo, apúntalos al marcar la carrera como hecha.</small>' : '') + '</div></section>'; }
   if (hayC) { var sc = S.x.c3s != null && W[S.x.c3s] ? S.x.c3s : W.length - 1;
@@ -7529,7 +7555,7 @@ function p3CardPeso() {
   var P = pesos(); if (!P.length) return '<section class="card p3-c"><b class="p3-tt">Peso corporal</b>' + p3Vacio('Sin registros', 'Si quieres seguirlo, apúntate por la mañana, en ayunas.') + '<button class="btn sec" data-a="pesoAnotar">' + ic('mas', 18) + 'Anotar peso</button></section>';
   var rng = S.x.rng || 4, u = P[P.length - 1], hoy = hoyStr(), desde = sumar(lunesDe(hoy), -7 * (rng - 1)), L = P.filter(function (x) { return x.fecha >= desde; });
   var si = S.x.w3 != null && L[S.x.w3] ? S.x.w3 : -1, x = si >= 0 ? L[si] : u;
-  var h = '<section class="card p3-c"><div class="p3-h"><b class="p3-tt">Peso corporal</b>' + p3Seg('pesoRng', rng, [[4, '4 sem'], [13, '3 meses'], [52, '1 año']]) + '</div>' +
+  var h = '<section class="card p3-c p3-hero"><div class="p3-h"><b class="p3-tt">Peso corporal</b>' + p3Seg('pesoRng', rng, [[4, '4 sem'], [13, '3 meses'], [52, '1 año']]) + '</div>' +
     '<div class="p3-dato"><b>' + kg1(num(x.peso)) + ' kg</b><span>' + (si >= 0 ? esc(p3Largo(x.fecha)) : 'Último registro · ' + esc(p3Largo(x.fecha))) + '</span></div>';
   h += L.length ? p3GrafPeso(L, desde, si) : p3Vacio('Sin registros en este periodo', 'Tu último peso es del ' + esc(p3Largo(u.fecha)) + '.');
   return h + '<div class="p3-bts"><button class="btn-mini" data-a="pesoAnotar">' + ic('mas', 15, null, 2.4) + 'Anotar peso</button><button class="link" data-a="p3Pesos">Ver historial</button></div></section>';
@@ -9951,7 +9977,7 @@ A.cCompartir = function (el) {
     var rec = x.tipo === 'rec', n21 = f21(), modos = n21 ? SH_MODOS.slice() : [['negro', 'Negro'], ['blanco', 'Blanco']].concat(im || x.mio ? [['foto', 'Foto']] : []);
     var r21 = rec && rec21();
     hojaImg({ k: 'pub|' + x.id, tit: rec ? 'Compartir la receta' : 'Compartir el entreno', nom: 'MOOD_ON_' + (rec ? 'receta' : 'entreno'), texto: 'Descárgate la app: moodonapp.com', modos: modos,
-      tarjetas: r21 ? [['rec', 'Receta'], ['mac', 'Macros']] : null, tj: r21 ? 'rec' : '',
+      tarjetas: r21 ? [['rec', 'Receta completa'], ['mac', 'Resumida']] : null, tj: r21 ? 'rec' : '',
       foto: im, fotoFija: !!im, nota: x.mio ? '' : 'Sale su nombre y lo que publicó para todos; nada de sus comentarios, sus me gusta ni lo de «Solo mis seguidores».',
       gen: function (m, f) { if (r21 && SHI && SHI.tj !== 'mac') return tarjetaReceta(x, im, m); return tarjetaDatos(pubD(x, (rec || n21) && m !== 'foto' ? im : null), m, f); } });      // 21 nov: sin «Foto», la de la publicación va arriba, como en las recetas
   });
