@@ -4004,6 +4004,8 @@ button.pf-fe{cursor:pointer}
 .sh2-hint{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap;font-size:11.5px;font-weight:700;color:#7A7F92;margin:6px 0 0}.sh2-hint .ic{width:14px;height:14px;margin:0}.sh2-cf{color:#1C1E26;text-decoration:underline;cursor:pointer}
 .sh2-ics{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:14px}.sh2-ics button{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;font:700 11.5px Plus Jakarta Sans,sans-serif;color:#3A3D48;cursor:pointer}
 .sh2-ics i{width:54px;height:54px;border-radius:50%;background:#F1F2F5;display:flex;align-items:center;justify-content:center;color:#1C1E26}.sh2-ics .ic{width:22px;height:22px;margin:0}.sh2-ics .ig i{background:linear-gradient(135deg,#F58529,#DD2A7B,#8134AF);color:#fff}.sh2-ics .wa i{background:#25D366;color:#fff}
+.sh2-ics.c5{grid-template-columns:repeat(5,1fr);gap:2px}.sh2-ics.c5 button{font-size:11px}.sh2-ics.c5 i{width:50px;height:50px}      /* 21 nov: con Copiar */
+.sh2-s[data-m=blanco]{background:#fff;box-shadow:inset 0 0 0 1px #E2E2E7}.tj-img.sh-im.bl{background:#F2F2F5}      /* 21 nov: el fondo blanco se ve como una tarjeta */
 /* fin del entreno */
 .z2-fin .z2-ftr{width:66px;height:66px;border-radius:50%;margin:8px auto 10px;background:linear-gradient(135deg,#F3D27A,#C99A1A);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 26px rgba(201,154,26,.4)}.z2-fin .z2-ftr .ic{width:30px;height:30px;margin:0}
 .z2-fin>h2{text-align:center}.z2-fsb{text-align:center;font-size:12.5px;font-weight:600;color:#6B7085;margin:2px 0 12px}
@@ -5077,7 +5079,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.181';
+var APP_V = 'v53.4.182';
 /* v53.4.24: en el iPhone, acercar con dos dedos no hace nada (la app ya está a la medida de la pantalla; las fotos tienen su propio zoom) */
 try{ document.addEventListener('gesturestart',function(e){ e.preventDefault(); },{passive:false}); document.addEventListener('gesturechange',function(e){ e.preventDefault(); },{passive:false}); }catch(e){}
 
@@ -8103,8 +8105,22 @@ function cycPantHtml(C){
    COMPARTIR (récord y entreno): eliges tarjeta (Tu carga · Tu entreno · Tu récord, y en el récord cuál o «Los 3»),
    deslizas para el fondo (Negro · Con tu foto · Transparente) y Historias · WhatsApp · Guardar · Más
    ===================================================================== */
-var SHM=['negro','foto','trans'], SHM_N={negro:'Negro',foto:'Con tu foto',trans:'Transparente'};
-function shEstado(U,t,recs,ri){ var m=CL.sh&&CL.sh.m||'negro';
+var SHM=['negro','foto','trans'], SHM_N={negro:'Negro',foto:'Con tu foto',trans:'Transparente',blanco:'Blanco'};
+/* 21 nov 2026, 10:10 (Chadín: «modifica eso porfa también ahí y lo de compartir»): como en el panel de usuaria, sin «Con tu foto»:
+   Negro · Blanco · Sin fondo (el blanco, la misma tarjeta en negro con los colores al revés y el dorado más oscuro), Copiar en los accesos
+   y, en «Ajusta tu foto», sin barra: con los dedos. Publicado para todas en v53.4.182 (SH21). */
+var SH21=true;      // 21 nov, 11:36 (Chadín): «a todos los paneles» (v53.4.182)
+function sh21(){ if(SH21) return true; try{ return localStorage.getItem('cl_sh21')==='1'; }catch(e){ return false; } }
+function aBlanco(cv){
+  var x=cv.getContext('2d'), d=x.getImageData(0,0,cv.width,cv.height), a=d.data;
+  for(var i=0;i<a.length;i+=4){ var r=a[i], g=a[i+1], b=a[i+2], mx=Math.max(r,g,b), mn=Math.min(r,g,b);
+    if(mx>48&&(mx-mn)/mx>0.25){ var k=255/mx, t=Math.min(1,(mx-40)/215), cr=r*k, cg=g*k, cb=b*k; if(r>=g&&g>=b){ cr*=0.74; cg*=0.6; cb*=0.3; } else { cr*=0.6; cg*=0.6; cb*=0.6; }
+      a[i]=255-(255-cr)*t; a[i+1]=255-(255-cg)*t; a[i+2]=255-(255-cb)*t; }
+    else { a[i]=255-Math.max(0,Math.min(255,(r-40)*1.186)); a[i+1]=255-Math.max(0,Math.min(255,(g-40)*1.186)); a[i+2]=255-Math.max(0,Math.min(255,(b-40)*1.186)); }      // el fondo oscuro (hasta 40), blanco del todo
+    a[i+3]=255; }
+  x.putImageData(d,0,0); return cv;
+}
+function shEstado(U,t,recs,ri){ if(sh21()){ SHM=['negro','blanco','trans']; SHM_N.trans='Sin fondo'; } var m=CL.sh&&CL.sh.m||'negro'; if(SHM.indexOf(m)<0) m='negro';
   if(U&&U!==CL.ultEntreno){ CL.ultEntreno=U; CL.finCv={}; CL.finMotI=null; }
   recs=recs||(U?recsPorEj(U.prs).map(function(b){ return {e:b.e,p:b.p,r:b.r,f:U.fecha||hoyStr()}; }):[]);
   CL.sh={U:U||null,t:t||(U?'sum':'rec'),recs:recs,ri:ri!=null?ri:(recs.length>1?'all':0),m:m,cv:{}}; }
@@ -8120,7 +8136,12 @@ function shBloque(){
   h+='<div class="seg2 sh2-seg" id="sh2-seg">'+SHM.map(function(m){ return '<button data-a="sh2M" data-v="'+m+'"'+(S.m===m?' class="on"':'')+'>'+SHM_N[m]+'</button>'; }).join('')+'</div>';
   h+='<div class="sh2-car" id="sh2-car">'+SHM.map(function(m){ return '<div class="sh2-s'+(m==='trans'?' tr':'')+'" data-m="'+m+'">'+(m==='foto'&&!CL.finFoto?'<label class="sh2-fp">'+ic('foto')+'<b>Elige tu foto</b><small>Del gimnasio, un selfie… y te ponemos '+(S.t==='rec'?'el récord':'tu entreno')+' encima</small><input type="file" accept="image/*" data-c="sh2Foto" hidden></label>':'<span class="sh2-ph">'+ic('reloj')+'Preparando…</span>')+'</div>'; }).join('')+'</div>';
   h+='<div class="sh2-dots" id="sh2-dots">'+SHM.map(function(m){ return '<i'+(S.m===m?' class="on"':'')+'></i>'; }).join('')+'</div><p class="sh2-hint">'+ic('desl')+'Desliza para cambiar el fondo'+(CL.finFoto?' · <label class="sh2-cf">Cambiar foto<input type="file" accept="image/*" data-c="sh2Foto" hidden></label>':'')+'</p>';
-  return h+'<div class="sh2-ics"><button class="ig" data-a="sh2Acc" data-v="ig"><i>'+ic('insta')+'</i>Historias</button><button class="wa" data-a="sh2Acc" data-v="wa"><i>'+ic('wa')+'</i>WhatsApp</button><button data-a="sh2Acc" data-v="dl"><i>'+ic('descargar')+'</i>Guardar</button><button data-a="sh2Acc" data-v="mas"><i>'+ic('mas3')+'</i>Más</button></div>';
+  return h+shIcs('sh2Acc');
+}
+/* los accesos de compartir (Historias · WhatsApp · Guardar · Copiar · Más); 21 nov: también en las medallas y los pasos */
+function shIcs(a){
+  return '<div class="sh2-ics'+(sh21()?' c5':'')+'"><button class="ig" data-a="'+a+'" data-v="ig"><i>'+ic('insta')+'</i>Historias</button><button class="wa" data-a="'+a+'" data-v="wa"><i>'+ic('wa')+'</i>WhatsApp</button><button data-a="'+a+'" data-v="dl"><i>'+ic('descargar')+'</i>Guardar</button>'+
+    (sh21()?'<button data-a="'+a+'" data-v="cp"><i>'+ic('copiar')+'</i>Copiar</button>':'')+'<button data-a="'+a+'" data-v="mas"><i>'+ic('mas3')+'</i>Más</button></div>';
 }
 function shPintar(){ var b=document.getElementById('sh2'); if(b){ b.innerHTML=shBloque(); shMontar(); } }
 function shMontar(){
@@ -8140,13 +8161,21 @@ CH.sh2Foto=function(t){ var f=t.files&&t.files[0]; if(!f) return; var u=URL.crea
 /* la imagen de lo elegido (tarjeta + fondo), guardada para que el toque comparta al momento */
 function shClave(m){ var S=CL.sh; return S.t==='rec'?'rec|'+S.ri+'|'+m:S.t+'|'+m; }
 function sh2Canvas(m){ var S=CL.sh, k=shClave(m); if(S.cv[k]) return Promise.resolve(S.cv[k]);
-  var p=S.t==='rec'?(m==='foto'?tarjetaRecord(shRecs(),'trans').then(function(c){ return componerFoto(c); }):tarjetaRecord(shRecs(),m)):finCanvas(S.t,m).then(function(o){ return o.cv; });
+  var p=S.t==='rec'?(m==='foto'?tarjetaRecord(shRecs(),'trans').then(function(c){ return componerFoto(c); }):m==='blanco'?tarjetaRecord(shRecs(),'negro').then(aBlanco):tarjetaRecord(shRecs(),m)):finCanvas(S.t,m).then(function(o){ return o.cv; });
   return p.then(function(cv){ var o={cv:cv,url:cv.toDataURL('image/png')}; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); S.cv[k]=o; return o; }); }
-function sh2Nombre(m){ var S=CL.sh; return 'MOOD_ON_'+(S.t==='rec'?'record':S.t==='res'?'ejercicios':S.t==='sum'?'resumen':'carga')+'_'+hoyStr()+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':'')+'.png'; }
+/* 21 nov: copiar la imagen (para pegarla en la historia o en un chat); si el móvil no deja, «no» (guardarla o la página de inicio) */
+function copiaImg(b,tr,no){
+  var ok=function(){ toast(tr?'Copiada sin fondo: en Instagram, en tu historia, mantén pulsado y «Pegar»':'Copiada: pégala en tu historia o en un chat','ok'); };
+  var mal=function(){ if(!no()) toast('Tu navegador no deja copiar: guárdala y añádela en tu historia','err'); };
+  try{ if(b&&navigator.clipboard&&window.ClipboardItem){ navigator.clipboard.write([new ClipboardItem({'image/png':b})]).then(ok,mal); return; } }catch(e){}
+  mal();
+}
+function sh2Nombre(m){ var S=CL.sh; return 'MOOD_ON_'+(S.t==='rec'?'record':S.t==='res'?'ejercicios':S.t==='sum'?'resumen':'carga')+'_'+hoyStr()+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':m==='blanco'?'_blanco':'')+'.png'; }
 A.sh2Acc=function(el){
   var S=CL.sh, m=S.m, v=el.dataset.v;
   if(m==='foto'&&!CL.finFoto){ var fi=document.querySelector('#sh2-car input[data-c=sh2Foto]'); if(fi) fi.click(); return; }
   var o0=S.cv[shClave(m)], go=function(o,tarde){ var oo={c:o,nombre:sh2Nombre(m),m:m==='foto'?'foto':m};
+    if(v==='cp') return copiaImg(o.blob,m==='trans',function(){ if(TOPCAP.indexOf('compartir')>=0&&finTop(oo,'copiar')) return true; finVer(oo); });      // 21 nov: Copiar
     if(TOPCAP.indexOf('compartir')>=0&&finTop(oo,v==='dl'?'guardar':'compartir')) return;
     if(v==='dl') return finVer(oo);
     var f=null; try{ if(o.blob) f=new File([o.blob],oo.nombre,{type:'image/png'}); }catch(e){}
@@ -20678,7 +20707,7 @@ function finHtml(U){
   var r=U.r||{}, C=compVol(r.vol), R=recsPorEj(U.prs), f0=U.fecha||hoyStr(), dt=aDate(f0);
   return '<div class="celebra fin31 z2-fin"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button>'+
     '<div class="big-ok z2-ftr">'+ic('trofeo')+'</div><h2>'+(U.primero?'¡Tu primer entreno en MOOD ON!':'¡Entreno completado!')+'</h2><p class="z2-fsb">'+esc([U.rutina,cap(DLARGO[diaSem(f0)])+' '+dt.getDate()+' '+mesC(dt)].filter(String).join(' · '))+'</p>'+
-    (U.primero?'<button class="fin-1" data-a="finIrSh">'+ic('compartir')+'<span><b>Sube tu primer entreno</b><small>A tus historias de Instagram, con fondo negro o con tu foto debajo</small></span>'+ic('flecha')+'</button>':'')+
+    (U.primero?'<button class="fin-1" data-a="finIrSh">'+ic('compartir')+'<span><b>Sube tu primer entreno</b><small>'+(sh21()?'A tus historias de Instagram: en negro, en blanco o sin fondo':'A tus historias de Instagram, con fondo negro o con tu foto debajo')+'</small></span>'+ic('flecha')+'</button>':'')+
     '<div class="res3 z2-fst">'+cajasDe(U,true).map(function(c){ return '<div><b>'+esc(c[0])+'</b><span>'+esc(c[1])+'</span></div>'; }).join('')+(R.length?'<div class="au"><b>'+R.length+'</b><span>'+(R.length===1?'récord':'récords')+'</span></div>':'')+'</div>'+
     (r.runKm&&(r.efectivas||r.vol)?'<p class="muted sm">+ '+fN(r.runKm,2)+' km de carrera'+(r.runRit?' a '+runRitT(r.runRit):'')+'</p>':'')+
     (r.cardio?'<p class="muted sm">+ '+fN(r.cardio)+' min de cardio</p>':'')+
@@ -20710,7 +20739,7 @@ function finCanvas(t,m){
   CL.finCv=CL.finCv||{}; var k=t+'|'+m;
   if(CL.finCv[k]) return Promise.resolve(CL.finCv[k]);
   var nueva=(t==='sum'||t==='res'||t==='vol')&&!soloCarrera(CL.ultEntreno||{}), dib=function(mo){ return nueva?tarjetaGrande(t,mo):tarjetaEntreno(t==='sum'?'vol':t,mo,m==='foto'); };      // v53.4.176
-  return (m==='foto'?dib('trans').then(componerFoto):dib(m)).then(function(cv){
+  return (m==='foto'?dib('trans').then(componerFoto):m==='blanco'?dib('negro').then(aBlanco):dib(m)).then(function(cv){
     var o={cv:cv,url:cv.toDataURL('image/png')}; CL.finCv[k]=o; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); return o; });
 }
 function finPreparar(){
@@ -22101,15 +22130,22 @@ function pagFotoEst(E){ var z=Math.min(2.5,Math.max(1,Number(E.fotoZ)||1)), x=E.
 A.pagAjustar=function(){ var E=CO.pagEd, I=CO.pagImg||{}, cl=E.diseno==='claro'; if(!I.foto) return;
   CO.pagAj={z:Math.min(2.5,Math.max(1,Number(E.fotoZ)||1)),x:E.fotoX==null?50:+E.fotoX,y:E.fotoY==null?50:+E.fotoY};
   modal('<h2>Ajustar tu foto</h2><p class="muted sm">Así sale arriba del todo en tu página'+(cl?', en la tarjeta del diseño claro':'')+'.</p><div class="pag-aj"><div class="pag-fr'+(cl?' cl':'')+'" id="pag-fr"><img src="'+esc(I.foto)+'" alt="" draggable="false"><b class="pag-fh">Arrástrala para encuadrar</b>'+(cl?'':'<span>'+esc(pagTx(E.frase))+'</span>')+'</div>'+
-    '<label class="pag-zs">Zoom<input type="range" min="100" max="250" step="1" value="'+Math.round(CO.pagAj.z*100)+'" data-v29="pagZoom" aria-label="Zoom"></label>'+
+    (sh21()?'<p class="muted sm pag-dd">Arrástrala con un dedo para encuadrarla. Con dos dedos, acércala o aléjala.</p>':'<label class="pag-zs">Zoom<input type="range" min="100" max="250" step="1" value="'+Math.round(CO.pagAj.z*100)+'" data-v29="pagZoom" aria-label="Zoom"></label>')+
     '<button class="btn" data-a="pagAjOk">Listo</button><button class="btn sec" data-a="pagAjReset">Dejarla como al subirla</button><button class="link" data-a="cerrarModal">Cancelar</button></div>');
   pagAjPintar(); pagAjArrastre(); };
-function pagAjPintar(){ var f=document.getElementById('pag-fr'), J=CO.pagAj; if(!f||!J) return; var im=f.querySelector('img'), p=J.x+'% '+J.y+'%'; im.style.objectPosition=p; im.style.transform='scale('+J.z+')'; im.style.transformOrigin=p; }
-function pagAjArrastre(){ var f=document.getElementById('pag-fr'), d=null; if(!f) return;
-  f.addEventListener('pointerdown',function(e){ if(!CO.pagAj) return; d={x:e.clientX,y:e.clientY,ox:CO.pagAj.x,oy:CO.pagAj.y}; try{ f.setPointerCapture(e.pointerId); }catch(er){} f.classList.add('mv'); e.preventDefault(); });
-  f.addEventListener('pointermove',function(e){ if(!d||!CO.pagAj) return; var r=f.getBoundingClientRect(), z=CO.pagAj.z;
-    CO.pagAj.x=Math.max(0,Math.min(100,Math.round(d.ox-(e.clientX-d.x)*100/(r.width*z)))); CO.pagAj.y=Math.max(0,Math.min(100,Math.round(d.oy-(e.clientY-d.y)*100/(r.height*z)))); pagAjPintar(); });
-  var fin=function(){ d=null; }; f.addEventListener('pointerup',fin); f.addEventListener('pointercancel',fin); }
+function pagAjPintar(){ var f=document.getElementById('pag-fr'), J=CO.pagAj; if(!f||!J) return; var im=f.querySelector('img'), p=J.x+'% '+J.y+'%'; im.style.objectPosition=p; im.style.transform='scale('+J.z+')'; im.style.transformOrigin=p; var r=document.querySelector('#modal .pag-zs input'); if(r&&document.activeElement!==r) r.value=Math.round(J.z*100); }
+/* 21 nov (Chadín: «la foto de Tu página, con los dedos»): un dedo encuadra y dos dedos acercan o alejan (y encuadran a la vez); en el ordenador, la rueda */
+function pagAjArrastre(){ var f=document.getElementById('pag-fr'), P={}, d=null; if(!f) return;
+  var lista=function(){ return Object.keys(P).sort().map(function(k){ return P[k]; }); };
+  var med=function(L){ return L.length>1?{x:(L[0].x+L[1].x)/2,y:(L[0].y+L[1].y)/2,d:Math.max(8,Math.hypot(L[0].x-L[1].x,L[0].y-L[1].y))}:{x:L[0].x,y:L[0].y,d:0}; };
+  var ini=function(){ var L=lista(); d=L.length&&CO.pagAj?{m:med(L),n:L.length,ox:CO.pagAj.x,oy:CO.pagAj.y,z:CO.pagAj.z}:null; };
+  f.addEventListener('pointerdown',function(e){ if(!CO.pagAj) return; P[e.pointerId]={x:e.clientX,y:e.clientY}; try{ f.setPointerCapture(e.pointerId); }catch(er){} f.classList.add('mv'); ini(); e.preventDefault(); });
+  f.addEventListener('pointermove',function(e){ if(!P[e.pointerId]||!CO.pagAj) return; P[e.pointerId]={x:e.clientX,y:e.clientY}; var L=lista(); if(!d||L.length!==d.n) return ini();
+    var r=f.getBoundingClientRect(), m=med(L), J=CO.pagAj;
+    if(L.length>1&&d.m.d) J.z=Math.max(1,Math.min(2.5,d.z*m.d/d.m.d));
+    J.x=Math.max(0,Math.min(100,Math.round(d.ox-(m.x-d.m.x)*100/(r.width*J.z)))); J.y=Math.max(0,Math.min(100,Math.round(d.oy-(m.y-d.m.y)*100/(r.height*J.z)))); pagAjPintar(); e.preventDefault(); });
+  var fin=function(e){ delete P[e.pointerId]; ini(); if(!Object.keys(P).length) f.classList.remove('mv'); }; f.addEventListener('pointerup',fin); f.addEventListener('pointercancel',fin);
+  f.addEventListener('wheel',function(e){ if(!CO.pagAj) return; e.preventDefault(); CO.pagAj.z=Math.max(1,Math.min(2.5,CO.pagAj.z*Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0015)))); pagAjPintar(); },{passive:false}); }
 IN29.pagZoom=function(t){ if(!CO.pagAj) return; CO.pagAj.z=Math.max(1,Math.min(2.5,(+t.value||100)/100)); pagAjPintar(); };
 A.pagAjReset=function(){ CO.pagAj={z:1,x:50,y:50}; var r=document.querySelector('#modal .pag-zs input'); if(r) r.value=100; pagAjPintar(); };
 A.pagAjOk=function(){ var J=CO.pagAj, E=CO.pagEd; CO.pagAj=null; cerrarModal(); if(!J) return; E.fotoZ=Math.round(J.z*100)/100; E.fotoX=J.x; E.fotoY=J.y; pagSucio(); pagMarcaRefrescar(); if(CO.pagLadoOn) pagIr('marca'); toast('Foto ajustada · toca «Guardar» para que salga así','ok'); };
@@ -23379,10 +23415,11 @@ function shAbrir(cfg){ var mismo=SH&&SH.k===cfg.k; SH=Object.assign({m:mismo?SH.
 function shModo(){ return SH.m==='trans'&&SH.foto?'foto':SH.m; }
 function shCanvas(m){
   if(SH.cv[m]) return Promise.resolve(SH.cv[m]); var S=SH;
-  return (m==='foto'?S.crear('trans').then(function(c){ return componerFoto(c,S.foto); }):S.crear(m)).then(function(cv){ var o={cv:cv,url:cv.toDataURL('image/png')}; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); S.cv[m]=o; return o; });
+  return (m==='foto'?S.crear('trans').then(function(c){ return componerFoto(c,S.foto); }):m==='blanco'?S.crear('negro').then(aBlanco):S.crear(m)).then(function(cv){ var o={cv:cv,url:cv.toDataURL('image/png')}; cv.toBlob(function(b){ if(b) o.blob=b; },'image/png'); S.cv[m]=o; return o; });
 }
-function shNombre(m){ return SH.nombre.replace(/\.png$/,'')+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':'')+'.png'; }
+function shNombre(m){ return SH.nombre.replace(/\.png$/,'')+(m==='trans'?'_sin_fondo':m==='foto'?'_foto':m==='blanco'?'_blanco':'')+'.png'; }
 function pintarSh(){
+  if(sh21()) return pintarSh21();
   var tr=SH.m==='trans', foto=tr&&!!SH.foto;
   modal('<div class="sh49"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button><h2>'+esc(SH.tit)+'</h2><div class="seg2 sh-seg"><button data-a="shModo" data-v="negro"'+(tr?'':' class="on"')+'>Fondo negro</button><button data-a="shModo" data-v="trans"'+(tr?' class="on"':'')+'>Con tu foto</button></div>'+
     '<div class="tj-img sh-im'+(tr&&!foto?' trans':'')+'" id="sh-im"><div class="car-ph">'+ic('reloj')+'Preparando…</div></div>'+
@@ -23393,6 +23430,16 @@ function pintarSh(){
   var m=shModo(), k=SH.k; shCanvas(m).then(function(o){ if(!SH||SH.k!==k||shModo()!==m) return; var e=document.getElementById('sh-im'); if(e) e.innerHTML='<img src="'+o.url+'" alt="Imagen para compartir">'; },function(){ toast('No se ha podido crear la imagen','err'); });
 }
 A.shModo=function(el){ if(!SH||SH.m===el.dataset.v) return; SH.m=el.dataset.v; pintarSh(); };
+/* 21 nov (Chadín): las medallas y los pasos, igual que el entreno: Negro · Blanco · Sin fondo y los accesos de compartir */
+function pintarSh21(){
+  var m=SH.m==='foto'?'negro':SH.m, tr=m==='trans'; SH.m=m;
+  modal('<div class="sh49"><button class="fin-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button><h2>'+esc(SH.tit)+'</h2><div class="seg2 sh-seg">'+[['negro','Negro'],['blanco','Blanco'],['trans','Sin fondo']].map(function(x){ return '<button data-a="shModo" data-v="'+x[0]+'"'+(m===x[0]?' class="on"':'')+'>'+x[1]+'</button>'; }).join('')+'</div>'+
+    '<div class="tj-img sh-im'+(tr?' trans':m==='blanco'?' bl':'')+'" id="sh-im"><div class="car-ph">'+ic('reloj')+'Preparando…</div></div>'+
+    '<p class="muted sm">'+(tr?'Sin fondo: cópiala o guárdala y pégala encima de tu foto o tu vídeo en tu historia.':'Lista para tu historia de Instagram o para WhatsApp.')+'</p>'+shIcs('shAcc')+
+    '<button class="btn sec mt" data-a="shVolver">'+(SH.volver?'Volver':'Cerrar')+'</button></div>');
+  var k=SH.k; shCanvas(m).then(function(o){ if(!SH||SH.k!==k||SH.m!==m) return; var e=document.getElementById('sh-im'); if(e) e.innerHTML='<img src="'+o.url+'" alt="Imagen para compartir">'; },function(){ toast('No se ha podido crear la imagen','err'); });
+}
+A.shAcc=function(el){ var v=el.dataset.v; if(!SH) return; if(v==='dl') return A.shGuardar(); if(v==='cp') return A.shCopiar(); A.shCompartir(); };
 /* v50 · su foto de perfil: la elige en Perfil; su móvil la recorta en cuadrado y la reduce (240 px) antes de subirla */
 function miFotoCargar(){
   var c=CL.d&&CL.d.clienta; if(!c) return; var k='chadin_mifoto_'+(BOOT.lk||BOOT.token), loc=LS.get(k);
@@ -23419,9 +23466,10 @@ CH.pfFotoF=function(t){
 function fcAbrir(im,u){
   if(FC&&FC.u&&FC.u!==u) URL.revokeObjectURL(FC.u);
   FC={im:im,u:u,w:im.naturalWidth,h:im.naturalHeight,z:1,tx:0,ty:0,S:0,p:{},ini:true};
-  modal('<h2>Ajusta tu foto</h2><p class="muted sm">Muévela con el dedo y acércala o aléjala hasta que tu cara quede bien dentro del círculo.</p>'+
-    '<div class="fc-st" id="fc-st" tabindex="0" role="application" aria-label="Tu foto: arrástrala para moverla; acércala o aléjala con dos dedos, la barra o las teclas + y −"><img id="fc-im" src="'+esc(u)+'" alt="" draggable="false"><div class="fc-ma"></div></div>'+
-    '<div class="fc-z"><button class="ico sm" data-a="fcZ" data-v="-1" aria-label="Alejar">−</button><input type="range" id="fc-r" data-v29="fcZoom" min="1" max="4" step="0.01" value="1" aria-label="Acercar o alejar"><button class="ico sm" data-a="fcZ" data-v="1" aria-label="Acercar">+</button></div>'+
+  var n21=sh21();      // 21 nov (Chadín: «el zoom con los dedos, no con la barra»): sin la barra ni − +; con dos dedos (y en el ordenador, la rueda)
+  modal('<h2>Ajusta tu foto</h2><p class="muted sm">'+(n21?'Muévela con un dedo y, con dos dedos, acércala o aléjala hasta que tu cara quede bien dentro del círculo.':'Muévela con el dedo y acércala o aléjala hasta que tu cara quede bien dentro del círculo.')+'</p>'+
+    '<div class="fc-st" id="fc-st" tabindex="0" role="application" aria-label="Tu foto: arrástrala para moverla; acércala o aléjala con dos dedos'+(n21?', la rueda del ratón o las teclas + y −':', la barra o las teclas + y −')+'"><img id="fc-im" src="'+esc(u)+'" alt="" draggable="false"><div class="fc-ma"></div></div>'+
+    (n21?'':'<div class="fc-z"><button class="ico sm" data-a="fcZ" data-v="-1" aria-label="Alejar">−</button><input type="range" id="fc-r" data-v29="fcZoom" min="1" max="4" step="0.01" value="1" aria-label="Acercar o alejar"><button class="ico sm" data-a="fcZ" data-v="1" aria-label="Acercar">+</button></div>')+
     '<div class="fc-pv"><span class="fc-l">Así se verá</span><canvas id="fc-p1" width="184" height="184" role="img" aria-label="Vista previa en tu perfil"></canvas><canvas id="fc-p2" width="80" height="80" role="img" aria-label="Vista previa en pequeño, como en la lista de tu coach"></canvas></div>'+
     '<button class="btn mt" data-a="fcOk">'+ic('ok')+'Guardar foto</button>'+
     '<div class="fc-bs"><label class="btn sec">'+ic('foto')+'Elegir otra<input type="file" accept="image/*" data-c="pfFotoF" hidden></label><button class="btn sec" data-a="fcCancelar">Cancelar</button></div>');
@@ -23492,8 +23540,9 @@ CH.shFoto=function(t){
   im.src=u;
 };
 A.shCompartir=function(){ var m=shModo(); shCanvas(m).then(function(o){ compartirImg({url:o.url,blob:o.blob,nombre:shNombre(m)},function(){ return Promise.resolve(o.cv); },shNombre(m),SH.titC,SH.texto); }); };
-A.shGuardar=function(){ var m=SH.m==='trans'&&!SH.foto?'trans':shModo(); shCanvas(m).then(function(o){ var x={c:{url:o.url},nombre:shNombre(m),m:m==='trans'?'trans':'negro'}; if(TOPCAP.indexOf('compartir')>=0&&finTop(x,'guardar')) return; verImg({url:o.url,blob:o.blob,nombre:shNombre(m)},SH.titC); }); };
+A.shGuardar=function(){ var m=SH.m==='trans'&&!SH.foto?'trans':shModo(); shCanvas(m).then(function(o){ var x={c:{url:o.url},nombre:shNombre(m),m:m==='trans'?'trans':m==='blanco'?'blanco':'negro'}; if(TOPCAP.indexOf('compartir')>=0&&finTop(x,'guardar')) return; verImg({url:o.url,blob:o.blob,nombre:shNombre(m)},SH.titC); }); };
 A.shCopiar=function(){
+  if(sh21()){ var m=shModo(); return shCanvas(m).then(function(o){ copiaImg(o.blob,m==='trans',function(){ var x={c:{url:o.url},nombre:shNombre(m),m:m}; if(TOPCAP.indexOf('compartir')>=0&&finTop(x,'copiar')) return true; verImg({url:o.url,blob:o.blob,nombre:shNombre(m)},SH.titC); }); }); }
   shCanvas('trans').then(function(o){
     var ok=function(){ toast('Copiada sin fondo: en Instagram, en tu historia, mantén pulsado y «Pegar»','ok'); };
     var no=function(){ var x={c:{url:o.url},nombre:shNombre('trans'),m:'trans'}; if(TOPCAP.indexOf('compartir')>=0&&finTop(x,'copiar')) return; toast('Tu navegador no deja copiar: guárdala y añádela en tu historia','err'); verImg({url:o.url,blob:o.blob,nombre:shNombre('trans')},SH.titC); };
