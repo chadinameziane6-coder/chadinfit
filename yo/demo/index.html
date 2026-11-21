@@ -2018,6 +2018,7 @@ html[data-tema="oscuro"] .phh{--phh-a:#6F8BFF;--phh-p:#2B3566}html[data-tema="os
 /* 21 nov: la foto se coloca con los dedos; con el teclado, con el contorno de siempre */
 .crop:focus-visible{outline:3px solid var(--borde2);outline-offset:3px}
 .shi-m button{flex:1}      /* 21 nov: los tres fondos ocupan todo el ancho */
+.crop-bs{gap:8px;margin-top:0}.crop-bs .btn{margin:0;flex:1}.cp-fbs{display:flex;gap:18px;align-items:center;justify-content:center;flex-wrap:wrap}      /* 21 nov: «Elegir otra» */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3086,7 +3087,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.11';
+var YO_V = 'yo-1.12';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -4061,7 +4062,7 @@ function iniSeries() {
   h += G.length ? G.slice(0, 6).map(function (x) { return '<span class="hbar"><span>' + x[0] + '</span><span class="b"><i style="width:' + Math.round(x[1] * 100 / mx) + '%"></i></span><b>' + x[1] + '</b></span>'; }).join('') : '<span class="mut sm">Cuando entrenes esta semana, aquí verás cuántas series llevas de cada grupo.</span>';
   return h + '</button>';
 }
-A.iniVol = function () { S.x.pv = 'vol'; irTab('prog'); };
+A.iniVol = function () { S.x.pv = 'vol'; if (prog3()) { S.x.p3 = 'ren'; irTab('prog'); return ir({ t: 'p3run' }); } irTab('prog'); };
 /* tus rutinas: las de tu plan y las tuyas, en fila; al tocar una, sus ejercicios */
 function iniRutinas() {
   var L = S.rutinas.slice().sort(ordenRut), sem = semEsta();
@@ -6903,7 +6904,7 @@ CH.pfFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return;
   if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { CROP = { im: im, url: u, z: 1, x: 0, y: 0, s0: CROP_B / Math.min(im.width, im.height) }; hojaCrop(); };
+  im.onload = function () { if (CROP && CROP.url !== u) URL.revokeObjectURL(CROP.url); CROP = { im: im, url: u, z: 1, x: 0, y: 0, s0: CROP_B / Math.min(im.width, im.height) }; hojaCrop(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
@@ -6913,7 +6914,7 @@ function hojaCrop() {
   var n = f21();      // 21 nov: sin barra, con los dedos (gestoFoto, en base.js)
   hoja('<h2>Coloca tu foto</h2><p class="mut sm">' + (n ? gestoAyuda() : 'Arrastra para moverla y usa la barra para acercarla.') + '</p><div class="crop" id="crop" role="application" aria-label="Tu foto: arrástrala para moverla y acércala o aléjala con dos dedos" style="width:' + CROP_B + 'px;height:' + CROP_B + 'px"><img id="crop-i" src="' + CROP.url + '" alt="" draggable="false"><span class="crop-m"></span></div>' +
     (n ? '' : '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CROP.z + '" data-in="cropZ" aria-label="Zoom"></label>') +
-    '<button class="btn" data-a="pfFotoGuardar">Guardar foto</button><button class="btn sec" data-a="pfFotoCancelar">Cancelar</button>');
+    '<button class="btn" data-a="pfFotoGuardar">Guardar foto</button><div class="fila2 crop-bs"><label class="btn sec">' + ic('foto', 18) + 'Elegir otra<input type="file" accept="image/*" data-ch="pfFoto" hidden></label><button class="btn sec" data-a="pfFotoCancelar">Cancelar</button></div>');      // 21 nov, 10:50 (Chadín): «si no te cuadra, que puedas sustituirla por otra»
   cropPinta();
   gestoFoto($('#crop'), { st: function () { return CROP; }, pinta: cropPinta, zmax: n ? 4 : 3 });
 }
@@ -6953,6 +6954,7 @@ function kg1(v) { return fN(Math.round(v * 10) / 10, 1); }
 /* pestañas en el orden del panel de entrenador: Tus entrenos primero, luego récords, volumen, peso y medidas */
 var PROG_T = [['ent', 'Tus entrenos'], ['rec', 'Récords'], ['vol', 'Volumen'], ['peso', 'Peso'], ['med', 'Medidas y fotos']];
 function vProg() {
+  if (typeof prog3 === 'function' && prog3()) return vProg3();      // 21 nov: Progreso en tres pestañas (borrador, progreso2.js)
   var lun = lunesDe(hoyStr()), sem = S.sesiones.filter(function (s) { return s.fecha >= lun; }).length, pv = S.x.pv || 'ent';
   var h = '<div class="pant pad-tab"><div class="ini-cab"><h1 class="t1">Progreso</h1><span class="mut sm">Esta semana: ' + sem + (sem === 1 ? ' entreno' : ' entrenos') + '</span></div>';
   h += '<div class="chips ver scroll" role="group" aria-label="Ver">' + PROG_T.map(function (t) {
@@ -7414,7 +7416,8 @@ A.cmpAnterior = function (el) {
   var id = el.dataset.id, L = sesOrd(), b = L.filter(function (s) { return s.id === id; })[0]; if (!b) return;
   var a = L.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha && clave(nomSes(s)) === clave(nomSes(b)); })[0] || L.filter(function (s) { return s.id !== b.id && s.fecha <= b.fecha; })[0];
   if (!a) return toast('No hay un entreno anterior para comparar');
-  S.x.cm = { r: nomSes(b), a: a.id, b: b.id }; S.x.cmM = 'ses'; S.x.pv = 'ent'; S.pant = null; S.pila = []; S.tab = 'prog'; pintar();
+  S.x.cm = { r: nomSes(b), a: a.id, b: b.id }; if (prog3()) { S.x.p3 = 'ren'; return ir({ t: 'p3cmp' }); }
+  S.x.cmM = 'ses'; S.x.pv = 'ent'; S.pant = null; S.pila = []; S.tab = 'prog'; pintar();
   setTimeout(function () { var c = $('#cmp'); if (c && c.scrollIntoView) c.scrollIntoView({ block: 'start', behavior: 'smooth' }); }, 60);
 };
 function mejoresSem(l) { var M = {}, fin = sumar(l, 6); S.sesiones.forEach(function (s) { if (s.fecha < l || s.fecha > fin) return; (s.ej || []).forEach(function (e) { if (e.tipo === 'run' || e.tipo === 'cardio') return; var Z = setsDe(s, e.n); if (!Z || !Z.z.length) return; var m = mejorZ(Z.z), k = clave(e.n), o = M[k];
@@ -7569,6 +7572,367 @@ function borrarFotosTodas() {
     return SB.storage.from(FOTOS_B).remove(L).then(function (q) { if (q && q.error) throw q.error; });
   });
 }
+
+;
+/* ===== 21 nov 2026, 10:35 (Chadín, «Rediseño del apartado Progreso»): tres pestañas — Actividad · Rendimiento · Mi cuerpo.
+   Siempre en el mismo orden: qué estoy viendo, el dato, una sola gráfica y el detalle; lo demás, al tocar. Borrador (PROG3): solo en las demos hasta su OK.
+   Reglas de los datos (para que nada se contradiga):
+   · Entrenos: cada sesión guardada cuenta una vez; semanas de lunes a domingo; el total y «Ver todos» usan las mismas fechas.
+   · Series de trabajo: las hechas, sin las de calentamiento («C», t = 'aprox'). Lo programado y no hecho no se guarda.
+   · Carga: la serie de trabajo con más kilos de cada sesión (con sus repeticiones y su RIR, si lo apuntaste).
+   · 1RM estimada (Epley: kg × (1 + reps / 30)), solo con series de 1 a 10 repeticiones y, si apuntaste el RIR, con RIR 3 o menos.
+     Sin series así: «No hay datos suficientes» (nunca 0 kg). Es una estimación, no un récord.
+   · Volumen de carga: kilos × repeticiones de las series de trabajo hechas (unilaterales, cada lado; drop sets, cada bajada).
+     Sin kilos (peso corporal), con tiempo, metros o asistidas: fuera; se ven sus repeticiones, su tiempo o sus metros.
+   · Récords: solo si mejoran algo que ya habías hecho (la primera vez no es récord): de carga (más kilos que nunca), de N repeticiones
+     (más kilos que nunca para N repeticiones o más) o más repeticiones con los mismos kilos; sin kilos, más repeticiones; con tiempo, más tiempo.
+   · Series por grupo: cada serie de trabajo cuenta una vez, en el músculo principal del ejercicio (sin movilidad, cardio ni cuerpo completo). */
+var PROG3 = false;
+function prog3() { return PROG3 || rpBorr(); }
+var P3_T = [['act', 'Actividad'], ['ren', 'Rendimiento'], ['cue', 'Mi cuerpo']], P3N = 0;
+function vProg3() {
+  var pv = S.x.p3 || 'act';
+  var h = '<div class="pant pad-tab p3"><div class="ini-cab"><h1 class="t1">Progreso</h1></div>' + p3Seg('p3Tab', pv, P3_T, 'p3-tabs ancho', 'Progreso');
+  return h + ({ act: p3Act, ren: p3Ren, cue: p3Cue })[pv]() + '</div>';
+}
+A.p3Tab = function (el) { S.x.p3 = el.dataset.v; if (el.dataset.v === 'cue') cargaFotos(); pintar(); };
+function p3Seg(a, v, L, cls, ar) { return '<div class="seg-p p3-seg ' + (cls || '') + '" role="tablist"' + (ar ? ' aria-label="' + ar + '"' : '') + '>' + L.map(function (x) { var on = String(x[0]) === String(v); return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="' + a + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>'; }
+function p3Mes(f) { return aDate(f).toLocaleDateString('es-ES', { month: 'short' }).replace('.', ''); }
+function p3Dia(f) { return aDate(f).getDate() + ' ' + p3Mes(f); }
+function p3Largo(f) { var d = aDate(f); return d.getDate() + ' de ' + d.toLocaleDateString('es-ES', { month: 'long' }); }
+function p3Ini() { return S.sesiones.reduce(function (a, x) { return !a || x.fecha < a ? x.fecha : a; }, ''); }
+function p3Ses(a, b) { return S.sesiones.filter(function (s) { return s.fecha >= a && s.fecha <= b; }).sort(function (x, y) { return x.fecha < y.fecha ? 1 : x.fecha > y.fecha ? -1 : 0; }); }
+function p3Trab(e) { return (e.sets || []).filter(function (z) { return z.t !== 'aprox' && num(z.reps) > 0; }); }
+function p3Fz(e) { return e.tipo !== 'run' && e.tipo !== 'cardio' && e.tipo !== 'bloque'; }
+function p3Paso(span, n) { var r = span / (n || 3), p = Math.pow(10, Math.floor(Math.log(r) / Math.LN10)); return [1, 2, 2.5, 5, 10].filter(function (k) { return k * p >= r; })[0] * p; }
+function p3Num(v) { return Math.abs(v) >= 10000 ? fmtK(v) : fN(Math.round(v * 10) / 10, v % 1 ? 1 : 0); }
+function p3Vacio(t, d) { return '<div class="p3-vac"><b>' + t + '</b>' + (d ? '<span>' + d + '</span>' : '') + '</div>'; }
+
+/* ---------- las gráficas (SVG, 340 de ancho; se tocan los puntos y las barras) ---------- */
+/* barras verticales que empiezan en 0. B = [{ v, l, ar, cur }], o = { sel, act, ent (números enteros), ar, fmt } */
+function p3Barras(B, o) {
+  var W = 340, H = 178, l = 34, r = 8, t = 14, b = 26, n = B.length, id = 'p3g' + (++P3N), mx = Math.max.apply(null, B.map(function (x) { return x.v; }).concat([0]));
+  var paso = o.ent ? Math.max(1, Math.ceil((mx || 1) / 3)) : p3Paso(mx || 1, 3), tope = Math.max(paso, Math.ceil((mx || 1) / paso) * paso), fmt = o.fmt || function (v) { return p3Num(v); };
+  var Y = function (v) { return t + (1 - v / tope) * (H - t - b); }, cw = (W - l - r) / n, bw = Math.max(5, Math.min(30, cw * 0.6));
+  var g = '<svg class="p3-g" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.ar || '') + '"><defs><linearGradient id="' + id + 'a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5D7FFB"/><stop offset="1" stop-color="#8C6CF3"/></linearGradient>' +
+    '<pattern id="' + id + 'r" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="6" height="6" fill="#8FA6FD"/><rect width="3" height="6" fill="#C9D4FE"/></pattern></defs>';
+  for (var v = 0; v <= tope + 1e-9; v += paso) { var y = Y(v); g += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="p3-gl' + (v ? '' : ' cero') + '"/><text x="' + (l - 6) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" class="p3-gt">' + esc(fmt(v)) + '</text>'; }
+  var k = Math.ceil(n / 5);
+  B.forEach(function (x, i) {
+    var cx = l + i * cw + cw / 2, h = x.v / tope * (H - t - b), sel = i === o.sel;
+    if (x.v > 0) g += '<rect x="' + (cx - bw / 2).toFixed(1) + '" y="' + Y(x.v).toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(2, h).toFixed(1) + '" rx="' + Math.min(5, bw / 2).toFixed(1) + '" fill="' + (x.cur && !sel ? 'url(#' + id + 'r)' : 'url(#' + id + 'a)') + '" class="p3-b' + (sel ? ' sel' : '') + (x.cur ? ' cur' : '') + '"/>';
+    if (sel && x.v > 0) g += '<text x="' + cx.toFixed(1) + '" y="' + (Y(x.v) - 5).toFixed(1) + '" text-anchor="middle" class="p3-gv">' + esc(fmt(x.v)) + '</text>';
+    if (x.cur || (n - 1 - i) % k === 0) g += '<text x="' + cx.toFixed(1) + '" y="' + (H - 7) + '" text-anchor="middle" class="p3-gx' + (sel ? ' sel' : '') + '">' + esc(x.l) + '</text>';
+    g += '<rect x="' + (l + i * cw).toFixed(1) + '" y="0" width="' + cw.toFixed(1) + '" height="' + H + '" class="p3-hit" data-a="' + o.act + '" data-i="' + i + '" role="button" aria-label="' + esc(x.ar || '') + '" aria-pressed="' + sel + '"/>';
+  });
+  return g + '</svg>';
+}
+/* línea; P = [{ v (null: sin dato válido, la línea se corta), l, ar }], o = { sel, act, ar, uni, min (lo mínimo que abarca el eje) } */
+function p3Linea(P, o) {
+  var V = P.filter(function (x) { return x.v != null; }).map(function (x) { return x.v; }); if (!V.length) return '';
+  var W = 340, H = 182, l = 40, r = 14, t = 20, b = 26, id = 'p3g' + (++P3N), lo = Math.min.apply(null, V), hi = Math.max.apply(null, V);
+  var ms = Math.max(hi * 0.2, o.min || 4); if (hi - lo < ms) { var c = (hi + lo) / 2; lo = c - ms / 2; hi = c + ms / 2; }      // sin exagerar cambios pequeños
+  lo = Math.max(0, lo); var paso = p3Paso(hi - lo, 3); lo = Math.floor(lo / paso) * paso; hi = Math.ceil(hi / paso) * paso; if (hi <= lo) hi = lo + paso;
+  var n = P.length, X = function (i) { return n === 1 ? (l + W - r) / 2 : l + i * (W - l - r) / (n - 1); }, Y = function (v) { return t + (hi - v) / (hi - lo) * (H - t - b); };
+  var g = '<svg class="p3-g" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(o.ar || '') + '"><defs><linearGradient id="' + id + 'a" x1="0" x2="1"><stop offset="0" stop-color="#5D7FFB"/><stop offset="1" stop-color="#8C6CF3"/></linearGradient></defs>';
+  for (var v = lo; v <= hi + 1e-9; v += paso) { var y = Y(v); g += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="p3-gl"/><text x="' + (l - 6) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" class="p3-gt">' + esc(p3Num(v)) + '</text>'; }
+  if (o.uni) g += '<text x="' + (l - 6) + '" y="10" text-anchor="end" class="p3-gt u">' + esc(o.uni) + '</text>';
+  var seg = [], cur = [];
+  P.forEach(function (x, i) { if (x.v == null) { if (cur.length) seg.push(cur); cur = []; } else cur.push(X(i).toFixed(1) + ' ' + Y(x.v).toFixed(1)); }); if (cur.length) seg.push(cur);
+  seg.forEach(function (s) { if (s.length > 1) g += '<path d="M' + s.join(' L') + '" fill="none" stroke="url(#' + id + 'a)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>'; });
+  var xi = n > 2 ? [0, Math.floor((n - 1) / 2), n - 1] : n === 2 ? [0, 1] : [0];
+  xi.forEach(function (i, k) { g += '<text x="' + X(i).toFixed(1) + '" y="' + (H - 7) + '" text-anchor="' + (n === 1 ? 'middle' : k === 0 ? 'start' : k === xi.length - 1 ? 'end' : 'middle') + '" class="p3-gx">' + esc(P[i].l) + '</text>'; });
+  if (o.sel != null && P[o.sel] && P[o.sel].v != null) g += '<line x1="' + X(o.sel).toFixed(1) + '" x2="' + X(o.sel).toFixed(1) + '" y1="' + Y(P[o.sel].v).toFixed(1) + '" y2="' + (H - b) + '" class="p3-gs"/>';
+  P.forEach(function (x, i) { if (x.v == null) return; var sel = i === o.sel;
+    g += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(x.v).toFixed(1) + '" r="' + (sel ? 6.5 : 4) + '" class="p3-p' + (sel ? ' sel' : '') + '"/>';
+    g += '<circle cx="' + X(i).toFixed(1) + '" cy="' + Y(x.v).toFixed(1) + '" r="18" class="p3-hit" data-a="' + o.act + '" data-i="' + i + '" role="button" aria-label="' + esc(x.ar || '') + '" aria-pressed="' + sel + '"/>'; });
+  return g + '</svg>';
+}
+
+/* =====================================================================  ACTIVIDAD  ===================================================================== */
+var P3_PER = [[4, '4 semanas'], [13, '3 meses'], [26, '6 meses']];
+function p3Grupos(nw) {
+  var hoy = hoyStr(), lun = lunesDe(hoy), f0 = p3Ini(), G = [];
+  if (nw <= 13) {      // por semanas, de lunes a domingo
+    var ini = sumar(lun, -7 * (nw - 1)); if (f0 && lunesDe(f0) > ini) ini = lunesDe(f0);
+    for (var a = ini; a <= lun; a = sumar(a, 7)) { var b = sumar(a, 6), L = p3Ses(a, b), cur = a === lun;
+      G.push({ a: a, b: b, v: L.length, L: L, cur: cur, l: cur ? 'En curso' : p3Dia(a), t: (cur ? 'Esta semana, en curso' : 'Semana del ' + aDate(a).getDate() + (aDate(a).getMonth() !== aDate(b).getMonth() ? ' ' + p3Mes(a) : '') + ' al ' + p3Dia(b)) }); }
+    return { G: G, por: 'semana' };
+  }
+  var d = aDate(hoy), m0 = new Date(d.getFullYear(), d.getMonth() - 5, 1);      // 6 meses: por meses (26 semanas no se leen bien en el móvil)
+  for (var k = 0; k < 6; k++) { var dt = new Date(m0.getFullYear(), m0.getMonth() + k, 1), a2 = fechaDe(dt), b2 = fechaDe(new Date(dt.getFullYear(), dt.getMonth() + 1, 0));
+    if (f0 && b2 < f0) continue; var L2 = p3Ses(a2, b2), cur2 = k === 5, nm = dt.toLocaleDateString('es-ES', { month: 'long' });
+    G.push({ a: a2, b: b2, v: L2.length, L: L2, cur: cur2, l: cur2 ? 'En curso' : p3Mes(a2), t: nm.charAt(0).toUpperCase() + nm.slice(1) + (cur2 ? ', en curso' : '') }); }
+  return { G: G, por: 'mes' };
+}
+function p3Act() {
+  if (!S.sesiones.length) return '<section class="card p3-c">' + p3Vacio('Todavía no hay entrenamientos', 'Cuando termines el primero, aquí verás cuántos haces cada semana.') + '<button class="btn" data-a="tab" data-v="entreno">' + ic('pesa', 18, null) + 'Ir a Entrenar</button></section>';
+  var nw = S.x.a3 || 4, R = p3Grupos(nw), G = R.G, tot = G.reduce(function (a, x) { return a + x.v; }, 0), f0 = p3Ini(), desde = G.length ? (G[0].a > f0 ? G[0].a : f0) : f0;
+  var sel = S.x.a3s != null && G[S.x.a3s] ? S.x.a3s : G.length - 1, w = G[sel];
+  var h = '<section class="card p3-c"><div class="p3-h"><b class="p3-tt">Actividad</b>' + p3Seg('p3Per', nw, P3_PER) + '</div>' +
+    '<div class="p3-big"><b>' + tot + '</b><span>' + (tot === 1 ? 'entrenamiento' : 'entrenamientos') + '</span><small>Desde el ' + esc(p3Largo(desde)) + '</small></div>' +
+    '<p class="p3-gtt">Entrenamientos por ' + R.por + '</p>' +
+    p3Barras(G.map(function (x) { return { v: x.v, l: x.l, cur: x.cur, ar: x.t + ': ' + x.v + (x.v === 1 ? ' entrenamiento' : ' entrenamientos') }; }), { sel: sel, act: 'p3ASel', ent: 1, ar: 'Entrenamientos por ' + R.por });
+  if (w) h += '<div class="p3-inf"><b>' + esc(w.t) + ' · ' + w.v + (w.v === 1 ? ' entrenamiento' : ' entrenamientos') + '</b>' + (w.L.length ? '<span>' + w.L.slice().reverse().map(function (s) { return esc(nomSes(s)); }).join(' · ') + '</span>' : '') +
+    (w.cur ? '<small>' + (R.por === 'semana' ? 'La semana aún no ha terminado.' : 'El mes aún no ha terminado.') + '</small>' : '') + '</div>';
+  h += '</section>';
+  var U = p3Ses('', hoyStr()).slice(0, 3);
+  h += '<section class="card p3-c"><b class="p3-tt">Últimos entrenamientos</b>' + U.map(p3FilaSes).join('') + '<button class="link p3-mas" data-a="p3Hist">Ver todos los entrenamientos' + ic('sig', 15) + '</button></section>';
+  return h;
+}
+A.p3Per = function (el) { S.x.a3 = +el.dataset.v; delete S.x.a3s; pintar(); };
+A.p3ASel = function (el) { S.x.a3s = +el.dataset.i; pintar(); };
+/* el músculo principal (para la lista y para las series por grupo) */
+var P3_GN = { 'Glúteo': 'Glúteos', 'Cuádriceps': 'Cuádriceps', 'Isquios': 'Isquiosurales', 'Isquiosurales': 'Isquiosurales', 'Aductores': 'Aductores', 'Gemelo': 'Gemelos', 'Espalda': 'Espalda', 'Pecho': 'Pectoral', 'Hombro': 'Hombros', 'Bíceps': 'Bíceps', 'Tríceps': 'Tríceps', 'Core': 'Core' };
+function p3Grupo(n) { return P3_GN[grupoN(n)] || ''; }
+function p3Foco(s) {
+  var C = {}; (s.ej || []).forEach(function (e) { if (e.tipo === 'run') C.Carrera = (C.Carrera || 0) + 3; else if (e.tipo === 'cardio') C.Cardio = (C.Cardio || 0) + 1; else if (p3Fz(e)) { var g = p3Grupo(e.n); if (g) C[g] = (C[g] || 0) + p3Trab(e).length; } });
+  return Object.keys(C).sort(function (a, b) { return C[b] - C[a]; })[0] || '';
+}
+function p3FilaSes(s) {
+  var fo = p3Foco(s), nom = nomSes(s), ve = fo && clave(nom).indexOf(clave(fo).slice(0, 5)) < 0;
+  return '<button class="p3-fila" data-a="verSes" data-id="' + esc(s.id) + '"><span class="col"><b>' + esc(nom) + (ve ? '<small> · ' + esc(fo) + '</small>' : '') + '</b></span><em>' + esc(p3Dia(s.fecha)) + '</em>' + ic('sig', 15) + '</button>';
+}
+/* «Ver todos los entrenamientos»: los mismos periodos (y las mismas fechas) que arriba, y Todo */
+A.p3Hist = function () { S.x.h3 = S.x.a3 || 4; ir({ t: 'p3hist' }); };
+VISTAS.p3hist = function () {
+  var nw = S.x.h3 == null ? 4 : S.x.h3, R = nw ? p3Grupos(nw).G : null, a = R && R.length ? R[0].a : '', L = p3Ses(a, hoyStr()), f0 = p3Ini();
+  var h = '<div class="pant pad p3">' + cab('Tus entrenamientos') + p3Seg('p3HPer', nw, P3_PER.concat([[0, 'Todo']])) +
+    '<p class="p3-hn"><b>' + L.length + (L.length === 1 ? ' entrenamiento' : ' entrenamientos') + '</b> ' + (a ? 'desde el ' + esc(p3Largo(a > f0 ? a : f0)) : 'en total') + '</p><section class="card p3-c">';
+  var mes = ''; L.forEach(function (s) { var m = aDate(s.fecha).toLocaleDateString('es-ES', { month: 'long', year: 'numeric' }); if (m !== mes) { mes = m; h += '<small class="p3-mt">' + esc(m.charAt(0).toUpperCase() + m.slice(1)) + '</small>'; } h += p3FilaSes(s); });
+  return h + (L.length ? '' : p3Vacio('Sin entrenamientos en este periodo')) + '</section></div>';
+};
+A.p3HPer = function (el) { S.x.h3 = +el.dataset.v; pintar(); };
+
+/* =====================================================================  RENDIMIENTO  ===================================================================== */
+function p3Datos(s, n) {
+  var R = null;
+  (s.ej || []).forEach(function (e) { if (clave(e.n) !== clave(n) || !p3Fz(e)) return; var Z = p3Trab(e); if (!Z.length) return;
+    R = R || { f: s.fecha, id: s.id, u: e.u || '', Z: [], vol: 0, top: null, e1: null, e1z: null, rmax: 0 };
+    Z.forEach(function (z) { var o = { p: num(z.kg) || 0, r: num(z.reps) || 0, rir: num(z.rir) }; R.Z.push(o); if (!R.u) R.vol += serVol(z); if (o.r > R.rmax) R.rmax = o.r;
+      if (!R.top || o.p > R.top.p || (o.p === R.top.p && o.r > R.top.r)) R.top = o;
+      if (o.p > 0 && o.r >= 1 && o.r <= 10 && (o.rir == null || o.rir <= 3)) { var x = e1rm(o.p, o.r); if (R.e1 == null || x > R.e1) { R.e1 = x; R.e1z = o; } } }); });
+  return R;
+}
+function p3TipoEj(n, A0) { var u = (A0[A0.length - 1] || {}).u; return u === 's' ? 'tiempo' : u === 'm' ? 'dist' : /asistid/i.test(n) ? 'asist' : A0.some(function (x) { return x.top && x.top.p > 0; }) ? 'kg' : 'reps'; }
+function p3Set(o, u) { return (o.p ? fN(o.p) + ' × ' : '') + o.r + (u === 's' ? ' s' : u === 'm' ? ' m' : ''); }
+function p3Ren() {
+  var E = ejsSes(), run = p3RunHay();
+  if (!E.length && !run) return '<section class="card p3-c">' + p3Vacio('Aún no hay ejercicios con series', 'Cuando apuntes tus series, aquí verás cómo evoluciona cada ejercicio.') + '</section>';
+  var h = E.length ? p3CardEj(E) : '';
+  h += p3CardRec() + '<div class="p3-filas">' + (S.sesiones.length > 1 ? '<button class="card p3-row" data-a="p3Cmp"><span class="p3-ri">' + ic('grafica', 18) + '</span><span class="col"><b>Comparar entrenamientos</b><small>Dos sesiones de la misma rutina, ejercicio por ejercicio</small></span>' + ic('sig', 16) + '</button>' : '') +
+    (run ? '<button class="card p3-row" data-a="p3Run"><span class="p3-ri">' + ic('carrera', 18) + '</span><span class="col"><b>Carrera y cardio</b><small>' + esc(run) + '</small></span>' + ic('sig', 16) + '</button>' : '') + '</div>' + p3CardGru();
+  return h;
+}
+/* 4.1 · la progresión de un ejercicio: Carga · 1RM estimada · Volumen (una gráfica) y su periodo debajo */
+var P3_MET = { kg: [['carga', 'Carga'], ['e1', '1RM estimada'], ['vol', 'Volumen']], reps: [['reps', 'Repeticiones']], asist: [['reps', 'Repeticiones']], tiempo: [['reps', 'Tiempo']], dist: [['reps', 'Metros']] };
+function p3CardEj(E) {
+  var n = S.x.pe && E.some(function (x) { return clave(x) === clave(S.x.pe); }) ? S.x.pe : E[0];
+  var A0 = S.sesiones.map(function (s) { return p3Datos(s, n); }).filter(Boolean).sort(function (a, b) { return a.f < b.f ? -1 : a.f > b.f ? 1 : 0; });
+  var h = '<section class="card p3-c"><b class="p3-tt">Progresión por ejercicio</b><label class="f-s ancho p3-sel">' + ic('pesa', 14) + '<select data-ch="p3Ej" aria-label="Ejercicio">' + E.map(function (e) { return '<option' + (clave(e) === clave(n) ? ' selected' : '') + '>' + esc(e) + '</option>'; }).join('') + '</select>' + ic('abajo', 13) + '</label>';
+  if (!A0.length) return h + p3Vacio('Todavía no hay series de trabajo de este ejercicio') + '</section>';
+  var ti = p3TipoEj(n, A0), MT = P3_MET[ti], M = MT.some(function (x) { return x[0] === S.x.p3m; }) ? S.x.p3m : MT[0][0], P = S.x.p3pp || '3m', u = A0[A0.length - 1].u;
+  if (MT.length > 1) h += p3Seg('p3Met', M, MT, 'p3-met ancho', 'Qué ver');
+  var hoy = hoyStr(), desde = { '1m': sumar(hoy, -30), '3m': sumar(hoy, -91), '6m': sumar(hoy, -182) }[P] || '', L = A0.filter(function (x) { return !desde || x.f >= desde; });
+  var val = function (x) { return M === 'carga' ? x.top.p : M === 'e1' ? (x.e1 == null ? null : Math.round(x.e1 * 10) / 10) : M === 'vol' ? x.vol : ti === 'tiempo' || ti === 'dist' ? Math.max.apply(null, x.Z.map(function (z) { return z.r; })) : x.rmax; };
+  var uni = M === 'reps' ? (ti === 'tiempo' ? 's' : ti === 'dist' ? 'm' : 'rep.') : 'kg';
+  var vl = L.filter(function (x) { return val(x) != null; });
+  if (!L.length) h += p3Vacio('Sin sesiones de este ejercicio en este periodo', 'Elige un periodo más largo.');
+  else if (!vl.length) h += p3Vacio('No hay datos suficientes', 'La 1RM se estima con series de 1 a 10 repeticiones' + (L.some(function (x) { return x.Z.some(function (z) { return z.rir != null; }); }) ? ' y RIR 3 o menos' : '') + '.');
+  else {
+    var si = S.x.p3i != null && L[S.x.p3i] && val(L[S.x.p3i]) != null ? S.x.p3i : L.indexOf(vl[vl.length - 1]), x = L[si], v = val(x), big, sub;
+    if (M === 'carga') { big = fN(v) + ' kg'; sub = '× ' + x.top.r + (x.top.r === 1 ? ' repetición' : ' repeticiones') + (x.top.rir != null ? ' · RIR ' + fN(x.top.rir, 0) : '') + ' · ' + p3Dia(x.f); }
+    else if (M === 'e1') { big = '≈ ' + fN(v) + ' kg'; sub = '1RM estimada · con ' + p3Set(x.e1z, '') + ' · ' + p3Dia(x.f); }
+    else if (M === 'vol') { big = fmtK(v) + ' kg'; sub = 'volumen de carga · ' + x.Z.length + (x.Z.length === 1 ? ' serie' : ' series') + ' · ' + p3Dia(x.f); }
+    else { big = fN(v, 0) + (ti === 'tiempo' ? ' s' : ti === 'dist' ? ' m' : ''); sub = (ti === 'tiempo' ? 'tu mejor serie' : ti === 'dist' ? 'tu mejor serie' : v === 1 ? 'repetición en tu mejor serie' : 'repeticiones en tu mejor serie') + ' · ' + p3Dia(x.f); }
+    h += '<div class="p3-dato"><b>' + esc(big) + '</b><span>' + esc(sub) + '</span><button class="link" data-a="verSes" data-id="' + esc(x.id) + '">Ver la sesión</button></div>';
+    var Pt = L.map(function (y) { var w = val(y); return { v: w, l: p3Dia(y.f), ar: p3Dia(y.f) + ': ' + (w == null ? 'sin dato' : p3Num(w) + ' ' + uni) }; });
+    h += M === 'vol' ? p3Barras(Pt.map(function (y) { return { v: y.v || 0, l: y.l, ar: y.ar }; }), { sel: si, act: 'p3Pt', ar: 'Volumen de carga de cada sesión' }) : p3Linea(Pt, { sel: si, act: 'p3Pt', uni: uni, min: uni === 'kg' ? 5 : 3, ar: (M === 'e1' ? '1RM estimada' : M === 'carga' ? 'Carga' : 'Tu mejor serie') + ' de cada sesión' });
+    if (M === 'e1') h += '<small class="p3-nt">Estimación (fórmula de Epley) con series de 1 a 10 repeticiones. No es una repetición máxima real.</small>';
+    else if (M === 'vol') h += '<small class="p3-nt">Kilos × repeticiones de tus series de trabajo, sin calentamiento.</small>';
+    else if (ti === 'asist') h += '<small class="p3-nt">Con ayuda, los kilos no se comparan: se ven tus repeticiones.</small>';
+  }
+  h += p3Seg('p3PPer', P, [['1m', '1 mes'], ['3m', '3 meses'], ['6m', '6 meses'], ['todo', 'Todo']], 'p3-per ancho', 'Periodo') + '</section>';
+  /* 4.2 · sus últimas sesiones, sin flechas de colores */
+  var U3 = A0.slice(-3).reverse();
+  h += '<section class="card p3-c"><b class="p3-tt">Últimas sesiones · ' + esc(n) + '</b>' + U3.map(function (y) { return p3FilaEj(y, ti); }).join('') + (A0.length > 3 ? '<button class="link p3-mas" data-a="p3EjHist">Ver historial completo' + ic('sig', 15) + '</button>' : '') + '</section>';
+  return h;
+}
+function p3FilaEj(y, ti) {
+  var t = ti === 'kg' ? fN(y.top.p) + ' kg × ' + y.top.r : ti === 'tiempo' ? Math.max.apply(null, y.Z.map(function (z) { return z.r; })) + ' s' : ti === 'dist' ? Math.max.apply(null, y.Z.map(function (z) { return z.r; })) + ' m' : y.rmax + (y.rmax === 1 ? ' repetición' : ' repeticiones');
+  return '<button class="p3-fila p3-fe" data-a="verSes" data-id="' + esc(y.id) + '"><span class="col"><b>' + esc(p3Dia(y.f)) + ' — ' + esc(t) + '</b><small>Series: ' + esc(y.Z.map(function (z) { return p3Set(z, y.u).replace(' × ', '×'); }).join(' · ')) + '</small></span>' + ic('sig', 15) + '</button>';
+}
+CH.p3Ej = function (t) { S.x.pe = t.value; delete S.x.p3i; pintar(); };
+A.p3Met = function (el) { S.x.p3m = el.dataset.v; delete S.x.p3i; pintar(); };
+A.p3PPer = function (el) { S.x.p3pp = el.dataset.v; delete S.x.p3i; pintar(); };
+A.p3Pt = function (el) { S.x.p3i = +el.dataset.i; pintar(); };
+A.p3EjHist = function () { ir({ t: 'p3ejh' }); };
+VISTAS.p3ejh = function () {
+  var E = ejsSes(), n = S.x.pe && E.some(function (x) { return clave(x) === clave(S.x.pe); }) ? S.x.pe : E[0];
+  var A0 = S.sesiones.map(function (s) { return p3Datos(s, n); }).filter(Boolean).sort(function (a, b) { return a.f < b.f ? 1 : a.f > b.f ? -1 : 0; }), ti = p3TipoEj(n, A0.slice().reverse());
+  return '<div class="pant pad p3">' + cab(esc(n)) + '<p class="p3-hn"><b>' + A0.length + (A0.length === 1 ? ' sesión' : ' sesiones') + '</b> con este ejercicio</p><section class="card p3-c">' + A0.map(function (y) { return p3FilaEj(y, ti); }).join('') + '</section></div>';
+};
+/* 4.3 · récords personales: solo mejoras reales (la primera vez no cuenta) */
+function p3Records() {
+  var H = {}, R = [], L = S.sesiones.map(function (s, i) { return { s: s, i: i }; }).sort(function (a, b) { return a.s.fecha < b.s.fecha ? -1 : a.s.fecha > b.s.fecha ? 1 : a.i - b.i; });
+  L.forEach(function (o) { var s = o.s;
+    (s.ej || []).forEach(function (e) { if (!p3Fz(e)) return; var Z = p3Trab(e).map(function (z) { return { p: num(z.kg) || 0, r: num(z.reps) || 0 }; }); if (!Z.length) return;
+      var k = clave(e.n), h = H[k], ti = e.u === 's' ? 's' : e.u === 'm' ? 'm' : '', rec = null, mr = Math.max.apply(null, Z.map(function (z) { return z.r; }));
+      if (h) {
+        if (ti) { if (mr > h.mr) rec = { t: ti === 's' ? 'Récord de tiempo' : 'Récord de distancia', m: mr + (ti === 's' ? ' s' : ' m') }; }
+        else if (!Z.some(function (z) { return z.p > 0; })) { if (mr > h.mr) rec = { t: 'Récord de repeticiones', m: mr + (mr === 1 ? ' repetición' : ' repeticiones') }; }
+        else {
+          var top = Z.reduce(function (a, z) { return !a || z.p > a.p || (z.p === a.p && z.r > a.r) ? z : a; }, null);
+          if (top.p > h.mp) rec = { t: 'Récord de carga', m: fN(top.p) + ' kg × ' + top.r };
+          else {
+            var c1 = null; Z.forEach(function (z) { if (!z.p) return; var pv = null; h.Z.forEach(function (w) { if (w.r >= z.r && (pv == null || w.p > pv)) pv = w.p; }); if (pv != null && z.p > pv && (!c1 || z.p > c1.p)) c1 = z; });
+            if (c1) rec = { t: 'Récord de ' + c1.r + (c1.r === 1 ? ' repetición' : ' repeticiones'), m: fN(c1.p) + ' kg × ' + c1.r };
+            else { var c2 = null; Z.forEach(function (z) { if (!z.p) return; var pr = h.ra[z.p]; if (pr != null && z.r > pr && (!c2 || z.p > c2.p)) c2 = z; });
+              if (c2) rec = { t: 'Más repeticiones con ' + fN(c2.p) + ' kg', m: fN(c2.p) + ' kg × ' + c2.r }; }
+          }
+        }
+        if (rec) R.push(Object.assign(rec, { n: e.n, f: s.fecha, id: s.id }));
+      }
+      h = H[k] = H[k] || { mp: 0, mr: 0, Z: [], ra: {} };
+      Z.forEach(function (z) { if (z.p > h.mp) h.mp = z.p; if (z.r > h.mr) h.mr = z.r; h.Z.push(z); if (z.p) h.ra[z.p] = Math.max(h.ra[z.p] || 0, z.r); });
+    }); });
+  return R.reverse();
+}
+function p3FilaRec(x) { return '<button class="p3-fila p3-rec" data-a="verSes" data-id="' + esc(x.id) + '"><span class="p3-rd">' + ic('trofeo', 15) + '</span><span class="col"><b>' + esc(x.n) + '</b><small>' + esc(x.t) + ' · ' + esc(p3Dia(x.f)) + '</small></span><b class="p3-rm">' + esc(x.m) + '</b></button>'; }
+function p3CardRec() {
+  var R = p3Records();
+  return '<section class="card p3-c"><b class="p3-tt">Récords personales</b>' + (R.length ? R.slice(0, 4).map(p3FilaRec).join('') + (R.length > 4 ? '<button class="link p3-mas" data-a="p3Recs">Ver todos (' + R.length + ')' + ic('sig', 15) + '</button>' : '')
+    : p3Vacio('Aún no hay récords', 'Saldrán cuando superes una marca que ya hayas hecho antes.')) + '</section>';
+}
+A.p3Recs = function () { ir({ t: 'p3recs' }); };
+VISTAS.p3recs = function () { var R = p3Records(); return '<div class="pant pad p3">' + cab('Récords personales') + '<section class="card p3-c">' + R.map(p3FilaRec).join('') + '</section><p class="p3-nt">Solo cuentan las mejoras de algo que ya habías hecho: la primera vez que haces un ejercicio no es un récord.</p></div>'; };
+/* 4.4 · comparar dos entrenamientos de la misma rutina (sin el recuadro de kilos, series y minutos; las diferencias, neutras) */
+A.p3Cmp = function () { ir({ t: 'p3cmp' }); };
+function p3Mejor(Z) { return (Z || []).reduce(function (a, z) { return !a || z.p > a.p || (z.p === a.p && z.r > a.r) ? z : a; }, null); }
+function p3Dif(a, b, u) {
+  if (!a || !b) return '';
+  var un = u === 's' ? ' s' : u === 'm' ? ' m' : ' rep.';
+  if (a.p === b.p && a.r === b.r) return '<span class="p3-tag">Igual</span>';
+  if (a.p === b.p) return '<span class="p3-tag' + (b.r > a.r ? ' mej' : '') + '">' + (b.r > a.r ? '+' : '−') + Math.abs(b.r - a.r) + un + (a.p ? ' con el mismo peso' : '') + '</span>';
+  if (b.p > a.p && b.r >= a.r) return '<span class="p3-tag mej">+' + fN(b.p - a.p) + ' kg' + (b.r > a.r ? ' y +' + (b.r - a.r) + un : ' con las mismas repeticiones') + '</span>';
+  return '<span class="p3-tag">' + (b.p > a.p ? 'Más peso, menos repeticiones' : b.r > a.r ? 'Menos peso, más repeticiones' : 'Menos peso') + '</span>';
+}
+function p3Col(s, n) {
+  var e = null; (s.ej || []).forEach(function (x) { if (!e && clave(x.n) === clave(n) && p3Fz(x)) e = x; }); if (!e) return { h: '<div class="p3-cc vacio"><small>No lo hiciste</small></div>', Z: null };
+  var Z = p3Trab(e).map(function (z) { return { p: num(z.kg) || 0, r: num(z.reps) || 0, rir: num(z.rir) }; });
+  return { u: e.u, Z: Z, h: '<div class="p3-cc">' + Z.map(function (z) { return '<div><span>' + esc(p3Set(z, e.u)) + '</span>' + (z.rir != null ? '<small>RIR ' + fN(z.rir, 0) + '</small>' : '') + '</div>'; }).join('') + '</div>' };
+}
+VISTAS.p3cmp = function () {
+  var P = cmpPar(), h = '<div class="pant pad p3">' + cab('Comparar entrenamientos'); if (!P) return h + '</div>';
+  h += '<section class="card p3-c"><small class="p3-paso">1 · Rutina</small><label class="f-s ancho p3-sel">' + ic('pesa', 14) + '<select data-ch="cmRut" aria-label="Rutina">' + rutsSes().map(function (r) { return '<option' + (clave(r) === clave(P.r) ? ' selected' : '') + '>' + esc(r) + '</option>'; }).join('') + '</select>' + ic('abajo', 13) + '</label>';
+  if (!P.a) return h + p3Vacio('Solo has hecho esta rutina una vez', 'Cuando la repitas podrás compararla.') + '</section></div>';
+  var cnt = {}; P.R.forEach(function (s) { cnt[s.fecha] = (cnt[s.fecha] || 0) + 1; });
+  var et = function (s) { var q = P.R.filter(function (x) { return x.fecha === s.fecha; }); return fCorta(s.fecha) + (cnt[s.fecha] > 1 ? ' (' + (q.length - q.indexOf(s)) + ')' : ''); };
+  var sel = function (k, v, otro) { return '<label class="f-s"><select data-ch="cmSel" data-k="' + k + '" aria-label="' + (k === 'a' ? 'Primera fecha' : 'Segunda fecha') + '">' + P.R.map(function (s) { return '<option value="' + s.id + '"' + (s.id === v.id ? ' selected' : '') + (s.id === otro.id ? ' disabled' : '') + '>' + esc(et(s)) + '</option>'; }).join('') + '</select></label>'; };
+  h += '<small class="p3-paso">2 · Fechas</small><div class="cm-f">' + sel('a', P.a, P.b) + '<span class="mut sm">y</span>' + sel('b', P.b, P.a) + '</div></section>';
+  var N = [], vis = {}; (P.b.ej || []).concat(P.a.ej || []).forEach(function (e) { var k = clave(e.n); if (!vis[k] && p3Fz(e) && p3Trab(e).length) { vis[k] = 1; N.push(e.n); } });
+  h += '<small class="p3-paso fuera">3 · Ejercicio por ejercicio</small>' + N.map(function (n) { var a = p3Col(P.a, n), b = p3Col(P.b, n), u = b.u || a.u;
+    return '<section class="card p3-c p3-ce"><div class="p3-cn"><b>' + esc(n) + '</b>' + p3Dif(p3Mejor(a.Z), p3Mejor(b.Z), u) + '</div><div class="p3-c2"><small>' + esc(et(P.a)) + '</small><small>' + esc(et(P.b)) + '</small>' + a.h + b.h + '</div></section>'; }).join('');
+  return h + '<p class="p3-nt">La etiqueta compara la mejor serie de cada día. Solo dice «más» cuando es comparable: mismos kilos con más repeticiones, o más kilos con las mismas o más.</p></div>';
+};
+/* 4.5 · series por grupo muscular (desplegable) */
+function p3SeriesG(a, b) {
+  var G = {}; S.sesiones.forEach(function (s) { if (s.fecha < a || s.fecha > b) return; (s.ej || []).forEach(function (e) { if (!p3Fz(e)) return; var g = p3Grupo(e.n); if (!g) return; G[g] = (G[g] || 0) + p3Trab(e).length; }); });
+  return Object.keys(G).filter(function (k) { return G[k]; }).map(function (k) { return [k, G[k]]; }).sort(function (x, y) { return y[1] - x[1]; });
+}
+function p3CardGru() {
+  var ab = !!S.x.p3go, h = '<section class="card p3-c p3-gru"><button class="p3-row2" data-a="p3Gru" aria-expanded="' + ab + '"><span class="p3-ri">' + ic('grafica', 18) + '</span><span class="col"><b>Series por grupo muscular</b><small>Ver estadísticas de volumen</small></span>' + ic(ab ? 'abajo' : 'sig', 16) + '</button>';
+  if (!ab) return h + '</section>';
+  var pp = S.x.p3gp || 'sem', lun = lunesDe(hoyStr()), a = pp === 'sem' ? lun : sumar(lun, -21), G = p3SeriesG(a, sumar(lun, 6)), mx = Math.max.apply(null, G.map(function (x) { return x[1]; }).concat([1]));
+  h += p3Seg('p3GPer', pp, [['sem', 'Esta semana'], ['4s', 'Últimas 4 semanas']], 'ancho', 'Periodo');
+  h += G.length ? '<div class="p3-hb">' + G.map(function (x) { return '<div><span>' + esc(x[0]) + '</span><i><u style="width:' + Math.max(3, Math.round(x[1] * 100 / mx)) + '%"></u></i><b>' + x[1] + '</b></div>'; }).join('') + '</div>' : p3Vacio(pp === 'sem' ? 'Esta semana aún no hay series de fuerza' : 'Sin series de fuerza en estas semanas');
+  return h + '<small class="p3-nt">Series de trabajo' + (pp === '4s' ? ' en las últimas 4 semanas (de lunes a domingo)' : ' de esta semana') + '. Cada serie cuenta una vez, en el músculo principal del ejercicio; sin calentamiento, movilidad ni cardio.</small></section>';
+}
+A.p3Gru = function () { S.x.p3go = !S.x.p3go; pintar(); };
+A.p3GPer = function (el) { S.x.p3gp = el.dataset.v; pintar(); };
+/* 5 · carrera y cardio: solo si hay; sin mezclar minutos de cardio con kilos de fuerza */
+function p3RunHay() {
+  var lun = lunesDe(hoyStr()), nr = 0, km = 0, cm = 0, alg = false; for (var i = 11; i >= 0; i--) { var o = runSem(sumar(lun, -7 * i)); if (o.nrun || o.cmin) alg = true; if (!i) { nr = o.nrun; km = o.km; cm = o.cmin; } }
+  if (!alg) return ''; return nr ? 'Esta semana: ' + nr + (nr === 1 ? ' salida' : ' salidas') + (km ? ' · ' + fN(Math.round(km * 10) / 10, 1) + ' km' : '') : cm ? 'Esta semana: ' + cm + ' min de cardio' : 'Tus salidas y tu cardio';
+}
+A.p3Run = function () { ir({ t: 'p3run' }); };
+VISTAS.p3run = function () {
+  var lun = lunesDe(hoyStr()), W = []; for (var i = 7; i >= 0; i--) { var l = sumar(lun, -7 * i); W.push(Object.assign({ l: l }, runSem(l))); }
+  var hayR = W.some(function (x) { return x.nrun; }), hayK = W.some(function (x) { return x.km; }), hayC = W.some(function (x) { return x.cmin; }), h = '<div class="pant pad p3">' + cab('Carrera y cardio');
+  var et = function (x, i) { return i === W.length - 1 ? 'En curso' : p3Dia(x.l); }, tw = function (x, i) { return i === W.length - 1 ? 'Esta semana, en curso' : 'Semana del ' + p3Dia(x.l) + ' al ' + p3Dia(sumar(x.l, 6)); };
+  if (hayR) { var si = S.x.r3s != null && W[S.x.r3s] ? S.x.r3s : W.length - 1, w = W[si];
+    h += '<section class="card p3-c"><b class="p3-tt">Distancia por semana</b>' + (hayK ? '<div class="p3-big"><b>' + fN(Math.round(w.km * 10) / 10, 1) + '</b><span>km</span><small>' + esc(tw(w, si)) + '</small></div>' +
+      p3Barras(W.map(function (x, i) { return { v: Math.round(x.km * 10) / 10, l: et(x, i), cur: i === W.length - 1, ar: tw(x, i) + ': ' + fN(Math.round(x.km * 10) / 10, 1) + ' km' }; }), { sel: si, act: 'p3RSel', ar: 'Kilómetros por semana', fmt: function (v) { return fN(v, v % 1 ? 1 : 0); } }) : '') +
+      '<div class="p3-inf"><b>' + w.nrun + (w.nrun === 1 ? ' salida' : ' salidas') + (w.km && w.rmin ? ' · ritmo medio ' + esc(ritmoTxt(w.km, w.rmin)) : '') + '</b>' + (w.sinKm ? '<small>Para ver tus km y tu ritmo, apúntalos al marcar la carrera como hecha.</small>' : '') + '</div></section>'; }
+  if (hayC) { var sc = S.x.c3s != null && W[S.x.c3s] ? S.x.c3s : W.length - 1;
+    h += '<section class="card p3-c"><b class="p3-tt">Cardio por tiempo</b><div class="p3-big"><b>' + W[sc].cmin + '</b><span>min</span><small>' + esc(tw(W[sc], sc)) + '</small></div>' +
+      p3Barras(W.map(function (x, i) { return { v: x.cmin, l: et(x, i), cur: i === W.length - 1, ar: tw(x, i) + ': ' + x.cmin + ' min' }; }), { sel: sc, act: 'p3CSel', ent: 1, ar: 'Minutos de cardio por semana' }) + '<small class="p3-nt">Bici, elíptica y otro cardio, en minutos. No se mezcla con la fuerza.</small></section>'; }
+  var Lr = []; S.sesiones.slice().sort(function (a, b) { return a.fecha < b.fecha ? 1 : -1; }).forEach(function (s) { (s.ej || []).forEach(function (e) { if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho && Lr.length < 8) Lr.push({ s: s, e: e }); }); });
+  if (Lr.length) h += '<section class="card p3-c"><b class="p3-tt">Tus últimas salidas y cardio</b>' + Lr.map(function (o) { return '<button class="p3-fila" data-a="verSes" data-id="' + esc(o.s.id) + '"><span class="col"><b>' + esc(o.e.n || (o.e.tipo === 'run' ? 'Carrera' : 'Cardio')) + '</b><small>' + esc(runRes(o.e) || (o.e.tipo === 'run' ? 'Carrera' : 'Cardio')) + '</small></span><em>' + esc(p3Dia(o.s.fecha)) + '</em>' + ic('sig', 15) + '</button>'; }).join('') + '</section>';
+  return h + '</div>';
+};
+A.p3RSel = function (el) { S.x.r3s = +el.dataset.i; pintar(); };
+A.p3CSel = function (el) { S.x.c3s = +el.dataset.i; pintar(); };
+
+/* =====================================================================  MI CUERPO  ===================================================================== */
+function p3Cue() {
+  if (S.fotos === null && !S.x.fotosCargando) setTimeout(cargaFotos, 0);
+  return p3CardPeso() + p3CardMed() + p3CardFotos() + '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Opcional y privado: tu peso, tus medidas y tus fotos nunca salen en Comunidad.</span></p>';
+}
+function p3CardPeso() {
+  var P = pesos(); if (!P.length) return '<section class="card p3-c"><b class="p3-tt">Peso corporal</b>' + p3Vacio('Sin registros', 'Si quieres seguirlo, apúntate por la mañana, en ayunas.') + '<button class="btn sec" data-a="pesoAnotar">' + ic('mas', 18) + 'Anotar peso</button></section>';
+  var rng = S.x.rng || 4, u = P[P.length - 1], hoy = hoyStr(), desde = sumar(lunesDe(hoy), -7 * (rng - 1)), L = P.filter(function (x) { return x.fecha >= desde; });
+  var si = S.x.w3 != null && L[S.x.w3] ? S.x.w3 : -1, x = si >= 0 ? L[si] : u;
+  var h = '<section class="card p3-c"><div class="p3-h"><b class="p3-tt">Peso corporal</b>' + p3Seg('pesoRng', rng, [[4, '4 sem'], [13, '3 meses'], [52, '1 año']]) + '</div>' +
+    '<div class="p3-dato"><b>' + kg1(num(x.peso)) + ' kg</b><span>' + (si >= 0 ? esc(p3Largo(x.fecha)) : 'Último registro · ' + esc(p3Largo(x.fecha))) + '</span></div>';
+  h += L.length ? p3GrafPeso(L, desde, si) : p3Vacio('Sin registros en este periodo', 'Tu último peso es del ' + esc(p3Largo(u.fecha)) + '.');
+  return h + '<div class="p3-bts"><button class="btn-mini" data-a="pesoAnotar">' + ic('mas', 15, null, 2.4) + 'Anotar peso</button><button class="link" data-a="p3Pesos">Ver historial</button></div></section>';
+}
+/* cada registro es un punto; la media de cada semana, solo con datos suficientes (3 semanas con registros y 4 registros o más) */
+function p3GrafPeso(L, desde, si) {
+  var W = 340, H = 170, l = 40, r = 12, t = 14, b = 26, hoy = hoyStr(), t0 = aDate(desde).getTime(), t1 = aDate(sumar(lunesDe(hoy), 6)).getTime(), X = function (f) { return l + (aDate(f).getTime() - t0) / (t1 - t0) * (W - l - r); };
+  var S2 = {}; L.forEach(function (x) { var k = lunesDe(x.fecha); (S2[k] = S2[k] || []).push(num(x.peso)); });
+  var M = Object.keys(S2).sort().map(function (k) { var a = S2[k]; return { f: sumar(k, 3), v: a.reduce(function (s, y) { return s + y; }, 0) / a.length }; }), med = M.length >= 3 && L.length >= 4;
+  var V = L.map(function (x) { return num(x.peso); }), lo = Math.min.apply(null, V), hi = Math.max.apply(null, V); if (hi - lo < 2) { var c = (hi + lo) / 2; lo = c - 1; hi = c + 1; }
+  var paso = p3Paso(hi - lo, 3); lo = Math.floor(lo / paso) * paso; hi = Math.ceil(hi / paso) * paso; var Y = function (v) { return t + (hi - v) / (hi - lo) * (H - t - b); };
+  var g = '<svg class="p3-g" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Tu peso">';
+  for (var v = lo; v <= hi + 1e-9; v += paso) { var y = Y(v); g += '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + y.toFixed(1) + '" y2="' + y.toFixed(1) + '" class="p3-gl"/><text x="' + (l - 6) + '" y="' + (y + 4).toFixed(1) + '" text-anchor="end" class="p3-gt">' + esc(fN(v, paso % 1 ? 1 : 0)) + '</text>'; }
+  g += '<text x="' + (l - 6) + '" y="10" text-anchor="end" class="p3-gt u">kg</text><text x="' + l + '" y="' + (H - 7) + '" class="p3-gx">' + esc(p3Dia(desde)) + '</text><text x="' + (W - r) + '" y="' + (H - 7) + '" text-anchor="end" class="p3-gx">hoy</text>';
+  if (med) g += '<polyline fill="none" class="p3-med" points="' + M.map(function (m) { return X(m.f).toFixed(1) + ',' + Y(m.v).toFixed(1); }).join(' ') + '"/>';
+  L.forEach(function (x, i) { var sel = i === si; g += '<circle cx="' + X(x.fecha).toFixed(1) + '" cy="' + Y(num(x.peso)).toFixed(1) + '" r="' + (sel ? 6 : 3.5) + '" class="p3-p' + (sel ? ' sel' : ' pe') + '"/><circle cx="' + X(x.fecha).toFixed(1) + '" cy="' + Y(num(x.peso)).toFixed(1) + '" r="14" class="p3-hit" data-a="p3WSel" data-i="' + i + '" role="button" aria-label="' + esc(p3Dia(x.fecha) + ': ' + kg1(num(x.peso)) + ' kg') + '"/>'; });
+  return g + '</svg>' + (med ? '<div class="p3-ley"><span><i class="pt"></i>Cada registro</span><span><i class="ln"></i>Media de cada semana</span></div>' : '');
+}
+A.p3WSel = function (el) { var i = +el.dataset.i; S.x.w3 = S.x.w3 === i ? null : i; pintar(); };
+A.p3Pesos = function () { ir({ t: 'p3pesos' }); };
+VISTAS.p3pesos = function () { var P = pesos().slice().reverse(); return '<div class="pant pad p3">' + cab('Tu peso') + '<section class="card p3-c">' + P.map(function (x) { return '<button class="p3-fila" data-a="pesoAnotar" data-f="' + x.fecha + '"><span class="col"><b>' + kg1(num(x.peso)) + ' kg</b></span><em>' + esc(aDate(x.fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })) + '</em>' + ic('lapiz', 15) + '</button>'; }).join('') + '</section><button class="btn" data-a="pesoAnotar">' + ic('mas', 18, null) + 'Anotar peso</button></div>'; };
+function p3CardMed() {
+  var M = S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); });
+  if (!M.length) return '<section class="card p3-c"><b class="p3-tt">Medidas</b>' + p3Vacio('Sin registros', 'Cintura, cadera, pecho, brazo y muslo, con una cinta métrica, si quieres.') + '<button class="btn sec" data-a="medAnotar">' + ic('cinta', 18) + 'Anotar medidas</button></section>';
+  var hay = MED_K.filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); }), sel = hay.some(function (k) { return k[0] === S.x.m3; }) ? S.x.m3 : hay[0][0];
+  var h = '<section class="card p3-c"><b class="p3-tt">Medidas</b><div class="p3-med">' + hay.map(function (k) {
+    var L = M.filter(function (m) { return num(m[k[0]]); }), u = L[L.length - 1], a = L[L.length - 2];
+    return '<button class="p3-mf' + (k[0] === sel ? ' on' : '') + '" data-a="p3MSel" data-k="' + k[0] + '" aria-pressed="' + (k[0] === sel) + '"><span>' + k[1] + '</span><b>' + fN(num(u[k[0]]), 1) + ' cm</b><small>' + (a ? 'antes ' + fN(num(a[k[0]]), 1) + ' · ' + esc(p3Dia(a.fecha)) : esc(p3Dia(u.fecha))) + '</small></button>'; }).join('') + '</div>';
+  var Ls = M.filter(function (m) { return num(m[sel]); }), ks = MED_K.filter(function (k) { return k[0] === sel; })[0];
+  if (Ls.length > 1) h += '<p class="p3-gtt">' + esc(ks[1]) + ', en cm</p>' + p3Linea(Ls.map(function (m) { return { v: num(m[sel]), l: p3Dia(m.fecha), ar: p3Dia(m.fecha) + ': ' + fN(num(m[sel]), 1) + ' cm' }; }), { act: 'medAnotarI', uni: 'cm', min: 4, ar: ks[1] + ' en centímetros' });
+  return h + '<div class="p3-bts"><button class="btn-mini" data-a="medAnotar">' + ic('mas', 15, null, 2.4) + 'Anotar medidas</button><button class="link" data-a="p3Meds">Ver historial</button></div></section>';
+}
+A.p3MSel = function (el) { S.x.m3 = el.dataset.k; pintar(); };
+A.medAnotarI = function () { };
+A.p3Meds = function () { ir({ t: 'p3meds' }); };
+VISTAS.p3meds = function () {
+  var M = S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); }).slice().reverse(), cols = MED_K.filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); });
+  return '<div class="pant pad p3">' + cab('Tus medidas') + '<section class="card p3-c"><div class="tabla-m" style="grid-template-columns:1.3fr repeat(' + cols.length + ',1fr)"><span class="mut">Día</span>' + cols.map(function (k) { return '<span class="mut">' + k[1] + '</span>'; }).join('') +
+    M.map(function (m) { return '<button data-a="medAnotar" data-f="' + m.fecha + '">' + esc(fCorta(m.fecha)) + '</button>' + cols.map(function (k) { return '<span>' + (num(m[k[0]]) ? fN(num(m[k[0]]), 1) : '–') + '</span>'; }).join(''); }).join('') + '</div><small class="mut">En centímetros. Toca un día para cambiarlo.</small></section></div>';
+};
+function p3CardFotos() {
+  var F = S.fotos, h = '<section class="card p3-c"><b class="p3-tt">Fotos</b>';
+  if (F === null) return h + '<small class="mut">Cargando…</small></section>';
+  if (F === false) return h + '<small class="mut">No se han podido cargar.</small><button class="link izq" data-a="fotosRe">Reintentar</button></section>';
+  h += F.length ? '<div class="p3-fot">' + F.slice(-3).reverse().map(function (x) { return '<button data-a="fotoVer" data-n="' + esc(x.name) + '" aria-label="Foto del ' + esc(fCorta(x.fecha)) + '">' + (x.url ? '<img src="' + esc(x.url) + '" alt="">' : '') + '<span>' + esc(p3Dia(x.fecha)) + '</span></button>'; }).join('') + '</div>' : p3Vacio('Sin fotos', 'Una cada pocas semanas, con la misma luz y la misma postura.');
+  return h + '<div class="p3-bts"><label class="btn-mini">' + ic('foto', 15, null) + 'Subir foto<input type="file" accept="image/*" data-ch="fotoSubir" hidden></label>' + (F.length > 1 ? '<button class="link" data-a="fotoComparar">Comparar</button>' : '') + (F.length > 3 ? '<button class="link" data-a="p3Fotos">Ver todas (' + F.length + ')</button>' : '') + '</div></section>';
+}
+A.p3Fotos = function () { ir({ t: 'p3fotos' }); };
+VISTAS.p3fotos = function () { var F = S.fotos || []; return '<div class="pant pad p3">' + cab('Tus fotos') + '<section class="card p3-c"><div class="fotos-g">' + F.slice().reverse().map(function (x) { return '<button data-a="fotoVer" data-n="' + esc(x.name) + '">' + (x.url ? '<img src="' + esc(x.url) + '" alt="" loading="lazy">' : '') + '<span>' + esc(fCorta(x.fecha)) + '</span></button>'; }).join('') + '</div></section><p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Solo las ves tú.</span></p></div>'; };
 
 ;
 /* ---------- Nutrición (tableros 18–22): diario, objetivo de calorías, macros y comidas, buscar, escanear y recetas ---------- */
@@ -8341,7 +8705,7 @@ function fotoRecJpeg(im) {
 CH.rcFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { if (f21()) { RCROP = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(RC_W / im.width, RC_H / im.height) }; return hojaRcCrop(); }
+  im.onload = function () { if (f21()) { if (RCROP && RCROP.url !== u) URL.revokeObjectURL(RCROP.url); RCROP = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(RC_W / im.width, RC_H / im.height) }; return hojaRcCrop(); }
     var j = fotoRecJpeg(im); URL.revokeObjectURL(u); S.x.rec.foto = j; S.x.rec.fotoN = 1; pintar(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
@@ -8352,7 +8716,7 @@ function rcCropLim() { var C = RCROP, W = C.im.width * C.s0 * C.z, H = C.im.heig
 function rcCropPinta() { var C = RCROP, i = $('#rc-ci'); if (!C || !i) return; var d = rcCropLim(); i.style.width = d.W + 'px'; i.style.height = d.H + 'px'; i.style.left = (RC_W / 2 + C.x - d.W / 2) + 'px'; i.style.top = (RC_H / 2 + C.y - d.H / 2) + 'px'; }
 function hojaRcCrop() {
   hoja('<h2>Coloca la foto</h2><p class="mut sm">' + gestoAyuda() + '</p><div class="crop cp-crop" id="rc-crop" role="application" aria-label="La foto de la receta: arrástrala para moverla y acércala o aléjala con dos dedos" style="width:' + RC_W + 'px;height:' + RC_H + 'px"><img id="rc-ci" src="' + RCROP.url + '" alt="" draggable="false"></div>' +
-    '<button class="btn" data-a="rcCropOk">Usar esta foto</button><button class="btn sec" data-a="rcCropNo">Cancelar</button>');
+    '<button class="btn" data-a="rcCropOk">Usar esta foto</button><div class="fila2 crop-bs"><label class="btn sec">' + ic('foto', 18) + 'Elegir otra<input type="file" accept="image/*" data-ch="rcFoto" hidden></label><button class="btn sec" data-a="rcCropNo">Cancelar</button></div>');
   rcCropPinta(); gestoFoto($('#rc-crop'), { st: function () { return RCROP; }, pinta: rcCropPinta });
 }
 A.rcCropOk = function () {
@@ -9496,13 +9860,13 @@ function cpfHtml() {
     (f21() ? '<small class="mut">' + gestoAyuda() + '</small>' :      // 21 nov: sin barra, con los dedos
     '<label class="f crop-z">Zoom<input type="range" min="1" max="3" step="0.01" value="' + CPF.z + '" data-in="cpZ" aria-label="Zoom de la foto"></label><small class="mut">Arrastra la foto para colocarla.</small>') +
     (CPF.fmOk ? '<div class="seg3 cp-fm" role="radiogroup" aria-label="Forma de la foto">' + [['h', '4:3'], ['q', 'Cuadrada'], ['v', 'Vertical']].map(function (f) { var on = (CPF.fm || 'v') === f[0]; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="cpFm" data-v="' + f[0] + '">' + f[1] + '</button>'; }).join('') + '</div>' : '') +
-    '<button class="link rojo-t izq" data-a="cpFotoQuitar">' + (CPF.rec ? 'Dejar la foto como estaba' : 'Quitar la foto') + '</button></div>' +
+    '<div class="cp-fbs"><label class="link izq">' + ic('foto', 15) + 'Elegir otra<input type="file" accept="image/*" data-ch="cpFoto" hidden></label><button class="link rojo-t izq" data-a="cpFotoQuitar">' + (CPF.rec ? 'Dejar la foto como estaba' : 'Quitar la foto') + '</button></div></div>' +
     '<p class="cm-nunca">' + ic('escudo', 15) + '<span>La verán las personas de la Comunidad. Le quitamos la ubicación y los datos de la cámara. No subas fotos de otras personas sin su permiso.</span></p>';
 }
 CH.cpFoto = function (t) {
   var f = t.files && t.files[0]; t.value = ''; if (!f) return; if (!/^image\//.test(f.type || 'image/')) return toast('Elige una imagen');
   var u = URL.createObjectURL(f), im = new Image();
-  im.onload = function () { var rec = !!document.querySelector('[data-a=cPublicarRec]') || (cpEnEd() && S.x.ced.tipo === 'rec'); CPF_FM(rec ? 'h' : 'v'); CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), fm: rec ? 'h' : 'v', fmOk: rec ? 1 : 0 }; cpRepinta(); };
+  im.onload = function () { if (CPF && !CPF.rec && CPF.url !== u) URL.revokeObjectURL(CPF.url); var rec = !!document.querySelector('[data-a=cPublicarRec]') || (cpEnEd() && S.x.ced.tipo === 'rec'); CPF_FM(rec ? 'h' : 'v'); CPF = { im: im, url: u, z: 1, x: 0, y: 0, s0: Math.max(CPF_W / im.width, CPF_H / im.height), fm: rec ? 'h' : 'v', fmOk: rec ? 1 : 0 }; cpRepinta(); };
   im.onerror = function () { URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto'); };
   im.src = u;
 };
