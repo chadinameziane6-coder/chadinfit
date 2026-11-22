@@ -1385,6 +1385,27 @@ details.sxf .ses-b{padding:2px 0 14px}
 .sx-r.sub{font-size:14px;background:var(--card2)}.sx-sub{display:inline-flex;align-items:center;gap:2px;font-size:12.5px;color:var(--tx2)}.sx-sub .ic{width:12px;height:12px;margin:0}
 .sx-m em{font-style:normal;display:inline-flex;align-items:center;gap:3px;font-size:12px;font-weight:700}.sx-m .ic{margin:0;width:14px;height:14px}
 .mk-rec{color:var(--mg)}.mk-mej{color:var(--ok)}
+/* v53.4.212 · Sus entrenos (tu panel): la fila es un botón y se abre en una ventana ancha; los récords, en amarillo */
+button.sxb{display:flex;align-items:center;gap:12px;width:100%;padding:12px 0;background:none;border:0;border-bottom:1px solid var(--line2);font:inherit;color:inherit;text-align:left;cursor:pointer}
+button.sxb:hover{background:#FAFAFB}button.sxb .sxf-c{transform:none}
+.ui2 .sx-ch .c-rec,.ui2 .sx-ch .c-rec .ic{color:#8A6100}.ui2 .sx-ch .c-rec{background:#FFF3C4;border-radius:7px;padding:1px 7px}
+.ve-box{max-width:1080px!important}
+.ve-h{display:flex;align-items:flex-start;gap:12px;margin-bottom:14px}.ve-tt{flex:1;min-width:0}.ve-tt h2{margin:0 0 2px;font-size:22px}.ve-tt small{font-size:13px;color:var(--mu)}
+.ve-nav{display:flex;align-items:center;gap:6px;flex:none}.ve-nav .btn[disabled]{opacity:.35;pointer-events:none}.ve-nav .ico-x{margin-left:4px}
+.ve-ch{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}.ve-p{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:700;border-radius:999px;padding:5px 11px;background:#F1F1F4;color:#3A3A44}.ve-p .ic{width:14px;height:14px}
+.ve-p.rec{background:#FFF3C4;color:#8A6100}.ve-p.mej{background:#EAF7EF;color:#0E7A45}.ve-p.nh{background:#FFF1E7;color:#B5560F}
+.ve .sx{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:start}.ve .sx>.sx-nota.gen,.ve .sx>.sx-pie,.ve .sx>.link,.ve .sx>.ses-acc{grid-column:1/-1}
+.ve .sx-e{margin:0;border:1px solid var(--line);border-radius:16px;padding:12px 14px;background:#fff}
+.ve em.mk-rec{background:#FFF3C4;color:#8A6100;border-radius:6px;padding:1px 6px}.ve em.mk-rec .ic{color:#B88400;stroke:#B88400}
+.ve-pie{display:flex;justify-content:flex-start;margin-top:12px}
+/* v53.4.212 · en tu panel (Sus entrenos y «Comparar dos»): mejora en verde, igual en azul, baja en rojo y récords en amarillo */
+.ui2 .hc-k1.eq{border-color:#CFE0FB;background:#F3F8FF}.ui2 .hc-k1.eq .hc-kd{color:#2563D4}
+.ui2 .hc-k1.down{border-color:#F5C9C4;background:#FFF5F4}.ui2 .hc-k1.down .hc-kd{color:#D93B30}
+.ui2 .hc-v.s0{background:#EAF2FF;color:#2563D4}.ui2 .hc-v.s-1{background:#FFEDEA;color:#D93B30}
+.ui2 .hc-g .down b,.ui2 .hc-g .ar.down,.ui2 .hc-t .down{color:#D93B30}.ui2 .hc-g .ar.eq{color:#2563D4}
+.ui2 .sx-vs.s1>span:first-of-type{color:#0E7A45;font-weight:600}.ui2 .sx-vs.s0>span:first-of-type{color:#2563D4;font-weight:600}.ui2 .sx-vs.s-1>span:first-of-type{color:#D93B30;font-weight:600}
+.ui2 .sx-vs.s0 .ic{color:#2563D4}.ui2 .sx-vs.s-1 .ic{color:#D93B30}.ui2 .sx-vs .muted{font-weight:400}
+@media(max-width:760px){.ve .sx{grid-template-columns:1fr}.ve-h{flex-wrap:wrap}.ve-nav{width:100%}.ve-nav .btn{flex:1;justify-content:center}}
 .sx-l{font-size:14px;line-height:1.5}
 .sx-nh{display:flex;gap:8px;align-items:center;font-size:13.5px;color:#8A5300;background:rgba(178,106,0,.08);border-radius:10px;padding:7px 10px;margin-top:8px}.sx-nh .ic{color:var(--warn);margin:0}
 .sx-vs{display:flex;gap:7px;align-items:flex-start;font-size:13px;margin-top:8px;color:var(--tx2)}.sx-vs .ic{margin:1px 0 0;flex:none}
@@ -5427,7 +5448,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.211';
+var APP_V = 'v53.4.212';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -6901,7 +6922,7 @@ A.cmpTipo=function(el){ est().cmp.t=el.dataset.t; repCmp(); };
    v18 · ENTRENOS CLAROS (coach y clienta): sesión por ejercicio, filtros, comparar
    ===================================================================== */
 function rpeTxt(v){ v=num(v); if(v==null) return ''; return 'RPE '+fN(v,0)+' ('+(v<=4?'fácil':v<=6?'moderado':v<=8?'duro':v<=9?'muy duro':'máximo')+')'; }
-function hfN(){ return BOOT.mode==='clienta'?3:6; }      // v53.4.43: en tu panel, sus 6 últimos (antes 20)      // v46: la clienta ve de primeras sus 3 últimos entrenos
+function hfN(){ return 3; }      // v53.4.212 (Word «PANEL ENTRENADOR» 5): también en tu panel, sus 3 últimos (antes 6)      // v53.4.43: en tu panel, sus 6 últimos (antes 20)      // v46: la clienta ve de primeras sus 3 últimos entrenos
 function hfDe(st){ return st.hf||(st.hf={rut:'',ej:'',per:90,cmp:null,n:hfN()}); }
 function repH(){ if(BOOT.mode==='clienta'){ CL.keep=true; pintarCl(); } else repintar(); }
 function datH(){ return BOOT.mode==='clienta'?CL.d:CO.d; }
@@ -7039,6 +7060,13 @@ function histCard(st,coach){
     if(arr.length>F.n) h+='<button class="link" data-a="hsMas">Ver más</button>';
     return h+'</div>';
   }
+  if(coach&&d===CO.d){      // v53.4.212: en tu panel, al tocar uno se abre en una ventana ancha (sesVentana)
+    h+='<div class="hf-res">'+S.length+(S.length===1?' entreno':' entrenos')+(S.length>F.n?' · los '+F.n+' últimos':'')+'. Toca uno para verlo en grande.</div>';
+    h+=S.slice(0,F.n).map(function(x){ return sesFilaBtn(x,d,M); }).join('');
+    if(S.length>F.n) h+='<button class="link hs-mas" data-a="hsMas">Ver los '+S.length+' entrenos</button>';
+    else if(F.n>hfN()&&S.length>hfN()) h+='<button class="link hs-mas" data-a="hsMenos">Ver solo los '+hfN()+' últimos</button>';
+    return h+'</div>';
+  }
   h+='<div class="hf-res">'+S.length+(S.length===1?' entreno':' entrenos')+'. Toca uno para ver cada ejercicio, serie a serie, con sus notas.</div>';
   h+=S.slice(0,F.n).map(function(x){ return sesFila(x,d,M,coach,false); }).join('');
   if(S.length>F.n) h+='<button class="link hs-mas" data-a="hsMas">Ver más entrenos ('+(S.length-F.n)+')</button>';
@@ -7047,7 +7075,40 @@ function histCard(st,coach){
 CH.hfRut=function(t){ var F=hfDe(est()); F.rut=t.value; F.n=hfN(); if(F.cmp) F.cmp=null; repH(); };
 CH.hfEj=function(t){ var F=hfDe(est()); F.ej=t.value; F.n=hfN(); repH(); };
 A.hfPer=function(el){ var F=hfDe(est()); F.per=+el.dataset.v; F.n=hfN(); repH(); };
-A.hsMas=function(){ hfDe(est()).n+=BOOT.mode==='clienta'?10:14; repH(); };
+A.hsMas=function(){ var F=hfDe(est()); F.n=BOOT.mode==='clienta'?F.n+10:1e4; repH(); };      // v53.4.212: en tu panel, «Ver los N entrenos» los enseña todos (los del periodo elegido)
+A.hsMenos=function(){ hfDe(est()).n=hfN(); repH(); var h=document.getElementById('hist'); if(h) h.scrollIntoView({block:'start'}); };
+/* ---------- v53.4.212 · tu panel, «Sus entrenos» (Word «PANEL ENTRENADOR» 5; Javier: «que salgan abiertos solo los tres últimos; si le das a uno,
+   que se abra una ventana más amplia y se vea bien, como cuando comparas entrenos»). La fila es un botón; la ventana, ancha como «Comparar dos»:
+   arriba sus cifras frente a la vez anterior que hizo esa rutina, sus récords (en amarillo) y mejoras, y cada ejercicio en su recuadro, dos por fila.
+   «Anterior» y «Siguiente» pasan de un entreno a otro sin cerrarla. ---------- */
+function sesFilaBtn(x,d,M){
+  var h=sesFila(x,d,M,true,false), a=h.indexOf('<summary>'), b=h.indexOf('</summary>');
+  if(a<0||b<0) return h;
+  return '<button class="ses sxf sxb" data-a="sesVer" data-id="'+esc(x.id)+'">'+h.slice(a+9,b)+'</button>';
+}
+function svLista(){ var d=CO.d, st=est(), L=d&&d.sesiones.length?sesionesFiltro(st,d):[]; return L; }
+function sesVentana(id){
+  var d=CO.d; if(!d) return; var x=d.sesiones.filter(function(s){ return s.id===id; })[0]; if(!x) return cerrarModal();
+  var M=calcMarcas(d.series), pv=prevMisma(x,d), c=(M._ses&&M._ses[x.id])||{}, ex=extrasSes(x);
+  var L=svLista(); if(L.indexOf(x)<0) L=d.sesiones.slice().sort(function(a,b){ return a.fecha<b.fecha?1:a.fecha>b.fecha?-1:0; });
+  var i=L.indexOf(x), ant=L[i+1], sig=i>0?L[i-1]:null;
+  function tile(lab,ka,kb,u,mejor,fmt){ if(pv) return cmpTile(lab,pv[ka],x[kb],u,0,mejor,fmt); if(vacio(x[kb])) return ''; return '<div class="hc-k1"><span class="hc-kl">'+lab+'</span><span class="hc-kv"><b>'+(fmt?fmt(x[kb]):fN(x[kb],0))+'</b></span><span class="hc-kd"></span></div>'; }
+  var nh=ex.nh.filter(function(y){ return y.t!=='mov'; }).length;
+  var h='<div class="ve" id="ve"><div class="ve-h"><div class="ve-tt"><h2>'+esc(x.rutina||'Entreno')+'</h2><small>'+esc(cap(fLarga(x.fecha)))+(pv?' · frente al '+esc(fLarga(pv.fecha).toLowerCase())+', la vez anterior que la hizo':' · la primera vez que la hizo')+'</small></div>'+
+    '<div class="ve-nav"><button class="btn sm sec" data-a="sesVer" data-id="'+esc(ant?ant.id:'')+'"'+(ant?'':' disabled')+' aria-label="Entreno anterior">'+ic('atras')+'Anterior</button><button class="btn sm sec" data-a="sesVer" data-id="'+esc(sig?sig.id:'')+'"'+(sig?'':' disabled')+' aria-label="Entreno siguiente">Siguiente'+ic('flecha')+'</button>'+
+    '<button class="ico-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div></div>';
+  h+='<div class="hc-k">'+tile('Series','series','series','',true)+tile('Kg en total','volumen','volumen','kg',true,fMil)+tile('Minutos','minutos','minutos','min',null)+tile('Esfuerzo (RPE)','rpe','rpe','',false)+'</div>';
+  h+='<div class="ve-ch">'+(c.rec?'<span class="ve-p rec">'+ic('trofeo')+c.rec+(c.rec>1?' récords':' récord')+'</span>':'')+(c.mej?'<span class="ve-p mej">'+ic('sube')+c.mej+(c.mej>1?' mejoras':' mejora')+'</span>':'')+
+    '<span class="ve-p '+(nh?'nh':'ok')+'">'+(nh?ic('alerta')+nh+' sin hacer':'Lo hizo todo')+'</span>'+(x.editado?'<span class="ve-p">'+ic('lapiz')+'editado</span>':'')+'</div>';
+  h+=sesVista(x,d,M,true);
+  h+='<div class="ve-pie"><button class="btn sm sec" data-a="svCmp" data-id="'+esc(x.id)+'">'+ic('comparar')+'Comparar con otro día</button></div></div>';
+  var abierto=document.querySelector('#modal.open .ve-box');
+  modal(h); var bx=document.querySelector('#modal .mbox'); if(bx){ bx.classList.add('hc-box','ve-box'); if(abierto) bx.scrollTop=0; }
+}
+A.sesVer=function(el){ if(el.dataset.id) sesVentana(el.dataset.id); };
+A.svCmp=function(el){ var d=CO.d, x=d&&d.sesiones.filter(function(s){ return s.id===el.dataset.id; })[0]; if(!x) return; var pv=prevMisma(x,d);
+  if(!pv) return toast('Es la primera vez que hizo esta rutina: todavía no hay con qué compararla');
+  var F=hfDe(est()); F.cmp={b:x.id,a:pv.id}; abrirCmp(); };
 /* comparar dos entrenos de la misma rutina */
 A.hsCmp=function(){      // v53.4.13: la comparación se abre en grande, en primer plano (antes, dentro de la tarjeta)
   var st=est(), F=hfDe(st), d=datH();
@@ -7086,7 +7147,7 @@ function cmpVer(A,B){ var t=difTxt(A,B); if(!t) return null;      // en corto: l
   return t; }
 function cmpTile(lab,a,b,u,dec,mejorSube,fmt){
   if(vacio(a)&&vacio(b)) return ''; var da=num(a), db=num(b), s=(da!=null&&db!=null&&da!==db)?(db>da?1:-1):0, F=fmt||function(v){ return fN(v,dec); };
-  var cls=!s||mejorSube==null?'':((s>0)===mejorSube?' up':' down');
+  var cls=!s?(da!=null&&db!=null?' eq':''):mejorSube==null?'':((s>0)===mejorSube?' up':' down');      // v53.4.212: «igual» con su clase (en tu panel, en azul)
   return '<div class="hc-k1'+cls+'"><span class="hc-kl">'+lab+'</span><span class="hc-kv"><i>'+(da==null?'–':F(da))+'</i><span class="hc-ka">→</span><b>'+(db==null?'–':F(db))+'</b></span>'+
     '<span class="hc-kd">'+(s?ic(s>0?'sube':'baja')+(s>0?'+':'−')+F(Math.abs(db-da))+(u?' '+u:''):(da!=null&&db!=null?'igual':''))+'</span></div>';
 }
