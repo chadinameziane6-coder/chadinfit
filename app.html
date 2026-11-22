@@ -5277,7 +5277,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.197';
+var APP_V = 'v53.4.198';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -17312,7 +17312,7 @@ function vEnlace(){
   CO.activa=c.activa; CO.sexoEd=c.sexo||'mujer'; CO.waEd=!!c.wa;      // v50
   var nA=(al.alergias||[]).length+(al.txt?1:0), nG=(al.noGusta||[]).length;
   var resAl=[al.tipo?((DIETA_T.filter(function(d){ return d[0]===al.tipo; })[0]||[])[1]||al.tipo):'Come de todo',nA?'con alergias o intolerancias':'sin alergias',nG?nG+(nG===1?' cosa que no le gusta':' cosas que no le gustan'):''].filter(Boolean).join(' · ');
-  var resApp=[c.dietaMacros?'Ve kcal y macros':c.dietaKcal?'Ve las kcal':'Sin kcal ni macros',c.dietaLibre?'Cuadra su dieta':'',c.entrenoLibre?'Edita sus entrenos':''].filter(Boolean).join(' · ');
+  var resApp=[c.dietaMacros?'Ve kcal y macros':c.dietaKcal?'Ve las kcal':'Sin kcal ni macros',c.dietaLibre?'Cuadra su dieta':'',c.entrenoLibre&&CO.casa!==false?'Edita sus entrenos':''].filter(Boolean).join(' · ');
   var resPa=[c.pasosObj?'Pasos: '+fP(c.pasosObj)+' al día':'Pasos apagados',c.logrosOn?'medallas activadas':'medallas apagadas'].join(' · ');
   var resNo=[c.notas?'Con notas':'Sin notas',c.wa?'WhatsApp directo activado':''].filter(Boolean).join(' · ');
   var a0=c.acceso||{}, st0=a0.estado||'';
@@ -17331,7 +17331,7 @@ function vEnlace(){
     cfgSegCard()+
     '<div class="card fab-mas fi-card"><div class="card-t">Más ajustes</div>'+
       fabFila('alim','Alimentación',esc(resAl),alimCard())+
-      fabFila('app','Qué ve y qué puede hacer en su app',esc(resApp),verKmHtml(false)+libreFilaHtml()+masFilaHtml()+entLibreFilaHtml()+moodFilaHtml())+
+      fabFila('app','Qué ve y qué puede hacer en su app',esc(resApp),verKmHtml(false)+libreFilaHtml()+masFilaHtml()+(CO.casa===false?'':entLibreFilaHtml())+moodFilaHtml())+
       fabFila('pasos','Pasos y medallas',esc(resPa),pasosFichaCard()+logrosFichaCard())+
       fabFila('notas','Notas privadas y WhatsApp directo',esc(resNo),
         '<label class="f" style="margin-top:0">Notas privadas ('+cG('ella','él')+' no las ve)<textarea id="c-notas" rows="4" placeholder="Lesiones, historial, contexto…">'+esc(c.notas)+'</textarea></label>'+
