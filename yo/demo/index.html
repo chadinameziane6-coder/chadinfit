@@ -2363,6 +2363,9 @@ html.cz-on, html.cz-on body { overflow: hidden; }
 .av-vacio{align-items:center;text-align:center;gap:6px}.av-pie{margin-top:16px}
 .av-l .av-f{background:none!important;box-shadow:none!important;border-radius:0!important;margin:0!important;padding:12px 0!important;min-height:0}
 .av-l .av-av{width:42px;height:42px;flex:none}
+/* 22 nov, 11:38: «Cambiar contraseña» */
+.aviso-r{background:var(--rojo-bg);color:var(--rojo-tx);border-radius:14px;padding:10px 12px;font-size:13.5px;font-weight:600;margin:4px 0 10px}
+.pw-ver{margin:2px 0 12px}.pw-olv{display:block;margin:12px auto 0;text-align:center;font-size:13px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3473,7 +3476,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.23';
+var YO_V = 'yo-1.24';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -7474,6 +7477,7 @@ VISTAS.perfil = function () {
   h += '<b class="tit-sec">APARIENCIA</b><section class="card"><div class="seg3 tema" role="radiogroup" aria-label="Apariencia">' + [['auto', 'Como el móvil'], ['claro', 'Claro'], ['oscuro', 'Oscuro']].map(function (x) {
     return '<button role="radio" aria-checked="' + (tm === x[0]) + '"' + (tm === x[0] ? ' class="on"' : '') + ' data-a="tema" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div><small class="mut">' + (tm === 'auto' ? 'Sigue el modo claro u oscuro de tu móvil.' : 'Solo en este móvil o navegador.') + '</small></section>';
   h += '<b class="tit-sec">TU CUENTA Y TUS DATOS</b><section class="card">' +
+    '<button class="fila-b" data-a="cambiarPw"><b>Cambiar contraseña</b><small>' + esc((S.user && S.user.email) || 'Tu contraseña para entrar') + '</small></button>' +      // 22 nov, 11:38 (Chadín)
     '<a class="fila-b" href="../../condiciones.html" target="_blank" rel="noopener"><b>Condiciones de uso</b><small>Lo que aceptaste al crear tu cuenta</small></a>' +
     '<a class="fila-b" href="../../privacidad.html#yo" target="_blank" rel="noopener"><b>Política de privacidad</b><small>Qué guardamos y para qué</small></a>' +
     '<button class="fila-b rojo" data-a="borrarCuenta"><b>Borrar mi cuenta</b><small>Se borra todo, para siempre</small></button></section>';
@@ -7483,6 +7487,40 @@ VISTAS.perfil = function () {
 A.temaRapido = function () { A.tema({ dataset: { v: esOscuro() ? 'claro' : 'oscuro' } }); };      // 17 nov 2026: el botón de Inicio (el sol o la luna)
 A.tema = function (el) { var v = el.dataset.v; try { if (v === 'auto') localStorage.removeItem('yo_tema'); else localStorage.setItem('yo_tema', v); } catch (e) { } ponTema(v); pintar(); };
 var pfT; IN.pfNom = function (t) { S.perfil.nombre = t.value.trim(); clearTimeout(pfT); pfT = setTimeout(guardaPerfil, 900); };
+
+/* ---------- 22 nov, 11:38 (Chadín: «que puedas cambiar contraseña en panel usuario»): la actual (se comprueba entrando con ella) y la nueva dos veces.
+   Si no se acuerda de la actual, el enlace de siempre a su email. ---------- */
+function pwHoja(err, ok) {
+  var em = (S.user && S.user.email) || '', antes = ['pw-a', 'pw-n', 'pw-r'].map(function (id) { var i = document.getElementById(id); return i ? i.value : ''; });      // lo escrito no se pierde al avisar
+  hoja('<h2>Cambiar contraseña</h2><p class="mut sm">Tu cuenta: ' + esc(em) + '</p>' +
+    '<label class="f">Contraseña actual<input type="password" id="pw-a" autocomplete="current-password"></label>' +
+    '<label class="f">Nueva contraseña<input type="password" id="pw-n" autocomplete="new-password" placeholder="Al menos 8 caracteres"></label>' +
+    '<label class="f">Repite la nueva<input type="password" id="pw-r" autocomplete="new-password"></label>' +
+    '<label class="chk pw-ver"><input type="checkbox" data-c="pwVer"><span>Ver las contraseñas</span></label>' +
+    (err ? '<p class="aviso-r" role="alert">' + esc(err) + '</p>' : '') + (ok ? '<p class="aviso-a">' + esc(ok) + '</p>' : '') +
+    '<button class="btn" id="pw-go" data-a="cambiarPwSi">Guardar la nueva contraseña</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>' +
+    '<button class="link pw-olv" data-a="cambiarPwOlv">¿No te acuerdas de la actual? Te mandamos un enlace a tu email</button>');
+  ['pw-a', 'pw-n', 'pw-r'].forEach(function (id, k) { var i = document.getElementById(id); if (i && antes[k]) i.value = antes[k]; });
+}
+A.cambiarPw = function () { pwHoja(); };
+CH.pwVer = function (t) { ['pw-a', 'pw-n', 'pw-r'].forEach(function (id) { var i = document.getElementById(id); if (i) i.type = t.checked ? 'text' : 'password'; }); };
+A.cambiarPwSi = function (el) {
+  var a = ($('#pw-a') || {}).value || '', n = ($('#pw-n') || {}).value || '', r = ($('#pw-r') || {}).value || '', em = (S.user && S.user.email) || '';
+  if (!a) return pwHoja('Escribe tu contraseña actual.');
+  if (n.length < 8) return pwHoja('La nueva contraseña necesita al menos 8 caracteres.');
+  if (n !== r) return pwHoja('Las dos contraseñas nuevas no coinciden.');
+  if (n === a) return pwHoja('La nueva tiene que ser distinta de la actual.');
+  el.disabled = true; el.textContent = 'Un momento…';
+  SB.auth.signInWithPassword({ email: em, password: a }).then(function (x) {
+    if (x.error) return pwHoja(/invalid|credentials/i.test(String(x.error.message || '')) ? 'La contraseña actual no es correcta.' : accErr(x.error));
+    return SB.auth.updateUser({ password: n }).then(function (y) {
+      if (y.error) return pwHoja(accErr(y.error));
+      cerrarHoja(); toast('Contraseña cambiada', 'ok');
+    });
+  }, function (e) { pwHoja(accErr(e)); });
+};
+A.cambiarPwOlv = function (el) { var em = (S.user && S.user.email) || ''; if (!em) return; el.disabled = true;
+  SB.auth.resetPasswordForEmail(em, { redirectTo: location.origin + location.pathname }).then(function (r) { pwHoja(r && r.error ? accErr(r.error) : '', r && r.error ? '' : 'Te hemos mandado un enlace a ' + em + ' para crear una contraseña nueva. Mira también en Spam.'); }, function (e) { pwHoja(accErr(e)); }); };
 
 /* ---------- «Borrar mi cuenta»: se borra la cuenta y todo lo suyo, al momento (yo_borrar_cuenta, solo la propia) ---------- */
 A.borrarCuenta = function () {
