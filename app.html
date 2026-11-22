@@ -1802,10 +1802,10 @@ details.be-meta summary .muted{font-weight:500;margin-left:auto;text-align:right
 .dur-ed input{width:76px;text-align:center;font:600 20px Plus Jakarta Sans,sans-serif;padding:6px}.dur-b{width:46px;height:40px;border-radius:10px;border:1px solid var(--line);background:#fff;font:600 15px Plus Jakarta Sans,sans-serif;cursor:pointer}
 .dur-t{margin:0 0 6px}
 .ex-grip{flex:none;align-self:center;width:30px;height:40px;margin:0 -4px 0 -6px;border:0;background:none;color:var(--mu);display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none;-webkit-user-select:none;user-select:none}.ex-grip .ic{margin:0;width:20px;height:20px}
-/* v53.4.200: mantener 2 s para mover · el anillo se llena mientras mantienes */
+/* v53.4.200-201: mantener 1 s para mover · el anillo se llena mientras mantienes */
 .ex-grip{position:relative;-webkit-touch-callout:none}.ex-grip.carga,.ses .ex .ex-grip.carga,.ses .ex.abierto .ex-grip.carga{color:#9A8CFF}
 .ex-grip-r{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;transform:rotate(-90deg);pointer-events:none;overflow:visible}
-.ex-grip-r circle{fill:none;stroke:#9A8CFF;stroke-width:3;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:gripCarga 2s linear forwards}
+.ex-grip-r circle{fill:none;stroke:#9A8CFF;stroke-width:3;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:gripCarga 1s linear forwards}
 @keyframes gripCarga{to{stroke-dashoffset:0}}
 .ord-r{touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab}.ord-r.arr{box-shadow:0 10px 26px rgba(20,20,20,.22);border-color:var(--mg);transform:scale(1.02);background:#fff}
 .ord-ov{position:fixed;inset:0;z-index:80;background:rgba(20,20,20,.45);display:flex;align-items:center;justify-content:center;padding:16px;touch-action:none}
@@ -5323,7 +5323,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.200';
+var APP_V = 'v53.4.201';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -7554,12 +7554,12 @@ function arrastreFila(row,list,ev,fin){
 /* v53.4.200 (Javier: «que se active al estar dos seg presionando, porque si no a la mínima que pulsas se abre ese panel»):
    el panel para mover solo se abre tras mantener ⠿ pulsado 2 segundos sin mover el dedo (un anillo se va llenando).
    Un toque corto avisa de cómo se hace; si el dedo se mueve antes de tiempo, no pasa nada. */
-var ORD_MS=2000, ORDP=null;
+var ORD_MS=1000, ORDP=null;      // v53.4.201 (Javier: «reduce a un seg porfa, dos es mucho»)
 function ordPCancela(aviso){
   var p=ORDP; if(!p) return; ORDP=null; clearTimeout(p.t);
   p.g.classList.remove('carga'); var r=p.g.querySelector('.ex-grip-r'); if(r) r.remove();
   document.removeEventListener('pointermove',p.mv,true); document.removeEventListener('pointerup',p.up,true); document.removeEventListener('pointercancel',p.cc,true);
-  if(aviso) toast('Mantén '+'⠿'+' pulsado 2 segundos para mover el ejercicio');
+  if(aviso) toast('Mantén '+'⠿'+' pulsado 1 segundo para mover el ejercicio');
 }
 function ordAbrePanel(g,y){
   if(!CL.dr) return;
@@ -9220,7 +9220,7 @@ function cabEj(e,i,lab,sub,completo,cls,extra){
   return '<section class="ex'+(completo?' completo':'')+(cls?' '+cls:'')+(ab?' abierto':' cerrado')+'" id="ex-'+i+'"><div class="ex-h">'+thSes(e,i)+
     '<div class="ex-tg"'+(dr&&!dr.edit?' data-a="exTog" data-i="'+i+'" role="button" tabindex="0" aria-expanded="'+ab+'"':'')+'><span class="ex-n">'+esc(lab)+'</span><div class="ex-info"><h3>'+esc(e.n)+'</h3><div class="ex-sub">'+presHtml(sub)+'</div>'+(extra||'')+'</div>'+
     '<div class="ex-r"><span class="ex-num">'+esc(lab)+'</span><span class="ex-pr" id="pr-'+i+'" style="--p:'+prPct(e)+'">'+prHtml(e)+'</span></div></div>'+
-    (arr?'<button class="ex-grip" data-dd-ex="'+i+'" aria-label="Mantén 2 segundos y arrastra para cambiar el orden" title="Mantén 2 segundos y arrastra para cambiar el orden">'+ic('agarre')+'</button>':'')+'</div>'+
+    (arr?'<button class="ex-grip" data-dd-ex="'+i+'" aria-label="Mantén 1 segundo y arrastra para cambiar el orden" title="Mantén 1 segundo y arrastra para cambiar el orden">'+ic('agarre')+'</button>':'')+'</div>'+
     '<div class="ex-b">'+(T.length?'<div class="ex-bt ex-top n'+T.length+'">'+T.join('')+'</div>':'')+(e.nota?'<div class="nota">'+br(e.nota)+'</div>':'')+
     (e.sust?'<div class="sust-n">'+ic('cambiar')+'En lugar de «'+esc(e.sust)+'» · tu coach lo verá</div>':'');
 }
