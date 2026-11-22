@@ -2304,6 +2304,32 @@ body.ord-on{user-select:none;-webkit-user-select:none}
 .cue-ley{display:flex;gap:16px;font-size:12px;color:var(--tx2);font-weight:600}.cue-ley span{display:flex;align-items:center;gap:6px}
 .cue-ley .pt{width:7px;height:7px;border-radius:50%;background:var(--tx3);opacity:.7}.cue-ley .ln{width:16px;height:2.5px;border-radius:2px;background:var(--tx)}
 .cue-bt .btn{white-space:nowrap;padding:0 10px}
+/* ===== 22 nov · ver en grande y acercar el antes y el después ===== */
+html.cz-on, html.cz-on body { overflow: hidden; }
+.cz{position:fixed;inset:0;z-index:9000;background:#0B0B0D;color:#fff;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0) 0 env(safe-area-inset-bottom,0);touch-action:none;user-select:none;-webkit-user-select:none}
+.cz-top{display:flex;align-items:center;gap:10px;padding:10px 12px}
+.cz-b{width:42px;height:42px;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center;flex:none}.cz-b .ic{margin:0}
+.cz-t{flex:1;text-align:center;font-size:15px}.cz-esp{width:42px;flex:none}
+.cz-seg{flex:1;display:flex;background:rgba(255,255,255,.12);border-radius:999px;padding:3px;max-width:280px;margin:0 auto}
+.cz-seg button{flex:1;height:36px;border:0;border-radius:999px;background:transparent;color:rgba(255,255,255,.75);font:inherit;font-size:14px;font-weight:700}
+.cz-seg button.on{background:#fff;color:#111}
+.cz-tip{display:flex;gap:6px;justify-content:center;padding:0 12px 8px;flex-wrap:wrap}
+.cz-tip button{height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.25);background:transparent;color:#fff;font:inherit;font-size:13px;font-weight:700}.cz-tip button.on{background:#fff;color:#111;border-color:#fff}
+.cz-area{flex:1;min-height:0;display:flex;gap:4px;padding:0 4px}
+.cz-p{position:relative;flex:1;min-width:0;overflow:hidden;border-radius:14px;background:#000}
+.cz-i,.cz-no{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:contain;transform-origin:0 0;will-change:transform;pointer-events:none}
+.cz-no{display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.6);font-size:14px}
+.cz-clip{position:absolute;inset:0}
+.cz-raya{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:#fff;box-shadow:0 0 0 1px rgba(0,0,0,.25);pointer-events:none}
+.cz-raya span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:40px;height:40px;border-radius:50%;background:#fff;color:#111;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 10px rgba(0,0,0,.35)}.cz-raya .ic{margin:0 -2px}
+.cz-cap{position:absolute;left:10px;bottom:10px;padding:5px 10px;border-radius:999px;background:rgba(0,0,0,.6);font-size:12.5px;pointer-events:none}.cz-cap b{font-weight:800}
+.cz-cap.de{left:auto;right:10px}
+.cz-pie{display:flex;align-items:center;justify-content:center;gap:14px;padding:10px 0 4px}
+.cz-pct{min-width:74px;height:36px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;font:inherit;font-weight:800;font-size:14px;font-variant-numeric:tabular-nums}
+.cz-ay{display:block;text-align:center;color:rgba(255,255,255,.6);font-size:12.5px;padding:0 16px 10px}
+.cmp-gr{margin:2px 0 0}
+.foto-g{position:relative;display:block;width:100%;border:0;padding:0}.foto-z{position:absolute;right:10px;bottom:10px;display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:999px;background:rgba(0,0,0,.6);color:#fff;font-size:12.5px;font-weight:700}.foto-z .ic{margin:0}
+@media (orientation:landscape){.cz-top{padding:6px 12px}.cz-ay{display:none}}
 
 </style>
 </head>
@@ -2958,7 +2984,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.18';
+var YO_V = 'yo-1.19';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -7234,7 +7260,7 @@ VISTAS.foto = function (p) {
   var x = fotoDe(p.n); if (!x) return '<div class="pant pad">' + cab('Foto') + '<p class="mut">Esta foto ya no está.</p></div>';
   var m = pesoCerca(x.fecha);
   return '<div class="pant pad">' + cab(esc(aDate(x.fecha).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' }))) +
-    '<div class="foto-g"><img src="' + esc(x.url) + '" alt="Tu foto del ' + esc(fCorta(x.fecha)) + '"></div>' + (m ? '<p class="mut center">Peso de ese día o del más cercano: ' + kg1(m) + ' kg</p>' : '') +
+    '<button class="foto-g" data-a="fotoGrande" data-n="' + esc(x.name) + '" aria-label="Ver en grande y acercar"><img src="' + esc(x.url) + '" alt="Tu foto del ' + esc(fCorta(x.fecha)) + '"><span class="foto-z">' + ic('mas', 14) + 'Ampliar</span></button>' + (m ? '<p class="mut center">Peso de ese día o del más cercano: ' + kg1(m) + ' kg</p>' : '') +
     '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Solo la ves tú.</span></p><button class="btn sec" data-a="fotoBorrar" data-n="' + esc(x.name) + '">' + ic('papelera', 18) + 'Borrar esta foto</button></div>';
 };
 function pesoCerca(f) { var P = pesos(), b = null, bd = 99; P.forEach(function (m) { var d = Math.abs((aDate(m.fecha) - aDate(f)) / 86400000); if (d <= 7 && d < bd) { bd = d; b = num(m.peso); } }); return b; }
@@ -7260,8 +7286,9 @@ VISTAS.comparar = function () {
   if (fe.length > 2) h += '<div class="chips scroll cmp-ch">' + CMP_R.map(function (r) { return '<button class="chip' + (c.rg === r[0] ? ' on' : '') + '" data-a="cmpRango" data-v="' + r[0] + '">' + r[1] + '</button>'; }).join('') + '</div>';
   if (T0.length > 1) h += '<div class="seg-p cmp-t">' + T0.map(function (k) { return '<button class="' + (t === k ? 'on' : '') + '" data-a="cmpTipo" data-v="' + k + '">' + foTn(k) + '</button>'; }).join('') + '<button class="' + (t === 'todas' ? 'on' : '') + '" data-a="cmpTipo" data-v="todas">Todas</button></div>';
   h += '<p class="cmp-dif"><b>' + (dias ? dias + (dias === 1 ? ' día' : ' días') + ' entre una y otra' : 'Mismo día') + '</b>' + (pa && pb ? ' · ' + kg1(pa) + ' → ' + kg1(pb) + ' kg' + (Math.abs(pb - pa) < 0.05 ? '' : ' (' + (pb > pa ? '+' : '−') + kg1(Math.abs(pb - pa)) + ')') : '') + '</p>';
+  h += '<button class="btn cmp-gr" data-a="cmpGrande">' + ic('ojo', 18) + 'Ver en grande y acercar</button>';
   h += T.map(function (k) { return '<div class="cmp-row">' + (T.length > 1 ? '<b class="cmp-tt">' + foTn(k) + '</b>' : '') + '<div class="cmp-par">' + [['Antes', c.a], ['Después', c.b]].map(function (z) { var x = cmpFoto(z[1], k);
-    return '<figure>' + (x ? '<button data-a="fotoVer" data-n="' + esc(x.name) + '">' + (x.url ? '<img src="' + esc(x.url) + '" alt="' + z[0] + ', ' + esc(fCorta(z[1])) + '">' : '') + '</button>' : '<div class="cmp-no">Sin foto de ' + esc(foTn(k).toLowerCase()) + '</div>') + '<figcaption><b>' + z[0] + '</b>' + esc(fCorta(z[1])) + '</figcaption></figure>'; }).join('') + '</div></div>'; }).join('');
+    return '<figure>' + (x ? '<button data-a="cmpGrande" data-k="' + k + '" aria-label="Ver ' + esc(foTn(k).toLowerCase()) + ' en grande">' + (x.url ? '<img src="' + esc(x.url) + '" alt="' + z[0] + ', ' + esc(fCorta(z[1])) + '">' : '') + '</button>' : '<div class="cmp-no">Sin foto de ' + esc(foTn(k).toLowerCase()) + '</div>') + '<figcaption><b>' + z[0] + '</b>' + esc(fCorta(z[1])) + '</figcaption></figure>'; }).join('') + '</div></div>'; }).join('');
   return h + '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Solo las ves tú. Al compartir sale la imagen sin tu nombre.</span></p></div>';
 };
 CH.cmpFe = function (t) { S.x.cmp[t.dataset.k] = t.value; S.x.cmp.rg = ''; pintar(); };
@@ -7274,6 +7301,71 @@ A.cmpRango = function (el) { var fe = foFechas(), v = el.dataset.v, c = S.x.cmp,
 A.cmpCompartir = function () { var c = S.x.cmp; if (!c) return; var T0 = cmpTipos(c), t = c.t === 'todas' || T0.indexOf(c.t) >= 0 ? c.t : T0[0], T = (t === 'todas' ? T0 : [t]).slice(0, 2);
   var P = T.map(function (k) { return [cmpFoto(c.a, k), cmpFoto(c.b, k)]; }), dias = Math.round(Math.abs(aDate(c.b) - aDate(c.a)) / 86400000);
   hojaImg({ k: 'cmp|' + c.a + '|' + c.b + '|' + t, tit: 'Compartir la comparación', nom: 'MOOD_ON_progreso', texto: '#MOODON', gen: function (m) { return cmpLienzoYo(P, c, dias, m); } }); };
+/* 22 nov, 09:49 (Chadín): «que la usuaria pueda ver en grande y acercar el antes y después de su foto». A pantalla completa, «Lado a lado» o
+   «Deslizar» (una encima de otra con una raya que se mueve), y se acerca con dos dedos, tocando dos veces o con + y −: las dos fotos a la vez y
+   en el mismo sitio, para comparar el mismo detalle. Aparte de la app (no se repinta al acercar), se cierra con la X, con atrás o con Esc */
+var CZ = null;
+function czModo() { try { return localStorage.getItem('yo_czm') === 'desl' ? 'desl' : 'lado'; } catch (e) { return 'lado'; } }
+A.cmpGrande = function (el) { var c = S.x.cmp; if (!c) return; var T0 = cmpTipos(c), k = el && el.dataset.k != null ? el.dataset.k : (T0.indexOf(c.t) >= 0 ? c.t : T0[0]);
+  czAbre({ fa: c.a, fb: c.b, tipos: T0, k: k, modo: czModo() }); };
+A.fotoGrande = function (el) { var x = fotoDe(el.dataset.n); if (x) czAbre({ fa: x.fecha, uno: x, modo: 'lado' }); };
+function czAbre(o) {
+  czCierra(true); CZ = o; o.s = 1; o.x = 0; o.y = 0; o.div = 50; o.pt = {};
+  var d = document.createElement('div'); d.className = 'cz'; d.setAttribute('role', 'dialog'); d.setAttribute('aria-modal', 'true'); d.setAttribute('aria-label', 'Fotos en grande');
+  document.body.appendChild(d); o.el = d; document.documentElement.classList.add('cz-on'); czPinta();
+  d.addEventListener('click', czClic); d.addEventListener('pointerdown', czDown); d.addEventListener('pointermove', czMove); d.addEventListener('pointerup', czUp); d.addEventListener('pointercancel', czUp);
+  d.addEventListener('wheel', czRueda, { passive: false }); document.addEventListener('keydown', czTecla);
+  try { history.pushState({ cz: 1 }, ''); o.hist = 1; } catch (e) { }
+}
+function czCierra(sinHist) { if (!CZ) return; var h = CZ.hist; CZ.el.remove(); CZ = null; document.documentElement.classList.remove('cz-on'); document.removeEventListener('keydown', czTecla); if (h && !sinHist) try { history.back(); } catch (e) { } }
+window.addEventListener('popstate', function () { if (CZ) { CZ.hist = 0; czCierra(true); } });
+function czTecla(e) { if (e.key === 'Escape') czCierra(); else if (e.key === '+' || e.key === '=') czZoom(1.5); else if (e.key === '-') czZoom(1 / 1.5); }
+function czPinta() {
+  var o = CZ, d = o.el, uno = !!o.uno, lado = uno || o.modo === 'lado', A_ = uno ? o.uno : cmpFoto(o.fa, o.k), B_ = uno ? null : cmpFoto(o.fb, o.k);
+  var img = function (x, q) { return x && x.url ? '<img class="cz-i" data-q="' + q + '" src="' + esc(x.url) + '" alt="' + (q === 'a' ? (uno ? 'Tu foto' : 'Antes') : 'Después') + '" draggable="false">' : '<div class="cz-no">Sin foto de ' + esc(foTn(o.k).toLowerCase()) + '</div>'; };
+  var cap = function (t, f) { return '<span class="cz-cap">' + (t ? '<b>' + t + '</b> ' : '') + esc(fCorta(f) + ' ' + f.slice(0, 4)) + '</span>'; };
+  var h = '<div class="cz-top"><button class="cz-b" data-cz="cerrar" aria-label="Cerrar">' + ic('x', 22) + '</button>' +
+    (uno ? '<b class="cz-t">' + esc(aDate(o.fa).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })) + '</b>' :
+      '<div class="cz-seg"><button class="' + (lado ? 'on' : '') + '" data-cz="lado" aria-pressed="' + lado + '">Lado a lado</button><button class="' + (!lado ? 'on' : '') + '" data-cz="desl" aria-pressed="' + !lado + '">Deslizar</button></div>') +
+    '<span class="cz-esp"></span></div>';
+  if (!uno && o.tipos.length > 1) h += '<div class="cz-tip">' + o.tipos.map(function (k) { return '<button class="' + (k === o.k ? 'on' : '') + '" data-cz="tipo" data-k="' + k + '">' + foTn(k) + '</button>'; }).join('') + '</div>';
+  if (lado) h += '<div class="cz-area lado' + (uno ? ' uno' : '') + '"><div class="cz-p">' + img(A_, 'a') + (uno ? '' : cap('Antes', o.fa)) + '</div>' + (uno ? '' : '<div class="cz-p">' + img(B_, 'b') + cap('Después', o.fb) + '</div>') + '</div>';
+  else h += '<div class="cz-area desl"><div class="cz-p">' + img(A_, 'a') + '<div class="cz-clip" style="clip-path:inset(0 0 0 ' + o.div + '%)">' + img(B_, 'b') + '</div>' +
+    '<div class="cz-raya" style="left:' + o.div + '%"><span>' + ic('atras', 14) + ic('sig', 14) + '</span></div>' + cap('Antes', o.fa).replace('cz-cap', 'cz-cap iz') + cap('Después', o.fb).replace('cz-cap', 'cz-cap de') + '</div></div>';
+  h += '<div class="cz-pie"><button class="cz-b" data-cz="menos" aria-label="Alejar">' + ic('menos', 20) + '</button><button class="cz-pct" data-cz="reset" aria-label="Tamaño normal">' + Math.round(o.s * 100) + ' %</button><button class="cz-b" data-cz="mas" aria-label="Acercar">' + ic('mas', 20) + '</button></div>' +
+    '<small class="cz-ay">' + (o.s > 1 ? 'Arrastra para mover. Toca dos veces para volver.' : 'Acerca con dos dedos o tocando dos veces' + (lado ? '' : '; desliza la raya para comparar') + '.') + '</small>';
+  d.innerHTML = h; czAplica();
+}
+function czAplica() { var o = CZ; if (!o) return; var t = 'translate(' + o.x + 'px,' + o.y + 'px) scale(' + o.s + ')';
+  o.el.querySelectorAll('.cz-i, .cz-no').forEach(function (i) { i.style.transform = t; });
+  var pc = o.el.querySelector('.cz-pct'); if (pc) pc.textContent = Math.round(o.s * 100) + ' %'; var ay = o.el.querySelector('.cz-ay'); if (ay) ay.textContent = o.s > 1 ? 'Arrastra para mover. Toca dos veces para volver.' : 'Acerca con dos dedos o tocando dos veces' + (o.modo === 'lado' || o.uno ? '' : '; desliza la raya para comparar') + '.'; }
+/* el zoom, alrededor de un punto (cx, cy) del panel; sin salirse de la foto */
+function czPanel() { return CZ.el.querySelector('.cz-p'); }
+function czLimita() { var o = CZ, p = czPanel(); if (!p) return; var w = p.clientWidth, h = p.clientHeight; o.s = Math.min(6, Math.max(1, o.s)); o.x = Math.min(0, Math.max(w - w * o.s, o.x)); o.y = Math.min(0, Math.max(h - h * o.s, o.y)); }
+function czZoomEn(f, cx, cy) { var o = CZ, s0 = o.s; o.s = Math.min(6, Math.max(1, o.s * f)); var k = o.s / s0; o.x = cx - (cx - o.x) * k; o.y = cy - (cy - o.y) * k; czLimita(); czAplica(); }
+function czZoom(f) { var p = czPanel(); if (p) czZoomEn(f, p.clientWidth / 2, p.clientHeight / 2); }
+function czRel(e) { var p = e.target.closest && e.target.closest('.cz-p'); p = p || czPanel(); var r = p.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top, w: r.width }; }
+function czClic(e) { var b = e.target.closest('[data-cz]'); if (!b || !CZ) return; var v = b.dataset.cz;
+  if (v === 'cerrar') czCierra(); else if (v === 'mas') czZoom(1.5); else if (v === 'menos') czZoom(1 / 1.5); else if (v === 'reset') { CZ.s = 1; CZ.x = 0; CZ.y = 0; czAplica(); }
+  else if (v === 'lado' || v === 'desl') { CZ.modo = v; try { localStorage.setItem('yo_czm', v); } catch (er) { } czPinta(); }
+  else if (v === 'tipo') { CZ.k = b.dataset.k; czPinta(); } }
+function czDown(e) { if (!CZ || e.target.closest('button')) return; var o = CZ, r = czRel(e); o.pt[e.pointerId] = r; try { e.target.setPointerCapture(e.pointerId); } catch (er) { }
+  var ids = Object.keys(o.pt); o.raya = ids.length === 1 && o.modo === 'desl' && !o.uno && (o.s === 1 || e.target.closest('.cz-raya'));
+  if (ids.length === 2) { var a = o.pt[ids[0]], b = o.pt[ids[1]]; o.p0 = { d: Math.hypot(a.x - b.x, a.y - b.y), s: o.s, x: o.x, y: o.y, cx: (a.x + b.x) / 2, cy: (a.y + b.y) / 2 }; o.raya = false; }
+  else { o.m0 = { x: r.x, y: r.y, ox: o.x, oy: o.y, t: Date.now() }; if (o.raya) czRaya(r); } }
+function czRaya(r) { var o = CZ, p = o.el.querySelector('.cz-area.desl .cz-p'); if (!p) return; o.div = Math.max(0, Math.min(100, r.x / p.clientWidth * 100));      // la raya, en la pantalla (no se mueve al acercar)
+  var c = o.el.querySelector('.cz-clip'), l = o.el.querySelector('.cz-raya'); if (c) c.style.clipPath = 'inset(0 0 0 ' + o.div + '%)'; if (l) l.style.left = o.div + '%'; }
+function czMove(e) { var o = CZ; if (!o || !o.pt[e.pointerId]) return; o.pt[e.pointerId] = czRel(e); var ids = Object.keys(o.pt);
+  if (ids.length >= 2 && o.p0) { var a = o.pt[ids[0]], b = o.pt[ids[1]], d = Math.hypot(a.x - b.x, a.y - b.y), cx = (a.x + b.x) / 2, cy = (a.y + b.y) / 2, p0 = o.p0;
+    var s = Math.min(6, Math.max(1, p0.s * d / (p0.d || 1))), k = s / p0.s; o.s = s; o.x = cx - (p0.cx - p0.x) * k; o.y = cy - (p0.cy - p0.y) * k; czLimita(); czAplica(); czRayaPos(); }
+  else if (o.m0) { var r = o.pt[e.pointerId]; if (o.raya) czRaya(r); else if (o.s > 1) { o.x = o.m0.ox + r.x - o.m0.x; o.y = o.m0.oy + r.y - o.m0.y; czLimita(); czAplica(); czRayaPos(); } } }
+function czRayaPos() { }
+function czUp(e) { var o = CZ; if (!o || !o.pt[e.pointerId]) return; var r = o.pt[e.pointerId]; delete o.pt[e.pointerId];
+  if (Object.keys(o.pt).length < 2) o.p0 = null;
+  if (o.m0 && !Object.keys(o.pt).length) { var quieto = Math.abs(r.x - o.m0.x) < 8 && Math.abs(r.y - o.m0.y) < 8 && Date.now() - o.m0.t < 300;
+    if (quieto && !o.raya) { var now = Date.now(); if (o.tap && now - o.tap.t < 320 && Math.abs(o.tap.x - r.x) < 30) { o.tap = null; if (o.s > 1) { o.s = 1; o.x = 0; o.y = 0; czAplica(); czRayaPos(); } else { czZoomEn(2.5, r.x, r.y); czRayaPos(); } } else o.tap = { t: now, x: r.x }; }
+    o.m0 = null; o.raya = false; } }
+function czRueda(e) { if (!CZ) return; e.preventDefault(); var r = czRel(e); czZoomEn(e.deltaY < 0 ? 1.15 : 1 / 1.15, r.x, r.y); czRayaPos(); }
 function cmpLienzoYo(P, c, dias, modo) {
   var bl = modo === 'blanco' || modo === 'sinn', sn = /^sin/.test(modo), FG = bl ? '#111111' : '#FFFFFF', SUB = bl ? 'rgba(17,17,17,.6)' : 'rgba(255,255,255,.72)', F = ' "Plus Jakarta Sans", sans-serif';
   var url = function (x) { return x && x.url ? imgDeSrc(x.url) : Promise.resolve(null); };
