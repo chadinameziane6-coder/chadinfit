@@ -3796,6 +3796,12 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-b{flex:none;border:1px solid var(--line);background:#fff;border-radius:999px;font-weight:800;font-size:13px;padding:7px 14px;white-space:nowrap}
 .aa-b.rr{background:#D13B3B;border-color:#D13B3B;color:#fff}.aa-b.o{border-color:#E9A66B;color:#A84A00}.aa-b.n{background:#111;border-color:#111;color:#fff}
 .aa-sub{border-left:3px solid var(--line);margin:0 0 6px 22px;padding-left:10px}.aa-sub .aa-r{padding:8px 0}
+.aa-av{width:42px;height:42px;font-size:13.5px}.aa-r.s .aa-av{width:34px;height:34px;font-size:12px}
+.aa-x b.aa-n{font-size:16.5px;letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.aa-kr{display:flex;align-items:center;gap:7px;margin-top:3px;min-width:0}.aa-kr small{flex:1;min-width:0}
+.aa-k{flex:none;max-width:70%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12.5px;font-weight:700;border-radius:7px;padding:3px 8px;background:var(--t);color:var(--c)}
+.aa-k.az{--c:#2563D4;--t:#EAF2FF}.aa-k.li{--c:#6A4AE0;--t:#F1EDFF}.aa-k.gf{--c:#3A3A44;--t:#EDEDF1}.aa-k.co{--c:#D93B30;--t:#FFEDEA}.aa-k.na{--c:#C9601C;--t:#FFF1E7}
+@media(max-width:560px){.aa-kr{flex-wrap:wrap;row-gap:3px}.aa-k{max-width:100%}.aa-kr small{flex-basis:100%}}
 .aa-dia{font-size:12px;font-weight:800;color:var(--mu);text-transform:uppercase;letter-spacing:.05em;padding:14px 0 6px;border-bottom:1px solid var(--line2)}
 .aa-dia.hoy{color:#0B6B40}.aa-dia.r{color:#D13B3B}
 .aa-nada{color:var(--mu);font-size:14px;margin:8px 0 12px}
@@ -5421,7 +5427,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.210';
+var APP_V = 'v53.4.211';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -13377,7 +13383,28 @@ function aaFila(t,modo,sub){
   else { act=attrs2(t); tit=t.a==='escribir'?t.tit:tit2(t); det=sub?(t.nom||''):sub2(t); b=t.a==='escribir'?'Escribirle':btn2(t); }
   var pas=t.tipo==='cita'&&t.cita&&citaPasada(t.cita);
   var icn=t.tipo==='cita'&&t.cita?(CITA_T[t.cita.tipo]||CITA_T.otra)[0]:(TT[t.tipo]||['alerta'])[0];
-  return '<button class="aa-r'+(modo==='atr'?' atr':'')+(sub?' s':'')+(pas?' pas':'')+'" '+act+'><span class="aa-h">'+(sub?'':aaCol(t,modo))+'</span><span class="aa-i '+cls+'">'+ic(icn)+'</span><span class="aa-x"><b>'+esc(tit)+'</b>'+(det?'<small>'+esc(det)+'</small>':'')+'</span><span class="aa-b'+(modo==='atr'?' rr':aaVence(t)?' o':t.tipo==='nuevo'?' n':'')+'">'+esc(b)+'</span></button>';
+  /* v53.4.211 · primero quién: su cara y su nombre en grande, y lo que toca con esa persona en una etiqueta de color (aaK) */
+  var c=t.cid?(CO.lista||[]).filter(function(x){ return x.id===t.cid; })[0]:null, per=c?c.nombre:t.tipo==='nuevo'?String(t.nom||''):'';
+  var conCol=!sub&&(modo==='atr'||modo==='sem'||modo==='dia'), col=conCol?aaCol(t,modo):'', hh=modo==='hoy'||modo==='nue'?(t.hora||(t.tipo==='llamada'?(/\d\d:\d\d/.exec(t.tit)||[''])[0]:'')):'';
+  var av=c?avCo(c.id,c.nombre,'sd-av aa-av'):per?'<span class="sd-av aa-av">'+esc(iniciales(per))+'</span>':'<span class="aa-i '+cls+'">'+ic(icn)+'</span>';
+  var tx;
+  if(per){
+    var tarea=t.tipo==='nuevo'?'Quiere empezar':tit, d2=t.tipo==='cita'||t.tipo==='nuevo'?(t.det||''):(t.a==='semanal'||t.a==='sug'?'':(accionT(t).det||''));
+    if(hh&&tarea.indexOf(hh)<0) d2=[hh,d2].filter(String).join(' · ');
+    tx='<b class="aa-n">'+esc(per)+'</b><span class="aa-kr"><span class="aa-k '+aaK(t)+'">'+esc(tarea)+'</span>'+(d2?'<small>'+esc(d2)+'</small>':'')+'</span>';
+  } else tx='<b>'+esc(tit)+'</b>'+(det?'<small>'+esc(det)+'</small>':'');
+  return '<button class="aa-r'+(per?' aa-pe':'')+(modo==='atr'?' atr':'')+(sub?' s':'')+(pas?' pas':'')+'" '+act+'>'+(conCol?'<span class="aa-h">'+col+'</span>':'')+av+'<span class="aa-x">'+tx+'</span><span class="aa-b'+(modo==='atr'?' rr':aaVence(t)?' o':t.tipo==='nuevo'?' n':'')+'">'+esc(b)+'</span></button>';
+}
+/* el color de lo que toca: azul revisión, lila dieta (y nuevos), gris rutinas, coral plan o mensajes, naranja llamada, cita o competición */
+function aaK(t){
+  var a=t.a||'', p=t.tipo||'';
+  if(p==='nuevo') return 'li';
+  if(p==='cita'||p==='llamada'||p==='evento'||a==='llamada') return 'na';
+  if(p==='plan'||a==='plan'||p==='chat'||a==='chat'||a==='escribir') return 'co';
+  if(p==='dieta'||/^dieta/.test(a)) return 'li';
+  if(p==='rutina'||/^(rutina|plnRen|plnPrep|verRut|prog)/.test(a)) return 'gf';
+  if(p==='revision'||p==='semanal'||p==='fotos'||p==='cuest'||/^(semanal|revision|progRev|progFotos|fotos|cuest)$/.test(a)) return 'az';
+  return 'gf';
 }
 var AA_MAX=12;
 function aaLista(R,sel){
