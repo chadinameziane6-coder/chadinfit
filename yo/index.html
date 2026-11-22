@@ -2963,7 +2963,7 @@ function faseHoy(r, nf) {
 }
 function semanaDe(r) { var p = planDeRut(r); if (!p || !p.desde) return null; var sem = p.sem || 8, w = Math.floor((aDate(hoyStr()) - aDate(p.desde)) / (7 * 864e5)) + 1; return { w: Math.max(1, Math.min(sem, w)), sem: sem }; }
 /* lo que toca hoy en una sesión de carrera (o su resumen) */
-function runHoy(e, r) { if (e.rp) return rpHoyTxt(e); if (e.fases && e.fases.length) return e.fases[faseHoy(r, e.fases.length)].p; return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || 'Cardio'; }
+function runHoy(e, r) { if (e.rp) return rpHoyTxt(e); if (e.fases && e.fases.length) return e.fases[faseHoy(r, e.fases.length)].p; return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || (e.tipo === 'run' ? 'Carrera' : 'Cardio'); }
 /* la ficha de la sesión de carrera: calentamiento, parte principal, vuelta a la calma, intensidad y cómo progresa */
 function runFicha(e, r) {
   if (!e.fases) return e.nota ? '<p class="txt">' + esc(e.nota) + '</p>' : '';
@@ -3020,7 +3020,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.24';
+var YO_V = 'yo-1.25';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3540,7 +3540,7 @@ function esCal(e) { return !!(e.cal || (e._p && e._p.mov)); }
 function setsTxt(e) {
   if (e.tipo === 'bloque') return blqFmt(e);
   if (e.rp) return rpHoyTxt(e);
-  if (e.tipo === 'run' || e.tipo === 'cardio') return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || 'Cardio';
+  if (e.tipo === 'run' || e.tipo === 'cardio') return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || (e.tipo === 'cardio' && cardioMin(e) ? cardioMin(e) + ' min' : e.tipo === 'run' ? 'Carrera' : 'Cardio');
   var s = e.sets || [], r = s[0] ? s[0].r : '', u = e.u === 's' ? ' s' : e.u === 'm' ? ' m' : '';
   return s.length + ' × ' + r + u;
 }
@@ -3687,7 +3687,7 @@ function semanaHtml(oscura, toca) {
     return '<span class="s7 ' + cl + (d === hoy ? ' hoy' : '') + '" role="listitem" aria-label="' + lab + '">' + dentro + '</span>'; }).join('') + '</div>';
 }
 function nEjTxt(r) { var X = rpDeRut(r); if (X) return 'Semana ' + X.w + ' de ' + X.P.sem; var n = (r.ejercicios || []).filter(function (e) { return !e.cal; }).length; return n + (n === 1 ? ' ejercicio' : ' ejercicios'); }
-function minRut(r) { var t = 0; (r.ejercicios || []).forEach(function (e) { if (e.rp) { t += rpMinEj(e); return; } if (e.tipo === 'run') { t += +e.min || 30; return; } if (e.tipo === 'bloque') { t += Math.round((blqDur(e) || (e.tc || 15) * 60) / 60) + 2; return; } var n = (e.sets || []).length; t += n * (0.8 + (+e.d || 60) / 60); }); return Math.max(10, Math.round(t / 5) * 5); }
+function minRut(r) { var t = 0; (r.ejercicios || []).forEach(function (e) { if (e.rp) { t += rpMinEj(e); return; } if (e.tipo === 'run') { t += +e.min || 30; return; } if (e.tipo === 'cardio') { t += cardioMin(e) || 15; return; } if (e.tipo === 'bloque') { t += Math.round((blqDur(e) || (e.tc || 15) * 60) / 60) + 2; return; } var n = (e.sets || []).length; t += n * (0.8 + (+e.d || 60) / 60); }); return Math.max(10, Math.round(t / 5) * 5); }
 function dDias(a, b) { return Math.round((aDate(b) - aDate(a)) / 864e5); }
 /* semanas seguidas entrenando: la de ahora cuenta si ya hay uno; si no, se mira desde la anterior */
 function racha() {
@@ -4353,7 +4353,9 @@ VISTAS.rutina = function () {
     if (e.cal) return; nP++;
     var mov = '<span class="ed-mv"><button class="ed-x" data-a="edMover" data-i="' + i + '" data-v="-1" aria-label="Subir"' + (nP > 1 ? '' : ' disabled') + '>' + ic('subir', 14, null, 2.4) + '</button><button class="ed-x" data-a="edQuitar" data-i="' + i + '" aria-label="Quitar ' + esc(e.n) + '">' + ic('x', 14) + '</button></span>';
     if (e.tipo === 'bloque') { h += '<div class="ed-ej2 ed-blq"><div class="ed-t"><span class="ed-n">' + nP + '</span><span class="ej-n"><b>' + esc(e.n || 'Bloque') + '</b></span>' + mov + '</div>' + blqCardHtml(e, true) + '</div>'; return; }
-    if (e.tipo === 'run' || e.tipo === 'cardio') { h += '<div class="ed-ej2"><div class="ed-t"><span class="ed-n">' + nP + '</span><span class="ej-n"><b>' + esc(e.n) + '</b><small>' + esc(setsTxt(e)) + '</small></span>' + mov + '</div></div>'; return; }
+    if (e.tipo === 'run' || e.tipo === 'cardio') { var lib = e.tipo === 'cardio' && !e.res && !(e.bl && e.bl.length);      // 22 nov: el cardio suelto lleva sus minutos, editables
+      h += '<div class="ed-ej2"><div class="ed-t"><span class="ed-n">' + nP + '</span><span class="ej-n"><b>' + esc(e.n) + '</b><small>' + esc(lib ? 'Cardio' : setsTxt(e)) + '</small></span>' + mov + '</div>' +
+        (lib ? '<div class="ed-ctl2"><label class="ed-rp"><input class="rep" data-in="edMin" data-i="' + i + '" value="' + esc((e.obj && e.obj.tiempo) || '') + '" inputmode="numeric" aria-label="Minutos de ' + esc(e.n) + '" placeholder="15"><small>min</small></label><small>de cardio · el día del entreno apuntas km, kcal y nivel</small></div>' : '') + '</div>'; return; }
     var s0 = (e.sets && e.sets[0]) || {};
     /* 20 nov (Chadín: «dejas mucho margen a la izquierda»): el número va en la línea del nombre y lo demás ocupa todo el ancho */
     h += '<div class="ed-ej2"><div class="ed-t"><span class="ed-n">' + nP + '</span><button class="ej-n" data-a="verEj" data-n="' + esc(e.n) + '"><b>' + esc(e.n) + '</b>' + (ejSub(e.n) ? '<small>' + esc(ejSub(e.n)) + '</small>' : '') + '</button>' + mov + '</div>' +
@@ -4367,6 +4369,7 @@ VISTAS.rutina = function () {
   return h;
 };
 IN.edNom = function (t) { S.x.ed.nombre = t.value; };
+IN.edMin = function (t) { var e = S.x.ed.ejercicios[+t.dataset.i], v = t.value.replace(/[^\d]/g, '').slice(0, 3); e.obj = e.obj || {}; e.obj.tiempo = v; };
 IN.edRep = function (t) { var e = S.x.ed.ejercicios[+t.dataset.i]; (e.sets || []).forEach(function (s) { if (s.t !== 'aprox') s.r = t.value.trim(); }); edRefresca(+t.dataset.i); };
 /* 19 nov (Chadín: «no te deja planificar las series… series de aproximación, 2 normales y una tercera de back-off… tampoco te deja poner RIR»):
    el RIR para todas las series de trabajo y «Planificar cada serie»: el tipo (aproximación, normal, top set, back-off, drop set, al fallo), las repeticiones y el RIR de cada una */
@@ -4482,7 +4485,7 @@ VISTAS.buscar = function () { return '<div class="pant pad">' + cab(S.x.bus && S
 A.busElegir = function (el) {
   var n = el.dataset.n, e = ejNuevo(n);
   if (S.x.bus.para === 'ses') { volver(); return sesAnadirEj(e); }
-  if (S.x.bus.cal) { e.cal = 1; e.d = '0'; e.sets = [{ t: 'normal', r: e.u === 's' ? '30' : '8-10', rir: '', kg: '' }]; var k = S.x.ed.ejercicios.filter(function (x) { return x.cal; }).length; S.x.ed.ejercicios.splice(k, 0, e); S.x.ed.sinMov = 0; volver(); return toast(n + ' añadido a la movilidad', 'ok'); }
+  if (S.x.bus.cal) { e = ejNuevo(n, 1); e.cal = 1; e.d = '0'; e.sets = [{ t: 'normal', r: e.u === 's' ? '30' : '8-10', rir: '', kg: '' }]; var k = S.x.ed.ejercicios.filter(function (x) { return x.cal; }).length; S.x.ed.ejercicios.splice(k, 0, e); S.x.ed.sinMov = 0; volver(); return toast(n + ' añadido a la movilidad', 'ok'); }
   S.x.ed.ejercicios.push(e); volver(); toast(n + ' añadido', 'ok');
 };
 
@@ -4601,7 +4604,12 @@ A.ejARutina = function (el) {
     return '<button class="fila-b" data-a="ejARutinaSi" data-id="' + r.id + '" data-n="' + esc(n) + '"' + (ya ? ' disabled' : '') + '><b>' + esc(r.nombre) + '</b><small>' + (ya ? 'Ya lo tiene' : (r.ejercicios || []).length + ' ejercicios') + '</small></button>'; }).join('') + '</div>' +
     '<button class="btn sec" data-a="ejNuevaRut" data-n="' + esc(n) + '">' + ic('mas', 18) + 'En una rutina nueva</button>');
 };
-function ejNuevo(n) { var b = bancoDe(n), uni = b && /^(s)$/.test(b.reg || '') ? 's' : ''; var e = { n: n, tipo: 'fuerza', d: '90', sets: [0, 1, 2].map(function () { return { t: 'normal', r: uni ? '30' : '10', rir: '', kg: '' }; }) }; if (uni) e.u = 's'; return e; }
+/* 22 nov (Chadín: «al elegir cardio deben salir los parámetros de cardio, no de musculación»): las máquinas y el cardio continuo
+   van con minutos, km, kcal y nivel (como en la app de clientas); la técnica de carrera, los saltos y lo funcional siguen por series */
+function esCardioB(b) { if (!b) return false; var tec = (b.g2 || []).some(function (g) { return /técnica de carrera|funcional/i.test(g); });
+  return (b.pat === 'cardio' && b.eq === 'maquina') || (b.grupo === 'Cardio' && ((b.pat === 'cardio' && b.mod === 'cardio' && !tec) || (!b.pat && !b.mod))); }
+function ejCardio(n) { return /^carrera$/i.test(n) ? { n: n, tipo: 'run', s: '1', d: '', nota: '' } : { n: n, tipo: 'cardio', m: ['tiempo', 'km', 'kcal', 'nivel'], obj: { tiempo: '15' }, s: '1', d: '', nota: '' }; }
+function ejNuevo(n, fz) { if (!fz && esCardioB(bancoDe(n))) return ejCardio(n); var b = bancoDe(n), uni = b && /^(s)$/.test(b.reg || '') ? 's' : ''; var e = { n: n, tipo: 'fuerza', d: '90', sets: [0, 1, 2].map(function () { return { t: 'normal', r: uni ? '30' : '10', rir: '', kg: '' }; }) }; if (uni) e.u = 's'; return e; }
 A.ejARutinaSi = function (el) { var r = rutinaDe(el.dataset.id); if (!r) return; r.ejercicios = r.ejercicios || []; r.ejercicios.push(ejNuevo(el.dataset.n)); guardaRutina(r); cerrarHoja(); toast(el.dataset.n + ' añadido a ' + r.nombre, 'ok'); };
 A.ejNuevaRut = function (el) { cerrarHoja(); S.x.ed = { id: nuevoId(), nombre: '', ejercicios: [ejNuevo(el.dataset.n)], nuevo: true, dias: [] }; ir({ t: 'rutina' }); };
 
@@ -5823,7 +5831,7 @@ function exHecho(e) { return e.tipo === 'run' || e.tipo === 'cardio' || e.tipo =
 function ejCerrado(e, i) {
   if (e.rp) return rpCerrado(e, i);
   var ok = (e.sets || []).filter(function (s) { return s.ok; }).length;
-  return '<button class="card ej-c" data-a="sesAb" data-i="' + i + '"><span class="ck' + (exHecho(e) ? ' on' : '') + '">' + ic('check', 14, null, 3) + '</span><span class="fr-t"><b>' + esc(e.n) + '</b><small>' + (e.tipo === 'run' || e.tipo === 'cardio' ? esc(runHoy(e, rutinaDe(S.ses.rid))) : ok + ' de ' + (e.sets || []).length + ' series') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
+  return '<button class="card ej-c" data-a="sesAb" data-i="' + i + '"><span class="ck' + (exHecho(e) ? ' on' : '') + '">' + ic('check', 14, null, 3) + '</span><span class="fr-t"><b>' + esc(e.n) + '</b><small>' + (e.tipo === 'cardio' ? esc((e.hecho && runRes(e)) || setsTxt(e)) : e.tipo === 'run' ? esc(runHoy(e, rutinaDe(S.ses.rid))) : ok + ' de ' + (e.sets || []).length + ' series') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
 }
 function ejAbierto(e, i) {
   if (e.rp) return rpAbierto(e, i);
@@ -5863,13 +5871,18 @@ A.sesAb = function (el) { S.ses.ab = +el.dataset.i; guardaEnCurso(); pintar(); }
 A.calOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); pintar(); };
 /* carrera y cardio: lo que has hecho de verdad (opcional) para ver km, tiempo y ritmo en Progreso */
 function runCampos(e, i) {
-  var run = e.tipo === 'run';
-  return '<div class="run-in">' + (run ? '<label class="f">Km<input data-in="runV" data-i="' + i + '" data-k="km" inputmode="decimal" autocomplete="off" placeholder="Ej.: 5,2" value="' + esc(e.km || '') + '"></label>' : '') +
-    '<label class="f">Minutos' + (cardioMin(e) ? ' (te tocan ' + cardioMin(e) + ')' : '') + '<input data-in="runV" data-i="' + i + '" data-k="mn" inputmode="numeric" autocomplete="off" placeholder="' + (cardioMin(e) || 'Ej.: 32') + '" value="' + esc(e.mn || '') + '"></label>' +
-    '<small class="mut">Opcional. ' + (run ? 'Con los km y los minutos verás tu ritmo y tus km por semana en Progreso.' : 'Con los minutos verás tu tiempo de cardio en Progreso.') + '</small></div>';
+  var run = e.tipo === 'run', m = cardioMin(e), lib = S.ses && S.ses.libre;
+  var f = function (lab, k, ph, im) { return '<label class="f">' + lab + '<input data-in="runV" data-i="' + i + '" data-k="' + k + '" inputmode="' + (im || 'decimal') + '" autocomplete="off" placeholder="' + ph + '" value="' + esc(e[k] || '') + '"></label>'; };
+  var mn = f('Minutos' + (m ? ' (' + (lib ? 'objetivo ' : 'te tocan ') + m + ')' : ''), 'mn', m || 'Ej.: 32', 'numeric');
+  /* 22 nov: en el cardio, lo que marca la máquina (como en la app de clientas): minutos, distancia, calorías y nivel o inclinación */
+  if (!run) return '<div class="run-in">' + mn + f('Distancia (km)', 'km', 'Ej.: 2,5') + f('Calorías (kcal)', 'kcal', 'Ej.: 180', 'numeric') + f('Nivel / inclinación', 'niv', 'Ej.: 8') +
+    '<small class="mut">Opcional. Apunta lo que te marque la máquina; con los minutos verás tu tiempo de cardio en Progreso.</small></div>';
+  return '<div class="run-in">' + f('Km', 'km', 'Ej.: 5,2') + mn + '<small class="mut">Opcional. Con los km y los minutos verás tu ritmo y tus km por semana en Progreso.</small></div>';
 }
 IN.runV = function (t) { var e = S.ses.ej[+t.dataset.i]; e[t.dataset.k] = t.value.replace(',', '.').replace(/[^\d.]/g, ''); guardaEnCurso(); };
 function runKm(v) { var k = num(v); return k != null && k > 0 && k <= 300 ? Math.round(k * 100) / 100 : null; }
+function runKc(v) { var k = num(v); return k != null && k > 0 && k <= 5000 ? Math.round(k) : null; }
+function runNv(v) { var k = num(v); return k != null && k >= 0 && k <= 100 ? Math.round(k * 10) / 10 : null; }
 function runMn(v) { var m = num(v); return m != null && m > 0 && m <= 1440 ? Math.round(m) : null; }
 A.cardioOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); if (e.hecho) sigEj(); pintar(); };
 IN.stV = function (t) { var s = S.ses.ej[+t.dataset.i].sets[+t.dataset.j]; s[t.dataset.k] = t.value.replace(',', '.'); guardaEnCurso(); };
@@ -5878,8 +5891,8 @@ A.sesQuitar = function (el) { S.ses.ej.splice(+el.dataset.i, 1); S.ses.ab = Math
 A.sesAnadir = function () { S.x.bus = { q: '', g: '', para: 'ses' }; ir({ t: 'buscar' }); };
 A.sesCambiar = function (el) { S.x.bus = { q: '', g: (bancoDe(S.ses.ej[+el.dataset.i].n) || {}).grupo || '', para: 'ses' }; S.x.cambiarI = +el.dataset.i; ir({ t: 'buscar' }); };
 function sesAnadirEj(e) {
-  e.sets.forEach(function (s) { s.kg = ''; s.reps = ''; s.rir = ''; s.ok = false; });
-  if (S.x.cambiarI != null) { var v = S.ses.ej[S.x.cambiarI]; e.sets = v.sets.map(function (s) { return { t: s.t, r: s.r, kg: '', reps: '', rir: '', ok: false }; }); e.d = v.d; S.ses.ej[S.x.cambiarI] = e; S.ses.ab = S.x.cambiarI; S.x.cambiarI = null; }
+  (e.sets || []).forEach(function (s) { s.kg = ''; s.reps = ''; s.rir = ''; s.ok = false; });
+  if (S.x.cambiarI != null) { var v = S.ses.ej[S.x.cambiarI]; if (e.sets && v.sets && v.sets.length) e.sets = v.sets.map(function (s) { return { t: s.t, r: s.r, kg: '', reps: '', rir: '', ok: false }; }); if (e.sets && v.sets) e.d = v.d; S.ses.ej[S.x.cambiarI] = e; S.ses.ab = S.x.cambiarI; S.x.cambiarI = null; }
   else { S.ses.ej.push(e); S.ses.ab = S.ses.ej.length - 1; }
   guardaEnCurso(); pintar();
 }
@@ -5932,7 +5945,7 @@ A.terminarSi = function () {
   var ej = X.ej.filter(function (e) { return !e.cal && ((e.sets || []).some(function (s) { return s.ok; }) || e.hecho); }).map(function (e) {
     var o = { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', sets: (e.sets || []).filter(function (s) { return s.ok; }).map(function (s) { var p = num(s.kg) || 0, r = num(s.reps) || 0; nser++; if (!e.u) vol += serVol(s); var o2 = { t: s.t || 'normal', kg: s.kg, reps: s.reps, rir: s.rir, ok: true, rec: !!s.rec }; if (s.lad) o2.lad = s.lad; var mr = (s.mini || []).filter(function (z) { return z.ok; }).map(function (z) { return z.reps; }); if (mr.length) o2.mini = mr; return o2; }) };
     if (e.tipo === 'bloque' && e.hecho) { o.hecho = 1; o.f = e.f; o.fmt = blqFmt(e); o.txt = blqResTxt(e); o.res = e.res || null; o.lista = (e.ej || []).map(function (x) { return { n: x.n, q: blqQTxt(e, x) }; }); nser++; }
-    if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = e.tipo === 'run' ? runKm(e.km) : null, mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.rp) o.rp = rpReg(e); }
+    if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = runKm(e.km), mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.tipo === 'cardio') { var kc = runKc(e.kcal), nv = runNv(e.niv); if (kc) o.kcal = kc; if (nv != null && String(e.niv || '').trim()) o.niv = nv; } if (e.rp) o.rp = rpReg(e); }
     var rb = null; o.sets.forEach(function (s) { if (!s.rec) return; var p = num(s.kg) || 0, r = num(s.reps) || 0; if (!rb || p > rb.p || (p === rb.p && r > rb.r)) rb = { e: e.n, p: p, r: r }; }); if (rb) recs.push(rb);      // un récord por ejercicio (el mejor)
     return o; });
   var min = Math.max(1, Math.round((Date.now() - X.inicio) / 60000)), f = hoyStr();
@@ -6026,7 +6039,7 @@ function tarjetaRecYo(U, modo, foto) {
 }
 A.finSlide = function (el) { var n = finT(S.fin).length, i = el && el.dataset.i != null ? +el.dataset.i : ((S.fin.slide || 0) + (el && el.dataset.d ? +el.dataset.d : 1) + n) % n; S.fin.slide = i; pintar(); };
 CH.finFoto = function (t) { var f = t.files && t.files[0]; if (!f) return; var u = URL.createObjectURL(f), im = new Image(); im.onload = function () { S.fin.foto = im; pintar(); }; im.src = u; };
-A.finGuardarRut = function () { var U = S.fin; S.x.ed = { id: nuevoId(), nombre: 'Mi entreno libre', dias: [], nuevo: true, ejercicios: U.libreEj.filter(function (e) { return !e.cal; }).map(function (e) { return { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', d: e.d || '90', sets: e.sets.map(function (s) { return { t: s.t || 'normal', r: String(s.reps || s.r || '10'), rir: '', kg: '' }; }) }; }) }; U.libreEj = null; ir({ t: 'rutina' }); };
+A.finGuardarRut = function () { var U = S.fin; S.x.ed = { id: nuevoId(), nombre: 'Mi entreno libre', dias: [], nuevo: true, ejercicios: U.libreEj.filter(function (e) { return !e.cal; }).map(function (e) { if (e.tipo === 'run' || e.tipo === 'cardio') return e.tipo === 'run' ? { n: e.n, tipo: 'run', s: '1', d: '', nota: '' } : { n: e.n, tipo: 'cardio', m: e.m || ['tiempo'], obj: { tiempo: String(runMn(e.mn) || cardioMin(e) || 15) }, s: '1', d: '', nota: e.nota || '' }; return { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', d: e.d || '90', sets: (e.sets || []).map(function (s) { return { t: s.t || 'normal', r: String(s.reps || s.r || '10'), rir: '', kg: '' }; }) }; }) }; U.libreEj = null; ir({ t: 'rutina' }); };
 /* 21 nov: la imagen se pinta con cajaImg (compartir.js): «Sin fondo» y, con foto, moverla y hacer zoom encima de la tarjeta */
 function finSpec() {
   var U = S.fin; if (!U) return null; var T = finT(U)[U.slide || 0] || FIN_T[0], vieja = soloRunYo(U) && T[0] !== 'rec' && U.modo !== 'sin';      // solo carrera: la tarjeta de siempre
@@ -7193,7 +7206,7 @@ A.verMas = function (el) { var k = el.dataset.k; S.x[k] = cuantos(k, +el.dataset
 A.verMenos = function (el) { delete S.x[el.dataset.k]; pintar(); };
 /* carrera: km, minutos y ritmo */
 function ritmoTxt(km, mn) { if (!km || !mn) return ''; var t = Math.round(mn * 60 / km), m = Math.floor(t / 60); return m + ':' + ('0' + (t % 60)).slice(-2) + ' min/km'; }
-function runRes(e) { var p = []; if (num(e.km)) p.push(fN(num(e.km), 2) + ' km'); if (num(e.mn)) p.push(num(e.mn) + ' min'); var r = ritmoTxt(num(e.km), num(e.mn)); if (r) p.push(r); return p.join(' · '); }
+function runRes(e) { var p = [], cd = e.tipo === 'cardio'; if (cd && num(e.mn)) p.push(num(e.mn) + ' min'); if (num(e.km)) p.push(fN(num(e.km), 2) + ' km'); if (!cd && num(e.mn)) p.push(num(e.mn) + ' min'); var r = e.tipo === 'cardio' ? '' : ritmoTxt(num(e.km), num(e.mn)); if (r) p.push(r); if (num(e.kcal)) p.push(fmil(num(e.kcal)) + ' kcal'); if (e.niv != null && e.niv !== '' && e.tipo === 'cardio' && num(e.niv) != null) p.push('nivel ' + fN(num(e.niv), 1)); return p.join(' · '); }
 
 /* --- peso --- */
 function progPeso() {
