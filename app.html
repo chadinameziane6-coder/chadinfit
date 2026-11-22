@@ -666,7 +666,7 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .sg2-tb td.sg2-cd i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--sc);margin-right:7px;vertical-align:1px}td.sg2-cd{width:1%;white-space:nowrap;font-size:13px;font-weight:700;color:var(--sc)}
 .sg2-vb{--sc:#2E6FE0}.sg2-aj{--sc:#7A5AF0}.sg2-ha{--sc:#3A3A44}.sg2-mp{--sc:#E0453A}.sg2-no{--sc:#9A9AA2}
 .sg2-del.ico-x{display:inline-flex;margin-left:6px;vertical-align:-3px;opacity:.5}.sg2-del.ico-x:hover{opacity:1}
-.sg2-mas{display:none}.sg2-ver{margin-top:8px}
+.sg2-ver{margin-top:8px}
 @media (max-width:620px){.sg2-tb thead{display:none}.sg2-tb tr{display:grid;grid-template-columns:1fr auto;border-bottom:1px solid #F2F2F4;padding:10px 0}.sg2-tb td{border:0;padding:2px 4px}.sg2-tb td.sg2-ct{grid-column:1/-1;order:3}}
 .sg2-f{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #F2F2F4}.sg2-f:last-of-type{border-bottom:0}
 .sg2-d{width:54px;flex:none;border-radius:14px;background:#0D0D10;color:#fff;text-align:center;padding:7px 0;line-height:1}.sg2-d b{display:block;font-size:20px;font-weight:800}.sg2-d small{display:block;font-size:11px;font-weight:700;color:#C9C9D1;margin-top:3px;text-transform:uppercase}
@@ -5373,7 +5373,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.208';
+var APP_V = 'v53.4.209';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -13881,8 +13881,7 @@ function vSeg(){
   var d=CO.d;
   // v53.4.42 (Javier: «si Evolución tiene sus entrenos, ¿para qué repetirlos en Seguimiento?»): solo Próximas fechas y tus notas de cada revisión.
   //   Sus entrenos, el entreno sin terminar y sus check-ins están en Evolución.
-  if(CO.casa===true) return segCasaHtml(d);      // v53.4.208 (nº 1): Word «PANEL ENTRENADOR» 3
-  return dkCols([[1,proxFechasHtml()]],[[2,notasCard(d)]]);
+  return segCasaHtml(d);      // v53.4.208 (nº 1) · v53.4.209 (Javier: «aplica a todos de momento lo que llevamos»): en todos los paneles. Antes: dkCols([[1,proxFechasHtml()]],[[2,notasCard(d)]])
 }
 /* v53.4.208 (nº 1; Word «PANEL ENTRENADOR» 3, Javier eligió la 2B con «notas en tabla, más limpio» y «“Más fechas” resalta la fecha»):
    arriba, lo próximo en 4 recuadros con los días que faltan en grande (el de hoy en negro con el brillo de la marca; atrasado en rojo);
@@ -13904,7 +13903,7 @@ function sg2Fecha(o,hoy){ var n=diff(hoy,o.f), dt=aDate(o.f), rel=n===0?'hoy':n=
   return '<div class="sg2-f'+(n<0?' atr':n===0?' hoy':'')+'"><span class="sg2-d"><b>'+dt.getDate()+'</b><small>'+esc(mesC(dt))+'</small></span><span class="sg2-ft"><b>'+esc(o.tit)+'</b><small><em>'+esc(diaSemC(dt))+' · '+esc(rel)+'</em>'+(o.det?' · '+esc(o.det):'')+'</small></span><span class="sg2-fb">'+o.btn+'</span></div>'; }
 function sg2Dec(a){ var r=String(a.resultado||'');
   if(a.tipo==='nota') return ['no','Nota'];
-  if(a.tipo==='tarea') return esLogroT(a)?['no','Logro']:['no','Recordatorio'];
+  if(a.tipo==='tarea') return esLogroT(a)?['no','Logro']:['no',a.resultado||'Recordatorio'];      // el recordatorio hecho: lo que salió («Va mejor»)
   if(!r) return ['no','—'];
   return [/^Va bien/.test(r)?'vb':/preocupa/i.test(r)?'mp':/^Hablar/.test(r)?'ha':'aj',resTxt(r)]; }
 var SG2_F=[['','Todas'],['vb','Va bien'],['aj','Ajustar'],['ha','Hablar'],['mp','Me preocupa'],['no','Notas y recordatorios']];
@@ -13920,7 +13919,7 @@ function sg2Notas(d){
   h+='<table class="sg2-tb"><thead><tr><th>Fecha</th><th>Lo que apuntaste</th><th>Decisión</th></tr></thead><tbody>'+N.map(function(a,i){
     var sem=a.tipo==='semanal', rev=a.tipo==='revision', D=sg2Dec(a), f=sem?sg2Sem(a.prevista):fCorta(a.fecha||String(a.creado).slice(0,10)), ty=sem?'Semanal':rev?'Con '+cG('ella','él'):a.tipo==='nota'?'Nota':esLogroT(a)?'Logro':'Recordatorio';
     var tx=(a.tipo==='tarea'&&!esLogroT(a)?(a.titulo||'')+(a.nota?': ':''):'')+(esLogroT(a)?String(a.nota||'').split('\n').slice(1).join(' '):String(a.nota||''));
-    return '<tr class="sg2-r sg2-'+D[0]+(i>=3?' sg2-mas':'')+'" data-k="'+D[0]+'" data-s="'+esc(clave(f+' '+ty+' '+tx+' '+D[1]))+'"><td class="sg2-cf"><b>'+esc(f)+'</b><small>'+esc(ty)+'</small></td><td class="sg2-ct">'+(tx?br(tx):'<span class="muted">—</span>')+'</td><td class="sg2-cd"><i></i>'+esc(D[1])+(a.tipo==='nota'&&a.id?'<button class="ico-x sg2-del" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</td></tr>'; }).join('')+'</tbody></table>'+
+    return '<tr class="sg2-r sg2-'+D[0]+'"'+(i>=3?' style="display:none"':'')+' data-k="'+D[0]+'" data-s="'+esc(clave(f+' '+ty+' '+tx+' '+D[1]))+'"><td class="sg2-cf"><b>'+esc(f)+'</b><small>'+esc(ty)+'</small></td><td class="sg2-ct">'+(tx?br(tx):'<span class="muted">—</span>')+'</td><td class="sg2-cd"><i></i>'+esc(D[1])+(a.tipo==='nota'&&a.id?'<button class="ico-x sg2-del" data-a="segBorrarAct" data-id="'+esc(a.id)+'" aria-label="Borrar nota">'+ic('x')+'</button>':'')+'</td></tr>'; }).join('')+'</tbody></table>'+
     '<p class="muted sm sg2-nada hidden">No hay ninguna nota así.</p>'+(N.length>3?'<button class="link sg2-ver" data-a="sg2Ver">Ver las '+N.length+' notas</button>':'');
   return h+'</div>';
 }
