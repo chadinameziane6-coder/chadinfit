@@ -5340,7 +5340,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.202';
+var APP_V = 'v53.4.203';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -16066,7 +16066,7 @@ function guiaDieHtml(){
     ['Intercambios','Por qué puede cambiar el cliente cada alimento, con los gramos ya ajustados. Tócalo para ver y desmarcar los que no quieras.','<span class="gu-it">Pechuga de pollo <span class="gu-g">150 g</span>'+hl('<span class="it-x on">'+ic('lado')+'<span>8</span></span>')+'</span>'],
     ['Más opciones','Guarda la dieta en tu banco para otros clientes, cópiala a otro cliente o envíasela en PDF o por email.','<span class="gu-row">'+tile('marcador','Guardar en tu banco de dietas','Para ponérsela a otros clientes')+'<span class="btn sm sec">'+ic('descargar')+'PDF</span></span>']
   ]);
-  if(CO.casa===true) P.splice(6,0,['Tus recetas y platos','En «Alimentos y recetas»: <b>Nueva receta</b> (con sus pasos; tu cliente la cocina paso a paso) o <b>Nuevo plato</b> (solo los alimentos para una persona: se ajustan solos a la dieta de cada cliente). La receta, pégala tal cual y se rellena sola; lo que no tiene calorías (sal, especias, laurel, agua) va en «Sin calorías».','<span class="gu-row">'+hl('<span class="btn sm">'+ic('mas')+'Nueva receta</span>')+'<span class="btn sm sec">'+ic('mas')+'Nuevo plato</span></span>']);      // v53.4.202
+  P.splice(6,0,['Tus recetas y platos','En «Alimentos y recetas»: <b>Nueva receta</b> (con sus pasos; tu cliente la cocina paso a paso) o <b>Nuevo plato</b> (solo los alimentos para una persona: se ajustan solos a la dieta de cada cliente). La receta, pégala tal cual y se rellena sola; lo que no tiene calorías (sal, especias, laurel, agua) va en «Sin calorías».','<span class="gu-row">'+hl('<span class="btn sm">'+ic('mas')+'Nueva receta</span>')+'<span class="btn sm sec">'+ic('mas')+'Nuevo plato</span></span>']);      // v53.4.202
   return '<div class="gu-h"><b>Guía rápida de dietas</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">El recuadro señala dónde tocar.</p>'+
     P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p><div class="gu-im" inert>'+x[2]+'</div></div>'; }).join('');
 }
@@ -17089,10 +17089,10 @@ A.recLeer=function(){
   var rev=x.det.filter(function(d){ return d.st!=='ok'; }).length, nA=x.det.filter(function(d){ return d.a; }).length;
   var dv=CO.recDiv; CO.recDiv=0; toast('Leída: '+nA+' ingrediente'+(nA!==1?'s':'')+(dv?' · gramos para 1 persona (era para '+dv+')':'')+(rev?' · '+rev+' por revisar (en ámbar o rojo)':'')+'. Revisa y guarda.','ok');
 };
-/* v53.4.202 (panel nº 1; Javier, Word «PANEL ENTRENADOR» 1): «Receta» (con pasos: el cliente la cocina paso a paso) o «Plato sencillo» (alimentos para una
+/* v53.4.202 (Javier, Word «PANEL ENTRENADOR» 1; v53.4.203: en todos los paneles): «Receta» (con pasos: el cliente la cocina paso a paso) o «Plato sencillo» (alimentos para una
    persona que se ajustan solos a las calorías y macros de cada cliente). «Sin calorías» (sal, especias, laurel, agua…): forman parte de la receta pero no
    suman; se guardan como «Además: …» al principio de los pasos, que es como ya los ven los clientes (en el plato y en el modo cocina). */
-function recCasa(){ return CO.casa===true; }
+function recCasa(){ return !!(CO.nut&&CO.nut.dn); }      // v53.4.203 (Javier: «ya lo puedes aplicar a todos los entrenadores»): todos los paneles (antes solo el nº 1)
 function recExSep(r){ if(!r||r._exv) return r; r._exv=1; var t=String(r.texto||''), m=t.match(/^Además: ([^\n]*)(\n\s*\n|\n|$)/); r.ex=[];
   if(m){ r.ex=m[1].split(/\s+·\s+/).map(function(x){ return x.trim(); }).filter(Boolean); r.texto=t.slice(m[0].length).replace(/^\s+/,''); }
   if(!r.clase) r.clase=(num(r.raciones)||1)<=1&&cocNPasos(r.texto)<2?'plato':'receta'; return r; }
