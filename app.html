@@ -630,6 +630,13 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .fase-hoy{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:8px 0}
 .fase-chip{display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--line);border-radius:99px;padding:5px 11px;font:600 12.5px Plus Jakarta Sans,sans-serif;color:var(--tx);cursor:pointer}
 .fase-chip i,.cal-per i,.fase-t i,.fase-ops i{display:inline-block;flex:none;width:12px;height:12px;border-radius:4px}
+.ah2{display:flex;align-items:stretch;background:#111;color:#fff;border-radius:20px;overflow:hidden;margin:10px 0 14px}
+.ah2-l{padding:14px 18px;display:flex;flex-direction:column;justify-content:center;border-right:1px solid rgba(255,255,255,.12);min-width:110px;flex:none}.ah2-l small{font-size:12px;color:#A9A9B2;font-weight:600}.ah2-l b{font-size:18px}
+.ah2-p{flex:1;min-width:0;padding:13px 18px;display:flex;gap:14px;align-items:center;border:0;border-right:1px solid rgba(255,255,255,.12);background:none;color:#fff;font:inherit;text-align:left;cursor:pointer}.ah2-p:last-child{border-right:0}.ah2-p:hover{background:#1E1E22}
+.ah2-ic{width:40px;height:40px;border-radius:12px;flex:none;display:flex;align-items:center;justify-content:center}.ah2-ic .ic{width:20px;height:20px;color:#fff;stroke:#fff;margin:0}
+.ah2-x{flex:1;min-width:0;display:flex;flex-direction:column}.ah2-x small{font-size:12px;color:#A9A9B2;font-weight:600}.ah2-x b{font-size:18px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.ah2-x span{font-size:12.5px;color:#D4D4DA;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ah2-q{flex:none;text-align:right;display:flex;flex-direction:column}.ah2-q b{font-size:22px;line-height:1.1}.ah2-q small{font-size:11.5px;color:#A9A9B2}
+@media(max-width:700px){.ah2{flex-direction:column}.ah2-l{flex-direction:row;justify-content:flex-start;gap:6px;align-items:baseline;padding:12px 16px 6px;border-right:0}.ah2-x span{white-space:normal}.ah2-l b{font-size:15px}.ah2-p{border-right:0;border-top:1px solid rgba(255,255,255,.12);padding:11px 16px}.ah2-x b{font-size:16px}.ah2-q b{font-size:19px}}
 .fase-t{display:flex;align-items:center;gap:10px}.fase-t i{width:18px;height:18px;border-radius:5px}
 .fase-ops button{display:inline-flex;align-items:center;gap:7px}
 .fase-ops button.on i{box-shadow:0 0 0 2px #fff}
@@ -5453,7 +5460,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.213';
+var APP_V = 'v53.4.214';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -12855,7 +12862,25 @@ function faseHoyTxt(d){
   if(!n&&!e&&!dz) return '';
   function t(z){ return '<button class="fase-chip" data-a="verFase" data-id="'+esc(z.id)+'"><i style="background:'+fondoFases(z.fases)+'"></i>'+esc(nombreFase(z))+' <span class="muted">hasta el '+fCorta(z.hasta)+'</span></button>'; }
   var td=dz?'<button class="fase-chip" data-a="pgBloque" data-t="die" data-k="ahora"><i style="background:'+pgCol(dz)+'"></i>'+esc(pgNom(dz))+' <span class="muted">'+(dz.hasta?'hasta el '+fCorta(dz.hasta):'sin fin')+'</span></button>':'';      // v53.4.188: su dieta de ahora (la misma que en Dieta)
+  if(d===CO.d) return ahoraFranja(d,dz,n,e);      // v53.4.214 (Word «PANEL ENTRENADOR» 7, opción B): una franja oscura, bien visible
   return '<div class="fase-hoy"><span class="muted sm">Ahora:</span>'+td+(n?t(n):'')+(e?t(e):'')+'</div>';
+}
+/* v53.4.214 · «Ahora con Ana»: cada plan con su color (el de su fase en el calendario), el nombre en grande, la semana en la que va y, a la
+   derecha, los días que le quedan. Al tocarlo se abre igual que antes (su dieta o su programación). */
+function ahoraFranja(d,dz,n,e){
+  var hoy=CO.hoy||hoyStr();
+  function sem(a,b){ if(!a||!b||b<a) return ''; var tot=Math.max(1,Math.ceil((diff(a,b)+1)/7)), va=Math.min(tot,Math.floor(Math.max(0,diff(a,hoy))/7)+1); return 'semana '+va+' de '+tot; }
+  function seg(tipo,act,col,nom,det,a,b){
+    var q=b?diff(hoy,b):null, partes=String(nom).split(' · '), big=tipo==='Dieta'?nom:partes[0], sub=[tipo==='Dieta'?det:partes.slice(1).join(' · '),sem(a,b)].filter(String).join(' · ');
+    return '<button class="ah2-p" '+act+'><span class="ah2-ic" style="background:'+col+'">'+ic(tipo==='Dieta'?'dieta':'pesa')+'</span><span class="ah2-x"><small>'+tipo+'</small><b>'+esc(big)+'</b>'+(sub?'<span>'+esc(sub)+'</span>':'')+'</span>'+
+      '<span class="ah2-q"><b>'+(q==null?'—':q<=0?'hoy':q+' d')+'</b><small>'+(b?(q<=0?'acaba hoy':'hasta el '+esc(fCorta(b))):'sin fin')+'</small></span></button>';
+  }
+  var S='';
+  if(dz) S+=seg('Dieta','data-a="pgBloque" data-t="die" data-k="ahora"',pgCol(dz),pgNom(dz),'',dz.desde,dz.hasta);
+  else if(n) S+=seg('Dieta','data-a="verFase" data-id="'+esc(n.id)+'"',fondoFases(n.fases||[]),nombreFase(n)+(num(n.kcal)?' · '+fN(n.kcal,0)+' kcal':''),'',n.desde,n.hasta);
+  if(e) S+=seg('Entreno','data-a="verFase" data-id="'+esc(e.id)+'"',fondoFases(e.fases||[]),nombreFase(e)||'Programación','',e.desde,e.hasta);
+  if(!S) return '';
+  return '<div class="ah2"><div class="ah2-l"><small>Ahora con</small><b>'+esc(primerNombre(d.clienta&&d.clienta.nombre))+'</b></div>'+S+'</div>';
 }
 function nombreMes(Y,m){ var s=new Date(Y,m,1).toLocaleDateString('es-ES',{month:'long'}); return s.charAt(0).toUpperCase()+s.slice(1); }
 function vCalendario(){
