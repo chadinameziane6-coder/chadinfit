@@ -1558,6 +1558,14 @@ body:has(.ecb) main.wrap{padding-bottom:150px}
 .pfa-b>.card{box-shadow:none!important;border:0!important;background:none!important;padding:0!important;margin:0!important}
 .pfa-b>.card>.card-t{display:none}
 .pf-pie{margin-top:4px}
+/* 22 nov: «Borrar mi cuenta» */
+.bc-f{display:flex;gap:12px;align-items:center;width:100%;margin-top:12px;padding:14px 16px;border:0;border-radius:20px;background:var(--card);font:inherit;color:var(--tx);text-align:left;cursor:pointer;box-shadow:var(--sh)}
+.bc-i{width:36px;height:36px;border-radius:11px;background:rgba(209,59,59,.1);color:var(--bad);display:flex;align-items:center;justify-content:center;flex:none}.bc-i .ic{width:19px;height:19px;margin:0}
+.bc-t{display:flex;flex-direction:column;gap:2px;flex:1;min-width:0}.bc-t b{color:var(--bad);font-size:15px}.bc-t small{color:var(--mu);font-size:12.5px}.bc-f .bc-ch{width:16px;height:16px;color:var(--mu);margin:0}
+.bc-h h2{margin:0 0 6px}.bc-l{margin:4px 0 12px;padding-left:20px;font-weight:600;font-size:14px;line-height:1.35}.bc-l li{margin:6px 0}
+.bc-n{background:var(--card2);border-radius:16px;padding:12px 14px;font-size:13px;color:var(--mu);line-height:1.45;margin-bottom:14px}.bc-n b{color:var(--tx)}
+.bc-c{display:flex;gap:10px;align-items:flex-start;font-size:14px;font-weight:600;margin-bottom:14px}.bc-c input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--bad)}
+.btn.bc-go{background:var(--bad);border-color:var(--bad);color:#fff}.btn.bc-go:disabled{opacity:.45}
 .com-card{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;padding:10px 12px;margin:0 0 12px;font:inherit;color:var(--tx);cursor:pointer}.com-card .ch-tx{display:flex;flex-direction:column;flex:1;min-width:0}.com-card .ch-tx small{font-size:12.5px;color:var(--mu);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.com-card>.ic{width:18px;height:18px;color:var(--mu)}
 .com-top{display:flex;align-items:center;gap:8px}.com-top .chat-tit{margin:8px 0 6px}.chat.com-cl{padding-bottom:150px}
 .com-pie{position:fixed;left:10px;right:10px;bottom:calc(76px + var(--sab));z-index:25;display:flex;align-items:center;gap:10px;background:#fff;border-radius:18px;padding:10px 12px;box-shadow:0 6px 24px rgba(0,0,0,.08);font-size:13px;color:var(--tx2);max-width:540px;margin:0 auto}.com-pie span{flex:1}.com-pie .btn.sm{flex:none;white-space:nowrap}
@@ -5184,7 +5192,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.193';
+var APP_V = 'v53.4.194';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -11800,7 +11808,13 @@ function pintarLogin(msg){
 }
 A.entrar=function(){ A.coEntrar(); };
 A.salirCoach=function(){ if(DEMO) return A.demoSalir(); var t=CO.pin; if(/^C/.test(t||'')) pushSalir('co',t).then(function(){ return api('salir',t); }).catch(function(){}); sesGuarda('co',null); snapBorrar(SNAP.k()); CCACHE={}; CO.lista=null; CO.pin=''; mcCerrar(); pintarLogin('Has cerrado sesión.'); };
-function ponerResumen(r){ PG22=LS.get('chadin_pg22')!==0; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
+/* 22 nov 2026: las clientas que han borrado su cuenta desde su app (solo el nombre y el día; al verlo, se quita) */
+function avisarBajas(L){ if(!L||!L.length||document.querySelector('#modal.open')) return;
+  modal('<div class="celebra"><div class="big-ok">'+ic('user')+'</div><h2>'+(L.length===1?esc(L[0].n)+' ha borrado su cuenta':L.length+' clientas han borrado su cuenta')+'</h2>'+
+    (L.length>1?'<p>'+L.map(function(x){ return esc(x.n)+' ('+esc(fCorta(x.f))+')'; }).join(', ')+'</p>':'<p class="muted">El '+esc(fCorta(L[0].f))+', desde su app.</p>')+
+    '<p class="muted sm">Se han borrado sus datos (rutinas, dieta, entrenos, fotos, chat…). Sus pagos siguen en Pagos, porque hay que guardarlos.</p><button class="btn mt" data-a="bajasVistas">Entendido</button></div>'); }
+A.bajasVistas=function(){ cerrarModal(); api('coachBajasVistas',CO.pin).catch(function(){}); };
+function ponerResumen(r){ if(r&&r.bajas&&r.bajas.length) setTimeout(function(){ avisarBajas(r.bajas); },1200); PG22=LS.get('chadin_pg22')!==0; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
   CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.citasMias=r.citasMias||[]; CO.nuevos=r.nuevos||[]; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
@@ -21913,7 +21927,7 @@ function vPerfil(){
   return '<div class="saludo pf-cab"><div class="pf-avw"><button class="pf-av'+(ft?' ft':'')+'" data-a="'+(ft?'pfVer':'pfFoto')+'" aria-label="'+(ft?'Ver tu foto en grande':'Tu foto de perfil')+'">'+(ft?'<img src="'+esc(ft)+'" alt="">':esc(iniciales(nom)||'·'))+'</button><button class="pf-avb" data-a="pfFoto" aria-label="Cambiar tu foto">'+ic('foto')+'</button></div><div><h1>'+esc(nom||'Tu perfil')+'</h1><div class="muted">Tu plan, tu feedback y tu privacidad</div></div></div>'+
     (planClCard()||'<div class="card"><div class="card-t">'+ic('euro')+'Tu plan</div><p class="muted sm">Cuando tu coach registre tu plan, aquí verás cuándo empieza, cuándo vence y tus pagos.</p></div>')+
     pfAjHtml()+      // v53.4.141: lo demás, recogido en «Ajustes» (cada apartado se abre al tocarlo)
-    '<div class="pf-pie">'+salirBtn()+'</div><p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
+    '<div class="pf-pie">'+salirBtn()+borrarCuentaBtn()+'</div><p class="muted sm center" style="opacity:.6">MOOD ON · '+APP_V+'</p>';
 }
 /* v53.4.141 (Javier, «Fallos a corregir» 7: «la pestaña de perfil cliente no puede venir más limpia? Lo de pagos vale pero el resto más
    cerrado y si quiere modificar ajustes le da y ya sale todo»): su plan y sus pagos, a la vista; el feedback, el descanso, los avisos,
@@ -23182,6 +23196,23 @@ function miCuentaCard(){
 }
 /* v46: «Cerrar sesión» bien a la vista, al final de su Perfil */
 function salirBtn(){ return '<button class="btn sec salir-b" data-a="clSalir">'+ic('salir')+'Cerrar sesión</button>'; }
+/* 22 nov 2026 (maquetas aprobadas por Javier y Chadín): «Borrar mi cuenta» en Perfil, debajo de «Cerrar sesión» (lo exigen Apple y Google).
+   Antes, qué se borra, que se avisa a su entrenador y que solo se guardan los recibos de pago; tiene que marcar la casilla. */
+function borrarCuentaBtn(){ if(PRUEBA||!CL.d||(CL.d.clienta||{}).nombre==='Ana Ejemplo') return '';
+  return '<button class="bc-f" data-a="borrarCuentaCl">'+'<span class="bc-i">'+ic('papelera')+'</span><span class="bc-t"><b>Borrar mi cuenta</b><small>Se borran tus datos para siempre</small></span>'+ic('flecha','bc-ch')+'</button>'; }
+A.borrarCuentaCl=function(){ var co=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'', ce=co?esc(co):'tu entrenador/a';
+  modal('<div class="bc-h"><h2>¿Borrar tu cuenta?</h2><p class="muted">Se borra todo lo tuyo en MOOD ON, para siempre:</p><ul class="bc-l"><li>Tus entrenos, tu dieta y tus check-ins</li><li>Tus fotos, peso y medidas, y tu ciclo</li><li>El chat con '+ce+'</li></ul>'+
+    '<div class="bc-n">Avisamos a '+ce+' de que ya no estás. Solo se guardan tus <b>recibos de pago</b>, porque la ley obliga a conservarlos, sin nada de tu salud.</div>'+
+    '<label class="bc-c"><input type="checkbox" id="bc-ok" data-c="bcOk"><span>Entiendo que no se puede deshacer</span></label>'+
+    '<button class="btn bc-go" id="bc-go" data-a="borrarCuentaClSi" disabled>Borrar mi cuenta para siempre</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button></div>'); };
+CH.bcOk=function(t){ var b=document.getElementById('bc-go'); if(b) b.disabled=!t.checked; };
+A.borrarCuentaClSi=function(el){ var ok=document.getElementById('bc-ok'); if(el.disabled||!ok||!ok.checked) return; el.disabled=true; el.textContent='Borrando…';
+  var t=BOOT.token;
+  api('borrarMiCuenta',t,'BORRAR').then(function(){
+    pushSalir('cl',t).catch(function(){}); sesGuarda('cl',null);
+    try{ LSX().removeItem(SNAP.k()); LSX().removeItem(SNAP.k()+'_t'); }catch(e){}
+    limpiarCuentaCl(); cerrarModal(); BOOT.mode='login'; BOOT.token=''; BOOT.lk=''; window.scrollTo(0,0); pintarLoginCl('Tu cuenta se ha borrado. Gracias por entrenar con nosotros.');
+  },function(e){ el.disabled=false; el.textContent='Borrar mi cuenta para siempre'; toast(limpiaErr(e),'err'); }); };
 function politicaHtml(p){
   return '<div class="pol"><h2>'+esc(p.titulo)+'</h2><div class="pol-box">'+(p.secciones||[]).map(function(x){ return '<h3>'+esc(x[0])+'</h3>'+x[1].map(function(t){ return '<p>'+esc(t)+'</p>'; }).join(''); }).join('')+
     '<p class="pol-v">Versión '+esc(p.version)+'</p></div><button class="btn mt" data-a="cerrarModal">Cerrar</button></div>';
