@@ -1989,6 +1989,11 @@ details.ng-mm summary{list-style:none;cursor:pointer;display:flex;align-items:ce
 .pmx-gt{font-size:13px;font-weight:600;color:var(--mu);margin:0 0 2px}
 .pmx-1{margin:24px 0}
 body.ancho .pmx-g{display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);align-items:start;gap:22px}
+.pmx-t.pmx-ba{background:#EEF3FF}.pmx-t.pmx-su{background:#FFF3EC}.pmx-t.pmx-ig{background:#F4F4F6}
+.pmx-t.pmx-ba.on,.pmx-t.pmx-ba:hover{background:#E6EDFF}.pmx-t.pmx-su.on,.pmx-t.pmx-su:hover{background:#FFEBDF}.pmx-t.pmx-ig.on{background:#F4F4F6}
+.pmx-t[class*=pmx-] .pmx-d>b{display:inline-block;border-radius:999px;padding:2px 9px;font-weight:800}
+.pmx-ba .pmx-d>b{background:#DCE6FF;color:#2A55C9}.pmx-su .pmx-d>b{background:#FFE2D1;color:#B5560F}.pmx-ig .pmx-d>b{background:#E9E9EE;color:#55555E}
+.pmx-leg{display:flex;gap:12px;font-size:12px;color:var(--mu);margin-top:6px}.pmx-leg i{display:inline-block;width:11px;height:11px;border-radius:4px;margin-right:5px;vertical-align:-1px}.pmx-leg .ba{background:#DCE6FF}.pmx-leg .su{background:#FFE2D1}.pmx-leg .ig{background:#E9E9EE}
 .ckl-n{font-weight:500;font-size:13px}
 details.cy-mas{margin-top:4px;border-top:1px solid var(--line2,#EFEFF2);padding-top:4px}
 details.cy-mas summary{display:flex;align-items:center;gap:8px;padding:10px 0;list-style:none;cursor:pointer;font-weight:600;font-size:14px}
@@ -5448,7 +5453,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.212';
+var APP_V = 'v53.4.213';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -12475,6 +12480,9 @@ function vEvo(){
   return h;
 }
 /* peso y medidas juntos: cada una en su recuadro (lo último y el cambio desde el primero); el que tocas, en la gráfica */
+/* v53.4.213 · Word «PANEL ENTRENADOR» 6 (opción 1): cada medida con un color suave según lo que ha hecho desde el principio, sin juzgar */
+var PMX_COL={ba:'#2A55C9',su:'#C9601C',ig:'#8A8A92'};
+function pmxDir(dl){ return dl==null?'':dl<0?'ba':dl>0?'su':'ig'; }
 function cuerpoCard(d){
   var reg=regDe(d.clienta.registra), m=d.medidas.slice().sort(function(a,b){ return a.fecha<b.fecha?-1:1; });
   var K=(reg.peso?[['peso','Peso','kg']]:[]).concat(reg.medidas?MED_COLS.map(function(c){ return [c[0],c[1],'cm']; }):[]);
@@ -12488,25 +12496,29 @@ function cuerpoCard(d){
   // los recuadros (si todas empiezan el mismo día, «desde el …» una sola vez, arriba)
   var ini={}; K.forEach(function(k){ var q=m.filter(function(x){ return num(x[k[0]])!=null; }); if(q.length>1) ini[q[0].fecha]=1; });
   var uno=Object.keys(ini).length===1?Object.keys(ini)[0]:'';
-  var tiles=K.map(function(k,i){
+  var DIRS={}, tiles=K.map(function(k,i){
     var pts=m.filter(function(x){ return num(x[k[0]])!=null; }), u=pts[pts.length-1], p0=pts[0];
     if(k[0]==='peso'&&reg.diario&&pts.length>=3){ var MM=mediaMovil(pts.map(function(x){ return {f:x.fecha,y:num(x.peso)}; }),7); u={fecha:MM[MM.length-1].f,peso:MM[MM.length-1].y,media:1}; }
     var v=u?num(u[k[0]]):null, dl=(u&&p0&&pts.length>1)?v-num(p0[k[0]]):null;
-    return '<button class="pmx-t'+(cur===k[0]?' on':'')+(i===0&&K.length%2?' pmx-t1':'')+'" data-a="medSel" data-v="'+(k[0]==='peso'?'':k[0])+'"><small>'+k[1]+(u&&u.media?' · media 7 d':'')+'</small><b>'+(v==null?'–':fN(v))+' <i>'+k[2]+'</i></b>'+
-      '<span class="pmx-d">'+(dl==null?(pts.length?'1 registro':'sin registros'):'<b>'+(dl>0?'↑ ':dl<0?'↓ ':'= ')+(dl?fN(Math.abs(dl))+' '+k[2]:'igual')+'</b>'+(uno?'':' desde el '+fCorta(p0.fecha)))+'</span></button>';      // sin verde ni rojo: subir o bajar no es bueno ni malo (depende de su objetivo)
+    if(dl!=null&&fN(Math.abs(dl))==='0') dl=0;
+    var dir=pmxDir(dl); DIRS[k[0]]=dir;
+    var sem=k[0]==='peso'&&dl&&u&&p0?diff(String(p0.fecha).slice(0,10),String(u.fecha).slice(0,10))/7:0, rit=sem>=2?' · '+(dl<0?'−':'+')+fN(Math.abs(dl)/sem,2)+' kg por semana':'';      // v53.4.213: el ritmo, en el peso
+    return '<button class="pmx-t'+(dir?' pmx-'+dir:'')+(cur===k[0]?' on':'')+(i===0&&K.length%2?' pmx-t1':'')+'" data-a="medSel" data-v="'+(k[0]==='peso'?'':k[0])+'"><small>'+k[1]+(u&&u.media?' · media 7 d':'')+'</small><b>'+(v==null?'–':fN(v))+' <i>'+k[2]+'</i></b>'+
+      '<span class="pmx-d">'+(dl==null?(pts.length?'1 registro':'sin registros'):'<b>'+(dl>0?'↑ ':dl<0?'↓ ':'= ')+(dl?fN(Math.abs(dl))+' '+k[2]:'igual')+rit+'</b>'+(uno?'':' desde el '+fCorta(p0.fecha)))+'</span></button>';      // v53.4.213: color por dirección (baja azul, sube naranja, igual gris), sin juzgar: subir o bajar no es bueno ni malo (depende de su objetivo)
   }).join('');
+  var gc=PMX_COL[DIRS[cur]]||MAG;      // la gráfica, del color de lo que ha hecho esa medida
   // la gráfica del que está elegido
   var g='', W=vistaAncha()?640:340;
   if(cur==='peso'){
     var pts=m.filter(function(x){ return num(x.peso)!=null; }).map(function(x){ return {f:x.fecha,y:num(x.peso)}; });
     var denso=reg.diario&&pts.length>=3||pts.length>=7&&diff(pts[0].f,pts[pts.length-1].f)/pts.length<=2.5;
-    g=pts.length>1?(denso?grafica([{puntos:pts,color:'#B4B4B9',nombre:'Cada día'},{puntos:mediaMovil(pts,7),color:MAG,nombre:'Media de 7 días'}],{unidad:'kg',W:W}):grafica([{puntos:pts,color:MAG}],{unidad:'kg',W:W})):'<p class="muted sm pmx-1">Con dos registros verás aquí cómo cambia.</p>';
+    g=pts.length>1?(denso?grafica([{puntos:pts,color:'#B4B4B9',nombre:'Cada día'},{puntos:mediaMovil(pts,7),color:gc,nombre:'Media de 7 días'}],{unidad:'kg',W:W}):grafica([{puntos:pts,color:gc}],{unidad:'kg',W:W})):'<p class="muted sm pmx-1">Con dos registros verás aquí cómo cambia.</p>';
   } else {
     var pm=m.filter(function(x){ return num(x[cur])!=null; }).map(function(x){ return {f:x.fecha,y:num(x[cur])}; });
-    g=pm.length>1?grafica([{puntos:pm,color:MAG}],{unidad:'cm',W:W}):'<p class="muted sm pmx-1">Con dos registros verás aquí cómo cambia.</p>';
+    g=pm.length>1?grafica([{puntos:pm,color:gc}],{unidad:'cm',W:W}):'<p class="muted sm pmx-1">Con dos registros verás aquí cómo cambia.</p>';
   }
   var nom=(K.filter(function(k){ return k[0]===cur; })[0]||K[0])[1];
-  return h+(uno?'<p class="muted sm pmx-s">Lo último que ha apuntado y cuánto ha cambiado desde el '+esc(fCorta(uno))+'. Toca una para ver su gráfica.</p>':'<p class="muted sm pmx-s">Lo último que ha apuntado y cuánto ha cambiado. Toca una para ver su gráfica.</p>')+'<div class="pmx-g"><div class="pmx-ts">'+tiles+'</div><div class="pmx-gr"><div class="pmx-gt">'+esc(nom)+' · cómo ha cambiado</div>'+g+'</div></div></div>';
+  return h+(uno?'<p class="muted sm pmx-s">Lo último que ha apuntado y cuánto ha cambiado desde el '+esc(fCorta(uno))+'. Toca una para ver su gráfica.</p>':'<p class="muted sm pmx-s">Lo último que ha apuntado y cuánto ha cambiado. Toca una para ver su gráfica.</p>')+'<div class="pmx-g"><div class="pmx-ts">'+tiles+'</div><div class="pmx-gr"><div class="pmx-gt">'+esc(nom)+' · cómo ha cambiado</div>'+g+'<div class="pmx-leg"><span><i class="ba"></i>Baja</span><span><i class="su"></i>Sube</span><span><i class="ig"></i>Igual</span></div></div></div></div>';
 }
 /* sus registros, en una tabla (con «Corregir o borrar») */
 A.medTabla=function(){
