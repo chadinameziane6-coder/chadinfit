@@ -682,7 +682,7 @@ html[data-tema="oscuro"]{--m1:#3987e5;--m2:#d95926;--m3:#199e70;--m4:#c98500;--m
 .sub-t{font-size:13px;font-weight:800;margin-top:4px}
 .card-tt .ic{display:inline-block;vertical-align:-3px;margin-right:6px}
 .run-in{display:grid;grid-template-columns:1fr 1fr;gap:8px}.run-in .mut{grid-column:1/-1;font-size:12px}
-.run-in .f:only-of-type{grid-column:1/-1}
+.run-in .f:only-of-type{grid-column:1/-1}.run-in .f.f-w{grid-column:1/-1}
 .pe-k b{font-size:16.5px;line-height:1.2}.pe-k div{justify-content:center;padding:10px 6px}
 .bus-f{display:flex;gap:8px;align-items:stretch}.bus-f .buscar{flex:1;min-width:0}
 .fil-b{position:relative;width:52px;flex-shrink:0;border:1px solid var(--borde2);border-radius:16px;background:var(--card-g);display:flex;align-items:center;justify-content:center;color:var(--tx)}
@@ -3476,7 +3476,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.25';
+var YO_V = 'yo-1.26';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -6326,17 +6326,21 @@ function mmss(s) { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + '
 A.sesAb = function (el) { S.ses.ab = +el.dataset.i; guardaEnCurso(); pintar(); };
 A.calOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); pintar(); };
 /* carrera y cardio: lo que has hecho de verdad (opcional) para ver km, tiempo y ritmo en Progreso */
+function esCaminar(n) { return /caminar|caminata|cinta|andar|paseo|senderismo/i.test(n || ''); }
 function runCampos(e, i) {
   var run = e.tipo === 'run', m = cardioMin(e), lib = S.ses && S.ses.libre;
   var f = function (lab, k, ph, im) { return '<label class="f">' + lab + '<input data-in="runV" data-i="' + i + '" data-k="' + k + '" inputmode="' + (im || 'decimal') + '" autocomplete="off" placeholder="' + ph + '" value="' + esc(e[k] || '') + '"></label>'; };
   var mn = f('Minutos' + (m ? ' (' + (lib ? 'objetivo ' : 'te tocan ') + m + ')' : ''), 'mn', m || 'Ej.: 32', 'numeric');
   /* 22 nov: en el cardio, lo que marca la máquina (como en la app de clientas): minutos, distancia, calorías y nivel o inclinación */
-  if (!run) return '<div class="run-in">' + mn + f('Distancia (km)', 'km', 'Ej.: 2,5') + f('Calorías (kcal)', 'kcal', 'Ej.: 180', 'numeric') + f('Nivel / inclinación', 'niv', 'Ej.: 8') +
+  /* 22 nov, 13:20 (Chadín: «en caminar y caminar con inclinación puedas poner pasos, en todo lo que sea caminar») */
+  var pas = esCaminar(e.n), nv = f('Nivel / inclinación', 'niv', 'Ej.: 8');
+  if (!run) return '<div class="run-in">' + mn + f('Distancia (km)', 'km', 'Ej.: 2,5') + (pas ? f('Pasos', 'pasos', 'Ej.: 4.500', 'numeric') : '') + f('Calorías (kcal)', 'kcal', 'Ej.: 180', 'numeric') + (pas ? nv.replace('<label class="f">', '<label class="f f-w">') : nv) +
     '<small class="mut">Opcional. Apunta lo que te marque la máquina; con los minutos verás tu tiempo de cardio en Progreso.</small></div>';
   return '<div class="run-in">' + f('Km', 'km', 'Ej.: 5,2') + mn + '<small class="mut">Opcional. Con los km y los minutos verás tu ritmo y tus km por semana en Progreso.</small></div>';
 }
-IN.runV = function (t) { var e = S.ses.ej[+t.dataset.i]; e[t.dataset.k] = t.value.replace(',', '.').replace(/[^\d.]/g, ''); guardaEnCurso(); };
+IN.runV = function (t) { var e = S.ses.ej[+t.dataset.i], k = t.dataset.k; e[k] = k === 'pasos' ? t.value.replace(/[^\d]/g, '') : t.value.replace(',', '.').replace(/[^\d.]/g, ''); guardaEnCurso(); };
 function runKm(v) { var k = num(v); return k != null && k > 0 && k <= 300 ? Math.round(k * 100) / 100 : null; }
+function runPs(v) { var k = num(String(v || '').replace(/\./g, '')); return k != null && k > 0 && k <= 100000 ? Math.round(k) : null; }
 function runKc(v) { var k = num(v); return k != null && k > 0 && k <= 5000 ? Math.round(k) : null; }
 function runNv(v) { var k = num(v); return k != null && k >= 0 && k <= 100 ? Math.round(k * 10) / 10 : null; }
 function runMn(v) { var m = num(v); return m != null && m > 0 && m <= 1440 ? Math.round(m) : null; }
@@ -6401,7 +6405,7 @@ A.terminarSi = function () {
   var ej = X.ej.filter(function (e) { return !e.cal && ((e.sets || []).some(function (s) { return s.ok; }) || e.hecho); }).map(function (e) {
     var o = { n: e.n, tipo: e.tipo || 'fuerza', u: e.u || '', sets: (e.sets || []).filter(function (s) { return s.ok; }).map(function (s) { var p = num(s.kg) || 0, r = num(s.reps) || 0; nser++; if (!e.u) vol += serVol(s); var o2 = { t: s.t || 'normal', kg: s.kg, reps: s.reps, rir: s.rir, ok: true, rec: !!s.rec }; if (s.lad) o2.lad = s.lad; var mr = (s.mini || []).filter(function (z) { return z.ok; }).map(function (z) { return z.reps; }); if (mr.length) o2.mini = mr; return o2; }) };
     if (e.tipo === 'bloque' && e.hecho) { o.hecho = 1; o.f = e.f; o.fmt = blqFmt(e); o.txt = blqResTxt(e); o.res = e.res || null; o.lista = (e.ej || []).map(function (x) { return { n: x.n, q: blqQTxt(e, x) }; }); nser++; }
-    if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = runKm(e.km), mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.tipo === 'cardio') { var kc = runKc(e.kcal), nv = runNv(e.niv); if (kc) o.kcal = kc; if (nv != null && String(e.niv || '').trim()) o.niv = nv; } if (e.rp) o.rp = rpReg(e); }
+    if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = runKm(e.km), mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.tipo === 'cardio') { var kc = runKc(e.kcal), nv = runNv(e.niv); if (kc) o.kcal = kc; if (nv != null && String(e.niv || '').trim()) o.niv = nv; var ps = runPs(e.pasos); if (ps) o.pasos = ps; } if (e.rp) o.rp = rpReg(e); }
     var rb = null; o.sets.forEach(function (s) { if (!s.rec) return; var p = num(s.kg) || 0, r = num(s.reps) || 0; if (!rb || p > rb.p || (p === rb.p && r > rb.r)) rb = { e: e.n, p: p, r: r }; }); if (rb) recs.push(rb);      // un récord por ejercicio (el mejor)
     return o; });
   var min = Math.max(1, Math.round((Date.now() - X.inicio) / 60000)), f = hoyStr();
@@ -7662,7 +7666,7 @@ A.verMas = function (el) { var k = el.dataset.k; S.x[k] = cuantos(k, +el.dataset
 A.verMenos = function (el) { delete S.x[el.dataset.k]; pintar(); };
 /* carrera: km, minutos y ritmo */
 function ritmoTxt(km, mn) { if (!km || !mn) return ''; var t = Math.round(mn * 60 / km), m = Math.floor(t / 60); return m + ':' + ('0' + (t % 60)).slice(-2) + ' min/km'; }
-function runRes(e) { var p = [], cd = e.tipo === 'cardio'; if (cd && num(e.mn)) p.push(num(e.mn) + ' min'); if (num(e.km)) p.push(fN(num(e.km), 2) + ' km'); if (!cd && num(e.mn)) p.push(num(e.mn) + ' min'); var r = e.tipo === 'cardio' ? '' : ritmoTxt(num(e.km), num(e.mn)); if (r) p.push(r); if (num(e.kcal)) p.push(fmil(num(e.kcal)) + ' kcal'); if (e.niv != null && e.niv !== '' && e.tipo === 'cardio' && num(e.niv) != null) p.push('nivel ' + fN(num(e.niv), 1)); return p.join(' · '); }
+function runRes(e) { var p = [], cd = e.tipo === 'cardio'; if (cd && num(e.mn)) p.push(num(e.mn) + ' min'); if (num(e.km)) p.push(fN(num(e.km), 2) + ' km'); if (!cd && num(e.mn)) p.push(num(e.mn) + ' min'); var r = e.tipo === 'cardio' ? '' : ritmoTxt(num(e.km), num(e.mn)); if (r) p.push(r); if (num(e.pasos)) p.push(fmil(num(e.pasos)) + ' pasos'); if (num(e.kcal)) p.push(fmil(num(e.kcal)) + ' kcal'); if (e.niv != null && e.niv !== '' && e.tipo === 'cardio' && num(e.niv) != null) p.push('nivel ' + fN(num(e.niv), 1)); return p.join(' · '); }
 
 /* --- peso --- */
 function progPeso() {
