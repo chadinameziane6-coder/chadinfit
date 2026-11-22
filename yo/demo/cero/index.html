@@ -2349,6 +2349,21 @@ html.cz-on, html.cz-on body { overflow: hidden; }
 /* 22 nov: sin «Etiqueta», los atajos de Nutrición en 3 */
 .n-acc{grid-template-columns:repeat(auto-fit,minmax(0,1fr))}
 
+/* 22 nov, 11:25: los avisos de la Comunidad (la campana, el número y «Actividad») */
+.tb-i{position:relative}.tb-n{position:absolute;top:-6px;right:-10px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:#D13B3B;color:#fff;font:800 10px/17px "Plus Jakarta Sans",sans-serif;font-style:normal;text-align:center;box-shadow:0 0 0 2px var(--card)}
+.tb-n[hidden]{display:none}.cm-bell{position:relative}.cm-bell .tb-n{top:-3px;right:-3px}
+.av-sec{margin:18px 4px 8px;font-size:13px;font-weight:800;color:var(--tx2)}
+.av-l{padding:4px 14px}
+.av-f{display:flex;gap:12px;align-items:center;width:100%;padding:12px 0;border:0;border-top:1px solid var(--borde);background:none;font:inherit;color:var(--tx);text-align:left}
+.av-l>.av-f:first-child{border-top:0}button.av-f{cursor:pointer}
+.av-av{width:42px;height:42px;border-radius:50%;flex:none;padding:0;border:0;background:none;display:flex}.av-av>*{width:42px;height:42px}
+.av-tx{flex:1;min-width:0;font-size:14px;line-height:1.38;display:block}.av-tx b{font-weight:800;display:inline}.av-tx small{display:block;margin-top:2px;font-size:12px;color:var(--tx3);font-weight:600}
+.av-bt{flex:none;border:0;border-radius:999px;padding:8px 13px;font:700 12.5px "Plus Jakarta Sans",sans-serif;background:var(--tx);color:var(--card)}.av-bt.on{background:var(--suave);color:var(--tx)}
+.av-f>.ic{flex:none;color:var(--tx3)}
+.av-vacio{align-items:center;text-align:center;gap:6px}.av-pie{margin-top:16px}
+.av-l .av-f{background:none!important;box-shadow:none!important;border-radius:0!important;margin:0!important;padding:12px 0!important;min-height:0}
+.av-l .av-av{width:42px;height:42px;flex:none}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -2385,10 +2400,10 @@ html.cz-on, html.cz-on body { overflow: hidden; }
   function botsDe(C, u){ return Object.keys(C.per).filter(function(k){ return k!==u&&C.per[k].activo&&!C.per[k].susp&&!C.bloq.some(function(b){ return (b.a===u&&b.b===k)||(b.a===k&&b.b===u); }); }); }
   function alAzar(L, n){ return L.slice().sort(function(){ return Math.random()-0.5; }).slice(0,n); }
   function botsReaccionan(id, rec){
-    [3500, 7000, 11000, 16000, 24000].forEach(function(ms, i){ botHaz(function(C,u){ var p=C.pubs.filter(function(x){ return x.id===id; })[0]; if(!p) return false; var b=alAzar(botsDe(C,u).filter(function(k){ return !C.likes.some(function(l){ return l.p===id&&l.u===k; }); }),1)[0]; if(!b) return false; C.likes.push({p:id, u:b});
+    [3500, 7000, 11000, 16000, 24000].forEach(function(ms, i){ botHaz(function(C,u){ var p=C.pubs.filter(function(x){ return x.id===id; })[0]; if(!p) return false; var b=alAzar(botsDe(C,u).filter(function(k){ return !C.likes.some(function(l){ return l.p===id&&l.u===k; }); }),1)[0]; if(!b) return false; C.likes.push({p:id, u:b, creado:new Date().toISOString()});
       if(i===1||i===3){ C.n++; var L=rec?BOT_C.rec:BOT_C.ent; C.coms.push({id:C.n, p:id, u:b, t:L[Math.floor(Math.random()*L.length)], creado:new Date().toISOString()}); }
       if(i===2&&(rec||(p.d.rut&&p.d.rut.ej))&&!C.cop.some(function(c){ return c.p===id&&c.u===b; })) C.cop.push({p:id, u:b});
-      if(i===4&&!C.sigue.some(function(f){ return f.a===b&&f.b===u; })) C.sigue.push({a:b, b:u}); }, ms); });
+      if(i===4&&!C.sigue.some(function(f){ return f.a===b&&f.b===u; })) C.sigue.push({a:b, b:u, creado:new Date().toISOString()}); }, ms); });
   }
   var BOT_N=0;
   function botPublica(){ if(!bots()||BOT_N>=BOT_P.length) return; botHaz(function(C,u){ var b=alAzar(botsDe(C,u),1)[0]; if(!b) return false; var d=JSON.parse(JSON.stringify(BOT_P[BOT_N++])); C.n++; C.pubs.push({id:C.n, u:b, sid:'bot'+C.n, d:d, creado:new Date().toISOString()}); }, 0); setTimeout(botPublica, 70000+Math.random()*40000); }
@@ -2416,6 +2431,11 @@ html.cz-on, html.cz-on body { overflow: hidden; }
     if(!P||!P.activo) return E('Activa Comunidad para usarla'); if(P.susp) return E('Tu cuenta de Comunidad está suspendida. Escríbenos a hola@moodonapp.com');
     var pub=function(id){ return C.pubs.filter(function(p){ return p.id===+id&&!p.oc; })[0]; };
     var okPer=function(k){ var q=C.per[k]; return q&&q.activo&&!q.susp; };
+    if(fn==='yo_comu_avisos'){ if(!P||!P.activo) return E('Activa Comunidad para usarla'); var mias=C.pubs.filter(function(x){ return x.u===u&&!x.oc; }), pd=function(id){ return mias.filter(function(x){ return x.id===id; })[0]; }, nv=function(k){ return okPer(k)&&vis(u,k); };      // como la 018
+      var A=[]; C.sigue.forEach(function(f){ if(f.b===u&&nv(f.a)) A.push({t:'sigue', f:f.creado||null, pid:C.per[f.a].pid, nombre:C.per[f.a].nombre, sigo:sigo(u,f.a)}); });
+      C.coms.forEach(function(c){ var x=pd(c.p); if(x&&c.u!==u&&!c.oc&&nv(c.u)) A.push({t:'coment', f:c.creado||null, pid:C.per[c.u].pid, nombre:C.per[c.u].nombre, pub:x.id, tit:x.d.t||'', tipo:x.d.tipo||'', txt:String(c.t||'').slice(0,140)}); });
+      C.likes.forEach(function(l){ var x=pd(l.p); if(x&&l.u!==u&&nv(l.u)) A.push({t:'like', f:l.creado||null, pid:C.per[l.u].pid, nombre:C.per[l.u].nombre, pub:x.id, tit:x.d.t||'', tipo:x.d.tipo||''}); });
+      return R(A.sort(function(a,b){ return (b.f||'')<(a.f||'')?-1:(b.f||'')>(a.f||'')?1:0; })); }
     if(fn==='yo_comu_feed'){ var L=C.pubs.filter(function(p){ return !p.oc&&veP(p)&&(a.antes==null||p.id<a.antes)&&(p.u===u||(okPer(p.u)&&vis(u,p.u)&&!C.sil.some(function(s){ return s.a===u&&s.b===p.u; })))&&(a.modo!=='sig'||p.u===u||sigo(u,p.u)); });
       return R(L.sort(function(x,y){ return y.id-x.id; }).slice(0,30).map(pj)); }
     if(fn==='yo_comu_publicar2'){ var v2=(a.d||{}).vis||'todos'; if(['todos','seg','priv'].indexOf(v2)<0) return E('Elige quién lo ve'); var d2=Object.assign({},a.d); delete d2.vis; if(v2==='seg') d2.vis='seg';
@@ -2433,7 +2453,7 @@ html.cz-on, html.cz-on body { overflow: hidden; }
     if(fn==='yo_comu_avatar_poner'){ if(String(a.foto).length>60000||String(a.foto).indexOf('data:image/jpeg;base64,')!==0) return E('Foto no válida'); C.n++; P.av={f:a.foto, id:C.n}; return R(null); }
     if(fn==='yo_comu_avatares'){ var L2=(a.pids||[]).slice(0,60), o2={}; for(var k2 in C.per){ var q2=C.per[k2]; if(q2.av&&L2.indexOf(q2.pid)>=0&&(k2===u||(okPer(k2)&&vis(u,k2)))) o2[q2.pid]={f:q2.av.f, id:q2.av.id}; } return R(o2); }
     if(fn==='yo_comu_borrar_pub'){ C.pubs=C.pubs.filter(function(p){ return !(p.id===+a.pub&&p.u===u); }); return R(null); }
-    if(fn==='yo_comu_like'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); C.likes=C.likes.filter(function(l){ return !(l.p===x.id&&l.u===u); }); if(a.si) C.likes.push({p:x.id,u:u});
+    if(fn==='yo_comu_like'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); C.likes=C.likes.filter(function(l){ return !(l.p===x.id&&l.u===u); }); if(a.si) C.likes.push({p:x.id, u:u, creado:new Date().toISOString()});
       return R({likes:cuenta(C.likes,function(l){ return l.p===x.id; }), yo_like:!!a.si}); }
     var coms=function(x){ return C.coms.filter(function(c){ return c.p===x.id&&!c.oc&&(c.u===u||(okPer(c.u)&&vis(u,c.u))); }).map(function(c){ var q=C.per[c.u]||{}; return {id:c.id, pid:q.pid, nombre:q.nombre, texto:c.t, creado:c.creado, mio:c.u===u, borrable:c.u===u||x.u===u}; }); };
     if(fn==='yo_comu_coms'){ var x=pub(a.pub); if(!x||!vis(u,x.u)) return E('Esa publicación ya no está'); return R(coms(x)); }
@@ -2442,7 +2462,7 @@ html.cz-on, html.cz-on body { overflow: hidden; }
       if(x.u!==u){ var au=x.u, xid=x.id; botHaz(function(C2){ C2.n++; C2.coms.push({id:C2.n, p:xid, u:au, t:BOT_C.resp[Math.floor(Math.random()*BOT_C.resp.length)], creado:new Date().toISOString()}); }, 6000); }      // la demo: te contesta
       return R(coms(x)); }
     if(fn==='yo_comu_borrar_com'){ C.coms=C.coms.filter(function(c){ var x=C.pubs.filter(function(p){ return p.id===c.p; })[0]; return !(c.id===+a.com&&(c.u===u||(x&&x.u===u))); }); return R(null); }
-    if(fn==='yo_comu_seguir'){ var o=uid(a.p); if(!o||o===u) return E('Esa persona no está en Comunidad'); C.sigue=C.sigue.filter(function(f){ return !(f.a===u&&f.b===o); }); if(a.si){ if(!vis(u,o)) return E('No puedes seguir a esta persona'); C.sigue.push({a:u,b:o}); if(Math.random()<0.7) botHaz(function(C2,u2){ if(C2.sigue.some(function(f){ return f.a===o&&f.b===u2; })) return false; C2.sigue.push({a:o,b:u2}); }, 8000); } return R(null); }
+    if(fn==='yo_comu_seguir'){ var o=uid(a.p); if(!o||o===u) return E('Esa persona no está en Comunidad'); C.sigue=C.sigue.filter(function(f){ return !(f.a===u&&f.b===o); }); if(a.si){ if(!vis(u,o)) return E('No puedes seguir a esta persona'); C.sigue.push({a:u,b:o,creado:new Date().toISOString()}); if(Math.random()<0.7) botHaz(function(C2,u2){ if(C2.sigue.some(function(f){ return f.a===o&&f.b===u2; })) return false; C2.sigue.push({a:o,b:u2}); }, 8000); } return R(null); }
     if(fn==='yo_comu_bloquear'){ var o=null; for(var k in C.per) if(C.per[k].pid===a.p) o=k; if(!o||o===u) return E('Esa persona no está en Comunidad');
       C.bloq=C.bloq.filter(function(b){ return !(b.a===u&&b.b===o); }); if(a.si){ C.bloq.push({a:u,b:o}); C.sigue=C.sigue.filter(function(f){ return !((f.a===u&&f.b===o)||(f.a===o&&f.b===u)); }); } return R(null); }
     if(fn==='yo_comu_silenciar'){ var o=uid(a.p); if(!o||o===u) return E('Esa persona no está en Comunidad'); C.sil=C.sil.filter(function(s){ return !(s.a===u&&s.b===o); }); if(a.si) C.sil.push({a:u,b:o}); return R(null); }
@@ -2687,15 +2707,15 @@ html.cz-on, html.cz-on body { overflow: hidden; }
     'Sofríe la cebolla, la zanahoria y el pimiento con el aceite. Añade el pimentón, las lentejas y la patata en trozos. Cubre con agua y deja 35 minutos a fuego medio. Rectifica de sal.', 50) });
   function copias(p, n, pre) { for (var i = 0; i < n; i++) CO.cop.push({ p: p, u: pre + i }); }
   copias(pRec1, 9, 'r'); copias(pRec2, 14, 's'); copias(pRec3, 5, 't');
-  function like(p, L) { L.forEach(function (u) { CO.likes.push({ p: p, u: u }); }); }
-  like(pSara, ['otra1', 'otra4', 'otra5', UID]); like(pAlex, ['otra2', 'otra3', 'otra6']); like(pDani, ['otra4']); like(pM1, ['otra1', 'otra3', 'otra5']);
+  function like(p, L, o) { L.forEach(function (u, i) { CO.likes.push(o != null ? { p: p, u: u, creado: iso(o, 9 + i, 10 * i) } : { p: p, u: u }); }); }      // 22 nov: con o, con su hora (los avisos)
+  like(pSara, ['otra1', 'otra4', 'otra5', UID]); like(pAlex, ['otra2', 'otra3', 'otra6']); like(pDani, ['otra4']); like(pM1, ['otra1', 'otra3', 'otra5'], A1.o + 1);
   like(pLaura, ['otra2', 'otra3', 'otra4', 'otra5', 'otra6', UID]); like(pNuria, ['otra1', 'otra3']); like(pM2, ['otra1', 'otra6']); like(pLaura2, ['otra3']); like(pRec1, ['otra1', 'otra5', UID]); like(pRec2, ['otra3', 'otra4', 'otra5', 'otra6']); like(pRec3, ['otra1']);
   function com(p, u, o, h, t) { CO.n++; CO.coms.push({ id: CO.n, p: p, u: u, t: t, creado: iso(o, h[0], h[1]) }); }
   com(pLaura, 'otra2', -4, [9, 2], '¡Qué máquina!'); com(pLaura, 'otra3', -4, [12, 30], 'Ese hip thrust ya es serio. ¿Cuánto tiempo llevas?'); com(pLaura, 'otra1', -4, [13, 1], 'Unos 8 meses, poco a poco');
   com(pM1, 'otra1', A1.o, [20, 15], 'Bien ahí con la pierna'); com(pM1, 'otra5', A1.o + 1, [8, 40], 'Me apunto tu rutina para la semana que viene');
   com(pAlex, 'otra6', -9, [10, 5], 'La he copiado, gracias'); com(pM2, 'otra1', A2.o, [21, 0], '¡Constancia! Se nota');
   [['otra1', 'Laura'], ['otra3', 'Sara'], ['otra2', 'Dani']].forEach(function (x) { CO.sigue.push({ a: UID, b: x[0] }); });
-  ['otra1', 'otra5', 'otra6'].forEach(function (u) { CO.sigue.push({ a: u, b: UID }); });
+  ['otra1', 'otra5', 'otra6'].forEach(function (u, i) { CO.sigue.push(i ? { a: u, b: UID, creado: iso(-i, 18, 20) } : { a: u, b: UID }); });      // 22 nov: dos, con su hora (los avisos)
   CO.sigue.push({ a: 'otra1', b: 'otra3' }, { a: 'otra3', b: 'otra1' }, { a: 'otra2', b: 'otra4' });
   copias(pAlex, 24, 'x'); copias(pSara, 11, 'y'); copias(pLaura, 7, 'z'); CO.cop.push({ p: pM1, u: 'otra5' }, { p: pM1, u: 'otra1' });
 
@@ -3453,7 +3473,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.22';
+var YO_V = 'yo-1.23';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3709,7 +3729,7 @@ function tabbar() {
   /* 21 nov (Chadín, captura con el hueco rodeado: «cuando subes la pantalla se ve ahí abajo… eso no puede ser»): un velo del color del fondo
      desde la mitad de la barra hasta abajo del todo (también por debajo de la barra de Safari), para que no se vea lo que pasa por detrás */
   return '<div class="tab-velo" aria-hidden="true"></div><nav class="tabbar" aria-label="Secciones">' + T.map(function (t) { var on = S.tab === t[0] && !S.pant;
-    return '<button data-a="tab" data-v="' + t[0] + '"' + (on ? ' aria-current="page" class="on"' : '') + '><i class="tb-i">' + ic(t[0], 22, null, on ? 2.1 : 1.8) + '</i><span>' + t[1] + '</span></button>'; }).join('') + '</nav>';
+    return '<button data-a="tab" data-v="' + t[0] + '"' + (on ? ' aria-current="page" class="on"' : '') + '><i class="tb-i">' + ic(t[0], 22, null, on ? 2.1 : 1.8) + (t[0] === 'comu' ? avBadgeHtml() : '') + '</i><span>' + t[1] + '</span></button>'; }).join('') + '</nav>';
 }
 function cab(tit, opts) {
   opts = opts || {};
@@ -10136,7 +10156,7 @@ function noOculta(x) { return !CMU().ocultas[x.id]; }
 
 /* ---------- cargar ---------- */
 function comuCarga() {
-  var C = CMU(); if (C.cargando) return; C.cargando = true; C.err = '';
+  var C = CMU(); if (C.cargando) return; C.cargando = true; C.err = ''; setTimeout(function () { avCarga(true); }, 300);      // 22 nov: los avisos
   rpc('yo_comu_estado').then(function (e) { C.est = e || null; C.cargando = false; repintaComu(); },
     function (e) { C.cargando = false; C.err = cErr(e); repintaComu(); });
 }
@@ -10158,7 +10178,7 @@ function olvidaFeeds() { var C = CMU(); C.feed = { s: null, d: null }; C.ts = {}
 
 /* ---------- la pestaña ---------- */
 function cabComu(on) {
-  return '<div class="ini-cab"><h1 class="t1">Comunidad</h1>' + (on ? '<span class="cm-acc"><button class="redondo" data-a="cBuscar" aria-label="Buscar personas">' + ic('buscar', 19) + '</button>' + (CMU().est && CMU().est.pid ? '<button class="redondo" data-a="cPersona" data-p="' + esc(CMU().est.pid) + '" aria-label="Tu perfil">' + ic('usuario', 19) + '</button>' : '') + '<button class="redondo" data-a="cAjustes" aria-label="Tu Comunidad: nombre, bloqueos y salir">' + ic('ajustes', 19) + '</button></span>' : '') + '</div>';
+  return '<div class="ini-cab"><h1 class="t1">Comunidad</h1>' + (on ? '<span class="cm-acc"><button class="redondo cm-bell" data-a="cAvisos" aria-label="Actividad: quién te sigue, te comenta o da me gusta">' + ic('campana', 19) + avBadgeHtml() + '</button><button class="redondo" data-a="cBuscar" aria-label="Buscar personas">' + ic('buscar', 19) + '</button>' + (CMU().est && CMU().est.pid ? '<button class="redondo" data-a="cPersona" data-p="' + esc(CMU().est.pid) + '" aria-label="Tu perfil">' + ic('usuario', 19) + '</button>' : '') + '<button class="redondo" data-a="cAjustes" aria-label="Tu Comunidad: nombre, bloqueos y salir">' + ic('ajustes', 19) + '</button></span>' : '') + '</div>';
 }
 function errCard(m, a) { return '<section class="card vacio"><b>No se ha podido cargar</b><small class="mut">' + esc(m) + '</small><button class="btn sec" data-a="' + (a || 'cRecargar') + '">Reintentar</button></section>'; }
 var CARGANDO = '<p class="mut center sm cm-carga">Cargando…</p>';
@@ -10463,6 +10483,7 @@ function seguir(pid, si, n) {
     [C.gente, C.bus && C.bus.L, C.red && C.red.seguidores, C.red && C.red.siguiendo].forEach(function (L) { (L || []).forEach(function (g) { if (g.pid === pid) g.sigo = si; }); });
     var P = C.pers[pid]; if (P && P.nombre) { if (P.sigo !== si) P.seguidores = Math.max(0, (P.seguidores || 0) + (si ? 1 : -1)); P.sigo = si; }
     if (C.est) C.est.siguiendo = Math.max(0, (C.est.siguiendo || 0) + (si ? 1 : -1));
+    if (C.av && C.av.L) C.av.L.forEach(function (x) { if (x.t === 'sigue' && x.pid === pid) x.sigo = si; });      // 22 nov: los avisos
     if (si && typeof p1Marca === 'function') p1Marca('sig');      // 22 nov: «Tu primera semana»
     C.feed.s = null; C.ts.s = 0;
     toast(si ? 'Ahora sigues a ' + esc(nom1(n)) : 'Ya no sigues a ' + esc(nom1(n)));
@@ -10958,6 +10979,61 @@ function hojaCompartir(tit, txt, url, nota) {
 /* A.cCompartir y A.cPerCompartir: ahora como imagen, en compartir.js */
 A.cShCopiar = function () { var u = S.x.csh && S.x.csh.url; try { navigator.clipboard.writeText(u); } catch (e) { } cerrarHoja(); toast('Enlace copiado', 'ok'); };
 A.cShMas = function () { var d = S.x.csh; if (!d) return; try { navigator.share({ title: 'MOOD ON', text: d.txt, url: d.url }); } catch (e) { } };
+
+
+/* ---------- 22 nov, 11:25 (Chadín: «que en la comunidad te notifique cuando alguien te sigue o te comenta y da like», maqueta aprobada: «sí, aplica a todos usuarios») ----------
+   La campana en Comunidad (y el número en su pestaña) con lo nuevo: quién te ha empezado a seguir, quién ha comentado y quién ha dado me gusta
+   a lo tuyo (yo_comu_avisos, la 018). «Actividad»: lo nuevo arriba («Nuevo») y lo demás («Antes»); varios me gusta en lo mismo, en una línea.
+   Hasta dónde lo ha visto, en su perfil (perfil.comuVisto). Sin la app del iPhone no hay aviso con la app cerrada: se ve al abrirla. */
+IC.campana = IC.campana || '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z"/><path d="M10 20.6a2.2 2.2 0 0 0 4 0"/>';
+function avVisto() { return (S.perfil && S.perfil.comuVisto) || ''; }
+function avFilas(L) {      // agrupa los me gusta de una misma publicación
+  var out = [], porPub = {};
+  L.forEach(function (x) { if (x.t !== 'like') { out.push(x); return; } var g = porPub[x.pub]; if (!g) { g = porPub[x.pub] = { t: 'like', pub: x.pub, tit: x.tit, tipo: x.tipo, f: x.f, quien: [] }; out.push(g); } g.quien.push(x); if (x.f && (!g.f || x.f > g.f)) g.f = x.f; });
+  return out;
+}
+function avNuevos() { var C = S.comu, v = avVisto(); if (!C || !C.av || !C.av.L) return []; return C.av.L.filter(function (x) { return x.f && (!v || x.f > v); }); }
+function avNum() { return avFilas(avNuevos()).length; }
+function avBadgeHtml() { var n = avNum(); return '<i class="tb-n" data-avn' + (n ? '' : ' hidden') + '>' + (n > 9 ? '9+' : n || '') + '</i>'; }
+function avPinta() { var n = avNum(); document.querySelectorAll('[data-avn]').forEach(function (el) { el.hidden = !n; el.textContent = n > 9 ? '9+' : n ? String(n) : ''; }); }
+var AV_T = 0;
+function avCarga(forzar) {
+  if (!S.user || !S.cargado || window.__avNo) return Promise.resolve();
+  var C = CMU(); if (C.av && C.av.off && !forzar) return Promise.resolve();
+  if (!forzar && Date.now() - AV_T < 60000) return Promise.resolve(); AV_T = Date.now();
+  return rpc('yo_comu_avisos').then(function (L) { C.av = { L: Array.isArray(L) ? L : [] }; avPinta(); if (S.pant && S.pant.t === 'comuAvisos') pintar(); },
+    function (e) { if (/Activa Comunidad|suspendida/.test(String((e && e.message) || ''))) C.av = { L: [], off: true }; avPinta(); });
+}
+setInterval(function () { if (document.visibilityState === 'visible') avCarga(); }, 180000);
+document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') avCarga(); });
+setTimeout(function chequea() { if (S.cargado) avCarga(true); else setTimeout(chequea, 1500); }, 2500);
+A.cAvisos = function () {
+  var C = CMU(); S.x.avV0 = avVisto();
+  var L = (C.av && C.av.L) || [], ult = L.filter(function (x) { return x.f; }).map(function (x) { return x.f; }).sort().pop();
+  if (S.perfil && ult && ult > avVisto()) { S.perfil.comuVisto = ult; guardaPerfil(); }
+  ir({ t: 'comuAvisos' }); avPinta(); avCarga(true).then(function () { var u2 = ((CMU().av || {}).L || []).filter(function (x) { return x.f; }).map(function (x) { return x.f; }).sort().pop(); if (S.perfil && u2 && u2 > avVisto() && S.pant && S.pant.t === 'comuAvisos') { S.perfil.comuVisto = u2; guardaPerfil(); avPinta(); } });
+};
+A.cSeguirAv = function (el) { var p = el.dataset.p; el.disabled = true; seguir(p, true, el.dataset.n).then(function () { pintar(); }, function () { el.disabled = false; }); };
+A.cAvPub = function (el) { var C = CMU(); if (el.dataset.t === 'coment') return A.cComs({ dataset: { id: el.dataset.id } }); if (C.est && C.est.pid) A.cPersona({ dataset: { p: C.est.pid, n: C.est.nombre } }); };
+VISTAS.comuAvisos = function () {
+  var C = CMU(), h = '<div class="pant pad">' + cab('Actividad');
+  if (!C.av) return h + CARGANDO + '</div>';
+  var L = C.av.L || [], v0 = S.x.avV0 || '';
+  if (!L.length) return h + '<section class="card vacio av-vacio">' + ic('campana', 28) + '<b>Aquí verás tu actividad</b><small class="mut">Quién te empieza a seguir, te comenta o da me gusta a lo que publicas.</small></section></div>';
+  var nue = L.filter(function (x) { return x.f && (!v0 || x.f > v0); }), ant = L.filter(function (x) { return !(x.f && (!v0 || x.f > v0)); });
+  var que = function (x) { return x.tipo === 'rec' ? 'tu receta' : 'tu entreno'; };
+  var fila = function (x) {
+    var p0 = x.t === 'like' ? x.quien[0] : x, cu = x.f ? '<small>' + esc(cuandoTxt(x.f)) + '</small>' : '';
+    if (x.t === 'sigue') return '<div class="av-f"><button class="av-av cm-av" data-a="cPersona" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '" aria-label="Ver a ' + esc(x.nombre) + '">' + avIn(x.pid, x.nombre) + '</button><span class="av-tx"><b>' + esc(x.nombre) + '</b> ha empezado a seguirte' + cu + '</span>' +
+      (x.sigo ? '<span class="av-bt on">Siguiendo</span>' : '<button class="av-bt" data-a="cSeguirAv" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">Seguir también</button>') + '</div>';
+    if (x.t === 'coment') return '<button class="av-f" data-a="cAvPub" data-t="coment" data-id="' + x.pub + '"><span class="av-av cm-av">' + avIn(x.pid, x.nombre) + '</span><span class="av-tx"><b>' + esc(x.nombre) + '</b> ha comentado en ' + que(x) + ' «' + esc(x.tit) + '»: «' + esc(x.txt) + '»' + cu + '</span>' + ic('sig', 16) + '</button>';
+    var n = x.quien.length, nom = n === 1 ? esc(p0.nombre) : n === 2 ? esc(p0.nombre) + ' y ' + esc(x.quien[1].nombre) : esc(p0.nombre) + ' y ' + (n - 1) + ' más';
+    return '<button class="av-f" data-a="cAvPub" data-t="like" data-id="' + x.pub + '"><span class="av-av cm-av">' + avIn(p0.pid, p0.nombre) + '</span><span class="av-tx"><b>' + nom + '</b> ' + (n > 1 ? 'han' : 'ha') + ' dado me gusta a ' + que(x) + ' «' + esc(x.tit) + '»' + cu + '</span>' + ic('sig', 16) + '</button>';
+  };
+  if (nue.length) h += '<p class="av-sec">Nuevo</p><section class="card av-l">' + avFilas(nue).map(fila).join('') + '</section>';
+  if (ant.length) h += '<p class="av-sec">' + (nue.length ? 'Antes' : 'Tu actividad') + '</p><section class="card av-l">' + avFilas(ant).slice(0, 60).map(fila).join('') + '</section>';
+  return h + '<p class="mut sm center av-pie">Con la app de la tienda te llegará también el aviso al móvil.</p></div>';
+};
 
 ;
 /* ===== Compartir como imagen (20 nov 2026, 23:33, Chadín: «vamos con esto») =====
