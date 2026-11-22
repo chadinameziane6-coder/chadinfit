@@ -5355,7 +5355,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.204';
+var APP_V = 'v53.4.205';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -12747,13 +12747,14 @@ function calTipo(d,tipo,Y){
   }
   h+='</div>';
   var anio=F.filter(function(z){ return z.hasta>=Y+'-01-01'&&z.desde<=Y+'-12-31'; });
-  h+=anio.length?'<div class="cal-lista'+(CO.casa===true?' cp-l':'')+'">'+anio.map(function(z){ if(CO.casa===true) return calPerCasa(z,d,hoy); var EV=(d.eventos||[]).filter(function(e){ return evFz(e).indexOf(z.id)>=0; }); return '<button class="cal-per'+(z.pgk?' pg-cp':'')+'" '+(z.pgk?'data-a="pgBloque" data-k="'+esc(z.pgk)+'"'+(z.pgt?' data-t="'+z.pgt+'"':''):'data-a="verFase" data-id="'+esc(z.id)+'"')+'><i style="background:'+(z.pend?pgRaya(colFase(z)):fondoFases(z.fases))+'"></i><div><b>'+esc(z.pgt==='die'?z.nom:z.pgk&&!(z.fases||[]).length&&!(z.prioridad||[]).length?'Programación':nombreFase(z))+'</b>'+(z.pgk?(z.ahora?' <span class="pg-ah">Ahora</span>':z.pend?' <span class="pg-am">'+(z.pgt==='die'?'! Falta hacerla':'! Faltan las rutinas')+'</span>':' <span class="pg-ok">✓ Lista</span>'):'')+' <span class="muted sm">· '+fCorta(z.desde)+' – '+fCorta(z.hasta)+' ('+semanasTxt(z)+')</span>'+(z.nota?'<div class="muted sm clamp">'+esc(primeraLinea(z.nota))+'</div>':'')+(EV.length?'<div class="ev-fz">'+ic('trofeo')+'Prepara: '+esc(EV.map(function(e){ return e.nombre+' ('+fCorta(e.fecha)+')'; }).join(', '))+'</div>':'')+'</div></button>'; }).join('')+'</div>'
+  h+=anio.length?'<div class="cal-lista'+(CP_LISTA?' cp-l':'')+'">'+anio.map(function(z){ if(CP_LISTA) return calPerCasa(z,d,hoy); var EV=(d.eventos||[]).filter(function(e){ return evFz(e).indexOf(z.id)>=0; }); return '<button class="cal-per'+(z.pgk?' pg-cp':'')+'" '+(z.pgk?'data-a="pgBloque" data-k="'+esc(z.pgk)+'"'+(z.pgt?' data-t="'+z.pgt+'"':''):'data-a="verFase" data-id="'+esc(z.id)+'"')+'><i style="background:'+(z.pend?pgRaya(colFase(z)):fondoFases(z.fases))+'"></i><div><b>'+esc(z.pgt==='die'?z.nom:z.pgk&&!(z.fases||[]).length&&!(z.prioridad||[]).length?'Programación':nombreFase(z))+'</b>'+(z.pgk?(z.ahora?' <span class="pg-ah">Ahora</span>':z.pend?' <span class="pg-am">'+(z.pgt==='die'?'! Falta hacerla':'! Faltan las rutinas')+'</span>':' <span class="pg-ok">✓ Lista</span>'):'')+' <span class="muted sm">· '+fCorta(z.desde)+' – '+fCorta(z.hasta)+' ('+semanasTxt(z)+')</span>'+(z.nota?'<div class="muted sm clamp">'+esc(primeraLinea(z.nota))+'</div>':'')+(EV.length?'<div class="ev-fz">'+ic('trofeo')+'Prepara: '+esc(EV.map(function(e){ return e.nombre+' ('+fCorta(e.fecha)+')'; }).join(', '))+'</div>':'')+'</div></button>'; }).join('')+'</div>'
     :'<p class="muted sm mt">Sin periodos en '+Y+'.</p>';
   return h+'</div>';
 }
 /* v53.4.204 (nº 1; Word «PANEL ENTRENADOR» 2, Javier: «esto más visual, sale mucho texto y fecha igual»): cada programación o dieta del año en una
    tarjeta: su color en una franja, el nombre y su estado (Ahora, Lista, Faltan las rutinas, Hecha), las fechas en una pastilla, en la de ahora la semana
    en la que va con su barra, la nota en una línea y las competiciones que prepara en etiquetas. Las que ya pasaron, apagadas. */
+var CP_LISTA=false;      // v53.4.205 (Javier: «pf más lioso aún, cámbialo»): apagada; vuelve la lista de antes hasta que elija otro diseño
 function calPerCasa(z,d,hoy){
   var EV=(d.eventos||[]).filter(function(e){ return evFz(e).indexOf(z.id)>=0; }), die=z.pgt==='die', pas=z.hasta<hoy, n=Math.max(1,diff(z.desde,z.hasta)+1);
   var nom=die?z.nom:z.pgk&&!(z.fases||[]).length&&!(z.prioridad||[]).length?'Programación':nombreFase(z);
