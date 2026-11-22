@@ -5181,6 +5181,25 @@ body:after{content:"";position:fixed;left:0;right:0;top:0;height:var(--sat);z-in
 :where(html[data-tema=oscuro]) .ses .ex.abierto>.ex-h .ex-pr:before{background:#16161B}
 :where(html[data-tema=oscuro]) .ses .ex.abierto>.ex-h .ex-n{color:#fff}
 /* en oscuro, «Objetivo de hoy» sigue en blanco (regla del modo oscuro «J», más arriba) */
+/* 22 nov, 19:45: «Lo que te toca» (la rutina del entrenador, desde fuera) con el estilo de la app de usuaria */
+.rl{display:flex;flex-direction:column;gap:8px;padding:6px 0 4px}
+.rl-sec{display:flex;align-items:center;gap:8px;margin:8px 0 0}
+.rl-sec span{background:#0D0D10;color:#fff;border-radius:999px;padding:5px 12px;font:700 13px Plus Jakarta Sans,sans-serif}
+.rl-sec small{color:#74747A;font:600 13px Plus Jakarta Sans,sans-serif}
+.rl-gm{font:700 12px Plus Jakarta Sans,sans-serif;color:#74747A;margin:4px 2px -2px}
+.rl-f{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid #ECECEF;border-radius:16px;padding:10px 12px;text-align:left;width:100%;font:inherit;color:inherit;margin:0;box-shadow:none}
+button.rl-f{cursor:pointer}
+.rl-n{flex:none;min-width:38px;height:38px;padding:0 6px;border-radius:11px;background:#0D0D10;color:#fff;display:flex;align-items:center;justify-content:center;font:800 14px Plus Jakarta Sans,sans-serif;box-sizing:border-box}
+.rl-t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.rl-t b{font:700 15px/1.25 Plus Jakarta Sans,sans-serif;color:#0D0D10}
+.rl-t small{font:500 13px/1.35 Plus Jakarta Sans,sans-serif;color:#74747A}
+.rl-t .ex-esp{margin-top:2px}
+.rl-ch{flex:none;width:30px;height:30px;border-radius:50%;background:#F2F2F5;color:#0D0D10;display:flex;align-items:center;justify-content:center}
+.rl-ch .ic{width:15px;height:15px;margin:0}
+:where(html[data-tema=oscuro]) .rl-f{background:#2C2C2E;border-color:#3A3A3C}
+:where(html[data-tema=oscuro]) .rl-t b{color:#fff}
+:where(html[data-tema=oscuro]) .rl-n,:where(html[data-tema=oscuro]) .rl-sec span{background:#fff;color:#0D0D10}
+:where(html[data-tema=oscuro]) .rl-ch{background:#3A3A3C;color:#fff}
 :where(html[data-tema=oscuro]) .ses .ex.abierto .apx-b{background:#2C2C2E}
 :where(html[data-tema=oscuro]) .ses .ex.abierto .apx-h b{color:#C9CCD8}
 :where(html[data-tema=oscuro]) .ses .ex.abierto .set.apx:not(.head) input{background:#000000;color:#fff}
@@ -5258,7 +5277,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.195';
+var APP_V = 'v53.4.196';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8496,12 +8515,19 @@ A.ordOk=function(){ var O=CL.ord; if(!O) return cerrarModal(); var pf=prefCl(); 
 function rutinaBloque(r,principal,txt,f,z2){
   var O=ordenMov(r.ejercicios), lista=O.map(function(x){ return x.e; }), L=etiquetasEj(lista), G=gruposDe(lista), series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), nMov=O.filter(function(x){ return x.mov; }).length;
   var semR=r.desde&&r.hasta?(function(){ var hoy=f||hoyStr(), tot=Math.max(1,Math.ceil((diff(r.desde,r.hasta)+1)/7)), n=Math.floor(diff(r.desde,hoy)/7)+1; return n>=1&&n<=tot?' · semana '+n+' de '+tot:''; })():'';
-  return '<div class="rut rp"><details class="rp-d"><summary><span class="rp-tx"><b class="rp-n">'+esc(r.nombre)+'</b>'+(z2?'<span class="z2-ch"><span>'+ic('pesa')+cuentaEjCl(r.ejercicios,nMov)+'</span><span>'+ic('reloj')+'~'+minRutCl(r,series)+' min</span>'+(series?'<span>'+series+' series</span>':'')+'</span>':'<span class="rp-f">'+esc(f?(f===hoyStr()?'Hoy · ':'')+fLarga(f):'')+'</span><span class="muted sm">'+cuentaEjCl(r.ejercicios,nMov)+semR+(series?' · '+series+' series':'')+(nMov?' · '+nMov+' de movilidad':'')+'</span>')+(okUrl(r.video)?'<span class="vs-p">'+ic('play')+'Con vídeo de tu coach de la sesión completa</span>':'')+'</span><span class="rp-v">'+ic('flecha','rp-ch')+'<small>Ver</small></span></summary><div class="rp-b"><ul class="lista-ej">'+O.map(function(x,j){
-    var e=x.e, t=tipoEj(e), nom=tituloEj(e), g=G[j];
-    var nm=t!=='bloque'&&infoEj(e).hay?'<button class="li-v" data-a="verEjRut" data-r="'+esc(r.id)+'" data-i="'+x.i+'">'+esc(nom)+'<i>'+ic('play')+'vídeo</i></button>':'<b class="li-n">'+esc(nom)+'</b>';
-    var sec=nMov&&j===0?'<li class="li-sec mov">'+ic('mov')+'Movilidad · calentamiento</li>':nMov&&j===nMov?'<li class="li-sec">'+ic('pesa')+'Entrenamiento principal</li>':'';
-    return sec+'<li class="'+(g?'en-grp':'')+(t==='bloque'?' li-bl':'')+(x.mov?' li-mov':'')+'"><span class="ej-lab">'+esc(L[j])+'</span><div>'+(g&&g.pos===1?'<div class="grp-mini">'+esc(g.label)+' '+g.letra+'</div>':'')+nm+' <span class="muted">'+esc(resumenEj(e))+'</span>'+(t==='fuerza'?espLinea(e):'')+(t==='bloque'?'<div class="muted sm">'+esc((e.ej||[]).map(function(x){ return x.n+(x.r?' '+blRTxt(x.r):''); }).join(' · '))+'</div>':'')+'</div></li>';
-  }).join('')+'</ul></div></details><button class="btn '+(principal?'':'sec')+(z2?' z2-go':'')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(z2?ic('play'):'')+(txt||(principal?'Comenzar rutina':'Repetir rutina'))+'</button></div>';
+  return '<div class="rut rp"><details class="rp-d"><summary><span class="rp-tx"><b class="rp-n">'+esc(r.nombre)+'</b>'+(z2?'<span class="z2-ch"><span>'+ic('pesa')+cuentaEjCl(r.ejercicios,nMov)+'</span><span>'+ic('reloj')+'~'+minRutCl(r,series)+' min</span>'+(series?'<span>'+series+' series</span>':'')+'</span>':'<span class="rp-f">'+esc(f?(f===hoyStr()?'Hoy · ':'')+fLarga(f):'')+'</span><span class="muted sm">'+cuentaEjCl(r.ejercicios,nMov)+semR+(series?' · '+series+' series':'')+(nMov?' · '+nMov+' de movilidad':'')+'</span>')+(okUrl(r.video)?'<span class="vs-p">'+ic('play')+'Con vídeo de tu coach de la sesión completa</span>':'')+'</span><span class="rp-v">'+ic('flecha','rp-ch')+'<small>Ver</small></span></summary><div class="rp-b"><div class="rl">'+O.map(function(x,j){
+    /* 22 nov, 19:45 (Chadín: «la vista en clienta del entrenador de la rutina que toca, que se vea desde fuera como en usuaria, este estilo»):
+       «Movilidad» y «Principal» en pastilla negra con cuántos ejercicios; cada ejercicio en su tarjeta con su número en un cuadrado negro, las series
+       y el descanso; si tiene vídeo o técnica, se toca (con la flecha) */
+    var e=x.e, t=tipoEj(e), nom=tituloEj(e), g=G[j], vid=t!=='bloque'&&infoEj(e).hay;
+    var sub=resumenEj(e)+(t==='fuerza'&&num(e.d)>0?' · descanso '+mmss(e.d):'');
+    var sec=function(n,c){ return '<div class="rl-sec"><span>'+n+'</span><small>'+c+(c===1?' ejercicio':' ejercicios')+'</small></div>'; };
+    var cab=nMov&&j===0?sec('Movilidad',nMov):nMov&&j===nMov?sec('Principal',O.length-nMov):'';
+    var gm=g&&g.pos===1?'<div class="rl-gm">'+esc(g.label)+' '+g.letra+'</div>':'';
+    var tag=vid?'button':'div', at=vid?' type="button" data-a="verEjRut" data-r="'+esc(r.id)+'" data-i="'+x.i+'" aria-label="Cómo se hace: '+esc(nom)+'"':'';
+    return cab+gm+'<'+tag+' class="rl-f'+(x.mov?' mov':'')+(t==='bloque'?' bl':'')+'"'+at+'><span class="rl-n">'+esc(L[j])+'</span><span class="rl-t"><b>'+esc(nom)+'</b><small>'+esc(sub)+'</small>'+
+      (t==='fuerza'?espLinea(e):'')+(t==='bloque'?'<small>'+esc((e.ej||[]).map(function(x){ return x.n+(x.r?' '+blRTxt(x.r):''); }).join(' · '))+'</small>':'')+'</span>'+(vid?'<span class="rl-ch">'+ic('flecha')+'</span>':'')+'</'+tag+'>';
+  }).join('')+'</div></div></details><button class="btn '+(principal?'':'sec')+(z2?' z2-go':'')+'" data-a="empezar" data-id="'+esc(r.id)+'">'+(z2?ic('play'):'')+(txt||(principal?'Comenzar rutina':'Repetir rutina'))+'</button></div>';
 }
 function semanaStrip(hoy,sel){
   var l=lunesDe(sel), d=CL.d, lh=lunesDe(hoy), h='<div class="sem-n cz-sn"><button class="ico" data-a="semCl" data-v="-7" aria-label="Semana anterior">'+ic('atras')+'</button><span>'+(l===lh?'Esta semana':l===sumar(lh,-7)?'Semana pasada':l===sumar(lh,7)?'Semana que viene':'Semana del '+esc(fCorta(l)))+'</span><button class="ico" data-a="semCl" data-v="7" aria-label="Semana siguiente">'+ic('flecha')+'</button><button class="cz-mb" data-a="czMes">'+ic('cal')+'Mes</button></div><div class="semana">';
@@ -9158,8 +9184,11 @@ A.apxClN=function(el){
 function pieEj(e,i){
   var u=e.sets&&e.sets[e.sets.length-1], ab=e.tipo!=='run'&&(e.notaAb||!!e.notaCl), lib=!!CL.dr&&!CL.dr.edit&&entLibre();      // v52.17: en la carrera, en su tarjeta
   var menos=e.tipo!=='bloque'&&e.tipo!=='run'&&u&&e.sets.length>1&&(lib||(u.extra&&!u.ok));
+  /* 22 nov, 19:45 (Chadín): «el cliente no puede ni añadir series ni eliminar; lo único, añadir aproximaciones si quiere, por si su entrenador no
+     se lo ha metido; si no las hace, no las rellena y el coach verá que las dejó sin hacer». En el entreno libre (suyo) sí; el entrenador, igual que antes */
+  var aSer=!(BOOT.mode==='clienta'&&!!CL.dr&&!CL.dr.edit)||lib;
   return (ab?'<label class="f nota-cl">Tu nota sobre este ejercicio<textarea data-i="'+i+'" data-nc="1" rows="2" placeholder="Ej.: no me sale la técnica, molestia en la rodilla…">'+esc(e.notaCl||'')+'</textarea></label>':'')+
-    (e.tipo!=='bloque'&&e.tipo!=='run'||lib?'<div class="ex-acc">'+(e.tipo!=='bloque'&&e.tipo!=='run'?'<button class="link" data-a="addSet" data-i="'+i+'">'+ic('mas')+'Añadir serie</button>'+apxBtnCl(e,i)+(menos?'<button class="link" data-a="delSet" data-i="'+i+'" style="color:var(--mu)">'+(lib?'− Serie':'− Quitar serie extra')+'</button>':''):'')+
+    (e.tipo!=='bloque'&&e.tipo!=='run'||lib?'<div class="ex-acc">'+(e.tipo!=='bloque'&&e.tipo!=='run'?(aSer?'<button class="link" data-a="addSet" data-i="'+i+'">'+ic('mas')+'Añadir serie</button>':'')+apxBtnCl(e,i)+(menos?'<button class="link" data-a="delSet" data-i="'+i+'" style="color:var(--mu)">'+(lib?'− Serie':'− Quitar serie extra')+'</button>':''):'')+
       (lib?'<button class="link ex-del" data-a="exQuitar" data-i="'+i+'">'+ic('papelera')+'Quitar ejercicio</button>':'')+'</div>':'')+'</div></section>';
 }
 /* v34 · la lista del entreno: grupos (superserie, triserie…) y tandas de ejercicios sueltos */
@@ -9374,7 +9403,7 @@ function fuerzaCard(e,i,lab){
       '<input'+at+' data-k="r" inputmode="numeric" placeholder="'+esc(ph.r)+'" value="'+esc(s.r)+'" aria-label="Reps">'+
       '<input'+at+' data-k="rir" inputmode="numeric" placeholder="'+esc(ph.rir)+'" value="'+esc(s.rir)+'" aria-label="RIR">'+
       '<button class="chk"'+at+' data-a="setOk" aria-label="Serie hecha">'+ic('ok')+'</button></div>';
-    if(ph.calc) h+='<div class="calc-h">'+ic('calc')+esc(ph.calc)+'. Si coges otro peso, escríbelo.</div>';
+    if(ph.calc) h+='<div class="calc-h">'+ic('calc')+esc(ph.calc)+'</div>';      // 22 nov, 19:45 (Chadín): menos texto de ayuda en el entreno
     if(ts[3]&&!e.ld){
       s.sub.forEach(function(q,qi){ var pq=phSub(e,j,qi,ph);
         h+='<div class="set sub'+PV+(q.ok?' ok':'')+'" id="q-'+i+'-'+j+'-'+qi+'"><span class="sn"><small>'+esc(pq.lab)+'</small></span>'+(pvOn?'<span></span>':'')+'<input'+at+' data-q="'+qi+'" data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(pq.p||'')+'" value="'+esc(q.p)+'" aria-label="Kg"><input'+at+' data-q="'+qi+'" data-k="r" inputmode="numeric" placeholder="'+esc(pq.r||'')+'" value="'+esc(q.r)+'" aria-label="Reps"><button class="sub-x"'+at+' data-q="'+qi+'" data-a="delSub" aria-label="Quitar">'+ic('x')+'</button><button class="chk"'+at+' data-q="'+qi+'" data-a="subOk" aria-label="Hecha">'+ic('ok')+'</button></div>'; });
@@ -9493,7 +9522,7 @@ function trasSerie(i,j){
     } else if(e.sets.every(function(x){ return x.ok; })){ ir(document.getElementById('ex-'+(i+1)),false); }
   }
 }
-A.addSet=function(el){ var e=CL.dr.ej[+el.dataset.i]; if(e.tipo==='cardio') e.sets.push({m:{},ok:false,extra:true}); else { var u=e.sets[e.sets.length-1]||{t:'normal'}; var o={t:u.t,ro:u.ro,rio:u.rio,kgo:u.kgo,det:u.det,p:'',r:'',rir:'',ok:false,extra:true,sub:(u.sub||[]).map(function(){ return {p:'',r:''}; })}; if(e.ld){ o.pi=''; o.ri=''; } e.sets.push(o); } CL.dr.mod=true; guardarBorrador(true); CL.keep=true; pintarCl(); };
+A.addSet=function(el){ if(BOOT.mode==='clienta'&&CL.dr&&!CL.dr.edit&&!entLibre()) return toast('Las series las pone tu coach. Puedes añadir aproximaciones'); var e=CL.dr.ej[+el.dataset.i]; if(e.tipo==='cardio') e.sets.push({m:{},ok:false,extra:true}); else { var u=e.sets[e.sets.length-1]||{t:'normal'}; var o={t:u.t,ro:u.ro,rio:u.rio,kgo:u.kgo,det:u.det,p:'',r:'',rir:'',ok:false,extra:true,sub:(u.sub||[]).map(function(){ return {p:'',r:''}; })}; if(e.ld){ o.pi=''; o.ri=''; } e.sets.push(o); } CL.dr.mod=true; guardarBorrador(true); CL.keep=true; pintarCl(); };
 A.delSet=function(el){
   var e=CL.dr.ej[+el.dataset.i], u=e.sets[e.sets.length-1], lib=entLibre()&&!CL.dr.edit;
   function quita(){ e.sets.pop(); CL.dr.mod=true; guardarBorrador(true); CL.keep=true; pintarCl(); progresoEntreno(); }

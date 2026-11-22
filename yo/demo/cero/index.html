@@ -2861,12 +2861,7 @@ function demoRuns() {
 }
 function demoIr(tab) { S.pant = null; S.pila = []; S.tab = tab; pintar(); try { window.scrollTo(0, 0); } catch (e) { } }
 window.YO_REVISAR = [
-  { t: 'Por aprobar · Borrar una serie deslizándola a la izquierda (22 nov)', d: 'Abre un ejercicio en el entreno y desliza una serie a la izquierda: sale «Borrar» en rojo. Si la llevas más de la mitad, se borra sola; si no, tócalo. Sale «Deshacer».',
-    ir: function () { var r = S.rutinas.find(function (x) { return (x.ejercicios || []).some(function (e) { return e.tipo === 'fuerza' && !e.cal; }); }); if (!r) return; if (!S.ses) { S.pant = null; S.pila = []; empezarSes(r); } else A.abrirSes(); setTimeout(function () { var k = S.ses.ej.findIndex(function (e) { return e.tipo === 'fuerza' && !e.cal; }); if (k >= 0) { S.ses.ab = k; pintar(); } }, 300); } },
-  /* 21 nov 2026, 00:40: Chadín publicó en /yo (yo-1.9) todo lo de aquí: compartir como imagen (Comunidad, perfil, carrera y cardio, «Mi semana corriendo»),
-     «Sin fondo» y colocar la foto, recetas en ml, la barra de abajo sin hueco, tocar los puntos de Progresión
-     y «Tus entrenos» en claro. Tu foto en la Comunidad y editar lo publicado esperan a la 015 en Supabase. Y queda por elegir el diseño de «Tus entrenos».
-     21 nov, 09:48 (Chadín): compartir solo en negro, blanco o sin fondo, con accesos directos, y colocar las fotos con los dedos, sin barra (F21 en base.js): */
+  /* 22 nov, 19:45: publicado en yo-1.28 borrar una serie deslizándola a la izquierda (solo usuaria) */
   { t: 'Por aprobar · «Añadir a comida» con el color de cada comida (21 nov)', d: 'Nutrición → + en una comida: desayuno ámbar, comida verde, merienda coral, cena azul. A · Acentos (en la demo) o B · Fondo suave.',
     ir: function () { demoIr('nutri'); setTimeout(function () { A.nBuscar({ dataset: { c: '1' } }); }, 300); } },
   { t: 'Por aprobar · «Tus pasos»: la semana en barras (21 nov)', d: 'Inicio → toca «Pasos»: la semana con la línea de tu objetivo, la media, semanas anteriores y apuntar a mano el día que toques.',
@@ -3545,7 +3540,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.27';
+var YO_V = 'yo-1.28';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -6403,9 +6398,8 @@ function runCampos(e, i) {
   /* 22 nov: en el cardio, lo que marca la máquina (como en la app de clientas): minutos, distancia, calorías y nivel o inclinación */
   /* 22 nov, 13:20 (Chadín: «en caminar y caminar con inclinación puedas poner pasos, en todo lo que sea caminar») */
   var pas = esCaminar(e.n), nv = f('Nivel / inclinación', 'niv', 'Ej.: 8');
-  if (!run) return '<div class="run-in">' + mn + f('Distancia (km)', 'km', 'Ej.: 2,5') + (pas ? f('Pasos', 'pasos', 'Ej.: 4.500', 'numeric') : '') + f('Calorías (kcal)', 'kcal', 'Ej.: 180', 'numeric') + (pas ? nv.replace('<label class="f">', '<label class="f f-w">') : nv) +
-    '<small class="mut">Opcional. Apunta lo que te marque la máquina; con los minutos verás tu tiempo de cardio en Progreso.</small></div>';
-  return '<div class="run-in">' + f('Km', 'km', 'Ej.: 5,2') + mn + '<small class="mut">Opcional. Con los km y los minutos verás tu ritmo y tus km por semana en Progreso.</small></div>';
+  if (!run) return '<div class="run-in">' + mn + f('Distancia (km)', 'km', 'Ej.: 2,5') + (pas ? f('Pasos', 'pasos', 'Ej.: 4.500', 'numeric') : '') + f('Calorías (kcal)', 'kcal', 'Ej.: 180', 'numeric') + (pas ? nv.replace('<label class="f">', '<label class="f f-w">') : nv) + '</div>';      // 22 nov, 19:45 (Chadín): sin el texto de ayuda
+  return '<div class="run-in">' + f('Km', 'km', 'Ej.: 5,2') + mn + '</div>';
 }
 IN.runV = function (t) { var e = S.ses.ej[+t.dataset.i], k = t.dataset.k; e[k] = k === 'pasos' ? t.value.replace(/[^\d]/g, '') : t.value.replace(',', '.').replace(/[^\d.]/g, ''); guardaEnCurso(); };
 function runKm(v) { var k = num(v); return k != null && k > 0 && k <= 300 ? Math.round(k * 100) / 100 : null; }
@@ -6414,7 +6408,13 @@ function runKc(v) { var k = num(v); return k != null && k > 0 && k <= 5000 ? Mat
 function runNv(v) { var k = num(v); return k != null && k >= 0 && k <= 100 ? Math.round(k * 10) / 10 : null; }
 function runMn(v) { var m = num(v); return m != null && m > 0 && m <= 1440 ? Math.round(m) : null; }
 A.cardioOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); if (e.hecho) sigEj(); pintar(); };
-IN.stV = function (t) { var s = S.ses.ej[+t.dataset.i].sets[+t.dataset.j]; s[t.dataset.k] = t.value.replace(',', '.'); guardaEnCurso(); };
+IN.stV = function (t) { var i = +t.dataset.i, e = S.ses.ej[i], s = e.sets[+t.dataset.j]; s[t.dataset.k] = t.value.replace(',', '.'); guardaEnCurso(); if (t.dataset.k === 'kg' && s.t !== 'aprox') serCalcPinta(i); };
+/* 22 nov, 19:45 (Chadín: «en aproximaciones, que se calcule en función del peso que vas a levantar en la sesión»): al escribir los kilos de la
+   primera serie efectiva, las aproximaciones (y back-off o pirámide) se recalculan al momento con ese peso */
+function serCalcPinta(i) {
+  var e = S.ses && S.ses.ej[i]; if (!e) return; var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id), W = U ? U.sets.filter(function (z) { return z.ok; }) : [];
+  e.sets.forEach(function (z, j) { var v = serCalc(e, j, O, W), inp = document.querySelector('.ej-f2 input[data-in=stV][data-i="' + i + '"][data-j="' + j + '"][data-k=kg]'); if (inp && (z.t === 'aprox' || z.t === 'back' || z.t === 'pir')) { inp.placeholder = v ? fN(v) : ''; inp.classList.toggle('kg-calc', !!v && !z.kg); } });
+}
 A.stMas = function (el) { var e = S.ses.ej[+el.dataset.i], u = e.sets[e.sets.length - 1] || { t: 'normal', r: '10' }; e.sets.push({ t: 'normal', r: u.r, kg: '', reps: '', rir: '', ok: false }); guardaEnCurso(); pintar(); };
 A.sesQuitar = function (el) { S.ses.ej.splice(+el.dataset.i, 1); S.ses.ab = Math.min(S.ses.ab, S.ses.ej.length - 1); guardaEnCurso(); pintar(); };
 A.sesAnadir = function () { S.x.bus = { q: '', g: '', para: 'ses' }; ir({ t: 'buscar' }); };
@@ -7068,9 +7068,10 @@ function serFilasHtml(e, i, O, W) {
      numeradas desde 1, cada una en su tarjeta (.ef) */
   var AP = [], WK = []; e.sets.forEach(function (s, j) { (s.t === 'aprox' ? AP : WK).push(j); });
   var labDe = function (j) { var k = AP.indexOf(j); return k >= 0 ? 'A' + (k + 1) : String(WK.indexOf(j) + 1); };
-  var cab = e.lados ? '<div class="st-h st-l2"><span>#</span><span></span><span class="st-hl"><i></i><i>Kg</i><i>' + uU + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>Kg</span><span>' + uU + '</span><span>RIR</span><span></span></div>';
+  var cabDe = function (hayPv) { return e.lados ? '<div class="st-h st-l2"><span>#</span><span></span><span class="st-hl"><i></i><i>Kg</i><i>' + uU + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>Kg</span><span>' + uU + '</span><span>RIR</span><span></span></div>'; };
+  var cab = cabDe(hayPv);      // 22 nov, 19:45 (Chadín): en la aproximación, sin «Última vez» (cabDe(false))
   var fila = function (s, j) {
-    var h = '', lab = labDe(j);
+    var h = '', lab = labDe(j), hayPvF = hayPv && s.t !== 'aprox';
     var pv = W[j] || null, an = null; for (var q = j - 1; q >= 0 && s.t !== 'aprox'; q--) { var z = e.sets[q]; if (z.t !== 'aprox' && z.kg !== '' && num(z.kg) != null) { an = z; break; } }
     var phK = an ? fN(an.kg) : O && O.p ? fN(O.p) : pv && pv.kg ? fN(pv.kg) : '', phR = s.t === 'aprox' || s.t === 'pir' || s.t === 'top' || s.t === 'myo' ? String(s.r || '').split('-').pop() : O ? String(O.r) : pv ? String(pv.reps) : String(s.r || '').split('-').pop();
     var cK = serCalc(e, j, O, W); if (cK) phK = fN(cK);      // kilos calculados (aproximación, back-off, pirámide)
@@ -7078,20 +7079,20 @@ function serFilasHtml(e, i, O, W) {
     if (e.lados) { h += serLadosHtml(e, i, s, j, pv, phK, phR, lab); return h; }
     var tg = serTag(s.t), esp = /^(drop|rp|myo|fallo)$/.test(s.t);
     var mk = s.ok ? marcaYo(e, j) : null;
-    var row = '<div class="st st2' + (s.t === 'aprox' ? '' : ' ef') + (hayPv ? ' pv' : '') + (s.ok ? ' ok' : '') + (j === ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n"><i>' + lab + '</i>' + (tg && !esp && s.t !== 'aprox' ? '<small>' + tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' + (hayPv ? pvCel(j) : '') +
+    var row = '<div class="st st2' + (s.t === 'aprox' ? '' : ' ef') + (hayPvF ? ' pv' : '') + (s.ok ? ' ok' : '') + (j === ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n"><i>' + lab + '</i>' + (tg && !esp && s.t !== 'aprox' ? '<small>' + tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' + (hayPvF ? pvCel(j) : '') +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(s.kg) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">' +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="numeric" value="' + esc(s.reps) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + lab + '">' +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '" placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + '">' +
       '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + lab + ' hecha">' + ic('check', 17, null, 3) + '</button></div>' +
-      (mk ? '<div class="st-mk' + (hayPv ? ' pv' : '') + '"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '');
+      (mk ? '<div class="st-mk' + (hayPvF ? ' pv' : '') + '"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '');
     if (!esp) { h += row; return h; }
     var k = num(s.kg) || num(String(phK).replace(',', '.')) || 0, sub = { drop: 'sin descanso', rp: 'mismo peso', myo: 'mismo peso', fallo: 'hasta no poder más' }[s.t];
     h += '<div class="st-grp"><div class="st-gh"><span>Serie ' + lab + ' · ' + esc(metNom(s.t)) + '</span><small>' + sub + '</small></div>' + (s.det ? '<p class="st-gn st-det">' + esc(s.det) + '</p>' : '') + row;
     var dm = /(\d+)\s*bajadas?.*?(\d+)\s*%/.exec(s.det || ''), tieneMp = e.mp && (e.mp.drop != null || e.mp.nb != null);      // las del motor («2 bajadas de −25 %»), si no las has cambiado
     var dpc = tieneMp || !dm ? mpDe(e, 'drop') : +dm[2], dnb = tieneMp || !dm ? mpDe(e, 'nb') : Math.min(4, +dm[1]), dr = 1 - dpc / 100, SQ = [k]; for (var q3 = 1; q3 <= dnb; q3++) SQ.push(redKg(k * Math.pow(dr, q3)));
-    if (s.t === 'drop') h += '<div class="st-seq">' + SQ.map(function (v, q) { return (q ? '<i>' + ic('rayo', 15, null, 2.2) + '</i>' : '') + '<span class="kb"><b>' + (v ? fN(v) : '—') + '</b><small>' + (q ? '× máx' : '× ' + esc(phR)) + '</small></span>'; }).join('') + '</div><p class="st-gn">Las bajadas las calcula la app (−' + fN(dpc) + ' %, redondeado al disco); hazlas sin descansar. Se cambia en «Método».</p>';
+    if (s.t === 'drop') h += '<div class="st-seq">' + SQ.map(function (v, q) { return (q ? '<i>' + ic('rayo', 15, null, 2.2) + '</i>' : '') + '<span class="kb"><b>' + (v ? fN(v) : '—') + '</b><small>' + (q ? '× máx' : '× ' + esc(phR)) + '</small></span>'; }).join('') + '</div>';      // 22 nov, 19:45 (Chadín): sin el texto de las bajadas
     if (s.mini) s.mini.forEach(function (x, m) {
-      h += '<div class="st-mr"><span>' + ic('reloj', 12) + mpDe(e, 'rs') + ' s</span></div><div class="st st2 st-mini' + (hayPv ? ' pv' : '') + (x.ok ? ' ok' : '') + '"><span class="st-n"><i>+' + (m + 1) + '</i></span>' + (hayPv ? '<span></span>' : '') + '<span class="st-kg">' + (k ? fN(k) : '—') + '</span>' +
+      h += '<div class="st-mr"><span>' + ic('reloj', 12) + mpDe(e, 'rs') + ' s</span></div><div class="st st2 st-mini' + (hayPvF ? ' pv' : '') + (x.ok ? ' ok' : '') + '"><span class="st-n"><i>+' + (m + 1) + '</i></span>' + (hayPvF ? '<span></span>' : '') + '<span class="st-kg">' + (k ? fN(k) : '—') + '</span>' +
         '<input data-in="miniV" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="numeric" value="' + esc(x.reps) + '" placeholder="' + MINI_R[s.t] + '" aria-label="Repeticiones de la mini-serie ' + (m + 1) + '"><span></span>' +
         '<button class="st-ok' + (x.ok ? ' on' : '') + '" data-a="miniOk" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" aria-pressed="' + !!x.ok + '" aria-label="Mini-serie ' + (m + 1) + ' hecha">' + ic('check', 17, null, 3) + '</button></div>'; });
     h += '</div>';
@@ -7100,7 +7101,7 @@ function serFilasHtml(e, i, O, W) {
   if (AP.length) {
     var aOk = AP.every(function (j) { return e.sets[j].ok; }), ab = !!(S.x.apxAb || {})[i];
     h += '<div class="apx-b' + (aOk ? ' ok' : '') + (ab ? ' abre' : '') + '"><button class="apx-res" data-a="apxVer" data-i="' + i + '" aria-label="Ver la aproximación">' + apxResHtml(e) + '</button>' +
-      '<div class="apx-h"><b>' + ic('sube', 15, null, 2.4) + 'Aproximación · calentamiento</b><button class="apx-cer" data-a="apxVer" data-i="' + i + '">Ocultar</button></div>' + cab + AP.map(function (j) { return fila(e.sets[j], j); }).join('') + '</div>' +
+      '<div class="apx-h"><b>' + ic('sube', 15, null, 2.4) + 'Aproximación · calentamiento</b><button class="apx-cer" data-a="apxVer" data-i="' + i + '">Ocultar</button></div>' + cabDe(false) + AP.map(function (j) { return fila(e.sets[j], j); }).join('') + '</div>' +
       '<div class="trab-h">' + ic('pesa', 16, null, 2.2) + 'Series efectivas</div>';
   }
   h += cab + WK.map(function (j) { return fila(e.sets[j], j); }).join('');
@@ -7203,7 +7204,7 @@ function serNotasVistas(X) { var P = S.perfil; if (!P || !P.notasEj || !X || !X.
    y aparece «Borrar» en rojo; si la llevas más de la mitad, se borra sola; si no, se queda abierta y la tocas. Sale «Serie borrada · Deshacer».
    Vale para las aproximaciones y las efectivas (y sus mini-series se van con ella); la última efectiva no se borra (para eso, «Quitar de este entreno»).
    En borrador (SW_SER apagado): solo en las demos («Por revisar») o con ?borradores, hasta el OK. */
-var SW_SER = false, SDD = null, SD_ULT = null;
+var SW_SER = true, SDD = null, SD_ULT = null;      // 22 nov, 19:45: OK de Chadín («en usuaria sí esa opción de eliminar y añadir»)
 function sdOn() { return SW_SER || rpBorr(); }
 function sdFila(t) { var r = t && t.closest && t.closest('.ej-f2 .st.st2:not(.st-mini), .ej-f2 .st.st-l2'); return r && r.querySelector('[data-a=stOk]') ? r : null; }
 function sdCierra(salvo) { document.querySelectorAll('.ej-f2 .sw-ab').forEach(function (r) { if (r !== salvo) { r.classList.remove('sw-ab'); r.style.transform = ''; } }); }
@@ -7545,8 +7546,7 @@ function trBtn(e, i) {
   var L = trDe(e); if (!L.length) return '';
   var T = trTot(L), nd = trNDist(L), w = function (x) { return Math.max(2, x.s || 90); }, tw = L.reduce(function (a, x) { return a + w(x); }, 0);
   return '<div class="tr-box"><div class="tr-tira" aria-hidden="true">' + L.map(function (x) { return '<i class="' + trCol(x.k) + '" style="flex:' + w(x) / tw + '"></i>'; }).join('') + '</div>' +
-    '<button class="cta-b tr-b" data-a="trEmpieza" data-i="' + i + '">' + ic('play', 16, null) + '<span>Empezar entrenamiento · <b>' + (nd ? '≈ ' : '') + mmss(T) + '</b>' + '</span></button>' +
-    '<small class="mut tr-ay">La app te marca cada tramo y su zona, con pitidos: dos agudos para apretar, uno grave para aflojar, y 3, 2, 1 antes de cambiar. Si tienes el iPhone en silencio, en Sonido elige «Siempre».</small></div>';
+    '<button class="cta-b tr-b" data-a="trEmpieza" data-i="' + i + '">' + ic('play', 16, null) + '<span>Empezar entrenamiento · <b>' + (nd ? '≈ ' : '') + mmss(T) + '</b>' + '</span></button></div>';      // 22 nov, 19:45 (Chadín): sin el texto de los pitidos
 }
 A.trEmpieza = function (el) {
   audioOk(); sonAviso(); var i = +el.dataset.i, e = S.ses.ej[i], L = trDe(e); if (!L.length) return;
