@@ -5172,7 +5172,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.191';
+var APP_V = 'v53.4.192';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -21090,7 +21090,7 @@ function tarjetaRunCl(modo){
     var logoDer=function(base,fin){ var w=LW, lx=W-M-w; if(fin+34>lx){ w=Math.max(150,W-M-fin-34); lx=W-M-w; } x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,lx,base-w*0.14,w,'#FFFFFF',true); x.restore(); };
     add(76,function(y){ x.fillStyle='#fff'; var T=String(nom).toUpperCase(), px=textoAjustado(x,T,AN,60,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+58); });
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
-    add(60,function(y){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,M,y+12,LW,'#FFFFFF',true); x.restore(); });
+    add(54,function(y){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,M,y+12,LOGO_B,'#FFFFFF',true); x.restore(); });
     add(70,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,grFecha(U),AN),M,y+42); grEsp(x,'0px'); });
     var big=km?fN(km,km>=10?1:2):String(r.min||0), uni=km?'KM':'MIN';
     add(250,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,big,AN-200,250,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-8px'); x.fillText(big,M-6,y+220); var w=x.measureText(big).width; grEsp(x,'2px'); x.font='800 46px'+FCV; x.fillText(uni,M+w+14,y+220); grEsp(x,'0px'); });
@@ -21144,7 +21144,7 @@ function tarjetaGrande(tipo,modo){
     var logoSh=function(f){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } f(); x.restore(); };
     var logoDer=function(base,fin){ var w=LW, lx=W-M-w; if(fin+34>lx){ w=Math.max(150,W-M-fin-34); lx=W-M-w; } logoSh(function(){ logoCanvas(x,lx,base-w*0.14,w,'#FFFFFF',true); }); };
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
-    var logoBajo=function(){ add(60,function(y){ logoSh(function(){ logoCanvas(x,M,y+14,LW,'#FFFFFF',true); }); }); };
+    var logoBajo=function(){ add(54,function(y){ logoSh(function(){ logoCanvas(x,M,y+14,LOGO_B,'#FFFFFF',true); }); }); };
     var cabL=function(sub){
       add(68,function(y){ x.fillStyle='#fff'; var T=tit.toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+56); });
       logoBajo();
@@ -21162,7 +21162,7 @@ function tarjetaGrande(tipo,modo){
         x.fillStyle=l[2]?GR_ORO:'rgba(255,255,255,.92)'; x.font='800 44px'+FCV; x.fillText(l[1],M+w+18,y+150); var w2=x.measureText(l[1]).width; grEsp(x,'0px'); if(li===iL) logoDer(y+150,M+w+18+w2); }); });
     } else if(tipo==='res'){
       cabL(grFecha(U)+(nser?' · '+nser+(nser===1?' SERIE':' SERIES'):''));
-      var NX=M+170, NW=AN-170, disp=(H-330)-260-186-80, usado=0, E=[], k=0;
+      var NX=M+170, NW=AN-170, disp=(H-330)-260-180-80, usado=0, E=[], k=0;
       (U.ej||[]).forEach(function(e){ E.push(e); if(e.bl) (e.bl.ej||[]).forEach(function(z){ if(z&&z.n) E.push({sub:1,n:z.n,q:z.r||''}); }); });      // 21 nov: en los WOD, también sus ejercicios
       x.font='800 44px'+FCV;
       for(;k<E.length;k++){ var e=E[k];
@@ -23893,8 +23893,9 @@ function fraseCard(x,W,y,fr,px){
 }
 /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte).
    Comparar fotos: los días arriba a la izquierda y el logo debajo. Pasos y medallas (centradas): debajo del título, el logo y luego la fecha */
-function cabLogoCl(x,W,txt,color){ var M=90; x.save(); x.textAlign='left'; x.fillStyle=color; x.font='700 30px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,txt,W-2*M),M,290); grEsp(x,'0px'); logoCanvas(x,M,318,250,'#FFFFFF',true); x.restore(); }
-function logoFechaCl(x,W,top,txt,color){ x.save(); logoCanvas(x,(W-250)/2,top,250,'#FFFFFF',true); x.textAlign='center'; x.fillStyle=color; x.font='700 30px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,txt,W-180),W/2+2,top+85); grEsp(x,'0px'); x.restore(); }
+function cabLogoCl(x,W,txt,color){ var M=90; x.save(); x.textAlign='left'; x.fillStyle=color; x.font='700 30px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,txt,W-2*M),M,290); grEsp(x,'0px'); logoCanvas(x,M,318,LOGO_B,'#FFFFFF',true); x.restore(); }
+var LOGO_B=200;      // 22 nov, 10:07 (Chadín): «un pelín más pequeño que el título»: 200 px en vez de 250
+function logoFechaCl(x,W,top,txt,color){ x.save(); logoCanvas(x,(W-LOGO_B)/2,top,LOGO_B,'#FFFFFF',true); x.textAlign='center'; x.fillStyle=color; x.font='700 30px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,txt,W-180),W/2+2,top+78); grEsp(x,'0px'); x.restore(); }
 function tarjetaPasos(o,modo){
   modo=modo==='trans'?'trans':'negro';
   return fuentesListas().then(function(){ return svgImg(ICONS.pasos,'#FFFFFF',1.4); }).then(function(icp){

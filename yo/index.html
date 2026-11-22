@@ -2984,7 +2984,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.20';
+var YO_V = 'yo-1.21';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -5979,7 +5979,7 @@ function tarjetaGrande(U, tipo, modo, foto) {
        en Ejercicios a la altura de la fecha; en Tu carga, centrado debajo del dibujo */
     var logoDer = function (y, base, fin) { var w = LW, lx = W - M - w; if (fin + 34 > lx) { w = Math.max(150, W - M - fin - 34); lx = W - M - w; } logoEn(x, lx, base - w * 0.14, w, FG); };
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
-    var logoBajo = function () { add(60, function (y) { logoEn(x, M, y + 14, LW, FG); }); };
+    var logoBajo = function () { add(54, function (y) { logoEn(x, M, y + 14, LOGO_B, FG); }); };      // 22 nov, 10:07 (Chadín): «un pelín más pequeño que el título»: 200 px en vez de 250
     var cabL = function (sub) {
       add(68, function (y) { x.fillStyle = FG; var T = tit.toUpperCase(), px = ajusta(x, T, AN, 58, '800'); x.font = '800 ' + px + 'px' + F; x.fillText(recorta(x, T, AN), M, y + 56); });
       logoBajo();
@@ -5996,7 +5996,7 @@ function tarjetaGrande(U, tipo, modo, foto) {
         x.fillStyle = l[2] ? ORO : FG; x.font = '800 44px' + F; x.fillText(l[1], M + w + 18, y + 150); var w2 = x.measureText(l[1]).width; grEsp(x, '0px'); if (li === iL) logoDer(y, y + 150, M + w + 18 + w2); }); });
     } else if (tipo === 'res') {
       cabL(fe + (nser ? ' · ' + nser + (nser === 1 ? ' SERIE' : ' SERIES') : ''));
-      var E = [], NX = M + 170, NW = AN - 170, disp = (H - 330) - 260 - 186 - 80, usado = 0, k = 0;
+      var E = [], NX = M + 170, NW = AN - 170, disp = (H - 330) - 260 - 180 - 80, usado = 0, k = 0;
       (U.ej || []).forEach(function (e) { E.push({ n: e.tipo === 'bloque' ? (e.fmt || e.n) : e.n, c: grSer(e), t: e.hecho ? (e.txt || '') : '', r: !!rec[clave(e.n)] });
         if (e.tipo === 'bloque') (e.lista || []).forEach(function (z) { if (z && z.n) E.push({ n: z.n, q: z.q || '', sub: 1 }); }); });      // 21 nov: en los WOD, también sus ejercicios
       for (; k < E.length; k++) { var e = E[k];
@@ -7378,7 +7378,7 @@ function cmpLienzoYo(P, c, dias, modo) {
     if (!sn) { x.fillStyle = bl ? '#FFFFFF' : '#0C0C0E'; x.fillRect(0, 0, W, H); }
     x.textBaseline = 'alphabetic'; x.textAlign = 'left'; x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px');
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte): aquí el título son los días */
-    x.fillText(recorta(x, (dias ? dias + (dias === 1 ? ' DÍA' : ' DÍAS') + ' ENTRE UNA Y OTRA' : 'MI PROGRESO'), W - 2 * M), M, 300); grEsp(x, '0px'); logoEn(x, M, 328, LOGO_W, FG);
+    x.fillText(recorta(x, (dias ? dias + (dias === 1 ? ' DÍA' : ' DÍAS') + ' ENTRE UNA Y OTRA' : 'MI PROGRESO'), W - 2 * M), M, 300); grEsp(x, '0px'); logoEn(x, M, 328, LOGO_B, FG);
     var G = 22, top = 400, alto = H - 300 - top, n = I.length, cab = 70, filaH = (alto - (n - 1) * 30) / n, colW = (W - 2 * 44 - G) / 2;
     I.forEach(function (par, r) { var y0 = top + r * (filaH + 30);
       [['ANTES', c.a], ['DESPUÉS', c.b]].forEach(function (z, k) { var cx = 44 + k * (colW + G);
@@ -10442,7 +10442,7 @@ function runSh() { return RUN_SH || rpBorr(); }
 /* ---------- la tarjeta (1080 × 1920), estilo «Grande» como las del fin del entreno ----------
    D = { tit, sub, big, uni, kp: [[valor, ETIQUETA]], txt (comentario), oro (línea dorada), img (foto arriba en Negro y Blanco), pie } */
 /* el logo a la derecha de una línea (la de la fecha): su base en «base», sin pisar el texto que acaba en «fin» */
-var LOGO_W = 250;
+var LOGO_W = 250, LOGO_B = 200;      // LOGO_B: el logo debajo del título (22 nov, 10:07 (Chadín): «un pelín más pequeño que el título»: 200 px en vez de 250)
 function logoFila(x, W, M, base, fin, FG) { var w = LOGO_W, lx = W - M - w; if (fin + 34 > lx) { w = Math.max(150, W - M - fin - 34); lx = W - M - w; } logoEn(x, lx, base - w * 0.14, w, FG); }
 function tarjetaDatos(D, modo, foto) {
   var sn = /^sin/.test(modo), bl = modo === 'blanco' || modo === 'sinn', ft = (modo === 'foto' && foto) || sn, F = ' "Plus Jakarta Sans", sans-serif';
@@ -10459,7 +10459,7 @@ function tarjetaDatos(D, modo, foto) {
     x.font = '800 60px' + F; var TL = grLin(x, String(D.tit || '').toUpperCase(), AN, 2);
     add(TL.length * 70 - 4, function (y) { x.fillStyle = FG; x.font = '800 60px' + F; TL.forEach(function (t, i) { x.fillText(t, M, y + 58 + i * 70); }); });
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
-    add(64, function (y) { logoEn(x, M, y + 24, LOGO_W, FG); });
+    add(58, function (y) { logoEn(x, M, y + 24, LOGO_B, FG); });
     if (D.sub) add(70, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.fillText(recorta(x, D.sub, AN), M, y + 42); grEsp(x, '0px'); });
     if (D.txt) { x.font = '600 38px' + F; var CL = grLin(x, '«' + D.txt + '»', AN, 3); add(CL.length * 50 + 24, function (y) { x.fillStyle = bl ? 'rgba(17,17,17,.82)' : 'rgba(255,255,255,.9)'; x.font = '600 38px' + F; CL.forEach(function (t, i) { x.fillText(t, M, y + 46 + i * 50); }); }); }
     if (D.big) add(250, function (y) { x.fillStyle = FG; var px = ajusta(x, D.big, AN - 200, 250, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-8px'); x.fillText(D.big, M - 6, y + 220); var w = x.measureText(D.big).width; grEsp(x, '2px');
@@ -10691,8 +10691,8 @@ function tarjetaReceta(x, img, modo) {
       var d = x.creado ? new Date(x.creado) : new Date();
       /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
       c.fillStyle = FG; c.font = '800 62px' + F; var TL = grLin(c, String(x.t || 'Mi receta').toUpperCase(), AN, 2); TL.forEach(function (t, i) { c.fillText(t, M, y + 58 + i * 70); }); var B = y + 58 + (TL.length - 1) * 70;
-      logoEn(c, M, B + 28, LOGO_W, FG);
-      c.fillStyle = SUB; c.font = '700 26px' + F; grEsp(c, '4px'); c.fillText(recorta(c, ('Receta de ' + nom1(x.nombre) + ' · ' + d.getDate() + ' ' + mesC(d)).toUpperCase(), AN), M, B + 103); grEsp(c, '0px'); y = B + 119;
+      logoEn(c, M, B + 28, LOGO_B, FG);
+      c.fillStyle = SUB; c.font = '700 26px' + F; grEsp(c, '4px'); c.fillText(recorta(c, ('Receta de ' + nom1(x.nombre) + ' · ' + d.getDate() + ' ' + mesC(d)).toUpperCase(), AN), M, B + 96); grEsp(c, '0px'); y = B + 112;
       var mac = r.k != null ? [fmil(r.k || 0) + ' kcal', Math.round(r.p || 0) + ' g prot.', Math.round(r.h || 0) + ' g hidr.', Math.round(r.g || 0) + ' g grasa'].join(' · ') + ' por ración' : rac + (rac === 1 ? ' ración' : ' raciones');
       c.fillStyle = SUB; c.font = '700 30px' + F; c.fillText(recorta(c, mac + (r.min ? ' · ' + r.min + ' min' : ''), AN), M, y + 30); y += 64;
       if (x.c) { c.fillStyle = bl ? 'rgba(17,17,17,.82)' : 'rgba(255,255,255,.9)'; c.font = 'italic 600 32px' + F; var CL = grLin(c, '«' + x.c + '»', AN, 2); CL.forEach(function (t, i) { c.fillText(t, M, y + 32 + i * 42); }); y += CL.length * 42 + 22; }
@@ -10757,9 +10757,9 @@ function tarjetaRecetaV(x, img, modo, est) {
       if (!PH) { c.fillStyle = gr(M, 0, M + 140, 0); rr(c, M, y - 4, 140, 10, 5); c.fill(); }
       /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
       y += 20; c.fillStyle = FG; c.font = '800 76px' + F; TL.forEach(function (t, i) { c.fillText(t, M, y + 72 + i * 84); }); var B1 = y + 72 + (TL.length - 1) * 84;
-      logoEn(c, M, B1 + 30, LOGO_W, FG);
-      c.fillStyle = AC; c.font = '800 27px' + F; grEsp(c, '5px'); c.fillText(recorta(c, meta, AN), M, B1 + 106); grEsp(c, '0px');
-      c.fillStyle = SUB; c.font = '700 29px' + F; grEsp(c, '3px'); c.fillText(info, M, B1 + 152); grEsp(c, '0px'); y = B1 + 190;
+      logoEn(c, M, B1 + 30, LOGO_B, FG);
+      c.fillStyle = AC; c.font = '800 27px' + F; grEsp(c, '5px'); c.fillText(recorta(c, meta, AN), M, B1 + 99); grEsp(c, '0px');
+      c.fillStyle = SUB; c.font = '700 29px' + F; grEsp(c, '3px'); c.fillText(info, M, B1 + 145); grEsp(c, '0px'); y = B1 + 183;
       if (MAC.length) { var g4 = 16, bw = (AN - 3 * g4) / 4, bh = 136;
         MAC.forEach(function (m, i) { var bx = M + i * (bw + g4); c.fillStyle = i ? CAJ : gr(bx, y, bx + bw, y + bh); rr(c, bx, y, bw, bh, 28); c.fill();
           c.textAlign = 'center'; c.fillStyle = i ? FG : ON; c.font = '800 48px' + F; c.fillText(m[0], bx + bw / 2, y + 70); c.font = '800 20px' + F; grEsp(c, '3px'); c.fillStyle = i ? SUB : ON2; c.fillText(m[1], bx + bw / 2 + 1.5, y + 106); grEsp(c, '0px'); c.textAlign = 'left'; });
@@ -10784,8 +10784,8 @@ function tarjetaRecetaV(x, img, modo, est) {
       if (PH) { foto(M, 60, AN, PH, 40); y = Math.max(ARR, 60 + PH + 56); }
       /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
       y += 14; c.fillStyle = FG; c.font = '800 68px' + F; var T2 = grLin(c, String(x.t || 'Mi receta').toUpperCase(), AN, 2); T2.forEach(function (t, i) { c.fillText(t, M, y + 64 + i * 74); }); var B2 = y + 64 + (T2.length - 1) * 74;
-      logoEn(c, M, B2 + 28, LOGO_W, FG);
-      c.fillStyle = AC; c.font = '800 27px' + F; grEsp(c, '5px'); c.fillText(recorta(c, meta2, AN), M, B2 + 103); grEsp(c, '0px'); y = B2 + 143;
+      logoEn(c, M, B2 + 28, LOGO_B, FG);
+      c.fillStyle = AC; c.font = '800 27px' + F; grEsp(c, '5px'); c.fillText(recorta(c, meta2, AN), M, B2 + 96); grEsp(c, '0px'); y = B2 + 136;
       if (info) { c.fillStyle = SUB; c.font = '700 27px' + F; grEsp(c, '3px'); c.fillText(recorta(c, info, AN), M, y + 6); grEsp(c, '0px'); y += 46; }
       /* los macros en pastillas y, al lado, «por ración» (el tiempo y las raciones, arriba) */
       var px2 = M; MAC.forEach(function (m, i) { var u = [' kcal', ' prot.', ' hidr.', ' grasa'][i]; c.font = '800 31px' + F; var a = c.measureText(m[0]).width; c.font = '600 27px' + F; var w = a + c.measureText(u).width + 44;
