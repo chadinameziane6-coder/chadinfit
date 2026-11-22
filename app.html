@@ -5181,6 +5181,47 @@ body:after{content:"";position:fixed;left:0;right:0;top:0;height:var(--sat);z-in
 :where(html[data-tema=oscuro]) .ses .ex.abierto>.ex-h .ex-pr:before{background:#16161B}
 :where(html[data-tema=oscuro]) .ses .ex.abierto>.ex-h .ex-n{color:#fff}
 /* en oscuro, «Objetivo de hoy» sigue en blanco (regla del modo oscuro «J», más arriba) */
+/* 22 nov, 20:19: «Tu plan» con la fecha de vencimiento resaltada; «Renovar» solo desde 5 días antes */
+.plc-ven{display:flex;flex-direction:column;gap:2px;margin:10px 0 4px;padding:14px 16px;border-radius:18px;background:#0D0D10;color:#fff}
+.plc-ven span{font:600 12.5px Plus Jakarta Sans,sans-serif;color:#C9CCD8}
+.plc-ven b{font:800 22px/1.15 Plus Jakarta Sans,sans-serif;letter-spacing:-.01em;color:#fff}
+.plc-ven small{font:700 13px Plus Jakarta Sans,sans-serif;color:#9FE3BE}
+.plc-ven.warn{background:#FFF4DE;color:#5C3D00}.plc-ven.warn span{color:#8A6A2B}.plc-ven.warn b{color:#3D2800}.plc-ven.warn small{color:#B26B00}
+.plc-ven.bad{background:#FDECEC}.plc-ven.bad span{color:#9A3B3B}.plc-ven.bad b{color:#6B1414}.plc-ven.bad small{color:#C62828}
+:where(html[data-tema=oscuro]) .plc-ven{background:#fff}:where(html[data-tema=oscuro]) .plc-ven span{color:#5E6070}:where(html[data-tema=oscuro]) .plc-ven b{color:#0D0D10}:where(html[data-tema=oscuro]) .plc-ven small{color:#1F8A50}
+:where(html[data-tema=oscuro]) .plc-ven.warn{background:#3D2E10}:where(html[data-tema=oscuro]) .plc-ven.warn b{color:#FFE2A8}:where(html[data-tema=oscuro]) .plc-ven.warn span,:where(html[data-tema=oscuro]) .plc-ven.warn small{color:#F2C46B}
+:where(html[data-tema=oscuro]) .plc-ven.bad{background:#3A1616}:where(html[data-tema=oscuro]) .plc-ven.bad b{color:#FFC9C9}:where(html[data-tema=oscuro]) .plc-ven.bad span,:where(html[data-tema=oscuro]) .plc-ven.bad small{color:#FF8A8A}
+/* 22 nov, 20:19: progresión por ejercicio, solo las 3 últimas fechas; las demás, plegadas */
+.pr-tw .pr-mas{display:none}.pr-tw.ab .pr-mas{display:table-row}
+.pr-ver{display:inline-flex;align-items:center;gap:6px;margin:8px 0 2px;font:700 13px Plus Jakarta Sans,sans-serif}
+.pr-ver .ic{width:14px;height:14px;margin:0;transform:rotate(90deg);transition:transform .2s}.pr-tw.ab .pr-ver .ic{transform:rotate(-90deg)}
+/* 22 nov, 20:19 (Chadín: «en mes, que sea más visual: los días entrenados con un tic verde como en usuaria y los días que hay un entreno, por ejemplo,
+   una pesa, en blanco; lía mucho»): el mes en blanco; hecho, en verde con su tic; toca entrenar, con la pesa (apagada si ya pasó sin hacerlo) */
+.cz-mg .cz-md{background:#fff;box-shadow:inset 0 0 0 1px #ECECEF;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px}
+.cz-mg .cz-md b{color:#3A3A3C;margin-top:0}
+.cz-mg .cz-md.pas b{color:#AEAEB2}
+.cz-mg .cz-md.hc{background:#E3F6EA;box-shadow:inset 0 0 0 1px #BFE8CD}.cz-mg .cz-md.hc b{color:#0B5C35}
+.cz-mg .cz-md.pl{background:#fff;box-shadow:inset 0 0 0 1px #E2E2E7}.cz-mg .cz-md.pl b{color:#0D0D10}
+.cz-ic{display:flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;font-style:normal}
+.cz-ic .ic{width:13px;height:13px;margin:0}
+.cz-mg .cz-md.hc .cz-ic{background:#22A45D;color:#fff}.cz-mg .cz-md.hc .cz-ic .ic{width:10px;height:10px;stroke-width:3.4}
+.cz-mg .cz-md.pl .cz-ic{color:#0D0D10}.cz-mg .cz-md.pl.pas .cz-ic{color:#C7C7CC}
+.cz-mg .cz-md.hoy{background:#fff;box-shadow:inset 0 0 0 2px #0D0D10}.cz-mg .cz-md.hoy b{color:#0D0D10}
+.cz-mg .cz-md.hoy.hc{background:#E3F6EA;box-shadow:inset 0 0 0 2px #22A45D}.cz-mg .cz-md.hoy.hc b{color:#0B5C35}
+.cz-mg .cz-md .cz-bd{top:-6px;right:-6px;bottom:auto;left:auto;transform:none;width:18px;height:18px}
+.cz-li{display:inline-flex;align-items:center;justify-content:center;width:16px;height:16px;border-radius:50%;margin-right:4px;font-style:normal;vertical-align:-3px}
+.cz-li .ic{width:11px;height:11px;margin:0}.cz-li.ok{background:#22A45D;color:#fff}.cz-li.ok .ic{width:9px;height:9px;stroke-width:3.4}.cz-li.pl{color:#0D0D10}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md{background:#1C1C1E;box-shadow:inset 0 0 0 1px #2C2C2E}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md b{color:#E5E5EA}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.pas b{color:#6C6C70}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.hc{background:rgba(34,164,93,.2);box-shadow:inset 0 0 0 1px rgba(34,164,93,.45)}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.hc b{color:#8FE0B0}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.pl{background:#1C1C1E;box-shadow:inset 0 0 0 1px #3A3A3C}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.pl b,:where(html[data-tema=oscuro]) .cz-mg .cz-md.pl .cz-ic,:where(html[data-tema=oscuro]) .cz-li.pl{color:#fff}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.pl.pas .cz-ic{color:#5A5A5E}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.hoy{background:#1C1C1E;box-shadow:inset 0 0 0 2px #fff}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.hoy b{color:#fff}
+:where(html[data-tema=oscuro]) .cz-mg .cz-md.hoy.hc{background:rgba(34,164,93,.2);box-shadow:inset 0 0 0 2px #22A45D}
 /* 22 nov, 19:45: «Lo que te toca» (la rutina del entrenador, desde fuera) con el estilo de la app de usuaria */
 .rl{display:flex;flex-direction:column;gap:8px;padding:6px 0 4px}
 .rl-sec{display:flex;align-items:center;gap:8px;margin:8px 0 0}
@@ -5277,7 +5318,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.198';
+var APP_V = 'v53.4.199';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -5806,11 +5847,14 @@ function ejercicioCard(series,st,coach,go){
     if(e1M) h+='<div class="f1rm"><span>1RM estimado: <b>'+fN(e1M,1)+' kg</b> con</span><select data-c="f1rm" aria-label="Fórmula">'+Object.keys(F1RM).map(function(k){ return '<option value="'+k+'"'+((CO.f1rm||'epley')===k?' selected':'')+'>'+F1RM[k]+'</option>'; }).join('')+'</select><span class="muted sm">'+[90,80,70].map(function(p){ return p+' % ≈ '+fN(e1M*p/100,1)+' kg'; }).join(' · ')+'</span></div>'; }
   if(pts.length>1) h+='<div class="muted sm mt">Peso máximo por sesión (kg)</div>'+grafica([{puntos:pts,color:MAG}],Object.assign({unidad:'kg'},go||{}))+mkLista(MKE);
   else if(!pts.length){ var pr2=arr.filter(function(s){ return s.maxR!=null; }).map(function(s){ return {f:s.f,y:s.maxR}; }); if(pr2.length>1) h+='<div class="muted sm mt">Repeticiones máximas por sesión</div>'+grafica([{puntos:pr2,color:MAG}],go||{}); }
-  h+='<div class="tbl-w"><table class="tbl"><tr><th>Fecha</th><th>Series (kg × reps, RIR)</th>'+(coach?'<th>1RM est.</th>':'')+'</tr>'+arr.slice(-8).reverse().map(function(s){
-    return '<tr><td style="white-space:nowrap">'+fCorta(s.f)+'</td><td>'+txtFilas(s.rows,M,s.sid)+'</td>'+(coach?'<td>'+fN(s.e1,1)+'</td>':'')+'</tr>';
-  }).join('')+'</table></div>';
+  /* 22 nov, 20:19 (Chadín: «en progresión por ejercicio, que salgan solo las últimas 3 fechas abajo, las demás cerradas»): «Ver N fechas más» las abre */
+  var TF=arr.slice(-20).reverse(), nMas=Math.max(0,TF.length-3);
+  h+='<div class="tbl-w pr-tw"><table class="tbl"><tr><th>Fecha</th><th>Series (kg × reps, RIR)</th>'+(coach?'<th>1RM est.</th>':'')+'</tr>'+TF.map(function(s,k){
+    return '<tr'+(k>=3?' class="pr-mas"':'')+'><td style="white-space:nowrap">'+fCorta(s.f)+'</td><td>'+txtFilas(s.rows,M,s.sid)+'</td>'+(coach?'<td>'+fN(s.e1,1)+'</td>':'')+'</tr>';
+  }).join('')+'</table>'+(nMas?'<button class="link pr-ver" data-a="prVer" data-n="'+nMas+'">'+ic('flecha')+'Ver '+nMas+(nMas===1?' fecha más':' fechas más')+'</button>':'')+'</div>';
   return h+'<div class="muted sm mt6 ley-mk">'+ic('trofeo')+' récord · '+ic('sube')+' mejora respecto al último día · ↘ bajadas o mini-series · D/I derecha e izquierda</div></div>';
 }
+A.prVer=function(el){ var w=el.closest('.pr-tw'); if(!w) return; var ab=!w.classList.contains('ab'), n=+el.dataset.n; w.classList.toggle('ab',ab); el.innerHTML=ic('flecha')+(ab?'Ver solo las 3 últimas':'Ver '+n+(n===1?' fecha más':' fechas más')); };
 function cardioProg(arr,go){
   arr.forEach(function(s){ var o={}; s.rows.forEach(function(y){ var x=extraDe(y); ['tiempo','km','kcal','pisos','pasos'].forEach(function(k){ if(num(x[k])!=null) o[k]=(o[k]||0)+num(x[k]); }); if(!vacio(x.nivel)) o.nivel=x.nivel; }); s.o=o; });
   var met=['km','kcal','tiempo','pisos','pasos'].filter(function(k){ return arr.some(function(s){ return num(s.o[k]); }); })[0]||'tiempo';
@@ -8718,9 +8762,9 @@ function checkinCard(hoy){
   if(CL.ckQ!=null&&CL.ck.energia==null) CL.ck.energia=CL.ckQ;
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var mj=!hombreCl(), res=[mj&&e.regla?'Con el periodo':'',mj&&!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',mj&&e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
-    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Cómo te sientes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
+    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Qué mood tienes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
   }
-  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Cómo te sientes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>'+(CL.ckAb||CL.ckEd?'<button class="ck-x" data-a="ckCierra" aria-label="Cerrar">'+ic('abajo')+'</button>':'')+'</div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
+  return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Qué mood tienes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>'+(CL.ckAb||CL.ckEd?'<button class="ck-x" data-a="ckCierra" aria-label="Cerrar">'+ic('abajo')+'</button>':'')+'</div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
 
     (hombreCl()||!cicloOn()?'<input type="hidden" id="ck-dia" value="">'+'<label class="f">Horas de sueño<input id="ck-sueno" inputmode="decimal" value="'+esc(vacio(e.sueno)?'':fN(e.sueno))+'" placeholder="7,5"></label>':
     '<div class="fila"><span>¿Estás con el periodo?</span><button class="sw'+(CL.ck.regla?' on':'')+'" data-a="ckRegla" aria-label="Estás con el periodo"><i></i></button></div>'+
@@ -8740,11 +8784,18 @@ var CK_R=[[2,'#E5484D'],[4,'#F08A24'],[6,'#F2C230'],[8,'#3DBE6A'],[10,'#147A43']
 function ckNiv(){ return [gCl('Agotada','Agotado'),gCl('Cansada','Cansado'),'Normal','A tope','Súper a tope']; }
 function ckRapidoHtml(){
   var N=ckNiv();
-  return '<div class="card ck-rap" id="ck-card"><div class="ck-rh"><b>¿Cómo te sientes hoy?</b><small>Toca cómo estás y, si quieres, completa lo demás</small></div>'+
+  return '<div class="card ck-rap" id="ck-card"><div class="ck-rh"><b>¿Qué mood tienes hoy?</b><small>'+(cicloOn()?'Toca cómo estás y, si quieres, completa lo demás':'Toca cómo estás y se guarda')+'</small></div>'+
     '<div class="ck-rn">'+CK_R.map(function(x,i){ return '<button data-a="ckRapido" data-v="'+x[0]+'" style="--c:'+x[1]+'" aria-label="'+esc(N[i])+'"><i></i><small>'+esc(N[i])+'</small></button>'; }).join('')+'</div>'+
     '<button class="ck-rnota" data-a="ckRapido" data-v="">'+ic('nota')+'Añadir una nota para '+esc(czCoach())+'</button></div>';
 }
-A.ckRapido=function(el){ var v=el.dataset.v; CL.ckAb=true; CL.ckQ=v?+v:null; CL.keep=true; pintarCl();
+/* 22 nov, 20:19 (Chadín): «si no tiene ciclo menstrual, el “cómo te sientes” se rellena de un clic, no se le abre la otra vista»: sin ciclo (hombre
+   o con el ciclo oculto), tocar el mood lo guarda ya (lo demás de hoy, como estaba); la nota sigue abriendo el check-in */
+function ckUnToque(v){
+  var hoy=hoyStr(), e=diarioDe(hoy)||{}, N=ckNiv(), k=CK_R.map(function(x){ return x[0]; }).indexOf(v);
+  var p={fecha:hoy,regla:!!e.regla,premenstrual:!!e.premenstrual,sintomas:(e.sintomas||[]).slice(),dia_ciclo:e.dia_ciclo==null?'':e.dia_ciclo,sueno:e.sueno==null?'':e.sueno,energia:v,escala:10,notas:e.notas||''};
+  cargando(colaDiario(p)).then(function(){ var d=diarioDe(hoy,true); d.energia=v; toast('Guardado: '+(N[k]||'tu mood'),'ok'); CL.ckAb=false; CL.ckQ=null; CL.ckEd=false; CL.keep=true; pintarCl(); },function(er){ toast('No se ha podido guardar: '+limpiaErr(er),'err'); });
+}
+A.ckRapido=function(el){ var v=el.dataset.v; if(v&&!cicloOn()) return ckUnToque(+v); CL.ckAb=true; CL.ckQ=v?+v:null; CL.keep=true; pintarCl();
   setTimeout(function(){ var c=document.getElementById('ck-card'); if(c) c.scrollIntoView({block:'start',behavior:'smooth'}); if(!v){ var t=document.getElementById('ck-notas'); if(t) setTimeout(function(){ t.focus({preventScroll:true}); },350); } },60); };
 A.ckCierra=function(){ CL.ckAb=false; CL.ckQ=null; CL.ckEd=false; CL.keep=true; pintarCl();      // v53.4.173 (Javier): «si quieres volver a salir no se cierra»
   setTimeout(function(){ var c=document.getElementById('ck-card'); if(c&&c.getBoundingClientRect().top<0) c.scrollIntoView({block:'center',behavior:'smooth'}); },60); };
@@ -10903,6 +10954,7 @@ var bancoBg=false;
 function libSugCm(p,mi){
   if(!CL.bancoM){ if(!bancoBg){ bancoBg=true; cargarBancoCl().then(function(){ if(CL.tab==='dieta'){ CL.keep=true; pintarCl(); } },function(){}); } return []; }
   var c=p.comidas[mi], cat=catCm(c), M=miaCl(), mios=(M.add[p.id+'|'+mi]||[]).map(function(x){ return x.lib; });
+  if(CL.d&&CL.d.casa) return [];      // 22 nov, 20:19 (Chadín: «quita lo de que salgan sugerencias en el perfil Chadín»): en el panel nº 1, sin sugerencias
   var pf=prefCl(), oc=pf.oc||{}; if(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi])) return [];      // v53.4.26: las que ha quitado · v53.4.34: sin sugerencias en esta comida (o en ninguna)
   var tp=casaLib()?tipoCmDe(c.nombre):'';      // v53.4.87: en el nº 1, cada comida con lo suyo (desayuno, media mañana o merienda, comida o cena)
   var L=libTodas().filter(function(r){ return !r.tanda&&(tp?r.t.indexOf(tp)>=0:libCat(r)===cat)&&mios.indexOf(r.id)<0&&adaptarRecCl(r); }); if(!L.length) return [];
@@ -11062,7 +11114,7 @@ function pqPintar(){
         '<button class="pq-x" data-a="pqTog" data-o="'+esc(o.id)+'"'+(hoy?' disabled':'')+' aria-label="Quitar «'+esc(nombreOp(o,z.i))+'» de tu '+esc(nom)+'">'+ic('x')+'</button></div>'; }).join('')+'</div>'
     :'<p class="muted sm">No te queda ningún plato en tu '+esc(nom)+': crea el tuyo o elige una receta.</p>';
   var sOn=!(pf.ns||(pf.nsm&&pf.nsm[p.id+'|'+mi]));
-  h+=(lib?'<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en tu '+esc(nom)+' (cambian cada día)</small></span><button class="sw'+(sOn?' on':'')+'" data-a="pqSug" aria-pressed="'+sOn+'" aria-label="Sugerencias de la biblioteca en tu '+esc(nom)+'"><i></i></button></div>':'')+
+  h+=(lib&&!(CL.d&&CL.d.casa)?'<div class="fila dsc-f pq-sug"><span>Sugerencias de la biblioteca<small class="fila-s">3 recetas que te proponemos en tu '+esc(nom)+' (cambian cada día)</small></span><button class="sw'+(sOn?' on':'')+'" data-a="pqSug" aria-pressed="'+sOn+'" aria-label="Sugerencias de la biblioteca en tu '+esc(nom)+'"><i></i></button></div>':'')+
     '<button class="btn sec mt" data-a="cerrarModal">Listo</button>';
   b.innerHTML=h;
 }
@@ -21573,9 +21625,10 @@ function czMesPintar(){
     var f=fechaDe(new Date(Y,m,dd)), r=czDia(f);
     var bd=r.ev.length?['g','trofeo']:r.citas.length||r.ll.length?['c',r.ll.length&&!r.citas.length?'video':'user']:r.rev?['r','rev']:r.fotos?['f','foto']:null;      // v53.4.171: el recordatorio, con su icono de color
     g+='<button class="cz-md'+(f===hoy?' hoy':'')+(f===sel&&CL.czD?' sel':'')+(f<hoy?' pas':'')+(r.hecho?' hc':r.plan.length?' pl':'')+(bd?' bd':'')+'" data-a="czMesD" data-f="'+f+'" aria-label="'+esc(fLarga(f))+'"><b>'+dd+'</b>'+(bd?'<span class="cz-bd '+bd[0]+'">'+ic(bd[1])+'</span>':'')+
-      '<span class="cz-mk">'+(r.hecho?'<i class="h"></i>':'')+(r.plan.length?'<i class="p"></i>':'')+(r.rev?'<i class="r"></i>':'')+(r.fotos?'<i class="f"></i>':'')+'</span></button>';
+      '<span class="cz-mk">'+(r.hecho?'<i class="h"></i>':'')+(r.plan.length?'<i class="p"></i>':'')+(r.rev?'<i class="r"></i>':'')+(r.fotos?'<i class="f"></i>':'')+'</span>'+
+      (r.hecho?'<i class="cz-ic">'+ic('ok')+'</i>':r.plan.length?'<i class="cz-ic">'+ic('pesa')+'</i>':'')+'</button>';      // 22 nov, 20:19: tic verde (hecho) o pesa (toca)
   }
-  g+='</div><div class="cz-ly"><span><i class="h"></i>Hecho</span><span><i class="p"></i>Toca entrenar</span><span><i class="r"></i>Revisión</span><span><i class="c"></i>Cita con '+esc(czCoach())+'</span><span><i class="f"></i>Fotos</span><span><i class="g"></i>Competición</span></div>';
+  g+='</div><div class="cz-ly"><span><em class="cz-li ok">'+ic('ok')+'</em>Hecho</span><span><em class="cz-li pl">'+ic('pesa')+'</em>Toca entrenar</span><span><i class="r"></i>Revisión</span><span><i class="c"></i>Cita con '+esc(czCoach())+'</span><span><i class="f"></i>Fotos</span><span><i class="g"></i>Competición</span></div>';
   if(!CL.czD) g+=czProxHtml(hoy);      // v53.4.171: «Lo próximo»
   if(sel&&CL.czD){ var r2=czDia(sel), L=[];
     r2.citas.forEach(function(x){ L.push('<div class="cz-dr"><b>'+esc(x.hora)+'</b><span>'+esc(x.titulo)+' con '+esc(czCoach())+(x.lugar&&!czUrl(x.lugar)?'<small>'+esc(x.lugar)+'</small>':'')+'</span></div>'); });
@@ -21886,9 +21939,10 @@ function planClCard(){
   var p=CL.d.plan; if(!p||(!p.nombre&&!p.hasta&&!(p.pagos||[]).length)) return '';
   var d=planClDias();
   var h='<div class="card plan-cl"><div class="card-t"><i class="pf-ti pf-ti-plan">'+ic('euro')+'</i>Tu plan</div><h2>'+esc(p.nombre||'Tu plan')+'</h2>'+
-    '<div class="plc-f">'+(p.desde?'<div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div>':'')+(p.hasta?'<div><span>'+(d!=null&&d<0?'Venció':'Vence')+'</span><b>'+esc(fAnio(p.hasta))+'</b></div>':'')+'</div>'+
-    (d!=null?'<p class="plc-d'+(d<0?' bad':d<=7?' warn':'')+'">'+diasTxt(d)+'</p>':'')+
-    (p.estado!=='baja'&&(p.hasta||(p.planes||[]).length)?'<button class="btn mt6'+(d!=null&&d<=7?'':' sec')+'" data-a="plRenovarCl">'+(p.pedido?ic('okc')+'Renovación pedida':'Renovar mi plan')+'</button>':'');
+    /* 22 nov, 20:19 (Chadín): «que en la app de la clienta no salga el botón de renovar plan, solo 5 días antes de vencer; resalta la fecha de vencimiento» */
+    (p.hasta?'<div class="plc-ven'+(d!=null&&d<0?' bad':d!=null&&d<=5?' warn':'')+'"><span>'+(d!=null&&d<0?'Venció el':'Vence el')+'</span><b>'+esc(fAnio(p.hasta))+'</b>'+(d!=null?'<small>'+diasTxt(d)+'</small>':'')+'</div>':'')+
+    (p.desde?'<div class="plc-f"><div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div></div>':'')+
+    (p.estado!=='baja'&&(p.hasta||(p.planes||[]).length)&&(p.pedido||(d!=null&&d<=5))?'<button class="btn mt6" data-a="plRenovarCl">'+(p.pedido?ic('okc')+'Renovación pedida':'Renovar mi plan')+'</button>':'');
   if((p.pagos||[]).length) h+='<div class="lab">Tus pagos</div>'+p.pagos.map(function(x){ return '<div class="plc-p"><span><b>'+esc(fAnio(x.fecha))+'</b><small>'+esc(x.plan)+(x.desde&&x.hasta?' · del '+esc(fCorta(x.desde))+' al '+esc(fCorta(x.hasta)):'')+(x.metodo?' · '+esc(METODO_L[x.metodo]||x.metodo):'')+'</small></span>'+
     '<span class="plc-r"><b>'+eur(x.importe)+'</b>'+(x.id?'<button class="link plc-j" data-a="justCl" data-id="'+esc(x.id)+'">'+ic('descargar')+'Justificante</button>':'')+'</span></div>'; }).join('');      // v53.4.31
   return h+'</div>';
@@ -21910,7 +21964,7 @@ A.bajarCompartir=function(){ var f=window.__bajarF; if(f&&navigator.share) navig
 /* v35: 3 días antes, «tu plan vence en 3 días»; al vencer, 3 días de cortesía con su cuenta atrás (luego pierde el acceso) */
 function planGracia(){ var p=CL.d&&CL.d.plan; return p&&p.acceso?diff(hoyStr(),p.acceso):null; }
 function planAvisoHoy(){
-  var d=planClDias(); if(d==null||d>7) return '';
+  var d=planClDias(); if(d==null||d>5) return '';      // 22 nov: el aviso con «Renovar», desde 5 días antes (antes, 7)
   var p=CL.d.plan, g=planGracia(), tit, sub;
   if(d<0&&g!=null){ tit='Tu plan ha vencido'; sub=g>0?(g===1?'Te queda 1 día':'Te quedan '+g+' días')+' de cortesía: si no renuevas antes del '+fMedia(sumar(p.acceso,1)).toLowerCase()+', perderás el acceso a la app':'Hoy es tu último día de cortesía: renueva hoy para no perder el acceso'; }
   else { tit=d<0?'Tu plan ha vencido':d===0?'Tu plan vence hoy':d<=3?'Tu plan vence en '+d+' día'+(d===1?'':'s'):'Tu plan vence pronto'; sub=diasTxt(d)+' · '+fAnio(p.hasta)+(d>=0&&p.acceso?' · después tendrás 3 días de cortesía':''); }
