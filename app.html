@@ -512,6 +512,12 @@ rect.hit{fill:transparent;cursor:crosshair}rect.hit.on{fill:rgba(20,20,20,.05)}
 #tip{position:fixed;z-index:95;display:none;background:#141414;color:#fff;font:600 12px/1.35 Plus Jakarta Sans,sans-serif;padding:7px 10px;border-radius:8px;white-space:pre-line;pointer-events:none;max-width:250px;box-shadow:0 6px 18px rgba(0,0,0,.2)}
 details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .per{margin:6px 0 4px}
+.perf{display:flex;flex-wrap:wrap;align-items:center;gap:6px 8px;margin:8px 0 4px}.perf>div{display:inline-flex;align-items:baseline;gap:7px;border-radius:999px;padding:6px 13px;min-width:0}
+.perf-a{background:#111;color:#fff}.perf-a small{color:#B4B4BC}.perf-b{background:#fff;border:1.5px solid #DCDCE2}.perf-b small{color:#8A8A92}
+.perf small{font-size:11.5px;font-weight:600}.perf b{font-size:14px;font-weight:800;white-space:nowrap}.perf b i{font-style:normal;font-weight:600;opacity:.6;margin:0 1px}
+.perf-vs{font-size:12px;font-weight:700;color:#8A8A92}
+.cmp-t th small{display:block;font-size:11px;font-weight:600;color:var(--mu);margin-top:1px;white-space:nowrap}@media(max-width:560px){.cmp-t th small{white-space:normal}}
+.ui2 .cmp-t td.up{color:#0E7A45}.ui2 .cmp-t td.down{color:#D93B30}.ui2 .cmp-t td.eq{color:#2563D4;font-weight:700}      /* v53.4.216: en tu panel, como en «Comparar dos»: mejora verde, igual azul, baja rojo */.cmp-t th.cmp-ha{color:#111}.cmp-t th.cmp-ha small{color:#3A3A44}
 .cmp-t{font-size:12.5px}.cmp-t th,.cmp-t td{padding:7px 4px}
 .cmp-t td.up{color:var(--ok);font-weight:700}.cmp-t td.down{color:var(--warn);font-weight:700}.cmp-t td:nth-child(n+2){white-space:nowrap}
 .hm{border-collapse:separate;border-spacing:2px;font-size:12px;min-width:100%}
@@ -5461,7 +5467,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.215';
+var APP_V = 'v53.4.216';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -12668,7 +12674,7 @@ function vAnalisis(){
   if(!T.some(function(x){ return x[0]===CO.anT; })) CO.anT='gen';
   var h=(T.length>1?'<div class="an-tabs" role="tablist" aria-label="Qué quieres ver">'+T.map(function(x){ return '<button role="tab" data-a="anT" data-t="'+x[0]+'" aria-selected="'+(CO.anT===x[0])+'"'+(CO.anT===x[0]?' class="on"':'')+'>'+esc(x[1])+'</button>'; }).join('')+'</div>':'')+
     '<div class="tipos per">'+PERIODOS.map(function(p){ return '<button class="'+((CO.per==null?90:CO.per)===p[0]?'on':'')+'" data-a="per" data-v="'+p[0]+'">'+p[1]+'</button>'; }).join('')+'</div>'+
-    '<p class="muted sm">Del '+fCorta(R.desde)+' al '+fCorta(R.hasta)+' ('+R.dias+' días). Se compara con los '+R.dias+' días anteriores ('+fCorta(R.aDesde)+' – '+fCorta(R.aHasta)+').</p>'+faseHoyTxt(d);
+    perFechasHtml(R)+faseHoyTxt(d);
   // v23: en el móvil una columna; en el ordenador, rejilla (cada pestaña con la suya)
   function bl(k,t,html){ return html?'<div class="an-'+k+' tg-'+t+' dk-i">'+html+'</div>':''; }
   var PL=d.clienta.pasosObj?'<div class="pl-2">'+pasosProgCard()+'</div>':'';      // v53.4.119: sin sus medallas
@@ -12699,6 +12705,12 @@ function runUltCard(d,R){
     (L.length>8?'<p class="muted sm">Y '+(L.length-8)+' más en el periodo.</p>':'')+'<p class="muted sm mt6">Cada una, frente a la anterior que más se le parece. «Comparar» abre el detalle.</p></div>';
 }
 A.per=function(el){ CO.per=+el.dataset.v; pintarClienta(false); };
+/* v53.4.216 · Word «PANEL ENTRENADOR» 9: las fechas que se comparan, bien claras (antes, una línea gris pequeña) */
+function fPer(f){ var hoy=CO.hoy||hoyStr(); return fCorta(f)+(String(f).slice(0,4)!==String(hoy).slice(0,4)?' '+String(f).slice(0,4):''); }
+function perFechasHtml(R){
+  return '<div class="perf"><div class="perf-a"><small>Este periodo · '+R.dias+(R.dias===1?' día':' días')+'</small><b>'+esc(fPer(R.desde))+' <i>→</i> '+esc(fPer(R.hasta))+'</b></div>'+
+    '<span class="perf-vs">frente a</span><div class="perf-b"><small>Periodo anterior · '+R.dias+(R.dias===1?' día':' días')+'</small><b>'+esc(fPer(R.aDesde))+' <i>→</i> '+esc(fPer(R.aHasta))+'</b></div></div>';
+}
 function comparativaCard(d,R,M,P,K,tit,siempre,pie){      // v52.18: K = las filas ([clave, etiqueta]) y su título; v52.19: pie (HTML)
   var a=metricas(d,R.desde,R.hasta,M,P), b=metricas(d,R.aDesde,R.aHasta,M,P);
   var sinAnt=!b.ses&&!b.series&&!b.prog&&b.dieta==null&&b.energia==null&&b.sueno==null&&b.peso==null;
@@ -12706,9 +12718,9 @@ function comparativaCard(d,R,M,P,K,tit,siempre,pie){      // v52.18: K = las fil
   var filas=[['Entrenos','ses',0,'',true],['Series programadas','prog',0,'',null],['Series hechas','series',0,'',true],['Series cumplidas','cumpl',0,'%',true],['Cardio','cardio',0,' min',true],['Bloques funcionales','bloques',0,'',true],['Volumen','vol',0,' kg',true],['Récords','rec',0,'',true],['Energía (1-10)','energia',1,'',true],['Sueño medio','sueno',1,' h',true],['Peso final','peso',1,' kg',null]];
   if(K){ var FD={}; filas.concat([['Km de carrera','km',1,' km',true]]).forEach(function(f){ FD[f[1]]=f; }); filas=K.map(function(k){ var f=FD[k[0]]; return f&&k[1]?[k[1]].concat(f.slice(1)):f; }).filter(Boolean); }
   filas=filas.filter(function(f){ return siempre||(f[1]!=='cardio'&&f[1]!=='bloques'&&f[1]!=='km')||a[f[1]]||b[f[1]]; });
-  return '<div class="card"><div class="card-t">'+esc(tit||'Comparativa con el periodo anterior')+'</div><div class="tbl-w"><table class="tbl cmp-t"><tr><th></th><th>Este periodo</th><th>Anterior</th><th>Diferencia</th></tr>'+filas.map(function(f){
+  return '<div class="card"><div class="card-t">'+esc(tit||'Comparativa con el periodo anterior')+'</div><div class="tbl-w"><table class="tbl cmp-t"><tr><th></th><th class="cmp-ha">Este periodo<small>'+esc(fPer(R.desde))+' – '+esc(fPer(R.hasta))+'</small></th><th>Anterior<small>'+esc(fPer(R.aDesde))+' – '+esc(fPer(R.aHasta))+'</small></th><th>Diferencia</th></tr>'+filas.map(function(f){
     var x=a[f[1]], y=b[f[1]], dlt=(x!=null&&y!=null)?x-y:null, cls='', txt='–';
-    if(dlt!=null){ var r=Math.round(dlt*Math.pow(10,f[2]))/Math.pow(10,f[2]); if(r===0) txt='='; else { txt=(r>0?ic('sube')+'+':ic('baja'))+fN(r,f[2])+(f[3]==='%'?' pts':f[3]); if(f[4]!=null) cls=((r>0)===f[4])?'up':'down'; } }
+    if(dlt!=null){ var r=Math.round(dlt*Math.pow(10,f[2]))/Math.pow(10,f[2]); if(r===0){ txt='='; cls='eq'; } else { txt=(r>0?ic('sube')+'+':ic('baja'))+fN(r,f[2])+(f[3]==='%'?' pts':f[3]); if(f[4]!=null) cls=((r>0)===f[4])?'up':'down'; } }
     return '<tr><td>'+f[0]+'</td><td><b>'+(x==null?'–':fN(x,f[2])+f[3])+'</b></td><td class="muted">'+(y==null?'–':fN(y,f[2])+f[3])+'</td><td class="'+cls+'">'+txt+'</td></tr>';
   }).join('')+'</table></div>'+'<p class="muted sm mt6 cmp-ex">«Este periodo»: del '+esc(fCorta(R.desde))+' al '+esc(fCorta(R.hasta))+'. «Anterior»: los '+R.dias+' días de justo antes (del '+esc(fCorta(R.aDesde))+' al '+esc(fCorta(R.aHasta))+'). «Diferencia»: cuánto ha subido o bajado de uno a otro.</p>'+(sinAnt?'<p class="muted sm mt6">No hay datos del periodo anterior para comparar (aún no había empezado o no registró nada).</p>':'')+(pie?'<p class="muted sm mt6 an-pie">'+ic('comparar')+'<span>'+pie+'</span></p>':'')+'</div>';
 }
