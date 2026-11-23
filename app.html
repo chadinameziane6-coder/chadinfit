@@ -1368,6 +1368,20 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .sv-q{display:flex;gap:6px;align-items:flex-start;margin-top:4px;font-size:13px;color:var(--tx2)}.sv-q .ic{margin:2px 0 0;flex:none}.sv-q.warn{color:var(--warn)}
 .sv-p{font-size:13.5px;margin:0;line-height:1.45}
 .sv-res{margin-top:0}
+/* v53.4.221 · ¿Cómo funciona? de la revisión, visual (rvg-) */
+.rvg-mapa{border:1px solid #E6E6EA;border-radius:14px;padding:8px;background:#F7F7F9;display:flex;flex-direction:column;gap:5px;margin-bottom:6px}
+.rvg-r{position:relative;border-radius:8px;background:#fff;min-height:22px;display:flex;align-items:center;gap:5px;padding:4px 8px 4px 26px;font-size:10.5px;font-weight:700;color:#55555E}
+.rvg-n{position:absolute;left:4px;top:50%;transform:translateY(-50%);width:17px;height:17px;border-radius:50%;background:#E8890C;color:#fff;font:800 10px/17px sans-serif;text-align:center;font-style:normal}
+.rvg-h{min-height:34px}.rvg-h .rvg-n+.rvg-n{left:auto;right:4px}.rvg-av{width:18px;height:18px;border-radius:50%;background:#E7EFFD}.rvg-l{height:7px;border-radius:4px;background:#D1D1D6}.rvg-ics{margin-left:auto;margin-right:20px;display:flex;gap:3px}.rvg-ics i{width:10px;height:10px;border-radius:3px;border:1px solid #B8B8C0}
+.rvg-g{background:#EDEDF0}.rvg-rd{background:#FDE4E2;color:#8E1D16}.rvg-a{display:grid;grid-template-columns:repeat(6,1fr);gap:3px;min-height:28px}.rvg-a span{height:20px;border-radius:5px;background:#fff;border:1px solid #E1E1E6}
+.rvg-vv{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:none;padding:0 0 0 22px}.rvg-vv span{border-radius:7px;padding:5px 6px}.rvg-vv .v1{background:#EEF7EF;color:#164F20}.rvg-vv .v2{background:#FDEEEC;color:#8E1D16}
+.rvg-q{background:#141414;color:#fff;flex-wrap:wrap}.rvg-q span{width:26%;height:14px;border-radius:4px;background:#fff;margin-left:4px}.rvg-m{background:#F2F6FE;color:#1F3A7A}.rvg-b{border:1.5px solid #141414}
+.rvg-p p{margin:2px 0 6px}.rvg-im{display:flex;flex-direction:column;gap:6px;align-items:flex-start}.rvg-im .btn{margin:0;width:auto;pointer-events:none}.rvg-im .rv-per{position:static}
+.rvg-icl{display:flex;gap:10px;flex-wrap:wrap}.rvg-icl>span{display:flex;flex-direction:column;align-items:center;gap:3px}.rvg-icl small{font-size:11px;color:#55555E}
+.rvg-at{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.rvg-at .rv-at{width:170px;pointer-events:none}.rvg-ley{display:flex;flex-direction:column;gap:4px;font-size:11.5px;color:#55555E}.rvg-ley span{display:flex;align-items:center;gap:5px}.rvg-ley .rv-dot{margin:0}
+.rvg-vb{display:flex;flex-direction:column;gap:4px;width:100%}.rvg-vb>span{display:flex;align-items:center;gap:6px;border-radius:10px;padding:7px 9px;font-size:12.5px;flex-wrap:wrap}.rvg-vb .g{background:#EEF7EF;color:#164F20}.rvg-vb .r{background:#FDEEEC;color:#8E1D16}.rvg-vb small{width:100%;padding-left:22px;color:#55555E}.rvg-vb .ic{width:15px;height:15px}
+.rvg-cc{display:flex;flex-direction:column;gap:6px;background:#fff;border:1px solid #E6E6EA;border-radius:12px;padding:9px;width:100%;box-sizing:border-box}.rvg-cc .rv-bts2{display:flex;gap:6px}
+.rvg-pie{display:flex;gap:6px;align-items:flex-start;margin-top:12px}.rvg-pie .ic{width:15px;height:15px;flex:none;margin-top:2px}
 /* v53.4.220 · la revisión de cada cliente (rv-) */
 .rv-nav{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 10px;font-size:13px;color:var(--muted)}.rv-nav .link{display:inline-flex;align-items:center;gap:4px;font-weight:700}
 .rv-h{display:flex;align-items:flex-start;gap:12px;background:#fff;border-radius:20px;padding:14px 16px;margin-bottom:10px;flex-wrap:wrap}
@@ -5635,7 +5649,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.220';
+var APP_V = 'v53.4.221';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14927,28 +14941,30 @@ A.rvGuia=function(){
   g.setAttribute('aria-label','Guía de la revisión de cada cliente'); g.innerHTML=rvGuiaHtml(); g.scrollTop=0; requestAnimationFrame(function(){ g.classList.add('open'); });
 };
 function rvGuiaHtml(){
-  var hl=function(x){ return x.replace(/^<(\w+)(?: class="([^"]*)")?/,function(m,tg,cl){ return '<'+tg+' class="'+(cl?cl+' ':'')+'gu-hl"'; }); };
-  var at=function(icn,t,dot,big,sm,dc,dcc){ return '<span class="rv-at" style="pointer-events:none"><span class="rv-at-t">'+ic(icn)+'<b>'+t+'</b><i class="rv-dot '+dot+'"></i></span><span class="rv-at-big">'+big+'</span><span class="rv-at-s">'+sm+'</span>'+rvChip(dcc,dc)+'</span>'; };
+  var B=function(t,cls,icn){ return '<span class="btn sm'+(cls?' '+cls:'')+'">'+(icn?ic(icn):'')+t+'</span>'; };
+  var n=function(i){ return '<i class="rvg-n">'+i+'</i>'; };
+  var mapa='<div class="rvg-mapa" inert>'+
+    '<div class="rvg-r rvg-h"><span class="rvg-av"></span><span class="rvg-l" style="width:70px"></span><span class="rvg-ics"><i></i><i></i><i></i><i></i><i></i></span>'+n(1)+n(2)+'</div>'+
+    '<div class="rvg-r rvg-g">'+n(3)+'Tu nota anterior</div><div class="rvg-r rvg-rd">'+n(4)+'Alerta</div>'+
+    '<div class="rvg-r rvg-a">'+n(5)+'<span></span><span></span><span></span><span></span><span></span><span></span></div>'+
+    '<div class="rvg-r rvg-vv">'+n(6)+'<span class="v1">Va bien</span><span class="v2">Va mal</span></div>'+
+    '<div class="rvg-r rvg-q">'+n(7)+'Qué cambiar<span></span><span></span><span></span></div>'+
+    '<div class="rvg-r rvg-m">'+n(8)+'Mensaje para ella</div><div class="rvg-r rvg-b">'+n(9)+'Cómo la ves · Revisada y siguiente</div></div>';
   var P=[
-    ['Para qué sirve','En una sola pantalla ves cómo va cada cliente, por qué y qué hacer. La app lo calcula con sus datos (entrenos, series, check-ins, peso, medidas, su dieta, sus notas y el chat) y tú decides. Nada se cambia ni se envía sin que lo pulses.',''],
-    ['La lista de la semana','Al entrar en «Revisiones» ves a todos tus clientes de esa semana. Arriba, cuántos llevas revisados. Los que tienen una alerta salen primero. Toca uno para abrir su revisión, o «Empezar» para ir uno detrás de otro.',''],
-    ['El periodo','Arriba a la derecha eliges qué días se miran: «Desde tu última revisión» (lo normal; si a ese cliente lo revisas cada 2 semanas, son 2 semanas), 2 semanas, 20 días, un mes, la programación actual o «Elegir fechas…» (una programación anterior o las fechas que quieras). Todo se compara con los días de antes, del mismo largo.',hl('<span class="rv-per" style="position:static"><button class="on">Desde tu última revisión</button><button>Mes</button><button>Elegir fechas…</button></span>')],
-    ['Los iconos de arriba','Sus rutinas, su programación, su dieta, el chat y todas tus notas. Pasa el ratón por encima (o mantén pulsado en el móvil) para ver qué es cada uno.',''],
-    ['Tu nota anterior','Lo que te apuntaste la última vez que la revisaste sale arriba, para que no se te olvide lo que ibas a mirar.',''],
-    ['La alerta','Si ha escrito que le duele o le molesta algo (en una nota del entreno, en un check-in o en el chat), sale en rojo antes que todo. «Ver lo que dijo» enseña sus palabras con la fecha; «Preguntarle» y «Derivación» abren el chat con un mensaje ya escrito que tú cambias y envías. La app no dice qué tiene: solo te avisa.',hl('<span class="rv-alr" style="margin:0"><b>'+ic('alerta')+'Alerta: dolor de rodilla</b><small>lo ha dicho 2 veces</small></span>')],
-    ['Las áreas','Seis recuadros: constancia, ejercicios, peso, descanso, ciclo (solo si te lo comparte) y lo que dice. Cada uno con su cifra, un punto de color (verde bien, naranja a vigilar, rojo a mirar) y lo que sugiere la app. Tócalo y se abre un panel con todo el detalle, sin salir de la revisión.','<span class="rv-ar" style="grid-template-columns:repeat(2,1fr);margin:0">'+at('pesa','Ejercicios','r','<span class="rv-g">6 suben</span>','3 igual · 1 baja (búlgara)','Cambiar la búlgara','ca')+at('luna','Descanso','g','7,2 h','energía 7 (antes 6)','Dejar igual','ig')+'</span>'],
-    ['Va bien y Va mal','A la izquierda, lo que mejora (los ejercicios que suben se agrupan y con «ver todos» los ves uno a uno). A la derecha, lo que va mal con su porqué: «le molesta la rodilla (lo dice ella)», «mucho trabajo (chat del miércoles)» o «sin causa clara» si sus datos no lo explican.',''],
-    ['Cómo lo calcula','Cada ejercicio se compara consigo mismo y en el mismo rango (kilos, repeticiones y RIR), no solo por el peso. El peso del cuerpo, por tendencia de varias semanas, no por un día. El ciclo solo explica algo si en sus ciclos anteriores le pasa lo mismo; si no lo comparte, no se usa. Y un día sin registro no es un día sin entrenar: lo dice así.',''],
-    ['Qué cambiar','Como mucho 3 cosas, por prioridad, para no cambiar demasiado a la vez y saber qué funciona. Cada una dice por qué, qué comprobar en la próxima revisión y trae sus botones: abrir su rutina, ver la evolución del ejercicio o el mensaje ya escrito. Si un ejercicio se estanca, te propone probar otro rango, una serie especial o cambiarlo.',hl('<span class="btn sm">'+ic('editar')+'Abrir su rutina en la búlgara</span>')],
-    ['Agendar y Hecho','«Agendar» te lo recuerda en tu agenda (en 1 semana, en 3 días, en la próxima revisión o el día que elijas); solo lo ves tú. «Marcar hecho» lo tacha y lo apunta en tu nota.',hl('<span class="btn sm sec">'+ic('cal')+'Agendar</span>')],
-    ['Dejar igual y no hacer','Debajo, lo que conviene no tocar ahora (por ejemplo, su dieta si baja a buen ritmo) y lo que se acerca (su programación acaba pronto).',''],
-    ['El mensaje para ella','La app escribe un mensaje con lo que va bien, lo que habéis cambiado, lo que quieres preguntarle y cuándo lo volvéis a mirar. Quita o pon cada parte, cámbialo como quieras o «Escribir el mío desde cero». Si todo va bien, el mensaje es para felicitarla por sus progresos.',''],
-    ['Cerrar la revisión','Abajo: «Cómo la ves» (sale marcado lo que sugiere la app; cámbialo si no estás de acuerdo), tu nota (solo tú la ves; te saldrá arriba la próxima vez) y «Revisada y siguiente», que guarda y abre el siguiente cliente. También puedes enviar el mensaje y pasar al siguiente con un solo botón.',''],
-    ['Si todo va bien','Arriba sale «Va bien, sin cambios · siguiente»: un toque y al siguiente. Con muchos clientes, así la mayoría se revisa en segundos.',hl('<span class="btn sm">'+ic('ok')+'Va bien, sin cambios · siguiente</span>')],
-    ['Tu cliente no ve nada de esto','Todo lo de esta pantalla es para ti. A tu cliente solo le llega lo que tú envías o guardas.','']
+    [1,'El periodo','Qué días se miran. Siempre frente a los días de antes.','<span class="rv-per" style="justify-content:flex-start"><button class="on">Desde tu última revisión</button><button>2 semanas</button><button>Mes</button><button>Elegir fechas…</button></span>'],
+    [2,'Los iconos','Al pasar el cursor, su nombre.','<span class="rvg-icl">'+[['pesa','Rutinas'],['cal','Programación'],['dieta','Dieta'],['nota','Chat'],['lista','Notas']].map(function(x){ return '<span><span class="rv-ic">'+ic(x[0])+'</span><small>'+x[1]+'</small></span>'; }).join('')+'</span>'],
+    [3,'Tu nota anterior','Lo que te apuntaste la última vez.','<span class="rv-rem" style="margin:0">'+ic('nota')+'<span><b>Tu nota de la revisión anterior</b>Mirar la rodilla.</span></span>'],
+    [4,'La alerta','Si escribe que le duele algo. Sale la primera.','<span class="rv-alr" style="margin:0"><b>'+ic('alerta')+'Alerta: dolor de rodilla</b><span class="rv-alb" style="margin:0">'+B('Ver lo que dijo','sec','ojo')+B('Preguntarle','sec','nota')+B('Derivación','sec','nota')+'</span></span>'],
+    [5,'Las áreas','Toca una: se abre un panel, sin salir.','<span class="rvg-at"><span class="rv-at"><span class="rv-at-t">'+ic('pesa')+'<b>Ejercicios</b><i class="rv-dot r"></i></span><span class="rv-at-big"><span class="rv-g">6 suben</span></span><span class="rv-at-s">1 baja (búlgara)</span>'+rvChip('ca','Cambiar la búlgara')+'<span class="rv-at-ab">Abrir'+ic('flecha')+'</span></span><span class="rvg-ley"><span><i class="rv-dot g"></i>bien</span><span><i class="rv-dot o"></i>vigilar</span><span><i class="rv-dot r"></i>mirar</span><span><i class="rv-dot p"></i>ciclo</span></span></span>'],
+    [6,'Va bien · Va mal','Lo que mejora y lo que no, con su porqué.','<span class="rvg-vb"><span class="g">'+ic('sube')+'<b>6 ejercicios mejoran</b></span><span class="r">'+ic('baja')+'<b>Búlgara 16 → 12 kg</b><small>por qué: le molesta la rodilla</small></span></span>'],
+    [7,'Qué cambiar','3 cosas como mucho. Cada una con sus botones.','<span class="rvg-cc"><span class="rv-cch"><span class="rv-n">1</span><span class="rv-pr a">Prioridad alta</span>'+rvChip('ca','Cambiar')+'</span>'+B('Abrir su rutina en la búlgara','','editar')+'<span class="rv-bts2">'+B('Agendar','sec rv-ag','cal')+B('Marcar hecho','sec','ok')+'</span></span>'],
+    [8,'El mensaje para ella','Lo escribe la app. Quita partes o escríbelo tú.','<span class="rv-inc" style="margin:0">'+['Lo que va bien','Lo que cambiamos','Cuéntame','Próxima revisión'].map(function(t){ return '<button class="on">'+ic('ok')+t+'</button>'; }).join('')+'</span>'+B('Enviar, marcar revisada y siguiente','','enviar')],
+    [9,'Cerrar','Elige cómo la ves (sale marcada la sugerida) y al siguiente.','<span class="rv-rs">'+['Va bien','Ajustar algo','Hablar con ella'].map(function(r,i){ return '<button class="'+(i===2?'on':'')+'">'+r+(i===2?'<i>sugerido</i>':'')+'</button>'; }).join('')+'</span>'+B('Revisada y siguiente','','flecha')],
+    ['✓','Si todo va bien','Un toque y al siguiente.',B('Va bien, sin cambios · siguiente','','ok')]
   ];
-  return '<div class="gu-h"><b>Guía: la revisión de cada cliente</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 6px">Para revisar a todos tus clientes en poco tiempo, sin dejarte nada.</p>'+
-    P.map(function(x,i){ return '<div class="gu-p"><div class="gu-t"><span class="gu-n">'+(i+1)+'</span><b>'+x[0]+'</b></div><p>'+x[1]+'</p>'+(x[2]?'<div class="gu-im" inert>'+x[2]+'</div>':'')+'</div>'; }).join('');
+  return '<div class="gu-h"><b>Cómo funciona la revisión</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 8px">Dónde está cada cosa en la pantalla:</p>'+mapa+
+    P.map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
+    '<p class="muted sm rvg-pie">'+ic('info')+'La app lo calcula con sus datos y tú decides: nada se cambia ni se envía sin que lo pulses. Tu cliente no ve esta pantalla.</p>';
 }
 
 /* ---------- ¿avisar a la clienta de este cambio? (solo si la coach quiere) ---------- */
