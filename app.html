@@ -4273,6 +4273,7 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-fr .aa-como{margin-top:10px}.top .aa-como{min-width:70px;justify-content:flex-end}
 /* v53.4.244 (Chadín, 23 nov 19:11: «ese diseño muy feo»): «Citas con…» de la ficha, como «Competiciones y objetivos» */
 /* v53.4.245: a quién das los 3 días de cortesía */
+.prep-av{border-top:1px solid var(--line);margin-top:14px;padding-top:14px;display:flex;flex-direction:column;gap:4px}.prep-av>b{font-size:14.5px}.prep-ds{margin:6px 0 2px}.prep-ds button .ic{width:13px;height:13px;margin:0 4px 0 0}
 .pg-cort{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:4px}.pg-cort>b{font-size:14.5px}
 .pg-cops{margin:6px 0 2px}.pg-cops button .ic{width:13px;height:13px;margin:0 4px 0 0}
 .pg-cres{display:flex;gap:8px;align-items:flex-start;margin:4px 0 0;font-size:13px;color:#3A3A3C;background:#F2F2F5;border-radius:12px;padding:9px 12px}.pg-cres .ic{width:16px;height:16px;flex:none;margin-top:1px}
@@ -5916,7 +5917,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.245';
+var APP_V = 'v53.4.246';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -12905,7 +12906,7 @@ function avisarBajas(L){ if(!L||!L.length||document.querySelector('#modal.open')
     '<p class="muted sm">Se han borrado sus datos (rutinas, dieta, entrenos, fotos, chat…). Sus pagos siguen en Pagos, porque hay que guardarlos.</p><button class="btn mt" data-a="bajasVistas">Entendido</button></div>'); }
 A.bajasVistas=function(){ cerrarModal(); api('coachBajasVistas',CO.pin).catch(function(){}); };
 function ponerResumen(r){ if(r&&r.bajas&&r.bajas.length) setTimeout(function(){ avisarBajas(r.bajas); },1200); PG22=LS.get('chadin_pg22')!==0; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
-  CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0); CO.cfotoV=r.cfotoV||''; CO.comOff=r.comOff===true; setTimeout(function(){ cfotoSync(CO.cfotoV); },0);      // v53.4.243 (Word 16 y 17)      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
+  CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0); CO.cfotoV=r.cfotoV||''; CO.comOff=r.comOff===true; if(Array.isArray(r.prepDias)) CO.prepDias=r.prepDias; setTimeout(function(){ cfotoSync(CO.cfotoV); },0);      // v53.4.243 (Word 16 y 17)      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.citasMias=r.citasMias||[]; CO.nuevos=r.nuevos||[]; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.semCal=r.semCal||{dias:[],per:''}; CO.clFil=r.clFil||null; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
@@ -13861,6 +13862,12 @@ function tareasDe(c,lim){
   var f0=Object.keys(fin).sort()[0];
   if(f0) add({tipo:'rutina',f:f0,tit:f0<hoy?'Rutinas terminadas':'Terminan las rutinas',det:listaY(fin[f0]),acc:plnOn()?'Preparar renovación':'Nueva programación o prorrogar',a:plnOn()?'plnRen':'rutina'});      // v53.4.122 (nº 1): a «Plan»
   Object.keys(ini).forEach(function(f){ add({tipo:'rutina',f:f,tit:'Empieza la programación nueva',det:listaY(ini[f]),info:true,acc:'Ver rutinas',a:'verRut'}); });
+  /* v53.4.246 · 23 nov 2026 (Chadín, 20:16–20:17): programación o dieta con sus fechas pero sin hacer: desde el primer aviso que elegiste
+     (de partida, 5 días antes) hasta que la haces; si empieza sin hacer, sigue (atrasado) */
+  var PD=CO.prepDias||[5,3,2,1], pmax=PD.length?Math.max.apply(null,PD):0;
+  (c.pend||[]).forEach(function(z){ var q=diff(hoy,z.desde), die=z.t==='die'; if(!pmax||q>pmax) return;
+    /* los días de aviso, en «Hoy»; el resto, en su día */
+    add({tipo:die?'dieta':'rutina',f:q>0&&PD.indexOf(q)>=0?hoy:z.desde,tit:die?'Falta hacer la dieta':'Faltan las rutinas',det:[prepNom(z),q>1?'empieza en '+q+' días':q===1?'empieza mañana':q===0?'empieza hoy':'empezó el '+fCorta(z.desde)+': sigue con '+(die?'la':'las')+' de antes'].filter(String).join(' · '),acc:die?'Hacerla':'Prepararlas',a:die?'prepDie':'prepRut',id:z.desde}); });
   (c.llamadas||[]).forEach(function(l){ if(l.fecha>=hoy) add({tipo:'llamada',f:l.fecha,tit:'Videollamada '+l.hora,det:l.minutos+' min'+(l.motivo?' · '+l.motivo:''),acc:'Ver',a:'llamada',id:l.id,hora:l.hora}); });   // v30
   (c.citas||[]).forEach(function(x){ if(x.fecha>=hoy) add(citaT(x)); });      // v53.4.160: lo que has agendado con él/ella
   (c.eventos||[]).forEach(function(e){ if(e.fecha>=hoy) add({tipo:'evento',f:e.fecha,tit:e.nombre,det:[e.modalidad,e.prioridad==='principal'?'objetivo principal':'preparatoria',faltanTxt(e.fecha,hoy).toLowerCase()].filter(String).join(' · '),info:true,acc:'Ver',a:'evento',id:e.id}); });      // v52.11
@@ -13878,6 +13885,8 @@ function tareasDe(c,lim){
   if(!rv.fecha) add({tipo:'setup',f:'',tit:'Sin revisión programada',det:'',acc:'Programar revisión',a:'progRev'});
   return L;
 }
+function prepNom(z){ var n=fasesTxt(z.fases); if(z.t==='die') return [n||'Dieta',z.kcal?fN(z.kcal,0)+' kcal':''].filter(String).join(' · '); return (n||'Programación')+((z.prio||[]).length?' · prioridad '+listaY(z.prio).toLowerCase():''); }
+function prepDiasTxt(){ var L=(CO.prepDias||[5,3,2,1]).slice().sort(function(a,b){ return b-a; }); return L.length?listaY(L.map(String))+(L[L.length-1]===1?' día':' días')+' antes':''; }
 function ordenT(a,b){ var G='atr hoy sem mas sin'; return (G.indexOf(a.g)-G.indexOf(b.g))||((a.f||'')<(b.f||'')?-1:(a.f||'')>(b.f||'')?1:0)||String(a.nom).localeCompare(String(b.nom),'es'); }
 function tareasTodas(lim){ var L=[]; CO.lista.filter(function(c){ return c.activa; }).forEach(function(c){ L=L.concat(tareasDe(c,lim)); }); L=L.concat(citasMiasT(lim||sumar(CO.hoy||hoyStr(),30))); return L.sort(ordenT); }      // v53.4.160: + tus citas («Solo yo»)
 function fechaT(t){ if(!t.f) return '<span class="tk-f"><b>Sin fecha</b></span>'; var d=aDate(t.f); return '<span class="tk-f"><b>'+diaSemC(d)+' '+d.getDate()+'</b><small>'+esc(t.f.slice(0,7)===(CO.hoy||hoyStr()).slice(0,7)?relT(t.f):mesC(d)+' · '+relT(t.f))+'</small></span>'; }
@@ -13887,7 +13896,7 @@ function filaT(t,conNom){
     (t.info?'':'<button class="tk-acc" data-a="tkAcc"'+x+'>'+esc(t.acc)+ic('flecha')+'</button>')+'</div>';
 }
 /* abrir la ficha en la pantalla afectada (y, con la acción, su ventana) */
-var TK_SUB={escribir:'chat',cita:'calendario',evento:'calendario',chat:'chat',fotos:'chat',progFotos:'enlace',revision:'seguimiento',plan:'seguimiento',dieta:'dieta',rutina:'entrenos',tarea:'seguimiento',progRev:'enlace',cuest:'enlace',verRut:'entrenos',dietaTab:'dieta',plnPrep:'plan',plnRen:'plan'};
+var TK_SUB={prepRut:'entrenos',prepDie:'dieta',escribir:'chat',cita:'calendario',evento:'calendario',chat:'chat',fotos:'chat',progFotos:'enlace',revision:'seguimiento',plan:'seguimiento',dieta:'dieta',rutina:'entrenos',tarea:'seguimiento',progRev:'enlace',cuest:'enlace',verRut:'entrenos',dietaTab:'dieta',plnPrep:'plan',plnRen:'plan'};
 function irA(cid,sub,fn){
   function go(){ if(fn) fn(); }
   if(CO.vista==='clienta'&&CO.cid===cid) return siCambios(function(){ CO.sub=sub; pintarClienta(true); go(); });
@@ -13896,7 +13905,9 @@ function irA(cid,sub,fn){
 A.tkAbrir=function(el){ irA(el.dataset.cid,TK_SUB[el.dataset.x]||'seguimiento'); };
 A.tkAcc=function(el){
   var x=el.dataset.x, tid=el.dataset.tid;
-  var cid=el.dataset.cid, M={fotos:null,progFotos:modalFotos,revision:modalRevision,plan:function(){ modalRenovar(cid); },dieta:modalDietaAcc,rutina:modalRutinaAcc,progRev:modalProgRev,tarea:function(){ modalTareaHecha(tid); },cuest:irACuest,llamada:function(){ A.llVer({dataset:{id:tid}}); },plnPrep:null,plnRen:null};
+  var cid=el.dataset.cid, M={fotos:null,progFotos:modalFotos,revision:modalRevision,plan:function(){ modalRenovar(cid); },dieta:modalDietaAcc,rutina:modalRutinaAcc,progRev:modalProgRev,tarea:function(){ modalTareaHecha(tid); },cuest:irACuest,llamada:function(){ A.llVer({dataset:{id:tid}}); },plnPrep:null,plnRen:null,
+    prepRut:function(){ var z=pgSegs().filter(function(s){ return s.desde===tid&&s.pend; })[0]; CO.progSel=z?(z.k==='ahora'?'a':z.k):tid; (CO.rut||[]).forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; repintar(); pgIrA('.pg-vacio'); },      // v53.4.246
+    prepDie:function(){ var z=pgSegs('die').filter(function(s){ return s.desde===tid; })[0]; CO.dieV='plan'; CO.dieSel=z?(z.k==='ahora'?'a':z.k):tid; dgCargar(); repintar(); pgIrA('.pg-vacio'); }};
   irA(el.dataset.cid,TK_SUB[x]||'seguimiento',M[x]);
 };
 
@@ -13963,6 +13974,7 @@ function accionT(t){
   if(t.info) return {tit:t.tit,det:det};
   switch(t.a){
     case 'revision': return {tit:'Hacer su revisión',det:det};
+    case 'prepRut': case 'prepDie': return {tit:t.tit,det:det};      // v53.4.246
     case 'plan': return t.pide?{tit:'Quiere renovar su plan',det:det}:{tit:t.f&&t.f<hoy?'Plan vencido: renovar':'Renovar su plan',det:det};
     case 'dieta': return {tit:'Preparar su dieta nueva',det:t.f<hoy?'La actual ya terminó':'Se le acaba la actual'};
     case 'rutina': return {tit:'Preparar su programación nueva',det:'Terminan '+det};
@@ -14121,7 +14133,7 @@ function datosIni(){
   return {T:T,H:H,P:P,mas:S.length+M.length-P.length,SP:SP};
 }
 function attrs2(t){ return 'data-a="agAcc" data-cid="'+esc(t.cid||'')+'" data-x="'+t.a+'"'+(t.id?' data-tid="'+esc(t.id)+'"':'')+(t.a==='semanal'?' data-dom="'+t.f+'"':''); }
-var BTN2={plnPrep:'Preparar',plnRen:'Preparar',escribir:'Escribirle',semanal:'Revisar',revision:'Registrar',plan:'Renovar',dieta:'Preparar',rutina:'Preparar',fotos:'Escribirle',chat:'Responder',llamada:'Ver',tarea:'Hecha',sug:'Leer',progRev:'Programar',progFotos:'Programar',verRut:'Crear',dietaTab:'Crear'};
+var BTN2={prepRut:'Prepararlas',prepDie:'Hacerla',plnPrep:'Preparar',plnRen:'Preparar',escribir:'Escribirle',semanal:'Revisar',revision:'Registrar',plan:'Renovar',dieta:'Preparar',rutina:'Preparar',fotos:'Escribirle',chat:'Responder',llamada:'Ver',tarea:'Hecha',sug:'Leer',progRev:'Programar',progFotos:'Programar',verRut:'Crear',dietaTab:'Crear'};
 function btn2(t){ if(t.a==='cuest') return /respondido/.test(t.tit)?'Leer':'Recordar'; return BTN2[t.a]||'Abrir'; }
 function tit2(t){ if(t.a==='semanal') return t.cid?'Revisar su semana':'Revisar la semana'; if(t.a==='sug') return 'Leer el feedback'; return accionT(t).tit; }
 function sub2(t){ var d=t.a==='semanal'?'revisión semanal':t.a==='sug'?'':accionT(t).det; return [t.nom,d].filter(String).join(' · '); }
@@ -22198,6 +22210,7 @@ var AYUDA=[
   {g:1,q:'¿Cómo añado alimentos y recetas?',r:'En Alimentos y recetas: tienes más de 700 alimentos genéricos (crudos y cocinados) y los de supermercado; búscalo o filtra por categoría, «Supermercado» o «Referencia» (los genéricos), cada uno con cuántos hay. Si no está, créalo con los datos de su etiqueta. En Recetas están todas juntas, las tuyas y las de la biblioteca de MOOD ON: toca una para cambiarla o borrarla. Después las usas en todas tus dietas.',a:'sdNutri',k:'alimento receta macros ingredientes biblioteca'},
   {g:2,q:'¿Cómo programo una videollamada?',r:'En su ficha, pestaña Seguimiento: «Programar videollamada». Se crea con su enlace para conectarse y la ves en tu Calendario.',a:'sdCal',k:'videollamada llamada meet reunion cita calendario'},
   {g:2,q:'¿Cómo le pido revisiones y fotos?',r:'Desde su ficha (Seguimiento) programas cada cuánto te manda su revisión y sus fotos. Le sale en su app cuando le toca y, cuando lo envía, lo tienes en Inicio.',k:'revision check-in checkin fotos semanal programar'},
+  {g:2,q:'¿Me avisa si una programación o una dieta va a empezar sin hacer?',r:'Sí. Si tiene sus fechas pero aún no le has hecho las rutinas o los platos («Faltan las rutinas» o «Falta hacerla»), te sale en Inicio con «Prepararlas» o «Hacerla» y en el resumen de la mañana. De partida, 5, 3, 2 y 1 día antes; lo cambias en Cuenta y ajustes → Avisos.',a:'pushCo',b:'Cambiar los avisos',k:'aviso programacion dieta sin hacer faltan rutinas falta hacerla empieza'},
   {g:2,q:'¿Qué sale en Inicio?',r:'Tus tareas: lo atrasado y lo de hoy (revisiones y fotos que llegan, dietas o planes que acaban, mensajes…). Cuando lo haces, desaparece.',a:'sdInicio',k:'inicio tareas pendiente hoy avisos'},
   {g:2,q:'¿Dónde veo el feedback de mis clientes?',r:'En Feedback están los mensajes que te mandan desde su app con lo que mejorarían. Puedes responderles y marcarlos como hechos.',a:'sdSug',k:'feedback sugerencias ideas opiniones'},
   {g:3,q:'¿Cómo cobro a mis clientes?',r:'En Pagos: crea tus planes («Nuevo plan») con su precio. Puedes conectar tu Stripe para que te paguen online desde su app, o apuntar a mano lo que te pagan por Bizum, transferencia o en efectivo («Registrar pago»).',a:'sdPagos',k:'cobrar pagos plan precio bizum transferencia efectivo cuota'},
@@ -26404,8 +26417,16 @@ function pushCoModal(){
   else if(e==='bloq') h+='<p class="muted">Has bloqueado los avisos de MOOD ON '+aqui+'. Para volver a recibirlos: '+esc(pushBloqTxt())+'</p>';
   else if(e==='no') h+='<p class="muted">Este navegador no permite avisos. Usa Chrome, Edge, Safari o Firefox (en el móvil, con tu panel en la pantalla de inicio).</p>';
   else h+='<p class="muted">Te llegará un aviso '+aqui+', aunque tengas MOOD ON cerrado, cuando un cliente te escriba, responda su cuestionario, suba sus fotos o apunte su peso y sus medidas. Y cada mañana, lo que tienes pendiente.</p><p class="muted sm">En la pantalla bloqueada nunca sale lo que te escriben: solo quién.</p><button class="btn mt" data-a="pushOn">'+ic('campana')+'Activar avisos</button>'+(LS.get('mo_push_no_co')?'':'<button class="btn sec mt" data-a="pushNo">Ahora no</button>');
+  h+=prepAvisoHtml();      // v53.4.246
   modal(h+'<button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 }
+/* v53.4.246 · cuándo te avisamos de una programación o una dieta con fechas pero sin hacer (Inicio y el resumen de la mañana) */
+function prepAvisoHtml(){ var L=CO.prepDias||[5,3,2,1];
+  return '<div class="prep-av"><b>Programaciones y dietas sin hacer</b><small class="fila-s">Si una tiene sus fechas pero aún no le has hecho las rutinas o los platos, te avisamos antes de que empiece: en Inicio y en el resumen de la mañana.</small>'+
+    '<div class="tipos ops prep-ds" role="group" aria-label="Días antes">'+[7,5,3,2,1].map(function(n){ var on=L.indexOf(n)>=0; return '<button class="'+(on?'on':'')+'" data-a="prepDia" data-v="'+n+'" aria-pressed="'+on+'">'+(on?ic('ok'):'')+(n===1?'1 día':n+' días')+'</button>'; }).join('')+'</div>'+
+    '<small class="fila-s">'+(L.length?'Te avisamos '+esc(prepDiasTxt())+'.':'Sin avisos: no te saldrá en Inicio.')+'</small></div>'; }
+A.prepDia=function(el){ if(el.disabled) return; var n=+el.dataset.v, L=(CO.prepDias||[5,3,2,1]).slice(), i=L.indexOf(n); if(i>=0) L.splice(i,1); else L.push(n); el.disabled=true;
+  api('coachPrepDias',CO.pin,L).then(function(r){ CO.prepDias=r.dias; var b=document.querySelector('.prep-av'); if(b) b.outerHTML=prepAvisoHtml(); toast('Guardado','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.pushCo=function(){ if(PUSH.est==null){ cargando(pushEstado('co')).then(function(e){ PUSH.est=e; pushCoModal(); }); } else pushCoModal(); };
 A.pushResTog=function(){ var on=!(CO.push||{resumen:true}).resumen;
   cargando(api('coachPushCfg',CO.pin,{resumen:on})).then(function(r){ CO.push=r.cfg; pushCoModal(); toast(on?'Te llegará el resumen cada mañana':'Sin resumen por la mañana','ok'); },function(e){ toast(limpiaErr(e),'err'); }); };
@@ -27049,7 +27070,7 @@ function pgNuevaPintar(){ if(!PG22) return pgNuevaPintar0(); if(CO.pg&&CO.pg.t==
     pgCuandoHtml(S,L,F,{ctx:'pg',cD:'pgD',cH:'pgH',durs:[['28','4 semanas'],['42','6 semanas'],['56','8 semanas']],durOn:String(P.dur),durA:'pgDura'})+
     '<div class="lab">Objetivo</div>'+pgCh(FASES_T.entreno.map(function(k){ return [k,FASE_L[k]]; }),P.fases,'pgObjT')+
     '<div class="lab">Prioridad <span class="muted">(opcional)</span></div>'+pgCh(prioL().slice(0,11).map(function(g){ return [g,g]; }),P.prio,'pgPrioT')+
-    '<div class="lab">¿Y sus rutinas?</div>'+pgOps([['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas, con estas fechas.']:null,['tarde','Más tarde','Queda en el calendario como «faltan las rutinas» y te avisamos antes de que empiece.']].filter(Boolean).map(function(o){
+    '<div class="lab">¿Y sus rutinas?</div>'+pgOps([['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas, con estas fechas.']:null,['tarde','Más tarde','Queda en el calendario como «faltan las rutinas» y te avisamos en Inicio '+prepDiasTxt()+' (lo cambias en Avisos).']].filter(Boolean).map(function(o){
       return {a:'pgRut',v:o[0],t:o[1],d:o[2],ic:PGO_IC[o[0]],on:P.rut===o[0]}; }))+
     '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
   pgCaja(h); setTimeout(pgVerNueva,0);
@@ -27203,7 +27224,7 @@ function dgNuevaPintar(){
     '<div class="lab">Fase</div>'+pgCh(FASES_T.nutricion.map(function(k){ return [k,FASE_L[k]]; }),P.fases,'dgFaseT')+
     '<div class="lab">Calorías</div><label class="dg-kc"><input type="number" inputmode="numeric" min="800" max="8000" step="10" data-c="dgKc" value="'+esc(P.kcal)+'" placeholder="2000" aria-label="Calorías al día"><span>kcal al día</span></label>'+
     (prev&&prev.kcal&&kc&&Math.round(kc)!==prev.kcal?'<p class="muted sm mt6">'+(prev.ahora?'La de ahora':'La de antes')+' tiene '+fN(prev.kcal,0)+' kcal ('+(kc>prev.kcal?'+':'−')+fN(Math.abs(Math.round(kc)-prev.kcal),0)+').</p>':'')+
-    '<div class="lab">¿Y su dieta?</div>'+pgOps([['ahora','Hacerla ahora','Te lleva a Dieta con esta dieta abierta: automática, de tu banco o desde cero.'],prev?['copiar','Copiar la de '+(prev.ahora?'ahora':'antes'),'Los mismos platos, con los gramos recalculados'+(kc?' a '+fN(Math.round(kc),0)+' kcal':'')+'.']:null,['tarde','Más tarde','Queda en el calendario como «falta hacerla» y te avisamos antes de que empiece.']].filter(Boolean).map(function(o){
+    '<div class="lab">¿Y su dieta?</div>'+pgOps([['ahora','Hacerla ahora','Te lleva a Dieta con esta dieta abierta: automática, de tu banco o desde cero.'],prev?['copiar','Copiar la de '+(prev.ahora?'ahora':'antes'),'Los mismos platos, con los gramos recalculados'+(kc?' a '+fN(Math.round(kc),0)+' kcal':'')+'.']:null,['tarde','Más tarde','Queda en el calendario como «falta hacerla» y te avisamos en Inicio '+prepDiasTxt()+' (lo cambias en Avisos).']].filter(Boolean).map(function(o){
       return {a:'pgRut',v:o[0],t:o[1],d:o[2],ic:PGO_IC[o[0]],on:P.rut===o[0]}; }))+
     '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
   pgCaja(h); setTimeout(pgVerNueva,0); }
@@ -27355,7 +27376,7 @@ function pgNuevaPintar0(){
       return {a:'pgSol',v:o[0],t:o[1],d:esc(o[2]),ic:PGO_IC[o[0]],on:P.sol===o[0],x:pgBarra(Lo,{mini:true})}; }));
   h+='<div class="lab">Dura</div>'+pgCh([['28','4 semanas'],['42','6 semanas'],['56','8 semanas'],['otro',P.hfijo?'Hasta el '+fCorta(F.h):'Hasta un día…']],P.hfijo?'otro':String(P.dur),'pgDura')+
     (P.hfijo||P.durOtro?'<label class="f pg-f">Acaba<input type="date" id="pg-h" data-c="pgH" min="'+esc(F.d)+'" value="'+esc(F.h)+'"></label>':'')+
-    '<div class="lab">¿Y sus rutinas?</div>'+pgOps([['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas'+(prev.ahora?' que tiene ahora':'')+'.']:null,['tarde','Más tarde','Queda marcada «faltan las rutinas» y te avisamos antes de que empiece. Mientras, sigue con las de antes.']].filter(Boolean).map(function(o){
+    '<div class="lab">¿Y sus rutinas?</div>'+pgOps([['ahora','Prepararlas ahora','Te lleva a Entrenos con esta programación abierta: a mano, automática o de tu banco.'],prev?['copiar','Copiar las de '+(prev.ahora?'ahora':'la programación anterior'),'Las mismas rutinas'+(prev.ahora?' que tiene ahora':'')+'.']:null,['tarde','Más tarde','Queda marcada «faltan las rutinas» y te avisamos en Inicio '+prepDiasTxt()+' (lo cambias en Avisos). Mientras, sigue con las de antes.']].filter(Boolean).map(function(o){
       return {a:'pgRut',v:o[0],t:o[1],d:o[2],ic:PGO_IC[o[0]],on:P.rut===o[0]}; }))+
     '<button class="btn mt" data-a="pgNuevaOk">Programar del '+fCorta(F.d)+' al '+fCorta(F.h)+'</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>';
   pgCaja(h);
