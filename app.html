@@ -4340,6 +4340,9 @@ button.pf-fe{cursor:pointer}
 .ck-rap{padding:14px}
 .ck-cab{position:relative}.ck-x{margin-left:auto;align-self:center;width:32px;height:32px;border-radius:50%;border:0;background:rgba(255,255,255,.7);color:#111;display:flex;align-items:center;justify-content:center;cursor:pointer;flex:none}.ck-x .ic{width:16px;height:16px;margin:0;transform:rotate(180deg)}.ck-rh b{display:block;font:800 16px Plus Jakarta Sans,sans-serif}.ck-rh small{font-size:12.5px;color:var(--mu);font-weight:600}
 .ck-rn{display:flex;justify-content:space-between;gap:2px;margin-top:12px}
+.ck-su{margin-top:14px;padding-top:12px;border-top:1px solid #F0F0F3;width:100%}.ck-sut{display:flex;align-items:center;gap:6px;font:800 14px Plus Jakarta Sans,sans-serif;color:#141414}.ck-sut .ic{width:16px;height:16px;margin:0;color:#3B4F99}
+.ck-sur{display:flex;gap:6px;margin-top:9px}.ck-sur button{flex:1;min-width:0;border:1.5px solid #DCE2F2;background:#F6F8FD;color:#1F2F66;border-radius:12px;padding:9px 2px;font:700 12.5px/1.15 Plus Jakarta Sans,sans-serif;cursor:pointer;text-align:center}.ck-sur button.on{background:#3B4F99;border-color:#3B4F99;color:#fff}
+.ck-min.ck-min2{flex-wrap:wrap}.ck-min .ck-su{margin-top:4px}
 .ck-rn button{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;padding:0;font:inherit;cursor:pointer;min-width:0}
 .ck-rn i{position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff)}
 .ck-rn i:after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--c)}
@@ -5702,7 +5705,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.225';
+var APP_V = 'v53.4.226';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9449,11 +9452,12 @@ function checkinCard(hoy){
   var dia=!vacio(e.dia_ciclo)?e.dia_ciclo:(CL.ck.regla?diaPeriodo(est):(est||''));
   var hecho=num(e.energia)!=null||!vacio(e.sueno)||!vacio(e.dia_ciclo)||!!e.notas||CL.ck.sin.length>0||CL.ck.pm;
   var esH=hoy===hoyStr();
-  if(esH&&!hecho&&!CL.ckEd&&!CL.ckAb) return ckRapidoHtml();      // v53.4.171
+  var hechoSS=num(e.energia)!=null||!vacio(e.dia_ciclo)||!!e.notas||CL.ck.sin.length>0||CL.ck.pm;      // 23 nov, 13:21: las horas de sueño solas no cierran el «¿Qué mood tienes hoy?»
+  if(esH&&!hechoSS&&!CL.ckEd&&!CL.ckAb) return ckRapidoHtml(e);      // v53.4.171
   if(CL.ckQ!=null&&CL.ck.energia==null) CL.ck.energia=CL.ckQ;
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var mj=!hombreCl(), res=[mj&&e.regla?'Con el periodo':'',mj&&!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',mj&&e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
-    return '<div class="card ck-min" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Qué mood tienes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button></div>';
+    return '<div class="card ck-min'+(vacio(e.sueno)?' ck-min2':'')+'" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Qué mood tienes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button>'+(vacio(e.sueno)?ckSuenoHtml(e):'')+'</div>';
   }
   return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Qué mood tienes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>'+(CL.ckAb||CL.ckEd?'<button class="ck-x" data-a="ckCierra" aria-label="Cerrar">'+ic('abajo')+'</button>':'')+'</div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
 
@@ -9473,11 +9477,19 @@ function checkinCard(hoy){
 var CK_10=['#E5484D','#EC6A3A','#F08A24','#F2A62A','#F2C230','#C7C83A','#8CC448','#3DBE6A','#239A54','#147A43'];
 var CK_R=[[2,'#E5484D'],[4,'#F08A24'],[6,'#F2C230'],[8,'#3DBE6A'],[10,'#147A43']];
 function ckNiv(){ return [gCl('Agotada','Agotado'),gCl('Cansada','Cansado'),'Normal','A tope','Súper a tope']; }
-function ckRapidoHtml(){
+/* 23 nov, 13:21 (Chadín): «aparte de lo que está ahora en un clic, que puedas poner las horas de sueño con un clic también: menos de 5, 6, 7, 8, más de 9» */
+var CK_SU=[[5,'5 h o menos'],[6,'6 h'],[7,'7 h'],[8,'8 h'],[9,'9 h o más']];
+function ckSuenoHtml(e){ var v=num(e&&e.sueno); return '<div class="ck-su"><span class="ck-sut">'+ic('luna')+'¿Cuánto has dormido?</span><div class="ck-sur">'+CK_SU.map(function(x){ var on=v!=null&&(x[0]===5?v<=5:x[0]===9?v>=9:Math.round(v)===x[0]); return '<button class="'+(on?'on':'')+'" data-a="ckSueno" data-v="'+x[0]+'" aria-pressed="'+on+'">'+esc(x[1])+'</button>'; }).join('')+'</div></div>'; }
+A.ckSueno=function(el){
+  var v=+el.dataset.v, hoy=hoyStr(), e=diarioDe(hoy)||{};
+  var p={fecha:hoy,regla:!!e.regla,premenstrual:!!e.premenstrual,sintomas:(e.sintomas||[]).slice(),dia_ciclo:e.dia_ciclo==null?'':e.dia_ciclo,sueno:v,energia:num(e.energia)==null?'':num(e.energia),escala:10,notas:e.notas||''};
+  cargando(colaDiario(p)).then(function(){ var d=diarioDe(hoy,true); d.sueno=v; toast('Guardado: '+(CK_SU.filter(function(x){ return x[0]===v; })[0]||[0,v+' h'])[1]+' de sueño','ok'); CL.keep=true; pintarCl(); },function(er){ toast('No se ha podido guardar: '+limpiaErr(er),'err'); });
+};
+function ckRapidoHtml(e){
   var N=ckNiv();
   return '<div class="card ck-rap" id="ck-card"><div class="ck-rh"><b>¿Qué mood tienes hoy?</b><small>'+(cicloOn()?'Toca cómo estás y, si quieres, completa lo demás':'Toca cómo estás y se guarda')+'</small></div>'+
     '<div class="ck-rn">'+CK_R.map(function(x,i){ return '<button data-a="ckRapido" data-v="'+x[0]+'" style="--c:'+x[1]+'" aria-label="'+esc(N[i])+'"><i></i><small>'+esc(N[i])+'</small></button>'; }).join('')+'</div>'+
-    '<button class="ck-rnota" data-a="ckRapido" data-v="">'+ic('nota')+'Añadir una nota para '+esc(czCoach())+'</button></div>';
+    ckSuenoHtml(e)+'<button class="ck-rnota" data-a="ckRapido" data-v="">'+ic('nota')+'Añadir una nota para '+esc(czCoach())+'</button></div>';
 }
 /* 22 nov, 20:19 (Chadín): «si no tiene ciclo menstrual, el “cómo te sientes” se rellena de un clic, no se le abre la otra vista»: sin ciclo (hombre
    o con el ciclo oculto), tocar el mood lo guarda ya (lo demás de hoy, como estaba); la nota sigue abriendo el check-in */
