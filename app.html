@@ -2424,6 +2424,7 @@ details.cy-mas summary::-webkit-details-marker{display:none}details.cy-mas summa
 .cl3-idx button{border:0;background:none;padding:1px 5px;border-radius:5px;font:800 10.5px Plus Jakarta Sans,sans-serif;color:#8A8A92;cursor:pointer}.cl3-idx button:hover{background:#111;color:#fff}
 .cl3-caras{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:10px}
 .cl3-cara{display:flex;flex-direction:column;align-items:center;gap:7px;background:#fff;border:0;border-radius:18px;padding:16px 8px 14px;cursor:pointer;font:inherit;color:inherit;text-align:center}
+.cl3-cara{min-width:0;overflow:hidden}.cl3-cara .cl3-t{white-space:normal;max-width:100%;line-height:1.3;overflow-wrap:anywhere}.cl3-cara b{max-width:100%;overflow-wrap:anywhere}      /* v53.4.237: la etiqueta, dentro de su recuadro */
 .cl3-cara.pau{opacity:.6}.cl3-cara .cl3-av{width:66px;height:66px;font-size:19px}.cl3-cara b{font-size:13.5px;line-height:1.25}.cl3-cara:hover{box-shadow:0 6px 18px rgba(17,17,17,.08)}
 #cl3-srv{margin-top:12px}#cl3-srv .cl3-s{background:#fff;border-radius:14px;border:0;padding:10px 12px;margin-bottom:6px}
 .cl3-f{font-size:12px;color:#8A8A92;white-space:nowrap;flex:none}
@@ -5836,7 +5837,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.236';
+var APP_V = 'v53.4.237';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14810,7 +14811,7 @@ function semCalPintar(){
       '<div class="gq-sec"><div class="lab">Así queda · '+(R.length===1?'1 cliente':R.length+' clientes')+'</div>'+semCalRep(P)+'</div>'+
       '<div class="gq-sec"><div class="lab hq-labf">Con otro ritmo'+(E.length?' · '+E.length+'<button class="hq-lnk" data-a="calCambiarTodos">Cambiar también '+(E.length===1?'a este':'a estos '+E.length)+'</button>':'')+'</div>'+E.map(function(a){ return semCalFila(a.c,'<small>'+esc(semPerTxtC(a.per)+(P.nd>1&&a.dia?' · '+SEM_DN[a.dia].toLowerCase():''))+'</small>',semCalExDer(a))+semCalEd(a,P); }).join('')+
         '<button class="hq-add" data-a="calPaso" data-v="2">'+ic('mas')+'Elegir quién va con otro ritmo</button></div>'+
-      (K.length?'<div class="hq-aviso">'+ic('info')+'<span><b>'+esc(semNoms(K))+'</b> '+(K.length===1?'tiene':'tienen')+' ahora otra fecha de revisión. Si no '+(K.length===1?'lo dejas como está':'los dejas como están')+', '+(K.length===1?'pasa':'pasan')+' a '+esc(semPerTxt(C.per).toLowerCase())+'.'+
+      (K.length?'<div class="hq-aviso">'+ic('info')+'<span><b>'+esc(semNoms(K))+'</b> '+(K.length===1?'tiene':'tienen')+' su propia fecha de revisión, la que '+(K.length===1?'le':'les')+' pusiste en su ficha. Con «'+(K.length===1?'Dejar como está':'Dejar como están')+'» '+(K.length===1?'la conserva':'la conservan')+'; si no, '+(K.length===1?'pasa':'pasan')+' a '+esc(semPerTxt(C.per).toLowerCase())+', como el resto.'+
         '<span class="hq-bts"><button class="btn" data-a="calDejarTodos">'+(K.length===1?'Dejarlo como está':'Dejar los '+K.length+' como están')+'</button><button class="btn sec" data-a="calPaso" data-v="2">Ver uno a uno</button></span></span></div>':'')+
       '<div class="gq-bt"><button class="btn" data-a="calPaso" data-v="3"'+(P.A.length?'':' disabled')+'>Revisar y aplicar</button><button class="btn sec" data-a="cerrarModal">Cancelar</button></div>';
   }
@@ -15647,9 +15648,9 @@ function semGuiaHtml(){
   var CA=[
     ['A','Cada cuánto','Lo mismo para todos. «Otro…»: los días que quieras.','<span class="smg-chs">'+chip('Cada semana',1)+chip('Cada 10 días')+chip('Cada 20 días')+chip('Cada 2 semanas')+chip('Cada mes')+chip('Otro…')+'</span>'],
     ['B','Qué días revisas','Se reparten a partes iguales. Si es cada 2 semanas o más, también entre semanas (grupos A, B…). De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo.','<span class="gq-ds">'+['L','M','X','J','V','S','D'].map(function(d){ return '<button class="'+(d==='V'||d==='S'?'on':'')+'">'+d+'</button>'; }).join('')+'</span>'],
-    ['C','Te recuerda quién tiene otra fecha','Si no los dejas como están, pasan a tu calendario.','<span class="hq-aviso smg-av2">'+ic('info')+'<span><b>Carmen, Dana y Dara</b> tienen ahora otra fecha de revisión.<span class="hq-bts">'+B('Dejar los 3 como están','')+B('Ver uno a uno','sec')+'</span></span></span>'],
+    ['C','Te recuerda quién tiene otra fecha','Son los que tienen su propia fecha de revisión, la que les pusiste en su ficha. Si pulsas «Dejar como está», la conservan y no se les cambia. Si no lo pulsas, pasan a la misma que el resto.','<span class="hq-aviso smg-av2">'+ic('info')+'<span><b>Carmen, Dana y Dara</b> tienen su propia fecha de revisión.<span class="hq-bts">'+B('Dejar los 3 como están','')+B('Ver uno a uno','sec')+'</span></span></span>'],
     ['D','Con otro ritmo','Quien no va con el resto. «Cambiar»: su ritmo y su día. La ×: vuelve con el resto. «Cambiar también a estos N»: todos con el resto.','<span class="smg-or"><span class="hq-av">CR</span><span class="hq-n"><b>Carmen</b><small>Cada 10 días · viernes</small></span><span class="hq-dj">Cambiar</span><span class="hq-x">'+ic('x')+'</span></span>'],
-    ['E','Antes de aplicar','Cómo queda cada uno: ahora y pasa a. «Dejar como está» o «Otro ritmo», ahí mismo. Nada cambia hasta «Sí, aplicar».','<span class="smg-or"><span class="hq-av">DL</span><span class="hq-n"><b>Dana</b><small>Ahora: cada 5 días</small><small><b>Pasa a: cada semana · viernes</b></small></span></span><span class="hq-rbt">'+'<span class="hq-dj">Dejar como está</span><span class="hq-dj">Otro ritmo</span></span>']
+    ['E','Antes de aplicar','Cómo queda cada uno: cómo está ahora y cómo quedará. «Dejar como está»: conserva la fecha de su ficha. «Otro ritmo»: le pones otro ahí mismo. Nada cambia hasta que pulsas «Sí, aplicar».','<span class="smg-or"><span class="hq-av">DL</span><span class="hq-n"><b>Dana</b><small>Ahora: cada 5 días</small><small><b>Pasa a: cada semana · viernes</b></small></span></span><span class="hq-rbt">'+'<span class="hq-dj">Dejar como está</span><span class="hq-dj">Otro ritmo</span></span>']
   ];
   return '<div class="gu-h"><b>Cómo funciona «Revisiones»</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 8px">Tu revisión de la semana, de un vistazo. Dónde está cada cosa:</p>'+mapa+
     P.map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
