@@ -4271,7 +4271,13 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-fr{display:flex;align-items:center;justify-content:space-between;gap:10px}.aa-fr .hm-fecha{margin-top:10px}
 .aa-como{display:inline-flex;align-items:center;gap:5px;border:0;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--mu);padding:6px 2px;cursor:pointer;flex:none}.aa-como svg{width:16px;height:16px}.aa-como:hover{color:var(--tx)}
 .aa-fr .aa-como{margin-top:10px}.top .aa-como{min-width:70px;justify-content:flex-end}
-.aa-fc .card-t{display:flex;align-items:center;gap:8px}.aa-fc .card-t .btn{margin-left:auto;width:auto}
+/* v53.4.244 (Chadín, 23 nov 19:11: «ese diseño muy feo»): «Citas con…» de la ficha, como «Competiciones y objetivos» */
+.cita-co .card-t{display:flex;align-items:center;gap:10px}.cita-co .card-t .btn{margin-left:auto;width:auto}
+.cita-ic{width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}.cita-ic .ic{width:15px;height:15px;margin:0}
+.cita-co .card-t+.aa-r{border-top:0}
+.cita-vac{display:flex;align-items:center;gap:12px;background:#F2F2F5;border-radius:16px;padding:12px 14px}
+.cita-vac>span{width:34px;height:34px;border-radius:50%;background:#fff;color:#55555E;display:flex;align-items:center;justify-content:center;flex:none}.cita-vac>span .ic{width:16px;height:16px;margin:0}
+.cita-vac p{margin:0;display:flex;flex-direction:column;gap:2px;font-size:13px;line-height:1.4;color:#55555E}.cita-vac p b{font-size:14px;color:#111}
 .aa-nav{align-items:center;gap:8px;flex-wrap:nowrap;min-width:0}.aa-nav .cal-y{white-space:nowrap}
 @media(max-width:719px){.aa-ag-v .aa-nav .cal-y{font-size:20px}.aa-ag-v .aa-top .aa-ag{padding:9px 13px;font-size:13px}}
 .aa-fl{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}
@@ -5906,7 +5912,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.243';
+var APP_V = 'v53.4.244';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14485,9 +14491,9 @@ function citaRepintar(){ if(CO.vista==='lista') pintarLista(); else if(CO.vista=
 /* ficha · Calendario: sus citas */
 function citasCoCard(d){
   var c=d.clienta||{}, hoy=CO.hoy||hoyStr(), L=(d.citas||[]).filter(function(x){ return x.fecha>=hoy; }).sort(citaOrd);
-  return '<section class="card aa-fc"><div class="card-t">'+ic('cal')+'Citas con '+esc(primerNombre(c.nombre||''))+'<button class="btn sm" data-a="citaNueva" data-cid="'+esc(c.id||'')+'">+ Agendar</button></div>'+
+  return '<section class="card cita-co"><div class="card-t"><span class="cita-ic">'+ic('cal')+'</span>Citas con '+esc(primerNombre(c.nombre||''))+'<button class="btn sm" data-a="citaNueva" data-cid="'+esc(c.id||'')+'">+ Agendar</button></div>'+      // v53.4.244: su propia clase (con «aa-fc», la de los filtros de Inicio, salía como una pastilla)
     (L.length?L.map(function(x){ var dd=aDate(x.fecha); return '<button class="aa-r" data-a="citaVer" data-id="'+esc(x.id)+'"><span class="aa-h">'+dd.getDate()+' '+esc(mesC(dd))+'<small>'+esc(x.hora)+'</small></span><span class="aa-i i-g">'+ic((CITA_T[x.tipo]||CITA_T.otra)[0])+'</span><span class="aa-x"><b>'+esc(x.titulo)+'</b><small>'+esc([cap(relT(x.fecha)),x.lugar,x.visible?'le sale en su app':'solo tú la ves'].filter(String).join(' · '))+'</small></span><span class="aa-b">Ver</span></button>'; }).join('')
-      :'<p class="muted sm">Sin citas. Agenda una llamada, un entreno o lo que quieras: os avisamos antes a los dos.</p>')+'</section>';
+      :'<div class="cita-vac"><span>'+ic('cal')+'</span><p><b>Sin citas</b>Agenda una llamada, un entreno o lo que quieras: os avisamos antes a los dos.</p></div>')+'</section>';
 }
 function inicioHtml(){
   if(ui2On()) return inicioHtml2();
