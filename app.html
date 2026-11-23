@@ -1503,6 +1503,17 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .smg-bus{display:flex;align-items:center;gap:8px;width:100%;border:1.5px solid #141414;border-radius:12px;padding:8px 12px;font-size:12.5px;color:#8A8A92;background:#fff}.smg-bus .ic{width:14px;height:14px;margin:0}
 .smg-row2{display:flex;align-items:center;gap:10px;width:100%;background:#fff;border-radius:10px;padding:6px 10px}.smg-row2 b{font-size:13px}.smg-row2 b.off{color:#9A9AA2}.smg-row2 .fz-h{flex:0 0 auto;height:auto}
 .gu-im .cl3-sw{display:inline-flex}.gu-im .cl3-k{pointer-events:none}.smg-n2{position:static!important;transform:none!important;display:inline-block;margin-left:4px}
+/* v53.4.240 · Clientes: ir al sitio */
+.cl3-rf{padding:0;gap:6px}.cl3-rm{display:flex;align-items:center;gap:12px;flex:1;min-width:0;padding:10px 2px;background:none;border:0;text-align:left;cursor:pointer;color:inherit;font:inherit}
+.cl3-src{white-space:normal!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.cl3-sb{font-style:normal;font-weight:700;color:#141414}
+.cl3-go{display:inline-flex;align-items:center;border:1.5px solid #141414;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;color:#141414;background:#fff;white-space:nowrap}
+.cl3-fi{flex:none;border:0;background:none;font:600 12.5px Plus Jakarta Sans,sans-serif;color:#6A6A72;text-decoration:underline;cursor:pointer;padding:6px 4px}
+.cl3-vz{flex:none;border:1px solid #DCDCE2;background:#fff;border-radius:999px;padding:4px 9px;font:700 12px Plus Jakarta Sans,sans-serif;color:#2563D4;cursor:pointer;white-space:nowrap}
+.cl3-caraf{padding:0 0 8px}.cl3-cm{display:flex;flex-direction:column;align-items:center;gap:7px;width:100%;background:none;border:0;padding:16px 8px 4px;font:inherit;color:inherit;cursor:pointer;text-align:center}.cl3-cm .cl3-av{width:66px;height:66px;font-size:19px}.cl3-cm b{font-size:13.5px;line-height:1.25}.cl3-caraf .cl3-go{font-size:11.5px;padding:3px 9px}
+.cl3-ml{display:flex;flex-direction:column;gap:8px;margin:10px 0 4px}.cl3-mi{display:flex;align-items:center;gap:10px;justify-content:space-between;border:1px solid #E6E6EC;border-radius:12px;padding:10px 12px;font-size:13.5px}.cl3-mi .btn{margin:0;width:auto;flex:none}
+.ir-hl{animation:irhl 2.6s ease}@keyframes irhl{0%,45%{box-shadow:0 0 0 3px #2563D4;background-color:#EAF2FF}100%{box-shadow:0 0 0 0 rgba(37,99,212,0)}}
+.smg-ir{font-weight:700;color:#141414}
+@media(max-width:760px){.cl3-rf .cl3-tg .cl3-t{display:none}.cl3-go{padding:3px 8px;font-size:11.5px}}
 /* v53.4.236 · «¿Cómo funciona?» de Revisiones y del calendario (smg-) */
 .smg-mb{margin-left:auto;margin-right:20px;border:1px solid #C9C9D1;border-radius:999px;padding:1px 7px;font-size:9.5px;background:#fff}
 .smg-mt{border:1px solid #C9C9D1;border-radius:6px;padding:1px 8px;font-size:9.5px;background:#fff}.smg-mt.on{border-color:#141414}
@@ -5854,7 +5865,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.239';
+var APP_V = 'v53.4.240';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -7988,7 +7999,7 @@ function checkinsCard(dia){
     if(muj&&i&&i.dia!=null) chips.push('<span class="ckc">Día '+i.dia+' · '+esc(FASES_C.filter(function(f){ return f[0]===i.fase; })[0][1].toLowerCase())+'</span>');
     if(en!=null) chips.push('<span class="ckc'+(en<=4?' bj':'')+'">'+(en<=4?ic('alerta'):'')+'Energía '+fN(en,0)+'/10</span>');
     if(num(x.sueno)!=null) chips.push('<span class="ckc">'+ic('reloj')+fN(x.sueno)+' h</span>');
-    return '<div class="ck-i"><b class="ck-f">'+esc(fMedia(x.fecha))+'</b><div class="ck-ch">'+chips.join('')+'</div>'+((x.sintomas||[]).length?'<div class="ck-s">Síntomas: '+esc(listaY(x.sintomas.map(sintF)))+'</div>':'')+(x.notas?'<div class="sx-c">'+ic('nota')+'<span>'+esc(x.notas)+'</span></div>':'')+'</div>';
+    return '<div class="ck-i" data-f="'+esc(String(x.fecha||'').slice(0,10))+'"><b class="ck-f">'+esc(fMedia(x.fecha))+'</b><div class="ck-ch">'+chips.join('')+'</div>'+((x.sintomas||[]).length?'<div class="ck-s">Síntomas: '+esc(listaY(x.sintomas.map(sintF)))+'</div>':'')+(x.notas?'<div class="sx-c">'+ic('nota')+'<span>'+esc(x.notas)+'</span></div>':'')+'</div>';
   }).join('');
   if(dia.length>3) h+=CO.ckTodo?'<button class="link" data-a="ckTodo">Ver solo los 3 últimos</button>':'<button class="link" data-a="ckTodo">Ver todos ('+dia.length+')</button>';
   return h+'</div>';
@@ -13116,6 +13127,7 @@ function pintarClienta(arriba){
   setTimeout(pintarImgs,0); if(CO.sub==='entrenos') ajustarSp(); if(CO.sub==='progreso') fuScroll();
   if(CO.sub==='chat') chatAbrir(); else if(!MC.cid) chatPararPoll();
   if(CO.irCuest){ CO.irCuest=false; irACuest(); }
+  if(CO.irSel&&Date.now()<CO.irHasta) setTimeout(function(){ var el=CO.irSel&&document.querySelector(CO.irSel); if(el&&!el.classList.contains('ir-hl')) el.classList.add('ir-hl'); },0);      // v53.4.240: si se repinta, sigue resaltado
 }
 function irACuest(){ setTimeout(function(){ var c=document.getElementById('cuest'); if(!c) return; var y=c.getBoundingClientRect().top+window.scrollY-118; window.scrollTo(0,Math.max(0,y)); },30); }
 
@@ -19932,15 +19944,15 @@ function cliFila(c){
    te pasen, y que cada entrenador elige y ajusta («Tus filtros»): cuáles salen arriba, en qué orden y con qué números. Los de siempre:
    Te han escrito, No entrenan (5 días), Con molestias (14 días), Estancados (4 semanas) y Compiten (30 días). */
 var CL3_CAT={
-  esc:{t:'Te han escrito',c:'co',d:'Mensajes suyos que no has leído.'},
-  sin:{t:'No entrenan',c:'ro',d:'Tienen rutina y no apuntan ningún entreno.',n:5,u:'días',p:'Desde hace',min:2,max:60,ch:function(n){ return n+'+ días'; }},
-  mol:{t:'Con molestias',c:'az',d:'Te han dicho que les duele algo (chat, check-in o notas del entreno).',n:14,u:'días',p:'En los últimos',min:1,max:60,ch:function(n){ return 'últimos '+n+' días'; }},
-  est:{t:'Estancados',c:'li',d:'Entrenan, pero no suben ni kilos ni repeticiones en sus ejercicios.',n:4,u:'semanas',p:'Desde hace',min:2,max:12,ch:function(n){ return n+'+ semanas'; }},
-  com:{t:'Compiten',c:'na',d:'Tienen una competición cerca.',n:30,u:'días',p:'En los próximos',min:1,max:180,ch:function(n){ return 'próximos '+n+' días'; }},
-  nue:{t:'Nuevos',c:'in',d:'Dados de alta hace poco.',n:30,u:'días',p:'En los últimos',min:1,max:180,ch:function(n){ return 'últimos '+n+' días'; }},
-  dat:{t:'Sin datos',c:'pz',d:'No apuntan peso ni check-in: no sabes cómo van.',n:21,u:'días',p:'Desde hace',min:3,max:90,ch:function(n){ return n+'+ días'; }},
-  pla:{t:'Su plan vence pronto',tc:'Su plan vence',c:'vi',d:'Para hablar con ellos antes de que acabe.',n:7,u:'días',p:'En los próximos',min:1,max:60,ch:function(n){ return 'próximos '+n+' días'; }},
-  pau:{t:'En pausa',c:'gr',d:'Les quitaste «Acceso activo» en su ficha (Sus datos): ya no salen en Inicio ni en Revisiones.'}
+  esc:{t:'Te han escrito',c:'co',d:'Mensajes suyos que no has leído.',ir:'su chat'},
+  sin:{t:'No entrenan',c:'ro',d:'Tienen rutina y no apuntan ningún entreno.',ir:'su chat, con un mensaje ya escrito',n:5,u:'días',p:'Desde hace',min:2,max:60,ch:function(n){ return n+'+ días'; }},
+  mol:{t:'Con molestias',c:'az',d:'Te han dicho que les duele algo (chat, check-in o notas del entreno).',ir:'justo donde lo dijo: su chat, su check-in o ese entreno',n:14,u:'días',p:'En los últimos',min:1,max:60,ch:function(n){ return 'últimos '+n+' días'; }},
+  est:{t:'Estancados',c:'li',d:'Entrenan, pero no suben ni kilos ni repeticiones en sus ejercicios.',ir:'su progreso',n:4,u:'semanas',p:'Desde hace',min:2,max:12,ch:function(n){ return n+'+ semanas'; }},
+  com:{t:'Compiten',c:'na',d:'Tienen una competición cerca.',ir:'su competición, en su calendario',n:30,u:'días',p:'En los próximos',min:1,max:180,ch:function(n){ return 'próximos '+n+' días'; }},
+  nue:{t:'Nuevos',c:'in',d:'Dados de alta hace poco.',ir:'su ficha',n:30,u:'días',p:'En los últimos',min:1,max:180,ch:function(n){ return 'últimos '+n+' días'; }},
+  dat:{t:'Sin datos',c:'pz',d:'No apuntan peso ni check-in: no sabes cómo van.',ir:'su chat, con un mensaje ya escrito',n:21,u:'días',p:'Desde hace',min:3,max:90,ch:function(n){ return n+'+ días'; }},
+  pla:{t:'Su plan vence pronto',tc:'Su plan vence',c:'vi',d:'Para hablar con ellos antes de que acabe.',ir:'renovar su plan',n:7,u:'días',p:'En los próximos',min:1,max:60,ch:function(n){ return 'próximos '+n+' días'; }},
+  pau:{t:'Acceso en pausa',c:'gr',d:'Les quitaste «Acceso activo» en su ficha (Sus datos): no pueden entrar en su app y no salen en Inicio ni en Revisiones. Todo lo suyo se queda guardado.',ir:'sus datos, para volver a activarlo'}
 };
 var CL3_ORD=['esc','sin','mol','est','com','nue','dat','pla','pau'], CL3_ON={esc:1,sin:1,mol:1,est:1,com:1};
 function cl3Def(){ return CL3_ORD.map(function(k){ var o={k:k,on:!!CL3_ON[k]}; if(CL3_CAT[k].n) o.n=CL3_CAT[k].n; return o; }); }
@@ -19955,10 +19967,10 @@ function cl3Hace(d){ return d===0?'hoy':d===1?'ayer':'hace '+d+' días'; }
 function cl3Cond(c,k,n){
   var hoy=CO.hoy||hoyStr(); n=n==null?cl3N(k):n;
   if(k==='esc') return c.chat&&c.chat.noLeidos?{t:'Te ha escrito',s:c.chat.noLeidos}:null;
-  if(k==='pau') return !c.activa?{t:'En pausa',s:0}:null;
+  if(k==='pau') return !c.activa?{t:'Acceso en pausa',s:0}:null;
   if(!c.activa) return null;
   if(k==='sin'){ if(c.plan==='dieta'||!c.rutinas) return null; var u=c.ultimoEntreno, d=u?diff(u,hoy):(c.alta?diff(String(c.alta).slice(0,10),hoy):0); if(d<n) return null; return {t:u?d+' días sin entrenar':'Aún sin entrenar',s:d}; }
-  if(k==='mol'){ var x=c.dolor; if(!x||!x.f) return null; var dd=diff(x.f,hoy); if(dd>n||dd<0) return null; var z=null; try{ z=rvZona(x.t); }catch(e){} var zt=z?String(z[1]).replace(/^(la|el|los|las) /,''):'Molestias'; return {t:zt.charAt(0).toUpperCase()+zt.slice(1)+' · '+cl3Hace(dd),s:1000-dd}; }
+  if(k==='mol'){ var x=(c.dolores||[]).filter(function(y){ var e=diff(y.f,hoy); return e>=0&&e<=n; })[0]; if(!x) return null; var dd=diff(x.f,hoy); var z=null; try{ z=rvZona(x.t); }catch(e){} var zt=z?String(z[1]).replace(/^(la|el|los|las) /,''):'Molestias'; return {t:zt.charAt(0).toUpperCase()+zt.slice(1)+' · '+cl3Hace(dd),s:1000-dd}; }
   if(k==='est'){ var P=c.prog||{}; if(!P.d||(c.entrenos30||0)<3||!c.ultimoEntreno||diff(c.ultimoEntreno,hoy)>7) return null; var ref=P.m&&P.m>P.d?P.m:P.d, w=Math.floor(diff(ref,hoy)/7); if(w<n) return null; return {t:cG('Estancada','Estancado',c)+' · '+w+' semanas',s:w}; }
   if(k==='com'){ var e=(c.eventos||[]).filter(function(v){ return v.fecha>=hoy; })[0]; if(!e) return null; var de=diff(hoy,e.fecha); if(de>n) return null; return {t:cl3Comp(c),s:1000-de}; }
   if(k==='nue'){ if(!c.alta) return null; var da=diff(String(c.alta).slice(0,10),hoy); if(da<0||da>n) return null; return {t:cG('Nueva','Nuevo',c),s:1000-da}; }
@@ -19997,7 +20009,7 @@ function cl3Hoy(c){
 function cl3Tags(c){      // v53.4.238: las de tus filtros encendidos (la del filtro que miras, la primera)
   var T=[], f=CO.cliF||'todos', ks=cl3Cfg().filter(function(o){ return o.on&&o.k!=='pau'; }).map(function(o){ return o.k; });
   if(f!=='todos'&&f!=='pau'){ var i=ks.indexOf(f); if(i>=0) ks.splice(i,1); ks.unshift(f); }
-  if(!c.activa) T.push({k:'gr',t:'En pausa'});
+  if(!c.activa) T.push({k:'gr',t:'Acceso en pausa'});
   ks.forEach(function(k){ var r=cl3Cond(c,k); if(r) T.push({k:CL3_CAT[k].c,t:r.t}); });
   return T;
 }
@@ -20020,13 +20032,18 @@ function cl3Desde(c){
   return 'desde '+m+(f.slice(0,4)!==hoy.slice(0,4)?' '+f.slice(0,4):'');
 }
 function cl3TagsHtml(c,max){ return cl3Tags(c).slice(0,max||2).map(function(t){ return '<i class="cl3-t '+t.k+'">'+esc(t.t)+'</i>'; }).join(''); }
-function cl3Fila(c){
-  var n=(c.chat&&c.chat.noLeidos)||0;
+function cl3Fila(c,f){
+  var n=(c.chat&&c.chat.noLeidos)||0, D=f?cl3Dest(c,f):null;
+  if(D) return '<div class="cl3-r cl3-rf'+(c.activa?'':' pau')+'"><button class="cl3-rm" data-a="cl3Ir" data-id="'+esc(c.id)+'" data-f="'+f+'">'+avCo(c.id,c.nombre,'sd-av cl3-av')+
+    '<span class="cl3-tx"><b>'+esc(c.nombre)+'</b><small class="cl3-src">'+D.src+'</small></span><span class="cl3-tg">'+cl3TagsHtml(c,2)+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'<span class="cl3-go">'+esc(D.b)+' ›</span></span></button>'+
+    (D.mas?'<button class="cl3-vz" data-a="cl3IrMas" data-id="'+esc(c.id)+'">'+esc(D.mas)+'</button>':'')+'<button class="cl3-fi" data-a="clAbrir" data-id="'+esc(c.id)+'">Ficha</button></div>';
   return '<button class="cl3-r'+(c.activa?'':' pau')+'" data-a="clAbrir" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av cl3-av')+
     '<span class="cl3-tx"><b>'+esc(c.nombre)+'</b><small>'+esc([planTxt(c.plan),cl3Desde(c)].filter(String).join(' · '))+'</small></span>'+
     '<span class="cl3-tg">'+cl3TagsHtml(c,2)+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</span></button>';
 }
-function cl3Cara(c){ return '<button class="cl3-cara'+(c.activa?'':' pau')+'" data-a="clAbrir" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av cl3-av')+'<b>'+esc(c.nombre)+'</b>'+cl3TagsHtml(c,1)+'</button>'; }
+function cl3Cara(c,f){ var D=f?cl3Dest(c,f):null;
+  if(D) return '<div class="cl3-cara cl3-caraf'+(c.activa?'':' pau')+'"><button class="cl3-cm" data-a="cl3Ir" data-id="'+esc(c.id)+'" data-f="'+f+'">'+avCo(c.id,c.nombre,'sd-av cl3-av')+'<b>'+esc(c.nombre)+'</b>'+cl3TagsHtml(c,1)+'<span class="cl3-go">'+esc(D.b)+' ›</span></button><button class="cl3-fi" data-a="clAbrir" data-id="'+esc(c.id)+'">Ficha</button></div>';
+  return '<button class="cl3-cara'+(c.activa?'':' pau')+'" data-a="clAbrir" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av cl3-av')+'<b>'+esc(c.nombre)+'</b>'+cl3TagsHtml(c,1)+'</button>'; }
 function pintarClientes(arriba){
   CO.vista='clientes'; CO.cid=null; if(arriba) CO.cl3Cache={};
   var y=window.scrollY, L=CO.lista||[], v=cl3Vista();
@@ -20067,10 +20084,11 @@ function cl3Pintar(){
   else if(f!=='todos') h+='<div class="cl3-fx">'+cl3FxTxt(f,V.length)+'</div>';
   else if(cl3MasOn()) h+='<div class="cl3-rh">'+(V.length===1?'1 cliente':V.length+' clientes')+'</div>';
   if(V.length){
-    if(v==='caras') h+='<div class="cl3-caras">'+V.map(cl3Cara).join('')+'</div>';
+    var fI=!q&&f!=='todos'?f:'';      // v53.4.240: con un filtro puesto, cada uno te lleva al sitio
+    if(v==='caras') h+='<div class="cl3-caras">'+V.map(function(c){ return cl3Cara(c,fI); }).join('')+'</div>';
     else {
       var conL=!q&&f==='todos'&&!cl3MasOn()&&V.length>=15, ini='', rows='', Ls=[];
-      V.forEach(function(c){ if(conL){ var l=sinTil(String(c.nombre).trim().charAt(0)).toUpperCase()||'#'; if(l!==ini){ ini=l; Ls.push(l); rows+='<div class="cl3-let" id="cl3-L-'+esc(l)+'">'+esc(l)+'</div>'; } } rows+=cl3Fila(c); });
+      V.forEach(function(c){ if(conL){ var l=sinTil(String(c.nombre).trim().charAt(0)).toUpperCase()||'#'; if(l!==ini){ ini=l; Ls.push(l); rows+='<div class="cl3-let" id="cl3-L-'+esc(l)+'">'+esc(l)+'</div>'; } } rows+=cl3Fila(c,fI); });
       h+='<div class="cl3-lw"><div class="cl3-l">'+rows+'</div>'+(conL&&Ls.length>3?'<nav class="cl3-idx" aria-label="Ir a la letra">'+Ls.map(function(l){ return '<button data-a="cl3Let" data-l="'+esc(l)+'">'+esc(l)+'</button>'; }).join('')+'</nav>':'')+'</div>';
     }
   } else if(!q) h+='<p class="muted cl3-nada">Nadie en este grupo.</p>';
@@ -20079,6 +20097,59 @@ function cl3Pintar(){
   if(q){ var k=String(CO.cliQ||'').trim(); if(CO.cl3Cache&&CO.cl3Cache[k]) cl3SrvPintar(CO.cl3Cache[k],k); }
   cl3ProgPedir();
 }
+/* ---- v53.4.240 · 23 nov 2026, 16:56–17:05 (Chadín): con un filtro puesto, cada cliente te lleva directo al sitio (su chat, el check-in o el
+   entreno donde dijo que le duele, su progreso, su competición…); «Ficha» abre su ficha. «Escribirle» deja un mensaje escrito (nunca se envía solo). ---- */
+function cl3Mol(c){ var hoy=CO.hoy||hoyStr(), n=cl3N('mol'); return (c.dolores||[]).filter(function(x){ var d=diff(x.f,hoy); return d>=0&&d<=n; }); }
+function cl3Cita(t){ t=String(t||''); return '«'+esc(t.length>70?t.slice(0,68)+'…':t)+'»'; }
+function cl3Donde(x){ var sb=function(t){ return '<i class="cl3-sb">'+t+'</i>'; };
+  return x.src==='chat'?sb('en el chat')+' el '+esc(fCorta(x.f)):x.src==='ck'?sb('en su check-in')+' del '+esc(fCorta(x.f)):sb('en su entreno')+' del '+esc(fCorta(x.f))+(x.ej?', en '+esc(x.ej):''); }
+function cl3MolBtn(x){ return x.src==='chat'?'Ver en el chat':x.src==='ck'?'Ver su check-in':'Ver en su entreno'; }
+function cl3Dest(c,f){
+  var hoy=CO.hoy||hoyStr();
+  if(f==='esc'){ var n=(c.chat&&c.chat.noLeidos)||0; return {b:'Ver en el chat',src:(n===1?'1 mensaje':n+' mensajes')+' sin leer'}; }
+  if(f==='sin'){ var u=c.ultimoEntreno; return {b:'Escribirle',src:u?'Su último entreno: '+esc(fCorta(u)):'Aún no ha apuntado ningún entreno'}; }
+  if(f==='mol'){ var L=cl3Mol(c), x=L[0]; if(!x) return null; return {b:cl3MolBtn(x),src:'Lo dijo '+cl3Donde(x)+': '+cl3Cita(x.t),mas:L.length>1?L.length+' veces':''}; }
+  if(f==='est'){ var P=c.prog||{}; return {b:'Ver su progreso',src:P.m&&P.m>P.d?'Su última mejora: '+esc(fCorta(P.m)):'No ha mejorado desde que empezó ('+esc(fCorta(P.d))+')'}; }
+  if(f==='com'){ var e=(c.eventos||[]).filter(function(v){ return v.fecha>=hoy; })[0]; return {b:'Ver su competición',src:e?esc(e.nombre||'Competición')+' · '+esc(fCorta(e.fecha)):''}; }
+  if(f==='dat'){ var r=c.recibido||{}; return {b:'Escribirle',src:'Último peso: '+(r.peso?esc(fCorta(r.peso)):'ninguno')+' · último check-in: '+(c.ultCheck?esc(fCorta(c.ultCheck)):'ninguno')}; }
+  if(f==='pla') return {b:'Renovar',src:'Vence el '+esc(fCorta(c.planHasta))+(c.planDet?' · '+esc(c.planDet):'')};
+  if(f==='nue') return {b:'Ver su ficha',src:'Alta: '+esc(fCorta(String(c.alta||'').slice(0,10)))};
+  if(f==='pau') return {b:'Ver sus datos',src:'Para volver a activarlo: «Acceso activo», en sus datos'};
+  return null;
+}
+function cl3Borrador(c,f){ var n=primerNombre(c.nombre);
+  return f==='sin'?'Hola, '+n+', ¿qué tal? He visto que llevas unos días sin entrenar. ¿Va todo bien? Cuéntame y lo ajustamos.':
+    'Hola, '+n+', ¿qué tal vas? Hace unos días que no apuntas tu peso ni tu check-in. Cuando puedas, apúntalo, que así veo cómo vas.'; }
+function irEsperar(sel,fn,n){ var el=document.querySelector(sel); if(el) return fn(el); if((n||0)>40) return fn(null); setTimeout(function(){ irEsperar(sel,fn,(n||0)+1); },150); }
+function irMarcar(el,sel){ if(sel){ CO.irSel=sel; CO.irHasta=Date.now()+4000; } if(!el) return; try{ el.scrollIntoView({block:'center',behavior:'smooth'}); }catch(e){ el.scrollIntoView(); } el.classList.remove('ir-hl'); void el.offsetWidth; el.classList.add('ir-hl'); }
+function cl3IrChat(c,mid,txt){
+  return abrirClienta(c.id,'chat').then(function(){
+    if(mid) return irEsperar('#msj-'+mid,function(el){ if(el) irMarcar(el,'#msj-'+mid); else toast('No encuentro ese mensaje (puede que lo haya borrado)','err'); });
+    if(txt) irEsperar('#chat-t',function(t){ if(!t||String(t.value||'').trim()) return; t.value=txt; t.dispatchEvent(new Event('input',{bubbles:true})); try{ t.focus(); t.setSelectionRange(t.value.length,t.value.length); }catch(e){} toast('Te dejo el mensaje escrito: cámbialo o envíalo','ok'); });
+  });
+}
+function cl3IrMol(c,x){
+  if(!x) return abrirClienta(c.id,'seguimiento');
+  if(x.src==='chat') return cl3IrChat(c,x.mid);
+  if(x.src==='ck'){ CO.ckTodo=true; return abrirClienta(c.id,'evolucion').then(function(){ irEsperar('.ck-i[data-f="'+x.f+'"]',function(el){ if(el) irMarcar(el,'.ck-i[data-f="'+x.f+'"]'); else toast('No encuentro ese check-in','err'); }); }); }
+  return abrirClienta(c.id,'evolucion').then(function(){ var d=CO.d; if(!d||!(d.sesiones||[]).some(function(s){ return s.id===x.sid; })) return toast('No encuentro ese entreno (puede que lo haya borrado)','err');
+    sesVentana(x.sid); setTimeout(function(){ var q=clave(x.ej||''), B=[].slice.call(document.querySelectorAll('#modal .sx-e')).filter(function(e){ var b=e.querySelector('.sx-eh b'); return q&&b&&clave(b.textContent)===q; })[0]||document.querySelector('#modal .sx-nota.gen'); irMarcar(B); },200); });
+}
+A.cl3Ir=function(el){ var c=cliDe(el.dataset.id), f=el.dataset.f; if(!c) return; cl3RecPon(c.id);
+  if(f==='mol'){ cerrarModal(); return cl3IrMol(c,cl3Mol(c)[+el.dataset.i||0]); }
+  if(f==='esc') return cl3IrChat(c);
+  if(f==='sin'||f==='dat') return cl3IrChat(c,null,cl3Borrador(c,f));
+  if(f==='est') return abrirClienta(c.id,'progreso');
+  if(f==='com') return abrirClienta(c.id,'calendario');
+  if(f==='pla') return abrirClienta(c.id,'seguimiento').then(function(){ modalRenovar(c.id); });
+  if(f==='pau') return abrirClienta(c.id,'enlace');
+  return abrirClienta(c.id,'seguimiento');
+};
+A.cl3IrMas=function(el){ var c=cliDe(el.dataset.id); if(!c) return; var L=cl3Mol(c);
+  modal('<h2>Dónde lo ha dicho</h2><p class="muted">'+esc(c.nombre)+' · '+(L.length===1?'1 vez':L.length+' veces')+' en los últimos '+cl3N('mol')+' días. Lo más reciente, primero.</p><div class="cl3-ml">'+
+    L.map(function(x,i){ return '<div class="cl3-mi"><span>Lo dijo '+cl3Donde(x)+':<br>'+cl3Cita(x.t)+'</span><button class="btn sm sec" data-a="cl3Ir" data-id="'+esc(c.id)+'" data-f="mol" data-i="'+i+'">'+esc(cl3MolBtn(x))+' ›</button></div>'; }).join('')+
+    '</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
+
 /* ---- «Tus filtros» (v53.4.238): enciende o apaga, pon tus números y ordénalos arrastrando ---- */
 A.cl3Cfg=function(){ CO.fz=cl3Cfg().map(function(o){ return Object.assign({},o); }); cl3CfgPintar(); };
 function fzDe(k){ return (CO.fz||[]).filter(function(o){ return o.k===k; })[0]; }
@@ -20126,14 +20197,16 @@ function cl3GuiaHtml(){
     '<div class="rvg-r">'+n(3)+'<span class="smg-mx" style="background:#FFEDEA;color:#D93B30">Te han escrito</span><span class="smg-mx" style="background:#FBE7F1;color:#A11D5E">No entrenan</span><span class="smg-mx" style="background:#EAF2FF;color:#2563D4">Con molestias</span>…</div>'+
     '<div class="rvg-r">'+n(4)+'Más filtros · '+n(5).replace('rvg-n','rvg-n smg-n2')+'<span style="margin-left:22px">Tus filtros</span></div>'+
     '<div class="rvg-r">'+n(6)+'Nombre · <span class="smg-mx" style="background:#FBE7F1;color:#A11D5E">9 días sin entrenar</span></div>'+
-    '<div class="rvg-r">'+n(6)+'Nombre · <span class="smg-mx" style="background:#F1EDFF;color:#6A4AE0">Estancada · 5 semanas</span></div></div>';
+    '<div class="rvg-r">'+n(6)+'Nombre · <span class="smg-mx" style="background:#F1EDFF;color:#6A4AE0">Estancada · 5 semanas</span></div>'+
+    '<div class="rvg-r">'+n(7)+'Con un filtro: <span class="smg-mb" style="margin:0 0 0 4px">Ver en el chat ›</span> · Ficha</div></div>';
   var P=[
     [1,'Buscar','Por nombre, email, móvil, su competición o algo de tus notas. En el ordenador, Ctrl K desde cualquier sitio.','<span class="smg-bus">'+ic('lupa')+'Nombre, email, móvil o tus notas</span>'],
     [2,'Lista o caras','Como prefieras verlos: en lista, o con su cara.','<span class="cl3-sw"><button class="on">Lista</button><button>Caras</button></span>'],
     [3,'Tus filtros, arriba','Cada uno con cuántos clientes hay. Tócalo y ves solo esos, con una frase que dice qué estás viendo y los más urgentes primero.','<span class="smg-chs">'+k('Todos','',1,15)+k('Te han escrito','co',0,4)+k('No entrenan · 5+ días','ro',0,3)+k('Con molestias · últimos 14 días','az',0,2)+'</span>'],
     [4,'Más filtros','Los que tienes apagados y el servicio (entreno, dieta o los dos).','<span class="cl3-mf">Más filtros</span>'],
     [5,'Tus filtros','Tú decides cuáles salen arriba, en qué orden y con qué números. Abajo te lo explicamos.','<span class="cl3-cfgb">'+ic('editar')+'Tus filtros</span>'],
-    [6,'Cada cliente','Con sus etiquetas: por qué sale en cada filtro. Tócalo y se abre su ficha.','<span class="smg-f"><span class="smg-av">MR</span><span class="smg-fn"><b>Marta</b><small>Entreno + Dieta · desde octubre</small></span><span class="smg-fd"><span class="cl3-t ro">9 días sin entrenar</span></span></span>']
+    [7,'Te lleva al sitio','Con un filtro puesto, cada cliente lleva su botón: te lleva directo a donde tienes que mirar (su chat, el check-in o el entreno donde dijo que le duele, su progreso…). Debajo de su nombre, dónde y qué dijo. «Ficha» abre su ficha.','<span class="smg-f"><span class="smg-av">ES</span><span class="smg-fn"><b>Elena</b><small>Lo dijo en su entreno del 18 nov, en Press banca: «Me molesta el hombro»</small></span><span class="smg-fd"><span class="cl3-go">Ver en su entreno ›</span><span class="cl3-fi">Ficha</span></span></span>'],
+    [6,'Cada cliente','Con sus etiquetas: por qué sale en cada filtro. Sin filtro, al tocarlo se abre su ficha.','<span class="smg-f"><span class="smg-av">MR</span><span class="smg-fn"><b>Marta</b><small>Entreno + Dieta · desde octubre</small></span><span class="smg-fd"><span class="cl3-t ro">9 días sin entrenar</span></span></span>']
   ];
   var CF=[
     ['A','Enciende o apaga','Encendido: sale arriba. Apagado: queda en «Más filtros».','<span class="smg-row2">'+sw(1)+'<b>No entrenan</b></span><span class="smg-row2">'+sw(0)+'<b class="off">Sin datos</b></span>'],
@@ -20142,10 +20215,10 @@ function cl3GuiaHtml(){
     ['D','Volver a los de siempre','Si te lías, vuelve a los que vienen por defecto y pulsa «Guardar».',B('Volver a los de siempre','sec')]
   ];
   return '<div class="gu-h"><b>Cómo funciona «Clientes»</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 8px">Para encontrar a cualquier cliente y que no se te pase nadie. Dónde está cada cosa:</p>'+mapa+
-    P.map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
+    P.slice().sort(function(a,b){ return a[0]-b[0]; }).map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
     '<h3 class="smg-h3">Configura tus filtros («Tus filtros»)</h3><p class="muted sm" style="margin:0 0 4px">Son tuyos: lo que cambies no cambia nada a otros entrenadores ni a tus clientes.</p>'+
     CF.map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
-    '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+ic('info')+'</span><b>Qué es cada filtro</b></div><div class="smg-et">'+CL3_ORD.map(function(q){ var C=CL3_CAT[q]; return '<span><span class="cl3-t '+C.c+'">'+esc(C.t)+(C.n?' · '+esc(C.p.toLowerCase())+' '+C.n+' '+C.u:'')+'</span><small>'+esc(C.d)+'</small></span>'; }).join('')+'</div></div>'+
+    '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+ic('info')+'</span><b>Qué es cada filtro</b></div><div class="smg-et">'+CL3_ORD.map(function(q){ var C=CL3_CAT[q]; return '<span><span class="cl3-t '+C.c+'">'+esc(C.t)+(C.n?' · '+esc(C.p.toLowerCase())+' '+C.n+' '+C.u:'')+'</span><small>'+esc(C.d)+(C.ir?' <b class="smg-ir">Te lleva a '+esc(C.ir)+'.</b>':'')+'</small></span>'; }).join('')+'</div></div>'+
     '<p class="muted sm rvg-pie">'+ic('info')+'Por defecto salen: Te han escrito, No entrenan (5 días), Con molestias (14 días), Estancados (4 semanas) y Compiten (30 días). Tus clientes no ven nada de esto.</p>';
 }
 
