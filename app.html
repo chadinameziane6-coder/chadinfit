@@ -698,6 +698,13 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 /* v53.4.208 (nº 1): Seguimiento (Word «PANEL ENTRENADOR» 3): cuenta atrás, notas en tabla y «Más fechas» con la fecha resaltada */
 .sg2-top{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:0 0 16px}@media (max-width:900px){.sg2-top{grid-template-columns:repeat(2,minmax(0,1fr))}}@media (max-width:520px){.sg2-top{grid-template-columns:1fr}}
 .sg2-t{background:#fff;border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 0 rgba(13,13,16,.04)}
+.sg2-t{position:relative}.sg2-cfg{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:1px solid #E3E3E9;background:#fff;color:#3A3A44;display:grid;place-items:center;cursor:pointer}.sg2-cfg .ic{width:15px;height:15px;margin:0}.sg2-cfg:hover{border-color:#141414}
+.sg2-hoy .sg2-cfg{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff}
+.sg2-tip{position:absolute;bottom:calc(100% + 6px);right:0;background:#141414;color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 8px;white-space:nowrap;display:none;pointer-events:none}.sg2-cfg:hover .sg2-tip,.sg2-cfg:focus-visible .sg2-tip{display:block}
+.sg2-md{display:flex!important;align-items:center;gap:4px;font-weight:700}.sg2-md .ic{width:12px;height:12px;margin:0}
+.rvm-ant{display:flex;gap:6px;align-items:flex-start;background:#F5F8FE;border-radius:10px;padding:8px 10px;color:#1F3A7A}.rvm-ant .ic{width:15px;height:15px;flex:none;margin:1px 0 0}
+.rvm-h{display:flex;align-items:center;justify-content:space-between;gap:10px}.rvm-h h2{margin:0}.rvm-h .btn{margin:0;width:auto}.rvm-ac{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 2px}.rvm-ac:empty{display:none}.rvm-ac .btn{margin:0;width:auto}
+#pr-medio button .ic,#rv-medio button .ic{width:14px;height:14px;margin:0 4px 0 0}
 .sg2-n{width:58px;height:58px;flex:none;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;background:#F1F1F4;color:#3A3A44}.sg2-n b{font-size:24px;font-weight:800}.sg2-n small{font-size:9.5px;font-weight:800;margin-top:2px;letter-spacing:.02em}
 .sg2-revision{background:#F3F1FF;color:#5B45C9}.sg2-semanal{background:#F3F1FF;color:#5B45C9}.sg2-rutina{background:#EAF3FF;color:#2559B8}.sg2-dieta{background:#EEF0FF;color:#3F4FB8}.sg2-plan,.sg2-tarea,.sg2-fotos,.sg2-llamada{background:#F1F1F4;color:#3A3A44}
 .sg2-hoy{background:#0D0D10;color:#fff}.sg2-hoy .sg2-n{background:linear-gradient(135deg,#7FD6FF,#9A8CFF);color:#0D0D10}.sg2-hoy .sg2-x small{color:#C9C9D1}.sg2-hoy .btn.sec{background:#fff;color:#111;border-color:#fff}.sg2-hoy .btn:not(.sec){background:#fff;color:#111}
@@ -5705,7 +5712,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.226';
+var APP_V = 'v53.4.227';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8991,7 +8998,8 @@ function z2Prox(hoy){
   var d=CL.d, L=[], ahora=Date.now(), it=function(o){ L.push(o); };
   (d.llamadas||[]).forEach(function(l){ if(l.fecha>=hoy&&llMs(l)+(+l.minutos||30)*60000>ahora) it({f:l.fecha,o:l.hora||'',k:'c',i:'video',t:'Videollamada con '+czCoach(),s:llCuando(l)+(llMin(l)>60?'':' · '+(l.hora||'')),link:l.fecha===hoy&&l.meet?l.meet:''}); });
   czCitas().forEach(function(x){ it({f:x.fecha,o:x.hora||'',k:'c',i:'user',t:x.titulo,s:czCuando(x)}); });
-  var R=revEstado(); if(R&&!(R.todo&&diff(hoy,R.rv.fecha)<=0)) it({f:R.rv.fecha,k:'r',i:'rev',t:'Revisión',acc:'revReg'});
+  var R=revEstado(); if(R&&R.conv){ if(R.rv.fecha>=hoy) it({f:R.rv.fecha,k:'r',i:'rev',t:'Revisión con '+czCoach(),s:revMedioTxt(R.rv)||'Para ver cómo vas'}); }      // 23 nov: la conversación con su coach
+  else if(R&&!(R.todo&&diff(hoy,R.rv.fecha)<=0)) it({f:R.rv.fecha,k:'r',i:'rev',t:'Revisión',acc:'revReg'});
   var PP=progEstado('peso'); if(PP&&!(PP.ok&&PP.n<=0)) it({f:PP.P.fecha,k:'f',i:'peso',t:'Pesarte',acc:'medidas'});
   if(regCl().diario&&!(d.medidas||[]).some(function(m){ return m.fecha===hoy&&num(m.peso)!=null; })) it({f:hoy,k:'f',i:'peso',t:'Pesarte',s:'Hoy · en ayunas',accA:'z2Peso'});
   var PM=progEstado('medidas'); if(PM&&!(PM.ok&&PM.n<=0)) it({f:PM.P.fecha,k:'f',i:'medidas',t:'Medirte',acc:'medidas'});
@@ -9305,8 +9313,10 @@ function revEstado(){
     peso:med.some(function(m){ return m.fecha>=rv.desde&&num(m.peso)!=null; }),
     medidas:med.some(function(m){ return m.fecha>=rv.desde&&MED_CM.some(function(k){ return num(m[k])!=null; }); })};
   var L=(rv.pide||[]).map(function(k){ return {k:k,ok:hecho[k]}; });
-  // v26: "todo" = ya ha apuntado lo que le pides (si no pides nada, al menos su peso o medidas)
-  return {rv:rv,L:L,todo:L.length?L.every(function(x){ return x.ok; }):(hecho.peso||hecho.medidas)};
+  // 23 nov 2026 (Chadín): la revisión con su coach es una conversación (llamada, videollamada, audio o chat); si no le pide nada antes, no tiene que rellenar nada (conv)
+  var conv=!L.length;
+  // v26: "todo" = ya ha apuntado lo que le pides
+  return {rv:rv,L:L,conv:conv,todo:conv?true:L.every(function(x){ return x.ok; })};
 }
 /* =====================================================================
    AVISOS DE LA CLIENTA (campana arriba a la derecha)
@@ -9406,7 +9416,8 @@ A.npAcc=function(el){
 function revLinea(hoy){
   var R=revEstado(), F=fotosEstado(), L=[];
   function cu(f){ var n=diff(hoy,f); return fMedia(f)+' · '+(n<0?'pendiente':n===0?'hoy':n===1?'mañana':'en '+n+' días'); }
-  if(R) L.push('<span class="rl-i">'+ic('rev')+'<span><b>Próxima revisión</b><small>'+esc(R.todo&&diff(hoy,R.rv.fecha)<=0?fMedia(R.rv.fecha)+' · ya apuntada':cu(R.rv.fecha))+'</small></span></span>');      // v38: hecha, lo dice
+  if(R&&R.conv){ if(R.rv.fecha>=hoy) L.push('<span class="rl-i">'+ic('rev')+'<span><b>Revisión con '+esc(czCoach())+'</b><small>'+esc(cu(R.rv.fecha)+(revMedioTxt(R.rv)?' · '+revMedioTxt(R.rv).toLowerCase():''))+'</small></span></span>'); }      // 23 nov: la conversación
+  else if(R) L.push('<span class="rl-i">'+ic('rev')+'<span><b>Próxima revisión</b><small>'+esc(R.todo&&diff(hoy,R.rv.fecha)<=0?fMedia(R.rv.fecha)+' · ya apuntada':cu(R.rv.fecha))+'</small></span></span>');      // v38: hecha, lo dice
   var PP=progEstado('peso'), PM=progEstado('medidas');      // v53.4.62
   if(PP) L.push('<span class="rl-i">'+ic('peso')+'<span><b>Próximo peso</b><small>'+esc(PP.ok&&PP.n<=0?fMedia(PP.P.fecha)+' · ya apuntado':cu(PP.P.fecha))+'</small></span></span>');
   if(PM) L.push('<span class="rl-i">'+ic('medidas')+'<span><b>Próximas medidas</b><small>'+esc(PM.ok&&PM.n<=0?fMedia(PM.P.fecha)+' · ya apuntadas':cu(PM.P.fecha))+'</small></span></span>');
@@ -12545,7 +12556,8 @@ function revFechas(hoy){
   function it(k,t,f,ya){ var n=diff(hoy,f), d=aDate(f);
     L.push({k:k,t:t,f:String(f).slice(0,10),ya:!!ya,n:n,cu:ya?'Hecho':n<0?'Pendiente':n===0?'Hoy':n===1?'Mañana':'en '+n+' días',
       w:diaSemC(d),dn:d.getDate(),m:d.toLocaleDateString('es-ES',{month:'short'}).replace('.','')}); }
-  if(R) it('rev','Revisión',R.rv.fecha,R.todo&&diff(hoy,R.rv.fecha)<=0);
+  if(R&&R.conv){ if(R.rv.fecha>=hoy) it('rev','Revisión con '+czCoach(),R.rv.fecha,false); }      // 23 nov: la conversación con su coach (no rellena nada)
+  else if(R) it('rev','Revisión',R.rv.fecha,R.todo&&diff(hoy,R.rv.fecha)<=0);
   if(PP) it('peso','Pesarte',PP.P.fecha,PP.ok&&PP.n<=0);
   if(PM) it('medidas','Medirte',PM.P.fecha,PM.ok&&PM.n<=0);
   if(F) it('foto','Fotos',F.fo.fecha,false);
@@ -15229,7 +15241,9 @@ function sg2Tile(o,hoy){
   var n=diff(hoy,o.f), k=n<0?'tarde':n===0?'hoy':o.tipo, num=n<0?-n:n, lab=n<0?(num===1?'DÍA TARDE':'DÍAS TARDE'):n===0?'HOY':num===1?'DÍA':'DÍAS';
   var dp=String(o.det||'').split(' · '), sub=o.tipo==='revision'&&dp[1]?dp.slice(1).join(' · '):dp[0]; if(o.tipo==='revision'&&/^(aún|ya|lo ha|ha )/.test(sub)) sub=cG('Ella','Él')+' '+sub;      // la revisión: lo que le falta apuntar a ella (su peso, sus medidas…)
   var bt=String(o.btn||'').replace('>Registrar revisión<','>Hacer la revisión<').replace('>Revisar su semana<','>Revisar<').replace('>Ir a sus rutinas<','>Sus rutinas<').replace('>Ir a su dieta<','>Su dieta<');
-  return '<div class="sg2-t'+(n===0?' sg2-hoy':'')+(n<0?' sg2-atr':'')+'"><span class="sg2-n sg2-'+k+'"><b>'+num+'</b><small>'+lab+'</small></span><span class="sg2-x"><b>'+esc(o.tit)+'</b><small title="'+esc(o.det||'')+'">'+esc(sub)+'</small><span class="sg2-bt">'+bt+'</span></span></div>';
+  var md=o.tipo==='revision'?revMedioTxt(CO.d.clienta.rev):'', cf=o.tipo==='revision'?'sgCfgRev':o.tipo==='semanal'?'sgCfgSem':'';      // 23 nov, 13:30 (Chadín): acceso directo para configurarlas
+  if(o.tipo==='semanal') sub='Solo para ti · '+String(dp[0]||'').toLowerCase(); if(o.tipo==='revision') sub=periodoTxt(CO.d.clienta.rev.cada,true);
+  return '<div class="sg2-t'+(n===0?' sg2-hoy':'')+(n<0?' sg2-atr':'')+'"><span class="sg2-n sg2-'+k+'"><b>'+num+'</b><small>'+lab+'</small></span><span class="sg2-x"><b>'+esc(o.tit)+'</b>'+(md?'<small class="sg2-md">'+ic(REV_MEDIO_IC[CO.d.clienta.rev.medio]||'nota')+esc(md)+'</small>':'')+'<small title="'+esc(o.det||'')+'">'+esc(sub)+'</small><span class="sg2-bt">'+bt+'</span></span>'+(cf?'<button class="sg2-cfg" data-a="'+cf+'" aria-label="Configurar">'+ic('ajuste')+'<span class="sg2-tip">Configurar</span></button>':'')+'</div>';
 }
 function sg2Fecha(o,hoy){ var n=diff(hoy,o.f), dt=aDate(o.f), rel=n===0?'hoy':n===1?'mañana':n===-1?'ayer':n<0?'hace '+(-n)+' d':'en '+n+' d';
   return '<div class="sg2-f'+(n<0?' atr':n===0?' hoy':'')+'"><span class="sg2-d"><b>'+dt.getDate()+'</b><small>'+esc(mesC(dt))+'</small></span><span class="sg2-ft"><b>'+esc(o.tit)+'</b><small><em>'+esc(diaSemC(dt))+' · '+esc(rel)+'</em>'+(o.det?' · '+esc(o.det):'')+'</small></span><span class="sg2-fb">'+o.btn+'</span></div>'; }
@@ -15295,13 +15309,13 @@ function cfgSegCard(){
     c.plan_estado==='baja'?'<b class="bad-t">No renueva</b>':'']:['<span class="muted">Sin indicar</span>'],'<span class="cf-bs">'+b('segEditPlan',c.plan||c.plan_hasta?'Editar':'Indicar')+b('pgFicha','Pagos')+'</span>',
     c.plan||c.plan_hasta?esc([planCompleto(c)||'Sin modalidad',c.plan_hasta?'hasta el '+fCorta(c.plan_hasta):''].filter(Boolean).join(' · '))+(c.plan_estado==='baja'?' · <b class="bad-t">No renueva</b>':''):'Sin indicar',
     (function(){ if(!c.plan_hasta) return ''; var q=diff(hoy,c.plan_hasta); return q<0?fiChip('Vencido','warn'):q<=7?fiChip(q===0?'Vence hoy':'Vence en '+q+(q===1?' día':' días'),'warn'):fiChip(q+' días','gris'); })());
-  h+=cfgFila('revision','Revisión con '+cG('ella','él')+'',rv.fecha?[esc(periodoTxt(rv.cada,true)),'Próxima: '+esc(fMedia(rv.fecha)),(rv.pide||[]).length?'Antes apunta '+esc(listaY(rv.pide.map(function(k){ return PIDE_L[k]; }))):'No le pides que apunte nada']:['<span class="muted">Sin programar · lo normal, cada 20 días</span>'],b('segProgRev',rv.fecha?'Cambiar':'Programar'),
-    rv.fecha?esc(periodoTxt(rv.cada,true)+((rv.pide||[]).length?' · antes apunta '+listaY(rv.pide.map(function(k){ return PIDE_L[k]; })):'')):'Sin programar · lo normal, cada 20 días',
+  h+=cfgFila('revision','Revisión con '+cG('ella','él')+'',rv.fecha?[esc([revMedioTxt(rv),periodoTxt(rv.cada,!revMedioTxt(rv))].filter(String).join(' · ')),'Próxima: '+esc(fMedia(rv.fecha))]:['<span class="muted">Sin programar · una conversación con '+cG('ella','él')+' cada cierto tiempo para explicarle cómo va</span>'],b('segProgRev',rv.fecha?'Cambiar':'Programar'),
+    rv.fecha?esc([revMedioTxt(rv),periodoTxt(rv.cada,!revMedioTxt(rv))].filter(String).join(' · ')):'Sin programar',
     rv.fecha?fiChip('Próxima: '+fMedia(rv.fecha),rv.fecha<hoy?'warn':'ind'):fiChip('Sin programar','warn'));
   h+=regFilaHtml();
   if(c.plan!=='dieta'){
     var nS=c.semanal?(c.semanal_cada||1):0;
-    h+=cfgFila('semanal','Revisión semanal · solo tú',['Repasas su semana el domingo. '+cG('Ella','Él')+' no la ve.','<div class="tipos ops cf-sem">'+[[1,'Cada semana'],[2,'Cada 2 semanas'],[4,'Cada 4 semanas'],[0,'No']].map(function(o){ return '<button class="'+(nS===o[0]?'on':'')+'" data-a="semCada" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>'],'',nS?esc(SEM_CADA[nS])+' · el domingo':'No la haces');
+    h+=cfgFila('semanal','Revisión semanal · solo tú',['Es para ti: entras en «Revisión semanal» y ves cómo va. '+cG('Ella','Él')+' no la ve.','<div class="tipos ops cf-sem">'+[[1,'Cada semana'],[2,'Cada 2 semanas'],[4,'Cada 4 semanas'],[0,'No']].map(function(o){ return '<button class="'+(nS===o[0]?'on':'')+'" data-a="semCada" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>'],'',nS?esc(SEM_CADA[nS])+' · el domingo':'No la haces');
   }
   h+=cfgFila('dieta','Fechas de su dieta y sus rutinas',['Se ajustan en su pestaña: <button class="link" data-a="irDieta">Dieta</button> · <button class="link" data-a="irRutinas">Entrenos</button>'],'','En sus pestañas Dieta y Entrenos');
   return h+'</div>';
@@ -15364,19 +15378,23 @@ function pideSel(){ return [].slice.call(document.querySelectorAll('.rv-p:checke
 function modalRevision(){
   var c=CO.d.clienta, rv=c.rev||{}, hoy=CO.hoy||hoyStr(), rr=recibidoRev(rv,resumenFicha().recibido), cada=rv.cada||'20d';
   CO.rvRes='';
-  modal('<h2>Registrar revisión</h2>'+(rv.fecha?'<p class="muted">Prevista: '+esc(fLarga(rv.fecha))+(rv.fecha<hoy?' ('+relT(rv.fecha)+')':'')+'.</p>':'')+
-    (rr.tot?'<div class="rv-rec">'+rr.L.map(function(x){ return '<span class="rq'+(x.ok?' ok':'')+'">'+(x.ok?ic('ok'):ic('x'))+({peso:'Peso',medidas:'Medidas'})[x.k]+'</span>'; }).join('')+'</div>':'')+
+  var md=rv.medio||'';
+  modal('<div class="rvm-h"><h2>Revisión con '+cG('ella','él')+'</h2><button class="btn sm sec" data-a="sgCfgRev">'+ic('ajuste')+'Configurar</button></div>'+(rv.fecha?'<p class="muted">Prevista: '+esc(fLarga(rv.fecha))+(rv.fecha<hoy?' ('+relT(rv.fecha)+')':'')+'.</p>':'')+
+    '<div class="lab">¿Cómo ha sido?</div><div class="tipos ops" id="rv-medio">'+REV_MEDIO.map(function(o){ return '<button class="'+(md===o[0]?'on':'')+'" data-a="rvMedio" data-v="'+o[0]+'">'+ic(REV_MEDIO_IC[o[0]])+o[1]+'</button>'; }).join('')+'</div>'+
+    '<div class="rvm-ac">'+(md==='video'?'<button class="btn sm sec" data-a="llNueva">'+ic('video')+'Programar videollamada</button>':'')+(md==='chat'||md==='audio'?'<button class="btn sm sec" data-a="rvmChat">'+ic(md==='audio'?'mic':'nota')+(md==='audio'?'Mandarle un audio':'Abrir su chat')+'</button>':'')+'</div>'+
     '<label class="f">Fecha en que la has hecho<input type="date" id="rv-f" value="'+hoy+'" max="'+hoy+'"></label>'+
     '<div class="lab">Resultado</div><div class="tipos ops" id="rv-res">'+RES_REV.map(function(r){ return '<button data-a="rvRes" data-v="'+esc(r)+'">'+esc(resTxt(r))+'</button>'; }).join('')+'</div>'+
     '<label class="f">Notas (solo tú: qué habéis hablado o cambiado)<textarea id="rv-n" rows="3" placeholder="Peso, sensaciones, ajustes…"></textarea></label>'+
-    '<label class="f">Próxima revisión<input type="date" id="rv-sig" value="'+sumarPeriodo(hoy,cada)+'"></label><p class="muted sm">'+esc(periodoTxt(cada,true))+'. Cada cuánto y qué apunta antes se cambia en Ficha.</p>'+
+    '<label class="f">Próxima revisión<input type="date" id="rv-sig" value="'+sumarPeriodo(hoy,cada)+'"></label><p class="muted sm">'+esc(periodoTxt(cada,true))+'. Cada cuánto y cómo, en «Configurar».</p>'+
     '<button class="btn mt" data-a="rvGuardar">Guardar revisión</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
   var f=document.getElementById('rv-f');
   f.addEventListener('change',function(){ if(f.value) document.getElementById('rv-sig').value=sumarPeriodo(f.value,cada); });
 }
+A.rvMedio=function(el){ var on=!el.classList.contains('on'); document.querySelectorAll('#rv-medio button').forEach(function(b){ b.classList.toggle('on',on&&b===el); }); };
+A.rvmChat=function(){ var cid=CO.cid; cerrarModal(); if(typeof mcAbrir==='function') mcAbrir(cid); };
 A.rvRes=function(el){ CO.rvRes=CO.rvRes===el.dataset.v?'':el.dataset.v; document.querySelectorAll('#rv-res button').forEach(function(b){ b.classList.toggle('on',b.dataset.v===CO.rvRes); }); };
 A.rvGuardar=function(el){
-  var rv=CO.d.clienta.rev||{}, x={fecha:val('rv-f'),resultado:CO.rvRes,nota:val('rv-n'),siguiente:val('rv-sig'),cada:rv.cada||'20d',pide:rv.fecha?(rv.pide||[]):['peso','medidas']};
+  var rv=CO.d.clienta.rev||{}, mb=document.querySelector('#rv-medio button.on'), x={fecha:val('rv-f'),resultado:CO.rvRes,nota:val('rv-n'),siguiente:val('rv-sig'),cada:rv.cada||'20d',pide:[],medio:mb?mb.dataset.v:''};
   if(!x.fecha) return toast('Pon la fecha de la revisión');
   if(!x.resultado&&!x.nota) return toast('Elige un resultado o escribe una nota');
   if(x.siguiente&&x.siguiente<=x.fecha) return toast('La próxima revisión tiene que ser después');
@@ -15385,18 +15403,21 @@ A.rvGuardar=function(el){
 };
 function modalProgRev(){
   var rv=CO.d.clienta.rev||{}, hoy=CO.hoy||hoyStr();
-  modal('<h2>'+(rv.fecha?'Cambiar la revisión':'Programar revisiones')+'</h2>'+
-    '<p class="muted">Es la revisión que hacéis '+cG('juntas','juntos')+' (lo normal, cada 20 días). '+cG('Ella','Él')+' la ve en su campana con lo que tiene que apuntar antes. Las fotos van aparte.</p>'+
+  modal('<h2>'+(rv.fecha?'Revisión con '+cG('ella','él'):'Programar la revisión con '+cG('ella','él'))+'</h2>'+
+    '<p class="muted">Es con '+cG('ella','él')+': agendas una conversación cada cierto tiempo (cada 10 días, 20, cada mes…) por llamada, videollamada, audio o chat, según la persona, para explicarle cómo va. Va aparte de tu revisión semanal (que es solo para ti) y de sus días de pesarse y medirse. '+cG('Ella','Él')+' la ve en «Lo próximo» con el día y cómo será.</p>'+
+    ((rv.pide||[]).length?'<p class="muted sm rvm-ant">'+ic('info')+'Hasta ahora le pedías que apuntara '+esc(listaY(rv.pide.map(function(k){ return PIDE_L[k]; })))+' antes de esta revisión. Al guardar, deja de pedírselo aquí: sus días de pesarse y medirse se configuran aparte, en Ficha.</p>':'')+
+    '<div class="lab">¿Cómo la hacéis?</div><div class="tipos ops" id="pr-medio">'+REV_MEDIO.map(function(o){ return '<button class="'+(rv.medio===o[0]?'on':'')+'" data-a="prMedio" data-v="'+o[0]+'">'+ic(REV_MEDIO_IC[o[0]])+o[1]+'</button>'; }).join('')+'</div>'+
     '<div class="grid2"><label class="f">Próxima<input type="date" id="pr-f" value="'+(rv.fecha||sumarPeriodo(hoy,'20d'))+'"></label><label class="f">Repetir'+selCada('pr-cada',rv.fecha?rv.cada:'20d',CADA_REV)+'</label></div>'+
-    pideChecks(rv.fecha?rv.pide:['peso','medidas'])+
     '<button class="btn mt" data-a="prGuardar">Guardar</button>'+(rv.fecha?'<button class="link danger mt" data-a="prQuitar">Quitar las revisiones</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
 }
 function guardarProg(x,el,msg){
   if(el.disabled) return; el.disabled=true;
   cargando(api('coachProgramarRevision',CO.pin,CO.cid,x)).then(function(r){ CO.d.clienta.rev=r.rev; CO.d.clienta.rev_coach=r.rev.fecha; cerrarModal(); toast(msg,'ok'); repintar(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); });
 }
-A.prGuardar=function(el){ var f=val('pr-f'); if(!f) return toast('Pon la fecha'); guardarProg({fecha:f,cada:val('pr-cada'),pide:pideSel()},el,'Revisión programada: '+fMedia(f)); };
-A.prQuitar=function(el){ guardarProg({fecha:'',cada:'',pide:[]},el,'Revisiones quitadas'); };
+A.prMedio=function(el){ var v=el.dataset.v, on=!el.classList.contains('on'); document.querySelectorAll('#pr-medio button').forEach(function(b){ b.classList.toggle('on',on&&b===el); }); };
+function prMedioSel(){ var b=document.querySelector('#pr-medio button.on'); return b?b.dataset.v:''; }
+A.prGuardar=function(el){ var f=val('pr-f'); if(!f) return toast('Pon la fecha'); guardarProg({fecha:f,cada:val('pr-cada'),pide:[],medio:prMedioSel()},el,'Revisión programada: '+fMedia(f)); };
+A.prQuitar=function(el){ guardarProg({fecha:'',cada:'',pide:[],medio:''},el,'Revisiones quitadas'); };
 /* fotos de progreso */
 function modalFotos(){
   var fo=CO.d.clienta.fotos||{}, hoy=CO.hoy||hoyStr();
@@ -15566,6 +15587,18 @@ function modalRutinaAcc(){
     '<button class="btn sec mt" data-a="segProrrogar" data-t="rutina">Prorrogar las actuales</button><button class="link mt" data-a="cerrarModal">Cancelar</button>');
 }
 A.segRev=function(){ modalRevision(); };
+/* 23 nov, 13:30 (Chadín): «acceso directo por si quiere modificar cada cuánto revisar la semana… y lo de revisión con ella es para clientes con los que de vez en cuando
+   quieras tener una conversación mediante llamada, videollamada, audio o chat, según la persona, y explicarle cómo va… también acceso directo para configurarla» */
+var REV_MEDIO=[['llamada','Llamada'],['video','Videollamada'],['audio','Audio'],['chat','Chat']], REV_MEDIO_IC={llamada:'movil',video:'video',audio:'mic',chat:'nota'};
+function revMedioTxt(rv){ var m=rv&&rv.medio, o=REV_MEDIO.filter(function(x){ return x[0]===m; })[0]; return o?'Por '+o[1].toLowerCase():''; }
+A.sgCfgRev=function(){ modalProgRev(); };
+A.sgCfgSem=function(){
+  var c=CO.d.clienta, nS=c.semanal?(c.semanal_cada||1):0;
+  modal('<h2>Revisión semanal · solo para ti</h2><p class="muted">Es tuya, como entrenador: entras en «Revisión semanal» y ves de un vistazo cómo va '+cG('tu clienta','tu cliente')+': constancia, ejercicios, peso, descanso y lo que te ha dicho. '+cG('Ella','Él')+' no la ve ni tiene que hacer nada.</p>'+
+    '<div class="lab">¿Cada cuánto revisas su semana?</div><div class="tipos ops sg2-sem">'+[[1,'Cada semana'],[2,'Cada 2 semanas'],[4,'Cada 4 semanas'],[0,'No la hago']].map(function(o){ return '<button class="'+(nS===o[0]?'on':'')+'" data-a="sgSemCada" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'</div>'+
+    '<p class="muted sm">Te sale el domingo en «Revisión semanal».</p><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+};
+A.sgSemCada=function(el){ A.semCada(el); setTimeout(function(){ if(!el.disabled) return; },0); var n=+el.dataset.v; document.querySelectorAll('.sg2-sem button').forEach(function(b){ b.classList.toggle('on',+b.dataset.v===n); }); setTimeout(cerrarModal,450); };
 A.segProgRev=function(){ modalProgRev(); };
 A.segPlan=function(){ modalRenovar(CO.cid); };
 A.segEditPlan=function(){ modalEditarPlan(); };
@@ -23335,7 +23368,7 @@ function czProxHtml(hoy){
   var d=CL.d, c=d.clienta||{}, L=[];
   (d.citas||[]).forEach(function(x){ if(x.fecha>=hoy) L.push({f:x.fecha,k:'c',i:'user',t:x.titulo+' con '+czCoach(),s:[x.hora,x.lugar&&!czUrl(x.lugar)?x.lugar:''].filter(String).join(' · ')}); });
   (d.llamadas||[]).forEach(function(x){ if(x.fecha>=hoy) L.push({f:x.fecha,k:'c',i:'video',t:'Videollamada con '+czCoach(),s:[x.hora,(+x.minutos||30)+' min'].filter(String).join(' · ')}); });
-  if(c.revision&&c.revision.fecha>=hoy) L.push({f:c.revision.fecha,k:'r',i:'rev',t:'Revisión con '+czCoach(),s:'Rellena tu revisión ese día'});
+  if(c.revision&&c.revision.fecha>=hoy) L.push({f:c.revision.fecha,k:'r',i:'rev',t:'Revisión con '+czCoach(),s:(c.revision.pide||[]).length?'Rellena tu revisión ese día':(revMedioTxt(c.revision)||'Para ver cómo vas')});
   if(c.fotos&&c.fotos.fecha>=hoy) L.push({f:c.fotos.fecha,k:'f',i:'foto',t:'Fotos de progreso',s:'De frente, de perfil y de espaldas'});
   (d.eventos||[]).forEach(function(e){ if(e.fecha>=hoy) L.push({f:e.fecha,k:'g',i:'trofeo',t:e.nombre,s:[e.prioridad==='principal'?'Tu objetivo principal':'Competición',e.lugar].filter(String).join(' · ')}); });
   L.sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; }); L=L.slice(0,5);
@@ -23398,7 +23431,7 @@ function proxItems(){
   function add(o){ I.push(o); }
   if(rv.fecha){
     var rr=recibidoRev(rv,R.recibido), rt=rr.tot?recibidoTxt(rr):'';
-    add({tipo:'revision',f:rv.fecha,tit:'Revisión con '+cG('ella','él')+'',q:'dos',det:periodoTxt(rv.cada,true)+(rt?' · '+rt.charAt(0).toLowerCase()+rt.slice(1):''),btn:btnS('segRev','Registrar revisión',rv.fecha<=hoy||diff(hoy,rv.fecha)<=3)});
+    add({tipo:'revision',f:rv.fecha,tit:'Revisión con '+cG('ella','él')+'',q:'dos',det:[revMedioTxt(rv),periodoTxt(rv.cada,!revMedioTxt(rv))].filter(String).join(' · '),btn:btnS('segRev','Registrar revisión',rv.fecha<=hoy||diff(hoy,rv.fecha)<=3)});
   } else sin.push(['segProgRev','Revisión']);
   var fo=c.fotos||{};
   if(fo.fecha) add({tipo:'fotos',f:fo.fecha,tit:'Fotos de progreso',q:'ella',det:'Las sube '+cG('ella','él')+' · '+periodoTxt(fo.cada,true)+' · '+(d.ultFoto?'últimas: '+fCorta(d.ultFoto):'aún ninguna'),btn:fo.fecha<hoy?'<button class="btn sm sec" data-a="sub" data-t="chat">Escribirle</button>':''});
