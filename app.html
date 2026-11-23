@@ -700,7 +700,7 @@ details.datos{margin-top:8px}details.datos summary{font-size:12.5px}
 .sg2-t{background:#fff;border-radius:18px;padding:14px;display:flex;gap:12px;align-items:center;box-shadow:0 1px 0 rgba(13,13,16,.04)}
 .sg2-t{position:relative}.sg2-cfg{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;border:1px solid #E3E3E9;background:#fff;color:#3A3A44;display:grid;place-items:center;cursor:pointer}.sg2-cfg .ic{width:15px;height:15px;margin:0}.sg2-cfg:hover{border-color:#141414}
 .sg2-hoy .sg2-cfg{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.28);color:#fff}
-.sg2-tip{position:absolute;bottom:calc(100% + 6px);right:0;background:#141414;color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 8px;white-space:nowrap;display:none;pointer-events:none}.sg2-cfg:hover .sg2-tip,.sg2-cfg:focus-visible .sg2-tip{display:block}
+.sg2-tip{position:absolute;top:calc(100% + 6px);right:0;z-index:5;background:#141414;color:#fff;font-size:11.5px;font-weight:700;border-radius:8px;padding:4px 8px;white-space:nowrap;display:none;pointer-events:none}.sg2-cfg:hover .sg2-tip,.sg2-cfg:focus-visible .sg2-tip{display:block}.sg2-hoy .sg2-tip{background:#fff;color:#111;box-shadow:0 4px 14px rgba(0,0,0,.25)}
 .sg2-md{display:flex!important;align-items:center;gap:4px;font-weight:700}.sg2-md .ic{width:12px;height:12px;margin:0}
 .sg2-otro{display:flex;align-items:center;gap:8px;margin:10px 0 2px;font-weight:700}.sg2-otro[hidden]{display:none}.sg2-otro input{width:80px;min-height:40px;border:1.5px solid #DCDCE3;border-radius:10px;padding:0 10px;font:inherit;font-size:15px}.sg2-otro .btn{margin:0;width:auto}
 .rvm-ant{display:flex;gap:6px;align-items:flex-start;background:#F5F8FE;border-radius:10px;padding:8px 10px;color:#1F3A7A}.rvm-ant .ic{width:15px;height:15px;flex:none;margin:1px 0 0}
@@ -5713,7 +5713,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.228';
+var APP_V = 'v53.4.229';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -15412,8 +15412,7 @@ A.rvGuardar=function(el){
 function modalProgRev(){
   var rv=CO.d.clienta.rev||{}, hoy=CO.hoy||hoyStr();
   modal('<h2>'+(rv.fecha?'Revisión con '+cG('ella','él'):'Programar la revisión con '+cG('ella','él'))+'</h2>'+
-    '<p class="muted">Es con '+cG('ella','él')+': agendas una conversación cada cierto tiempo (cada 10 días, 20, cada mes…) por llamada, videollamada, audio o chat, según la persona, para explicarle cómo va. Va aparte de tu revisión semanal (que es solo para ti) y de sus días de pesarse y medirse. '+cG('Ella','Él')+' la ve en «Lo próximo» con el día y cómo será.</p>'+
-    ((rv.pide||[]).length?'<p class="muted sm rvm-ant">'+ic('info')+'Hasta ahora le pedías que apuntara '+esc(listaY(rv.pide.map(function(k){ return PIDE_L[k]; })))+' antes de esta revisión. Al guardar, deja de pedírselo aquí: sus días de pesarse y medirse se configuran aparte, en Ficha.</p>':'')+
+
     '<div class="lab">¿Cómo la hacéis?</div><div class="tipos ops" id="pr-medio">'+REV_MEDIO.map(function(o){ return '<button class="'+(rv.medio===o[0]?'on':'')+'" data-a="prMedio" data-v="'+o[0]+'">'+ic(REV_MEDIO_IC[o[0]])+o[1]+'</button>'; }).join('')+'</div>'+
     '<div class="grid2"><label class="f">Próxima<input type="date" id="pr-f" value="'+(rv.fecha||sumarPeriodo(hoy,'20d'))+'"></label><label class="f">Repetir'+selCada('pr-cada',rv.fecha?rv.cada:'20d',CADA_REV)+'</label></div>'+
     '<button class="btn mt" data-a="prGuardar">Guardar</button>'+(rv.fecha?'<button class="link danger mt" data-a="prQuitar">Quitar las revisiones</button>':'')+'<button class="btn sec mt" data-a="cerrarModal">Cancelar</button>');
