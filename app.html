@@ -1481,7 +1481,11 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .hq-bh{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;font-size:14px;font-weight:800;padding:10px 0 6px}.hq-bh small{font-weight:600;color:#6A6A72;font-size:12.5px}
 .hq-de{display:block;font-size:12.5px;color:#6A6A72}.hq-de b{display:inline;font-size:12.5px;color:#141414}
 .hq-dj{border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer;color:#141414}
-@media(max-width:560px){.hq-ops{padding-left:32px}.wkd-b{flex:1 1 0;min-width:0}}
+.hq-rbt{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.hq-dj.on{background:#141414;border-color:#141414;color:#fff}
+.hq-lnk{margin-left:auto;border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:800;color:#141414;cursor:pointer;white-space:nowrap}
+.lab.hq-labf{display:flex;align-items:center;gap:8px}.hq-bts{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.hq-bts .btn{margin:0;width:auto;padding:8px 14px;font-size:13px;min-height:0}
+.hq-ed{padding:0 0 8px}.hq-ed .hq-ops{padding:0 0 6px 44px}.hq-ol{font-size:12px;font-weight:800;color:#55555E;margin-right:2px;min-width:78px}
+@media(max-width:560px){.hq-ops{padding-left:32px}.hq-blq .hq-r,.gq-sec .hq-r{flex-wrap:wrap}.hq-rbt{flex-basis:100%;padding-left:44px;justify-content:flex-start}.hq-ed .hq-ops{padding-left:0}.hq-ol{flex-basis:100%}.wkd-b{flex:1 1 0;min-width:0}}
 /* v53.4.224 · la revisión en una caja (rv-caja) y paneles visuales (rvv-) */
 .rv-caja{background:#F7F7F9;border:1.5px solid #D6D6DE;border-radius:24px;margin-bottom:14px}
 .rv-caja>.rv-navc{background:#fff;border-radius:22px 22px 0 0;border-bottom:1.5px solid #D6D6DE;margin:0;padding:14px 18px}
@@ -5817,7 +5821,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.234';
+var APP_V = 'v53.4.235';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14738,7 +14742,7 @@ function semPerAct(c){ var s=c.semanal||{}; return s.on===false?'no':semPerN(s.p
 function semRefProx(hoy,D){ return D.length?semRefDomC(hoy,D,true):domRef(); }
 function semCalPlan(){
   var C=CO.cal, D=SEM_DS.filter(function(d){ return C.dias.indexOf(d)>=0; }), nd=D.length, g=Math.max(1,Math.round(semDiasP(C.per)/7)), ini0=semRefProx(CO.hoy||hoyStr(),D), j=0, k=0;
-  var A=semCalL().map(function(c){ var ex=C.ex[c.id], a={id:c.id,c:c,ex:!!ex,per:ex||C.per,dia:nd?D[j%nd]:''}; j++;
+  var A=semCalL().map(function(c){ var ex=C.ex[c.id], dd=(C.dia||{})[c.id], a={id:c.id,c:c,ex:!!ex,per:ex||C.per,dia:nd?(D.indexOf(dd)>=0?dd:D[j%nd]):''}; j++;
     if(!ex){ var gr=Math.floor(k/Math.max(1,nd))%g; a.grp=gr; a.ini=g>1?sumar(ini0,7*gr):''; k++; }
     else if(ex==='no'||semDiasP(ex)<=7) a.ini='';
     return a; });
@@ -14754,6 +14758,10 @@ function semCalRep(P){ var R=P.A.filter(function(a){ return !a.ex; }), card=func
   if(P.nd) return '<div class="gq-rep">'+P.D.map(function(d){ var L=R.filter(function(a){ return a.dia===d; }); return card(SEM_DN[d]+' · '+L.length,L,L.length?semNoms(L):'Nadie'); }).join('')+'</div>';
   return '<div class="gq-rep">'+card('Todos · '+R.length,R,semPerTxt(CO.cal.per)+', en «Revisiones»')+'</div>';
 }
+function semCalEd(a,P){ var C=CO.cal; if(C.abre!==a.id) return '';      // 16:18 (Chadín): «modificarlo ahí mismo»: su ritmo y su día
+  return '<div class="hq-ed"><div class="hq-ops"><span class="hq-ol">Cada cuánto</span>'+semCalOps(C.ex[a.id]||'',a.id)+'</div>'+
+    (P.nd>1?'<div class="hq-ops"><span class="hq-ol">Su día</span>'+P.D.map(function(d){ return '<button class="'+(a.dia===d?'on':'')+'" data-a="calExDia" data-id="'+esc(a.id)+'" data-v="'+d+'">'+SEM_DN[d]+'</button>'; }).join('')+'</div>':'')+'</div>'; }
+function semCalExDer(a){ return '<span class="hq-rbt"><button class="hq-dj'+(CO.cal.abre===a.id?' on':'')+'" data-a="calAbre" data-id="'+esc(a.id)+'">Cambiar</button><button class="hq-x" data-a="calExQ" data-id="'+esc(a.id)+'" aria-label="Como el resto" title="Como el resto">'+ic('x')+'</button></span>'; }
 function semCalFila(c,sub,der){ return '<div class="hq-r">'+avCo(c.id,c.nombre,'hq-av')+'<span class="hq-n"><b>'+esc(c.nombre)+'</b>'+(sub||'')+'</span>'+(der||'')+'</div>'; }
 function semCalOps(sel,id,sinNo){ var O=SEM_OP.slice(), esOtro=sel&&sel!=='no'&&!O.some(function(o){ return o[0]===sel; });
   return O.map(function(o){ return '<button class="'+(o[0]===sel?'on':'')+'" data-a="'+(id?'calExPer':'calPer')+'" data-v="'+o[0]+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+o[1]+'</button>'; }).join('')+
@@ -14774,10 +14782,10 @@ function semCalPintar(){
   } else if(C.paso===3){
     var dTxt=function(a){ return a.dia?SEM_DN[a.dia].toLowerCase():''; };
     h='<h2>Antes de aplicar</h2><p class="muted">Así quedan tus '+P.A.length+' clientes.</p>'+
-      (K.length?'<div class="hq-blq cam"><div class="hq-bh">Tienen otra fecha y se cambiarán · '+K.length+'</div>'+K.map(function(a){ var pa=semPerAct(a.c), pr=pa!=='no'?semCuandoTxt(a.c):'';
-        return semCalFila(a.c,'<span class="hq-de">Ahora: '+esc(semPerTxtC(pa).toLowerCase()+(pr?' · '+pr:''))+'</span><span class="hq-de"><b>Pasa a: '+esc([semPerTxt(a.per).toLowerCase(),dTxt(a)].filter(String).join(' · '))+'</b></span>','<button class="hq-dj" data-a="calDejar" data-id="'+esc(a.id)+'">Dejar como está</button>'); }).join('')+'</div>':'')+
-      (E.length?'<div class="hq-blq"><div class="hq-bh">Con otro ritmo · '+E.length+'</div>'+E.map(function(a){ var pa=semPerAct(a.c), cam=pa!==semPerN(a.per), pr=!cam&&pa!=='no'?semCuandoTxt(a.c):'';
-        return semCalFila(a.c,'<span class="hq-de">'+esc(cam?'Pasa a: '+semPerTxtC(a.per).toLowerCase()+' (ahora '+semPerTxtC(pa).toLowerCase()+')':semPerTxtC(pa)+(pr?' · '+pr:'')+' · no cambia')+'</span>'); }).join('')+'</div>':'')+
+      (K.length?'<div class="hq-blq cam"><div class="hq-bh">Tienen otra fecha y se cambiarán · '+K.length+(K.length>1?'<button class="hq-lnk" data-a="calDejarTodos">Dejar los '+K.length+' como están</button>':'')+'</div>'+K.map(function(a){ var pa=semPerAct(a.c), pr=pa!=='no'?semCuandoTxt(a.c):'';
+        return semCalFila(a.c,'<span class="hq-de">Ahora: '+esc(semPerTxtC(pa).toLowerCase()+(pr?' · '+pr:''))+'</span><span class="hq-de"><b>Pasa a: '+esc([semPerTxt(a.per).toLowerCase(),dTxt(a)].filter(String).join(' · '))+'</b></span>','<span class="hq-rbt"><button class="hq-dj" data-a="calDejar" data-id="'+esc(a.id)+'">Dejar como está</button><button class="hq-dj'+(C.abre===a.id?' on':'')+'" data-a="calAbre" data-id="'+esc(a.id)+'">Otro ritmo</button></span>')+semCalEd(a,P); }).join('')+'</div>':'')+
+      (E.length?'<div class="hq-blq"><div class="hq-bh">Con otro ritmo · '+E.length+'<button class="hq-lnk" data-a="calCambiarTodos">Cambiar también '+(E.length===1?'a este':'a estos '+E.length)+'</button></div>'+E.map(function(a){ var pa=semPerAct(a.c), cam=pa!==semPerN(a.per), pr=!cam&&pa!=='no'?semCuandoTxt(a.c):'';
+        return semCalFila(a.c,'<span class="hq-de">'+esc(cam?'Pasa a: '+semPerTxtC(a.per).toLowerCase()+(dTxt(a)?' · '+dTxt(a):'')+' (ahora '+semPerTxtC(pa).toLowerCase()+')':semPerTxtC(pa)+(pr?' · '+pr:'')+' · no cambia')+'</span>',semCalExDer(a))+semCalEd(a,P); }).join('')+'</div>':'')+
       (R.length-K.length?'<div class="hq-blq"><div class="hq-bh">'+(K.length?'El resto · ':'Todos · ')+(R.length-K.length)+' <small>'+esc(semPerTxt(C.per).toLowerCase()+(P.nd?', '+P.D.map(function(d){ return SEM_DN[d].toLowerCase(); }).join(' o '):''))+'</small></div></div>':'')+
       '<div class="gq-bt"><button class="btn" data-a="calAplicar">Sí, aplicar a '+(R.length===1?'1 cliente':R.length+' clientes')+'</button><button class="btn sec" data-a="calPaso" data-v="1">Volver</button></div>';
   } else {
@@ -14785,32 +14793,39 @@ function semCalPintar(){
       '<div class="gq-sec"><div class="lab">Cada cuánto</div><div class="tipos ops gq-per">'+semCalOps(C.otro?'':C.per)+'</div></div>'+
       '<div class="gq-sec"><div class="lab">Qué días revisas</div><div class="gq-ds">'+SEM_DS.map(function(d){ return '<button class="'+(C.dias.indexOf(d)>=0?'on':'')+'" data-a="calDia" data-v="'+d+'" aria-label="'+SEM_DN[d]+'">'+SEM_DL[d]+'</button>'; }).join('')+'</div></div>'+
       '<div class="gq-sec"><div class="lab">Así queda · '+(R.length===1?'1 cliente':R.length+' clientes')+'</div>'+semCalRep(P)+'</div>'+
-      '<div class="gq-sec"><div class="lab">Con otro ritmo'+(E.length?' · '+E.length:'')+'</div>'+E.map(function(a){ return semCalFila(a.c,'<small>'+esc(semPerTxtC(a.per))+'</small>','<button class="hq-x" data-a="calExQ" data-id="'+esc(a.id)+'" aria-label="Quitar">'+ic('x')+'</button>'); }).join('')+
+      '<div class="gq-sec"><div class="lab hq-labf">Con otro ritmo'+(E.length?' · '+E.length+'<button class="hq-lnk" data-a="calCambiarTodos">Cambiar también '+(E.length===1?'a este':'a estos '+E.length)+'</button>':'')+'</div>'+E.map(function(a){ return semCalFila(a.c,'<small>'+esc(semPerTxtC(a.per)+(P.nd>1&&a.dia?' · '+SEM_DN[a.dia].toLowerCase():''))+'</small>',semCalExDer(a))+semCalEd(a,P); }).join('')+
         '<button class="hq-add" data-a="calPaso" data-v="2">'+ic('mas')+'Elegir quién va con otro ritmo</button></div>'+
-      (K.length?'<div class="hq-aviso">'+ic('info')+'<span><b>'+esc(semNoms(K))+'</b> '+(K.length===1?'tiene':'tienen')+' ahora otra fecha de revisión. Si no '+(K.length===1?'lo':'los')+' pones con otro ritmo, '+(K.length===1?'pasa':'pasan')+' a '+esc(semPerTxt(C.per).toLowerCase())+'. <a href="#" data-a="calPaso" data-v="2">Ver</a></span></div>':'')+
+      (K.length?'<div class="hq-aviso">'+ic('info')+'<span><b>'+esc(semNoms(K))+'</b> '+(K.length===1?'tiene':'tienen')+' ahora otra fecha de revisión. Si no '+(K.length===1?'lo dejas como está':'los dejas como están')+', '+(K.length===1?'pasa':'pasan')+' a '+esc(semPerTxt(C.per).toLowerCase())+'.'+
+        '<span class="hq-bts"><button class="btn" data-a="calDejarTodos">'+(K.length===1?'Dejarlo como está':'Dejar los '+K.length+' como están')+'</button><button class="btn sec" data-a="calPaso" data-v="2">Ver uno a uno</button></span></span></div>':'')+
       '<div class="gq-bt"><button class="btn" data-a="calPaso" data-v="3"'+(P.A.length?'':' disabled')+'>Revisar y aplicar</button><button class="btn sec" data-a="cerrarModal">Cancelar</button></div>';
   }
   modal('<div class="gq-m">'+h+'</div>'); if(C.paso===2&&C.q) semCalFiltra();
 }
 function semCalFiltra(){ var q=clave(CO.cal.q||''), n=0; document.querySelectorAll('#cal-l .hq-it').forEach(function(r){ var ok=!q||r.dataset.q.indexOf(q)>=0; r.hidden=!ok; if(ok) n++; }); document.querySelectorAll('#cal-l .hq-g').forEach(function(g){ g.hidden=!!q; }); var z=document.querySelector('#cal-l .hq-nada'); if(z) z.hidden=!q||!!n; }
-A.semCal=function(){ var c=CO.semCal||{}; CO.cal={per:semPerN(c.per)||'1s',dias:(c.dias||[]).slice(),ex:{},otro:false,exOtro:'',paso:1,q:''};
+A.semCal=function(){ var c=CO.semCal||{}; CO.cal={per:semPerN(c.per)||'1s',dias:(c.dias||[]).slice(),ex:{},dia:{},abre:'',otro:false,exOtro:'',paso:1,q:''};
   if(c.per) semCalL().forEach(function(x){ var pa=semPerAct(x); if(pa!==semPerN(c.per)) CO.cal.ex[x.id]=pa; });      // si ya lo usas: los que pusiste con otro ritmo (o sin revisión) siguen así
   semCalPintar(); };
 A.calPer=function(el){ CO.cal.per=el.dataset.v; CO.cal.otro=false; semCalPintar(); };
 A.calOtro=function(){ CO.cal.otro=true; semCalPintar(); var i=document.querySelector('.gq-per .cal-n'); if(i) i.focus(); };
 A.calDia=function(el){ var D=CO.cal.dias, d=el.dataset.v, i=D.indexOf(d); if(i>=0) D.splice(i,1); else D.push(d); semCalPintar(); };
-A.calPaso=function(el){ CO.cal.paso=+el.dataset.v||1; CO.cal.exOtro=''; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=0; };
+A.calPaso=function(el){ CO.cal.paso=+el.dataset.v||1; CO.cal.exOtro=''; CO.cal.abre=''; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=0; };
 A.calEx=function(el){ var id=el.dataset.id, C=CO.cal, c=semCalL().filter(function(x){ return x.id===id; })[0]; if(!c) return;
   if(C.ex[id]) delete C.ex[id]; else { var pa=semPerAct(c); C.ex[id]=pa!==semPerN(C.per)&&pa!=='no'?pa:(SEM_OP.filter(function(o){ return o[0]!==semPerN(C.per); })[0]||['10d'])[0]; }
   var y=(document.querySelector('#modal .mbox')||{}).scrollTop||0; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; };
-A.calExPer=function(el){ CO.cal.ex[el.dataset.id]=el.dataset.v; CO.cal.exOtro=''; var y=(document.querySelector('#modal .mbox')||{}).scrollTop||0; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; };
+A.calExPer=function(el){ CO.cal.ex[el.dataset.id]=el.dataset.v; CO.cal.exOtro=''; semCalRe(); };
 A.calExOtro=function(el){ CO.cal.exOtro=el.dataset.id; var y=(document.querySelector('#modal .mbox')||{}).scrollTop||0; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; var i=document.querySelector('.cal-n[data-id="'+el.dataset.id+'"]'); if(i) i.focus(); };
-A.calExQ=function(el){ delete CO.cal.ex[el.dataset.id]; semCalPintar(); };
+function semCalRe(){ var b=document.querySelector('#modal .mbox'), y=b?b.scrollTop:0; semCalPintar(); b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; }
+A.calExQ=function(el){ delete CO.cal.ex[el.dataset.id]; if(CO.cal.abre===el.dataset.id) CO.cal.abre=''; semCalRe(); };
+A.calAbre=function(el){ var id=el.dataset.id; CO.cal.abre=CO.cal.abre===id?'':id; CO.cal.exOtro=''; semCalRe(); };
+A.calExDia=function(el){ (CO.cal.dia=CO.cal.dia||{})[el.dataset.id]=el.dataset.v; semCalRe(); };
+A.calDejarTodos=function(){ semCalOtros(semCalPlan()).forEach(function(a){ CO.cal.ex[a.id]=semPerAct(a.c); }); CO.cal.abre=''; semCalRe(); };
+A.calCambiarTodos=function(){ CO.cal.ex={}; CO.cal.abre=''; semCalRe(); };
 A.calDejar=function(el){ var id=el.dataset.id, c=semCalL().filter(function(x){ return x.id===id; })[0]; if(!c) return; CO.cal.ex[id]=semPerAct(c); semCalPintar(); };
 document.addEventListener('input',function(ev){ var t=ev.target; if(!t||!CO.cal) return;
   if(t.id==='cal-q'){ CO.cal.q=t.value; semCalFiltra(); return; }
   if(t.classList&&t.classList.contains('cal-n')){ var n=parseInt(t.value,10); if(!(n>=2&&n<=90)) return; if(t.dataset.id) CO.cal.ex[t.dataset.id]=n+'d'; else CO.cal.per=n+'d'; } });
-document.addEventListener('change',function(ev){ var t=ev.target; if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&CO.cal.paso===1&&!t.dataset.id){ var n=parseInt(t.value,10); if(n>=2&&n<=90){ CO.cal.per=n+'d'; semCalPintar(); } else toast('Escribe entre 2 y 90 días','err'); } });
+document.addEventListener('change',function(ev){ var t=ev.target; if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&t.dataset.id){ if(CO.cal.ex[t.dataset.id]) semCalRe(); return; }
+  if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&CO.cal.paso===1&&!t.dataset.id){ var n=parseInt(t.value,10); if(n>=2&&n<=90){ CO.cal.per=n+'d'; semCalPintar(); } else toast('Escribe entre 2 y 90 días','err'); } });
 A.calAplicar=function(el){ if(el.disabled) return; var C=CO.cal, P=semCalPlan(); el.disabled=true;
   cargando(api('coachCalendarioRevisiones',CO.pin,{per:C.per,dias:P.D,asig:P.A.map(function(a){ var o={id:a.id,per:a.per,dia:a.dia}; if(a.ini!==undefined) o.ini=a.ini; return o; })})).then(function(r){
     CO.semCal=r.cal||{dias:P.D,per:C.per};
