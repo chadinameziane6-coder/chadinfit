@@ -1922,6 +1922,9 @@ details.be-meta summary .muted{font-weight:500;margin-left:auto;text-align:right
 /* v53.4.218 · progresión por ejercicio en el panel (subidas de kg, programaciones, «Valorar») */
 .ejc-top{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.ejc-top .ej-bus-w{flex:1 1 220px;margin:0}.ejc-top>select{flex:1.4 1 220px;margin:0}
 .ejc-vb{display:inline-flex;align-items:center;gap:6px;background:#141414;color:#fff;border:0;border-radius:14px;padding:11px 16px;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}.ejc-vb .ic{width:17px;height:17px;margin:0}.ejc-vb.on{box-shadow:0 0 0 3px #B7CCF6}
+.ejc-est{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-radius:16px;padding:11px 16px;margin-top:12px}.ejc-est .ic{width:18px;height:18px;margin:0}.ejc-est b{font-size:19px;font-weight:800}.ejc-est span{font-size:13.5px}
+.ejc-est.sube{background:#E3F3E3;color:#164F20}.ejc-est.eq{background:#F4F4F6;color:#3A3A44}.ejc-est.est,.ejc-est.con{background:#FFF1DE;color:#7A4A00}.ejc-est.baja{background:#FDE4E2;color:#8E1D16}
+.ejc-tg.cy{background:#F6EEF8;color:#6B3D7A}
 .ejc-hero{display:grid;grid-template-columns:1.5fr 1fr 1fr;gap:12px;margin:16px 0 18px}
 .ejc-ti{border-radius:16px;padding:14px 16px;min-width:0}.ejc-ti small{display:flex;align-items:center;gap:5px;font-size:13px;font-weight:700}.ejc-ti small .ic{width:14px;height:14px;margin:0}.ejc-ti>b{display:block;font-size:26px;font-weight:800;margin:3px 0;font-variant-numeric:tabular-nums}.ejc-ti>span{font-size:12.8px;line-height:1.45;display:block}
 .ejc-ti.sube{background:#E3F3E3;color:#164F20}.ejc-ti.baja{background:#FDE4E2;color:#8E1D16}.ejc-ti.eq{background:#F4F4F6;color:#141414}.ejc-ti.sube>b,.ejc-ti.baja>b,.ejc-ti.eq>b{font-size:34px}
@@ -5562,7 +5565,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.218';
+var APP_V = 'v53.4.219';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -6129,6 +6132,32 @@ function ejcVentanas(){ var per=CO.per==null?90:CO.per, V=[[7,'Semana'],[30,'Mes
   if(!V.some(function(v){ return v[0]===per; })){ var R=rangoProg(); V.push([per||R.dias,per===60?'2 meses':per===180?'6 meses':per?per+' días':'Todo']); V.sort(function(x,y){ return x[0]-y[0]; }); }
   return {V:V,def:per||rangoProg().dias}; }
 /* la gráfica: el peso de cada día, sobre franjas con cada programación y lo que pasó en ella */
+/* v53.4.219 (Chadín, 23 nov: «no vas a mejorar todas las semanas; siendo mujer, hay semanas de regla o premenstrual en que bajas: dentro de lo
+   normal. Quiero que me avise de algo ya repetido»; «aquí, a grosso modo»; estancada: 4 semanas, 3 si es principiante y 6 si es avanzada).
+   Cada día: si bajó de verdad (3.ª vez seguida), suelto o en su periodo / fase premenstrual (solo si comparte su ciclo contigo) */
+function ejcFaseCiclo(d,f){ var cc=d.clienta&&d.clienta.cicloCoach; if(!cc||!cc.si||!(d.diario||[]).length) return '';
+  try{ var E=cicloEstadoDe(d.diario,f); return E&&(E.f==='menstrual'||E.f==='premenstrual')?E.f:''; }catch(e){ return ''; } }
+function ejcPeor(a,b){ return a.top.p<b.top.p||(a.top.p===b.top.p&&a.top.r<b.top.r); }      // a, peor que b
+function ejcRachas(d,S){ var n=0; S.forEach(function(s,i){ s.ciclo=ejcFaseCiclo(d,s.f); var pv=i?S[i-1]:null;
+    if(pv&&ejcPeor(s,pv)){ if(!s.ciclo) n++; s.baja=true; } else { s.baja=false; if(pv) n=0; } s.racha=s.baja&&!s.ciclo?n:0; }); }
+function ejcSemEst(d){ var c=(d.clienta||{}), g=c.perfil||{}, niv=g.niv||plnNivDe(plnT(plnCq().experiencia),(d.sesiones||[]).length); return niv==='ini'?3:niv==='ava'?6:4; }
+function ejcEstado(d,E,S){
+  var hoy=CO.hoy||hoyStr(), k=clave(E.n), W=ejcSemEst(d), u=S[S.length-1], act=ejcRutinas(d,hoy,hoy), en=act.some(function(r){ return (r.ejercicios||[]).some(function(e){ return clave(e.n)===k; }); });
+  var a2=sumar(hoy,-13), prog=en?ejcProgDias(act,k,a2,hoy):0, hechos=S.filter(function(s){ return s.f>=a2; }).length;
+  if(prog>=3&&hechos/prog<0.6) return {c:'con',t:'Poca constancia',s:'hizo '+hechos+' de '+prog+' entrenos de este ejercicio en 2 semanas'};
+  if(u.racha>=3){ var j=S.length-1; while(j>0&&S[j].baja) j--; var ref=S[j];
+    if(diff(S[Math.min(S.length-1,j+1)].f,u.f)>=14) return {c:'baja',t:'Ha retrocedido',s:'de '+fN(ref.top.p)+' kg × '+fN(ref.top.r,0)+' a '+fN(u.top.p)+' kg × '+fN(u.top.r,0)+' en las últimas '+Math.max(3,Math.round(diff(ref.f,u.f)/7))+' semanas'}; }
+  var ini=sumar(hoy,-(W*7-1)), dentro=S.filter(function(s){ return s.f>=ini; }), antes=S.filter(function(s){ return s.f<ini; });
+  var mejorAntes=antes.reduce(function(m,s){ return !m||ejcPeor(m,s)?s:m; },null), progresa=!mejorAntes||dentro.some(function(s){ return ejcPeor(mejorAntes,s); });
+  if(mejorAntes&&dentro.length>=4&&!progresa) return {c:'est',t:cG('Estancada','Estancado'),s:W+' semanas sin pasar de '+fN(mejorAntes.top.p)+' kg × '+fN(mejorAntes.top.r,0)};
+  var w=ejcVent(S,30), Zs=ejcSegs(d,E,S,sumar(hoy,-364),hoy,planPorFecha(d)), desde=(Zs.filter(function(z){ return z.act; })[0]||{}).a;
+  var nSub=desde?S.filter(function(s,i){ return s.f>=desde&&i&&s.top.p>S[i-1].top.p; }).length:0;
+  if(w&&w.d>0.01) return {c:'sube',t:'Va subiendo',s:ejcDif(w.d)+' en el último mes'+(nSub>1?'; '+nSub+' subidas desde el '+fCorta(desde):'')};
+  if(mejorAntes&&progresa) return {c:'sube',t:'Va subiendo',s:'más repeticiones con '+fN(u.top.p)+' kg'};
+  var nb=S.filter(function(s){ return s.f>=sumar(hoy,-29)&&s.baja; }).length;
+  return {c:'eq',t:'Dentro de lo normal',s:(w&&Math.abs(w.d)<0.01?'igual que hace un mes':'sin cambios claros')+(nb?', con '+nb+(nb===1?' bajada suelta':' bajadas sueltas'):'')};
+}
+function ejcEstadoHtml(e){ return '<div class="ejc-est '+e.c+'">'+ic(e.c==='sube'?'sube':e.c==='baja'?'baja':e.c==='eq'?'igual':'alerta')+'<b>'+esc(e.t)+'</b><span>'+esc(e.s)+'</span></div>'; }
 function ejcGraf(S,Z,a,b,W,H){
   var P=S.filter(function(s){ return s.f>=a&&s.f<=b; }); if(!P.length) return '';
   var x0=46, x1=W-14, y0=Z.length?44:16, y1=H-24, tot=Math.max(1,diff(a,b));
@@ -6144,11 +6173,13 @@ function ejcGraf(S,Z,a,b,W,H){
   for(var v=mn;v<=mx+0.001;v+=paso) s+='<line x1="'+x0+'" x2="'+x1+'" y1="'+Y(v).toFixed(1)+'" y2="'+Y(v).toFixed(1)+'" stroke="#D5D5DC" stroke-dasharray="2 3"/><text x="'+(x0-8)+'" y="'+(Y(v)+4).toFixed(1)+'" font-size="11" fill="#8A8A92" text-anchor="end">'+fN(v)+'</text>';
   s+='<path d="'+P.map(function(p,i){ return (i?'L':'M')+X(p.f).toFixed(1)+','+Y(p.top.p).toFixed(1); }).join(' ')+'" fill="none" stroke="#3366D6" stroke-width="2.3"/>';
   var ant=S.filter(function(x){ return x.f<a; }).slice(-1)[0];
-  P.forEach(function(p,i){ var pv=i?P[i-1]:ant, c=pv&&p.top.p>pv.top.p?'#1E8E3E':pv&&p.top.p<pv.top.p?'#D93025':'', t=fMedia(p.f)+'\n'+fN(p.top.p)+' kg × '+fN(p.top.r,0)+(pv&&c?'\n'+ejcDif(p.top.p-pv.top.p)+' frente a la vez anterior':'');
+  var SES={}; (CO.d.sesiones||[]).forEach(function(x){ SES[x.id]=x; });
+  P.forEach(function(p,i){ var pv=i?P[i-1]:ant, sx=SES[p.sid], c=pv&&p.top.p>pv.top.p?'#1E8E3E':p.racha>=3?'#D93025':pv&&p.top.p<pv.top.p?'#9A9AA2':'', z=Z.filter(function(q){ return p.f>=q.a&&p.f<=q.b; })[0];
+    var t=fMedia(p.f)+'\n'+fN(p.top.p)+' kg × '+fN(p.top.r,0)+' · '+p.sets.length+(p.sets.length===1?' serie':' series')+(sx&&sx.rutina?'\nRutina: '+sx.rutina:'')+(z?'\nProgramación: '+z.nom:'')+(pv&&p.top.p!==pv.top.p?'\n'+ejcDif(p.top.p-pv.top.p)+' frente a la vez anterior':'')+(p.ciclo?'\n'+(p.ciclo==='menstrual'?'Con el periodo':'Fase premenstrual'):'');
     s+=c?'<circle cx="'+X(p.f).toFixed(1)+'" cy="'+Y(p.top.p).toFixed(1)+'" r="5" fill="'+c+'" stroke="#fff" stroke-width="1.8" data-tip="'+esc(t)+'"/>':'<circle cx="'+X(p.f).toFixed(1)+'" cy="'+Y(p.top.p).toFixed(1)+'" r="3" fill="#3366D6" data-tip="'+esc(t)+'"/>'; });
   var u=P[P.length-1]; s+='<text x="'+Math.min(x1,X(u.f)).toFixed(1)+'" y="'+(Y(u.top.p)-11).toFixed(1)+'" font-size="13" font-weight="800" text-anchor="end" fill="#141414">'+fN(u.top.p)+' kg</text>';
   s+='<text x="'+x0+'" y="'+(H-6)+'" font-size="11" fill="#8A8A92">'+fCorta(a)+'</text><text x="'+x1+'" y="'+(H-6)+'" font-size="11" fill="#8A8A92" text-anchor="end">'+fCorta(b)+'</text>';
-  return s+'</svg><div class="ejc-gl"><span><i style="background:#1E8E3E"></i>sube de peso</span><span><i style="background:#D93025"></i>baja de peso</span><span><i style="background:#3366D6"></i>mismo peso</span></div>';
+  return s+'</svg><div class="ejc-gl"><span><i style="background:#1E8E3E"></i>sube de peso</span><span><i style="background:#9A9AA2"></i>baja suelta (normal)</span><span><i style="background:#D93025"></i>baja varias veces seguidas</span><span><i style="background:#3366D6"></i>mismo peso</span></div>';
 }
 function ejcTag(r,txt){ return '<span class="ejc-tg '+r+'">'+(r==='sube'?ic('sube'):r==='baja'?ic('baja'):r==='eq'?ic('igual'):'')+esc(txt)+'</span>'; }
 function ejcPorSem(z){ return z.ej.en.length?z.ej.dias+(z.ej.dias===1?' día':' días')+' · '+z.ej.ser+' series':'No estaba en sus rutinas'; }
@@ -6169,12 +6200,13 @@ function ejcDias(S,M,k,go){
     var tr=function(z){ return z.sets.filter(function(x){ return num(x.p)===z.top.p; }).reduce(function(a,x){ return a+(num(x.r)||0); },0); };
     if(rec) t=['rec','Récord'];
     else if(pv&&s.top.p>pv.top.p) t=['sube','Sube de peso: '+ejcDif(s.top.p-pv.top.p)];
-    else if(pv&&s.top.p<pv.top.p) t=['baja','Baja de peso: '+ejcDif(s.top.p-pv.top.p)];
-    else if(pv&&tr(s)>tr(pv)) t=['sube','Más repeticiones que la vez anterior'];
-    else if(pv&&tr(s)<tr(pv)) t=['baja','Menos repeticiones que la vez anterior'];
+    else if(pv&&tr(s)>tr(pv)&&s.top.p===pv.top.p) t=['sube','Más repeticiones que la vez anterior'];
+    else if(s.baja&&s.racha>=3) t=['baja','Baja por '+s.racha+'.ª vez seguida'];
+    else if(s.baja&&s.ciclo) t=['cy','Algo menos · '+(s.ciclo==='menstrual'?'con el periodo':'fase premenstrual')];
+    else if(s.baja) t=['eq','Algo menos · normal'];
     else t=['eq',pv?'Igual que la vez anterior':'Primera vez'];
     var mismo=s.sets.every(function(x){ return num(x.p)===s.top.p; }), reps=s.sets.filter(function(x){ return !uFila(x); }).map(function(x){ return mismo||num(x.p)==null?fN(x.r,0):fN(x.p)+'×'+fN(x.r,0); }).join(' · ');
-    return '<td class="ejc-f">'+esc(fMedia(s.f))+'</td><td class="ejc-kg">'+fN(s.top.p)+' kg</td><td class="ejc-rp">'+esc(reps)+'</td><td><span class="ejc-tg '+t[0]+'">'+(t[0]==='rec'?ic('trofeo'):t[0]==='sube'?ic('sube'):t[0]==='baja'?ic('baja'):ic('igual'))+esc(t[1])+'</span></td>'; }
+    return '<td class="ejc-f">'+esc(fMedia(s.f))+'</td><td class="ejc-kg">'+fN(s.top.p)+' kg</td><td class="ejc-rp">'+esc(reps)+'</td><td><span class="ejc-tg '+t[0]+'">'+(t[0]==='rec'?ic('trofeo'):t[0]==='sube'?ic('sube'):t[0]==='baja'?ic('baja'):t[0]==='cy'?ic('gota'):ic('igual'))+esc(t[1])+'</span></td>'; }
   return '<div class="ejc-sec">Últimos días</div><div class="ejc-secs">Una línea por día: el peso y las repeticiones de cada serie (sin el calentamiento).</div><div class="tbl-w ejd-w"><table class="ejc-dt"><tr><th>Día</th><th>Peso</th><th>Repeticiones de cada serie</th><th>Cómo fue</th></tr>'+
     L.map(function(s,i){ return '<tr'+(i>=4?' class="ejd-mas"':'')+'>'+fila(s)+'</tr>'; }).join('')+'</table>'+(n>4?'<button class="link ejd-ver" data-a="ejcMasD" data-n="'+(n-4)+'">'+ic('abajo')+'Ver '+(n-4===1?'el día anterior':'los '+(n-4)+' días anteriores')+'</button>':'')+'</div>';
 }
@@ -6249,12 +6281,12 @@ A.ejcVen=function(el){ CO.ejcV=+el.dataset.v; tipOcultar(); pintarClienta(false)
 A.ejcVal=function(){ CO.ejcAb=!CO.ejcAb; pintarClienta(false); if(CO.ejcAb) setTimeout(function(){ var v=document.getElementById('ejc-va'); if(v&&v.scrollIntoView){ v.scrollIntoView({block:'nearest'}); } },40); };
 A.ejcVP=function(el){ CO.ejcVP=+el.dataset.v; pintarClienta(false); };
 function ejcCuerpo(E,go){
-  var d=CO.d, S=ejcSes(E); if(!S.length) return null;
+  var d=CO.d, S=ejcSes(E); if(!S.length) return null; ejcRachas(d,S);
   var hoy=CO.hoy||hoyStr(), a=go&&go.desde||S[0].f, b=go&&go.hasta||hoy, P=planPorFecha(d), Z=ejcSegs(d,E,S,a,b,P), M=calcMarcas(E.filas);
   CO._ejc={E:E,Z:Z};
   var VV=ejcVentanas(), sel=CO.ejcV!=null&&VV.V.some(function(v){ return v[0]===CO.ejcV; })?CO.ejcV:VV.def, W=ejcVent(S,sel);
   var labSel=(VV.V.filter(function(v){ return v[0]===sel; })[0]||[0,''])[1];
-  var h=CO.ejcAb?ejcValorar(d,E,S,P):'';
+  var h=ejcEstadoHtml(ejcEstado(d,E,S));      // v53.4.219: «a grosso modo», en una línea (la valoración completa irá en las revisiones)
   var cls=W&&W.d>0.01?'sube':W&&W.d<-0.01?'baja':'eq';
   h+='<div class="ejc-hero"><div class="ejc-ti '+cls+'"><small>'+(cls==='sube'?ic('sube')+'Ha subido de peso':cls==='baja'?ic('baja')+'Ha bajado de peso':ic('igual')+'Mismo peso')+(labSel?' · '+esc(ejcLab(labSel)):'')+'</small>'+
     '<b>'+(W?(cls==='eq'?fN(W.b)+' kg':ejcDif(W.d)):'—')+'</b><span>'+(W?(cls==='eq'?'sin cambios desde el '+fCorta(W.fa):'de '+fN(W.a)+' kg ('+fCorta(W.fa)+') a '+fN(W.b)+' kg ('+fCorta(W.fb)+')'):'no lo ha hecho en ese tiempo')+'</span>'+
@@ -6280,7 +6312,7 @@ function ejercicioCard(series,st,coach,go){
   if(EJC) h+='<div class="ejc-top">';
   if(lista.length>4) h+='<div class="ej-bus-w"><input class="ej-bus" type="search" data-v29="ejBus" data-sk="'+SK+'" placeholder="Buscar ejercicio…" autocomplete="off" enterkeyhint="search" aria-label="Buscar ejercicio"><div class="ej-bus-l" hidden></div></div>';      // v53.4.27: además del desplegable, buscar escribiendo
   h+='<select data-c="ejSel" data-sk="'+SK+'">'+lista.map(function(x){ var k=clave(x.n); return '<option value="'+esc(k)+'"'+(k===st[SK]?' selected':'')+'>'+esc(x.n)+(TI&&TI.length===1?'':x.tipo==='cardio'?' · cardio':x.tipo==='bloque'?' · funcional':x.tipo==='run'?' · carrera':'')+'</option>'; }).join('')+'</select>';
-  if(EJC) h+='<button type="button" class="ejc-vb'+(CO.ejcAb?' on':'')+'" data-a="ejcVal" aria-expanded="'+!!CO.ejcAb+'">'+ic('chispa')+'Valorar</button></div>';
+  if(EJC) h+='</div>';
   var E=porEj[st[SK]], ses={};
   E.filas.forEach(function(x){ (ses[x.sid]=ses[x.sid]||{f:x.f,sid:x.sid,rows:[]}).rows.push(x); });
   var arr=Object.keys(ses).map(function(k){ return ses[k]; }).sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; });
