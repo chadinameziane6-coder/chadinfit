@@ -5854,7 +5854,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.238';
+var APP_V = 'v53.4.239';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -19934,12 +19934,12 @@ function cliFila(c){
 var CL3_CAT={
   esc:{t:'Te han escrito',c:'co',d:'Mensajes suyos que no has leído.'},
   sin:{t:'No entrenan',c:'ro',d:'Tienen rutina y no apuntan ningún entreno.',n:5,u:'días',p:'Desde hace',min:2,max:60,ch:function(n){ return n+'+ días'; }},
-  mol:{t:'Con molestias',c:'az',d:'Te han dicho que les duele algo (chat, check-in o notas del entreno).',n:14,u:'días',p:'En los últimos',min:1,max:60,ch:function(n){ return n+' días'; }},
-  est:{t:'Estancados',c:'li',d:'Entrenan, pero no suben ni kilos ni repeticiones en sus ejercicios.',n:4,u:'semanas',p:'Desde hace',min:2,max:12,ch:function(n){ return n+'+ sem.'; }},
-  com:{t:'Compiten',c:'na',d:'Tienen una competición cerca.',n:30,u:'días',p:'En los próximos',min:1,max:180,ch:function(n){ return n+' días'; }},
-  nue:{t:'Nuevos',c:'in',d:'Dados de alta hace poco.',n:30,u:'días',p:'En los últimos',min:1,max:180,ch:function(n){ return n+' días'; }},
+  mol:{t:'Con molestias',c:'az',d:'Te han dicho que les duele algo (chat, check-in o notas del entreno).',n:14,u:'días',p:'En los últimos',min:1,max:60,ch:function(n){ return 'últimos '+n+' días'; }},
+  est:{t:'Estancados',c:'li',d:'Entrenan, pero no suben ni kilos ni repeticiones en sus ejercicios.',n:4,u:'semanas',p:'Desde hace',min:2,max:12,ch:function(n){ return n+'+ semanas'; }},
+  com:{t:'Compiten',c:'na',d:'Tienen una competición cerca.',n:30,u:'días',p:'En los próximos',min:1,max:180,ch:function(n){ return 'próximos '+n+' días'; }},
+  nue:{t:'Nuevos',c:'in',d:'Dados de alta hace poco.',n:30,u:'días',p:'En los últimos',min:1,max:180,ch:function(n){ return 'últimos '+n+' días'; }},
   dat:{t:'Sin datos',c:'pz',d:'No apuntan peso ni check-in: no sabes cómo van.',n:21,u:'días',p:'Desde hace',min:3,max:90,ch:function(n){ return n+'+ días'; }},
-  pla:{t:'Su plan vence pronto',c:'vi',d:'Para hablar con ellos antes de que acabe.',n:7,u:'días',p:'En los próximos',min:1,max:60,ch:function(n){ return n+' días'; }},
+  pla:{t:'Su plan vence pronto',tc:'Su plan vence',c:'vi',d:'Para hablar con ellos antes de que acabe.',n:7,u:'días',p:'En los próximos',min:1,max:60,ch:function(n){ return 'próximos '+n+' días'; }},
   pau:{t:'En pausa',c:'gr',d:'Les quitaste «Acceso activo» en su ficha (Sus datos): ya no salen en Inicio ni en Revisiones.'}
 };
 var CL3_ORD=['esc','sin','mol','est','com','nue','dat','pla','pau'], CL3_ON={esc:1,sin:1,mol:1,est:1,com:1};
@@ -19948,7 +19948,7 @@ function cl3Cfg(){ var L=CO.clFil, D=cl3Def(); if(!Array.isArray(L)||!L.length) 
   var out=L.filter(function(x){ return CL3_CAT[x.k]; }).map(function(x){ var o={k:x.k,on:!!x.on}; if(CL3_CAT[x.k].n) o.n=+x.n||CL3_CAT[x.k].n; return o; });
   D.forEach(function(d){ if(!out.some(function(x){ return x.k===d.k; })) out.push(Object.assign(d,{on:false})); }); return out; }
 function cl3N(k){ var x=cl3Cfg().filter(function(o){ return o.k===k; })[0]; return (x&&x.n)||(CL3_CAT[k]&&CL3_CAT[k].n)||0; }
-function cl3Lab(k,n){ var C=CL3_CAT[k]; return C.t+(C.ch?' · '+C.ch(n==null?cl3N(k):n):''); }
+function cl3Lab(k,n){ var C=CL3_CAT[k]; return (C.tc||C.t)+(C.ch?' · '+C.ch(n==null?cl3N(k):n):''); }
 function cl3Fs(){ return [['todos','Todos','']].concat(cl3Cfg().filter(function(o){ return o.on; }).map(function(o){ return [o.k,cl3Lab(o.k,o.n),CL3_CAT[o.k].c]; })); }
 function cl3Hace(d){ return d===0?'hoy':d===1?'ayer':'hace '+d+' días'; }
 /* si le toca ese filtro: {t: su etiqueta, s: para ordenar (más arriba, más alto)} o null */
@@ -20130,7 +20130,7 @@ function cl3GuiaHtml(){
   var P=[
     [1,'Buscar','Por nombre, email, móvil, su competición o algo de tus notas. En el ordenador, Ctrl K desde cualquier sitio.','<span class="smg-bus">'+ic('lupa')+'Nombre, email, móvil o tus notas</span>'],
     [2,'Lista o caras','Como prefieras verlos: en lista, o con su cara.','<span class="cl3-sw"><button class="on">Lista</button><button>Caras</button></span>'],
-    [3,'Tus filtros, arriba','Cada uno con cuántos clientes hay. Tócalo y ves solo esos, con una frase que dice qué estás viendo y los más urgentes primero.','<span class="smg-chs">'+k('Todos','',1,15)+k('Te han escrito','co',0,4)+k('No entrenan · 5+ días','ro',0,3)+k('Con molestias · 14 días','az',0,2)+'</span>'],
+    [3,'Tus filtros, arriba','Cada uno con cuántos clientes hay. Tócalo y ves solo esos, con una frase que dice qué estás viendo y los más urgentes primero.','<span class="smg-chs">'+k('Todos','',1,15)+k('Te han escrito','co',0,4)+k('No entrenan · 5+ días','ro',0,3)+k('Con molestias · últimos 14 días','az',0,2)+'</span>'],
     [4,'Más filtros','Los que tienes apagados y el servicio (entreno, dieta o los dos).','<span class="cl3-mf">Más filtros</span>'],
     [5,'Tus filtros','Tú decides cuáles salen arriba, en qué orden y con qué números. Abajo te lo explicamos.','<span class="cl3-cfgb">'+ic('editar')+'Tus filtros</span>'],
     [6,'Cada cliente','Con sus etiquetas: por qué sale en cada filtro. Tócalo y se abre su ficha.','<span class="smg-f"><span class="smg-av">MR</span><span class="smg-fn"><b>Marta</b><small>Entreno + Dieta · desde octubre</small></span><span class="smg-fd"><span class="cl3-t ro">9 días sin entrenar</span></span></span>']
