@@ -1487,6 +1487,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .hq-ed{padding:0 0 8px}.hq-ed .hq-ops{padding:0 0 6px 44px}.hq-ol{font-size:12px;font-weight:800;color:#55555E;margin-right:2px;min-width:78px}
 @media(max-width:560px){.hq-ops{padding-left:32px}.hq-blq .hq-r,.gq-sec .hq-r{flex-wrap:wrap}.hq-rbt{flex-basis:100%;padding-left:44px;justify-content:flex-start}.hq-ed .hq-ops{padding-left:0}.hq-ol{flex-basis:100%}.wkd-b{flex:1 1 0;min-width:0}}
 /* v53.4.238 · Clientes: tus filtros (cl3-, fz-) */
+.mn-h{margin:14px 0 4px;color:#55555E}
 .cl3-k.ro,.cl3-t.ro{--c:#A11D5E;--t:#FBE7F1}.cl3-k.in,.cl3-t.in{--c:#3730A3;--t:#E8E8FB}.cl3-k.pz,.cl3-t.pz{--c:#334155;--t:#EEF1F5}.cl3-k.vi,.cl3-t.vi{--c:#86198F;--t:#F8E8FA}
 .cl3-k.cero{opacity:.55}.cl3-fx{font-size:13px;color:#6A6A72;margin:-4px 0 12px}.cl3-fx b{color:#141414}
 .cl3-cfgb{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #DCDCE3;background:#fff;border-radius:11px;padding:6px 12px;font:700 13px Plus Jakarta Sans,sans-serif;color:#141414;cursor:pointer;white-space:nowrap}.cl3-cfgb .ic{width:14px;height:14px;margin:0}
@@ -5865,7 +5866,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.240';
+var APP_V = 'v53.4.241';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14465,7 +14466,8 @@ function pintarLista(){
 /* móvil: lo que antes iba en la cabecera */
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
-  modal('<h2>Más</h2><div class="mn">'+(NOVEDADES.length?it('novLista','nuevo','Novedades'+(novNuevas().length?'<b class="dot-n">'+novNuevas().length+'</b>':'')+'<small class="mn-s">Lo nuevo de tu panel</small>'):'')+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnPagina','enlace','Tu página'+'<small class="mn-s">Para mandar a posibles clientes</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div>'+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('pushCo','campana','Avisos'+'<small class="mn-s">'+(PUSH.est==='on'?'Activados en este '+(pushMovil()?'móvil':'ordenador'):'Mensajes, cuestionarios y fotos de tus clientes, al momento')+'</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  var novN=novNuevas().length, novIt=it('novLista','nuevo','Novedades'+(novN?'<b class="dot-n">'+novN+'</b>':'')+'<small class="mn-s">Lo nuevo de tu panel</small>');      // v53.4.241: arriba solo si hay sin ver; si no, en «Tu cuenta»
+  modal('<h2>Más</h2><div class="mn">'+(NOVEDADES.length&&novN?novIt:'')+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div><div class="sd-bk-h mn-h">Tu cuenta</div>'+it('mnPagina','enlace','Tu página'+'<small class="mn-s">Para mandar a posibles clientes</small>')+(NOVEDADES.length&&!novN?novIt:'')+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('pushCo','campana','Avisos'+'<small class="mn-s">'+(PUSH.est==='on'?'Activados en este '+(pushMovil()?'móvil':'ordenador'):'Mensajes, cuestionarios y fotos de tus clientes, al momento')+'</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -20323,9 +20325,11 @@ function ladoHtml2(act,v,urg,it){
   function nw(t){ return '<b class="sd-new">'+t+'</b>'; }
   var nom=CO.coachNombre&&CO.coachNombre!=='tu coach'?CO.coachNombre:'Tu cuenta';
   var nov=!!(CO.sugNuevas||CO.ayudaNuevas||pushNuevo(PUSH.est)||!(CO.seg&&CO.seg.conPass)||(CO.casa!==false&&!CO.appUrl)||(CO.casa===false&&!CO.logoV));
-  var ab=!!CO.cuAb, dentro=['sug','ayuda','prueba'].indexOf(v)>=0;
+  var ab=!!CO.cuAb, dentro=['sug','ayuda','prueba','pagina'].indexOf(v)>=0, novN=novNuevas().length;      // v53.4.241 (Chadín, 17:16): «Tu página» y «Novedades», en tu cuenta
   var menu='<div class="sd-cm" id="sd-cm" role="menu" aria-label="Cuenta y ajustes"'+(ab?'':' hidden')+'>'+
     '<div class="sd-cmh">Tu cuenta</div>'+
+    it('sdPagina','enlace','Tu página',v==='pagina')+
+    (NOVEDADES.length?it('sdNov','nuevo','Novedades',false,novDot()):'')+
     (CO.casa===false?it('coLogo','foto','Tu logo',false,CO.logoV?'':nw('Nuevo')):'')+
     it('pushCo','campana','Avisos',false,pushNuevo(PUSH.est)?nw('Nuevo'):'')+
     it('segCfg','candado','Seguridad y acceso',false,CO.seg&&CO.seg.conPass?'':nw('Revisar'))+
@@ -20341,7 +20345,7 @@ function ladoHtml2(act,v,urg,it){
     sdBuscaHtml()+'<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
-    it('sdPagos','euro','Pagos',v==='pagos')+it('sdPagina','enlace','Tu página',v==='pagina')+it('sdNov','nuevo','Novedades',false,novDot())+
+    it('sdPagos','euro','Pagos',v==='pagos')+(novN?it('sdNov','nuevo','Novedades',false,novDot()):'')+      // a la izquierda, solo mientras haya alguna sin ver
     '<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div></nav>'+
     '<button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+(CO.vista==='semana'?rvGuiaLado():'')+
     '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm"><span class="sd-av sd-cav">'+(nom==='Tu cuenta'?ic('user'):esc(iniciales(nom)))+'</span><span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
@@ -22131,7 +22135,9 @@ var AYUDA=[
   {g:3,q:'¿Cómo mando el justificante de un pago?',r:'En Pagos puedes activar el justificante por email: con cada pago, a tu cliente le llega su justificante en PDF. También lo puedes descargar de cada pago.',a:'sdPagos',k:'justificante recibo factura pdf pago'},
   {g:3,q:'¿Dónde veo cuánto gano?',r:'En Pagos → Tu negocio: cómo va cada mes (lo que cobras, altas, bajas y renovaciones), sus cobros uno a uno, el informe del mes en PDF y un Excel del mes, de los 3 últimos meses, del año o de las fechas que elijas.',a:'sdNeg',k:'negocio ganancias ingresos informe mes excel exportar'},
   {g:4,q:'¿Cómo cambio mi nombre en la app de mis clientes?',r:'Sale en su chat («Chat con tu coach, …»). Es el mismo para todos tus clientes.',a:'coNombre',b:'Cambiar mi nombre',k:'nombre coach entrenador'},
-  {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en el menú) lo subes: sale junto a MOOD ON arriba en la app de tus clientes (una vez dentro) y en sus emails. Al abrir la app y en lo que comparten, solo MOOD ON. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
+  {g:4,q:'¿Dónde está «Tu página»?',r:'En «Cuenta y ajustes» (abajo a la izquierda, en el ordenador; en el móvil, en «Más» → Tu cuenta). Es tu página para mandar a posibles clientes: tu marca, tus planes y tu cuestionario.',a:'sdPagina',b:'Abrir Tu página',k:'pagina web enlace landing cuenta'},
+  {g:4,q:'¿Dónde veo las novedades?',r:'Cuando hay algo nuevo, «Novedades» sale en el menú de la izquierda con su número hasta que lo ves. Después, siempre las tienes en «Cuenta y ajustes» → Novedades.',a:'sdNov',b:'Ver novedades',k:'novedades nuevo actualizacion cambios'},
+  {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en Cuenta y ajustes) lo subes: sale junto a MOOD ON arriba en la app de tus clientes (una vez dentro) y en sus emails. Al abrir la app y en lo que comparten, solo MOOD ON. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
   {g:4,q:'¿Cómo creo o cambio mi contraseña?',r:'En Seguridad y acceso: tu contraseña del panel y cómo entran tus clientes.',a:'segCfg',k:'contraseña seguridad acceso entrar'},
   {g:4,q:'¿Cómo veo la app como la ve un cliente?',r:'En Modo prueba ves los correos que les llegan y su app con una clienta de ejemplo, sin tocar a nadie real.',a:'sdPrueba',k:'prueba ejemplo correos ver app cliente'},
   {g:4,q:'¿Cómo tengo el panel a mano en el móvil?',r:'Abre tu panel en el navegador del móvil ({PANEL}) y añádelo a la pantalla de inicio: en iPhone, Compartir → «Añadir a pantalla de inicio»; en Android, el menú ⋮ → «Añadir a pantalla de inicio».',k:'movil iphone android pantalla de inicio enlace panel'},
@@ -28253,7 +28259,7 @@ A.plnTec=function(el){
 var NOV_IMG='https://moodonapp.com/novedades/';
 var NOVEDADES=[
   {id:'v53.4.130',f:'2026-11-15',t:'Tu página: para mandar a posibles clientes',sub:'Tu marca, tus planes y tu cuestionario, en un enlace.',ir:'pagina',
-    r:['En «Tu página» (debajo de Pagos) tienes tu propia página en moodonapp.com/tu-nombre, con tu foto, tu logo, tus textos y tus planes.',
+    r:['En «Tu página» (en Cuenta y ajustes) tienes tu propia página en moodonapp.com/tu-nombre, con tu foto, tu logo, tus textos y tus planes.',
       'La rellenas por apartados y ves al momento cómo queda: en el ordenador, al lado; en el móvil, con «Ver cómo queda mi página».',
       'Ponla en la biografía de Instagram o mándala por WhatsApp. Quien la abre puede rellenar tu cuestionario o escribirte.',
       'Lo que rellenan te llega a «Lo que llega»: no entran en tu app hasta que tú le das a «Pasar a cliente» (plan, acceso y primer pago, en un paso).'],
