@@ -2166,6 +2166,24 @@ details.ue-ck summary::-webkit-details-marker{display:none}details.ue-ck summary
 .dia-tr{position:absolute;right:-5px;top:-6px;width:20px;height:20px;border-radius:50%;background:#111;color:#F5C242;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px var(--bg)}
 .dia-tr .ic{width:11px;height:11px;margin:0}
 .ev-dia .ev-ic.pri{background:#111;color:#F5C242}
+/* v53.4.243 · 23 nov 2026 (Chadín, Word «Panel entrenador» 13: «más colores para resaltar también competiciones»; 18:53: «amarillo oro»,
+   no rosa: «también hay clientes masculinos»): las competiciones y objetivos, en dorado de medalla con su trofeo, en el calendario (con brillo,
+   para no confundirse con la fase «Híbrida», que es ámbar liso), en su leyenda y en «Competiciones y objetivos» */
+:root{--ev1:#FBE38E;--ev2:#E3AE1B;--ev3:#A8790B;--evt:#7A5600}
+.cal-d.evd{background:linear-gradient(135deg,var(--ev1) 0%,var(--ev2) 50%,var(--ev3) 100%)!important;color:#2B1F00;box-shadow:0 0 0 2px #fff,0 2px 10px 1px rgba(227,174,27,.7);position:relative;z-index:1}
+.cal-d.evd.hoy{box-shadow:0 0 0 2px #111,0 2px 10px 1px rgba(227,174,27,.7)}
+.cal-tr{background:linear-gradient(135deg,var(--ev1),var(--ev2) 50%,var(--ev3));color:#2B1F00;border-radius:5px}
+.ley-ev{font-weight:700;color:var(--evt)}
+.ev-co .card-t>.ic{width:30px;height:30px;padding:7px;border-radius:50%;background:linear-gradient(135deg,var(--ev1),var(--ev2) 50%,var(--ev3));color:#2B1F00;box-sizing:border-box;flex:none}
+.ev-co .ev-r:not(.pas){border-color:#EFD98F;background:linear-gradient(100deg,#FFF8E1 0%,#FFFCF2 55%,#fff 100%)}
+.ev-co .ev-ic{background:#FFF1C7;color:var(--evt)}
+.ev-co .ev-ic.pri{background:linear-gradient(135deg,var(--ev1),var(--ev2) 50%,var(--ev3));color:#2B1F00;box-shadow:0 4px 12px rgba(227,174,27,.4)}
+.ev-co .ev-r.pas .ev-ic,.ev-co .ev-r.pas .ev-ic.pri{background:#ECECEF;color:#6B6B70;box-shadow:none}
+.ev-co .ev-p.pri{background:linear-gradient(90deg,var(--ev1),var(--ev2));color:#2B1F00}
+.ev-co .ev-r:not(.pas) .ev-n{background:#fff;border:1.5px solid #EFD98F;border-radius:14px;padding:7px 8px 6px;min-width:62px}
+.ev-co .ev-r:not(.pas) .ev-n b{color:var(--evt)}
+.cal-per .ev-fz{color:var(--evt)}
+.c2-tr{color:var(--evt)!important;font-weight:700}
 /* v52.10 · ciclo y privacidad */
 .cy-priv{display:flex;gap:10px;align-items:flex-start;margin:0;background:#F5F5F7;border-radius:14px;padding:12px 14px;font-size:14px;line-height:1.45}
 .cy-priv .ic{flex:none;width:18px;height:18px;margin-top:1px}
@@ -4363,6 +4381,28 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .pg-fut2{cursor:default}.pg-fut2 .pg-fr{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;font:inherit;color:inherit;text-align:left;padding:7px 0;cursor:pointer;border-top:1px solid rgba(124,108,240,.15)}
 .pg-fut2 .pg-fr{flex-wrap:wrap;row-gap:4px}.pg-fut2 .pg-fr:first-of-type{border-top:0}.pg-fut2 .pg-fn{flex:1 1 120px;min-width:0;display:flex;flex-direction:column}.pg-fut2 .pg-fn,.pg-fut2 .pg-fd{overflow-wrap:anywhere}.pg-fut2 .pg-fn small{font-size:11.5px;color:var(--mu);font-weight:600}
 .pg-falta{display:flex;align-items:center;gap:10px;background:#FFF6E5;border-radius:14px;padding:10px 12px;margin-top:10px}.pg-falta>svg{width:20px;height:20px;stroke:#B15A00;flex:none}.pg-falta span{flex:1;display:flex;flex-direction:column}.pg-falta small{font-size:12px;color:var(--mu);font-weight:600}
+/* v53.4.243 · 23 nov 2026 (Chadín, Word «Panel entrenador» 14 y 15): lo de ahora y las próximas se eligen aquí; la elegida, con su borde */
+.pg-yab{width:100%;font:inherit;text-align:left;cursor:pointer;transition:box-shadow .15s}
+.pg-yab.on{box-shadow:0 0 0 3px #fff,0 0 0 5px #9A8CFF}.pg-yab:not(.on):hover{box-shadow:0 0 0 3px #fff,0 0 0 5px rgba(154,140,255,.35)}
+.pg-yab:focus-visible{outline:2px solid #5B4FD0;outline-offset:4px}
+.pg-fut3{gap:2px}.pg-fut3 .pg-frs{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px;margin:0 -6px;padding:8px 6px;border:1.5px solid transparent!important;border-radius:12px;cursor:default;transition:background .15s,border-color .15s}
+.pg-fut3 .pg-frs+.pg-frs{box-shadow:0 -1px 0 rgba(124,108,240,.15)}.pg-fut3 .pg-frs.on,.pg-fut3 .pg-frs.on+.pg-frs{box-shadow:none}
+.pg-fut3 .pg-frs.on{background:#fff;border-color:#B9A6FF!important}.pg-fut3 .pg-frs:not(.on):hover{background:rgba(255,255,255,.6)}
+.pg-frb{flex:1 1 210px;min-width:0;display:flex;align-items:center;gap:12px;background:none;border:0;padding:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.pg-frb:focus-visible{outline:2px solid #5B4FD0;outline-offset:3px;border-radius:8px}
+.pg-fut3 .pg-fd{min-width:112px}.pg-fut3 .pg-fd>b{font-size:13.5px;color:#5B4FD0}
+.pg-fh{font-size:12px;color:var(--mu);font-weight:600}.pg-fh b{font-size:13.5px;color:#111;font-weight:800}
+.pg-fut3 .pg-fd small{margin-top:1px}
+.pg-fut3 .pg-fn{flex:1 1 100px;font-size:13.5px;font-weight:700;line-height:1.3}
+.pg-frx{display:flex;align-items:center;gap:8px;margin-left:auto}.pg-frx .btn{white-space:nowrap}
+.dg-ya-t .dg-fe{font-style:normal;font-size:12.5px;font-weight:800;color:#fff;margin-left:auto}.dg-ya-t .dg-fe i{font-style:normal;color:#BDBDC4;margin:0 2px}
+.dg-ya-t .dg-fe+em{margin-left:0}.dg-ya-t em.dg-fe{color:#C9CCD8}
+/* v53.4.243 (Word 16 y 17): la foto del entrenador; la comunidad, apagable */
+.cfo-on{overflow:hidden;padding:0!important;background:#ECECEF!important}.cfo img{width:100%;height:100%;object-fit:cover;border-radius:50%;display:block}
+.cf-pv{display:flex;justify-content:center;margin:14px 0 6px}.cf-av{width:120px;height:120px;border-radius:50%;background:#F2F2F5;display:flex;align-items:center;justify-content:center;font:800 38px/1 Plus Jakarta Sans,sans-serif;color:#3A3A3C;overflow:hidden}.cf-av .ic{width:44px;height:44px}
+.chat-cabf{display:grid;grid-template-columns:auto 1fr;column-gap:12px;align-items:center}.chat-cabf .chat-tit,.chat-cabf .chat-sub{grid-column:2}.chat-cav{grid-row:1 / span 2;width:48px;height:48px;border-radius:50%;background:#F2F2F5;display:flex;align-items:center;justify-content:center;overflow:hidden}.chat-cav .ic{width:22px;height:22px}
+.sd-st{margin-left:auto;font-size:11.5px;font-weight:700;color:var(--mu)}
+.com-apg{display:block;margin:12px auto 0;font-size:13px;color:var(--mu)}
 .pgt.pgt-sc{display:flex;overflow-x:auto;scrollbar-width:none}.pgt.pgt-sc::-webkit-scrollbar{display:none}.pgt.pgt-sc .pgt-b{flex:0 0 auto;min-width:200px}
 .pgt-b.pgt-pend{background:repeating-linear-gradient(135deg,#FFF6E5 0 6px,#FFFDF8 6px 12px);border-color:#F5A524}
 .pg-tag.pg-amb{background:#FFE7B3;color:#6B4A00}.pgt-b .pg-tag{max-width:100%;white-space:normal}.pgt-b{min-width:0}
@@ -5866,7 +5906,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.242';
+var APP_V = 'v53.4.243';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8637,7 +8677,7 @@ function chatHtml(){
 function comSubTxt(){ var c=CO.com; return c?c.n+(c.n===1?' cliente':' clientes')+' · solo escribes tú':'Solo escribes tú'; }
 function comEnvTxt(){ var c=CO.com; return c?'Se envía a '+c.n+(c.n===1?' cliente':' clientes'):'Se envía a tus clientes de la comunidad'; }
 function progTxt(f){ f=String(f||''); var d=f.slice(0,10), hoy=hoyStr(); return (d===hoy?'hoy':d===sumar(hoy,1)?'mañana':fCorta(d))+' '+f.slice(11,16); }
-function comFila(cls){
+function comFila(cls){ if(CO.comOff) return '';      // v53.4.243 (Word 17): apagada, no sale
   var u=CO.comUlt, pr=u&&u.txt?'Tú: '+u.txt:'Solo escribes tú · le llega a todos';
   return '<button class="'+cls+' com-f'+(MC.cid==='__com'?' on':'')+'" data-a="mcAbrir" data-id="__com"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad</b><small>'+esc(pr)+'</small></span><span class="ch-r">'+(u&&u.f?'<small>'+esc(horaChat(u.f))+'</small>':'')+'</span></button>';
 }
@@ -8664,15 +8704,24 @@ function comMiembrosModal(r){
   modal('<h2>Miembros</h2><p class="muted sm">Comunidad · '+dentro+' de '+act.length+(act.length===1?' cliente':' clientes')+'</p>'+
     '<div class="fila com-auto"><span>Meter a los clientes nuevos<small class="fila-s">Al dar de alta a alguien, entra solo en la comunidad</small></span><button class="sw'+(r.auto?' on':'')+'" data-a="comAuto" aria-pressed="'+(!!r.auto)+'" aria-label="Meter a los clientes nuevos"><i></i></button></div>'+
     '<div class="com-ml">'+(L.length?L.map(function(c){ return '<div class="fila com-m'+(c.activa?'':' off')+'">'+avCo(c.id,c.nombre,'sd-av')+'<span>'+esc(c.nombre)+'<small class="fila-s">'+(c.activa?(c.desde?'Desde '+esc(MESES_L[+c.desde.slice(5,7)-1]||''):''):'Pausado · no ve la app')+'</small></span><button class="sw'+(c.dentro?' on':'')+'" data-a="comMiembro" data-id="'+esc(c.id)+'" aria-pressed="'+c.dentro+'" aria-label="'+esc(c.nombre)+' en la comunidad"><i></i></button></div>'; }).join(''):'<p class="muted sm">Aún no tienes clientes.</p>')+'</div>'+
-    '<p class="muted sm">Si quitas a alguien, deja de ver la comunidad desde ese momento. No se le avisa.</p><button class="btn sec mt" data-a="cerrarModal">Hecho</button>');
+    '<p class="muted sm">Si quitas a alguien, deja de ver la comunidad desde ese momento. No se le avisa.</p><button class="btn sec mt" data-a="cerrarModal">Hecho</button><button class="link mt com-apg" data-a="comCfg">¿No la quieres usar? Apagar la comunidad</button>');
 }
+/* v53.4.243 · 23 nov 2026 (Chadín, Word «Panel entrenador» 17): «que el entrenador pueda omitir la opción de comunidad». En Tu cuenta → Comunidad */
+A.comCfg=function(){ var on=!CO.comOff;
+  modal('<h2>Comunidad</h2><p class="muted sm">Un chat para todos tus clientes a la vez: solo escribes tú (motivación, retos, avisos) y ellos lo leen.</p>'+
+    '<div class="fila com-auto"><span>Usar la comunidad<small class="fila-s">'+(on?'Encendida: sale en tu chat y en la app de tus clientes.':'Apagada: no sale en tu panel ni en la app de tus clientes.')+'</small></span><button class="sw'+(on?' on':'')+'" data-a="comOffSw" aria-pressed="'+on+'" aria-label="Usar la comunidad"><i></i></button></div>'+
+    '<p class="muted sm">Si la apagas, lo que ya escribiste se guarda: al encenderla, vuelve tal cual.</p><button class="btn sec mt" data-a="cerrarModal">Hecho</button>'); };
+A.comOffSw=function(el){ if(el.disabled) return; el.disabled=true; var off=!CO.comOff;
+  api('coachComOff',CO.pin,off).then(function(r){ CO.comOff=r.off===true; A.comCfg(); toast(CO.comOff?'Comunidad apagada':'Comunidad encendida','ok');
+    if(CO.comOff&&MC.cid==='__com'){ try{ mcCerrar(); }catch(e){} }
+    try{ if(VISTA.ancha) ladoCo(); }catch(e){} },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.comMiembro=function(el){ var on=!el.classList.contains('on'); el.disabled=true; api('coachComMiembro',CO.pin,el.dataset.id,on).then(function(r){ comMiembrosModal(r); var d=(r.lista||[]).filter(function(x){ return x.activa&&x.dentro; }).length; if(CO.com) CO.com.n=d; var sb=document.getElementById('com-sub'); if(sb) sb.textContent=comSubTxt(); var ce=document.getElementById('com-env'); if(ce) ce.textContent=comEnvTxt(); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.comAuto=function(el){ var on=!el.classList.contains('on'); el.disabled=true; api('coachComAuto',CO.pin,on).then(function(r){ el.disabled=false; el.classList.toggle('on',!!r.auto); el.setAttribute('aria-pressed',!!r.auto); if(CO.comM) CO.comM.auto=r.auto; },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 /* su app: la comunidad fija arriba en Chat, y abierta (solo leer) */
 function comCardCl(){
   var c=CL.d.com; if(!c) return '';
   var u=c.ult, nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
-  return '<button class="com-card" data-a="comAbrirCl"><span class="sd-av com-av">'+ic('clientes')+'</span><span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
+  return '<button class="com-card" data-a="comAbrirCl">'+cfotoAv('sd-av com-av',ic('clientes'))+'<span class="ch-tx"><b>Comunidad de '+esc(nom)+'</b><small>'+esc(u&&u.txt?u.txt:'Mensajes para todo el grupo')+'</small></span>'+(c.n?'<b class="dot-n" aria-label="'+c.n+' sin leer">'+c.n+'</b>':ic('flecha'))+'</button>';
 }
 /* v53.4.141 (Javier, al ver la v53.4.138: la tarjeta fija «tapa el nombre del entrenador»): en su chat, la comunidad también arriba a la
    izquierda en la cabecera, redonda como la campana y con su número sin leer; siempre a la vista, sin tapar nada */
@@ -8869,7 +8918,7 @@ function chatParar(enviar){ clearInterval(CHT.recI); var r=CHT.rec; CHT.rec=null
   var s=document.getElementById('chat-rec-s'); if(s) s.textContent='0:00';
   if(r&&r.r.state!=='inactive') r.r.stop(); }
 A.chatRecX=function(){ if(CHT.rec){ chatParar(false); toast('Nota de voz descartada'); } };      // v53.4.57: la papelera, como en WhatsApp
-function vChat(){ if(CHT.com) return vComCl(); return '<div class="chat-cab"><h1 class="tit chat-tit">Chat con tu coach'+(CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?', '+esc(CL.d.coachNombre):'')+'</h1><p class="muted sm chat-sub">Solo lo veis tú y tu coach. Puedes escribir siempre que lo necesites.</p></div>'+comCardCl()+chatHtml(); }
+function vChat(){ if(CHT.com) return vComCl(); return '<div class="chat-cab'+(cfotoSrc()||CL.d.cfotoV?' chat-cabf':'')+'">'+(cfotoSrc()||CL.d.cfotoV?cfotoAv('chat-cav',ic('user')):'')+'<h1 class="tit chat-tit">Chat con tu coach'+(CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?', '+esc(CL.d.coachNombre):'')+'</h1><p class="muted sm chat-sub">Solo lo veis tú y tu coach. Puedes escribir siempre que lo necesites.</p></div>'+comCardCl()+chatHtml(); }
 function vChatCo(){ return '<p class="muted sm chat-sub">Solo lo veis '+cG('ella','él')+' y tú. Lo que escribas le sale en su app, en la pestaña Chat, con un punto rojo.</p>'+'<p class="muted sm chat-sub">En su app sale «Chat con tu coach'+(CO.coachNombre&&CO.coachNombre!=='tu coach'?', '+esc(CO.coachNombre):'')+'» · <button class="link" data-a="coNombre" style="padding:0">Cambiar tu nombre</button></p>'+(waDe(CO.cid)?'<div class="row wa-row">'+waBtn(CO.cid)+'<span class="muted sm">o escríbele por WhatsApp</span></div>':'')+
   (window.__moodonBoot&&CO.casa===false?'':'<button class="grab-l'+(CO.grabadora?' on':'')+'" data-a="'+(CO.grabadora?'grabCfg':'appCfg')+'">'+ic('mic')+(CO.grabadora?'Notas de voz: activadas · Cambiar':'¿No graba las notas de voz? Actívalas con tu página de inicio')+'</button>')+chatHtml(); }      // v53.4.41: en moodonapp.com, los demás entrenadores no tienen que configurar nada (sin el aviso de las notas de voz)
 /* v26 · página de inicio propia (GitHub Pages): abre la app sin el aviso de Google */
@@ -9049,7 +9098,7 @@ A.reintentarCarga=function(){ app.innerHTML='<div class="login">'+logoHtml('big'
 
 function pintarCl(){
   document.documentElement.classList.toggle('s2',!(CL.tab==='entreno'&&CL.dr)&&!(CL.d&&CL.d.bloqueo));      // v53.4.175
-  if(CL.d&&CL._lgD!==CL.d){ CL._lgD=CL.d; logoCoSync(CL.d.logoV); }      // v53.4.38: el logo de su coach
+  if(CL.d&&CL._lgD!==CL.d){ CL._lgD=CL.d; logoCoSync(CL.d.logoV); cfotoSync(CL.d.cfotoV); }      // v53.4.38: el logo de su coach
   var y=window.scrollY, keep=CL.keep; CL.keep=false;
   if(CL.d&&CL.d.bloqueo){ pararReloj(); app.innerHTML=vBloqueo(); window.scrollTo(0,0); return; }      // v31: plan vencido sin renovar
   if(CL.tab==='entreno'&&CL.dr){ pintarEntreno(); if(keep) window.scrollTo(0,y); return; }
@@ -12846,7 +12895,7 @@ function avisarBajas(L){ if(!L||!L.length||document.querySelector('#modal.open')
     '<p class="muted sm">Se han borrado sus datos (rutinas, dieta, entrenos, fotos, chat…). Sus pagos siguen en Pagos, porque hay que guardarlos.</p><button class="btn mt" data-a="bajasVistas">Entendido</button></div>'); }
 A.bajasVistas=function(){ cerrarModal(); api('coachBajasVistas',CO.pin).catch(function(){}); };
 function ponerResumen(r){ if(r&&r.bajas&&r.bajas.length) setTimeout(function(){ avisarBajas(r.bajas); },1200); PG22=LS.get('chadin_pg22')!==0; setTimeout(pedirFotosCo,400); if(r&&r.push) CO.push=r.push; setTimeout(function(){ pushTrasEntrar('co'); },600); /* v53.4.54: avisos push */ CO.rapidas=Array.isArray(r.rapidas)?r.rapidas:null; CO.coachNombre=r.coachNombre||'tu coach'; CO.sugNuevas=r.sugNuevas||0; if(Array.isArray(r.novVistas)){ CO.novVistas=r.novVistas; LS.set('chadin_nov_v',r.novVistas); } CO.ayudaNuevas=r.ayudaNuevas||0; CO.casa=r.casa!==false; CO.dn=r.dn===true; var u2=!BOOT.ui1; document.body.classList.toggle('ui2',u2);      // v53.4.112: la jerarquía visual nueva, de momento solo en el panel nº 1
-  CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0);      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
+  CO.empezar=r.empezar||null; CO.logoV=r.logoV||''; setTimeout(function(){ logoCoSync(CO.logoV); },0); CO.cfotoV=r.cfotoV||''; CO.comOff=r.comOff===true; setTimeout(function(){ cfotoSync(CO.cfotoV); },0);      // v53.4.243 (Word 16 y 17)      // v53.4.36: casa = la cuenta nº 1 (Chadín): solo ella tiene el Modo prueba
  CO.seg=r.seg||{conPass:true}; CO.lista=r.clientas; CO.citasMias=r.citasMias||[]; CO.nuevos=r.nuevos||[]; CO.url=r.url; CO.appUrl=r.appUrl||''; CO.grabadora=r.grabadora||''; CO.semCal=r.semCal||{dias:[],per:''}; CO.clFil=r.clFil||null; CO.hoy=r.hoy; CO.bres=r.banco||{total:0,conVideo:0}; }
 /* v26 · más rápida: con rapido, se pinta al momento lo último (en memoria o guardado en este equipo) y se actualiza por detrás */
 function cargarLista(rapido){
@@ -13612,7 +13661,7 @@ function nombreMes(Y,m){ var s=new Date(Y,m,1).toLocaleDateString('es-ES',{month
 function vCalendario(){
   var d=CO.d, Y=CO.calY||+String(CO.hoy||hoyStr()).slice(0,4); CO.calY=Y;
   var h='<div class="tit-row"><div class="row"><button class="ico" data-a="calY" data-v="-1" aria-label="Año anterior">‹</button><h2 class="cal-y">'+Y+'</h2><button class="ico" data-a="calY" data-v="1" aria-label="Año siguiente">›</button></div><button class="btn sm" data-a="faseNueva">+ Periodo</button></div>'+
-    faseHoyTxt(d)+'<p class="muted sm">Toca el día de inicio y luego el de fin para crear un periodo (también encima de otro: eliges entre medias, sustituir o los dos a la vez). Las letras de las esquinas son sus fechas de seguimiento: R revisión, D dieta, E rutinas…</p>';
+    faseHoyTxt(d)+'<p class="muted sm">Toca el día de inicio y luego el de fin para crear un periodo (también encima de otro: eliges entre medias, sustituir o los dos a la vez). Las letras de las esquinas son sus fechas de seguimiento: R revisión, D dieta, E rutinas… Las competiciones, en dorado con su trofeo.</p>';
   CO._evY={}; tareasDe(resumenFicha(),Y+'-12-31').forEach(function(t){ if(t.f&&t.f>=Y+'-01-01') (CO._evY[t.f]=CO._evY[t.f]||[]).push(t); });
   if(CO.calSel) h+='<div class="card hl cal-sel"><div>'+(CO.calSel.tipo==='entreno'?'Entrenamiento':'Nutrición')+' · desde el <b>'+fMedia(CO.calSel.a)+'</b>. Ahora toca el día en que termina.</div><div class="row mt6"><button class="btn sm sec" data-a="calSelUno">Solo ese día</button><button class="link" data-a="calSelNo">Cancelar</button></div></div>';
   return h+citasCoCard(d)+eventosCoCard(d)+calTipo(d,'nutricion',Y)+calTipo(d,'entreno',Y);      // v52.11: sus competiciones · v53.4.160: sus citas
@@ -14467,7 +14516,7 @@ function pintarLista(){
 A.menuCo=function(){
   function it(a,i,t){ return '<button class="mn-i" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+ic('flecha','hm-ch')+'</button>'; }
   var novN=novNuevas().length, novIt=it('novLista','nuevo','Novedades'+(novN?'<b class="dot-n">'+novN+'</b>':'')+'<small class="mn-s">Lo nuevo de tu panel</small>');      // v53.4.241: arriba solo si hay sin ver; si no, en «Tu cuenta»
-  modal('<h2>Más</h2><div class="mn">'+(NOVEDADES.length&&novN?novIt:'')+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div><div class="sd-bk-h mn-h">Tu cuenta</div>'+it('mnPagina','enlace','Tu página'+'<small class="mn-s">Para mandar a posibles clientes</small>')+(NOVEDADES.length&&!novN?novIt:'')+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('pushCo','campana','Avisos'+'<small class="mn-s">'+(PUSH.est==='on'?'Activados en este '+(pushMovil()?'móvil':'ordenador'):'Mensajes, cuestionarios y fotos de tus clientes, al momento')+'</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
+  modal('<h2>Más</h2><div class="mn">'+(NOVEDADES.length&&novN?novIt:'')+it('mnClientes','clientes','Clientes'+'<small class="mn-s">Todos, con el buscador y filtros</small>')+it('mnPagos','euro','Pagos'+'<small class="mn-s">Cobros, tus planes y cómo va tu negocio</small>')+it('mnSug','idea','Feedback'+(CO.sugNuevas?'<small class="mn-s">'+CO.sugNuevas+(CO.sugNuevas===1?' nueva':' nuevas')+'</small>':''))+'<div class="sd-bk mn-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('mnBanco','lista','Banco de ejercicios')+it('mnRutBib','modelo','Banco de rutinas')+it('mnBancoDie','dieta','Banco de dietas')+it('mnNutri','dieta','Alimentos y recetas')+'</div><div class="sd-bk-h mn-h">Tu cuenta</div>'+it('mnPagina','enlace','Tu página'+'<small class="mn-s">Para mandar a posibles clientes</small>')+it('coFoto','foto','Tu foto'+'<small class="mn-s">'+(CO.cfotoV?'Cámbiala o quítala':'Sale en el chat de tus clientes')+'</small>')+it('comCfg','clientes','Comunidad'+'<small class="mn-s">'+(CO.comOff?'Apagada':'Encendida · mensajes para todos tus clientes')+'</small>')+(NOVEDADES.length&&!novN?novIt:'')+(CO.casa===false?it('mnLogo','foto','Tu logo'+'<small class="mn-s">'+(CO.logoV?'Cámbialo o quítalo':'Sale junto a MOOD ON en la app de tus clientes')+'</small>'):'')+(CO.casa?it('mnPrueba','ojo','Modo prueba'+'<small class="mn-s">Los correos y la app como la ve un cliente</small>'):'')+it('pushCo','campana','Avisos'+'<small class="mn-s">'+(PUSH.est==='on'?'Activados en este '+(pushMovil()?'móvil':'ordenador'):'Mensajes, cuestionarios y fotos de tus clientes, al momento')+'</small>')+it('mnSeg','candado','Seguridad y acceso'+(CO.seg&&CO.seg.conPass?'':'<small class="mn-s">Crea tu contraseña y dales su acceso</small>'))+(CO.casa!==false?it('mnApp','enlace','Página de inicio'+(CO.appUrl?'':'<small class="mn-s">Quita el aviso de Google y activa las notas de voz</small>')):'')+it('mnAyuda','ayuda','Ayuda'+'<small class="mn-s">'+(CO.ayudaNuevas?(CO.ayudaNuevas===1?'1 respuesta nueva':CO.ayudaNuevas+' respuestas nuevas'):'Cómo se hace… y escribir a MOOD ON')+'</small>')+(hayVistaOrd()?it('mnOrd','pantalla','Vista ordenador'):'')+it('mnSalir','atras','Salir')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.mnBanco=function(){ cerrarModal(); A.abrirBanco(); };
 A.mnNutri=function(){ cerrarModal(); A.abrirNutri(); };
@@ -16262,14 +16311,14 @@ function progCard(){
      en negro cromado con menta, con su semana y una barra de lo que lleva; lo que viene, en hielo y lavanda y por fecha; si acaba pronto y no hay nada preparado, en ámbar */
   if(vig.length&&(d||h2)){
     var tot=d&&h2?diff(d,h2)+1:0, va=d?diff(d,hoy)+1:0, pc=tot>0?Math.max(0,Math.min(100,Math.round(va*100/tot))):0, qd=h2?diff(hoy,h2):null;
-    h+='<div class="pg-ya"><div class="pg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+(d?fMedia(d):'…')+' <i>→</i> '+(h2?fMedia(h2):'sin fin')+'</b>'+(st?'<em>'+st+'</em>':'')+'</div>'+
+    var selA=PG21&&progKeys().length;      // 23 nov 2026 (Chadín, Word «Panel entrenador» 14): sin la tira de arriba: aquí eliges qué programación ves a la derecha
+    h+=(selA?'<button type="button" class="pg-ya pg-yab'+(CO.progSel==='a'?' on':'')+'" data-a="progSel" data-v="a" aria-pressed="'+(CO.progSel==='a')+'" aria-label="Ver la programación de ahora">':'<div class="pg-ya">')+'<div class="pg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+(d?fMedia(d):'…')+' <i>→</i> '+(h2?fMedia(h2):'sin fin')+'</b>'+(st?'<em>'+st+'</em>':'')+'</div>'+
       (tot>0?'<div class="pgx-bar" role="img" aria-label="'+pc+' % hecho"><i style="width:'+pc+'%"></i></div>':'')+
-      (qd!=null&&qd>=0&&qd<=7&&fut.length?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': lo siguiente ya está preparado</p>':'')+'</div>'+
+      (qd!=null&&qd>=0&&qd<=7&&fut.length?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': lo siguiente ya está preparado</p>':'')+(selA?'</button>':'</div>')+
       (qd!=null&&qd>=0&&qd<=7&&!fut.length&&!(PG21&&pgSegs().some(function(z){ return !z.ahora; }))?'<p class="pgx-av">'+ic('alerta')+(qd===0?'Acaba hoy':'Acaba en '+qd+(qd===1?' día':' días'))+' y no hay nada preparado después</p>':'');
   } else h+=vig.length?'<p class="sm" style="margin:0">Sus rutinas no tienen fechas. Ponles inicio y fin para saber cuánto tiempo debe estar con ellas.</p>':'<p class="sm muted" style="margin:0">No tiene rutinas en marcha.</p>';
-  if(PG21){ var SG=pgSegs().filter(function(z){ return !z.ahora; }), pd=SG.filter(function(z){ return z.pend; })[0];
-    if(SG.length) h+='<div class="pg-fut pg-fut2"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span>'+SG.map(function(z){ var q=diff(hoy,z.desde); return '<button type="button" class="pg-fr" data-a="pgBloque" data-k="'+esc(z.k)+'"><span class="pg-fd"><b>'+fMedia(z.desde)+'</b><small>'+(q===1?'mañana':'en '+q+' días')+'</small></span><span class="pg-fn">'+esc(pgNom(z))+'<small>'+fCorta(z.desde)+' → '+fCorta(z.hasta)+'</small></span>'+(z.pend?'<span class="pg-am">! Faltan las rutinas</span>':'<span class="pg-ok">✓ Lista, no falta nada</span>')+'</button>'; }).join('')+'</div>';
-    if(pd) h+='<div class="pg-falta">'+ic('alerta')+'<span><b>Faltan las rutinas de '+esc(pgNom(pd).toLowerCase())+'</b><small>Empieza el '+fCorta(pd.desde)+'. Mientras, sigue con las de antes.</small></span><button class="btn sm" data-a="pgRutinas" data-k="'+esc(pd.k)+'">Prepararlas</button></div>';
+  if(PG21){ var SG=pgSegs().filter(function(z){ return !z.ahora; });
+    if(SG.length) h+='<div class="pg-fut pg-fut2 pg-fut3"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span>'+SG.map(function(z){ return pgFilaSel(z,''); }).join('')+'</div>';      // v53.4.243 (Word 14): sin el aviso amarillo: «Prepararlas», en su fila
     fut=[]; }
   if(fut.length){ var FG={}, FO=[]; fut.slice().sort(function(a,b){ return a.desde<b.desde?-1:a.desde>b.desde?1:0; }).forEach(function(r){ if(!FG[r.desde]){ FG[r.desde]=[]; FO.push(r.desde); } FG[r.desde].push(r.nombre); });
     h+='<button type="button" class="pg-fut" data-a="progProx" aria-label="Ver lo que tiene programado más adelante"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span><span class="pg-ver" aria-hidden="true">'+ic('flecha')+'</span></span>'+FO.map(function(f){ var q=diff(hoy,f); return '<span class="pg-fr"><span class="pg-fd"><b>'+fMedia(f)+'</b><small>'+(q===1?'mañana':'en '+q+' días')+'</small></span><span class="pg-fn">'+FG[f].map(esc).join(' · ')+'</span></span>'; }).join('')+'</button>'; }
@@ -16414,7 +16463,7 @@ function vRutinas(){
     return '<button class="sp'+(sel===k?' on':'')+(k===hoyK&&CO.progSel==='a'?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return '<span class="sp-n" title="'+esc(r.nombre||'')+'">'+esc(spCorto(r.nombre)||'Sin nombre')+'</span>'+(!hayF&&r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
   }).join('')+'</div><div class="tipos sem-f"><button class="'+(sel==='todas'?'on':'')+'" data-a="diaRut" data-d="todas">Todas las rutinas ('+RB.length+')</button>'+
     (sinDia||sel==='sin'?'<button class="'+(sel==='sin'?'on':'')+'" data-a="diaRut" data-d="sin">Sin día asignado ('+sinDia+')</button>':'')+'</div></div>';
-  var izq=h+chuHtml(RB); h=hayF?progTabsHtml(Bq):'';       // v23: en el ordenador, la semana a la izquierda y la rutina a la derecha
+  var izq=h+chuHtml(RB); h=hayF&&!PG21?progTabsHtml(Bq):'';      // v53.4.243 (Word 14): con programaciones, se eligen a la izquierda (no se repiten arriba)       // v23: en el ordenador, la semana a la izquierda y la rutina a la derecha
   var vis=[];
   CO.rut.forEach(function(r,ri){ if(progEn(r)&&(sel==='todas'||(sel==='sin'?!r.dias.length:r.dias.indexOf(sel)>=0)||r._vista===sel)){ vis.push(ri); if(sel!=='todas') r._vista=sel; } });
   if(esDia) h+='<div class="dia-h"><h2>'+cap(DLARGO[sel])+'</h2><span class="muted">'+(vis.length?vis.length+' rutina'+(vis.length>1?'s':''):'Descanso')+'</span></div>';
@@ -18122,7 +18171,7 @@ function guiaDieHtml(){
     ['Cambiar un plato','Toca el alimento o los gramos que quieras. Para cuadrar el plato con su comida:',hl('<span class="btn sm sec">'+ic('ajuste')+'Ajustar gramos al objetivo</span>')],
   ].concat(PG22?[
     ['Dieta nueva','Lo primero, <b>cuándo</b>: Empieza y Acaba (o 2, 4, 6 u 8 semanas). En la barra, <b>arrastra la verde</b> para ponerla después de la de ahora, de la próxima o al final; las de detrás se retrasan solas si hace falta. Luego su fase (mantenimiento, déficit o volumen), sus kcal y «¿Y su dieta?»: hacerla ahora, copiar la de ahora (los gramos, recalculados a esas kcal) o más tarde.',hl(tile('docMas','Dieta nueva','Fecha, fase y calorías'))],
-    ['Dietas preparadas','Arriba, «Dieta actual» y sus «Próximas» con <b>«✓ Lista»</b> o <b>«! Falta hacerla»</b>. Cada una tiene su pestaña: la preparas o la cambias cuando quieras y <b>le llega sola el día que empieza</b> (la de antes, a «Dietas anteriores»). Toca una para cambiar sus fechas, su fase o quitarla.',hl('<span class="pg-am">! Falta hacerla</span>')]
+    ['Dietas preparadas','Arriba, «Dieta actual» (en negro: sus fechas y en qué semana va) y sus «Próximas», con cuándo empieza y <b>hasta cuándo</b>. <b>Toca una</b> y se abre debajo para prepararla o cambiarla: la que estás viendo lleva el <b>borde lila</b>. Si falta, <b>«Hacerla»</b> está en su fila. <b>Le llega sola el día que empieza</b> (la de antes, a «Dietas anteriores»). Sus fechas, su fase o quitarla: «Cambiar fechas o quitar».',guFilaPg('Mantenimiento','lun, 21 dic','lun, 1 feb','! Falta hacerla','Hacerla')]
   ]:[
     ['Dieta nueva','Kcal nuevas y eliges: generar platos nuevos o copiar la de ahora con los gramos ajustados. La anterior queda en «Dietas anteriores».',hl(tile('docMas','Empezar una dieta nueva','La actual se guarda en el historial'))]
   ]).concat([
@@ -18144,7 +18193,7 @@ A.dieGuiaNo=function(){ LS.set('chadin_guia_die',1); var b=document.querySelecto
 function vDietaEd(){
   var v=CO.dieV==='calc'?'calc':'plan';
   return '<div class="die-top"><div class="seg die-seg"><button class="'+(v==='plan'?'on':'')+'" data-a="dieVista" data-v="plan">Plan de dieta</button><button class="'+(v==='calc'?'on':'')+'" data-a="dieVista" data-v="calc">'+ic('calc')+'Calculadora</button></div>'+
-    '<button class="gu-btn" data-a="dieGuia">'+ic('ayuda')+'¿Cómo funciona?</button></div>'+(LS.get('chadin_guia_die')?'':'<div class="gu-ban">'+ic('idea')+'<span><b>¿Primera dieta?</b> Mira cómo se hace en 1 minuto.</span><button class="link" data-a="dieGuia">Ver guía</button><button class="link" data-a="dieGuiaNo">No volver a mostrar</button></div>')+(v==='calc'?vCalc():PG22?dgCard()+dgTabsHtml()+dgCuerpo():vDietaPlan());      // v53.4.188: dietas preparadas
+    '<button class="gu-btn" data-a="dieGuia">'+ic('ayuda')+'¿Cómo funciona?</button></div>'+(LS.get('chadin_guia_die')?'':'<div class="gu-ban">'+ic('idea')+'<span><b>¿Primera dieta?</b> Mira cómo se hace en 1 minuto.</span><button class="link" data-a="dieGuia">Ver guía</button><button class="link" data-a="dieGuiaNo">No volver a mostrar</button></div>')+(v==='calc'?vCalc():PG22?dgCard()+dgCuerpo():vDietaPlan());      // v53.4.243 (Word 15): sin la tira de arriba: se eligen en «Dieta actual»      // v53.4.188: dietas preparadas
 }
 A.dieVista=function(el){ CO.dieV=el.dataset.v; repintar(); };
 function calcEstado(){
@@ -20338,6 +20387,8 @@ function ladoHtml2(act,v,urg,it){
   var menu='<div class="sd-cm" id="sd-cm" role="menu" aria-label="Cuenta y ajustes"'+(ab?'':' hidden')+'>'+
     '<div class="sd-cmh">Tu cuenta</div>'+
     it('sdPagina','enlace','Tu página',v==='pagina')+
+    it('coFoto','foto','Tu foto',false,CO.cfotoV?'':nw('Nuevo'))+      // v53.4.243 (Word 16 y 17)
+    it('comCfg','clientes','Comunidad',false,CO.comOff?'<small class="sd-st">Apagada</small>':'')+
     (NOVEDADES.length?it('sdNov','nuevo','Novedades',false,novDot()):'')+
     (CO.casa===false?it('coLogo','foto','Tu logo',false,CO.logoV?'':nw('Nuevo')):'')+
     it('pushCo','campana','Avisos',false,pushNuevo(PUSH.est)?nw('Nuevo'):'')+
@@ -20357,7 +20408,7 @@ function ladoHtml2(act,v,urg,it){
     it('sdPagos','euro','Pagos',v==='pagos')+(novN?it('sdNov','nuevo','Novedades',false,novDot()):'')+      // a la izquierda, solo mientras haya alguna sin ver
     '<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div></nav>'+
     '<button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+(CO.vista==='semana'?rvGuiaLado():'')+
-    '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm"><span class="sd-av sd-cav">'+(nom==='Tu cuenta'?ic('user'):esc(iniciales(nom)))+'</span><span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
+    '<div class="sd-cu'+(ab?' ab':'')+'">'+menu+'<button class="sd-cb'+(dentro?' on':'')+'" data-a="sdCuenta" aria-expanded="'+ab+'" aria-controls="sd-cm">'+cfotoAv('sd-av sd-cav',nom==='Tu cuenta'?ic('user'):esc(iniciales(nom)))+'<span class="sd-ct"><b>'+esc(nom)+'</b> <small>Cuenta y ajustes</small></span>'+(nov?'<i class="sd-cdot" aria-label="Hay algo nuevo"></i>':'')+ic('flecha','sd-cc')+'</button></div>';
 }
 function sdCuPoner(ab){ CO.cuAb=ab; var w=document.querySelector('#side .sd-cu'); if(!w) return; w.classList.toggle('ab',ab); var m=document.getElementById('sd-cm'), b=w.querySelector('.sd-cb'); if(m) m.hidden=!ab; if(b) b.setAttribute('aria-expanded',ab); }
 A.sdCuenta=function(){ sdCuPoner(!CO.cuAb); if(CO.cuAb){ var f=document.querySelector('#sd-cm .sd-i'); if(f) f.focus(); } };
@@ -22146,6 +22197,8 @@ var AYUDA=[
   {g:4,q:'¿Cómo cambio mi nombre en la app de mis clientes?',r:'Sale en su chat («Chat con tu coach, …»). Es el mismo para todos tus clientes.',a:'coNombre',b:'Cambiar mi nombre',k:'nombre coach entrenador'},
   {g:4,q:'¿Dónde está «Tu página»?',r:'En «Cuenta y ajustes» (abajo a la izquierda, en el ordenador; en el móvil, en «Más» → Tu cuenta). Es tu página para mandar a posibles clientes: tu marca, tus planes y tu cuestionario.',a:'sdPagina',b:'Abrir Tu página',k:'pagina web enlace landing cuenta'},
   {g:4,q:'¿Dónde veo las novedades?',r:'Cuando hay algo nuevo, «Novedades» sale en el menú de la izquierda con su número hasta que lo ves. Después, siempre las tienes en «Cuenta y ajustes» → Novedades.',a:'sdNov',b:'Ver novedades',k:'novedades nuevo actualizacion cambios'},
+  {g:4,q:'¿Cómo pongo mi foto?',r:'En «Cuenta y ajustes» → Tu foto (en el móvil, «Más» → Tu cuenta). La ajustas en su círculo y sale junto a tu nombre: abajo a la izquierda en tu panel y, en la app de tus clientes, en su chat y en la comunidad.',a:'coFoto',b:'Poner mi foto',k:'foto perfil imagen avatar cara'},
+  {g:4,q:'¿Puedo no usar la comunidad?',r:'Sí. En «Cuenta y ajustes» → Comunidad, apaga «Usar la comunidad»: desaparece de tu panel y de la app de tus clientes. Lo que ya escribiste se guarda y vuelve tal cual si la enciendes.',a:'comCfg',b:'Abrir Comunidad',k:'comunidad grupo apagar quitar desactivar ocultar'},
   {g:4,q:'¿Cómo pongo mi logo?',r:'En «Tu logo» (en Cuenta y ajustes) lo subes: sale junto a MOOD ON arriba en la app de tus clientes (una vez dentro) y en sus emails. Al abrir la app y en lo que comparten, solo MOOD ON. Mejor un PNG con fondo transparente.',a:'coLogo',b:'Subir mi logo',k:'logo marca imagen'},
   {g:4,q:'¿Cómo creo o cambio mi contraseña?',r:'En Seguridad y acceso: tu contraseña del panel y cómo entran tus clientes.',a:'segCfg',k:'contraseña seguridad acceso entrar'},
   {g:4,q:'¿Cómo veo la app como la ve un cliente?',r:'En Modo prueba ves los correos que les llegan y su app con una clienta de ejemplo, sin tocar a nadie real.',a:'sdPrueba',k:'prueba ejemplo correos ver app cliente'},
@@ -25651,6 +25704,25 @@ function logoCoSync(v){
     logosRepintar(); },function(){ logoCoSync.pid=''; });
 }
 setTimeout(function(){ if(BOOT&&BOOT.logoV!==undefined) logoCoSync(BOOT.logoV); },0);
+/* v53.4.243 · 23 nov 2026 (Chadín, Word «Panel entrenador» 16: «que el coach se pueda poner foto de perfil»): su foto, redonda, en su panel (abajo a la
+   izquierda) y en la app de sus clientes (su chat y la comunidad). Se guarda en el móvil ({v, src}) y se pide aparte solo cuando cambia (cfotoV) */
+var CFOTO=LS.get('moodon_cfoto')||null;
+function cfotoSrc(){ return CFOTO&&CFOTO.src||''; }
+function cfotoAv(cls,ini){ var s=cfotoSrc(); return '<span class="'+cls+' cfo'+(s?' cfo-on':'')+'" data-ini="'+esc(ini||'')+'">'+(s?'<img src="'+esc(s)+'" alt="">':ini||'')+'</span>'; }
+function cfotoRepintar(){ var s=cfotoSrc(); document.querySelectorAll('.cfo').forEach(function(e){ e.classList.toggle('cfo-on',!!s); e.innerHTML=s?'<img src="'+esc(s)+'" alt="">':e.dataset.ini||''; }); }
+function cfotoSync(v){
+  v=v||''; if(!v){ if(CFOTO){ CFOTO=null; LS.del('moodon_cfoto'); cfotoRepintar(); } return; }
+  if((CFOTO&&CFOTO.v===v)||cfotoSync.pid===v) return; cfotoSync.pid=v;
+  var co=BOOT.mode==='coach';
+  api(co?'coachFotoVer':'fotoCoach',co?CO.pin:BOOT.token).then(function(r){ var F=co?r&&r.foto:r; cfotoSync.pid='';
+    if(F&&F.img){ CFOTO={v:F.v,src:F.img}; LS.set('moodon_cfoto',CFOTO); } else { CFOTO=null; LS.del('moodon_cfoto'); }
+    cfotoRepintar(); },function(){ cfotoSync.pid=''; });
+}
+A.coFoto=function(){ var s=cfotoSrc(), nom=CO.coachNombre&&CO.coachNombre!=='tu coach'?CO.coachNombre:'';
+  modal('<h2>Tu foto</h2><p class="muted sm">Sale redonda junto a tu nombre: abajo a la izquierda en tu panel y, en la app de tus clientes, en su chat y en la comunidad.</p>'+
+    '<div class="cf-pv">'+cfotoAv('cf-av',nom?esc(iniciales(nom)):ic('user'))+'</div>'+
+    '<div class="pf-fo"><label class="btn">'+ic('foto')+(s?'Cambiar foto':'Elegir foto')+'<input type="file" accept="image/*" data-c="coFotoF" hidden></label>'+(s?'<button class="btn sec" data-a="coFotoQuitar">Quitar foto</button>':'')+'</div><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>'); };
+A.coFotoQuitar=function(){ confirmar('¿Quitar tu foto? Saldrán tus iniciales.','Quitar',function(){ cargando(api('coachFotoPerfil',CO.pin,'')).then(function(){ CO.cfotoV=''; CFOTO=null; LS.del('moodon_cfoto'); cfotoRepintar(); cerrarModal(); toast('Foto quitada','ok'); },function(e){ toast(limpiaErr(e),'err'); }); }); };
 function logoHtml(tam,sub){ var m=conMarca(), co=tam==='top'||tam==='side'?logoCoImg():'', at=' data-tam="'+tam+'" data-sub="'+esc(sub||'')+'"';
   if(co) return '<div class="logo-w logo-'+tam+' logo-co"'+at+' role="img" aria-label="Logo de tu coach y MOOD ON"><div class="lco-w"><img class="lco" src="'+co+'" alt=""><i class="lsep"></i>'+logoSvg(false)+'</div>'+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>';
   return '<div class="logo-w logo-'+tam+'"'+at+' role="img" aria-label="'+(m?'MOOD ON by Chadin':'MOOD ON')+'">'+logoSvg(m&&(tam==='big'||tam==='cq'))+(sub?'<em>'+esc(sub)+'</em>':'')+'</div>'; }
@@ -26490,23 +26562,24 @@ A.pfFoto=function(){
 function fotoCuadrada(f,lado,max){ max=max||46000; return new Promise(function(ok,ko){ var u=URL.createObjectURL(f), im=new Image(); im.onload=function(){ var w=im.naturalWidth, h=im.naturalHeight, m=Math.min(w,h), c=document.createElement('canvas'); c.width=c.height=lado; var x=c.getContext('2d'); x.drawImage(im,(w-m)/2,(h-m)/2,m,m,0,0,lado,lado); URL.revokeObjectURL(u); var q=0.82, d=c.toDataURL('image/jpeg',q); while(d.length>max&&q>0.4){ q-=0.12; d=c.toDataURL('image/jpeg',q); } ok(d); }; im.onerror=function(){ ko(new Error('No se ha podido abrir esa foto. Prueba con otra (JPG o PNG).')); }; im.src=u; }); }
 /* v52.5 · antes de guardarla, «Ajusta tu foto»: moverla con el dedo, acercarla o alejarla (dos dedos, la barra, + y − o la rueda) y verla ya en su círculo, en grande y en pequeño */
 var FC=null;
-CH.pfFotoF=function(t){
+CH.coFotoF=function(t){ CH.pfFotoF(t,true); };      // v53.4.243 (Word 16): la del entrenador, con el mismo «Ajusta tu foto»
+CH.pfFotoF=function(t,co){
   var f=t.files&&t.files[0]; if(!f) return; t.value='';
   var u=URL.createObjectURL(f), im=new Image();
-  im.onload=function(){ fcAbrir(im,u); };
+  im.onload=function(){ fcAbrir(im,u,co===true); };
   im.onerror=function(){ URL.revokeObjectURL(u); toast('No se ha podido abrir esa foto. Prueba con otra (JPG o PNG).','err'); };
   im.src=u;
 };
-function fcAbrir(im,u){
+function fcAbrir(im,u,co){
   if(FC&&FC.u&&FC.u!==u) URL.revokeObjectURL(FC.u);
-  FC={im:im,u:u,w:im.naturalWidth,h:im.naturalHeight,z:1,tx:0,ty:0,S:0,p:{},ini:true};
+  FC={im:im,u:u,w:im.naturalWidth,h:im.naturalHeight,z:1,tx:0,ty:0,S:0,p:{},ini:true,co:!!co};
   var n21=sh21();      // 21 nov (Chadín: «el zoom con los dedos, no con la barra»): sin la barra ni − +; con dos dedos (y en el ordenador, la rueda)
   modal('<h2>Ajusta tu foto</h2><p class="muted sm">'+(n21?'Muévela con un dedo y, con dos dedos, acércala o aléjala hasta que tu cara quede bien dentro del círculo.':'Muévela con el dedo y acércala o aléjala hasta que tu cara quede bien dentro del círculo.')+'</p>'+
     '<div class="fc-st" id="fc-st" tabindex="0" role="application" aria-label="Tu foto: arrástrala para moverla; acércala o aléjala con dos dedos'+(n21?', la rueda del ratón o las teclas + y −':', la barra o las teclas + y −')+'"><img id="fc-im" src="'+esc(u)+'" alt="" draggable="false"><div class="fc-ma"></div></div>'+
     (n21?'':'<div class="fc-z"><button class="ico sm" data-a="fcZ" data-v="-1" aria-label="Alejar">−</button><input type="range" id="fc-r" data-v29="fcZoom" min="1" max="4" step="0.01" value="1" aria-label="Acercar o alejar"><button class="ico sm" data-a="fcZ" data-v="1" aria-label="Acercar">+</button></div>')+
     '<div class="fc-pv"><span class="fc-l">Así se verá</span><canvas id="fc-p1" width="184" height="184" role="img" aria-label="Vista previa en tu perfil"></canvas><canvas id="fc-p2" width="80" height="80" role="img" aria-label="Vista previa en pequeño, como en la lista de tu coach"></canvas></div>'+
     '<button class="btn mt" data-a="fcOk">'+ic('ok')+'Guardar foto</button>'+
-    '<div class="fc-bs"><label class="btn sec">'+ic('foto')+'Elegir otra<input type="file" accept="image/*" data-c="pfFotoF" hidden></label><button class="btn sec" data-a="fcCancelar">Cancelar</button></div>');
+    '<div class="fc-bs"><label class="btn sec">'+ic('foto')+'Elegir otra<input type="file" accept="image/*" data-c="'+(co?'coFotoF':'pfFotoF')+'" hidden></label><button class="btn sec" data-a="fcCancelar">Cancelar</button></div>');
   var st=document.getElementById('fc-st'); if(!st) return; fcEventos(st); fcPintar();
 }
 function fcEsc(){ return (FC.S||280)/Math.min(FC.w,FC.h)*FC.z; }
@@ -26544,6 +26617,7 @@ function fcRecorte(c,lado,max){ var cv=document.createElement('canvas'); cv.widt
 A.fcCancelar=function(){ if(FC&&FC.u) URL.revokeObjectURL(FC.u); FC=null; cerrarModal(); };
 A.fcOk=function(){
   if(!FC) return; var c=fcCorte(), d=fcRecorte(c,240,46000), g=fcRecorte(c,720,150000), u=FC.u;
+  if(FC.co) return cargando(api('coachFotoPerfil',CO.pin,d)).then(function(r){ URL.revokeObjectURL(u); FC=null; var F=r.foto; CO.cfotoV=F?F.v:''; CFOTO=F?{v:F.v,src:F.img}:null; if(CFOTO) LS.set('moodon_cfoto',CFOTO); cfotoRepintar(); cerrarModal(); toast('Foto puesta','ok'); },function(e){ toast(limpiaErr(e),'err'); });      // v53.4.243 (Word 16)
   cargando(api('guardarMiFoto',BOOT.token,d,g)).then(function(r){ URL.revokeObjectURL(u); FC=null; CL.d.clienta.foto=r.v; CL.foto={v:r.v,img:d}; CL.fotoG={v:r.v,img:g}; LS.set('chadin_mifoto_'+(BOOT.lk||BOOT.token),CL.foto); cerrarModal(); fvCerrar(); CL.keep=true; pintarCl(); toast('Foto puesta','ok'); },function(e){ toast(limpiaErr(e),'err'); });      // v52: también la grande, para verla a pantalla completa
 };
 /* v52 · su foto de perfil a pantalla completa (ella en Hoy y en Perfil; su coach en su ficha) */
@@ -27167,18 +27241,27 @@ function dgCargar(){ var k=CO.dieSel||'a', z=k==='a'?null:pgSeg(k,'die');
   else CO.die=z.prep?normalizarDieta({planes:copia(z.prep.planes),notas:z.prep.notas||'',desde:z.desde,hasta:z.hasta}):null;
   CO.planI=0; CO.dieSucia=false; setTimeout(function(){ try{ undoReset(); }catch(e){} },0); }
 function dgClave(){ return (CO.dieSel||'a')==='a'?(CO.d.dieta?'ahora':''):CO.dieSel; }      // la dieta abierta, como la llama el servidor
+/* v53.4.243 · 23 nov 2026 (Chadín, Word «Panel entrenador» 14 y 15): lo de ahora y las próximas se eligen aquí (sin la tira de arriba ni los avisos amarillos).
+   Cada fila: cuándo empieza y, igual de visible, hasta cuándo; si falta algo, su botón al lado («Prepararlas» o «Hacerla») */
+function pgFilaSel(z,t){ var q=diff(pgHoy(),z.desde), on=t?(CO.dieSel||'a')===z.k:CO.progSel===z.k;
+  return '<div class="pg-fr pg-frs'+(on?' on':'')+'"><button type="button" class="pg-frb" data-a="'+(t?'dgSel':'progSel')+'" data-v="'+esc(z.k)+'" aria-pressed="'+on+'">'+
+    '<span class="pg-fd"><b>'+fMedia(z.desde)+'</b><span class="pg-fh">hasta el <b>'+(z.hasta?fMedia(z.hasta):'…')+'</b></span><small>'+(q<=0?'desde hoy':q===1?'empieza mañana':'empieza en '+q+' días')+'</small></span>'+
+    '<span class="pg-fn">'+esc(pgNom(z))+'</span></button>'+
+    (z.pend?'<span class="pg-frx"><span class="pg-am">! '+(t?'Falta hacerla':'Faltan las rutinas')+'</span><button type="button" class="btn sm" data-a="'+(t?'dgPrep':'pgPrep')+'" data-k="'+esc(z.k)+'">'+(t?'Hacerla':'Prepararlas')+'</button></span>':'<span class="pg-frx"><span class="pg-ok">✓ Lista</span></span>')+'</div>'; }
+function pgIrA(sel){ setTimeout(function(){ var e=document.querySelector(sel); if(e&&e.scrollIntoView&&window.innerWidth<1000){ e.scrollIntoView({block:'start'}); window.scrollBy(0,-80); } },60); }
+A.pgPrep=function(el){ var k=el.dataset.k; siCambios(function(){ CO.progSel=k; CO.rut&&CO.rut.forEach(function(r){ delete r._vista; }); CO.diaRut=null; CO.rutAb=null; repintar(); pgIrA('.pg-vacio'); }); };
+A.dgPrep=function(el){ var k=el.dataset.k; if(CO.dieSucia&&(CO.dieSel||'a')!==k) return toast('Guarda antes los cambios de esta dieta','err'); CO.dieSel=k; dgCargar(); repintar(); pgIrA('.pg-vacio'); };
 function dgCard(){ var S=pgSegs('die'); if(!S.length) return '';
-  var hoy=pgHoy(), a=S.filter(function(z){ return z.dr; })[0], fut=S.filter(function(z){ return !z.dr; }), pd=fut.filter(function(z){ return z.pend; })[0];
+  var hoy=pgHoy(), a=S.filter(function(z){ return z.dr; })[0], fut=S.filter(function(z){ return !z.dr; });
   var h='<div class="card prog dg-card"><div class="card-t">Dieta actual</div>';
-  if(a){ var d=a.desde, h2=a.hasta, tot=d&&h2&&!a.sigue?diff(d,h2)+1:0, va=d?diff(d,hoy)+1:0, pc=tot>0?Math.max(0,Math.min(100,Math.round(va*100/tot))):0, qd=h2?diff(hoy,h2):null, sem=d?Math.floor(Math.max(0,diff(d,hoy))/7)+1:0, ns=tot?Math.ceil(tot/7):0;
-    h+='<div class="pg-ya"><div class="pg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+esc(pgNom(a))+'</b><em>'+(a.sigue?'Sigue con ella hasta que hagas la nueva':(d?fMedia(d):'…')+' → '+(h2?fMedia(h2):'sin fin')+(sem&&ns?' · semana '+Math.min(sem,ns)+' de '+ns:''))+'</em></div>'+
+  if(a){ var d=a.desde, h2=a.hasta, tot=d&&h2&&!a.sigue?diff(d,h2)+1:0, va=d?diff(d,hoy)+1:0, pc=tot>0?Math.max(0,Math.min(100,Math.round(va*100/tot))):0, qd=h2?diff(hoy,h2):null, sem=d?Math.floor(Math.max(0,diff(d,hoy))/7)+1:0, ns=tot?Math.ceil(tot/7):0, selA=fut.length>0, on=(CO.dieSel||'a')==='a';
+    h+=(selA?'<button type="button" class="pg-ya pg-yab'+(on?' on':'')+'" data-a="dgSel" data-v="a" aria-pressed="'+on+'" aria-label="Ver la dieta de ahora">':'<div class="pg-ya">')+'<div class="pg-ya-t dg-ya-t"><span class="pg-tag pg-ok">Ahora</span><b>'+esc(pgNom(a))+'</b>'+
+      (a.sigue?'<em class="dg-fe">Sigue con ella hasta que hagas la nueva</em>':'<span class="dg-fe">'+(d?fMedia(d):'…')+' <i>→</i> '+(h2?fMedia(h2):'sin fin')+'</span>'+(sem&&ns?'<em>Semana '+Math.min(sem,ns)+' de '+ns+'</em>':''))+'</div>'+      // Word 15: la fecha y la semana, cada una de su color
       (tot>0?'<div class="pgx-bar" role="img" aria-label="'+pc+' % hecho"><i style="width:'+pc+'%"></i></div>':'')+
-      (qd!=null&&qd>=0&&qd<=7&&fut.length&&!fut[0].pend?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': la siguiente ya está hecha</p>':'')+'</div>'+
+      (qd!=null&&qd>=0&&qd<=7&&fut.length&&!fut[0].pend?'<p class="pg-ok-t">'+ic('ok')+'Acaba en '+qd+(qd===1?' día':' días')+': la siguiente ya está hecha</p>':'')+(selA?'</button>':'</div>')+
       (qd!=null&&qd>=0&&qd<=7&&!fut.length?'<p class="pgx-av">'+ic('alerta')+(qd===0?'Acaba hoy':'Acaba en '+qd+(qd===1?' día':' días'))+' y no hay nada preparado después</p>':'');
   } else h+='<p class="sm muted" style="margin:0">Todavía no tiene una dieta en marcha.</p>';
-  if(fut.length) h+='<div class="pg-fut pg-fut2"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span>'+fut.map(function(z){ var q=diff(hoy,z.desde);
-    return '<button type="button" class="pg-fr" data-a="pgBloque" data-t="die" data-k="'+esc(z.k)+'"><span class="pg-fd"><b>'+fMedia(z.desde)+'</b><small>'+(q<=0?'desde hoy':q===1?'mañana':'en '+q+' días')+'</small></span><span class="pg-fn">'+esc(pgNom(z))+'<small>hasta el '+fCorta(z.hasta)+'</small></span>'+(z.pend?'<span class="pg-am">! Falta hacerla</span>':'<span class="pg-ok">✓ Lista</span>')+'</button>'; }).join('')+'</div>';
-  if(pd) h+='<div class="pg-falta">'+ic('alerta')+'<span><b>Falta hacer la dieta de '+esc(pgNom(pd).toLowerCase())+'</b><small>Empieza el '+fCorta(pd.desde)+'. Mientras, sigue con la de antes.</small></span><button class="btn sm" data-a="dgHacer" data-k="'+esc(pd.k)+'">Hacerla</button></div>';
+  if(fut.length) h+='<div class="pg-fut pg-fut2 pg-fut3"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span>'+fut.map(function(z){ return pgFilaSel(z,'die'); }).join('')+'</div>';
   return h+'<div class="row mt"><button class="btn sm" data-a="pgNueva" data-t="die">Dieta nueva</button><button class="btn sm sec" data-a="pgGestion" data-t="die">Cambiar fechas o quitar</button></div></div>'; }
 function dgTabsHtml(){ var S=pgSegs('die'), a=S.filter(function(z){ return z.dr; })[0], fut=S.filter(function(z){ return !z.dr; }); if(!fut.length) return '';
   var sel=CO.dieSel||'a', hoy=pgHoy(), zs=sel==='a'?null:pgSeg(sel,'die');
@@ -28362,6 +28445,8 @@ A.pagGuiaNo=function(){ LS.set('chadin_guia_pag',1); var b=document.querySelecto
 /* v53.4.123 · GUÍA RÁPIDA DE PLAN Y ENTRENOS (Javier: «un apartado de instrucciones, como el de la dieta: el paso a paso, que la rutina automatizada
    aparece en Entrenos, que el entreno de antes se queda en el historial, qué pasa si lo borras o lo archivas…»). Botón «¿Cómo funciona?» en Plan y en
    Entrenos y, la primera vez en Plan, un aviso gris. Se abre en el mismo panel que la guía de dietas (a la derecha en el ordenador, desde abajo en el móvil). */
+/* v53.4.243 (Word 14 y 15): en las guías, una fila de «Próximas» como la de verdad, con su botón recuadrado */
+function guFilaPg(nom,de,a,tag,bt){ return '<div class="pg-fut pg-fut2 pg-fut3" style="margin:0;max-width:420px"><span class="pg-fut-h"><span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span></span><div class="pg-fr pg-frs on"><span class="pg-frb"><span class="pg-fd"><b>'+de+'</b><span class="pg-fh">hasta el <b>'+a+'</b></span><small>empieza en 21 días</small></span><span class="pg-fn">'+nom+'</span></span><span class="pg-frx"><span class="pg-am">'+tag+'</span><span class="btn sm gu-hl">'+bt+'</span></span></div></div>'; }
 function guiaPlnHtml(){
   var hl=function(h){ return h.replace(/^<(\w+)(?: class="([^"]*)")?/,function(m,tg,cl){ return '<'+tg+' class="'+(cl?cl+' ':'')+'gu-hl"'; }); };
   var P=[
@@ -28375,7 +28460,7 @@ function guiaPlnHtml(){
   ]:[
     ['Aprobar y ponérsela','Arriba, <b>«¿Cuándo va este plan?»</b>: al final, después de la de ahora u otro día (la barra enseña cómo queda). Sus rutinas aparecen en <b>Entrenos</b> con esas fechas y la dieta en <b>Dieta</b>. Luego te pregunta si avisarle (campana y chat).',hl('<span class="btn sm">'+ic('ok')+'Aprobar y ponérsela</span>')]
   ]).concat([PG22?['¿Y lo de antes?','Nada se rompe: una programación va detrás de otra. Si la nueva empieza antes de que acabe la de ahora, la de ahora acaba la víspera (y ese día pasa sola al <b>Historial de rutinas</b>); las que ya tenías preparadas se retrasan solo si chocan. Con la dieta, igual (la anterior, a <b>Dietas anteriores</b>). Sus entrenos registrados no se pierden nunca.','']:['¿Y lo de antes?','Nada se rompe: una programación va detrás de otra. Si la nueva empieza antes de que acabe la de ahora, la de ahora acaba la víspera (y ese día pasa sola al <b>Historial de rutinas</b>); las que ya tenías preparadas se mueven detrás. La dieta anterior, a <b>Dietas anteriores</b>. Sus entrenos registrados no se pierden nunca.','']]).concat([
-    ['Lo de ahora y lo que viene','En Entrenos, «Programación actual»: lo de ahora en negro, con su semana y lo que lleva; debajo, «Próximas», cada una con <b>«✓ Lista»</b> o <b>«! Faltan las rutinas»</b>. <b>Toca una</b> para cambiar sus fechas, ver o preparar sus rutinas, su objetivo o quitarla. Todas sus rutinas van con las fechas de su programación, y el calendario sale igual.',hl('<span class="pg-tag pg-ind">'+ic('reloj')+'Próximas</span>')],
+    ['Lo de ahora y lo que viene','En Entrenos, «Programación actual»: lo de ahora en negro, con su semana; debajo, «Próximas», cada una con cuándo empieza y <b>hasta cuándo</b>. <b>Toca una</b> (o la negra) y sus rutinas salen a la derecha: la que estás viendo lleva el <b>borde lila</b>. Si le faltan, <b>«Prepararlas»</b> está en su misma fila. Sus fechas, su objetivo o quitarla: «Cambiar fechas o quitar».',guFilaPg('Hipertrofia · core','lun, 14 dic','dom, 7 feb','! Faltan las rutinas','Prepararlas')],
     ['La rutina por dentro','Arriba, <b>«Cuándo la hace»</b>: sus días, las fechas y en qué semana va (la barra). Cada bloque (movilidad, principal, cardio) se pliega en su línea: queda abierto el que trabajas y, con «Listo» en su último ejercicio, se cierra y se abre el siguiente. <b>«Abrir todos»</b> para verlo todo a la vez.',hl('<span class="blq-todos">'+ic('abrir2')+'Abrir todos</span>')],      // v53.4.147
     ['Cambiar después','En Entrenos y en Dieta, como siempre: tocas lo que quieras y «Guardar». También puedes volver a «Plan» y preparar otro.',hl('<span class="btn sm">Guardar</span>')],
     ['Archivar o borrar una rutina','<b>Archivar</b>: pasa al historial; deja de verla y la recuperas cuando quieras. <b>Borrar para siempre</b>: no queda en el historial y no se puede recuperar.',''],
