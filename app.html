@@ -1440,7 +1440,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .wkq-n b{display:block;font-size:14.5px}.wkq-n small{color:#6A6A72;font-size:12px}
 .wkq-p{font-size:13.5px;line-height:1.35;color:#141414}.wkq-p em{font-style:normal;color:#6A6A72}
 .wkq-t{justify-self:start;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;white-space:nowrap}
-.wq-al{background:#FDE4E2;color:#8E1D16}.wq-ad{background:#FFEEE2;color:#C2410C}.wq-es{background:#F1ECFB;color:#5B3BA8}.wq-en{background:#FBE7F1;color:#A11D5E}.wq-di{background:#fff;color:#55555E;border:1.5px dashed #C9C9D1}.wq-ok{background:#E7EFFD;color:#1F3A7A}
+.wq-em{background:#FFE9E4;color:#B3261E}.wq-al{background:#FDE4E2;color:#8E1D16}.wq-ad{background:#FFEEE2;color:#C2410C}.wq-es{background:#F1ECFB;color:#5B3BA8}.wq-en{background:#FBE7F1;color:#A11D5E}.wq-di{background:#fff;color:#55555E;border:1.5px dashed #C9C9D1}.wq-ok{background:#E7EFFD;color:#1F3A7A}
 .wkq-pr{font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:6px}.wkq-pr i{width:8px;height:8px;border-radius:50%}
 .wqp-a{color:#B4231B}.wqp-a i{background:#D93025}.wqp-m{color:#B05A10}.wqp-m i{background:#E07A2E}.wqp-b{color:#6A6A72}.wqp-b i{background:#B9B9C2}
 .wkq-ch{color:#8A8A92}
@@ -5866,7 +5866,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.241';
+var APP_V = 'v53.4.242';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -14667,6 +14667,7 @@ function cargarSemana(){
     CO.sem=r; CO.semDom=r.domingo;
     if(CO.semAb&&r.clientas.some(function(x){ return x.id===CO.semAb; })) return rvAbrir(CO.semAb);      // v53.4.220: vuelves a la revisión que tenías abierta
     CO.semAb=null; pintarSemana(); window.scrollTo(0,0);
+    progPedir(function(){ if(CO.sem) (CO.sem.clientas||[]).forEach(function(x){ delete x._ev; }); if(CO.vista==='semana'&&!CO.semAb) pintarSemana(); });      // v53.4.242
   },function(e){ toast(limpiaErr(e),'err'); });
 }
 A.semMov=function(el){ CO.semDom=sumar(CO.semDom,+el.dataset.v); CO.semAb=null; if(CO.rv) CO.rv.panel=null; cargarSemana(); };
@@ -14706,7 +14707,14 @@ function semKpis(x){
 /* 23 nov 2026, 15:06–15:16 (Chadín): la lista de «Revisiones» de la semana, por prioridad: solo los que te tocan esa semana; en cada uno, lo principal
    en una línea, su etiqueta (la pone la app) y la prioridad; primero las alertas; los revisados abajo y en gris; filtros, buscador y «Ver más».
    «Empezar por…» es un atajo: puedes tocar a quien quieras. Maquetas: o1-lista, q1-vacio, q2-muchos. */
-var SEM_K={al:['Alerta','wq-al',0],ad:['Baja adherencia','wq-ad',1],en:['Energía o sueño peor','wq-en',2],di:['Datos insuficientes','wq-di',3],ok:['Todo bien','wq-ok',4]};
+var SEM_K={al:['Alerta','wq-al',0],ad:['Baja adherencia','wq-ad',1],en:['Energía o sueño peor','wq-en',2],em:['Empeora','wq-em',3],es:['Estancada','wq-es',4],di:['Datos insuficientes','wq-di',5],ok:['Todo bien','wq-ok',6]};      // v53.4.242: + Empeora y Estancada
+function semProg(x){      // con su cálculo (al guardar cada entreno): empeora en un ejercicio o lleva semanas sin mejorar
+  var c=cliDe(x.id)||{}, P=c.prog||{}, hoy=CO.hoy||hoyStr(); if(!P.c||!c.activa) return null;
+  if(P.b) return {k:'em',pr:2,tg:'Empeora',p:'Empeora en '+P.b.charAt(0).toLowerCase()+P.b.slice(1),s:'sus 2 últimas veces, por debajo de su mejor marca'};
+  if(!P.d||(c.entrenos30||0)<3||!c.ultimoEntreno||diff(c.ultimoEntreno,hoy)>7) return null;
+  var ref=P.m&&P.m>P.d?P.m:P.d, w=Math.floor(diff(ref,hoy)/7); if(w<cl3N('est')) return null;
+  return {k:'es',pr:2,tg:cG('Estancada','Estancado',c),p:'Sin mejorar desde hace '+w+' semanas',s:'ni kilos ni repeticiones'};
+}
 function semEval(x){
   if(x._ev) return x._ev;
   var S=x.sesiones||[], prog=num(x.programados)||0, hechos=prog?Math.min(S.length,prog):S.length, dol=(x.dolor||[]).slice(), ev;
@@ -14717,6 +14725,7 @@ function semEval(x){
   else if(!S.length&&!num(x.checkins)) ev={k:'di',pr:2,p:'Sin entrenos ni check-ins esta semana',s:'no se sabe si entrena'};      // falta de registro ≠ no hacerlo
   else if(prog&&hechos/prog<0.75) ev={k:'ad',pr:hechos/prog<=0.5?3:2,p:hechos+' de '+prog+' entrenos',s:S.length?'':'no ha registrado ninguno'};
   else if((x.energia!=null&&x.e0!=null&&x.energia<=x.e0-2)||(x.sueno!=null&&x.sueno<6)) ev={k:'en',pr:2,p:(x.energia!=null&&x.e0!=null&&x.energia<=x.e0-2?'Energía '+fN(x.e0)+' → '+fN(x.energia):'Duerme poco'),s:x.sueno!=null?'duerme '+fN(x.sueno)+' h de media':''};
+  else if(semProg(x)) ev=semProg(x);
   else ev={k:'ok',pr:1,p:(prog?hechos+' de '+prog+' entrenos':S.length+' entrenos'),s:[dP!=null?(dP>0?'+':'')+fN(Math.round(dP*10)/10)+' kg':'',x.energia!=null?'energía '+fN(x.energia):''].filter(String).join(' · ')};
   return (x._ev=ev);
 }
@@ -14725,7 +14734,7 @@ var SEM_MAX=12;
 function semFila(x){ var e=semEval(x), K=SEM_K[e.k], rv=x.revisada, cl=cliDe(x.id)||{}, sub=[cl.objetivo||x.objetivo||'',x.per?semPerTxt(x.per).toLowerCase():''].filter(String).join(' · ');
   return '<button class="wkq-r'+(rv?' rev':e.k==='al'?' al':'')+'" data-a="semAbrir" data-id="'+esc(x.id)+'" data-q="'+esc(clave(x.nombre))+'">'+avCo(x.id,x.nombre,'wkq-av')+'<span class="wkq-n"><b>'+esc(x.nombre)+'</b>'+(sub?'<small>'+esc(sub)+'</small>':'')+'</span>'+
     '<span class="wkq-p">'+esc(rv&&rv.nota?String(rv.nota).slice(0,90):e.p)+(!rv&&e.s?' <em>· '+esc(e.s)+'</em>':'')+'</span>'+
-    (rv?'<span class="wkq-res">'+ic('ok')+esc(resTxt(rv.resultado||'Revisada',cl))+'</span><span></span>':'<span class="wkq-t '+K[1]+'">'+K[0]+'</span><span class="wkq-pr wqp-'+(e.pr===3?'a':e.pr===2?'m':'b')+'"><i></i>'+(e.pr===3?'Alta':e.pr===2?'Media':'Baja')+'</span>')+'<span class="wkq-ch">'+ic('flecha')+'</span></button>'; }
+    (rv?'<span class="wkq-res">'+ic('ok')+esc(resTxt(rv.resultado||'Revisada',cl))+'</span><span></span>':'<span class="wkq-t '+K[1]+'">'+(e.tg||K[0])+'</span><span class="wkq-pr wqp-'+(e.pr===3?'a':e.pr===2?'m':'b')+'"><i></i>'+(e.pr===3?'Alta':e.pr===2?'Media':'Baja')+'</span>')+'<span class="wkq-ch">'+ic('flecha')+'</span></button>'; }
 function pintarSemana(){
   if(CO.semAb&&CO.rv&&CO.rv.cid===CO.semAb&&CO.d&&CO.cid===CO.semAb) return pintarRev();      // v53.4.220: la revisión de un cliente
   rvPanelCerrar();
@@ -15675,7 +15684,7 @@ function semGuiaHtml(){
     [6,'Cada cliente','Lo principal en una línea, su etiqueta y la prioridad. Tócalo y se abre su revisión.',fila('LG','Laura','Perder grasa · cada semana','Dolor de rodilla · lo ha dicho 1 vez','Alerta','wq-al','Alta','a',1)],
     [7,'Revisados','Abajo, plegados y en gris, con cómo los viste.','<span class="smg-fold"><b>Revisados · 2</b><span>Ver</span></span>']
   ];
-  var ET=[['Alerta','wq-al','Ha dicho que le duele algo (en el chat, el check-in o un entreno).'],['Baja adherencia','wq-ad','Ha hecho menos de 3 de cada 4 entrenos.'],['Energía o sueño peor','wq-en','Su energía ha bajado 2 puntos o duerme menos de 6 h.'],['Datos insuficientes','wq-di','Ni entrenos ni check-ins: no se sabe si entrena.'],['Todo bien','wq-ok','Ha cumplido y no hay nada raro.']];
+  var ET=[['Alerta','wq-al','Ha dicho que le duele algo (en el chat, el check-in o un entreno).'],['Baja adherencia','wq-ad','Ha hecho menos de 3 de cada 4 entrenos.'],['Energía o sueño peor','wq-en','Su energía ha bajado 2 puntos o duerme menos de 6 h.'],['Empeora','wq-em','En un ejercicio, sus 2 últimas veces por debajo de su mejor marca (te dice cuál).'],['Estancada','wq-es','Entrena, pero lleva 4 semanas o más sin mejorar ni kilos ni repeticiones.'],['Datos insuficientes','wq-di','Ni entrenos ni check-ins: no se sabe si entrena.'],['Todo bien','wq-ok','Ha cumplido y no hay nada raro.']];
   var CA=[
     ['A','Cada cuánto','Lo mismo para todos. «Otro…»: los días que quieras.','<span class="smg-chs">'+chip('Cada semana',1)+chip('Cada 10 días')+chip('Cada 20 días')+chip('Cada 2 semanas')+chip('Cada mes')+chip('Otro…')+'</span>'],
     ['B','Qué días revisas','Se reparten a partes iguales. Si es cada 2 semanas o más, también entre semanas (grupos A, B…). De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo.','<span class="gq-ds">'+['L','M','X','J','V','S','D'].map(function(d){ return '<button class="'+(d==='V'||d==='S'?'on':'')+'">'+d+'</button>'; }).join('')+'</span>'],
@@ -19984,11 +19993,11 @@ var CL3_FX={esc:'con mensajes que no has leído.',sin:'con rutina que llevan {n}
   est:'que entrenan, pero no suben ni kilos ni repeticiones desde hace {n} semanas o más.',com:'con una competición en los próximos {n} días. Primero la más cercana.',nue:'dados de alta en los últimos {n} días.',
   dat:'que llevan {n} días o más sin apuntar peso ni check-in.',pla:'cuyo plan vence en los próximos {n} días.',pau:'a los que quitaste «Acceso activo» en su ficha.'};
 function cl3FxTxt(k,N){ return '<b>'+(N===1?'1 cliente':N+' clientes')+'</b> '+esc(String(CL3_FX[k]||'').replace('{n}',cl3N(k))); }
-function cl3ProgPedir(){      // los de antes de v53.4.238 aún no tienen su cálculo de «Estancados»: se hace una vez
-  if(CO.progPed||!cl3Cfg().some(function(o){ return o.k==='est'&&(o.on||CO.cliF==='est'); })) return;
-  if(!(CO.lista||[]).some(function(c){ return c.activa&&c.ultimoEntreno&&!(c.prog&&c.prog.c); })) return;
-  CO.progPed=true; api('coachProgEstados',CO.pin).then(function(r){ var P=r.prog||{}; (CO.lista||[]).forEach(function(c){ if(P[c.id]) c.prog={m:P[c.id].m,d:P[c.id].d,c:1}; }); if(CO.vista==='clientes') cl3Pintar(); },function(){});
+function progPedir(fn){      // los de antes aún no tienen su cálculo de «Estancados» / «Empeora»: se hace una vez
+  if(CO.progPed||!(CO.lista||[]).some(function(c){ return c.activa&&c.ultimoEntreno&&!(c.prog&&c.prog.c); })) return;
+  CO.progPed=true; api('coachProgEstados',CO.pin).then(function(r){ var P=r.prog||{}; (CO.lista||[]).forEach(function(c){ if(P[c.id]) c.prog={m:P[c.id].m,d:P[c.id].d,b:P[c.id].b||'',c:1}; }); if(fn) fn(); },function(){});
 }
+function cl3ProgPedir(){ if(!cl3Cfg().some(function(o){ return o.k==='est'&&(o.on||CO.cliF==='est'); })) return; progPedir(function(){ if(CO.vista==='clientes') cl3Pintar(); }); }
 
 var CL3_MAC=/Mac|iPhone|iPad/.test(navigator.platform||'');
 var CL3_DONDE={nota:'En tus notas',ficha:'En su ficha',competicion:'En su competición',email:'Su email',movil:'Su móvil'};
