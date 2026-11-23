@@ -4272,6 +4272,10 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-como{display:inline-flex;align-items:center;gap:5px;border:0;background:none;font:inherit;font-weight:700;font-size:13px;color:var(--mu);padding:6px 2px;cursor:pointer;flex:none}.aa-como svg{width:16px;height:16px}.aa-como:hover{color:var(--tx)}
 .aa-fr .aa-como{margin-top:10px}.top .aa-como{min-width:70px;justify-content:flex-end}
 /* v53.4.244 (Chadín, 23 nov 19:11: «ese diseño muy feo»): «Citas con…» de la ficha, como «Competiciones y objetivos» */
+/* v53.4.245: a quién das los 3 días de cortesía */
+.pg-cort{border-top:1px solid var(--line);margin-top:12px;padding-top:12px;display:flex;flex-direction:column;gap:4px}.pg-cort>b{font-size:14.5px}
+.pg-cops{margin:6px 0 2px}.pg-cops button .ic{width:13px;height:13px;margin:0 4px 0 0}
+.pg-cres{display:flex;gap:8px;align-items:flex-start;margin:4px 0 0;font-size:13px;color:#3A3A3C;background:#F2F2F5;border-radius:12px;padding:9px 12px}.pg-cres .ic{width:16px;height:16px;flex:none;margin-top:1px}
 .cita-co .card-t{display:flex;align-items:center;gap:10px}.cita-co .card-t .btn{margin-left:auto;width:auto}
 .cita-ic{width:30px;height:30px;border-radius:50%;background:#111;color:#fff;display:inline-flex;align-items:center;justify-content:center;flex:none}.cita-ic .ic{width:15px;height:15px;margin:0}
 .cita-co .card-t+.aa-r{border-top:0}
@@ -5912,7 +5916,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.244';
+var APP_V = 'v53.4.245';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -22197,6 +22201,7 @@ var AYUDA=[
   {g:2,q:'¿Qué sale en Inicio?',r:'Tus tareas: lo atrasado y lo de hoy (revisiones y fotos que llegan, dietas o planes que acaban, mensajes…). Cuando lo haces, desaparece.',a:'sdInicio',k:'inicio tareas pendiente hoy avisos'},
   {g:2,q:'¿Dónde veo el feedback de mis clientes?',r:'En Feedback están los mensajes que te mandan desde su app con lo que mejorarían. Puedes responderles y marcarlos como hechos.',a:'sdSug',k:'feedback sugerencias ideas opiniones'},
   {g:3,q:'¿Cómo cobro a mis clientes?',r:'En Pagos: crea tus planes («Nuevo plan») con su precio. Puedes conectar tu Stripe para que te paguen online desde su app, o apuntar a mano lo que te pagan por Bizum, transferencia o en efectivo («Registrar pago»).',a:'sdPagos',k:'cobrar pagos plan precio bizum transferencia efectivo cuota'},
+  {g:3,q:'¿A quién le doy los 3 días de cortesía?',r:'En Pagos → Tus planes, debajo de «Cerrar el acceso si no renueva»: marcas las formas de pago que tienen 3 días de cortesía al vencer (cuenta cómo te pagó cada uno la última vez). Los demás pierden el acceso al día siguiente de vencer, hasta que renuevan. Para uno en concreto, «+3 días» en su ventana de renovar.',a:'ayPgPlanes',b:'Abrir Tus planes',k:'cortesia dias vencer acceso efectivo bizum stripe pago'},
   {g:3,q:'¿Cómo conecto Stripe?',r:'En Pagos, «Conectar Stripe»: pega una clave restringida de tu cuenta de Stripe (empieza por rk_live_). El dinero va directo a tu Stripe. Si quieres probar antes, usa una clave de prueba (rk_test_).',a:'sdPagos',k:'stripe tarjeta pago online clave cobrar'},
   {g:3,q:'¿Cómo mando el justificante de un pago?',r:'En Pagos puedes activar el justificante por email: con cada pago, a tu cliente le llega su justificante en PDF. También lo puedes descargar de cada pago.',a:'sdPagos',k:'justificante recibo factura pdf pago'},
   {g:3,q:'¿Dónde veo cuánto gano?',r:'En Pagos → Tu negocio: cómo va cada mes (lo que cobras, altas, bajas y renovaciones), sus cobros uno a uno, el informe del mes en PDF y un Excel del mes, de los 3 últimos meses, del año o de las fechas que elijas.',a:'sdNeg',k:'negocio ganancias ingresos informe mes excel exportar'},
@@ -22262,6 +22267,7 @@ function pintarAyuda(arriba){
   var q=document.getElementById('ay-q');
   if(q) q.addEventListener('input',function(){ CO.ayQ=q.value; var l=document.getElementById('ay-l'); if(l) l.innerHTML=ayListaHtml(); });
 }
+A.ayPgPlanes=function(){ CO.pgF=CO.pgF||{t:'res',f:'',q:'',mes:'',m:''}; CO.pgF.t='pla'; A.sdPagos(); };      // v53.4.245
 A.ayIr=function(el){ var x=AYUDA[+el.dataset.i]; if(x&&x.a&&A[x.a]) A[x.a](el); };
 A.ayEscribir=function(){
   CO.ayT=CO.ayT||'duda';
@@ -23522,9 +23528,9 @@ document.addEventListener('visibilitychange',function(){ if(document.visibilityS
 function rnAccesoHtml(c,hoy){
   var h='';
   if(c.plan_estado==='baja') h+='<div class="rn-baja"><span>'+ic('alerta')+'Marcaste que <b>no renueva</b>.</span><button class="btn sm sec" data-a="rnReactivar">Quitar «No renueva»</button></div>';
-  if(c.sinAcceso) h+='<div class="rn-sa"><b>'+ic('candado')+'Sin acceso a su app desde el '+esc(fCorta(sumar(c.plan_hasta,4)))+'</b><span class="muted sm">Si te paga, renueva abajo y vuelve a entrar al momento. ¿Te paga en unos días? Déjala entrar mientras tanto:</span><div class="tipos rn-dias">'+[3,7,14].map(function(n){ return '<button data-a="rnDias" data-v="'+n+'">+'+n+' días</button>'; }).join('')+'</div></div>';
+  if(c.sinAcceso) h+='<div class="rn-sa"><b>'+ic('candado')+'Sin acceso a su app desde el '+esc(fCorta(sumar(c.plan_hasta,gCort(c)+1)))+'</b><span class="muted sm">Si te paga, renueva abajo y vuelve a entrar al momento. ¿Te paga en unos días? Déjala entrar mientras tanto:</span><div class="tipos rn-dias">'+[3,7,14].map(function(n){ return '<button data-a="rnDias" data-v="'+n+'">+'+n+' días</button>'; }).join('')+'</div></div>';
   else if(c.acceso_hasta&&c.acceso_hasta>=hoy) h+='<div class="rn-sa ok"><span>'+ic('okc')+'Le has dado acceso hasta el <b>'+esc(fCorta(c.acceso_hasta))+'</b>.</span><button class="link" data-a="rnDiasQuitar">Quitar</button></div>';
-  else if(c.cierre&&c.plan_hasta&&sumar(c.plan_hasta,3)>=hoy&&diff(hoy,c.plan_hasta)<=7) h+='<p class="muted sm rn-av">'+(c.plan_hasta<hoy?'Está en sus 3 días de cortesía: ':'Al vencer tiene 3 días de cortesía; ')+'si no renueva, desde el '+esc(fCorta(sumar(c.plan_hasta,4)))+' ya no podrá entrar en su app.</p>';
+  else if(c.cierre&&c.plan_hasta&&sumar(c.plan_hasta,gCort(c))>=hoy&&diff(hoy,c.plan_hasta)<=7) h+='<p class="muted sm rn-av">'+(gCort(c)?(c.plan_hasta<hoy?'Está en sus 3 días de cortesía: ':'Al vencer tiene 3 días de cortesía; '):'Por cómo paga, no tiene días de cortesía: ')+'si no renueva, desde el '+esc(fCorta(sumar(c.plan_hasta,gCort(c)+1)))+' ya no podrá entrar en su app.</p>';
   return h;
 }
 function rnTrasAcceso(r,msg){
@@ -23538,6 +23544,17 @@ A.rnReactivar=function(el){ if(el.disabled) return; el.disabled=true; cargando(a
 A.rnDias=function(el){ if(el.disabled) return; el.disabled=true; cargando(api('coachProrroga',CO.pin,RN.cid,{dias:+el.dataset.v})).then(function(r){ rnTrasAcceso(r,'Puede entrar hasta el '+fCorta(r.accesoHasta)); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
 A.rnDiasQuitar=function(){ cargando(api('coachProrroga',CO.pin,RN.cid,{quitar:true})).then(function(r){ rnTrasAcceso(r,'Quitados los días extra'); },function(e){ toast(limpiaErr(e),'err'); }); };
 
+/* v53.4.245 · 23 nov 2026 (Chadín, Word «Fallos a corregir» 15b; 19:16: «lo elige el entrenador»): a qué formas de pago das los 3 días de
+   cortesía (según cómo te pagó cada uno la última vez). De partida, a todas (como antes) */
+var PG_CORT=[['efectivo','Efectivo'],['bizum','Bizum'],['transferencia','Transferencia'],['tarjeta','Tarjeta'],['paypal','PayPal'],['online','Pago online'],['otro','Otro'],['sin','Sin pago apuntado']];
+function pgCortOn(m){ var L=CO.pg&&CO.pg.cortesia; return !L||L.indexOf(m)>=0; }
+function pgCortHtml(){ var C=(CO.pg.clientas||[]).filter(function(c){ return c.activa&&c.nombre!==EJEMPLO; }), con=C.filter(function(c){ return c.cort!==false; }).length;
+  return '<div class="pg-cort"><b>3 días de cortesía</b><small class="fila-s">Al vencer, siguen entrando 3 días más mientras te pagan. Elige a quién, según cómo te pagaron la última vez.</small>'+
+    '<div class="tipos ops pg-cops" role="group" aria-label="Con días de cortesía">'+PG_CORT.map(function(m){ var on=pgCortOn(m[0]); return '<button class="'+(on?'on':'')+'" data-a="pgCort" data-v="'+m[0]+'" aria-pressed="'+on+'">'+(on?ic('ok'):'')+m[1]+'</button>'; }).join('')+'</div>'+
+    (C.length?'<p class="pg-cres">'+ic('clientes')+'<span><b>'+con+'</b> '+(con===1?'cliente con cortesía':'clientes con cortesía')+(C.length-con?' · <b>'+(C.length-con)+'</b> sin ella: al día siguiente de vencer, ya no entran':'')+'</span></p>':'')+'</div>'; }
+A.pgCort=function(el){ if(el.disabled) return; var v=el.dataset.v, L=PG_CORT.map(function(m){ return m[0]; }).filter(function(m){ return m===v?!pgCortOn(m):pgCortOn(m); });
+  el.disabled=true; api('coachCortesia',CO.pin,L).then(function(r){ CO.pg.cortesia=r.cortesia; return api('coachPagos',CO.pin); }).then(function(r){ CO.pg=r; CO.planes=r.planes; var y=window.scrollY; pintarPagos(false); window.scrollTo(0,y); toast('Guardado','ok'); },function(e){ el.disabled=false; toast(limpiaErr(e),'err'); }); };
+function gCort(c){ return c&&c.cort===false?0:3; }      // los días de cortesía de este cliente
 /* --- coach: Pagos → Tus planes → cobrar online (Stripe) y cerrar el acceso al vencer --- */
 function pgOnlineHtml(){
   var P=CO.pg||{}, S=P.stripe||{};
@@ -23548,7 +23565,7 @@ function pgOnlineHtml(){
   else h+='<p class="muted sm">Tus clientes pagan en la página segura de Stripe (la app nunca ve su tarjeta) y su plan se renueva solo. Stripe cobra una comisión por pago (en tarjetas europeas, alrededor del 1,5 % + 0,25 €); sin cuota mensual.</p>'+
     '<ol class="st-pasos"><li>Crea tu cuenta en <b>stripe.com</b> (con tu DNI, tu actividad y tu cuenta bancaria).</li><li>En Configuración → Métodos de pago, activa los que quieras (tarjeta, Bizum, Apple Pay, Google Pay).</li><li>En Desarrolladores → Claves de API → <b>Crear clave restringida</b>, con el permiso <b>Checkout Sessions: escritura</b>. Cópiala y pégala aquí.</li></ol>'+
     '<p class="muted sm">Para probar sin cobrar, usa primero la clave de prueba (empieza por <b>rk_test_</b> o <b>sk_test_</b>).</p><button class="btn sm" data-a="stCambiar">Conectar Stripe</button>';
-  h+='</div><div class="card pg-ci"><div class="fila"><span><b>Cerrar el acceso si no renueva</b><small class="fila-s">Al día siguiente de vencer su plan, si no ha pagado, ya no puede entrar en su app (solo renovar). Lo puedes evitar para un cliente con «+3 días» en su ventana de renovar.</small></span><button class="sw'+(P.cierre!==false?' on':'')+'" data-a="pgCierre" aria-label="Cerrar el acceso si no renueva"><i></i></button></div></div>';
+  h+='</div><div class="card pg-ci"><div class="fila"><span><b>Cerrar el acceso si no renueva</b><small class="fila-s">Al vencer su plan, si no ha pagado, ya no puede entrar en su app (solo renovar). Lo puedes evitar para un cliente con «+3 días» en su ventana de renovar.</small></span><button class="sw'+(P.cierre!==false?' on':'')+'" data-a="pgCierre" aria-label="Cerrar el acceso si no renueva"><i></i></button></div>'+(P.cierre!==false?pgCortHtml():'')+'</div>';
   return h;
 }
 A.pgCierre=function(el){ var on=!el.classList.contains('on'); cargando(api('coachAjustesCierre',CO.pin,on)).then(function(r){ CO.pg.cierre=r.cierre; el.classList.toggle('on',r.cierre); toast(r.cierre?'Activado: sin renovar, al día siguiente no podrá entrar':'Desactivado: aunque venza, seguirá entrando','ok'); },function(e){ toast(limpiaErr(e),'err'); }); };
@@ -24524,7 +24541,7 @@ function planAvisoHoy(){
   var d=planClDias(); if(d==null||d>5) return '';      // 22 nov: el aviso con «Renovar», desde 5 días antes (antes, 7)
   var p=CL.d.plan, g=planGracia(), tit, sub;
   if(d<0&&g!=null){ tit='Tu plan ha vencido'; sub=g>0?(g===1?'Te queda 1 día':'Te quedan '+g+' días')+' de cortesía: si no renuevas antes del '+fMedia(sumar(p.acceso,1)).toLowerCase()+', perderás el acceso a la app':'Hoy es tu último día de cortesía: renueva hoy para no perder el acceso'; }
-  else { tit=d<0?'Tu plan ha vencido':d===0?'Tu plan vence hoy':d<=3?'Tu plan vence en '+d+' día'+(d===1?'':'s'):'Tu plan vence pronto'; sub=diasTxt(d)+' · '+fAnio(p.hasta)+(d>=0&&p.acceso?' · después tendrás 3 días de cortesía':''); }
+  else { tit=d<0?'Tu plan ha vencido':d===0?'Tu plan vence hoy':d<=3?'Tu plan vence en '+d+' día'+(d===1?'':'s'):'Tu plan vence pronto'; sub=diasTxt(d)+' · '+fAnio(p.hasta)+(d>=0&&p.acceso?(p.cortesia===false?' · renuévalo antes para no perder el acceso':' · después tendrás 3 días de cortesía'):''); }
   return '<div class="card plan-av'+(d<=3?' urg':'')+'"><div><b>'+esc(tit)+'</b><small>'+esc(sub)+(p.pedido?' · ya has pedido renovarlo':'')+'</small></div><button class="btn sm" data-a="plRenovarCl">'+(p.pedido?'Ver':'Renovar')+'</button></div>';
 }
 function planAvisoPopup(){
@@ -24533,7 +24550,7 @@ function planAvisoPopup(){
   var tit=d>0?'Tu plan vence en '+d+' día'+(d===1?'':'s'):d===0?'Tu plan vence hoy':g!=null&&g<=0?'Último día para renovar':'Tu plan ha vencido';
   var txt=d>=0?esc(p.nombre||'Tu plan')+' vence el '+esc(fAnio(p.hasta))+'. Renuévalo para seguir con tus entrenos, tu dieta y el chat con tu coach.'
     :(g!=null?'Tienes <b>'+Math.max(0,g)+' día'+(g===1?'':'s')+' de cortesía</b>: si no lo renuevas antes del '+esc(fMedia(sumar(p.acceso,1)).toLowerCase())+', perderás el acceso a la app (todo lo tuyo queda guardado).':'Venció el '+esc(fAnio(p.hasta))+'.');
-  modal('<h2>'+esc(tit)+'</h2><p>'+txt+'</p>'+(d>=0?'<p class="muted sm">Si al vencer aún no has pagado, tendrás 3 días de cortesía para hacerlo.</p>':'')+
+  modal('<h2>'+esc(tit)+'</h2><p>'+txt+'</p>'+(d>=0&&p.acceso?'<p class="muted sm">'+(p.cortesia===false?'Si al vencer no lo has renovado, ya no podrás entrar en la app hasta que lo hagas (todo lo tuyo queda guardado).':'Si al vencer aún no has pagado, tendrás 3 días de cortesía para hacerlo.')+'</p>':'')+
     '<button class="btn mt" data-a="plRenovarCl">Renovar mi plan</button><button class="btn sec mt" data-a="cerrarModal">Más tarde</button>');
 }
 A.plRenovarCl=function(){
@@ -25317,12 +25334,12 @@ function pgResHtml(R){
   function fila(x,der,btn){ var c=x.c; return '<div class="pg-r pg-rr"><span class="pg-n">'+avCo(c.id,c.nombre,'pg-av')+'<span><button class="link" data-a="pgCli" data-id="'+esc(c.id)+'"><b>'+esc(c.nombre)+'</b></button><small>'+esc(c.plan_det||planTxt(c.plan)||'Sin plan')+'</small></span></span><span class="pg-rd">'+der+'</span><span class="pg-a">'+(btn||'')+'</span></div>'; }
   var ren=act.filter(function(x){ return x.c.plan_estado!=='baja'&&(x.ped||x.e.k==='venc'||x.e.k==='pronto'); }).sort(function(a,b){ return (b.ped?1:0)-(a.ped?1:0)||(a.c.plan_hasta<b.c.plan_hasta?-1:1); });
   var h='<div class="card pg-sec"><div class="card-t">'+ic('alerta')+'Tienen que renovar <span class="pg-cnt">'+ren.length+'</span></div>';
-  h+=ren.length?ren.map(function(x){ var c=x.c, d=diff(hoy,c.plan_hasta), g=c.plan_hasta?sumar(c.plan_hasta,3):'', est;
-      if(x.e.k==='venc') est=c.sinAcceso?'<i class="pg-e e-venc">'+ic('candado')+'Sin acceso desde el '+esc(fCorta(sumar(c.plan_hasta,4)))+'</i>':g>=hoy?'<i class="pg-e e-cort">Cortesía: '+(diff(hoy,g)>1?'le quedan '+diff(hoy,g)+' días':diff(hoy,g)===1?'le queda 1 día':'último día')+'</i>':'<i class="pg-e e-venc">Vencido hace '+(-d)+' d</i>';
+  h+=ren.length?ren.map(function(x){ var c=x.c, d=diff(hoy,c.plan_hasta), g=c.plan_hasta?sumar(c.plan_hasta,gCort(c)):'', est;
+      if(x.e.k==='venc') est=c.sinAcceso?'<i class="pg-e e-venc">'+ic('candado')+'Sin acceso desde el '+esc(fCorta(sumar(c.plan_hasta,gCort(c)+1)))+'</i>':g>=hoy?'<i class="pg-e e-cort">Cortesía: '+(diff(hoy,g)>1?'le quedan '+diff(hoy,g)+' días':diff(hoy,g)===1?'le queda 1 día':'último día')+'</i>':'<i class="pg-e e-venc">Vencido hace '+(-d)+' d</i>';
       else est='<i class="pg-e e-pronto">'+(d===0?'Vence hoy':'Vence en '+d+' d · '+esc(fCorta(c.plan_hasta)))+'</i>';
       return fila(x,(x.ped?'<i class="pg-e e-ped">Pide renovar</i>':'')+est,(pc21()?'<button class="btn sm sec nr-b" data-a="nrAbrir" data-id="'+esc(c.id)+'">No renueva</button>':'')+'<button class="btn sm" data-a="rnAbrir" data-id="'+esc(c.id)+'">Renovar</button>'); }).join('')
     :'<p class="muted sm">Nadie pendiente: todas al día.</p>';
-  h+='<p class="tip pg-nota">Al vencer, cada cliente tiene 3 días de cortesía en los que sigue entrando y la app le avisa; después pierde el acceso hasta que renueva.</p></div>';
+  h+='<p class="tip pg-nota">'+(CO.pg.cortesia?'Al vencer, los que tienen cortesía (según cómo te pagan: lo eliges en «Tus planes») siguen entrando 3 días y la app les avisa; los demás pierden el acceso al día siguiente, hasta que renuevan.':'Al vencer, cada cliente tiene 3 días de cortesía en los que sigue entrando y la app le avisa; después pierde el acceso hasta que renueva. A quién se los das, en «Tus planes».')+'</p></div>';
   // cobros del mes
   var L=P.pagos.filter(function(p){ return p.fecha.slice(0,7)===m; }).sort(function(a,b){ return a.fecha<b.fecha?1:-1; }), tot=L.reduce(function(s,p){ return s+p.importe; },0);
   var ant=sumarMeses(m+'-01',-1).slice(0,7), sig=sumarMeses(m+'-01',1).slice(0,7);
