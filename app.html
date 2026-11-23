@@ -1448,6 +1448,8 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .rvv-w{font-style:normal;display:inline-flex;align-items:center;gap:4px;font-size:11.3px;font-weight:700;color:#FFCF8A;margin-top:auto}.rvv-w .ic{width:12px;height:12px}.rvv-m{font-style:normal;font-size:11px;color:#C9C9D1}
 .rvv-ley{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;font-size:12px;color:#55555E}.rvv-ley span{display:inline-flex;align-items:center;gap:6px}.rvv-ley i{width:12px;height:12px;border-radius:4px;display:inline-block}
 .rvv-ley i.si{background:#141414}.rvv-ley i.sin{border:1.5px dashed #E0A040;box-sizing:border-box}.rvv-ley i.des{background:#E6E6EB}.rvv-ley i.e{background:#141414}.rvv-ley i.s{background:#5C74C4}.rvv-ley i.pr{background:#D9485A;border-radius:50%}.rvv-ley i.pm{background:#E3D5F5}.rvv-ley i.sy{background:#F3E3D3;border-radius:50%}.rvv-ley .gr{color:#9A9AA2}
+body.rv-pan-on #modal{z-index:90}      /* lo que se abre desde la ventana (comparar, confirmar…), por encima */
+.rvv-dha{display:flex;align-items:center;gap:6px}.rvv-dha .btn{margin:0;width:auto}
 .rvv-det{margin-top:14px;border:1.5px solid #D6D6DE;border-radius:16px;padding:12px 14px}.rvv-dh{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}.rvv-dh b{font-size:14.5px}
 .rvv-pie{margin:8px 0 0}
 .rvv-st{display:flex;gap:3px;height:12px;margin:2px 0 14px}.rvv-st i{border-radius:4px}.rvv-st i.sube,.rvv-c.sube i{background:#3E9B57}.rvv-st i.eq,.rvv-c.eq i{background:#8FA5D6}.rvv-st i.cy,.rvv-c.cy i{background:#B79AD6}.rvv-st i.est,.rvv-c.est i{background:#E0A040}.rvv-st i.baja,.rvv-c.baja i{background:#D93025}.rvv-c.tod i{display:none}
@@ -5749,7 +5751,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.232';
+var APP_V = 'v53.4.233';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -15144,9 +15146,9 @@ function rvConHtml(d,A){
     else h+='<div class="rvv-d des">'+lab+'<small>Descanso</small></div>';
   }
   h+='</div><div class="rvv-ley"><span><i class="si"></i>Entrenó</span><span><i class="sin"></i>Le tocaba y no hay registro</span><span><i class="des"></i>Descanso</span></div></div>'+OR.aviso;
-  if(sel){ var nh2=rvArr(sel.no_hecho); h+='<div class="rvv-det"><div class="rvv-dh"><b>'+esc(cap(fMedia(sel.fecha)))+' · '+esc(rvSent(sel.rutina)||'Entreno')+'</b><button class="ico" data-a="rvPanSes" data-s="'+esc(sel.id)+'" aria-label="Cerrar">'+ic('x')+'</button></div>'+(nh2.length?'<p class="rv-nh">'+ic('alerta')+'Sin hacer: '+nh2.map(function(y){ return esc(y.e)+' ('+(y.t==='bloque'?'no lo hizo':y.h+' de '+y.p)+')'; }).join(' · ')+'</p>':'')+semSesHtml(CO.rv.cid,sel.id)+'</div>'; }
+  if(sel){ var nh2=rvArr(sel.no_hecho); h+='<div class="rvv-det"><div class="rvv-dh"><b>'+esc(cap(fMedia(sel.fecha)))+' · '+esc(rvSent(sel.rutina)||'Entreno')+'</b><span class="rvv-dha"><button class="btn sm sec" data-a="svCmp" data-id="'+esc(sel.id)+'">'+ic('comparar')+'Comparar con la vez anterior</button><button class="ico" data-a="rvPanSes" data-s="'+esc(sel.id)+'" aria-label="Cerrar">'+ic('x')+'</button></span></div>'+(nh2.length?'<p class="rv-nh">'+ic('alerta')+'Sin hacer: '+nh2.map(function(y){ return esc(y.e)+' ('+(y.t==='bloque'?'no lo hizo':y.h+' de '+y.p)+')'; }).join(' · ')+'</p>':'')+semSesHtml(CO.rv.cid,sel.id)+'</div>'; }
   else if(S.length) h+='<p class="muted sm rvv-pie">Toca un entreno para ver sus series.</p>';
-  return h+'<div class="rv-pf"><button class="btn sm sec" data-a="rvIr" data-t="entrenos">'+ic('pesa')+'Sus rutinas</button></div>';
+  return h+'<div class="rv-pf">'+((CO.d.sesiones||[]).length>1?'<button class="btn sm" data-a="hsCmp">'+ic('comparar')+'Comparar dos entrenos</button>':'')+'<button class="btn sm sec" data-a="rvIr" data-t="entrenos">'+ic('pesa')+'Sus rutinas</button></div>';      // 23 nov: comparar dos entrenos, sin salir de la revisión
 }
 
 function rvDescHtml(d,A,P){
