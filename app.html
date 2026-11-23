@@ -1412,7 +1412,8 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .rvv-dn{font-size:12px;font-weight:800;color:#55555E}.rvv-dn em{font-style:normal;font-weight:600}
 .rvv-d.si{background:#141414;color:#fff;cursor:pointer}.rvv-d.si .rvv-dn,.rvv-d.si small{color:#C9C9D1}.rvv-d.si:hover{background:#2A2A2E}.rvv-d.si.ab{outline:3px solid #9DB4EA;outline-offset:1px}
 .rvv-d.sin{background:#fff;border:1.5px dashed #E0A040}.rvv-d.sin b{color:#7A4A00}
-.rvv-d.des{background:#F1F1F4}.rvv-d.fu{background:transparent;border:1px solid #EFEFF2}.rvv-d.fu .rvv-dn{color:#C2C2C8}
+.rvv-d.des{background:#F1F1F4}.rvv-d.mov{background:#F4F2FB;border:1.5px solid #D9D2F0}.rvv-d.mov b{color:#4B3A8C}.rvv-ley i.mov{background:#F4F2FB;border:1.5px solid #D9D2F0;box-sizing:border-box}
+.rvv-cd{font-style:normal;display:inline-flex;align-items:center;gap:4px;font-size:11.3px;font-weight:700;color:#C9BEF0}.rvv-cd .ic{width:12px;height:12px}.rvv-d.fu{background:transparent;border:1px solid #EFEFF2}.rvv-d.fu .rvv-dn{color:#C2C2C8}
 .rvv-w{font-style:normal;display:inline-flex;align-items:center;gap:4px;font-size:11.3px;font-weight:700;color:#FFCF8A;margin-top:auto}.rvv-w .ic{width:12px;height:12px}.rvv-m{font-style:normal;font-size:11px;color:#C9C9D1}
 .rvv-ley{display:flex;flex-wrap:wrap;gap:6px 16px;margin:10px 0 0;font-size:12px;color:#55555E}.rvv-ley span{display:inline-flex;align-items:center;gap:6px}.rvv-ley i{width:12px;height:12px;border-radius:4px;display:inline-block}
 .rvv-ley i.si{background:#141414}.rvv-ley i.sin{border:1.5px dashed #E0A040;box-sizing:border-box}.rvv-ley i.des{background:#E6E6EB}.rvv-ley i.e{background:#141414}.rvv-ley i.s{background:#5C74C4}.rvv-ley i.pr{background:#D9485A;border-radius:50%}.rvv-ley i.pm{background:#E3D5F5}.rvv-ley i.sy{background:#F3E3D3;border-radius:50%}.rvv-ley .gr{color:#9A9AA2}
@@ -4056,6 +4057,10 @@ body.ui2.ancho #side{background:#fff;border-right:1px solid var(--line)}
 .aa-st{flex:1;min-width:0}.aa-st b{display:block;font-size:16px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.aa-st small{display:block;color:#B9B9C1;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .aa-sb{border:0;background:#fff;color:#111;border-radius:999px;font:inherit;font-weight:800;font-size:13px;padding:9px 16px;flex:none;cursor:pointer}
 .aa-ts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 12px}
+.aa-fil{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:0 0 10px}.aa-fl{font-size:12.5px;font-weight:800;color:#55555E;margin-right:2px}
+.aa-fc{display:inline-flex;align-items:center;gap:6px;border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:13px;font-weight:700;color:#141414;cursor:pointer;white-space:nowrap}.aa-fc .ic{width:14px;height:14px;margin:0}.aa-fc b{color:#6A6A72;font-weight:800}.aa-fc:hover{border-color:#141414}
+.aa-fc.on{background:#141414;border-color:#141414;color:#fff}.aa-fc.on b{color:#C9C9D1}
+@media (max-width:760px){.aa-fil{flex-wrap:nowrap;overflow-x:auto;margin:0 -12px 10px;padding:0 12px 2px;scrollbar-width:none}.aa-fil::-webkit-scrollbar{display:none}}
 @media(min-width:720px){.aa-ts{grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}}
 .aa-t{display:flex;flex-direction:column;justify-content:space-between;gap:4px;min-height:112px;border-radius:20px;padding:14px 16px;border:2px solid transparent;text-align:left;font:inherit;cursor:pointer;min-width:0}
 .aa-tl{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px}.aa-tl svg{width:19px;height:19px;flex:none}
@@ -5713,7 +5718,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.229';
+var APP_V = 'v53.4.230';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -13630,7 +13635,7 @@ function tareasDe(c,lim){
   lim=lim||sumar(hoy,30);
   function add(o){ if(o.f&&o.f>lim) return; o.cid=c.id; o.nom=c.nombre; o.g=grupoT(o.f); L.push(o); }
   var rv=c.rev||{};
-  if(rv.fecha){ var rr=recibidoRev(rv,c.recibido); add({tipo:'revision',f:rv.fecha,tit:'Revisión',det:recibidoTxt(rr),acc:'Registrar revisión',a:'revision',rec:rr}); }
+  if(rv.fecha){ var rr=recibidoRev(rv,c.recibido); add({tipo:'revision',f:rv.fecha,tit:'Revisión',det:rr.tot?recibidoTxt(rr):(revMedioTxt(rv)||'Revisión con '+cG('ella','él',c)),acc:'Registrar revisión',a:'revision',rec:rr}); }      // 23 nov: cómo es (por videollamada…), no «no le pides que apunte nada»
   if(c.chat&&c.chat.noLeidos) add({tipo:'chat',f:hoy,tit:'Mensajes sin leer',det:c.chat.noLeidos+(c.chat.noLeidos>1?' mensajes sin leer':' mensaje sin leer'),a:'chat'});
   var fo=c.fotos||{};
   if(fo.fecha){ var subida=!!(c.recibido&&c.recibido.fotos&&c.recibido.fotos>=fo.desde);
@@ -14086,18 +14091,34 @@ var AA_MAX=12;
 function aaLista(R,sel){
   var L=sel==='sem'||sel==='atr'?aaJuntar(R[sel]):R[sel], hoy=CO.hoy||hoyStr(), h='', mas=!!(CO.aaMas&&CO.aaMas[sel]), V=mas?L:L.slice(0,AA_MAX);
   var T={atr:['Atrasado','Lo que ya tendría que estar hecho'],hoy:['Hoy',R.citasHoy.length?R.citasHoy.length+(R.citasHoy.length===1?' cita':' citas'):''],sem:['Esta semana','Citas y lo que vence, por días'],nue:['Nuevos','Rellenaron el cuestionario de tu página']}[sel];
-  h+='<div class="aa-ch"><b>'+T[0]+'</b><small>'+esc(T[1])+'</small></div>';
+  var fN2=R.F?(AA_F.filter(function(o){ return o[0]===R.F; })[0]||['',''])[1]:'';
+  h+='<div class="aa-ch"><b>'+T[0]+(fN2?' · '+esc(fN2):'')+'</b><small>'+esc(T[1])+'</small></div>';
   if(!L.length) h+='<p class="aa-nada">'+({atr:'Nada atrasado. Todo al día.',hoy:'Nada para hoy.',sem:'Nada en los próximos 7 días.',nue:'Nadie nuevo desde tu página.'})[sel]+'</p>';
   else if(sel==='sem'){ var f0=''; V.forEach(function(t){ if(t.f!==f0){ f0=t.f; var n=diff(hoy,t.f); h+='<div class="aa-dia">'+esc(n===1?'Mañana · '+fLarga(t.f).toLowerCase():fLarga(t.f)+' · en '+n+' días')+'</div>'; } h+=aaFila(t,'dia'); }); }
   else h+=V.map(function(t){ return aaFila(t,sel); }).join('');
   if(L.length>AA_MAX) h+='<button class="aa-mas" data-a="aaMas" data-v="'+sel+'">'+(mas?'Ver menos':'Ver '+(L.length-AA_MAX)+' más')+'</button>';
   return h+'<button class="aa-cal" data-a="verAgenda">'+ic('cal')+'Ver todo en el calendario</button>';
 }
+/* 23 nov 2026, 14:03 (Chadín): «en esta pantalla de tareas meterías un filtro? para filtrar por gente que tiene videollamadas, por las que tienen revisiones…»:
+   arriba de las 4 casillas, «Ver: Todo · Citas y videollamadas · Revisiones · Mensajes…» con cuántas hay; las casillas y la lista cuentan solo eso */
+var AA_F=[['','Todo','lista'],['cita','Citas y videollamadas','video'],['rev','Revisiones','rev'],['chat','Mensajes','nota'],['cuest','Cuestionarios','cuest'],['plan','Planes','plan'],['prog','Rutinas y dietas','pesa'],['fotos','Fotos','foto'],['tarea','Recordatorios','tarea'],['nuevo','Nuevos','clientes'],['otro','Otros','mas']];
+function aaCat(t){ var k=t.tipo; return k==='cita'||k==='llamada'?'cita':k==='revision'||k==='semanal'?'rev':k==='chat'?'chat':k==='cuest'?'cuest':k==='plan'?'plan':k==='rutina'||k==='dieta'||k==='setup'?'prog':k==='fotos'?'fotos':k==='tarea'||k==='nota'?'tarea':k==='nuevo'?'nuevo':'otro'; }
+function aaFiltrar(R){
+  var n={}, tot=0; ['atr','hoy','sem','nue'].forEach(function(g){ R[g].forEach(function(t){ var c=aaCat(t); n[c]=(n[c]||0)+1; tot++; }); });
+  var F=CO.aaF||''; if(F&&!n[F]) F=CO.aaF='';
+  var ok=function(t){ return !F||aaCat(t)===F; }, X={atr:R.atr.filter(ok),hoy:R.hoy.filter(ok),sem:R.sem.filter(ok),nue:R.nue.filter(ok),sig:R.sig,citasHoy:F&&F!=='cita'?[]:R.citasHoy,F:F};
+  var cats=AA_F.filter(function(o){ return o[0]&&n[o[0]]; });
+  X.fil=cats.length<2?'':'<div class="aa-fil" id="aa-fil" role="toolbar" aria-label="Filtrar"><span class="aa-fl">Ver</span>'+[AA_F[0]].concat(cats).map(function(o){ var on=F===o[0];
+    return '<button class="aa-fc'+(on?' on':'')+'" data-a="aaF" data-v="'+o[0]+'" aria-pressed="'+on+'">'+ic(o[2])+esc(o[1])+'<b>'+(o[0]?n[o[0]]:tot)+'</b></button>'; }).join('')+'</div>';
+  return X;
+}
+A.aaF=function(el){ CO.aaF=el.dataset.v||''; CO.aaSel=null; var w=document.getElementById('aa-ts'); if(!w) return aaRefrescar(); var x=document.createElement('div'); x.innerHTML=avisosIniHtml();
+  ['aa-fil','aa-ts','aa-l'].forEach(function(id){ var a=document.getElementById(id), b=x.querySelector('#'+id); if(a&&b) a.outerHTML=b.outerHTML; }); };
 function avisosIniHtml(){
-  var R=avisosIni(), nS=R.sem.filter(function(t){ return t.tipo==='cita'||t.tipo==='llamada'; }).length, nV=R.sem.filter(aaVence).length;
+  var R=aaFiltrar(avisosIni()), nS=R.sem.filter(function(t){ return t.tipo==='cita'||t.tipo==='llamada'; }).length, nV=R.sem.filter(aaVence).length;
   var sel=CO.aaSel&&R[CO.aaSel]?CO.aaSel:(R.hoy.length?'hoy':R.atr.length?'atr':R.sem.length?'sem':R.nue.length?'nue':'hoy');
   var sh=R.citasHoy[0];
-  return aaSig(R.sig)+'<div class="aa-ts" id="aa-ts">'+
+  return aaSig(R.sig)+R.fil+'<div class="aa-ts" id="aa-ts">'+
     aaTile('atr','t-atr','alerta','Atrasado',R.atr,R.atr.length?aaNombres(R.atr):'Nada atrasado',sel)+
     aaTile('hoy','t-hoy','cal','Hoy',R.hoy,sh?'Próxima '+sh.h+(sh.cid?' · '+primerNombre(((CO.lista||[]).filter(function(c){ return c.id===sh.cid; })[0]||{}).nombre||''):''):R.hoy.length?(R.hoy.length===1?'1 cosa':R.hoy.length+' cosas'):'Nada más hoy',sel)+
     aaTile('sem','t-sem','reloj','Esta semana',R.sem,R.sem.length?[nS?nS+(nS===1?' cita':' citas'):'',nV?nV+' vencen':'',R.sem.length-nS-nV>0?(R.sem.length-nS-nV)+' más':''].filter(String).join(' · '):'Nada en 7 días',sel)+
@@ -14589,6 +14610,19 @@ function rvPer(d){
   var n=diff(a,b)+1; return {a:a,b:b,n:n,pa:sumar(a,-n),pb:sumar(a,-1)};
 }
 function rvPerTxt(P){ return 'del '+fCorta(P.a)+' al '+fCorta(P.b); }
+/* 23 nov 2026, 14:07 (Chadín): «que la app reconozca cuando el cliente ordena los entrenos en la semana: programado el lunes pero lo hizo el martes
+   porque el lunes tenía mucho trabajo; eso no es “sin hacer”». Cada día con rutina se empareja con un entreno de su misma semana (lunes a domingo):
+   1) ese día y esa rutina, 2) esa rutina otro día de la semana, 3) otro entreno ese día, 4) otro entreno de la semana en un día sin rutina. */
+function rvLunes(f){ var d=aDate(f).getDay(); return sumar(f,d===0?-6:1-d); }
+function rvEmparejar(d,ses,prog){
+  var P=prog.map(function(f){ return {f:f,r:clave(rvRutDia(d,f)),w:rvLunes(f),m:null}; }), S=ses.map(function(s){ return {s:s,f:s.fecha,r:clave(s.rutina||''),w:rvLunes(s.fecha),m:null}; });
+  var une=function(ok){ P.forEach(function(p){ if(p.m) return; var y=S.filter(function(z){ return !z.m&&ok(p,z); })[0]; if(y){ p.m=y; y.m=p; } }); };
+  une(function(p,z){ return z.f===p.f&&z.r&&z.r===p.r; });
+  une(function(p,z){ return z.w===p.w&&z.r&&z.r===p.r; });
+  une(function(p,z){ return z.f===p.f; });
+  une(function(p,z){ return z.w===p.w&&prog.indexOf(z.f)<0; });
+  return P;
+}
 function rvProgDias(d,a,b){
   var R=(d.rutinas||[]).concat((d.rutinasAnteriores||[]).filter(function(r){ return r.hasta; })), hoy=CO.hoy||hoyStr(), out=[];
   for(var f=a;f<=b&&f<=hoy;f=sumar(f,1)){ var k=RV_DS[aDate(f).getDay()];
@@ -14677,9 +14711,9 @@ function rvSuyo(q,x){ if(q.ej&&clave(q.ej)===x.k) return true; var t=clave(q.t),
 function rvAnalizar(d){
   var P=rvPer(d), hoy=CO.hoy||hoyStr(), cx=rvCx(d), A={P:P};
   var ses=(d.sesiones||[]).filter(function(s){ return rvEn(s.fecha,P.a,P.b); }), prog=rvProgDias(d,P.a,P.b);
-  var hechosProg=prog.filter(function(f){ return ses.some(function(s){ return s.fecha===f; }); }).length;
+  var EM=rvEmparejar(d,ses,prog), hechosProg=EM.filter(function(p){ return p.m; }).length;      // 23 nov: aunque lo haya cambiado de día en la semana
   var noH=[]; ses.forEach(function(s){ rvArr(s.no_hecho).forEach(function(y){ noH.push({f:s.fecha,e:y.e,t:y.t,h:y.h,p:y.p}); }); });
-  A.con={ses:ses,progF:prog,prog:prog.length,hechos:ses.length,hechosProg:hechosProg,series:ses.reduce(function(a,s){ return a+(num(s.series)||0); },0),noH:noH,sinReg:prog.filter(function(f){ return !ses.some(function(s){ return s.fecha===f; }); }),pct:prog.length?Math.round(100*Math.min(hechosProg,prog.length)/prog.length):null};
+  A.con={ses:ses,progF:prog,prog:prog.length,hechos:ses.length,hechosProg:hechosProg,series:ses.reduce(function(a,s){ return a+(num(s.series)||0); },0),noH:noH,em:EM,movidos:EM.filter(function(p){ return p.m&&p.m.f!==p.f; }),sinReg:EM.filter(function(p){ return !p.m; }).map(function(p){ return p.f; }),pct:prog.length?Math.round(100*Math.min(hechosProg,prog.length)/prog.length):null};
   A.ej=rvEjs(d,P); A.peso=rvPeso(d,P); A.desc=rvDesc(d,P); A.ciclo=rvCiclo(d,P); A.dice=rvDice(d,P);
   var fa=rvFaseEn(d,P.b,'entreno'); A.fa=fa; A.faSem=fa?(Math.floor(diff(fa.desde,P.b)/7)+1):0; A.faTot=fa&&fa.hasta?Math.max(1,Math.ceil((diff(fa.desde,fa.hasta)+1)/7)):0;
   // alerta: ha dicho que le duele algo
@@ -15030,24 +15064,28 @@ function rvConHtml(d,A){
   var C=A.con, P=A.P, hoy=CO.hoy||hoyStr(), S=C.ses, min=rvMedia(S.map(function(s){ return num(s.minutos); })), rpe=rvMedia(S.map(function(s){ return num(s.rpe); }));
   var seg=''; for(var i=0;i<C.prog;i++) seg+='<i'+(i<C.hechosProg?' class="on"':'')+'></i>';
   var h='<div class="rvv-k">'
-    +'<div class="rvv-t"><small>'+ic('cal')+'Entrenos</small><b>'+(C.prog?C.hechosProg+'<span> de '+C.prog+'</span>':C.hechos)+'</b>'+(C.prog?'<div class="rvv-seg">'+seg+'</div>':'<em>sin días fijos en su rutina</em>')+'</div>'
+    +'<div class="rvv-t"><small>'+ic('cal')+'Entrenos</small><b>'+(C.prog?C.hechosProg+'<span> de '+C.prog+'</span>':C.hechos)+'</b>'+(C.prog?'<div class="rvv-seg">'+seg+'</div>'+(C.movidos&&C.movidos.length?'<em>'+C.movidos.length+' '+(C.movidos.length===1?'cambiado':'cambiados')+' de día</em>':''):'<em>sin días fijos en su rutina</em>')+'</div>'
     +'<div class="rvv-t"><small>'+ic('pesa')+'Series</small><b>'+C.series+'</b><em>en '+C.hechos+' '+(C.hechos===1?'entreno':'entrenos')+'</em></div>'
     +'<div class="rvv-t"><small>'+ic('reloj')+'Duración media</small><b>'+(min!=null?Math.round(min)+'<span> min</span>':'—')+'</b></div>'
     +'<div class="rvv-t"><small>'+ic('diana')+'Esfuerzo medio</small><b>'+(rpe!=null?fN(Math.round(rpe*10)/10)+'<span> RPE</span>':'—')+'</b></div>'
     +'<div class="rvv-t'+(C.sinReg.length?' av':'')+'"><small>'+ic('alerta')+'Sin registro</small><b>'+C.sinReg.length+'<span> '+(C.sinReg.length===1?'día':'días')+'</span></b><em>'+(C.sinReg.length?'no se sabe si '+rvG(d,'los hizo','los hizo'):'todo apuntado')+'</em></div>'
     +'</div>';
-  var prog=C.progF||[], dw=(aDate(P.a).getDay()+6)%7, f=sumar(P.a,-dw), sel=null;
+  var prog=C.progF||[], dw=(aDate(P.a).getDay()+6)%7, f=sumar(P.a,-dw), sel=null, EM=C.em||[];
+  var dc=function(x){ return cap(fMedia(x)).replace(/,? \w+$/,'').replace(',',''); };      // «Lun 16»
   h+='<div class="rvv-cal"><div class="rvv-cw">'+['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'].map(function(x){ return '<span>'+x+'</span>'; }).join('')+'</div><div class="rvv-cg">';
   for(var n=0;n<70&&(f<=P.b||n%7);n++,f=sumar(f,1)){
     var dn=aDate(f).getDate(), lab='<span class="rvv-dn">'+dn+(dn===1||f===P.a?' <em>'+esc(fCorta(f).replace(/^\d+\s*/,''))+'</em>':'')+'</span>';
     if(f<P.a||f>P.b||f>hoy){ h+='<div class="rvv-d fu">'+lab+'</div>'; continue; }
     var ss=S.filter(function(s){ return s.fecha===f; });
+    var pl=EM.filter(function(p){ return p.f===f; })[0];      // lo que tocaba ese día y con qué entreno se emparejó
     if(ss.length){ var s=ss[0], nh=rvArr(s.no_hecho).length, ab=CO.semSes&&ss.some(function(z){ return z.id===CO.semSes; }); if(ab) sel=ss.filter(function(z){ return z.id===CO.semSes; })[0];
-      h+='<button class="rvv-d si'+(ab?' ab':'')+'" data-a="rvPanSes" data-s="'+esc(s.id||'')+'" title="Ver sus series">'+lab+'<b>'+esc(rvSent(s.rutina)||'Entreno')+'</b><small>'+(num(s.series)||0)+' series'+(s.minutos?' · '+s.minutos+' min':'')+(s.rpe!=null&&s.rpe!==''?' · RPE '+fN(s.rpe):'')+'</small>'+(nh?'<i class="rvv-w">'+ic('alerta')+nh+' sin hacer</i>':'')+(ss.length>1?'<i class="rvv-m">+'+(ss.length-1)+' más</i>':'')+'</button>'; }
+      var de=EM.filter(function(p){ return p.m&&p.m.s===s&&p.f!==f; })[0];
+      h+='<button class="rvv-d si'+(ab?' ab':'')+'" data-a="rvPanSes" data-s="'+esc(s.id||'')+'" title="Ver sus series">'+lab+'<b>'+esc(rvSent(s.rutina)||'Entreno')+'</b><small>'+(num(s.series)||0)+' series'+(s.minutos?' · '+s.minutos+' min':'')+(s.rpe!=null&&s.rpe!==''?' · RPE '+fN(s.rpe):'')+'</small>'+(nh?'<i class="rvv-w">'+ic('alerta')+nh+' sin hacer</i>':'')+(ss.length>1?'<i class="rvv-m">+'+(ss.length-1)+' más</i>':'')+(de?'<i class="rvv-cd">'+ic('cambiar')+'Era del '+esc(dc(de.f).toLowerCase())+'</i>':'')+(pl&&!pl.m?'<i class="rvv-w">'+ic('alerta')+'Tocaba también '+esc(rvRutDia(d,f)||'otro')+'</i>':'')+'</button>'; }
+    else if(pl&&pl.m){ h+='<div class="rvv-d mov">'+lab+'<b>Lo hizo el '+esc(dc(pl.m.f).toLowerCase())+'</b><small>'+esc(rvRutDia(d,f)||'su entreno')+'</small></div>'; }      // 23 nov: lo cambió de día, no está sin hacer
     else if(prog.indexOf(f)>=0){ var rt=rvRutDia(d,f); h+='<div class="rvv-d sin">'+lab+'<b>Sin registro</b><small>'+(rt?'tocaba '+esc(rt):'tocaba entrenar')+'</small></div>'; }
     else h+='<div class="rvv-d des">'+lab+'<small>Descanso</small></div>';
   }
-  h+='</div><div class="rvv-ley"><span><i class="si"></i>Entrenó</span><span><i class="sin"></i>Le tocaba y no hay registro</span><span><i class="des"></i>Descanso</span></div></div>';
+  h+='</div><div class="rvv-ley"><span><i class="si"></i>Entrenó</span><span><i class="mov"></i>Lo cambió de día</span><span><i class="sin"></i>Le tocaba y no hay registro</span><span><i class="des"></i>Descanso</span></div></div>';
   if(sel){ var nh2=rvArr(sel.no_hecho); h+='<div class="rvv-det"><div class="rvv-dh"><b>'+esc(cap(fMedia(sel.fecha)))+' · '+esc(rvSent(sel.rutina)||'Entreno')+'</b><button class="ico" data-a="rvPanSes" data-s="'+esc(sel.id)+'" aria-label="Cerrar">'+ic('x')+'</button></div>'+(nh2.length?'<p class="rv-nh">'+ic('alerta')+'Sin hacer: '+nh2.map(function(y){ return esc(y.e)+' ('+(y.t==='bloque'?'no lo hizo':y.h+' de '+y.p)+')'; }).join(' · ')+'</p>':'')+semSesHtml(CO.rv.cid,sel.id)+'</div>'; }
   else if(S.length) h+='<p class="muted sm rvv-pie">Toca un entreno para ver sus series.</p>';
   return h+'<div class="rv-pf"><button class="btn sm sec" data-a="rvIr" data-t="entrenos">'+ic('pesa')+'Sus rutinas</button></div>';
