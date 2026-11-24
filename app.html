@@ -2434,9 +2434,6 @@ details.cy-mas summary::-webkit-details-marker{display:none}details.cy-mas summa
 .cl-r .dot-n{position:static;flex:none}.cl-ch{width:16px;height:16px;color:#C7C7CC;flex:none}
 @media(max-width:560px){.cl-u{display:none}}
 /* v53.4.210 · Clientes para el día a día (punto 4) y «Buscar cliente» en el menú */
-.sd-bus{display:flex;align-items:center;gap:8px;width:100%;margin:0 0 10px;padding:8px 10px;border:1.5px solid #111;border-radius:12px;background:#fff;font:600 13px Plus Jakarta Sans,sans-serif;color:#55555E;cursor:pointer;text-align:left}
-.sd-bus .ic{width:16px;height:16px;color:#111}.sd-bus span{flex:1}.sd-bus kbd{font:700 10.5px Plus Jakarta Sans,sans-serif;background:#EFEFF2;color:#55555E;border-radius:6px;padding:2px 6px;white-space:nowrap}
-.sd-bus:hover{background:#FAFAFB}.sd-bus:focus-visible{outline:2px solid #2E6FE0;outline-offset:2px}
 .sd-num{margin-left:auto;font-size:12px;font-weight:700;color:var(--mu)}.sd-i.on .sd-num{color:#C9C9D1}
 .cl3 .cl3-tr{gap:10px}.cl3 .cl3-tr .tit{flex:1}
 .cl3-sw{display:inline-flex;background:#EBEBEF;border-radius:999px;padding:3px}.cl3-sw button{border:0;background:none;font:700 12.5px Plus Jakarta Sans,sans-serif;color:#55555E;padding:6px 13px;border-radius:999px;cursor:pointer}.cl3-sw button.on{background:#fff;color:#111;box-shadow:0 1px 3px rgba(17,17,17,.12)}
@@ -5917,7 +5914,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.246';
+var APP_V = 'v53.4.248';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -20072,7 +20069,7 @@ function cl3ProgPedir(){ if(!cl3Cfg().some(function(o){ return o.k==='est'&&(o.o
 
 var CL3_MAC=/Mac|iPhone|iPad/.test(navigator.platform||'');
 var CL3_DONDE={nota:'En tus notas',ficha:'En su ficha',competicion:'En su competición',email:'Su email',movil:'Su móvil'};
-function sdBuscaHtml(){ return '<button class="sd-bus" data-a="sdBuscar">'+ic('lupa')+'<span>Buscar cliente</span><kbd>'+(CL3_MAC?'⌘ K':'Ctrl K')+'</kbd></button>'; }
+/* v53.4.248 (24 nov, Chadín: «la barra de buscar clientes, quítamela en el panel del coach»): fuera del menú. Se busca en Clientes (arriba) y Ctrl K (⌘ K) sigue llevando allí */
 function cl3Vista(){ if(!CO.cl3V) CO.cl3V=LS.get('mo_cl_vista')==='caras'?'caras':'lista'; return CO.cl3V; }
 function cl3RecIds(){ var L=LS.get('mo_cl_rec'); return Array.isArray(L)?L:[]; }
 function cl3RecPon(id){ if(!id) return; var L=cl3RecIds().filter(function(x){ return x!==id; }); L.unshift(id); LS.set('mo_cl_rec',L.slice(0,12)); }
@@ -20390,7 +20387,7 @@ function ladoHtml(){
   function it(a,i,t,on,extra){ return '<button class="sd-i'+(on?' on':'')+'" data-a="'+a+'">'+ic(i)+'<span>'+t+'</span>'+(extra||'')+'</button>'; }
   if(ui2On()) return ladoHtml2(act,v,urg,it);      // v53.4.116: menú del diseño D (v53.4.117: todos los entrenadores)
   return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
-    sdBuscaHtml()+'<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
+    '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
     it('sdPagos','euro','Pagos',v==='pagos')+it('sdPagina','enlace','Tu página',v==='pagina')+it('sdNov','nuevo','Novedades',false,novDot())+it('sdSug','idea','Feedback',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+'<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div>'+      // v53.4.43: los bancos, juntos y resaltados (opción C de Javier)
@@ -20424,7 +20421,7 @@ function ladoHtml2(act,v,urg,it){
     '<div class="sd-cmx"></div>'+it('salirCoach','salir','Salir').replace('class="sd-i"','class="sd-i sd-out"')+
     '<small>MOOD ON · '+APP_V+'</small></div>';
   return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
-    sdBuscaHtml()+'<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
+    '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
     it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
     (sdChatAb()?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
     it('sdPagos','euro','Pagos',v==='pagos')+(novN?it('sdNov','nuevo','Novedades',false,novDot()):'')+      // a la izquierda, solo mientras haya alguna sin ver
