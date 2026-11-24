@@ -2443,10 +2443,10 @@ html[data-tema="oscuro"] .ej-f2 .st2.ef.ok .st-n i{background:linear-gradient(13
 .cal-c .mov-cer{align-self:flex-end;font-size:12.5px;margin:0 0 2px}
 .ses-f .ses-t{flex:1}.ses-f .ses-ord{width:40px;height:40px}
 .so-l{display:flex;flex-direction:column;gap:6px;margin:10px 0 12px}
-.so-r{display:flex;align-items:center;gap:8px;background:var(--card2,#F2F2F5);border-radius:14px;padding:6px 6px 6px 2px;user-select:none;-webkit-user-select:none}
+.so-r{display:flex;align-items:center;gap:10px;background:var(--card2,#F2F2F5);border-radius:14px;padding:10px 6px 10px 12px;min-height:56px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:box-shadow .15s,background .15s}
 .so-r.ok .so-t{opacity:.55}
-.so-r.arr{box-shadow:0 10px 26px rgba(0,0,0,.18);background:var(--card);position:relative;z-index:2;transform:scale(1.02)}
-.so-h{flex:none;width:34px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--tx3);touch-action:none;cursor:grab}
+.so-r.arr{box-shadow:0 14px 30px rgba(0,0,0,.22);background:var(--card);position:relative;z-index:3;transition:box-shadow .15s}.so-l.so-arr .so-r:not(.arr){opacity:.75}
+.so-h{flex:none;width:30px;height:36px;display:flex;align-items:center;justify-content:center;color:var(--tx3)}
 .so-n{flex:none;width:24px;height:24px;border-radius:50%;background:var(--neg);color:var(--neg-t);font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center}
 .so-t{flex:1;min-width:0;display:flex;flex-direction:column}.so-t b{font-size:14.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.so-t small{font-size:12px;color:var(--tx2)}
 .so-mv{display:flex;gap:4px;flex:none}.so-mv button{width:36px;height:36px;border-radius:50%;border:0;background:var(--card);color:var(--tx);display:flex;align-items:center;justify-content:center;padding:0}.so-mv button:disabled{opacity:.3}
@@ -3572,7 +3572,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.30';
+var YO_V = 'yo-1.31';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -6432,15 +6432,13 @@ IC.ordenar = IC.ordenar || '<path d="M7 4v16M3.5 7.5 7 4l3.5 3.5M17 20V4M13.5 16
 A.sesOrden = function () { var X = S.ses; if (!X) return; S.x.so = { L: X.ej.filter(function (e) { return !e.cal; }), rut: false }; sesOrdPinta(); };
 function sesOrdPinta() {
   var O = S.x.so, r = S.ses && S.ses.rid ? rutinaDe(S.ses.rid) : null, n = O.L.length;
-  hoja('<h2>Cambiar el orden</h2><p class="mut sm">Si una máquina está ocupada, desliza el ejercicio hasta donde quieras hacerlo. Lo que llevas apuntado no se pierde.</p><div class="so-l" id="so-l">' + O.L.map(function (e, k) {
+  hoja('<h2>Cambiar el orden</h2><p class="mut sm">Mantén pulsado un ejercicio y deslízalo hasta donde quieras hacerlo. Lo que llevas apuntado no se pierde.</p><div class="so-l" id="so-l">' + O.L.map(function (e, k) {
     var ok = exHecho(e), hs = (e.sets || []).filter(function (z) { return z.ok; }).length, st = ok ? 'Hecho' : hs ? hs + ' de ' + e.sets.length + ' series' : 'Pendiente';
-    return '<div class="so-r' + (ok ? ' ok' : '') + '" data-k="' + k + '"><span class="so-h" aria-hidden="true">' + ic('grip', 20, null, 3) + '</span><span class="so-n">' + (k + 1) + '</span><span class="so-t"><b>' + esc(e.n) + '</b><small>' + st + '</small></span>' +
-      '<span class="so-mv"><button data-a="sesOrdMv" data-k="' + k + '" data-v="-1" aria-label="Subir ' + esc(e.n) + '"' + (k ? '' : ' disabled') + '>' + ic('subir', 15, null, 2.4) + '</button><button data-a="sesOrdMv" data-k="' + k + '" data-v="1" aria-label="Bajar ' + esc(e.n) + '"' + (k < n - 1 ? '' : ' disabled') + '>' + ic('bajar', 15, null, 2.4) + '</button></span></div>'; }).join('') + '</div>' +
+    return '<div class="so-r' + (ok ? ' ok' : '') + '" data-k="' + k + '"><span class="so-n">' + (k + 1) + '</span><span class="so-t"><b>' + esc(e.n) + '</b><small>' + st + '</small></span><span class="so-h" aria-hidden="true">' + ic('grip', 20, null, 3) + '</span></div>'; }).join('') + '</div>' +
     (r ? '<label class="chk"><input type="checkbox" data-ch="sesOrdRut"' + (O.rut ? ' checked' : '') + '><span>Guardar este orden también en «' + esc(r.nombre) + '»</span></label>' : '') +
     '<button class="btn" data-a="sesOrdOk">Listo</button>');
 }
 CH.sesOrdRut = function (t) { if (S.x.so) S.x.so.rut = t.checked; };
-A.sesOrdMv = function (el) { var O = S.x.so, k = +el.dataset.k, j = k + (+el.dataset.v); if (!O || j < 0 || j >= O.L.length) return; var x = O.L[k]; O.L[k] = O.L[j]; O.L[j] = x; sesOrdPinta(); try { navigator.vibrate && navigator.vibrate(10); } catch (e) { } };
 function sesOrdLee() { var O = S.x.so, b = document.getElementById('so-l'); if (!O || !b) return; var L = O.L; O.L = [].map.call(b.querySelectorAll('.so-r'), function (r) { return L[+r.dataset.k]; }); }
 A.sesOrdOk = function () {
   var X = S.ses, O = S.x.so; if (!X || !O) return cerrarHoja(); sesOrdLee();
@@ -6455,14 +6453,30 @@ A.sesOrdOk = function () {
     R.forEach(function (q, k) { if (!q.cal && !usa[k]) sal.push(q); }); r.ejercicios = sal; guardaRutina(r); } }
   S.x.so = null; guardaEnCurso(); cerrarHoja(); toast(O.rut ? 'Orden cambiado, también en tu rutina' : 'Orden cambiado', 'ok'); pintar();
 };
-/* deslizar con el dedo desde ⠿ (la fila sigue al dedo y se coloca donde la sueltas) */
-var SOD = null;
-document.addEventListener('pointerdown', function (ev) { var hd = ev.target && ev.target.closest && ev.target.closest('#so-l .so-h'); if (!hd || (ev.button && ev.button !== 0)) return; var row = hd.closest('.so-r'); SOD = { row: row, list: row.parentNode, pid: ev.pointerId }; row.classList.add('arr'); try { navigator.vibrate && navigator.vibrate(12); } catch (e) { } if (ev.cancelable) ev.preventDefault(); });
-document.addEventListener('pointermove', function (ev) { var o = SOD; if (!o || ev.pointerId !== o.pid) return; var y = ev.clientY, sib = [].slice.call(o.list.children).filter(function (r) { return r !== o.row; }), antes = null;
+/* 24 nov, 07:02 (Chadín: «que se mueva solo moviendo y se active manteniendo presionado 0,5 s con el dedo, quita estas flechas»): mantén pulsada
+   una fila medio segundo (vibra y se levanta) y deslízala: va pegada al dedo y las demás se apartan; al soltarla, se queda ahí. Si mueves el dedo
+   antes del medio segundo, la lista se desplaza normal. Cerca del borde, la hoja se desplaza sola */
+var SOD = null, SLP = null;
+function sodMover(y) { var o = SOD; if (!o) return; o.y = y;
+  var sib = [].slice.call(o.list.children).filter(function (r) { return r !== o.row; }), antes = null;
   for (var k = 0; k < sib.length; k++) { var b = sib[k].getBoundingClientRect(); if (y < b.top + b.height / 2) { antes = sib[k]; break; } }
-  if (o.row.nextElementSibling !== antes) o.list.insertBefore(o.row, antes); if (ev.cancelable) ev.preventDefault(); }, { passive: false });
-function sodFin(ev) { var o = SOD; if (!o || (ev && ev.pointerId !== o.pid)) return; SOD = null; o.row.classList.remove('arr'); sesOrdLee(); sesOrdPinta(); }
-document.addEventListener('pointerup', sodFin); document.addEventListener('pointercancel', sodFin);
+  if (o.row.nextElementSibling !== antes) { o.list.insertBefore(o.row, antes); try { navigator.vibrate && navigator.vibrate(6); } catch (e) { } }
+  o.row.style.transform = 'none'; var top = o.row.getBoundingClientRect().top; o.row.style.transform = 'translateY(' + Math.round(y - o.dy - top) + 'px) scale(1.03)';
+  var sc = o.list.closest('.hoja-c'); if (sc) { var R = sc.getBoundingClientRect(); if (y < R.top + 70) sc.scrollTop -= 10; else if (y > R.bottom - 70) sc.scrollTop += 10; } }
+function sodEmpieza() { var l = SLP; SLP = null; if (!l || !l.row.isConnected) return; var r = l.row.getBoundingClientRect();
+  SOD = { row: l.row, list: l.row.parentNode, pid: l.pid, dy: l.y - r.top, y: l.y }; l.row.classList.add('arr'); SOD.list.classList.add('so-arr');
+  try { navigator.vibrate && navigator.vibrate(18); } catch (e) { } sodMover(l.y); }
+function slpFuera() { if (SLP) { clearTimeout(SLP.t); SLP = null; } }
+document.addEventListener('pointerdown', function (ev) { var row = ev.target && ev.target.closest && ev.target.closest('#so-l .so-r'); if (!row || SOD || (ev.button && ev.button !== 0)) return;
+  slpFuera(); SLP = { row: row, pid: ev.pointerId, x: ev.clientX, y: ev.clientY, t: setTimeout(sodEmpieza, 500) }; });
+document.addEventListener('pointermove', function (ev) {
+  if (SLP && ev.pointerId === SLP.pid) { if (Math.abs(ev.clientX - SLP.x) > 8 || Math.abs(ev.clientY - SLP.y) > 8) slpFuera(); return; }
+  if (SOD && ev.pointerId === SOD.pid) { sodMover(ev.clientY); if (ev.cancelable) ev.preventDefault(); } }, { passive: false });
+document.addEventListener('touchmove', function (ev) { if (SOD) { if (ev.cancelable) ev.preventDefault(); if (ev.touches && ev.touches[0]) sodMover(ev.touches[0].clientY); } }, { passive: false });      // que la hoja no se desplace mientras arrastras
+document.addEventListener('contextmenu', function (ev) { if (ev.target && ev.target.closest && ev.target.closest('#so-l')) ev.preventDefault(); });
+function sodFin(ev) { if (SLP && (!ev || ev.pointerId === SLP.pid)) slpFuera(); var o = SOD; if (!o || (ev && ev.pointerId !== undefined && ev.pointerId !== o.pid)) return; SOD = null;
+  o.row.classList.remove('arr'); o.row.style.transform = ''; o.list.classList.remove('so-arr'); sesOrdLee(); sesOrdPinta(); }
+document.addEventListener('pointerup', sodFin); document.addEventListener('pointercancel', sodFin); document.addEventListener('touchend', function () { if (SOD) sodFin(); });
 /* carrera y cardio: lo que has hecho de verdad (opcional) para ver km, tiempo y ritmo en Progreso */
 function esCaminar(n) { return /caminar|caminata|cinta|andar|paseo|senderismo/i.test(n || ''); }
 function runCampos(e, i) {
