@@ -3635,7 +3635,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.38';
+var YO_V = 'yo-1.39';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7272,7 +7272,8 @@ function serCabHtml(e, i) {
   var P = S.perfil || {}, k = serK(e.n), mq = (P.maq || {})[k], nt = Object.assign({}, (P.notasEj || {})[k] || {});
   if (nt.p && nt.pd === S.ses.id) nt.p = '';      // la de «para la próxima vez» sale la próxima, no en el entreno en que la escribes
   if (nt.p) { S.ses.vistoP = S.ses.vistoP || {}; S.ses.vistoP[k] = 1; }
-  return '<div class="ej-acc4"><button data-a="verEj" data-n="' + esc(e.n) + '">' + ic('play', 15) + 'Vídeo</button><button data-a="sesCambiar" data-i="' + i + '">' + ic('cambiar', 15) + 'Cambiar</button>' +
+  /* 24 nov, 16:51 (Javier): fuera «Vídeo»: tocando el nombre del ejercicio ya sale */
+  return '<div class="ej-acc4"><button data-a="sesCambiar" data-i="' + i + '">' + ic('cambiar', 15) + 'Cambiar</button>' +
     '<button class="' + (mq ? 'on' : '') + '" data-a="ejMaq" data-i="' + i + '">' + ic('ajustes', 15) + 'Máquina</button><button class="' + (nt.f || nt.p ? 'on' : '') + '" data-a="ejNota" data-i="' + i + '">' + ic('lapiz', 15) + 'Nota</button>' +
     '<button data-a="ejHist" data-i="' + i + '">' + ic('histo', 15) + 'Historial</button></div>' +
     (mq ? '<p class="ej-maq">' + ic('ajustes', 14) + '<span>' + esc(mq) + '</span></p>' : '') + (nt.f ? '<p class="nota">' + esc(nt.f) + '</p>' : '') + (nt.p ? '<p class="ej-para">' + ic('info', 14) + '<span><b>Para hoy:</b> ' + esc(nt.p) + '</span></p>' : '');
