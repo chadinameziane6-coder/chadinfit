@@ -2614,6 +2614,16 @@ html[data-tema="oscuro"] .rir-c,html[data-tema="oscuro"] .rir-n{background:#2C2C
 .met-b.met-apx2:not(.on),.met-b.met-apx2.on{background:rgba(127,214,255,.24);border-color:rgba(40,150,210,.35);color:#0B3A55}.met-b.met-apx2 .ic{color:#0B3A55}
 html[data-tema="oscuro"] .met-b:not(.met-apx2){background:linear-gradient(90deg,rgba(127,214,255,.16),rgba(154,140,255,.2))!important;border-color:rgba(154,140,255,.4)!important;color:#E4E0FF!important}
 html[data-tema="oscuro"] .met-b.met-apx2{background:rgba(127,214,255,.18)!important;border-color:rgba(127,214,255,.45)!important;color:#D6F1FF!important}
+/* 24 nov, 18:48 (Javier: «si pongo una drop set o un rest-pause y la quiero eliminar, que también pueda deslizar y eliminar»): la serie especial
+   se desliza entera (su fila y sus bajadas o mini-series), como las demás */
+.ej-f2 .st-grp{position:relative;touch-action:pan-y;transition:transform .22s ease}.ej-f2 .st-grp.sw-mv{transition:none}
+.ej-f2 .st-grp.sw-mv,.ej-f2 .st-grp.sw-ab,.ej-f2 .st-grp.sw-fuera{overflow:visible}
+.ej-f2 .st-grp:after{content:"Borrar";position:absolute;top:0;bottom:0;left:calc(100% + 12px);width:84px;border-radius:16px;background:#E5484D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13'/%3E%3C/svg%3E") center 22% / 20px no-repeat;color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:flex-end;justify-content:center;padding-bottom:9px;box-sizing:border-box;cursor:pointer}
+.ej-f2 .st-grp.sw-ya:after{width:max(84px,60%);background-color:#D32F2F}
+.ej-f2 .st-grp:after{background-position:center calc(50% - 11px);align-items:center;padding:24px 0 0}
+.ej-f2 .st-grp .st.st2:not(.st-mini):after,.ej-f2 .st-grp .st.st-l2:after{display:none}      /* dentro del recuadro, el «Borrar» es el del recuadro */
+.ej-f2 .st-grp.sw-fuera{opacity:0;transition:transform .18s ease-in,opacity .18s ease-in}
+@media (prefers-reduced-motion:reduce){.ej-f2 .st-grp{transition:none}}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3721,7 +3731,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.45';
+var YO_V = 'yo-1.46';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7806,7 +7816,8 @@ function serNotasVistas(X) { var P = S.perfil; if (!P || !P.notasEj || !X || !X.
    En borrador (SW_SER apagado): solo en las demos («Por revisar») o con ?borradores, hasta el OK. */
 var SW_SER = true, SDD = null, SD_ULT = null;      // 22 nov, 19:45: OK de Chadín («en usuaria sí esa opción de eliminar y añadir»)
 function sdOn() { return SW_SER || rpBorr(); }
-function sdFila(t) { var r = t && t.closest && t.closest('.ej-f2 .st.st2:not(.st-mini), .ej-f2 .st.st-l2'); return r && r.querySelector('[data-a=stOk]') ? r : null; }
+function sdFila(t) { var g = t && t.closest && t.closest('.ej-f2 .st-grp'); if (g) return g.querySelector('[data-a=stOk]') ? g : null;      // 24 nov, 18:48: la especial, entera
+  var r = t && t.closest && t.closest('.ej-f2 .st.st2:not(.st-mini), .ej-f2 .st.st-l2'); return r && r.querySelector('[data-a=stOk]') ? r : null; }
 function sdCierra(salvo) { document.querySelectorAll('.ej-f2 .sw-ab').forEach(function (r) { if (r !== salvo) { r.classList.remove('sw-ab'); r.style.transform = ''; } }); }
 document.addEventListener('pointerdown', function (ev) {
   if (!sdOn()) return; var r = sdFila(ev.target);
@@ -7835,11 +7846,16 @@ function sdBorra(r) {
   if (e.sets[j].t !== 'aprox' && e.sets.filter(function (s) { return s.t !== 'aprox'; }).length < 2) { r.classList.remove('sw-ab'); r.style.transform = ''; return toast('Deja al menos una serie. Si no lo vas a hacer, «Quitar de este entreno»'); }
   r.classList.add('sw-fuera'); r.style.transform = 'translateX(-110%)';
   setTimeout(function () {
-    SD_ULT = { i: i, j: j, s: e.sets[j], n: e.n }; e.sets.splice(j, 1); guardaEnCurso(); pintar();
-    toast(SD_ULT.s.t === 'aprox' ? 'Aproximación borrada' : 'Serie borrada', 'desh', '<button class="toast-b" data-a="sdDesh">Deshacer</button>');
+    SD_ULT = { i: i, j: j, s: e.sets[j], n: e.n }; e.sets.splice(j, 1);
+    /* 24 nov, 18:48: si borras la serie especial del método (drop set, rest-pause, myo-reps o al fallo) y no queda otra, el método vuelve a «Normal», también en tu rutina */
+    var st = SD_ULT.s.t; if (/^(drop|rp|myo|fallo)$/.test(st) && e.met === st && !e.sets.some(function (s) { return s.t === st; })) { SD_ULT.met = st; e.met = 'normal'; serARutina(e, function (q) { q.met = 'normal'; q.n0 = e.n0; q.sets = metPlantilla(e, 'normal'); }); }
+    guardaEnCurso(); pintar();
+    toast(SD_ULT.s.t === 'aprox' ? 'Aproximación borrada' : SD_ULT.met ? metNom(SD_ULT.met) + ' borrado · Método: Normal' : 'Serie borrada', 'desh', '<button class="toast-b" data-a="sdDesh">Deshacer</button>');
   }, 180);
 }
-A.sdDesh = function () { var u = SD_ULT, e = u && S.ses && S.ses.ej[u.i]; if (!e || e.n !== u.n) return; e.sets.splice(Math.min(u.j, e.sets.length), 0, u.s); SD_ULT = null; guardaEnCurso(); pintar(); toast('Serie recuperada'); };
+A.sdDesh = function () { var u = SD_ULT, e = u && S.ses && S.ses.ej[u.i]; if (!e || e.n !== u.n) return; e.sets.splice(Math.min(u.j, e.sets.length), 0, u.s); SD_ULT = null;
+  if (u.met) { e.met = u.met; serARutina(e, function (q) { q.met = u.met; q.n0 = e.n0; q.sets = metPlantilla(e, u.met); }); }
+  guardaEnCurso(); pintar(); toast('Serie recuperada'); };
 
 /* 24 nov, 12:54 (Javier, entrenando: «no me deja poner la carga que estoy agarrando, solo la que me sugiere la aplicación… por mucho que me sugiera un peso
    de la drop set o el myo-rep o cualquier serie, que yo pueda modificarlo»). Los kilos sugeridos (fondo ámbar) parecían ya escritos: al tocarlos, borrar
