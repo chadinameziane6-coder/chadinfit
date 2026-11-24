@@ -2467,6 +2467,18 @@ html[data-tema="oscuro"] .ej-f2 .st2.ef.ok .st-n i{background:linear-gradient(13
 .st-nl i{width:30px;height:30px;border-radius:50%;background:var(--suave);display:flex;align-items:center;justify-content:center;font-style:normal;font-weight:800;font-size:13px}
 .st-l2.ok .st-nl i{background:#0D0D10;color:#fff}
 
+/* 24 nov 2026 · como una app del iPhone (Javier): ventanas que no mueven lo de detrás y volver deslizando desde el borde izquierdo */
+html.fondo-fijo,html.fondo-fijo body{overscroll-behavior:none}
+.hoja-c{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.hoja-fondo{touch-action:none}
+.cta,.desc.desc-full{touch-action:none;overscroll-behavior:contain}
+html.ges-on,html.ges-on body{overflow-x:hidden}
+#app.ges{z-index:2;box-shadow:-14px 0 34px rgba(0,0,0,.18);will-change:left}
+.atras-v{position:fixed;inset:0;z-index:1;overflow:hidden;pointer-events:none;background:var(--pie);will-change:transform}
+.atras-v .atras-in{position:relative;max-width:480px;margin-left:auto!important;margin-right:auto;min-height:100vh;background:var(--fondo)}
+.atras-v .atras-in *{animation:none!important;transition:none!important}
+.atras-v .atras-os{position:absolute;inset:0;background:#000;opacity:.35;pointer-events:none}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
 <body>
@@ -3573,7 +3585,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.32';
+var YO_V = 'yo-1.33';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -3666,8 +3678,16 @@ function toastDesliza(el) {
   el.addEventListener('pointerup', fin); el.addEventListener('pointercancel', fin);
   el.addEventListener('click', function (e) { if (el.classList.contains('arr')) e.stopPropagation(); }, true);
 }
-function hoja(html) { var h = $('#hoja'); h.innerHTML = '<button class="hoja-fondo" data-a="cerrarHoja" aria-label="Cerrar"></button><div class="hoja-c" role="dialog"><span class="asa"></span>' + html + '</div>'; h.classList.add('on'); }
-function cerrarHoja() { var h = $('#hoja'); h.classList.remove('on'); h.innerHTML = ''; }
+function hoja(html) { var h = $('#hoja'); h.innerHTML = '<button class="hoja-fondo" data-a="cerrarHoja" aria-label="Cerrar"></button><div class="hoja-c" role="dialog"><span class="asa"></span>' + html + '</div>'; h.classList.add('on'); fondoFijo(true); }
+function cerrarHoja() { var h = $('#hoja'); h.classList.remove('on'); h.innerHTML = ''; fondoFijo(false); }
+/* 24 nov (Javier, iPhone: «cuando se abre una ventana… si deslizo el dedo, se me mueve la parte de atrás que no estoy viendo»): con una ventana
+   abierta, la pantalla de detrás se queda quieta (fija donde estaba) y solo se mueve la ventana; al cerrarla, vuelve justo al mismo sitio */
+var FONDO = { on: false, y: 0 };
+function fondoFijo(on) {
+  var b = document.body, de = document.documentElement; if (!b || on === FONDO.on) return;
+  if (on) { FONDO.y = window.pageYOffset || de.scrollTop || 0; FONDO.on = true; de.classList.add('fondo-fijo'); b.style.position = 'fixed'; b.style.top = -FONDO.y + 'px'; b.style.left = '0'; b.style.right = '0'; b.style.width = '100%'; }
+  else { FONDO.on = false; de.classList.remove('fondo-fijo'); b.style.position = ''; b.style.top = ''; b.style.left = ''; b.style.right = ''; b.style.width = ''; try { window.scrollTo(0, FONDO.y); } catch (e) { } }
+}
 
 /* ---------- guardar en Supabase (con cola si falla la conexión) ---------- */
 var COLA_K = 'yo_cola';
@@ -3816,10 +3836,12 @@ function gestoAyuda() { var fino = false; try { fino = matchMedia('(hover: hover
 /* ---------- acciones, navegación y pintado ---------- */
 var A = {}, F = {};
 S.pila = []; S.pant = null;      // pantallas encima de las pestañas: {t:'rutina', id}…
-function ir(p) { if (S.pant) S.pila.push(S.pant); S.pant = p; arriba(); pintar(); }
-function volver() { S.pant = S.pila.pop() || null; pintar(); }
+/* 24 nov: al volver atrás, cada pantalla vuelve a donde la dejaste (como en las apps del iPhone); se apunta al ir a otra */
+function ir(p) { var y = scrollActual(); if (S.pant) { S.pant.sy = y; S.pila.push(S.pant); } else S.x.raizY = { t: S.tab, y: y }; S.pant = p; arriba(); pintar(); }
+function volver() { S.pant = S.pila.pop() || null; pintar(); var y = S.pant ? S.pant.sy : (S.x.raizY && S.x.raizY.t === S.tab ? S.x.raizY.y : 0); try { window.scrollTo(0, y || 0); } catch (e) { } }
 function irTab(t) { S.tab = t; S.pant = null; S.pila = []; arriba(); pintar(); }
-function arriba() { try { window.scrollTo(0, 0); } catch (e) { } }
+function scrollActual() { return FONDO.on ? FONDO.y : (window.pageYOffset || document.documentElement.scrollTop || 0); }
+function arriba() { if (FONDO.on) FONDO.y = 0; try { window.scrollTo(0, 0); } catch (e) { } }
 A.volver = function () { volver(); };
 A.tab = function (el) { irTab(el.dataset.v); };
 A.cerrarHoja = function () { cerrarHoja(); };
@@ -3905,6 +3927,82 @@ setInterval(function () {
   var e = document.getElementById('mini-t'); if (e) e.textContent = miniTxt();
   if (typeof DESC !== 'undefined' && DESC.fin && !document.getElementById('desc')) { var q = Math.round((DESC.fin - Date.now()) / 1000); if (q <= 3 && q > 0 && DESC.ult !== q) { DESC.ult = q; pitaCorto(); } if (q <= 0) { DESC.fin = 0; pitaFin(); try { navigator.vibrate && navigator.vibrate([200, 100, 200]); } catch (x) { } } }
 }, 1000);
+
+/* ---------- 24 nov 2026 (Javier: «en el iPhone… deslizas desde la parte izquierda de la pantalla y ya va hacia atrás, no hace falta dar al botón de arriba»;
+   «todos los cambios se aplican pensando en que somos una app en la App Store»): volver atrás deslizando desde el borde izquierdo, como en las apps
+   del iPhone. La pantalla va pegada al dedo y por detrás asoma la anterior; pasado un tercio (o con un golpe rápido), vuelve; si no, se queda.
+   Hace lo mismo que la flecha de arriba a la izquierda («Volver» o «Minimizar el entreno»); con una ventana abierta, la cierra. En Inicio y las
+   demás pestañas no hay nada detrás: no hace nada. Solo en la app (la de la tienda o la instalada en la pantalla de inicio): en Safari, ese gesto
+   es del propio navegador. Para probarlo fuera: localStorage yo_gesto = 1 ---------- */
+var GES = null, GES_BORDE = 24;
+function gestoOn() {
+  try { if (localStorage.getItem('yo_gesto') === '1') return true; } catch (e) { }
+  try { var C = window.Capacitor; if (C && C.isNativePlatform && C.isNativePlatform()) return true; } catch (e) { }
+  return !!(window.navigator.standalone || (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches));
+}
+/* a dónde lleva «atrás» ahora mismo: la ventana abierta o el botón de volver de la pantalla */
+function atrasDe() {
+  if (FONDO.on && $('#hoja.on .hoja-c')) return { hoja: 1 };
+  var b = document.querySelector('#app [aria-label="Volver"], #app [aria-label="Minimizar el entreno"]');
+  return b ? { b: b } : null;
+}
+function atrasHaz(o) { if (o.hoja) cerrarHoja(); else if (o.b && document.body.contains(o.b)) o.b.click(); }
+/* la pantalla de detrás, para que asome mientras deslizas (solo cuando «atrás» es volver a la anterior) */
+function atrasPrevia(o) {
+  if (o.hoja || !o.b || o.b.dataset.a !== 'volver' || !S.pant || S.v !== 'app') return null;
+  var p = S.pila[S.pila.length - 1] || null, sv = S.pant, h = '';
+  S.pant = p;
+  try { h = p ? (VISTAS[p.t] || function () { return ''; })(p) : ({ inicio: vInicio, entreno: vEntreno, nutri: vNutri, comu: vComu, prog: vProg })[S.tab]() + tabbar(); } catch (e) { h = ''; }
+  S.pant = sv;
+  return { h: h.replace(/\s(id|for)="[^"]*"/g, ''), y: p ? p.sy || 0 : (S.x.raizY && S.x.raizY.t === S.tab ? S.x.raizY.y : 0) };
+}
+function gesFijos() { var L = []; [].forEach.call(document.querySelectorAll('#app *'), function (e) { if (e.offsetParent === null && getComputedStyle(e).position === 'fixed') L.push(e); }); return L; }
+function gesEmpieza(G) {
+  var o = G.o, W = window.innerWidth; G.W = W;
+  if (o.hoja) { G.el = $('#hoja .hoja-c'); G.fondo = $('#hoja .hoja-fondo'); return; }
+  var app = $('#app'), pr = atrasPrevia(o), d = document.createElement('div'); d.id = 'atras-v'; d.className = 'atras-v'; d.setAttribute('aria-hidden', 'true');
+  d.innerHTML = '<div class="atras-in" style="margin-top:' + (-(pr ? pr.y : 0)) + 'px">' + (pr ? pr.h : '') + '</div><i class="atras-os"></i>';
+  document.body.appendChild(d); G.prev = d; G.app = app; G.fijos = gesFijos();
+  app.classList.add('ges'); document.documentElement.classList.add('ges-on');
+}
+function gesPinta(G, dx) {
+  var W = G.W, f = Math.max(0, Math.min(1, dx / W));
+  if (G.el) { G.el.style.transform = 'translateX(' + dx + 'px)'; if (G.fondo) G.fondo.style.opacity = String(1 - f); return; }
+  G.app.style.left = dx + 'px';
+  G.fijos.forEach(function (e) { e.style.translate = dx + 'px 0'; });
+  if (G.prev) { G.prev.style.transform = 'translateX(' + (-0.3 * W * (1 - f)) + 'px)'; G.prev.lastChild.style.opacity = String(0.35 * (1 - f)); }      // se mueve la capa entera (no lo de dentro), para que su barra de abajo siga abajo
+}
+function gesSuelta(G, ok) {
+  var W = G.W, dur = ok ? Math.max(120, Math.min(260, (W - G.dx) / Math.max(0.6, G.v) )) : 220, ease = 'cubic-bezier(.2,.8,.2,1)';
+  var fin = function () {
+    if (G.el) { G.el.style.transition = ''; G.el.style.transform = ''; if (G.fondo) { G.fondo.style.transition = ''; G.fondo.style.opacity = ''; } }
+    else { G.app.style.transition = ''; G.app.style.left = ''; G.app.classList.remove('ges'); G.fijos.forEach(function (e) { e.style.transition = ''; e.style.translate = ''; }); if (G.prev && G.prev.parentNode) G.prev.parentNode.removeChild(G.prev); document.documentElement.classList.remove('ges-on'); }
+  };
+  var tr = function (e, prop) { e.style.transition = prop + ' ' + dur + 'ms ' + ease; };
+  if (G.el) { tr(G.el, 'transform'); if (G.fondo) tr(G.fondo, 'opacity'); }
+  else { tr(G.app, 'left'); G.fijos.forEach(function (e) { tr(e, 'translate'); }); if (G.prev) { G.prev.style.transition = 'transform ' + dur + 'ms ' + ease; G.prev.lastChild.style.transition = 'opacity ' + dur + 'ms ' + ease; } }
+  requestAnimationFrame(function () { gesPinta(G, ok ? W : 0); });
+  setTimeout(function () { if (ok) { if (G.el) { G.el.style.visibility = 'hidden'; } atrasHaz(G.o); } fin(); }, dur + 20);
+}
+document.addEventListener('touchstart', function (ev) {
+  if (GES || !ev.touches || ev.touches.length !== 1) return; var t = ev.touches[0];
+  if (t.clientX > GES_BORDE || !gestoOn() || (typeof ORDY !== 'undefined' && ORDY) || (typeof SOD !== 'undefined' && SOD)) return;
+  var o = atrasDe(); if (!o) return;
+  GES = { o: o, x0: t.clientX, y0: t.clientY, act: false, dx: 0, v: 0, t0: Date.now(), xl: t.clientX, tl: Date.now() };
+}, { passive: true });
+document.addEventListener('touchmove', function (ev) {
+  var G = GES; if (!G || !ev.touches || ev.touches.length !== 1) return; var t = ev.touches[0], dx = t.clientX - G.x0, dy = t.clientY - G.y0;
+  if (!G.act) {
+    if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) { GES = null; return; }      // va hacia arriba o abajo: es desplazar la pantalla
+    if (dx < 8 || dx < Math.abs(dy)) return;
+    G.act = true; gesEmpieza(G);
+  }
+  if (ev.cancelable) ev.preventDefault();
+  var now = Date.now(); if (now > G.tl) { G.v = (t.clientX - G.xl) / (now - G.tl); G.xl = t.clientX; G.tl = now; }
+  G.dx = Math.max(0, dx); gesPinta(G, G.dx);
+}, { passive: false });
+function gesFin(ev, cancel) { var G = GES; if (!G) return; GES = null; if (!G.act) return; var ok = !cancel && (G.dx > G.W / 3 || (G.v > 0.45 && G.dx > 30)); gesSuelta(G, ok); }
+document.addEventListener('touchend', function (ev) { gesFin(ev, false); }); document.addEventListener('touchcancel', function (ev) { gesFin(ev, true); });
 
 ;
 /* ---------- entrar, crear cuenta y recuperar la contraseña (Supabase Auth) ---------- */
