@@ -5943,7 +5943,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.249';
+var APP_V = 'v53.4.250';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -6626,8 +6626,9 @@ function ejcValorar(d,E,S,P){
   var act=ejcRutinas(d,hoy,hoy), ult=S.slice(-3), j=S.length-1; while(j>0&&S[j-1].top.p===u.top.p) j--;
   var sU=(d.sesiones||[]).filter(function(x){ return x.id===u.sid; })[0], rU=sU&&act.filter(function(r){ return r.nombre===sU.rutina; }), rmx=ejcRepMax(rU&&rU.length?rU:act,k);      // el rango de la rutina de su último día
   var semIg=Math.floor(diff(S[j].f,hoy)/7), cumbre=ult.filter(function(s){ return s.top.p===u.top.p&&rmx&&s.top.r>=rmx; }).length, sig;
-  var inc=u.top.p>=20?2.5:1;
-  if(rmx&&(u.top.r>=rmx||cumbre>=2)) sig='La última vez hizo '+fN(u.top.r,0)+' repeticiones con '+fN(u.top.p)+' kg y tiene programadas hasta '+rmx+': puede subir a <b>'+fN(u.top.p+inc)+' kg</b>.';
+  var tcE=tipoCargaEj({n:nom}), rmxE=tcE&&rmx?Math.max(15,rmx):rmx;      // v53.4.250: con mancuernas o kettlebell, hasta 15 repeticiones y luego el peso que existe de verdad (10 → 12)
+  if(rmxE&&(u.top.r>=rmxE||(!tcE&&cumbre>=2))) sig='La última vez hizo '+fN(u.top.r,0)+' repeticiones con '+fN(u.top.p)+' kg y tiene programadas hasta '+rmx+': puede subir a <b>'+fN(pesoSig(u.top.p,tcE))+' kg</b>.';
+  else if(tcE&&rmx&&u.top.r>=rmx) sig='La última vez hizo '+fN(u.top.r,0)+' repeticiones con '+fN(u.top.p)+' kg: con mancuernas, que suba repeticiones hasta 15 y luego pase a <b>'+fN(pesoSig(u.top.p,tcE))+' kg</b>.';
   else if(semIg>=4&&S.length-j>=4) sig='Lleva '+semIg+' semanas en '+fN(u.top.p)+' kg: prueba a cambiar algo (repeticiones, series o días por semana).';
   else if(Z.length&&ejcRes(Z[Z.length-1])==='baja') sig='Ha bajado con «'+esc(Z[Z.length-1].nom)+'»: revisa lo que cumple, la dieta y el descanso antes de subir de peso.';
   else sig='Va bien: que siga con lo que tiene programado.';
@@ -8224,7 +8225,12 @@ A.cmpCerrar=function(){ A.fzCerrar(); A.cmpExpCerrar(); var v=document.getElemen
 var CFG_DEF={apx:{1:[[60,6]],2:[[50,8],[70,5]],3:[[40,10],[60,6],[80,3]],4:[[40,10],[55,6],[70,4],[85,2]]},drop:{pct:25,n:2,desc:0},mdrop:{n:2,desc:0},rp:{desc:20,n:2},myo:{desc:15,n:4},cluster:{desc:20,n:2},backoff:{pct:10},pir:{sube:5,baja:10}};   // v48: los de la guía (drop −25 %, back-off −10 %, cluster 2+2+2, pirámides ±)
 function cfgDe(){ return (BOOT.mode==='clienta'?(CL.d&&CL.d.clienta&&CL.d.clienta.cfg):(CO.d&&CO.d.clienta&&CO.d.clienta.cfg))||{}; }
 function cfgSer(c){ c=c||cfgDe(); var o={}; Object.keys(CFG_DEF).forEach(function(k){ o[k]=k==='apx'?Object.assign({},CFG_DEF.apx,c.apx||{}):Object.assign({},CFG_DEF[k],c[k]||{}); }); return o; }
-function redKg(v,mc){ if(v==null||!isFinite(v)||v<=0) return null; var p=mc?1:(v<12?1:2.5); return Math.max(p,Math.round(v/p)*p); }
+/* v53.4.250 (24 nov 2026, Javier: «en mancuernas no podemos hacer sobrecarga de 1 kg más… que tenga en cuenta los saltos reales de las mancuernas»):
+   los pesos que hay de verdad: mancuernas de 1 en 1 hasta 10 y luego de 2 en 2; kettlebells 4, 6, 8… 16, 20, 24…; barra y máquina, como antes */
+var PESOS_MANC=[1,2,3,4,5,6,7,8,9,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,55,60], PESOS_KB=[4,6,8,10,12,14,16,20,24,28,32,36,40,48];
+function redKg(v,mc){ if(v==null||!isFinite(v)||v<=0) return null; if(mc) return PESOS_MANC.reduce(function(a,x){ return Math.abs(x-v)<Math.abs(a-v)?x:a; },PESOS_MANC[0]); var p=v<12?1:2.5; return Math.max(p,Math.round(v/p)*p); }
+function tipoCargaEj(e){ var n=String(e&&e.n||''), b=bancoDe(n), m=b?metaEj(b):{}, q=String((m&&m.eq)||(b&&b.equipo)||''); return /kettlebell|pesa rusa/i.test(n+' '+q)?'kb':(e&&e.mc)||RE_MANC.test(n)||/mancuerna/i.test(q)?'manc':''; }
+function pesoSig(p,t){ var L=t==='manc'?PESOS_MANC:t==='kb'?PESOS_KB:null; if(L){ for(var k=0;k<L.length;k++) if(L[k]>p+0.01) return L[k]; return p+(t==='kb'?4:2); } return p+(p<20?1:2.5); }
 function apxTxt(l){ return (l||[]).map(function(p){ return p[0]+' % × '+p[1]; }).join(' · '); }
 function e1rmF(p,r,f){ p=num(p); r=num(r); if(!p||!r) return null; if(r===1) return p; if(f==='brzycki') return r<37?p*36/(37-r):null; if(f==='lombardi') return p*Math.pow(r,0.10); return p*(1+r/30); }
 var F1RM={epley:'Epley',brzycki:'Brzycki',lombardi:'Lombardi'};
@@ -8362,18 +8368,19 @@ function sugerenciaEj(e,uv){
   var s0=e.sets.filter(function(s){ return s.t!=='aprox'; })[0]; if(!s0) return null;
   var rg=String(s0.ro||'').match(/\d+/g), lo=rg?+rg[0]:null, hi=rg?+(rg[1]||rg[0]):null;
   var top=W.reduce(function(a,x){ return !a||num(x.p)>num(a.p)||(num(x.p)===num(a.p)&&num(x.r)>num(a.r))?x:a; },null), p=num(top.p), r=num(top.r);
-  var inc=e.mc?(p<10?1:2):(p<20?1:2.5);
+  var tc=tipoCargaEj(e);
   var rirs=W.map(function(x){ return num(x.rir); }).filter(function(v){ return v!=null; }), duro=rirs.length&&rirs.every(function(v){ return v<=0; });
   function S(pp,rr){ return {p:pp,r:rr,t:fN(pp)+' kg × '+fN(rr,0)+' reps'}; }
   // v22: en los accesorios, primero llegar a 15 repeticiones con el mismo peso; en los principales (compuestos), subir el peso dentro de su rango
-  if(fnEj(e.n)!=='principal'){
+  // v53.4.250 (Javier): con mancuernas o kettlebell, también en los principales: primero hasta 15 repeticiones y luego el siguiente peso que existe (10 → 12)
+  if(fnEj(e.n)!=='principal'||tc){
     var tope=Math.max(15,hi||0), base=lo&&lo<tope?lo:10;
-    if(r>=tope&&!duro) return S(p+inc,base);
+    if(r>=tope&&!duro) return S(pesoSig(p,tc),base);
     if(duro&&lo&&r<lo) return S(p,lo);
     return S(p,Math.min(tope,r+1));
   }
   if(lo==null) return S(p,r+1);
-  if(r>=hi&&!duro) return S(p+inc,lo);
+  if(r>=hi&&!duro) return S(pesoSig(p,''),lo);
   if(duro&&r<lo) return S(p,lo);
   return S(p,Math.min(hi,r+1));
 }
@@ -17607,7 +17614,7 @@ function metaEdHtml(x){
     ['eq','pat','niv','mod','fn'].map(function(k){ return '<label class="f">'+META_L[k].t+'<select id="be-'+k+'">'+META_L[k].o.map(function(o){ return '<option value="'+o[0]+'"'+(m[k]===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'; }).join('')+
     '<label class="f">Qué apunta<select id="be-reg"><option value=""'+(!x.reg?' selected':'')+'>Según el material (ahora: '+esc((metaTxt('reg',apuntaDe(Object.assign({},x,{reg:''}),x.nombre))||'').toLowerCase())+')</option>'+META_L.reg.o.map(function(o){ return '<option value="'+o[0]+'"'+(x.reg===o[0]?' selected':'')+'>'+o[1]+'</option>'; }).join('')+'</select></label>'+      // v52.8
     '</div><div class="lab">Movilidad: qué trabaja <span class="muted">(si es de movilidad; puedes marcar varias)</span></div><div class="tipos zona" id="be-zona" data-v="'+esc(zonasDe(m.mod==='movilidad'?m.zona:x.zona).join(','))+'">'+META_L.zona.o.map(function(o){ var on=zonasDe(m.mod==='movilidad'?m.zona:x.zona).indexOf(o[0])>=0; return '<button type="button" class="'+(on?'on':'')+'" data-a="beZona" data-v="'+o[0]+'" aria-pressed="'+on+'">'+o[1]+'</button>'; }).join('')+'</div>'+
-    '<p class="muted sm">La función decide cómo se le sugiere progresar: en los <b>principales</b> (compuestos) se prioriza subir el peso; en los <b>accesorios</b>, primero llegar a 15 repeticiones con el mismo peso.</p></details>';
+    '<p class="muted sm">La función decide cómo se le sugiere progresar: en los <b>principales</b> (compuestos) se prioriza subir el peso; en los <b>accesorios</b>, primero llegar a 15 repeticiones con el mismo peso. Con <b>mancuernas o kettlebell</b>, siempre primero hasta 15 repeticiones y luego el siguiente peso que existe (de 10 a 12 kg, no a 11).</p></details>';
 }
 /* v38 · vídeos de YouTube para el banco: 3 propuestas por ejercicio sin vídeo; sin el servicio, buscar y pegar */
 function ytBusca(n){ return 'https://www.youtube.com/results?search_query='+encodeURIComponent(String(n||'')+' técnica ejercicio'); }
@@ -22304,6 +22311,7 @@ var AYUDA=[
   {g:1,q:'¿Cómo le pongo una rutina?',r:'En su ficha, pestaña Entrenos: «+ Nueva rutina» y añade los ejercicios, o usa una de tu Banco de rutinas. Guárdala y le sale en su app.',a:'sdRutBib',k:'rutina entreno ejercicios plan semana crear'},
   {g:1,q:'¿Cómo copio una rutina a otro cliente o a otra semana?',r:'Abre la rutina y pulsa «Copiar rutina»: eliges a quién (o a qué fecha) y la ajustas antes de guardar.',k:'copiar duplicar rutina otra semana otro cliente'},
   {g:1,q:'¿Cómo añado un ejercicio o su vídeo?',r:'En el Banco de ejercicios: busca el ejercicio (sus palabras, en cualquier orden: «tríceps banco barra») o crea uno nuevo, y pega el enlace de su vídeo (por ejemplo, de YouTube) y sus indicaciones.',a:'sdBanco',k:'ejercicio video youtube banco nuevo tecnica buscar'},
+  {g:1,q:'¿Cómo le sugiere la app el peso de cada día?',r:'En su app, «Objetivo de hoy» sale de su última vez. En los ejercicios principales sube el peso dentro de su rango; en los accesorios, primero llega a 15 repeticiones con el mismo peso. Con mancuernas o kettlebell, siempre primero hasta 15 repeticiones y luego el siguiente peso que existe de verdad (de 10 a 12 kg, no a 11). Si la última vez fue a RIR 0 en todas, no sube.',k:'sugerencia peso objetivo sobrecarga progresiva mancuernas repeticiones subir'},
   {g:1,q:'¿Cómo le mando su dieta en PDF?',r:'Al guardar su dieta te sale «¿Avisar a…?»: deja activado «Enviarle también la dieta en PDF por email» y pulsa «Sí» (se recuerda para la próxima). Cuando quieras, en su pestaña Dieta: «Descargar en PDF» o «Enviársela por email». Sale lo guardado, en tarjetas para imprimir y pegar en la nevera: cada plan en su hoja, siempre con los gramos y con las kcal solo si se las dejas ver en su app.',k:'pdf dieta email correo mandar enviar descargar imprimir exportar nevera'},
   {g:1,q:'¿Cómo uso la misma dieta con varios clientes?',r:'En la dieta de un cliente, «Guardar en tu banco de dietas». Después, en otro cliente, pestaña Dieta → «Desde tu banco de dietas» (o «Poner una de tu banco»): eliges una y, si quieres, la ajustas a sus kcal (se escalan los gramos de cada plato). La que tenía queda en su historial.',k:'banco dietas plantilla copiar misma dieta kcal ajustar'},
   {g:1,q:'¿Cómo le hago una dieta?',r:'En su ficha, pestaña Dieta: pones sus kcal y macros y sus comidas con tus platos, recetas o alimentos. Para ir más rápido, «Copiar dieta…» la trae de otro cliente y la ajustas.',k:'dieta comidas macros kcal calorias menu copiar'},
