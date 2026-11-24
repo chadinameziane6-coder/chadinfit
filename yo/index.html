@@ -2542,6 +2542,23 @@ html[data-tema="oscuro"] .ss-b{background:linear-gradient(180deg,rgba(154,140,25
 html[data-tema="oscuro"] .ss-h b,html[data-tema="oscuro"] .ss-h small,html[data-tema="oscuro"] .ss-un{color:#D9D4FF}
 /* 24 nov, 16:59: «Crear» arriba a la derecha del buscador de ejercicios */
 .cab .cab-crear{height:38px;padding:0 14px;border-radius:19px;display:inline-flex;align-items:center;gap:5px;font-size:13.5px;font-weight:800;flex:none;margin-left:auto}
+/* 24 nov, 17:02: ajustes de la máquina, uno por casilla */
+.maq-g{display:grid;grid-template-columns:1fr 1fr;gap:8px 10px}.maq-f{margin:0}.maq-f span{font-size:12.5px;font-weight:700;color:var(--tx2)}.maq-f input{min-width:0}
+.maq-k{display:block;font-size:12px;font-weight:800;color:var(--tx3);margin:12px 0 6px}
+.maq-ch{flex-wrap:wrap;gap:6px}.maq-ch .chip{display:inline-flex;align-items:center;gap:4px;margin:0}
+.maq-x{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) 30px;gap:8px;align-items:center;margin-bottom:8px}.maq-x input{min-width:0;height:44px;border-radius:12px;border:1px solid var(--borde2);background:var(--card);padding:0 12px;font-size:15px}
+.maq-otro{display:inline-flex;align-items:center;gap:5px;margin:8px 0 4px;font-weight:800}
+.maq-ch .chip{height:34px;font-size:13px;padding:0 11px}
+/* 24 nov, 17:04 (Javier): «Método» y «Aproximación» en otro color (lila, como el objetivo de hoy); el descanso, con una rueda como la del iPhone */
+.met-b{background:linear-gradient(90deg,rgba(127,214,255,.2),rgba(154,140,255,.22));border-color:rgba(124,104,240,.32);color:#2E2560}.met-b em{color:#5A5378}
+.met-b.on{background:#0D0D10;border-color:#0D0D10;color:#fff}
+html[data-tema="oscuro"] .met-b:not(.on){background:linear-gradient(90deg,rgba(127,214,255,.16),rgba(154,140,255,.2))!important;border-color:rgba(154,140,255,.4)!important;color:#E4E0FF!important}
+.dw{position:relative;height:220px;margin:4px 0 12px;border-radius:22px;overflow:hidden;background:var(--suave)}
+.dw-sel{position:absolute;left:10px;right:10px;top:88px;height:44px;border-radius:22px;background:var(--card);box-shadow:0 2px 12px rgba(13,13,16,.1);pointer-events:none}
+.dw-l{position:relative;height:100%;overflow-y:scroll;scroll-snap-type:y mandatory;padding:88px 0;box-sizing:border-box;scrollbar-width:none;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(180deg,transparent 0,#000 34%,#000 66%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0,#000 34%,#000 66%,transparent 100%)}
+.dw-l::-webkit-scrollbar{display:none}
+.dw-i{display:block;width:100%;height:44px;border:0;background:none;padding:0;scroll-snap-align:center;font-size:21px;font-weight:600;color:var(--tx);font-variant-numeric:tabular-nums;letter-spacing:-.01em;transform-origin:center}
+.dw-i.on{font-weight:800}
 
 </style>
 </head>
@@ -3196,7 +3213,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.40';
+var YO_V = 'yo-1.41';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6625,17 +6642,32 @@ A.sonidoProbar = function () { audioOk(); if (!sonidoOn()) return toast('El soni
 
 /* ---------- el descanso de cada ejercicio: se cambia aquí (y, si quieres, también en la rutina) ---------- */
 var DESC_OP = [0, 30, 45, 60, 75, 90, 120, 150, 180, 240, 300];
+/* 24 nov, 17:04 (Javier, con una captura: «la selección del descanso que salga así»): una rueda como la del iPhone, de 5 en 5 segundos
+   (Sin descanso, 5s… 1min 10s… hasta 10 min); el del centro es el elegido; «Listo» lo guarda */
+var DESC_W = []; for (var dw0 = 0; dw0 <= 600; dw0 += 5) DESC_W.push(dw0);
+var DW_H = 44;
+function descTxt(v) { v = +v || 0; return !v ? 'Sin descanso' : v < 60 ? v + 's' : Math.floor(v / 60) + 'min ' + (v % 60) + 's'; }
+function dwIdx(v) { var k = DESC_W.indexOf(+v || 0); return k >= 0 ? k : Math.max(0, Math.min(DESC_W.length - 1, Math.round((+v || 0) / 5))); }
 A.descEj = function (el) {
-  var i = el ? +el.dataset.i : S.x.de.i, e = S.ses.ej[i]; if (el) S.x.de = { i: i, d: +e.d || 0, rut: false };
+  var i = el ? +el.dataset.i : S.x.de.i, e = S.ses.ej[i]; if (el) S.x.de = { i: i, d: DESC_W[dwIdx(+e.d || 0)], rut: false };
   var X = S.x.de, r = S.ses.rid ? rutinaDe(S.ses.rid) : null;
-  hoja('<h2>Descanso</h2><p class="mut sm">' + esc(e.n) + '</p><div class="chips desc-op">' + DESC_OP.map(function (v) { return '<button class="chip' + (X.d === v ? ' on' : '') + '" aria-pressed="' + (X.d === v) + '" data-a="descOp" data-v="' + v + '">' + (v ? mmss(v) : 'Sin descanso') + '</button>'; }).join('') + '</div>' +
+  hoja('<h2>Descanso</h2><p class="mut sm">' + esc(e.n) + '</p><div class="dw"><div class="dw-sel" aria-hidden="true"></div><div class="dw-l" id="dw-l" role="listbox" aria-label="Descanso entre series">' +
+    DESC_W.map(function (v) { return '<button class="dw-i" role="option" data-a="descOp" data-v="' + v + '" aria-selected="' + (X.d === v) + '">' + descTxt(v) + '</button>'; }).join('') + '</div></div>' +
     (r ? '<label class="chk"><input type="checkbox" data-ch="descRut"' + (X.rut ? ' checked' : '') + '><span>Guardarlo también en «' + esc(r.nombre) + '»</span></label>' : '') +
-    '<button class="btn" data-a="descEjSi">Guardar</button>');
+    '<button class="btn" data-a="descEjSi">Listo</button>');
+  var l = document.getElementById('dw-l'); if (!l) return; l.scrollTop = dwIdx(X.d) * DW_H; dwPinta(l);
+  l.addEventListener('scroll', function () { if (!l._raf) l._raf = requestAnimationFrame(function () { l._raf = 0; dwPinta(l); });
+    clearTimeout(l._t); l._t = setTimeout(function () { var k = Math.round(l.scrollTop / DW_H); if (l._obj != null) { if (k === l._obj) l._obj = null; return; } if (S.x.de) S.x.de.d = DESC_W[Math.max(0, Math.min(DESC_W.length - 1, k))]; }, 90); }, { passive: true });
 };
-A.descOp = function (el) { S.x.de.d = +el.dataset.v; A.descEj(); };
+function dwPinta(l) { var y = l.scrollTop, k0 = Math.round(y / DW_H), I = l.children;
+  for (var k = Math.max(0, k0 - 5); k <= Math.min(I.length - 1, k0 + 5); k++) { var d = Math.abs(k * DW_H - y) / DW_H, it = I[k];
+    it.style.opacity = String(Math.max(0.18, 1 - d * 0.3)); it.style.transform = 'scale(' + (1 - Math.min(d, 3) * 0.07) + ')'; it.classList.toggle('on', k === k0); it.setAttribute('aria-selected', String(k === k0)); } }
+A.descOp = function (el) { var v = +el.dataset.v, l = document.getElementById('dw-l'); S.x.de.d = v; if (!l) return A.descEj(); var k = dwIdx(v); l._obj = k;
+  try { l.scrollTo({ top: k * DW_H, behavior: 'smooth' }); } catch (er) { l.scrollTop = k * DW_H; } };
 CH.descRut = function (t) { S.x.de.rut = t.checked; };
 A.descEjSi = function () {
-  var X = S.x.de, e = S.ses.ej[X.i]; e.d = String(X.d); guardaEnCurso();
+  var X = S.x.de, e = S.ses.ej[X.i], l = document.getElementById('dw-l'); if (l && l._obj == null) X.d = DESC_W[Math.max(0, Math.min(DESC_W.length - 1, Math.round(l.scrollTop / DW_H)))];      // lo que está en el centro de la rueda
+  e.d = String(X.d); guardaEnCurso();
   if (X.rut && S.ses.rid) { var r = rutinaDe(S.ses.rid); if (r) { (r.ejercicios || []).forEach(function (q) { if (clave(q.n) === clave(e.n)) q.d = String(X.d); }); guardaRutina(r); } }
   if (DESC.fin && !X.d) DESC.fin = 0;
   cerrarHoja(); toast(X.d ? 'Descanso: ' + mmss(X.d) : 'Sin descanso', 'ok'); pintar();
@@ -7108,10 +7140,64 @@ A.serCta = function (el) { audioOk(); empiezaDescanso(+el.dataset.v || 15); pint
 A.stMenos = function (el) { var e = S.ses.ej[+el.dataset.i], k = -1; e.sets.forEach(function (s, j) { if (!s.ok && s.t !== 'aprox') k = j; }); if (k < 0) return toast('No hay series sin hacer que quitar'); e.sets.splice(k, 1); guardaEnCurso(); pintar(); };
 function serARutina(e, fn) { var r = S.ses && S.ses.rid ? rutinaDe(S.ses.rid) : null; if (!r) return; var q = (r.ejercicios || []).filter(function (x) { return clave(x.n) === clave(e.n); })[0]; if (!q) return; fn(q); guardaRutina(r); }
 /* máquina y notas (por ejercicio, se guardan en tu perfil) */
-A.ejMaq = function (el) { var e = S.ses.ej[+el.dataset.i], v = ((S.perfil || {}).maq || {})[serK(e.n)] || '';
-  hoja('<h2>Ajustes de la máquina</h2><p class="mut sm">' + esc(e.n) + '. Lo verás aquí cada vez que hagas este ejercicio.</p><label class="f">Asiento, respaldo, agarre, altura…<textarea id="maq-t" rows="3" maxlength="200" placeholder="Ej.: asiento 4, respaldo 2, agarre neutro">' + esc(v) + '</textarea></label>' +
-    '<button class="btn" data-a="ejMaqSi" data-n="' + esc(e.n) + '">Guardar</button>' + (v ? '<button class="btn sec" data-a="ejMaqSi" data-n="' + esc(e.n) + '" data-v="borrar">Quitar</button>' : '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>')); };
-A.ejMaqSi = function (el) { var P = S.perfil = S.perfil || perfilNuevo(), t = el.dataset.v === 'borrar' ? '' : String((document.getElementById('maq-t') || {}).value || '').trim().slice(0, 200); P.maq = P.maq || {}; if (t) P.maq[serK(el.dataset.n)] = t; else delete P.maq[serK(el.dataset.n)]; guardaPerfil(); cerrarHoja(); pintar(); };
+/* 24 nov, 17:02 (Javier: «el ajuste de la máquina que salga como en clienta, cada ajuste que suele haber en el gym: rodillo, asiento, grados de banco,
+   altura de la polea… y también poner algún ajuste que no esté»): los ajustes típicos de ese ejercicio, uno por casilla; «Más ajustes» con los demás;
+   «Añadir un ajuste que no está» (nombre y valor) y una nota. Se guarda por ejercicio en tu perfil (maqD) y, en texto, en maq (lo que se ve en el entreno) */
+var MAQ_C = [['asiento', 'Asiento', '4'], ['respaldo', 'Respaldo', '2'], ['rodillo', 'Rodillo', '3'], ['banco', 'Grados del banco', '30°'], ['bancoA', 'Altura del banco', '45 cm'],
+  ['polea', 'Altura de la polea', '12'], ['accesorio', 'Accesorio', 'Cuerda'], ['agarre', 'Agarre', 'Neutro'], ['soporte', 'Altura del soporte', '8'], ['topes', 'Topes de seguridad', '5'],
+  ['pies', 'Posición de los pies', 'Altos y abiertos'], ['pecho', 'Apoyo de pecho', '3'], ['recorrido', 'Inicio del recorrido', '2'], ['hombreras', 'Hombreras', '4'], ['apertura', 'Apertura', '3']];
+var MAQ_L = {}; MAQ_C.forEach(function (c) { MAQ_L[c[0]] = c; });
+function maqSug(n) {
+  var t = clave(n), b = typeof bancoN === 'function' ? bancoN(n) : null, q = b && typeof eqDe === 'function' ? eqDe(b) : '';
+  if (/curl femoral|curl de pierna|extension de (cuadriceps|pierna|rodilla)|cuadriceps en maquina/.test(t)) return ['asiento', 'respaldo', 'rodillo', 'recorrido'];
+  if (/prensa/.test(t)) return ['respaldo', 'pies', 'topes'];
+  if (/hack|pendulo|sentadilla (en )?maquina|belt squat/.test(t)) return ['hombreras', 'pies', 'topes'];
+  if (/hip thrust|puente de gluteo/.test(t)) return q === 'maq' || /maquina/.test(t) ? ['asiento', 'rodillo', 'pies'] : ['bancoA', 'pies'];
+  if (/jalon|pulldown/.test(t)) return ['asiento', 'rodillo', 'agarre', 'accesorio'];
+  if (/abduccion|aduccion/.test(t)) return ['asiento', 'respaldo', 'apertura'];
+  if (/gemelo|talones|pantorrilla/.test(t)) return ['hombreras', 'asiento', 'pies'];
+  if (/pec deck|contractora|aperturas en maquina|deltoides posterior en maquina|mariposa/.test(t)) return ['asiento', 'agarre', 'recorrido'];
+  if (/polea|cable|face pull|cruce|crossover/.test(t) || q === 'polea') return ['polea', 'accesorio', 'agarre'];
+  if (/(press|remo|pecho|hombro).*(maquina|hammer|articulad)|maquina de (press|remo|pecho|hombro)/.test(t)) return /remo/.test(t) ? ['asiento', 'pecho', 'agarre'] : ['asiento', 'respaldo', 'agarre', 'recorrido'];
+  if (/smith|multipower/.test(t)) return ['soporte', 'topes', 'banco'];
+  if (/banca|press inclinado|press declinado|inclinado|declinado/.test(t)) return q === 'manc' || /mancuerna/.test(t) ? ['banco'] : ['banco', 'soporte', 'agarre'];
+  if (/sentadilla|press militar|good morning|zancada|split/.test(t) && (q === 'barra' || /barra/.test(t))) return ['soporte', 'topes'];
+  if (/banco|sentado|inclinado/.test(t) && (q === 'manc' || /mancuerna/.test(t))) return ['banco'];
+  if (q === 'maq' || /maquina/.test(t)) return ['asiento', 'respaldo', 'agarre', 'recorrido'];
+  if (q === 'barra') return ['soporte', 'agarre'];
+  return ['asiento', 'respaldo', 'agarre'];
+}
+function maqDe(n) { var P = S.perfil || {}, k = serK(n), D = (P.maqD || {})[k];
+  if (D) return { c: Object.assign({}, D.c || {}), x: (D.x || []).map(function (z) { return [z[0], z[1]]; }), t: D.t || '' };
+  return { c: {}, x: [], t: (P.maq || {})[k] || '' }; }
+function maqTxt(D) { var L = MAQ_C.filter(function (c) { return String((D.c || {})[c[0]] || '').trim(); }).map(function (c) { return c[1] + ' ' + String(D.c[c[0]]).trim(); });
+  (D.x || []).forEach(function (z) { var a = String(z[0] || '').trim(), b = String(z[1] || '').trim(); if (a || b) L.push((a + ' ' + b).trim()); });
+  if (String(D.t || '').trim()) L.push(String(D.t).trim()); return L.join(' · ').slice(0, 400); }
+A.ejMaq = function (el) { var e = S.ses.ej[+el.dataset.i]; if (!e) return; var D = maqDe(e.n), sug = maqSug(e.n);
+  S.x.mq = { n: e.n, c: D.c, x: D.x, t: D.t, on: sug.concat(MAQ_C.map(function (c) { return c[0]; }).filter(function (k) { return sug.indexOf(k) < 0 && String(D.c[k] || '').trim(); })), hay: !!maqTxt(D) };
+  maqPinta(); };
+function maqLee() { var X = S.x.mq; if (!X) return; var h = document.getElementById('hoja'); if (!h) return;
+  [].forEach.call(h.querySelectorAll('[data-maq]'), function (inp) { X.c[inp.dataset.maq] = inp.value; });
+  var R = [].map.call(h.querySelectorAll('.maq-x'), function (r) { return [r.querySelector('[data-mx=n]').value, r.querySelector('[data-mx=v]').value]; }); X.x = R;
+  var t = document.getElementById('maq-t'); if (t) X.t = t.value; }
+function maqPinta(foco) { var X = S.x.mq, resto = MAQ_C.filter(function (c) { return X.on.indexOf(c[0]) < 0; });
+  hoja('<h2>Ajustes de la máquina</h2><p class="mut sm">' + esc(X.n) + '. Te saldrán cada vez que hagas este ejercicio. Rellena solo lo que uses.</p>' +
+    '<div class="maq-g">' + X.on.map(function (k) { var c = MAQ_L[k]; return '<label class="f maq-f"><span>' + c[1] + '</span><input data-maq="' + k + '" value="' + esc(X.c[k] || '') + '" placeholder="Ej.: ' + esc(c[2]) + '" maxlength="40" autocomplete="off"></label>'; }).join('') + '</div>' +
+    (resto.length ? '<small class="maq-k">Más ajustes</small><div class="chips maq-ch">' + resto.map(function (c) { return '<button type="button" class="chip" data-a="maqMas" data-k="' + c[0] + '">' + ic('mas', 13, null, 2.6) + c[1] + '</button>'; }).join('') + '</div>' : '') +
+    (X.x.length ? '<small class="maq-k">Tus ajustes</small>' + X.x.map(function (z, m) { return '<div class="maq-x"><input data-mx="n" value="' + esc(z[0] || '') + '" placeholder="Ajuste (ej.: pin del brazo)" maxlength="40" aria-label="Nombre del ajuste"><input data-mx="v" value="' + esc(z[1] || '') + '" placeholder="Valor" maxlength="40" aria-label="Valor del ajuste"><button type="button" class="ed-x" data-a="maqQuita" data-m="' + m + '" aria-label="Quitar este ajuste">' + ic('x', 14) + '</button></div>'; }).join('') : '') +
+    '<button type="button" class="link maq-otro" data-a="maqOtro">' + ic('mas', 15, null, 2.6) + 'Añadir un ajuste que no está</button>' +
+    '<label class="f">Nota<textarea id="maq-t" rows="2" maxlength="200" placeholder="Ej.: pies a la altura de las caderas">' + esc(X.t || '') + '</textarea></label>' +
+    '<button class="btn" data-a="ejMaqSi">Guardar</button>' + (X.hay ? '<button class="btn sec" data-a="ejMaqSi" data-v="borrar">Quitar todos</button>' : '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>'));
+  if (foco) setTimeout(function () { var f = document.querySelector(foco); if (f) try { f.focus(); } catch (er) { } }, 30); }
+A.maqMas = function (el) { maqLee(); var k = el.dataset.k; if (S.x.mq.on.indexOf(k) < 0) S.x.mq.on.push(k); maqPinta('#hoja [data-maq="' + k + '"]'); };
+A.maqOtro = function () { maqLee(); S.x.mq.x.push(['', '']); maqPinta('#hoja .maq-x:last-of-type [data-mx=n]'); };
+A.maqQuita = function (el) { maqLee(); S.x.mq.x.splice(+el.dataset.m, 1); maqPinta(); };
+A.ejMaqSi = function (el) { var X = S.x.mq; if (!X) return cerrarHoja(); maqLee(); var P = S.perfil = S.perfil || perfilNuevo(), k = serK(X.n); P.maq = P.maq || {}; P.maqD = P.maqD || {};
+  var D = { c: {}, x: X.x.filter(function (z) { return String(z[0] || '').trim() || String(z[1] || '').trim(); }).map(function (z) { return [String(z[0] || '').trim().slice(0, 40), String(z[1] || '').trim().slice(0, 40)]; }), t: String(X.t || '').trim().slice(0, 200) };
+  Object.keys(X.c).forEach(function (q) { var v = String(X.c[q] || '').trim().slice(0, 40); if (v) D.c[q] = v; });
+  var t = el && el.dataset.v === 'borrar' ? '' : maqTxt(D);
+  if (t) { P.maq[k] = t; P.maqD[k] = D; } else { delete P.maq[k]; delete P.maqD[k]; }
+  S.x.mq = null; guardaPerfil(); cerrarHoja(); pintar(); if (t) toast('Ajustes guardados', 'ok'); };
 A.ejNota = function (el) { var e = S.ses.ej[+el.dataset.i], nt = ((S.perfil || {}).notasEj || {})[serK(e.n)] || {};
   hoja('<h2>Notas de ' + esc(e.n) + '</h2><label class="f">Siempre (nota fija)<textarea id="nt-f" rows="2" maxlength="300" placeholder="Ej.: codos pegados, bajar en 3 segundos">' + esc(nt.f || '') + '</textarea></label>' +
     '<label class="f">Para la próxima vez<textarea id="nt-p" rows="2" maxlength="300" placeholder="Ej.: subir a 22,5 kg">' + esc(nt.p || '') + '</textarea><small class="mut">Te sale la próxima vez que hagas este ejercicio y, al terminar ese entreno, se borra sola.</small></label>' +
