@@ -3721,7 +3721,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.44';
+var YO_V = 'yo-1.45';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7502,7 +7502,7 @@ function serMetHojaPinta() {
   var i = S.x.metI, e = S.ses && S.ses.ej[i]; if (!e) return; var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id, e.u || ''), W = U ? U.sets.filter(function (s) { return s.ok; }) : [], ref = serRef(e, O, W), ap = e.sets.some(function (s) { return s.t === 'aprox'; });
   hoja('<h2>Método · ' + esc(e.n) + '</h2><div class="met-l">' + MET_SER.map(function (x) { var on = S.x.metSel === x[0]; return '<button class="met-o' + (on ? ' on' : '') + '" data-a="serMetSel" data-v="' + x[0] + '" aria-pressed="' + on + '"><span class="rb"></span><span class="t"><b>' + x[1] + '</b><small>' + esc(MET_D[x[0]]) + '</small>' + esqHtml(serEsq(e, x[0], O, W)) + '</span></button>'; }).join('') + '</div>' +
     serMetAjHtml(e, S.x.metSel) +      // 24 nov, 17:34 (Javier): sin «Series de aproximación» aquí: tienen su botón al lado
-    '<button class="btn" data-a="serMetUsar">' + (S.x.metSel === (e.met || 'normal') ? 'Listo' : 'Usar ' + esc(metNom(S.x.metSel))) + '</button>');
+    '<button class="btn" data-a="serMetUsar">' + (S.x.metSel === (e.met || 'normal') && metCuadra(e, S.x.metSel) ? 'Listo' : 'Usar ' + esc(metNom(S.x.metSel))) + '</button>');
 }
 A.serMetSel = function (el) { S.x.metSel = el.dataset.v; serMetHojaPinta(); };
 /* 24 nov, 17:12 (Javier: «que haya otra opción para quien quiera poner un porcentaje que no haya ahí»): «Otro…» en cada ajuste, con su casilla */
@@ -7526,7 +7526,7 @@ A.serMetAj = function (el) {
   e.sets.forEach(function (s) { if (!s.ok && MINI_N[s.t] && (k === 'mnrp' || k === 'mnmyo')) s.mini = serMinis(s.t, e); });      // las mini-series que aún no has hecho, con el número nuevo
   guardaEnCurso(); serARutina(e, function (q) { q.mp = e.mp; }); serMetHojaPinta(); pintar();
 };
-A.serMetUsar = function () { var i = S.x.metI, e = S.ses && S.ses.ej[i]; cerrarHoja(); if (e && S.x.metSel !== (e.met || 'normal')) A.serMet({ dataset: { i: String(i), v: S.x.metSel } }); else pintar(); };
+A.serMetUsar = function () { var i = S.x.metI, e = S.ses && S.ses.ej[i]; cerrarHoja(); if (e && (S.x.metSel !== (e.met || 'normal') || !metCuadra(e, S.x.metSel))) A.serMet({ dataset: { i: String(i), v: S.x.metSel } }); else pintar(); };      // 24 nov, 18:37: aunque ya ponga «Normal», si las series no lo son, lo aplica
 /* «···» del ejercicio: Cada lado (si es a una mano o una pierna) y Quitar */
 A.ejMas = function (el) { var i = +el.dataset.i, e = S.ses.ej[i], g = ssGrupo(i); if (!e) return;
   hoja('<h2>' + esc(e.n) + '</h2><div class="lista">' + (!e.u ? '<button class="fila-b" data-a="serLadosH" data-i="' + i + '"><b>' + (ladOn(e) ? 'Quitar «Cada lado»' : 'Cada lado (izq. y der.)') + '</b><small>Kilos y repeticiones de la izquierda y de la derecha</small></button>' : '') +
@@ -7641,12 +7641,26 @@ function serLadosOk(e, s, fila) {
 function serVol(s) { var k = num(s.kg) || 0, mv = (s.mini || []).reduce(function (a, z) { return a + (z.ok ? (num(z.kg) != null && z.kg !== '' ? num(z.kg) : k) * (num(z.reps) || 0) : 0); }, 0); if (s.lad) return (num(s.lad.kgI) || 0) * (num(s.lad.repsI) || 0) + (num(s.lad.kgD) || 0) * (num(s.lad.repsD) || 0) + mv; return k * (num(s.reps) || 0) + mv; }      // 23 nov: cada mini-serie o bajada, con sus kilos
 /* cambiar el método: rehace los tipos de serie (las ya hechas no se tocan) y se queda en tu rutina para la próxima */
 function serRango(r) { var a = String(r || '10').split('-').map(Number); return [a[0] || 10, a[1] || a[0] || 10]; }
+/* 24 nov, 18:37 (Javier: «he cambiado a serie normal y no se cambia… además me salen debajo dos series especiales»): el tipo que toca a cada serie con
+   un método, para saber si lo que ves ya es ese método y para guardar en tu rutina el método limpio (sin la serie de más de hoy ni las ya hechas) */
+function metTipo(m, k, n) { return m === 'pir' ? 'pir' : m === 'top' ? (k ? 'back' : 'top') : /^(myo|drop|rp|fallo)$/.test(m) ? (k === n - 1 ? m : 'normal') : 'normal'; }
+function metCuadra(e, m) { var W = e.sets.filter(function (s) { return s.t !== 'aprox'; }), n = W.length;
+  if (e.n0 && m !== 'myo' && n > e.n0 && !W[n - 1].ok) return false;      // una serie de más sin hacer
+  return W.every(function (s, k) { return s.ok || s.t === metTipo(m, k, n); }); }
+function metPlantilla(e, m) {
+  var W = e.sets.filter(function (s) { return s.t !== 'aprox'; }), z = W[0] || {}, r0 = z.r0 || z.r || '10', rg = serRango(r0), rir = z.rirO || z.rir || '', N = m === 'myo' ? 1 : Math.max(1, e.n0 || W.length), L = [];
+  e.sets.forEach(function (s) { if (s.t === 'aprox') { var o = { t: 'aprox', r: s.r, rir: s.rirO || s.rir || '', kg: '' }; if (s.r0) o.r0 = s.r0; L.push(o); } });
+  for (var k = 0; k < N; k++) { var t = metTipo(m, k, N), r = t === 'pir' ? String(Math.max(3, rg[1] + 2 - 2 * k)) : t === 'top' ? Math.max(3, rg[0] - 3) + '-' + Math.max(4, rg[0] - 1) : t === 'back' ? rg[0] + '-' + rg[1] : t === 'myo' ? '12-15' : r0;
+    L.push({ t: t, r: r, r0: r0, rir: (W[k] && (W[k].rirO || W[k].rir)) || rir, kg: '' }); }
+  return L; }
 A.serMet = function (el) {
   var e = S.ses.ej[+el.dataset.i], m = el.dataset.v, Wk = function () { return e.sets.filter(function (s) { return s.t !== 'aprox'; }); }, W = Wk();
   W.forEach(function (s) { if (!s.r0) s.r0 = s.r; }); var r0 = (W[0] || {}).r0 || '10', rg = serRango(r0);      // las repeticiones de antes, para volver a ellas
   if (!e.n0) e.n0 = W.length;      // cuántas series tenía (18 nov: myo-reps se queda en 1 de activación y, al cambiar a otro, vuelven)
   if (m === 'myo') { var una = false; e.sets = e.sets.filter(function (s) { if (s.t === 'aprox' || s.ok) return true; if (!una) { una = true; return true; } return false; }); }
-  else for (var q = Wk().length; q < e.n0; q++) e.sets.push({ t: 'normal', r: r0, r0: r0, kg: '', reps: '', rir: '', ok: false });
+  else { for (var q = Wk().length; q < e.n0; q++) e.sets.push({ t: 'normal', r: r0, r0: r0, kg: '', reps: '', rir: '', ok: false });
+    /* 24 nov, 18:37: las de más que no has hecho (la serie extra de otro método) se quitan: vuelves a tus series */
+    for (var x = e.sets.length - 1; x >= 0 && Wk().length > e.n0; x--) if (e.sets[x].t !== 'aprox' && !e.sets[x].ok) e.sets.splice(x, 1); }
   W = Wk(); var n = W.length, nuevaUlt = false, otraUlt = false, cambioUlt = '';
   W.forEach(function (s, k) {
     /* 23 nov (Chadín: «en abducción he marcado drop set después de completar las tres y no se aplica»): la última serie, aunque ya esté hecha,
@@ -7670,7 +7684,7 @@ A.serMet = function (el) {
   else if (cambioUlt) toast('Tu última serie pasa a ' + esc(metNom(m).toLowerCase()));
   else if (nuevaUlt && m === 'drop') toast('Drop set en tu última serie: haz ahora las bajadas');
   else if (!W.some(function (s) { return !s.ok; }) && !nuevaUlt && !otraUlt && m !== 'normal') toast('Las series ya hechas no cambian: lo tendrás la próxima vez');
-  e.met = m; guardaEnCurso(); serARutina(e, function (q) { q.met = m; q.n0 = e.n0; q.sets = (otraUlt ? e.sets.slice(0, -1) : e.sets).map(function (s) { var o = { t: s.t, r: s.r, rir: s.rirO || s.rir || '', kg: '' }; if (s.r0) o.r0 = s.r0; return o; }); }); pintar();      // la serie de más, solo hoy
+  e.met = m; guardaEnCurso(); serARutina(e, function (q) { q.met = m; q.n0 = e.n0; q.sets = metPlantilla(e, m); }); pintar();      // 24 nov, 18:37: a tu rutina, el método limpio (la serie de más y las ya hechas, solo hoy)
 };
 /* 21 nov, 22:41 (Chadín): «que en aproximación de series puedas añadir cuantas meter y te salga general repes y calcule peso en función a lo que
    aprox te toca levantar, esto igual que en la de clienta»: de 0 a 5, con las repeticiones y el % del peso de trabajo de la app de clientas */
