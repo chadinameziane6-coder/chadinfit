@@ -3495,7 +3495,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.56';
+var YO_V = 'yo-1.57';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4299,9 +4299,8 @@ function vInicio() {
   var nom = nombreYo(), hs = hoyStr(), dt = aDate(hs), fecha = dt.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' }).replace('.', '').replace(',', '');
   var h = '<div class="pant pad-tab z2"><div class="z2-top"><span class="hueco"></span><span class="z2-logo">' + logo(128) + '</span><span class="hueco"></span></div>' +      // 21 nov, 22:41 (Chadín): el modo oscuro solo en Ajustes, no arriba
     '<div class="z2-cab"><div><small>' + esc(fecha.charAt(0).toUpperCase() + fecha.slice(1)) + '</small><h1>Hola' + (nom ? ', ' + esc(nom.split(' ')[0]) : '') + '</h1></div><button class="z2-av' + (fotoPf() ? ' con-f' : '') + '" data-a="perfil" aria-label="Tu perfil">' + avatarIn(nom, 20) + '</button></div>';
-  h += semCard();
   var dv = diaVer();
-  h += dv ? otroDiaZ2(dv) : hoyZ2();
+  h += (dv ? otroDiaZ2(dv) : hoyZ2()) + semCard();      // 25 nov, 00:51 (Javier): primero «Hoy toca» y debajo la semana
   if (!dv) h += suaveIni();      // yo-1.47: «¿Hacemos una semana suave?» o la de ahora
   if (primeraSemOn()) {      // 22 nov, 10:47 (OK de Javier y Chadín a las maquetas del lanzamiento): la primera semana, «Tu primera semana»; el objetivo, las series por grupo y «Añade a tu Inicio», después
     h += primeraSemHtml(); if (cicOn() || metaSig()) h += casillasZ2(); h += iniCarrera();
