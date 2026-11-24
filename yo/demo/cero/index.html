@@ -2805,6 +2805,14 @@ html[data-tema="oscuro"] .ses-k.ses-pl{background:rgba(255,255,255,.12);color:#C
 .rz-rp{padding:4px 2px 8px}
 .ses-pl .ses-sr{border:0;background:none;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;white-space:nowrap}
 html[data-tema="oscuro"] .rp-b{background:rgba(255,255,255,.1)}html[data-tema="oscuro"] .rp-b i.hc,html[data-tema="oscuro"] .rp-ley i.hc{background:#E4E0FF}html[data-tema="oscuro"] .rp-b i.pv,html[data-tema="oscuro"] .rp-ley i.pv{background:rgba(228,224,255,.3)}
+/* 25 nov, 00:22: la gráfica pequeña en las series y, la primera vez, el aviso debajo de la pastilla */
+.ses-pl .ses-sr{display:inline-flex;align-items:center}
+.ses-gr{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:6px;background:#fff;color:#5B4BD6;margin-left:6px;flex:none}
+html[data-tema="oscuro"] .ses-gr{background:rgba(255,255,255,.16);color:#CFC7FF}
+.ses-tip{position:relative;display:flex;align-items:flex-start;gap:10px;margin:2px auto 0;max-width:360px;width:100%;background:#2E2A3E;color:#fff;border-radius:14px;padding:10px 10px 10px 14px;font-size:13px;line-height:1.4;box-shadow:0 10px 24px rgba(0,0,0,.18);animation:apxIn .3s ease-out}
+.ses-tip:before{content:"";position:absolute;top:-5px;right:26%;width:11px;height:11px;background:#2E2A3E;transform:rotate(45deg);border-radius:2px}
+.ses-tip>.ic{color:#B4A9FF;flex:none;margin-top:1px}.ses-tip span{flex:1;min-width:0}.ses-tip b{font-weight:800}
+.ses-tip button{flex:none;border:0;background:rgba(255,255,255,.14);color:#fff;border-radius:999px;padding:6px 11px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -3912,7 +3920,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.53';
+var YO_V = 'yo-1.54';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6925,7 +6933,7 @@ A.abrirSes = function () { if (!S.ses) return; if (!(S.pant && S.pant.t === 'ent
 function sesSeg(X) { X = X || S.ses; return X ? Math.max(0, Math.floor(((X.pausa || Date.now()) - X.inicio) / 1000)) : 0; }
 function crono() { if (!S.ses) return '0:00'; var s = sesSeg(), h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; return (h ? h + ':' + ('0' + m).slice(-2) : m) + ':' + ('0' + s % 60).slice(-2); }
 setInterval(function () { var c = $('#crono'); if (c) c.textContent = crono(); var c2 = $('#du-big'); if (c2) c2.textContent = crono(); pintaDescanso(); }, 1000);
-A.durH = function () { var X = S.ses; if (!X) return;
+A.durH = function () { var X = S.ses; if (!X) return; cabVista();
   hoja('<h2>Tiempo del entreno</h2><div class="du-h"><b id="du-big" class="' + (X.pausa ? 'pz' : '') + '">' + crono() + '</b><span>' + (X.pausa ? 'En pausa' : 'En marcha') + '</span></div>' +
     '<button class="btn" data-a="durPausa">' + ic(X.pausa ? 'play' : 'pausa', 17) + (X.pausa ? 'Seguir contando' : 'Pausar el tiempo') + '</button>' +
     '<button class="btn sec" data-a="durAj" data-de="h">' + ic('lapiz', 17) + 'Ajustar el tiempo</button>' +
@@ -6961,7 +6969,9 @@ VISTAS.entreno = function () {
   var h = '<div class="ses"><header class="ses-cab"><div class="ses-f"><button class="redondo gris" data-a="volver" aria-label="Minimizar el entreno">' + ic('abajo', 20) + '</button><span class="ses-t"><b>' + esc(X.nombre) + '</b></span>' + '<button class="btn-neg" data-a="terminar">Terminar</button></div>' +      /* 23:30 (Javier): fuera las flechas de ordenar: se ordena manteniendo pulsado el ejercicio */
     /* 25 nov, 00:02 (Javier: «todo en una pastilla, pero quizá un poco más oscuro»): tiempo · ejercicios · series en una pastilla centrada; el tiempo se toca */
     '<div class="ses-k ses-pl"><button class="ses-du' + (X.pausa ? ' pz' : '') + '" data-a="durH" aria-label="Tiempo del entreno' + (X.pausa ? ', en pausa' : '') + ': pausar o poner a 0">' + ic(X.pausa ? 'pausa' : 'reloj', 15, null, 2.2) + '<b id="crono">' + crono() + '</b></button>' +
-    (tot.length ? '<i aria-hidden="true"></i><span><b>' + hechos + '</b>/' + tot.length + ' ejercicios</span>' : '') + (SR[1] ? '<i aria-hidden="true"></i><button class="ses-sr" data-a="repSes" aria-label="' + SR[0] + ' de ' + SR[1] + ' series: ver el reparto por músculo"><b>' + SR[0] + '</b>/' + SR[1] + ' series</button>' : '') + '</div>' +
+    (tot.length ? '<i aria-hidden="true"></i><span><b>' + hechos + '</b>/' + tot.length + ' ejercicios</span>' : '') + (SR[1] ? '<i aria-hidden="true"></i><button class="ses-sr" data-a="repSes" aria-label="' + SR[0] + ' de ' + SR[1] + ' series: ver el reparto por músculo"><b>' + SR[0] + '</b>/' + SR[1] + ' series<span class="ses-gr" aria-hidden="true">' + ic('barras', 12, null, 2.8) + '</span></button>' : '') + '</div>' +
+    /* 25 nov, 00:22 (Javier: «la primera vez que salga ese aviso y ya después solo esa pequeña gráfica») */
+    (SR[1] && !((S.perfil || {}).pista || {}).cab ? '<div class="ses-tip" role="note">' + ic('barras', 17, null, 2.6) + '<span>Toca <b>las series</b> para ver el reparto por músculo y <b>el tiempo</b> para pausarlo o ajustarlo.</span><button data-a="pistaOk" data-v="cab">Vale</button></div>' : '') +
     '</header><div class="ses-c">';      // 23:50 (Javier: «las rayas de colores no me gustan»): fuera las rayas de progreso (los ejercicios hechos ya salen arriba)
   var cal = X.ej.filter(function (e) { return e.cal; });
   if (X.suave) { var sx = suaveHoy(); h += '<p class="ses-dsc ss-ban"><span class="ss-bi">' + ic('luna', 16) + '</span><span><b>Semana suave</b>' + (sx ? ' · día ' + (dDias(sx.desde, hoyStr()) + 1) + ' de 7' : '') + ' · la mitad de las series, RIR 3–4</span><button class="link" data-a="suaveFin">Terminarla</button></p>'; }      // yo-1.47
@@ -8570,7 +8580,7 @@ A.pistaVer = function (el) { var i = +(el.dataset.i != null ? el.dataset.i : S.x
     (L.indexOf('manc') >= 0 ? '<div class="pm-f"><span class="pm-i">' + ic('pesa', 17) + '</span><span class="pm-t"><b>Apunta el peso de una sola mancuerna</b><small>Si coges dos de 10 kg, escribe 10.</small></span><button class="pm-b" data-a="pistaOk" data-v="manc">Entendido</button></div>' : '') +
     (L.indexOf('lad') >= 0 ? '<div class="pm-f"><span class="pm-i">' + ic('lados', 17, null, 2.2) + '</span><span class="pm-t"><b>¿Trabajas cada lado por separado?</b><small>Apunta los kilos y las repeticiones de la izquierda y de la derecha.</small></span><span class="pm-bb"><button class="pm-b neg" data-a="pistaLad" data-i="' + i + '">Activar</button><button class="pm-b" data-a="pistaOk" data-v="lad">Ahora no</button></span></div>' : '') +
     '</div><button class="btn sec" data-a="cerrarHoja">Cerrar</button>'); };
-A.pistaOk = function (el) { var P = S.perfil = S.perfil || perfilNuevo(); P.pista = Object.assign({}, P.pista || {}); P.pista[el.dataset.v] = 1; guardaPerfil(); pintar(); A.pistaVer({ dataset: {} }); };
+A.pistaOk = function (el) { var P = S.perfil = S.perfil || perfilNuevo(); P.pista = Object.assign({}, P.pista || {}); P.pista[el.dataset.v] = 1; guardaPerfil(); pintar(); if (el.dataset.v !== 'cab') A.pistaVer({ dataset: {} }); };
 A.pistaLad = function (el) { var P = S.perfil = S.perfil || perfilNuevo(); P.pista = Object.assign({}, P.pista || {}); P.pista.lad = 1; guardaPerfil(); A.serLados(el); A.pistaVer({ dataset: {} }); toast('Ahora apuntas cada lado por separado. Se cambia en «···»', 'ok'); };
 
 /* «Durante una rutina, que al presionar el nombre de un ejercicio, aunque esté cerrado y sea el último, presionando 0,2 s puedas cambiar el orden»
@@ -8678,7 +8688,9 @@ function repartoHtml(R, vivo, vacio) {
 }
 function repartoCard(L, tit) { return '<section class="card rp-c"><div class="card-h"><b>' + (tit || 'Series por músculo') + '</b></div>' + repartoHtml(repartoDe(L)) + '</section>'; }
 /* en el entreno: tocando las series de la pastilla */
-A.repSes = function () { var X = S.ses; if (!X) return; var R = repartoDe(X.ej), SR = sesSeries(X);
+IC.barras = IC.barras || '<path d="M5 20v-7M10 20V5M15 20v-9M20 20v-4"/>';
+function cabVista() { var P = S.perfil; if (P && !(P.pista || {}).cab) { P.pista = Object.assign({}, P.pista || {}, { cab: 1 }); guardaPerfil(); } }      // tocarlo ya cuenta como visto
+A.repSes = function () { var X = S.ses; if (!X) return; cabVista(); var R = repartoDe(X.ej), SR = sesSeries(X);
   hoja('<h2>Series por músculo</h2><p class="mut sm">Hoy llevas ' + SR[0] + ' de ' + SR[1] + ' series de trabajo.</p>' + repartoHtml(R, true, 'Hoy no hay ejercicios de fuerza.') + '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>'); };
 /* en Mi semana: todas las rutinas de la semana (previstas) y lo hecho estos días */
 function repartoSemana() {
