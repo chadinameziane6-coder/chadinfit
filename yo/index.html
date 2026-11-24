@@ -2669,8 +2669,6 @@ html[data-tema="oscuro"] .os-sw[aria-checked=true]{background:#fff}html[data-tem
 .ses-k small{font-size:11px;font-weight:600;color:var(--tx2)}
 .ses-k b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap}
 .ses-k b i{font-style:normal;font-weight:600;color:var(--tx2);font-size:13px}
-.ses-k span:first-child b{background:linear-gradient(90deg,#2B8FD6,#6E5BE6);-webkit-background-clip:text;background-clip:text;color:transparent}
-html[data-tema="oscuro"] .ses-k span:first-child b{background:linear-gradient(90deg,#7FD6FF,#9A8CFF);-webkit-background-clip:text;background-clip:text}
 /* la barra del entreno en curso, oscura y con la papelera (como Hevy) */
 .mini-ses{height:62px;border-radius:31px;padding:0 8px;gap:8px;background:rgba(28,28,32,.94);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.08);color:#fff}
 .mini-up,.mini-ses .mini-x{width:46px;height:46px;border-radius:50%;border:0;padding:0;display:flex;align-items:center;justify-content:center;flex:none;background:rgba(255,255,255,.1);color:#fff}
@@ -2770,6 +2768,18 @@ html[data-tema="oscuro"] .mov-res i{background:rgba(255,255,255,.12);color:#fff}
 .hoja .pm-c{margin:12px 0 14px}
 .ej-f2 .ej-h2 .ej-tip{align-self:center}
 .ses .ej-f2 .ej-h2{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+/* tocar «Duración»: pausar o poner a 0 */
+.ses-k .ses-du{display:flex;flex-direction:column;gap:1px;min-width:0;border:0;background:none;padding:0;margin:0;text-align:left;font:inherit;color:inherit;cursor:pointer}
+.ses-k .ses-du small{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;color:var(--tx2)}.ses-k .ses-du small .ic{opacity:.7}
+.ses-k .ses-du b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap;background:linear-gradient(90deg,#2B8FD6,#6E5BE6);-webkit-background-clip:text;background-clip:text;color:transparent}
+.ses-k .ses-du.pz b{background:none;-webkit-text-fill-color:currentColor;color:var(--tx3)}.ses-k .ses-du.pz small{color:#6E5BE6}
+html[data-tema="oscuro"] .ses-k .ses-du b{background:linear-gradient(90deg,#7FD6FF,#9A8CFF);-webkit-background-clip:text;background-clip:text}
+.du-h{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px 0 16px}.du-h b{font-size:44px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}.du-h b.pz{color:var(--tx3)}.du-h span{font-size:13px;font-weight:700;color:var(--tx2)}
+.du-n{text-align:center;margin:8px 0 0}
+/* tarjetas cerradas del entreno: el número (como en la abierta) en vez del cuadrado; hecho, el tic */
+.ej-cn{width:28px;height:28px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:var(--suave);color:var(--tx);font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
+.ej-cn.ok{background:linear-gradient(135deg,#7FD6FF,#9A8CFF);color:#0D0D10}
+html[data-tema="oscuro"] .ej-cn:not(.ok){background:rgba(255,255,255,.1);color:#fff}
 
 </style>
 </head>
@@ -3424,7 +3434,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.49';
+var YO_V = 'yo-1.50';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -3761,16 +3771,16 @@ function arrancar() {
 /* 21 nov, 22:41 (Chadín: «que al salir también aparezca como en curso, como Hevy… descansos, tiempo de trabajo»): en la barra del entreno
    en curso, el tiempo que lleva y lo que le queda de descanso; y si el descanso acaba estando en otra pantalla, suena igual la campana */
 function miniTxt() {
-  if (!S.ses) return ''; var m = Math.max(0, Math.floor((Date.now() - (S.ses.inicio || Date.now())) / 1000)), r = DESC && DESC.fin ? Math.ceil((DESC.fin - Date.now()) / 1000) : 0;
+  if (!S.ses) return ''; var m = sesSeg(), r = DESC && DESC.fin ? Math.ceil((DESC.fin - Date.now()) / 1000) : 0;
   var t = (m >= 3600 ? Math.floor(m / 3600) + ':' + ('0' + Math.floor(m % 3600 / 60)).slice(-2) : Math.floor(m / 60)) + ':' + ('0' + m % 60).slice(-2);
   return 'En curso · ' + t + (r > 0 ? ' · descanso ' + Math.floor(r / 60) + ':' + ('0' + r % 60).slice(-2) : '');
 }
 /* yo-1.48 (Javier, con la de Hevy: «este diseño no me gusta, que salga así»; «en vez de una X, una papelera»): la barra del entreno en curso, oscura,
    con la flecha para volver, el punto de «en directo», el nombre y el tiempo; debajo, el ejercicio de ahora (o el descanso que queda); a la derecha, la papelera */
-function miniT() { if (!S.ses) return ''; var m = Math.max(0, Math.floor((Date.now() - (S.ses.inicio || Date.now())) / 1000));
+function miniT() { if (!S.ses) return ''; var m = sesSeg();
   return (m >= 3600 ? Math.floor(m / 3600) + ' h ' + Math.floor(m % 3600 / 60) + ' min' : Math.floor(m / 60) + ':' + ('0' + m % 60).slice(-2)); }
 function miniSub() { var X = S.ses; if (!X) return ''; var r = DESC && DESC.fin ? Math.ceil((DESC.fin - Date.now()) / 1000) : 0, e = X.ej[X.ab], n = e && !e.cal ? e.n : '';
-  return r > 0 ? 'Descanso ' + Math.floor(r / 60) + ':' + ('0' + r % 60).slice(-2) + (n ? ' · ' + n : '') : n ? n : 'En curso'; }
+  return (X.pausa ? 'En pausa' + (n ? ' · ' : '') : '') + (r > 0 ? 'Descanso ' + Math.floor(r / 60) + ':' + ('0' + r % 60).slice(-2) + (n ? ' · ' + n : '') : n ? n : X.pausa ? '' : 'En curso'); }
 function miniSesHtml() {
   return '<div class="mini-ses"><button class="mini-up" data-a="abrirSes" aria-label="Volver al entreno">' + ic('abajo', 20, null, 2.4) + '</button>' +
     '<button class="mini-v" data-a="abrirSes"><span class="mini-l1"><i class="mini-dot" aria-hidden="true"></i><b>' + esc(S.ses.nombre || 'Entreno') + '</b><em id="mini-t">' + esc(miniT()) + '</em></span><small id="mini-s">' + esc(miniSub()) + '</small></button>' +
@@ -6429,8 +6439,16 @@ function empezarSes(r) {
 }
 A.sesSinMov = function () { var X = S.ses; if (!X) return; X.sinMov = X.sinMov ? 0 : 1; guardaEnCurso(); pintar(); };
 A.abrirSes = function () { if (!S.ses) return; if (!(S.pant && S.pant.t === 'entreno')) ir({ t: 'entreno' }); };
-function crono() { if (!S.ses) return '0:00'; var s = Math.floor((Date.now() - S.ses.inicio) / 1000), h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; return (h ? h + ':' + ('0' + m).slice(-2) : m) + ':' + ('0' + s % 60).slice(-2); }
-setInterval(function () { var c = $('#crono'); if (c) c.textContent = crono(); pintaDescanso(); }, 1000);
+/* 23:50 (Javier: «que pueda dar a duración y pausar el tiempo o poner desde 0»): el tiempo del entreno se para (pausa) y se pone a 0 */
+function sesSeg(X) { X = X || S.ses; return X ? Math.max(0, Math.floor(((X.pausa || Date.now()) - X.inicio) / 1000)) : 0; }
+function crono() { if (!S.ses) return '0:00'; var s = sesSeg(), h = Math.floor(s / 3600), m = Math.floor(s / 60) % 60; return (h ? h + ':' + ('0' + m).slice(-2) : m) + ':' + ('0' + s % 60).slice(-2); }
+setInterval(function () { var c = $('#crono'); if (c) c.textContent = crono(); var c2 = $('#du-big'); if (c2) c2.textContent = crono(); pintaDescanso(); }, 1000);
+A.durH = function () { var X = S.ses; if (!X) return;
+  hoja('<h2>Tiempo del entreno</h2><div class="du-h"><b id="du-big" class="' + (X.pausa ? 'pz' : '') + '">' + crono() + '</b><span>' + (X.pausa ? 'En pausa' : 'En marcha') + '</span></div>' +
+    '<button class="btn" data-a="durPausa">' + ic(X.pausa ? 'play' : 'pausa', 17) + (X.pausa ? 'Seguir contando' : 'Pausar el tiempo') + '</button>' +
+    '<button class="btn sec" data-a="durCero">' + ic('deshacer', 17) + 'Poner a 0</button><p class="mut sm du-n">Poner a 0 empieza a contar desde ahora. Lo que llevas apuntado no se toca.</p>'); };
+A.durPausa = function () { var X = S.ses; if (!X) return; if (X.pausa) { X.inicio += Date.now() - X.pausa; X.pausa = 0; } else X.pausa = Date.now(); guardaEnCurso(); cerrarHoja(); pintar(); toast(X.pausa ? 'Tiempo en pausa' : 'El tiempo sigue', 'ok'); };
+A.durCero = function () { var X = S.ses; if (!X) return; X.inicio = Date.now(); if (X.pausa) X.pausa = X.inicio; guardaEnCurso(); cerrarHoja(); pintar(); toast('Tiempo a 0', 'ok'); };
 
 VISTAS.entreno = function () {
   var X = S.ses; if (!X) return '';
@@ -6439,8 +6457,8 @@ VISTAS.entreno = function () {
      arriba el nombre y, debajo, tres datos: Duración · Ejercicios (hechos de cuántos) · Series (hechas de cuántas) */
   var SR = sesSeries(X);
   var h = '<div class="ses"><header class="ses-cab"><div class="ses-f"><button class="redondo gris" data-a="volver" aria-label="Minimizar el entreno">' + ic('abajo', 20) + '</button><span class="ses-t"><b>' + esc(X.nombre) + '</b></span>' + '<button class="btn-neg" data-a="terminar">Terminar</button></div>' +      /* 23:30 (Javier): fuera las flechas de ordenar: se ordena manteniendo pulsado el ejercicio */
-    '<div class="ses-k"><span><small>Duración</small><b id="crono">' + crono() + '</b></span>' + (tot.length ? '<span><small>Ejercicios</small><b>' + hechos + '<i> de ' + tot.length + '</i></b></span>' : '') + (SR[1] ? '<span><small>Series</small><b>' + SR[0] + '<i> de ' + SR[1] + '</i></b></span>' : '') + '</div>' +
-    (tot.length ? '<div class="prog-b" aria-label="' + hechos + ' de ' + tot.length + ' ejercicios">' + tot.map(function (e) { return '<i class="' + (exHecho(e) ? 'ok' : X.ej.indexOf(e) === X.ab ? 'act' : '') + '"></i>'; }).join('') + '</div>' : '') + '</header><div class="ses-c">';
+    '<div class="ses-k"><button class="ses-du' + (X.pausa ? ' pz' : '') + '" data-a="durH" aria-label="Tiempo del entreno: pausar o poner a 0"><small>' + (X.pausa ? 'En pausa' : 'Duración') + ic(X.pausa ? 'play' : 'pausa', 11, null, 2.6) + '</small><b id="crono">' + crono() + '</b></button>' + (tot.length ? '<span><small>Ejercicios</small><b>' + hechos + '<i> de ' + tot.length + '</i></b></span>' : '') + (SR[1] ? '<span><small>Series</small><b>' + SR[0] + '<i> de ' + SR[1] + '</i></b></span>' : '') + '</div>' +
+    '</header><div class="ses-c">';      // 23:50 (Javier: «las rayas de colores no me gustan»): fuera las rayas de progreso (los ejercicios hechos ya salen arriba)
   var cal = X.ej.filter(function (e) { return e.cal; });
   if (X.suave) { var sx = suaveHoy(); h += '<p class="ses-dsc ss-ban"><span class="ss-bi">' + ic('luna', 16) + '</span><span><b>Semana suave</b>' + (sx ? ' · día ' + (dDias(sx.desde, hoyStr()) + 1) + ' de 7' : '') + ' · la mitad de las series, RIR 3–4</span><button class="link" data-a="suaveFin">Terminarla</button></p>'; }      // yo-1.47
   else if (X.desc) h += '<p class="ses-dsc">' + ic('info', 15) + '<span><b>Semana de descarga:</b> la mitad de series y RIR 3‑4, para recuperar.</span></p>';
@@ -6460,13 +6478,17 @@ VISTAS.entreno = function () {
   h += '<div id="desc" class="desc" hidden></div>' + ctaHtml() + '</div>';
   return h;
 };
+function ejNumHtml(n, hc) { return '<span class="ej-cn' + (hc ? ' ok' : '') + '" aria-label="' + (hc ? 'Hecho' : 'Ejercicio ' + n) + '">' + (hc ? ic('check', 13, null, 3.2) : n) + '</span>'; }
 function numEj(i) { var X = S.ses; return X ? X.ej.slice(0, i + 1).filter(function (e) { return !e.cal; }).length : i + 1; }      // yo-1.48: el número, contando solo el entreno principal (sin la movilidad)
 function sesSeries(X) { var a = 0, b = 0; (X.ej || []).forEach(function (e) { if (e.cal || !esFz(e) && !(e.u && (e.sets || []).length)) return; (e.sets || []).forEach(function (s) { if (s.t === 'aprox') return; b++; if (s.ok) a++; }); }); return [a, b]; }      // yo-1.48: series de trabajo hechas y totales
 function exHecho(e) { return e.tipo === 'run' || e.tipo === 'cardio' || e.tipo === 'bloque' ? !!e.hecho : (e.sets || []).length && e.sets.every(function (s) { return s.ok; }); }
 function ejCerrado(e, i) {
   if (e.rp) return rpCerrado(e, i);
-  var ok = (e.sets || []).filter(function (s) { return s.ok; }).length;
-  return '<button class="card ej-c" data-a="sesAb" data-i="' + i + '"><span class="ck' + (exHecho(e) ? ' on' : '') + '">' + ic('check', 14, null, 3) + '</span><span class="fr-t"><b>' + esc(e.n) + '</b><small>' + (e.tipo === 'cardio' ? esc((e.hecho && runRes(e)) || setsTxt(e)) : e.tipo === 'run' ? esc(runHoy(e, rutinaDe(S.ses.rid))) : ok + ' de ' + (e.sets || []).length + ' series') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
+  /* 23:53 (Javier): «que no salga el cuadrado blanco al principio de cada ejercicio, que salga el número; y en vez de "0 de 4 series", 4 × 12, un
+     resumen de lo que toca». Hecho, el número pasa a ser el tic */
+  var W = (e.sets || []).filter(function (s) { return s.t !== 'aprox'; }), ok = W.filter(function (s) { return s.ok; }).length, ap = (e.sets || []).length - W.length, w0 = W[0] || {}, hc = exHecho(e);
+  var sub = e.tipo === 'cardio' ? (e.hecho && runRes(e)) || setsTxt(e) : e.tipo === 'run' ? runHoy(e, rutinaDe(S.ses.rid)) : W.length + ' × ' + (w0.r || '') + uSuf(e.u) + (w0.rirO ? ' · RIR ' + w0.rirO : '') + (ap ? ' · ' + ap + ' aprox.' : '') + (ok && !hc ? ' · ' + ok + ' de ' + W.length + ' hechas' : '');
+  return '<button class="card ej-c" data-a="sesAb" data-i="' + i + '">' + ejNumHtml(numEj(i), hc) + '<span class="fr-t"><b>' + esc(e.n) + '</b><small>' + esc(sub) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
 }
 function ejAbierto(e, i) {
   if (e.rp) return rpAbierto(e, i);
@@ -6675,7 +6697,7 @@ A.terminarSi = function () {
     if ((e.tipo === 'run' || e.tipo === 'cardio') && e.hecho) { o.hecho = 1; o.txt = runHoy(e, rutinaDe(X.rid)); nser++; var km = runKm(e.km), mn = runMn(e.mn); if (km) o.km = km; if (mn) o.mn = mn; if (e.tipo === 'cardio') { var kc = runKc(e.kcal), nv = runNv(e.niv); if (kc) o.kcal = kc; if (nv != null && String(e.niv || '').trim()) o.niv = nv; var ps = runPs(e.pasos); if (ps) o.pasos = ps; } if (e.rp) o.rp = rpReg(e); }
     var rb = null; o.sets.forEach(function (s) { if (!s.rec) return; var p = num(s.kg) || 0, r = num(s.reps) || 0; if (!rb || p > rb.p || (p === rb.p && r > rb.r)) rb = { e: e.n, p: p, r: r }; }); if (rb) recs.push(rb);      // un récord por ejercicio (el mejor)
     return o; });
-  var min = Math.max(1, Math.round((Date.now() - X.inicio) / 60000)), f = hoyStr();
+  var min = Math.max(1, Math.round(sesSeg(X) / 60)), f = hoyStr();
   var d = { nombre: X.nombre, rid: X.rid, libre: X.libre ? 1 : 0, min: min, vol: Math.round(vol), nser: nser, recs: recs, ej: ej };
   if (X.desc) d.desc = 1;      // yo-1.47: semana suave o de descarga: no es referencia para tus kilos
   S.sesiones.push(Object.assign({ id: X.id, fecha: f }, d));
@@ -7739,7 +7761,7 @@ A.ssSeparar = function (el) { var g = ssGrupo(+el.dataset.i); cerrarHoja(); if (
 function ssHtml(g) {
   var X = S.ses, M = X.ej.slice(g.ini, g.fin + 1), L = ssLetra(g), ab = X.ab >= g.ini && X.ab <= g.fin, ok = M.every(exHecho);
   if (!ab) { var p = ssPrimero(g);
-    return '<button class="card ej-c ss-c" data-a="sesAb" data-i="' + (p >= 0 ? p : g.ini) + '"><span class="ck' + (ok ? ' on' : '') + '">' + ic('check', 14, null, 3) + '</span><span class="fr-t"><b><em class="ss-lt">' + L + '</em>' + ssNom(g.n) + '</b><small>' + esc(M.map(function (q) { return q.n; }).join(' + ')) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }
+    return '<button class="card ej-c ss-c" data-a="sesAb" data-i="' + (p >= 0 ? p : g.ini) + '">' + ejNumHtml(L, ok) + '<span class="fr-t"><b><em class="ss-lt">' + L + '</em>' + ssNom(g.n) + '</b><small>' + esc(M.map(function (q) { return q.n; }).join(' + ')) + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>'; }
   return '<section class="ss-b"><div class="ss-h"><span class="ss-lt">' + L + '</span><span class="col"><b>' + ssNom(g.n) + '</b><small>Una serie de cada uno, seguidas. Descansas al acabar la ronda.</small></span></div>' +
     M.map(function (q, k) { return (k ? '<div class="ss-un" aria-hidden="true">' + ic('enlace', 13, null, 2.4) + 'sin descanso</div>' : '') + ejAbierto(q, g.ini + k); }).join('') + '</section>';
 }
@@ -7843,7 +7865,7 @@ function blqTick() {
 setInterval(blqTick, 250);
 /* ---- en el entreno ---- */
 function blqSesHtml(e, i, ab) {
-  if (!ab) return '<button class="card ej-c blq-c" data-a="sesAb" data-i="' + i + '"><span class="ck' + (e.hecho ? ' on' : '') + '">' + ic('check', 14, null, 3) + '</span><span class="fr-t"><b>' + esc(e.n || blqFmt(e)) + '</b><small>' + esc(blqFmt(e)) + (e.hecho ? ' · ' + esc(blqResTxt(e)) : '') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
+  if (!ab) return '<button class="card ej-c blq-c" data-a="sesAb" data-i="' + i + '">' + ejNumHtml(numEj(i), !!e.hecho) + '<span class="fr-t"><b>' + esc(e.n || blqFmt(e)) + '</b><small>' + esc(blqFmt(e)) + (e.hecho ? ' · ' + esc(blqResTxt(e)) : '') + '</small></span>' + ic('sig', 16, 'var(--tx3)') + '</button>';
   var mio = BT.i === i, o = mio && BT.on ? blqEstado(e) : null, corre = mio && BT.on && !BT.pausa && !BT.fin, L = e.ej || [];
   var h = '<section class="blq-s" data-ej="' + i + '"><div class="blq-h"><b>' + esc(e.n || 'Bloque') + '</b><small>' + esc(blqFmt(e)) + '</small></div>';
   if (e.f === 'circuito' || e.f === 'intervalos') return h + blqRingHtml(e, i, o, mio) + blqListaHtml(e, i, o, mio) + (e.nota ? '<p class="sm mut blq-nota">' + esc(e.nota) + '</p>' : '') + '</section>';
