@@ -2597,6 +2597,23 @@ html[data-tema="oscuro"] .met-b.met-apx2{background:#136088!important;border-col
 .dd-ok{position:sticky;bottom:0;width:100%;height:42px;margin-top:4px;border:0;border-radius:10px;background:#0D0D10;color:#fff;font-weight:800}
 .seg2.seg-pc{grid-template-columns:1fr 1fr 1.35fr}.seg2.seg-pc button{font-size:13px;padding:0 4px}.ej-apt{display:block;margin-top:6px;font-size:12.5px}
 #ej-mus,#ej-ap{display:flex;flex-direction:column;gap:14px}
+/* 24 nov, 17:52: el RIR con sus colores (sin amarillo ni verde) */
+.st2 input[data-k=rir][data-v="0"],.rir-n[data-v="0"],.rir-c[data-v="0"] b{color:#C62E2E}
+.st2 input[data-k=rir][data-v="1"],.rir-n[data-v="1"],.rir-c[data-v="1"] b{color:#D2601A}
+.st2 input[data-k=rir][data-v="2"],.rir-n[data-v="2"],.rir-c[data-v="2"] b{color:#6A55E0}
+.st2 input[data-k=rir][data-v="3"],.rir-n[data-v="3"],.rir-c[data-v="3"] b{color:#2373B0}
+.st2 input[data-k=rir][data-v="4"],.rir-n[data-v="4"],.rir-c[data-v="4"] b{color:#6B7488}
+.rir-n[data-v="0"],.rir-c[data-v="0"]{background:#FCE9E9}.rir-n[data-v="1"],.rir-c[data-v="1"]{background:#FCEEE3}.rir-n[data-v="2"],.rir-c[data-v="2"]{background:#EEEBFF}.rir-n[data-v="3"],.rir-c[data-v="3"]{background:#E5F1FA}.rir-n[data-v="4"],.rir-c[data-v="4"]{background:#EEF0F4}
+.rir-ay{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;margin:6px 0 4px}
+.rir-c{display:flex;flex-direction:column;align-items:center;gap:1px;border:0;border-radius:12px;padding:6px 2px}.rir-c b{font-size:16px;font-weight:800;line-height:1.1}.rir-c small{font-size:10.5px;font-weight:700;color:var(--tx2);white-space:nowrap}
+.rir-t{display:flex;flex-direction:column;gap:8px;margin:6px 0}.rir-f{display:flex;align-items:center;gap:12px}.rir-f span{display:flex;flex-direction:column}.rir-f small{font-size:12.5px;color:var(--tx2)}
+.rir-n{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:17px;font-weight:800;flex:none}
+html[data-tema="oscuro"] .rir-c,html[data-tema="oscuro"] .rir-n{background:#2C2C2E!important}
+/* 24 nov, 17:54 (Javier: «no me gusta, como el primer diseño que enviaste»): Método y Aproximación otra vez claros, lila y azul cielo con su borde */
+.met-b{background:linear-gradient(90deg,rgba(127,214,255,.2),rgba(154,140,255,.22));border-color:rgba(124,104,240,.32);color:#2E2560}.met-b em{color:#5A5378}.met-b .ic{color:#2E2560}
+.met-b.met-apx2:not(.on),.met-b.met-apx2.on{background:rgba(127,214,255,.24);border-color:rgba(40,150,210,.35);color:#0B3A55}.met-b.met-apx2 .ic{color:#0B3A55}
+html[data-tema="oscuro"] .met-b:not(.met-apx2){background:linear-gradient(90deg,rgba(127,214,255,.16),rgba(154,140,255,.2))!important;border-color:rgba(154,140,255,.4)!important;color:#E4E0FF!important}
+html[data-tema="oscuro"] .met-b.met-apx2{background:rgba(127,214,255,.18)!important;border-color:rgba(127,214,255,.45)!important;color:#D6F1FF!important}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3704,7 +3721,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.43';
+var YO_V = 'yo-1.44';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7370,17 +7387,18 @@ function ejUni(e) { var b = bancoDe(e.n); return !!(e.uni || e.ld || (b ? b.ld :
 /* 23 nov (Chadín: «No sale izquierda y derecha en usuario»): como en la app de clientas, los ejercicios a una mano o una pierna (los del banco
    marcados «unilateral» o por su nombre) salen ya con izquierda y derecha; «···» → «Cada lado» lo quita o lo pone (en cualquier ejercicio de fuerza) */
 function ladOn(e) { if (!e || e.u || (e.tipo && e.tipo !== 'fuerza')) return false; return e.lados === undefined || e.lados === null || e.lados === '' ? ejUni(e) : !!+e.lados || e.lados === true; }
-/* 24 nov, 17:29 (Javier: «en mancuernas no podemos hacer sobrecarga de 1 kg más… que tenga en cuenta los saltos reales de las mancuernas»):
-   los pesos que hay de verdad: mancuernas de 1 en 1 hasta 10 y luego de 2 en 2; kettlebells 4, 6, 8… 16, 20, 24…; barra y máquina, como antes */
-var PESOS_MANC = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 55, 60];
+/* 24 nov, 17:29 y 17:51 (Javier: «en mancuernas no hay salto de 1 en 1, respeta el salto real: 2 o 2,5 kg, luego salta a 3, (4 no suelen tener
+   todos) 5, 10, 12 o 12,5, 15, 16…»): las mancuernas que suele haber y, para subir, la siguiente con un salto de verdad (al menos 2 kg desde 3 kg:
+   3 → 5, 5 → 7,5, 8 → 10, 10 → 12; si usas las de 12,5, luego 15, 17,5…; por debajo de 3, 2 → 3). Kettlebells 4, 6, 8… 16, 20, 24… */
+var PESOS_MANC = [1, 2, 2.5, 3, 5, 6, 7.5, 8, 10, 12, 12.5, 14, 15, 16, 17.5, 18, 20, 22, 22.5, 24, 25, 26, 27.5, 28, 30, 32, 32.5, 34, 35, 36, 37.5, 38, 40, 42, 42.5, 44, 45, 46, 47.5, 48, 50, 55, 60];
 var PESOS_KB = [4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 36, 40, 48];
 function tipoCarga(e) { if (!e) return ''; var t = clave(e.n), bb = typeof bancoN === 'function' ? bancoN(e.n) : null, q = bb && typeof eqDe === 'function' ? eqDe(bb) : '', b = bancoDe(e.n);
   return /kettlebell|pesa rusa/.test(t) || q === 'kb' ? 'kb' : /mancuerna/.test(t) || q === 'manc' || (b && b.mc) || e.mc ? 'manc' : ''; }
 function redKg(v, t) { if (!(v > 0)) return 0; var L = t === 'manc' ? PESOS_MANC : t === 'kb' ? PESOS_KB : null;
   if (L) return L.reduce(function (a, x) { return Math.abs(x - v) < Math.abs(a - v) ? x : a; }, L[0]);
   var p = v < 20 ? 1 : 2.5; return Math.round(v / p) * p; }
-function pesoSig(p, t) { var L = t === 'manc' ? PESOS_MANC : t === 'kb' ? PESOS_KB : null;
-  if (L) { for (var k = 0; k < L.length; k++) if (L[k] > p + 0.01) return L[k]; return p + (t === 'kb' ? 4 : 2); }
+function pesoSig(p, t) { var L = t === 'manc' ? PESOS_MANC : t === 'kb' ? PESOS_KB : null, sj = t === 'manc' ? (p < 2.5 ? 1 : p < 3 ? 0.5 : 2) : 0.01;      // el salto mínimo de verdad
+  if (L) { for (var k = 0; k < L.length; k++) if (L[k] >= p + sj - 0.001) return L[k]; return p + (t === 'kb' ? 4 : 2.5); }
   return p + (p < 20 ? 1 : 2.5); }
 /* el peso de referencia: el de la primera serie de trabajo (escrito o el que sugiere la app) */
 function serRef(e, O, W) {
@@ -7538,7 +7556,7 @@ function serFilasHtml(e, i, O, W) {
   /* 24 nov, 17:08 (Javier: «que al dar a kg puedas cambiar a peso corporal, y en repes, a seg, min, calorías o metros»): «Kg» y «Reps» se tocan */
   var hK = '<button class="st-hb" data-a="serMedK" data-i="' + i + '" aria-label="Cambiar cómo mides el peso (ahora: ' + (+e.pc === 1 ? 'peso corporal' : +e.pc === 2 ? 'tu peso más lastre' : 'kilos') + ')">' + (+e.pc === 1 ? 'Peso' : +e.pc === 2 ? 'Lastre' : 'Kg') + ic('abajo', 10, null, 2.8) + '</button>',
     hR = '<button class="st-hb" data-a="serMedR" data-i="' + i + '" aria-label="Cambiar lo que cuentas (ahora: ' + uU.toLowerCase() + ')">' + uU + ic('abajo', 10, null, 2.8) + '</button>';
-  var cabDe = function (hayPv, apx) { return LD ? '<div class="st-h st-l2"><span>#</span><span class="st-hl"><i></i><i>' + hK + '</i><i>' + hR + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>' + hK + '</span><span>' + hR + '</span><span>' + (apx ? '%' : 'RIR') + '</span><span></span></div>'; };      // 23 nov: en la aproximación, «%» en vez de RIR
+  var cabDe = function (hayPv, apx) { return LD ? '<div class="st-h st-l2"><span>#</span><span class="st-hl"><i></i><i>' + hK + '</i><i>' + hR + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>' + hK + '</span><span>' + hR + '</span><span>' + (apx ? '%' : '<button class="st-hb" data-a="rirInfo" aria-label="Qué es el RIR">RIR' + ic('info', 11, null, 2.4) + '</button>') + '</span><span></span></div>'; };      // 23 nov: en la aproximación, «%» en vez de RIR
   var cab = cabDe(hayPv);      // 22 nov, 19:45 (Chadín): en la aproximación, sin «Última vez» (cabDe(false))
   var fila = function (s, j) {
     var h = '', lab = labDe(j), hayPvF = hayPv && s.t !== 'aprox';
@@ -7552,7 +7570,7 @@ function serFilasHtml(e, i, O, W) {
       (+e.pc === 1 ? '<span class="st-pc" title="Peso corporal: sin kilos">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(String(s.kg || '').replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">') +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="' + (e.u === 'min' ? 'decimal' : 'numeric') + '" value="' + esc(String(s.reps || '').replace('.', ',')) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + lab + '">' +
       (s.t === 'aprox' ? '<span class="st-pct" data-pct="' + i + '-' + j + '">' + apxPctTxt(e, j, O, W) + '</span>' :      // 23 nov (Chadín: «¿Cuánto porcentaje aproxima?»): el % de tu peso de trabajo
-      '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '" placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + '">') +
+      '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '"' + (s.rir !== '' && s.rir != null ? ' data-v="' + esc(String(Math.min(4, +s.rir || 0))) + '"' : '') + ' placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + ' (repeticiones que te quedaban)">') +
       '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + lab + ' hecha">' + ic('check', 17, null, 3) + '</button></div>' +
       (mk ? '<div class="st-mk' + (hayPvF ? ' pv' : '') + '"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '');
     if (!esp) { h += row; return h; }
@@ -7905,6 +7923,15 @@ A.serMedSi = function (el) { var X = S.ses, i = +el.dataset.i, e = X && X.ej[i];
   var P = S.perfil = S.perfil || perfilNuevo(), kk = serK(e.n); P.medEj = P.medEj || {}; var M = { u: e.u || '', pc: +e.pc || 0 }; if (!M.u && !M.pc) delete P.medEj[kk]; else P.medEj[kk] = M; guardaPerfil();
   serARutina(e, function (q) { q.u = e.u || ''; q.pc = +e.pc || 0; if (k === 'u') q.sets = (q.sets || []).map(function (z) { return Object.assign({}, z, { r: U_YO[e.u || ''][3], t: e.u ? 'normal' : z.t }); }); });
   guardaEnCurso(); pintar(); toast(k === 'pc' ? (+e.pc === 1 ? 'Tu peso corporal' : +e.pc === 2 ? 'Tu peso + lastre' : 'En kilos') : 'Cuentas ' + U_YO[e.u || ''][2].toLowerCase(), 'ok'); };
+/* ---------- 24 nov, 17:52 (Javier: «en RIR, al pinchar, que salga qué significa cada número por colores, hay gente que no lo sabe»): «RIR ⓘ» de la
+   cabecera abre la explicación, cada número con su color; el número apuntado sale con su color ---------- */
+var RIR_T = [['0', 'Al fallo', 'No podías hacer ni una más'], ['1', 'Muy duro', 'Te quedaba 1 repetición'], ['2', 'Duro', 'Te quedaban 2'], ['3', 'Moderado', 'Te quedaban 3'], ['4', 'Fácil', 'Te quedaban 4 o más']];
+A.rirInfo = function () {
+  hoja('<h2>¿Qué es el RIR?</h2><p class="mut sm">Las repeticiones que te quedaban «en la recámara» al acabar la serie: cuántas más podrías haber hecho con buena técnica.</p><div class="rir-t">' +
+    RIR_T.map(function (r) { return '<div class="rir-f"><b class="rir-n" data-v="' + r[0] + '">' + (r[0] === '4' ? '4+' : r[0]) + '</b><span><b>' + r[1] + '</b><small>' + r[2] + '</small></span></div>'; }).join('') + '</div>' +
+    '<p class="mut sm">En gris, en la casilla, el que toca hoy. Si te sale más fácil, la próxima vez sube un poco el peso.</p><button class="btn" data-a="cerrarHoja">Entendido</button>'); };
+/* 17:55 (Javier: «que lo de RIR solo salga al pinchar el nombre RIR, a modo de información, no debajo de la serie»): sin la ayuda debajo de la serie */
+document.addEventListener('input', function (ev) { var t = ev.target; if (t && t.dataset && t.dataset.k === 'rir' && t.tagName === 'INPUT') { if (t.value === '') delete t.dataset.v; else t.dataset.v = String(Math.min(4, +t.value || 0)); } });
 
 ;
 /* ---------- Bloques: AMRAP, EMOM, For Time, vueltas, circuitos por tiempo e intervalos (17 nov 2026) ----------
