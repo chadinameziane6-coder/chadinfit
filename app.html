@@ -1301,6 +1301,7 @@ details.tk-g[open]>summary{margin-bottom:4px}
 /* v26 · chats */
 .sd-tg{margin-left:auto!important;color:#B5B5B9;transition:transform .15s}.sd-tg.ab{transform:rotate(90deg)}
 .sd-i .dot-n{margin-left:auto}.sd-i .dot-n+.sd-tg{margin-left:6px!important}
+.sd-chw{position:relative}.sd-chw>.sd-i{padding-right:42px}.sd-tgb{position:absolute;right:4px;top:50%;transform:translateY(-50%);width:32px;height:32px;border:0;background:none;border-radius:8px;display:grid;place-items:center;cursor:pointer;padding:0}.sd-tgb:hover{background:rgba(127,127,140,.14)}.sd-tgb .sd-tg{margin:0!important}      /* v53.4.249: «Chat» abre la página; la flecha, la lista rápida del menú */
 .sd-chats{display:flex;flex-direction:column;gap:1px;margin:2px 0 6px 8px;padding-left:6px;border-left:1px solid var(--line2);max-height:340px;overflow-y:auto}
 .sd-ch,.mc-r{display:flex;align-items:center;gap:9px;width:100%;background:none;border:0;border-radius:10px;padding:6px 8px;font:inherit;color:var(--tx);cursor:pointer;text-align:left}
 .sd-ch:hover,.mc-r:hover{background:var(--card2)}.sd-ch.on,.mc-r.on{background:#E9E9ED}
@@ -1325,6 +1326,28 @@ details.tk-g[open]>summary{margin-bottom:4px}
 #mchat .chat-bar{position:static;left:auto;right:auto;max-width:none;margin:0;padding:8px;flex:none}
 .mc-l{flex:1;overflow-y:auto;padding:6px}
 .mc-r{padding:10px 8px}.mc-r .ch-tx b{font-size:14px}.mc-r .ch-tx small{font-size:12.5px}
+/* v53.4.249 · Chat a pantalla completa */
+.chp-w{max-width:none!important}
+.chp-g{display:grid;grid-template-columns:minmax(0,1fr);height:calc(100vh - 64px);height:calc(100dvh - 64px);min-height:460px;background:#fff;overflow:hidden;margin:0 -16px}
+.chp-l{display:flex;flex-direction:column;min-height:0;min-width:0;padding:12px 12px 0}
+.chp-h{display:none;align-items:baseline;gap:8px;padding:0 4px}.chp-h .tit{margin:0;font-size:26px}
+.chp-bus{margin:2px 0 8px!important}
+.chp-f{display:flex;gap:6px;padding:0 2px 8px}.chp-f button{border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:800;cursor:pointer;color:#141414}.chp-f button.on{background:#141414;border-color:#141414;color:#fff}
+#chp-lw{flex:1;min-height:0;display:flex;flex-direction:column}
+.chp-li{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:2px 0 12px;margin:0 -4px}
+.chp-r{padding:10px;border-radius:12px}.chp-r:hover{background:#F6F6F8}.chp-r.on{background:#EFEFF3}.chp-r.nl .ch-tx b{font-weight:800}.chp-r .sd-av{width:40px;height:40px;flex:0 0 40px}
+.chp-nada{padding:24px 0}
+.chp-c{min-width:0;min-height:0;display:none;flex-direction:column;background:#FAFAFB}
+.chp-g.conv .chp-l{display:none}.chp-g.conv .chp-c{display:flex}
+.chp-vacio{margin:auto;max-width:300px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;padding:24px}.chp-vacio>.ic{width:46px;height:46px;padding:12px;border-radius:50%;background:#EFEFF3;color:#141414;margin-bottom:4px}.chp-vacio b{font-size:17px}
+#mchat.en-pag{position:relative;right:auto;bottom:auto;width:auto;height:auto;flex:1;min-height:0;z-index:auto;border:0;border-radius:0;box-shadow:none;animation:none;background:#fff}
+#mchat.en-pag .mc-h{padding:12px 16px}#mchat.en-pag .mc-h b{font-size:16px}#mchat.en-pag .mc-x[data-a=mcCerrar]{display:none}
+#mchat.en-pag .chat{padding:16px 18px 10px;background:#FAFAFB;overscroll-behavior:contain}#mchat.en-pag .chat-bar{padding:10px 14px;border-top:1px solid var(--line2)}
+body.ancho .chp-g{grid-template-columns:minmax(300px,360px) minmax(0,1fr);height:calc(100vh - var(--chp-t,48px));margin:0;border:1px solid var(--line);border-radius:20px}
+body.ancho .chp-l{border-right:1px solid var(--line2);padding:16px 12px 0}body.ancho .chp-h{display:flex}body.ancho .chp-bus{margin:10px 0 8px!important}
+body.ancho .chp-c,body.ancho .chp-g.conv .chp-c{display:flex}body.ancho .chp-g.conv .chp-l{display:flex}
+body.ancho #mchat.en-pag .mc-x[data-a=mcVolver]{display:none}
+
 @media(max-width:699px){#mchat,#mchat.lista{inset:0;width:auto;height:auto;border-radius:0;border:0}}
 .ch-home{padding:6px}
 #mc-noti{position:fixed;z-index:70;right:20px;bottom:20px;display:flex;align-items:center;gap:4px;background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:0 14px 40px rgba(20,20,20,.18);padding:6px;max-width:360px;opacity:0;transform:translateY(14px);pointer-events:none;transition:all .22s}
@@ -1478,6 +1501,12 @@ details.tk-g[open]>summary{margin-bottom:4px}
 .hq-ops{display:flex;gap:6px;flex-wrap:wrap;align-items:center;padding:0 0 10px 66px}.hq-ops button{border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;color:#141414}.hq-ops button.on{background:#141414;border-color:#141414;color:#fff}
 .hq-otro{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700}.hq-otro input{width:64px;min-height:0!important;padding:5px 8px!important;font:inherit;text-align:center}
 .hq-blq{border:1px solid #E6E6EC;border-radius:14px;padding:4px 14px;margin-top:12px}.hq-blq.cam{border-color:#F5CDB3;background:#FFF9F5}
+/* v53.4.249 · «Tienen otra fecha y se cambiarán», cerrado hasta que lo abres */
+.hq-ks{display:flex;align-items:center;gap:10px;padding:0 0 10px}.hq-ks .gq-av{padding-left:6px}.hq-ks .gq-a1{border-color:#FFF9F5}.hq-kmas{font-size:12px;font-weight:800;color:#6A6A72;margin-left:-4px}.hq-ks small{flex:1;min-width:0;font-size:12.5px;color:#6A6A72;font-weight:600}
+.hq-kbt{display:flex;gap:6px;flex-wrap:wrap;padding:0 0 12px}.hq-kver{display:inline-flex;align-items:center;gap:4px}.hq-kver .ic{width:14px;height:14px;transition:transform .2s}.hq-k.ab .hq-kver .ic{transform:rotate(180deg)}
+.hq-kl{border-top:1px solid #F1DCCD}.hq-kl .hq-it:first-child .hq-r{border-top:0}.hq-kch{color:#8A8A92;display:flex}.hq-kch .ic{width:16px;height:16px;transition:transform .2s}.hq-kit.ab .hq-kch .ic{transform:rotate(180deg)}
+.hq-kop{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap;padding:0 0 10px 44px}.hq-kit.ab>.hq-rb{padding-bottom:4px}
+
 .hq-bh{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 8px;font-size:14px;font-weight:800;padding:10px 0 6px}.hq-bh small{font-weight:600;color:#6A6A72;font-size:12.5px}
 .hq-de{display:block;font-size:12.5px;color:#6A6A72}.hq-de b{display:inline;font-size:12.5px;color:#141414}
 .hq-dj{border:1.5px solid #DCDCE3;background:#fff;border-radius:999px;padding:5px 11px;font:inherit;font-size:12.5px;font-weight:800;white-space:nowrap;cursor:pointer;color:#141414}
@@ -5914,7 +5943,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.248';
+var APP_V = 'v53.4.249';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8539,7 +8568,7 @@ function revisarNoLeidos(){
     if(nuevos.length) mcNoti(nuevos);
   },function(){});
 }
-function pintarNoLeidosCo(){ if(!CO.lista) return;
+function pintarNoLeidosCo(){ if(!CO.lista) return; if(chpAqui()) chpLista();
   var t=totNoLeidos(), hb=document.querySelector('.top-home .mc-hb');
   if(hb) hb.innerHTML=ic('nota')+(t?'<b class="dot-n">'+t+'</b>':'');
   var hc=document.getElementById('hm-cli'); if(hc&&CO.vista==='lista') hc.innerHTML=tilesHtml();
@@ -8583,12 +8612,65 @@ function chatFila(c,cls){
   var n=(c.chat&&c.chat.noLeidos)||0, u=c.chat&&c.chat.ult, pr=u&&u.txt?(u.de==='coach'?'Tú: ':'')+u.txt:'Sin mensajes todavía';
   return '<button class="'+cls+(n?' nl':'')+(MC.cid===c.id?' on':'')+'" data-a="mcAbrir" data-id="'+esc(c.id)+'">'+avCo(c.id,c.nombre,'sd-av')+'<span class="ch-tx"><b>'+esc(c.nombre)+'</b><small>'+esc(pr)+'</small></span><span class="ch-r">'+(u&&u.f?'<small>'+esc(horaChat(u.f))+'</small>':'')+(n?'<b class="dot-n" aria-label="'+n+' sin leer">'+n+'</b>':'')+'</span></button>';
 }
+/* =====================================================================
+   v53.4.249 · Chat a pantalla completa (Javier, 24 nov 2026, 10:20: «cuando le doy a chat, que se me abran todos los chats en una pantalla completa con
+   todos los clientes que tengo… poder buscar a todos mis clientes en ese apartado de chat»). A la izquierda, todos tus clientes (primero los que
+   tienen mensajes sin leer, luego los más recientes, después el resto), con buscador y «Sin leer»; a la derecha, la conversación (la misma del chat
+   pequeño, aquí dentro: #mchat.en-pag). En el móvil, primero la lista y, al tocar a alguien, su conversación con la flecha para volver.
+   ===================================================================== */
+var CHP={q:'',f:'todos'};
+function chpAqui(){ return CO.vista==='chats'&&!!document.getElementById('chp-c'); }
+function chpFiltrados(){ var q=clave(CHP.q||''), L=chatsOrden();
+  if(CHP.f==='nl') L=L.filter(function(c){ return c.chat&&c.chat.noLeidos; });
+  if(q) L=L.filter(function(c){ return clave(c.nombre).indexOf(q)>=0||clave(c.email||'').indexOf(q)>=0; });
+  return L; }
+function chpListaHtml(){ var L=chpFiltrados(), nl=chatsOrden().filter(function(c){ return c.chat&&c.chat.noLeidos; }).length;
+  return '<div class="chp-f" role="group" aria-label="Qué chats ver"><button class="'+(CHP.f==='todos'?'on':'')+'" data-a="chpF" data-v="todos">Todos</button><button class="'+(CHP.f==='nl'?'on':'')+'" data-a="chpF" data-v="nl">Sin leer'+(nl?' · '+nl:'')+'</button></div>'+
+    '<div class="chp-li">'+(!CHP.q&&CHP.f==='todos'?comFila('mc-r chp-r'):'')+(L.length?L.map(function(c){ return chatFila(c,'mc-r chp-r'); }).join(''):'<p class="muted sm center chp-nada">'+(CHP.q?'Nadie se llama así.':CHP.f==='nl'?'Lo tienes todo leído.':'Aún no tienes clientes.')+'</p>')+'</div>'; }
+function chpLista(){ var b=document.getElementById('chp-lw'); if(b) b.innerHTML=chpListaHtml(); }
+function chpVacio(){ return '<div class="chp-vacio">'+ic('nota')+'<b>Elige a quién escribir</b><p class="muted sm">Toca a cualquiera de tus clientes en la lista'+(vistaAncha()?' de la izquierda':'')+'. Con el buscador lo encuentras al momento.</p></div>'; }
+function pintarChats(arriba){
+  if(MC.modo&&!MC.pag) mcCerrar();      // el chat pequeño no se queda encima
+  CO.vista='chats'; CO.cid=null; if(arriba){ CHP.q=''; CHP.f='todos'; }
+  var conv=!!(MC.pag&&MC.cid), n=(CO.lista||[]).filter(function(c){ return c.activa; }).length;
+  app.innerHTML=(vistaAncha()?'':'<header class="top"><button class="link" data-a="volverLista">'+ic('atras')+'Inicio</button><div class="top-n">Chat</div><span style="width:70px"></span></header>')+
+    '<main class="wrap coachw chp-w"><div class="chp-g'+(conv?' conv':'')+'"><aside class="chp-l"><div class="chp-h"><h1 class="tit">Chat <span class="muted">'+n+'</span></h1></div>'+
+    '<label class="cl3-bus chp-bus">'+ic('lupa')+'<input id="chp-q" type="search" placeholder="Buscar cliente" value="'+esc(CHP.q)+'" autocomplete="off" aria-label="Buscar cliente"></label>'+
+    '<div id="chp-lw">'+chpListaHtml()+'</div></aside><section class="chp-c" id="chp-c">'+(conv?'<section id="mchat" class="mc conv en-pag" role="dialog"></section>':chpVacio())+'</section></div></main>'+gbarHtml();
+  if(conv){ pintarMc(); chatAbrir(); }
+  if(arriba) window.scrollTo(0,0);
+  chpAlto();
+  if(VISTA.ancha) ladoCo();
+  if(arriba&&vistaAncha()&&!conv){ var q=document.getElementById('chp-q'); if(q) q.focus(); }
+}
+function chpAlto(){ var g=document.querySelector('.chp-g'); if(!g||!vistaAncha()) return; var t=g.getBoundingClientRect().top+window.scrollY; g.style.setProperty('--chp-t',Math.round(t+20)+'px'); }
+window.addEventListener('resize',function(){ if(CO.vista==='chats') chpAlto(); });
+A.verChats=function(){ siCambiosOk(function(){ MC.pag=false; MC.cid=null; MC.modo=null; CHT.msgs=null; CHT.cid=null; chatPararPoll(); pintarChats(true); }); };
+A.chpF=function(el){ CHP.f=el.dataset.v; chpLista(); };
+document.addEventListener('input',function(ev){ var t=ev.target; if(t&&t.id==='chp-q'){ CHP.q=t.value; chpLista(); } });
+document.addEventListener('keydown',function(ev){ var t=ev.target; if(!t||t.id!=='chp-q') return;
+  if(ev.key==='Enter'){ ev.preventDefault(); var b=document.querySelector('#chp-lw .chp-r:not(.com-f)'); if(b) b.click(); }
+  if(ev.key==='Escape'&&t.value){ t.value=''; CHP.q=''; chpLista(); } });
+/* abrir una conversación dentro de la página (en vez del chat pequeño) */
+function chpAbrir(id){
+  var c=document.getElementById('chp-c'); if(!c) return false;
+  chatPararPoll(); if(CHT.rec) chatParar(false);
+  MC.cid=id; MC.modo='conv'; MC.pag=true; CHT.msgs=null; CHT.cid=null;
+  c.innerHTML='<section id="mchat" class="mc conv en-pag" role="dialog"></section>';
+  var g=document.querySelector('.chp-g'); if(g) g.classList.add('conv');
+  pintarMc(); chatAbrir(); chpLista(); if(VISTA.ancha) ladoCo();
+  if(!vistaAncha()) window.scrollTo(0,0);
+  return true;
+}
+function chpVolver(){ chatPararPoll(); if(CHT.rec) chatParar(false); MC.cid=null; MC.modo=null; MC.pag=false; CHT.msgs=null; CHT.cid=null;
+  var c=document.getElementById('chp-c'); if(c) c.innerHTML=chpVacio(); var g=document.querySelector('.chp-g'); if(g) g.classList.remove('conv'); chpLista(); if(VISTA.ancha) ladoCo(); pintarNoLeidosCo(); }
 function mcBtnHtml(){ var t=totNoLeidos(); return ic('nota')+'<span>Chat</span>'+(t?'<b class="dot-n" aria-label="'+t+' sin leer">'+t+'</b>':''); }
 function pintarMc(){
   var el=document.getElementById('mchat');
+  if(MC.pag&&(!el||!chpAqui())){ MC.pag=false; MC.cid=null; MC.modo=null; chatPararPoll(); if(el&&!chpAqui()) el.remove(); return; }      // v53.4.249: has salido de la página de Chat
   if(!MC.modo){ if(el) el.remove(); return; }
   if(!el){ el=document.createElement('section'); el.id='mchat'; el.setAttribute('role','dialog'); document.body.appendChild(el); }
-  el.className='mc '+MC.modo; el.setAttribute('aria-label',MC.modo==='lista'?'Mensajes':'Chat con '+nomChat());
+  el.className='mc '+MC.modo+(MC.pag?' en-pag':''); el.setAttribute('aria-label',MC.modo==='lista'?'Mensajes':'Chat con '+nomChat());
   var x='<button class="mc-x" data-a="mcCerrar" aria-label="Cerrar el chat">'+ic('x')+'</button>';
   if(MC.modo==='lista'){
     var L=chatsOrden();
@@ -8602,11 +8684,12 @@ function mcAbrir(id){
   if(BOOT.mode!=='coach'||!id) return;
   if(CO.vista==='clienta'&&CO.sub==='chat'&&id!=='__com'){ if(CO.cid===id) return; return siCambiosOk(function(){ abrirClienta(id,'chat'); }); }
   if(MC.cid===id&&MC.modo==='conv'&&document.getElementById('mchat')){ var t=document.getElementById('chat-t'); if(t) t.focus(); return; }
+  if(chpAqui()&&chpAbrir(id)) return;      // v53.4.249: en la página de Chat, la conversación se abre ahí
   chatPararPoll(); if(CHT.rec) chatParar(false);
   MC.cid=id; MC.modo='conv'; CHT.msgs=null; CHT.cid=null;
   pintarMc(); chatAbrir(); if(VISTA.ancha) ladoCo();
 }
-function mcCerrar(){ chatPararPoll(); if(CHT.rec) chatParar(false); var habia=!!MC.cid; MC.cid=null; MC.modo=null; if(habia){ CHT.msgs=null; CHT.cid=null; } pintarMc(); if(VISTA.ancha) ladoCo(); pintarNoLeidosCo(); }
+function mcCerrar(){ if(MC.pag&&chpAqui()) return chpVolver(); chatPararPoll(); if(CHT.rec) chatParar(false); var habia=!!MC.cid; MC.cid=null; MC.modo=null; if(habia){ CHT.msgs=null; CHT.cid=null; } pintarMc(); if(VISTA.ancha) ladoCo(); pintarNoLeidosCo(); }
 A.mcAbrir=function(el){ mcNotiCerrar(); mcAbrir(el.dataset.id); };
 A.mcCerrar=function(){ mcCerrar(); };
 A.mcLista=function(){
@@ -8615,11 +8698,11 @@ A.mcLista=function(){
   MC.modo='lista'; pintarMc(); mcNotiCerrar();
   api('coachNoLeidos',CO.pin).then(function(r){ CO.comUlt=r.com||null; (CO.lista||[]).forEach(function(c){ c.chat=c.chat||{}; c.chat.noLeidos=r.porClienta[c.id]||0; if(r.ult&&r.ult[c.id]) c.chat.ult=r.ult[c.id]; }); pintarNoLeidosCo(); },function(){});
 };
-A.mcVolver=function(){ A.mcLista(); };
+A.mcVolver=function(){ if(MC.pag&&chpAqui()) return chpVolver(); A.mcLista(); };
 /* v50: tu nombre en su app («Chat con tu coach, Chadin») */
 A.coNombre=function(){ modal('<h2>Tu nombre en su app</h2><p class="muted sm">Sale arriba en su chat: «Chat con tu coach'+(CO.coachNombre&&CO.coachNombre!=='tu coach'?', '+esc(CO.coachNombre):'')+'». Es el mismo para todos tus clientes.</p><label class="f">Tu nombre<input id="co-nom" maxlength="40" value="'+esc(CO.coachNombre&&CO.coachNombre!=='tu coach'?CO.coachNombre:'')+'"></label><button class="btn mt" data-a="coNombreOk">Guardar</button><button class="btn sec mt" data-a="cerrarModal">Cancelar</button>'); };
 A.coNombreOk=function(){ var n=val('co-nom'); cargando(api('coachNombreGuardar',CO.pin,n)).then(function(r){ CO.coachNombre=r.nombre; if(CO.empezar) CO.empezar.nombre=true; cerrarModal(); if(CO.vista==='clienta'&&CO.d) repintar(); else repintarVista(); toast('Listo: «Chat con tu coach, '+r.nombre+'»','ok'); },function(e){ toast(limpiaErr(e),'err'); }); };
-A.mcFicha=function(){ var id=MC.cid; mcCerrar(); siCambiosOk(function(){ abrirClienta(id,'chat'); }); };
+A.mcFicha=function(){ var id=MC.cid; if(MC.pag){ chatPararPoll(); MC.pag=false; MC.cid=null; MC.modo=null; CHT.msgs=null; CHT.cid=null; } else mcCerrar(); siCambiosOk(function(){ abrirClienta(id,'chat'); }); };
 A.sdChat=function(){ CO.sdChat=!sdChatAb(); LS.set('chadin_sdchat',CO.sdChat?'1':'0'); ladoCo(); };
 /* aviso de mensaje nuevo: tarjeta que se toca para contestar en el chat pequeño */
 var MCN={t:null};
@@ -14527,7 +14610,7 @@ function inicioHtml(){
 function pintarLista(){
   CO.vista='lista';
   var anc=vistaAncha(), t=totNoLeidos();
-  app.innerHTML=(anc?'':'<header class="top top-home">'+logoHtml('top')+'<div class="row top-acc"><button class="ico-r" data-a="verClientes" aria-label="Clientes">'+ic('clientes')+'</button><button class="ico-r" data-a="verAgenda" aria-label="Calendario">'+ic('cal')+'</button><button class="ico-r mc-hb" data-a="sdRev" aria-label="Revisiones">'+ic('rev')+(semPendN()?'<b class="dot-n">'+semPendN()+'</b>':'')+'</button><button class="ico-r mc-hb" data-a="mcLista" aria-label="Chat">'+ic('nota')+(t?'<b class="dot-n">'+t+'</b>':'')+'</button><button class="ico-r" data-a="menuCo" aria-label="Más opciones">'+ic('lista')+novDot()+'</button></div></header>')+
+  app.innerHTML=(anc?'':'<header class="top top-home">'+logoHtml('top')+'<div class="row top-acc"><button class="ico-r" data-a="verClientes" aria-label="Clientes">'+ic('clientes')+'</button><button class="ico-r" data-a="verAgenda" aria-label="Calendario">'+ic('cal')+'</button><button class="ico-r mc-hb" data-a="sdRev" aria-label="Revisiones">'+ic('rev')+(semPendN()?'<b class="dot-n">'+semPendN()+'</b>':'')+'</button><button class="ico-r mc-hb" data-a="verChats" aria-label="Chat">'+ic('nota')+(t?'<b class="dot-n">'+t+'</b>':'')+'</button><button class="ico-r" data-a="menuCo" aria-label="Más opciones">'+ic('lista')+novDot()+'</button></div></header>')+
     '<main class="wrap coachw hm">'+novBanner()+inicioHtml()+'<p class="muted sm center ver-app">MOOD ON · '+APP_V+'</p></main>';
   window.scrollTo(0,0);
 }
@@ -14838,7 +14921,10 @@ A.sdRev=function(){ siCambiosOk(function(){ A.verSemana(null); }); };
    semanas) — y quién va con otro ritmo. Antes de aplicar te recuerda quién tiene ahora otra fecha y que se cambiará («Dejar como está»).
    De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo. En la lista, una pestaña por día. */
 var SEM_DS=['lun','mar','mie','jue','vie','sab','dom'], SEM_DN={lun:'Lunes',mar:'Martes',mie:'Miércoles',jue:'Jueves',vie:'Viernes',sab:'Sábado',dom:'Domingo'}, SEM_DL={lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
-var SEM_OP=[['1s','Cada semana'],['10d','Cada 10 días'],['20d','Cada 20 días'],['2s','Cada 2 semanas'],['1m','Cada mes']];
+/* v53.4.249 (24 nov, Javier: «lo de las revisiones, ponlo en semanas en vez de días, ya que se reparta automáticamente»): como revisas siempre los mismos
+   días de la semana, el ritmo va en semanas enteras (cada 10 días acababa siendo cada 2 semanas y todos a la vez). Los de antes (10d, 20d, 1m) siguen valiendo */
+var SEM_OP=[['1s','Cada semana'],['2s','Cada 2 semanas'],['3s','Cada 3 semanas'],['4s','Cada 4 semanas']];
+function semSemN(p){ var d=semDiasP(p); return d?Math.max(1,Math.ceil(d/7)):''; }      // en semanas (lo de antes en días, redondeado como cae en la práctica)
 function semCalD(){ return (CO.semCal&&CO.semCal.dias)||[]; }
 function semIdx(f){ return (aDate(f).getDay()+6)%7; }
 function semBucket(f){ var i=semIdx(f); return i<=2?sumar(f,-(i+1)):sumar(f,6-i); }
@@ -14890,7 +14976,25 @@ function semCalFila(c,sub,der){ return '<div class="hq-r">'+avCo(c.id,c.nombre,'
 function semCalOps(sel,id,sinNo){ var O=SEM_OP.slice(), esOtro=sel&&sel!=='no'&&!O.some(function(o){ return o[0]===sel; });
   return O.map(function(o){ return '<button class="'+(o[0]===sel?'on':'')+'" data-a="'+(id?'calExPer':'calPer')+'" data-v="'+o[0]+'"'+(id?' data-id="'+esc(id)+'"':'')+'>'+o[1]+'</button>'; }).join('')+
     '<button class="'+(esOtro?'on':'')+'" data-a="'+(id?'calExOtro':'calOtro')+'"'+(id?' data-id="'+esc(id)+'"':'')+'>Otro…</button>'+
-    (esOtro||(!id&&CO.cal.otro)||(id&&CO.cal.exOtro===id)?'<span class="hq-otro"><span>Cada</span><input type="number" inputmode="numeric" min="2" max="90" class="cal-n"'+(id?' data-id="'+esc(id)+'"':'')+' value="'+(esOtro?semDiasP(sel):'')+'" placeholder="12"><span>días</span></span>':''); }
+    (esOtro||(!id&&CO.cal.otro)||(id&&CO.cal.exOtro===id)?'<span class="hq-otro"><span>Cada</span><input type="number" inputmode="numeric" min="2" max="12" class="cal-n"'+(id?' data-id="'+esc(id)+'"':'')+' value="'+(esOtro?semSemN(sel):'')+'" placeholder="6"><span>semanas</span></span>':''); }
+/* v53.4.249 · «Tienen otra fecha y se cambiarán», cerrado: el resumen (quiénes, de qué ritmo a cuál) y «Dejar los N como están» / «Ver uno a uno».
+   Abierto, una fila por cliente (de qué a qué) que se toca para abrirla: «Dejar como está» u «Otro ritmo». Con uno solo, ya abierto. */
+function semCalK(K,P){
+  var C=CO.cal, uno=K.length===1, ver=uno||!!C.verK, dTxt=function(a){ return a.dia?SEM_DN[a.dia].toLowerCase():''; };
+  var pa0=semPerAct(K[0].c), p0=K[0].per, igual=K.every(function(a){ return semPerAct(a.c)===pa0&&a.per===p0; });
+  var res=igual?'Ahora '+semPerTxtC(pa0).toLowerCase()+' · pasan a '+semPerTxt(p0).toLowerCase():'Pasan a '+semPerTxt(C.per).toLowerCase()+', como el resto';
+  var aq=function(a){ return semPerTxtC(semPerAct(a.c))+' → '+[semPerTxt(a.per).toLowerCase(),dTxt(a)].filter(String).join(' · '); };
+  var fila=function(a){ var pa=semPerAct(a.c), pr=pa!=='no'?semCuandoTxt(a.c):'', ab=uno||C.abreK===a.id;
+    return '<div class="hq-it hq-kit'+(ab?' ab':'')+'">'+(uno?semCalFila(a.c,'<small>'+esc(aq(a))+'</small>'):
+      '<button class="hq-r hq-rb" data-a="calAbreK" data-id="'+esc(a.id)+'" aria-expanded="'+ab+'">'+avCo(a.id,a.c.nombre,'hq-av')+'<span class="hq-n"><b>'+esc(a.c.nombre)+'</b><small>'+esc(aq(a))+'</small></span><span class="hq-kch">'+ic('abajo')+'</span></button>')+
+      (ab?'<div class="hq-kop"><span class="hq-de">Ahora: '+esc(semPerTxtC(pa).toLowerCase()+(pr?' · '+pr:''))+'</span><span class="hq-rbt"><button class="hq-dj" data-a="calDejar" data-id="'+esc(a.id)+'">Dejar como está</button><button class="hq-dj'+(C.abre===a.id?' on':'')+'" data-a="calAbre" data-id="'+esc(a.id)+'">Otro ritmo</button></span></div>'+semCalEd(a,P):'')+'</div>'; };
+  return '<div class="hq-blq cam hq-k'+(ver?' ab':'')+'"><div class="hq-bh">Tienen otra fecha y se cambiarán · '+K.length+'</div>'+
+    (uno?'':'<div class="hq-ks">'+semCalAv(K)+(K.length>5?'<span class="hq-kmas">+'+(K.length-5)+'</span>':'')+'<small>'+esc(res)+'</small></div>'+
+      '<div class="hq-kbt"><button class="hq-dj" data-a="calDejarTodos">Dejar los '+K.length+' como están</button><button class="hq-dj hq-kver" data-a="calVerK" aria-expanded="'+ver+'">'+(ver?'Cerrar la lista':'Ver uno a uno')+ic('abajo')+'</button></div>')+
+    (ver?'<div class="hq-kl">'+K.map(fila).join('')+'</div>':'')+'</div>';
+}
+A.calVerK=function(){ CO.cal.verK=!CO.cal.verK; CO.cal.abreK=''; CO.cal.abre=''; semCalRe(); };
+A.calAbreK=function(el){ var id=el.dataset.id; CO.cal.abreK=CO.cal.abreK===id?'':id; if(CO.cal.abre&&CO.cal.abre!==id) CO.cal.abre=''; semCalRe(); };
 function semCalPintar(){
   var C=CO.cal, P=semCalPlan(), E=P.A.filter(function(a){ return a.ex; }), K=semCalOtros(P), R=P.A.filter(function(a){ return !a.ex; }), h;
   if(C.paso===2){
@@ -14906,8 +15010,7 @@ function semCalPintar(){
   } else if(C.paso===3){
     var dTxt=function(a){ return a.dia?SEM_DN[a.dia].toLowerCase():''; };
     h='<h2>Antes de aplicar</h2><p class="muted">Así quedan tus '+P.A.length+' clientes.</p>'+
-      (K.length?'<div class="hq-blq cam"><div class="hq-bh">Tienen otra fecha y se cambiarán · '+K.length+(K.length>1?'<button class="hq-lnk" data-a="calDejarTodos">Dejar los '+K.length+' como están</button>':'')+'</div>'+K.map(function(a){ var pa=semPerAct(a.c), pr=pa!=='no'?semCuandoTxt(a.c):'';
-        return semCalFila(a.c,'<span class="hq-de">Ahora: '+esc(semPerTxtC(pa).toLowerCase()+(pr?' · '+pr:''))+'</span><span class="hq-de"><b>Pasa a: '+esc([semPerTxt(a.per).toLowerCase(),dTxt(a)].filter(String).join(' · '))+'</b></span>','<span class="hq-rbt"><button class="hq-dj" data-a="calDejar" data-id="'+esc(a.id)+'">Dejar como está</button><button class="hq-dj'+(C.abre===a.id?' on':'')+'" data-a="calAbre" data-id="'+esc(a.id)+'">Otro ritmo</button></span>')+semCalEd(a,P); }).join('')+'</div>':'')+
+      (K.length?semCalK(K,P):'')+      // v53.4.249 (24 nov, Javier: «quiero que aparezcan cerrados… a no ser que tengas que modificar a alguno, le das y se abre»)
       (E.length?'<div class="hq-blq"><div class="hq-bh">Con otro ritmo · '+E.length+'<button class="hq-lnk" data-a="calCambiarTodos">Cambiar también '+(E.length===1?'a este':'a estos '+E.length)+'</button></div>'+E.map(function(a){ var pa=semPerAct(a.c), cam=pa!==semPerN(a.per), pr=!cam&&pa!=='no'?semCuandoTxt(a.c):'';
         return semCalFila(a.c,'<span class="hq-de">'+esc(cam?'Pasa a: '+semPerTxtC(a.per).toLowerCase()+(dTxt(a)?' · '+dTxt(a):'')+' (ahora '+semPerTxtC(pa).toLowerCase()+')':semPerTxtC(pa)+(pr?' · '+pr:'')+' · no cambia')+'</span>',semCalExDer(a))+semCalEd(a,P); }).join('')+'</div>':'')+
       (R.length-K.length?'<div class="hq-blq"><div class="hq-bh">'+(K.length?'El resto · ':'Todos · ')+(R.length-K.length)+' <small>'+esc(semPerTxt(C.per).toLowerCase()+(P.nd?', '+P.D.map(function(d){ return SEM_DN[d].toLowerCase(); }).join(' o '):''))+'</small></div></div>':'')+
@@ -14934,7 +15037,7 @@ A.calOtro=function(){ CO.cal.otro=true; semCalPintar(); var i=document.querySele
 A.calDia=function(el){ var D=CO.cal.dias, d=el.dataset.v, i=D.indexOf(d); if(i>=0) D.splice(i,1); else D.push(d); semCalPintar(); };
 A.calPaso=function(el){ CO.cal.paso=+el.dataset.v||1; CO.cal.exOtro=''; CO.cal.abre=''; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=0; };
 A.calEx=function(el){ var id=el.dataset.id, C=CO.cal, c=semCalL().filter(function(x){ return x.id===id; })[0]; if(!c) return;
-  if(C.ex[id]) delete C.ex[id]; else { var pa=semPerAct(c); C.ex[id]=pa!==semPerN(C.per)&&pa!=='no'?pa:(SEM_OP.filter(function(o){ return o[0]!==semPerN(C.per); })[0]||['10d'])[0]; }
+  if(C.ex[id]) delete C.ex[id]; else { var pa=semPerAct(c); C.ex[id]=pa!==semPerN(C.per)&&pa!=='no'?pa:(SEM_OP.filter(function(o){ return o[0]!==semPerN(C.per); })[0]||['2s'])[0]; }
   var y=(document.querySelector('#modal .mbox')||{}).scrollTop||0; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; };
 A.calExPer=function(el){ CO.cal.ex[el.dataset.id]=el.dataset.v; CO.cal.exOtro=''; semCalRe(); };
 A.calExOtro=function(el){ CO.cal.exOtro=el.dataset.id; var y=(document.querySelector('#modal .mbox')||{}).scrollTop||0; semCalPintar(); var b=document.querySelector('#modal .mbox'); if(b) b.scrollTop=y; var i=document.querySelector('.cal-n[data-id="'+el.dataset.id+'"]'); if(i) i.focus(); };
@@ -14947,9 +15050,9 @@ A.calCambiarTodos=function(){ CO.cal.ex={}; CO.cal.abre=''; semCalRe(); };
 A.calDejar=function(el){ var id=el.dataset.id, c=semCalL().filter(function(x){ return x.id===id; })[0]; if(!c) return; CO.cal.ex[id]=semPerAct(c); semCalPintar(); };
 document.addEventListener('input',function(ev){ var t=ev.target; if(!t||!CO.cal) return;
   if(t.id==='cal-q'){ CO.cal.q=t.value; semCalFiltra(); return; }
-  if(t.classList&&t.classList.contains('cal-n')){ var n=parseInt(t.value,10); if(!(n>=2&&n<=90)) return; if(t.dataset.id) CO.cal.ex[t.dataset.id]=n+'d'; else CO.cal.per=n+'d'; } });
+  if(t.classList&&t.classList.contains('cal-n')){ var n=parseInt(t.value,10); if(!(n>=1&&n<=12)) return; if(t.dataset.id) CO.cal.ex[t.dataset.id]=n+'s'; else CO.cal.per=n+'s'; } });
 document.addEventListener('change',function(ev){ var t=ev.target; if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&t.dataset.id){ if(CO.cal.ex[t.dataset.id]) semCalRe(); return; }
-  if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&CO.cal.paso===1&&!t.dataset.id){ var n=parseInt(t.value,10); if(n>=2&&n<=90){ CO.cal.per=n+'d'; semCalPintar(); } else toast('Escribe entre 2 y 90 días','err'); } });
+  if(t&&t.classList&&t.classList.contains('cal-n')&&CO.cal&&CO.cal.paso===1&&!t.dataset.id){ var n=parseInt(t.value,10); if(n>=1&&n<=12){ CO.cal.per=n+'s'; semCalPintar(); } else toast('Escribe entre 1 y 12 semanas','err'); } });
 A.calAplicar=function(el){ if(el.disabled) return; var C=CO.cal, P=semCalPlan(); el.disabled=true;
   cargando(api('coachCalendarioRevisiones',CO.pin,{per:C.per,dias:P.D,asig:P.A.map(function(a){ var o={id:a.id,per:a.per,dia:a.dia}; if(a.ini!==undefined) o.ini=a.ini; return o; })})).then(function(r){
     CO.semCal=r.cal||{dias:P.D,per:C.per};
@@ -15754,11 +15857,11 @@ function semGuiaHtml(){
   ];
   var ET=[['Alerta','wq-al','Ha dicho que le duele algo (en el chat, el check-in o un entreno).'],['Baja adherencia','wq-ad','Ha hecho menos de 3 de cada 4 entrenos.'],['Energía o sueño peor','wq-en','Su energía ha bajado 2 puntos o duerme menos de 6 h.'],['Empeora','wq-em','En un ejercicio, sus 2 últimas veces por debajo de su mejor marca (te dice cuál).'],['Estancada','wq-es','Entrena, pero lleva 4 semanas o más sin mejorar ni kilos ni repeticiones.'],['Datos insuficientes','wq-di','Ni entrenos ni check-ins: no se sabe si entrena.'],['Todo bien','wq-ok','Ha cumplido y no hay nada raro.']];
   var CA=[
-    ['A','Cada cuánto','Lo mismo para todos. «Otro…»: los días que quieras.','<span class="smg-chs">'+chip('Cada semana',1)+chip('Cada 10 días')+chip('Cada 20 días')+chip('Cada 2 semanas')+chip('Cada mes')+chip('Otro…')+'</span>'],
-    ['B','Qué días revisas','Se reparten a partes iguales. Si es cada 2 semanas o más, también entre semanas (grupos A, B…). De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo.','<span class="gq-ds">'+['L','M','X','J','V','S','D'].map(function(d){ return '<button class="'+(d==='V'||d==='S'?'on':'')+'">'+d+'</button>'; }).join('')+'</span>'],
+    ['A','Cada cuánto','Lo mismo para todos, en semanas (revisas siempre los mismos días). «Otro…»: las semanas que quieras.','<span class="smg-chs">'+chip('Cada semana',1)+chip('Cada 2 semanas')+chip('Cada 3 semanas')+chip('Cada 4 semanas')+chip('Otro…')+'</span>'],
+    ['B','Qué días revisas','Se reparten solos a partes iguales. Si es cada 2 semanas o más, también entre semanas: cada 2 semanas, 2 grupos (A y B); cada 3, 3 grupos…, y cada semana revisas a uno. De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo.','<span class="gq-ds">'+['L','M','X','J','V','S','D'].map(function(d){ return '<button class="'+(d==='V'||d==='S'?'on':'')+'">'+d+'</button>'; }).join('')+'</span>'],
     ['C','Te recuerda quién tiene otra fecha','Son los que tienen su propia fecha de revisión, la que les pusiste en su ficha. Si pulsas «Dejar como está», la conservan y no se les cambia. Si no lo pulsas, pasan a la misma que el resto.','<span class="hq-aviso smg-av2">'+ic('info')+'<span><b>Carmen, Dana y Dara</b> tienen su propia fecha de revisión.<span class="hq-bts">'+B('Dejar los 3 como están','')+B('Ver uno a uno','sec')+'</span></span></span>'],
-    ['D','Con otro ritmo','Quien no va con el resto. «Cambiar»: su ritmo y su día. La ×: vuelve con el resto. «Cambiar también a estos N»: todos con el resto.','<span class="smg-or"><span class="hq-av">CR</span><span class="hq-n"><b>Carmen</b><small>Cada 10 días · viernes</small></span><span class="hq-dj">Cambiar</span><span class="hq-x">'+ic('x')+'</span></span>'],
-    ['E','Antes de aplicar','Cómo queda cada uno: cómo está ahora y cómo quedará. «Dejar como está»: conserva la fecha de su ficha. «Otro ritmo»: le pones otro ahí mismo. Nada cambia hasta que pulsas «Sí, aplicar».','<span class="smg-or"><span class="hq-av">DL</span><span class="hq-n"><b>Dana</b><small>Ahora: cada 5 días</small><small><b>Pasa a: cada semana · viernes</b></small></span></span><span class="hq-rbt">'+'<span class="hq-dj">Dejar como está</span><span class="hq-dj">Otro ritmo</span></span>']
+    ['D','Con otro ritmo','Quien no va con el resto. «Cambiar»: su ritmo y su día. La ×: vuelve con el resto. «Cambiar también a estos N»: todos con el resto.','<span class="smg-or"><span class="hq-av">CR</span><span class="hq-n"><b>Carmen</b><small>Cada 3 semanas · viernes</small></span><span class="hq-dj">Cambiar</span><span class="hq-x">'+ic('x')+'</span></span>'],
+    ['E','Antes de aplicar','Arriba, el resumen de los que tienen otra fecha y cambiarán (de qué ritmo a cuál), cerrado. «Ver uno a uno» abre la lista: toca a cualquiera y elige «Dejar como está» (conserva la fecha de su ficha) u «Otro ritmo» (le pones otro ahí mismo). Nada cambia hasta que pulsas «Sí, aplicar».','<span class="smg-or"><span class="hq-av">DL</span><span class="hq-n"><b>Dana</b><small>Ahora: cada 2 semanas</small><small><b>Pasa a: cada semana · viernes</b></small></span></span><span class="hq-rbt">'+'<span class="hq-dj">Dejar como está</span><span class="hq-dj">Otro ritmo</span></span>']
   ];
   return '<div class="gu-h"><b>Cómo funciona «Revisiones»</b><button class="ico gu-x" data-a="dieGuiaCerrar" aria-label="Cerrar la guía">'+ic('x')+'</button></div><p class="muted sm" style="margin:0 0 8px">Tu revisión de la semana, de un vistazo. Dónde está cada cosa:</p>'+mapa+
     P.map(function(x){ return '<div class="gu-p rvg-p"><div class="gu-t"><span class="gu-n">'+x[0]+'</span><b>'+x[1]+'</b></div><p>'+x[2]+'</p><div class="gu-im rvg-im" inert>'+x[3]+'</div></div>'; }).join('')+
@@ -16210,16 +16313,16 @@ function revMedioTxt(rv){ var m=rv&&rv.medio, o=REV_MEDIO.filter(function(x){ re
 A.sgCfgRev=function(){ modalProgRev(); };
 A.sgCfgSem=function(){
   var c=CO.d.clienta, pS=semPerC(c), OP=SEM_OP, otro=pS&&!OP.some(function(o){ return o[0]===pS||(pS==='7d'&&o[0]==='1s'); }), DS=semCalD();      // v53.4.234: las mismas que el calendario
-  var mo=/^(\d+)([dsm])$/.exec(otro?pS:''), oN=mo?(mo[2]==='d'?+mo[1]:semDiasP(pS)):'';
+  var oN=otro?semSemN(pS):'';
   modal('<h2>Revisión semanal · solo para ti</h2><p class="muted">Es tuya, como entrenador: entras en «Revisiones» y ves de un vistazo cómo va '+cG('tu clienta','tu cliente')+': constancia, ejercicios, peso, descanso y lo que te ha dicho. '+cG('Ella','Él')+' no la ve ni tiene que hacer nada.</p>'+
     '<div class="lab">¿Cada cuánto la revisas?</div><div class="tipos ops sg2-sem">'+OP.map(function(o){ return '<button class="'+(pS===o[0]||(pS==='7d'&&o[0]==='1s')?'on':'')+'" data-a="sgSemCada" data-v="'+o[0]+'">'+o[1]+'</button>'; }).join('')+'<button class="'+(otro?'on':'')+'" data-a="sgSemOtro">Otro…</button><button class="'+(!pS?'on':'')+'" data-a="sgSemCada" data-v="0">No la hago</button></div>'+
-    '<div class="sg2-otro"'+(otro?'':' hidden')+'><span>Cada</span><input id="sg2-n" type="number" inputmode="numeric" min="2" max="90" value="'+esc(String(oN))+'" placeholder="12"><span>días</span><button class="btn sm" data-a="sgSemOtroOk">Guardar</button></div>'+
+    '<div class="sg2-otro"'+(otro?'':' hidden')+'><span>Cada</span><input id="sg2-n" type="number" inputmode="numeric" min="1" max="12" value="'+esc(String(oN))+'" placeholder="6"><span>semanas</span><button class="btn sm" data-a="sgSemOtroOk">Guardar</button></div>'+
     (pS&&DS.length>1?'<div class="lab">Qué día</div><div class="tipos ops sg2-dia">'+DS.map(function(d){ return '<button class="'+(semDiaDe(c)===d?'on':'')+'" data-a="sgSemDia" data-v="'+d+'">'+SEM_DN[d]+'</button>'; }).join('')+'</div>':'')+
     '<p class="muted sm">'+(pS?(DS.length?'Próxima: '+esc(semFTxt(semFechaDia(semProxDom(c),semDiaDe(c))))+'.':'La revisión va por semanas: te sale en la semana en la que le toque. Próxima: '+esc(semTxt(semProxDom(c))).toLowerCase()+'.'):'No te saldrá en «Revisiones».')+'</p><button class="btn sec mt" data-a="cerrarModal">Cerrar</button>');
 };
 A.sgSemCada=function(el){ document.querySelectorAll('.sg2-sem button').forEach(function(b){ b.classList.toggle('on',b===el); }); semGuardarPer(el.dataset.v,el); };
 A.sgSemOtro=function(el){ document.querySelectorAll('.sg2-sem button').forEach(function(b){ b.classList.toggle('on',b===el); }); var o=document.querySelector('.sg2-otro'); if(o){ o.hidden=false; var i=document.getElementById('sg2-n'); if(i) i.focus(); } };
-A.sgSemOtroOk=function(el){ var n=parseInt(val('sg2-n'),10); if(!(n>=2&&n<=90)) return toast('Pon entre 2 y 90 días'); semGuardarPer(n%7===0&&n<=84?(n/7)+'s':n+'d',el); };
+A.sgSemOtroOk=function(el){ var n=parseInt(val('sg2-n'),10); if(!(n>=1&&n<=12)) return toast('Pon entre 1 y 12 semanas'); semGuardarPer(n+'s',el); };      // v53.4.249: en semanas
 function semProxDom(c){ var d=CO.d, dsem=domRef(), us=(d.actuaciones||[]).filter(function(a){ return a.tipo==='semanal'; }).sort(function(a,b){ return a.prevista<b.prevista?1:-1; })[0], p=semPerC(c)||'1s', ini=semDiasP(p)>7?String(c.sem_ini||''):'', u=us?us.prevista:'';
   if(semToca({ult:u,per:p,ini:ini},dsem)) return dsem; if(ini&&u<ini) u=''; if(!u) return ini>dsem?ini:dsem; var x=domDe(sumarPeriodo(u,p)); while(x<=dsem) x=domDe(sumarPeriodo(x,p)); return x; }
 A.segProgRev=function(){ modalProgRev(); };
@@ -20388,8 +20491,8 @@ function ladoHtml(){
   if(ui2On()) return ladoHtml2(act,v,urg,it);      // v53.4.116: menú del diseño D (v53.4.117: todos los entrenadores)
   return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
-    it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
-    (sdChatAb()?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
+    '<div class="sd-chw">'+it('verChats','nota','Chat',v==='chats',(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':''))+(v==='chats'?'':'<button class="sd-tgb" data-a="sdChat" aria-expanded="'+sdChatAb()+'" aria-label="'+(sdChatAb()?'Ocultar':'Ver')+' los chats en el menú">'+ic('flecha','sd-tg'+(sdChatAb()?' ab':''))+'</button>')+'</div>'+
+    (sdChatAb()&&v!=='chats'?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
     it('sdPagos','euro','Pagos',v==='pagos')+it('sdPagina','enlace','Tu página',v==='pagina')+it('sdNov','nuevo','Novedades',false,novDot())+it('sdSug','idea','Feedback',v==='sug',CO.sugNuevas?'<b class="dot-n" aria-label="'+CO.sugNuevas+' nuevas">'+CO.sugNuevas+'</b>':'')+'<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div>'+      // v53.4.43: los bancos, juntos y resaltados (opción C de Javier)
 (CO.casa?it('sdPrueba','ojo','Modo prueba',v==='prueba'):'')+it('sdAyuda','ayuda','Ayuda',v==='ayuda',CO.ayudaNuevas?'<b class="dot-n" aria-label="'+CO.ayudaNuevas+(CO.ayudaNuevas===1?' respuesta nueva':' respuestas nuevas')+'">'+CO.ayudaNuevas+'</b>':'')+'</nav>'+
     '<button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+(CO.vista==='semana'?rvGuiaLado():'')+
@@ -20422,8 +20525,8 @@ function ladoHtml2(act,v,urg,it){
     '<small>MOOD ON · '+APP_V+'</small></div>';
   return '<div class="sd-b">'+logoHtml('side','Panel de coach')+'</div>'+demoLado()+
     '<nav class="sd-n">'+it('sdInicio','inicio','Inicio',v==='lista',urg?'<b class="cnt">'+urg+'</b>':'')+it('sdClientes','clientes','Clientes',v==='clientes'||v==='clienta'&&!!CO.cid,(CO.lista||[]).length?'<span class="sd-num">'+(CO.lista||[]).length+'</span>':'')+it('sdCal','cal','Calendario',v==='agenda')+it('sdRev','rev','Revisiones',v==='semana',semPendN()?'<b class="cnt">'+semPendN()+'</b>':'')+
-    it('sdChat','nota','Chat',false,(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':'')+ic('flecha','sd-tg'+(sdChatAb()?' ab':'')))+
-    (sdChatAb()?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
+    '<div class="sd-chw">'+it('verChats','nota','Chat',v==='chats',(totNoLeidos()?'<b class="dot-n" aria-label="'+totNoLeidos()+' sin leer">'+totNoLeidos()+'</b>':''))+(v==='chats'?'':'<button class="sd-tgb" data-a="sdChat" aria-expanded="'+sdChatAb()+'" aria-label="'+(sdChatAb()?'Ocultar':'Ver')+' los chats en el menú">'+ic('flecha','sd-tg'+(sdChatAb()?' ab':''))+'</button>')+'</div>'+
+    (sdChatAb()&&v!=='chats'?'<div class="sd-chats">'+comFila('sd-ch')+chatsOrden().map(function(c){ return chatFila(c,'sd-ch'); }).join('')+'</div>':'')+
     it('sdPagos','euro','Pagos',v==='pagos')+(novN?it('sdNov','nuevo','Novedades',false,novDot()):'')+      // a la izquierda, solo mientras haya alguna sin ver
     '<div class="sd-bk"><div class="sd-bk-h">Tu biblioteca</div>'+it('sdBanco','lista','Banco de ejercicios',v==='banco')+it('sdRutBib','modelo','Banco de rutinas',v==='rutbib'||(v==='clienta'&&!!CO.md&&!CO.cid))+it('sdBancoDie','dieta','Banco de dietas',v==='bancodie')+it('sdNutri','dieta','Alimentos y recetas',v==='nutri')+'</div></nav>'+
     '<button class="sd-i sd-nueva" data-a="nuevaClienta">'+ic('mas')+'<span>Nuevo cliente</span></button>'+(CO.vista==='semana'?rvGuiaLado():'')+
@@ -20443,6 +20546,7 @@ function repintarVista(){
   if(CO.vista==='clienta'&&CO.d) pintarClienta(false);
   else if(CO.vista==='lista') pintarLista();
   else if(CO.vista==='clientes') pintarClientes(false);
+  else if(CO.vista==='chats') pintarChats(false);      // v53.4.249
   else if(CO.vista==='agenda') pintarAgenda();
   else if(CO.vista==='banco') pintarBanco();
   else if(CO.vista==='rutbib') pintarRutBib(false);
@@ -22193,7 +22297,8 @@ var AYUDA=[
   {g:0,q:'¿Cómo encuentro rápido a un cliente?',r:'En «Clientes» (en el menú, debajo de Inicio; en el móvil, el icono de las dos personas, arriba) los tienes todos de la A a la Z, con el buscador arriba: escribe su nombre o su apellido, sin tildes si quieres, e Intro abre el primero. Con los filtros ves solo los que tienen algo pendiente, los que están al día o los que están en pausa. También puedes buscar encima de tus clientes en Inicio.',a:'sdClientes',b:'Ver mis clientes',k:'buscar encontrar cliente nombre lista'},
   {g:0,q:'¿Puedo tener respuestas guardadas para el chat?',r:'Sí: encima de la caja del chat tienes respuestas rápidas. Al tocar una se escribe en la caja (con su nombre) y la envías tú. En «+ Las tuyas» pones las tuyas, una por línea; escribe {nombre} donde quieras su nombre.',k:'respuestas rapidas chat mensajes guardados plantilla'},
   {g:0,q:'Mi cliente no puede entrar o no le llega el correo',r:'Que mire en Spam y en Promociones. Si no está, abre su ficha, pestaña Ficha, toca «Acceso a su app» y pulsa «Reenviar el acceso» (o «Enviar acceso por email» si todavía no lo tiene). Comprueba que su email esté bien escrito. Si sigue sin poder, escríbenos.',a:'sdInicio',b:'Ver mis clientes',k:'contraseña login entrar email correo spam acceso olvidado'},
-  {g:0,q:'¿Cómo hablo con un cliente?',r:'En su ficha, pestaña Chat. Lo que escribes le sale en su app con un punto rojo, y puedes mandarle fotos y notas de voz. Si lo prefieres, activa «WhatsApp directo» en su ficha y tendrás un botón a su WhatsApp junto al chat.',k:'chat mensaje whatsapp escribir nota de voz'},
+  {g:0,q:'¿Cómo hablo con un cliente?',r:'En «Chat» (en el menú; en el móvil, el globo de arriba) tienes a todos tus clientes en una pantalla, con buscador y «Sin leer»: tocas a uno y le escribes ahí mismo. También en su ficha, pestaña Chat. Lo que escribes le sale en su app con un punto rojo, y puedes mandarle fotos y notas de voz. Si lo prefieres, activa «WhatsApp directo» en su ficha y tendrás un botón a su WhatsApp junto al chat.',a:'verChats',b:'Abrir el chat',k:'chat mensaje whatsapp escribir nota de voz buscar todos'},
+  {g:2,q:'¿Cada cuánto reviso a mis clientes?',r:'En «Revisiones» → Calendario eliges cada cuántas semanas (cada semana, cada 2, 3 o 4, u otra) y qué días revisas. Se reparten solos: cada semana te toca más o menos el mismo número (cada 2 semanas, en 2 grupos; cada 3, en 3…). Si alguno va con otro ritmo, se lo pones ahí o en su ficha.',a:'sdRev',b:'Ir a Revisiones',k:'revision semanal calendario cada semanas grupos ritmo repartir'},
   {g:0,q:'¿Cómo veo cómo va un cliente?',r:'Abre su ficha. En Seguimiento, lo que tienes pendiente y tus notas de cada revisión; en Evolución, sus entrenos (y compararlos), su peso y medidas, sus fotos y sus check-ins; en Progreso, cómo mejoran sus marcas.',a:'sdClientes',b:'Ver mis clientes',k:'progreso evolucion seguimiento medidas fotos peso marcas'},
   {g:0,q:'¿Cómo quito a un cliente que ya no entrena conmigo?',r:'Si lo deja, en su ficha, pestaña Pagos, pulsa «Renovar» y elige «No renueva»: sus datos se quedan guardados. Si quieres borrarlo con todos sus datos, pestaña Ficha → «Más ajustes» → «Borrar cliente». Eso no se puede deshacer.',k:'baja borrar eliminar quitar dejar renovar'},
   {g:1,q:'¿Cómo le pongo una rutina?',r:'En su ficha, pestaña Entrenos: «+ Nueva rutina» y añade los ejercicios, o usa una de tu Banco de rutinas. Guárdala y le sale en su app.',a:'sdRutBib',k:'rutina entreno ejercicios plan semana crear'},
