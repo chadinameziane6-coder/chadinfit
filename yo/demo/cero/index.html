@@ -3586,18 +3586,19 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.34';
+var YO_V = 'yo-1.35';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
-function yoNueva() {
+/* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
+function yoNueva(alAbrir) {
   if (window.YO_FAKE || !window.fetch) return;
   fetch('version.json?t=' + Date.now(), { cache: 'no-store' }).then(function (r) { return r.ok ? r.json() : null; }).then(function (j) {
-    if (!j || !j.v || j.v === YO_V || (typeof S !== 'undefined' && S.ses)) return;
+    if (!j || !j.v || j.v === YO_V || (!alAbrir && typeof S !== 'undefined' && S.ses)) return;
     var k = 'yo_rec_' + j.v; try { if (sessionStorage.getItem(k)) return; sessionStorage.setItem(k, '1'); } catch (e) { }
     var q = new URLSearchParams(location.search); q.set('v', j.v); location.replace(location.pathname + '?' + q.toString() + location.hash);      // sin perder lo que ya llevara la dirección
   }).catch(function () { });
 }
-setTimeout(yoNueva, 1500);
+setTimeout(function () { yoNueva(true); }, 1500);
 document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') yoNueva(); });
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
@@ -6597,12 +6598,14 @@ function runKc(v) { var k = num(v); return k != null && k > 0 && k <= 5000 ? Mat
 function runNv(v) { var k = num(v); return k != null && k >= 0 && k <= 100 ? Math.round(k * 10) / 10 : null; }
 function runMn(v) { var m = num(v); return m != null && m > 0 && m <= 1440 ? Math.round(m) : null; }
 A.cardioOk = function (el) { var e = S.ses.ej[+el.dataset.i]; e.hecho = !e.hecho; guardaEnCurso(); if (e.hecho) sigEj(); pintar(); };
-IN.stV = function (t) { var i = +t.dataset.i, e = S.ses.ej[i], s = e.sets[+t.dataset.j]; s[t.dataset.k] = t.value.replace(',', '.'); guardaEnCurso(); if (t.dataset.k === 'kg' && s.t !== 'aprox') serCalcPinta(i); };
+/* 24 nov, 13:05 (Javier, en el iPhone: «me sigue sin dejar»): mientras escribes en una casilla, no se toca esa casilla (ni su gris ni su color): en el iPhone,
+   cambiarle la sugerencia mientras escribes no dejaba poner los kilos del back-off. Solo recalculan las demás, y solo si cambias la serie de la que salen */
+IN.stV = function (t) { var i = +t.dataset.i, e = S.ses.ej[i], s = e.sets[+t.dataset.j]; s[t.dataset.k] = t.value.replace(',', '.'); guardaEnCurso(); if (t.dataset.k === 'kg' && !/^(aprox|back|pir)$/.test(s.t)) serCalcPinta(i, t); };
 /* 22 nov, 19:45 (Chadín: «en aproximaciones, que se calcule en función del peso que vas a levantar en la sesión»): al escribir los kilos de la
    primera serie efectiva, las aproximaciones (y back-off o pirámide) se recalculan al momento con ese peso */
-function serCalcPinta(i) {
+function serCalcPinta(i, yo) {
   var e = S.ses && S.ses.ej[i]; if (!e) return; var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id), W = U ? U.sets.filter(function (z) { return z.ok; }) : [];
-  e.sets.forEach(function (z, j) { var v = serCalc(e, j, O, W), inp = document.querySelector('.ej-f2 input[data-in=stV][data-i="' + i + '"][data-j="' + j + '"][data-k=kg]'); if (inp && (z.t === 'aprox' || z.t === 'back' || z.t === 'pir')) { inp.placeholder = v ? fN(v) : ''; inp.classList.toggle('kg-calc', !!v && !z.kg); } });
+  e.sets.forEach(function (z, j) { var v = serCalc(e, j, O, W), inp = document.querySelector('.ej-f2 input[data-in=stV][data-i="' + i + '"][data-j="' + j + '"][data-k=kg]'); if (inp && inp !== yo && inp !== document.activeElement && (z.t === 'aprox' || z.t === 'back' || z.t === 'pir')) { inp.placeholder = v ? fN(v) : ''; inp.classList.toggle('kg-calc', !!v && !z.kg); } });
 }
 A.stMas = function (el) { var e = S.ses.ej[+el.dataset.i], u = e.sets[e.sets.length - 1] || { t: 'normal', r: '10' }; e.sets.push({ t: 'normal', r: u.r, kg: '', reps: '', rir: '', ok: false }); guardaEnCurso(); pintar(); };
 A.sesQuitar = function (el) { S.ses.ej.splice(+el.dataset.i, 1); S.ses.ab = Math.min(S.ses.ab, S.ses.ej.length - 1); guardaEnCurso(); pintar(); };
@@ -6620,7 +6623,8 @@ A.stOk = function (el) {
   if (s.ok) { s.ok = false; s.rec = false; (s.mini || []).forEach(function (z) { z.ok = false; }); guardaEnCurso(); return pintar(); }
   var fila = el.closest('.st'), ins = fila ? fila.querySelectorAll('input') : [];
   if (ladOn(e)) { if (!serLadosOk(e, s, fila)) { toast('Apunta las repeticiones de los dos lados'); return; } }
-  else if (ins.length) { if (s.kg === '' && ins[0].placeholder) s.kg = ins[0].placeholder.replace(',', '.'); if (s.reps === '' && ins[1].placeholder) s.reps = ins[1].placeholder; }
+  else if (ins.length) { ['kg', 'reps', 'rir'].forEach(function (k, q) { var v = ins[q] && ins[q].dataset.k === k ? String(ins[q].value || '').trim().replace(',', '.') : ''; if (v) s[k] = v; });      // 24 nov: lo que se ve escrito en la casilla, siempre
+    if (s.kg === '' && ins[0].placeholder) s.kg = ins[0].placeholder.replace(',', '.'); if (s.reps === '' && ins[1].placeholder) s.reps = ins[1].placeholder; }
   if (!num(s.reps)) { toast('Apunta las repeticiones de la serie'); return; }
   s.ok = true;
   if (s.t === 'aprox' && S.x.apxAb && e.sets.every(function (z) { return z.t !== 'aprox' || z.ok; })) delete S.x.apxAb[i];      // 22 nov: hecha la última, se pliega
@@ -7346,6 +7350,7 @@ A.miniOk = function (el) {
   if (x.ok) { x.ok = false; guardaEnCurso(); return pintar(); }
   if (!s.ok) return toast('Primero, la serie ' + (+el.dataset.j + 1));
   var fila = el.closest && el.closest('.st'), ik = fila && fila.querySelector('input[data-k=kg]'), ir2 = fila && fila.querySelector('input[data-k=reps]');
+  if (ik && String(ik.value || '').trim()) x.kg = String(ik.value).trim().replace(',', '.').replace(/[^\d.]/g, '');      // 24 nov: lo que se ve escrito, siempre
   if ((x.kg === '' || x.kg == null) && ik && ik.placeholder) x.kg = ik.placeholder.replace(',', '.');      // 23 nov: los kilos que se ven en gris valen
   if (!num(x.reps)) { if (s.t === 'drop') { if (ir2) ir2.focus(); return toast('Apunta las repeticiones de la bajada'); } x.reps = String(MINI_R[s.t] || '').split('-').pop(); }
   x.ok = true; pitaCorto(); guardaEnCurso();
@@ -7493,8 +7498,13 @@ document.addEventListener('focusin', function (ev) {
   var sel = function () { try { t.setSelectionRange(0, t.value.length); } catch (e) { try { t.select(); } catch (e2) { } } };
   sel(); setTimeout(sel, 0); setTimeout(sel, 60);
 });
-document.addEventListener('input', function (ev) { var t = ev.target; if (t && t._kgPre != null) { t._kgPre = null; t.classList.remove('kg-pre'); } }, true);
-document.addEventListener('focusout', function (ev) { var t = ev.target; if (t && t._kgPre != null && t.value === t._kgPre) { t.value = ''; } if (t && t._kgPre != null) { t._kgPre = null; t.classList.remove('kg-pre'); } });
+document.addEventListener('input', function (ev) { var t = ev.target; if (t && t._kgPre != null) t._kgPre = null; }, true);      // 24 nov, 13:05: sin tocar sus clases mientras escribes
+/* al salir de la casilla: si no la tocaste, vuelve a ser la sugerencia; si escribiste, se apunta lo que se ve (por si el iPhone no avisó al escribir) y ya no es sugerencia */
+document.addEventListener('focusout', function (ev) {
+  var t = ev.target; if (!t || t.tagName !== 'INPUT') return; var pre = t._kgPre; t._kgPre = null; t.classList.remove('kg-pre');
+  if (pre != null && t.value === pre) { t.value = ''; return; }
+  var k = t.dataset && t.dataset.in; if ((k === 'stV' || k === 'miniV') && IN[k]) { try { IN[k](t); } catch (e) { } if (t.value) t.classList.remove('kg-calc'); }
+});
 
 ;
 /* ---------- Bloques: AMRAP, EMOM, For Time, vueltas, circuitos por tiempo e intervalos (17 nov 2026) ----------
