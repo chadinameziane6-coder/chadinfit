@@ -2790,6 +2790,9 @@ html[data-tema="oscuro"] .ej-cn:not(.ok){background:rgba(255,255,255,.1);color:#
 .ses-pl .ses-du.pz b{color:#8A8D97}.ses-pl .ses-du.pz .ic{color:#8A8D97}
 @media (max-width:350px){.ses-k.ses-pl{gap:7px;padding:7px 11px;font-size:12.5px}.ses-pl .ses-du b{font-size:12.5px}}
 html[data-tema="oscuro"] .ses-k.ses-pl{background:rgba(255,255,255,.12);color:#C9CCD8}html[data-tema="oscuro"] .ses-pl b,html[data-tema="oscuro"] .ses-pl .ses-du b{color:#fff}html[data-tema="oscuro"] .ses-pl>i{background:rgba(255,255,255,.22)}html[data-tema="oscuro"] .ses-pl .ses-du .ic{color:#B4A9FF}
+/* «¿Terminar el entreno?»: la duración, con «Cambiar» (abre la rueda) */
+.tr-du{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:16px;background:var(--suave);padding:12px 14px;margin:2px 0 12px;font:inherit;color:var(--tx);text-align:left;cursor:pointer}
+.tr-du .ic{color:#5B4BD6;flex:none}.tr-du span{flex:1;font-size:14px;font-weight:600;color:var(--tx2)}.tr-du b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}.tr-du i{font-style:normal;font-size:13px;font-weight:800;color:#5B4BD6;margin-left:4px}
 
 </style>
 </head>
@@ -3444,7 +3447,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.51';
+var YO_V = 'yo-1.52';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6456,7 +6459,27 @@ setInterval(function () { var c = $('#crono'); if (c) c.textContent = crono(); v
 A.durH = function () { var X = S.ses; if (!X) return;
   hoja('<h2>Tiempo del entreno</h2><div class="du-h"><b id="du-big" class="' + (X.pausa ? 'pz' : '') + '">' + crono() + '</b><span>' + (X.pausa ? 'En pausa' : 'En marcha') + '</span></div>' +
     '<button class="btn" data-a="durPausa">' + ic(X.pausa ? 'play' : 'pausa', 17) + (X.pausa ? 'Seguir contando' : 'Pausar el tiempo') + '</button>' +
+    '<button class="btn sec" data-a="durAj" data-de="h">' + ic('lapiz', 17) + 'Ajustar el tiempo</button>' +
     '<button class="btn sec" data-a="durCero">' + ic('deshacer', 17) + 'Poner a 0</button><p class="mut sm du-n">Poner a 0 empieza a contar desde ahora. Lo que llevas apuntado no se toca.</p>'); };
+/* 25 nov, 00:06 (Javier: «que también puedas ajustar el tiempo, por si te quedas en 10 min, y al finalizar la rutina también; no con más o menos
+   sino con el formato del descanso, que es más rápido»): la misma rueda que el descanso, de minuto en minuto (1 min a 5 h). Desde «Duración» y
+   desde «¿Terminar el entreno?» (vuelve a esa hoja al acabar) */
+var DUR_W = []; for (var du0 = 1; du0 <= 300; du0++) DUR_W.push(du0);
+function durTxt(m) { m = +m || 0; return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + ('0' + m % 60).slice(-2) + ' min' : ''); }
+function durIdx(m) { return Math.max(0, Math.min(DUR_W.length - 1, (+m || 1) - 1)); }
+A.durAj = function (el) {
+  var X = S.ses; if (!X) return; if (el && el.dataset && el.dataset.de) S.x.du = { m: DUR_W[durIdx(Math.round(sesSeg(X) / 60) || 1)], de: el.dataset.de };
+  var D = S.x.du; if (!D) return;
+  hoja('<h2>Ajustar el tiempo</h2><p class="mut sm">Si se te olvidó pararlo o empezarlo, pon lo que has entrenado.</p><div class="dw"><div class="dw-sel" aria-hidden="true"></div><div class="dw-l" id="dw-t" role="listbox" aria-label="Tiempo del entreno">' +
+    DUR_W.map(function (v) { return '<button class="dw-i" role="option" data-a="durOp" data-v="' + v + '" aria-selected="' + (D.m === v) + '">' + durTxt(v) + '</button>'; }).join('') + '</div></div>' +
+    '<button class="btn" data-a="durAjSi">Listo</button>' + (D.de === 'fin' ? '<button class="btn sec" data-a="terminar">Volver</button>' : ''));
+  var l = document.getElementById('dw-t'); if (!l) return; l.scrollTop = durIdx(D.m) * DW_H; dwPinta(l);
+  l.addEventListener('scroll', function () { if (!l._raf) l._raf = requestAnimationFrame(function () { l._raf = 0; dwPinta(l); });
+    clearTimeout(l._t); l._t = setTimeout(function () { var k = Math.round(l.scrollTop / DW_H); if (l._obj != null) { if (k === l._obj) l._obj = null; return; } if (S.x.du) S.x.du.m = DUR_W[Math.max(0, Math.min(DUR_W.length - 1, k))]; }, 90); }, { passive: true });
+};
+A.durOp = function (el) { var v = +el.dataset.v, l = document.getElementById('dw-t'); if (!S.x.du) return; S.x.du.m = v; if (!l) return; var k = durIdx(v); l._obj = k; try { l.scrollTo({ top: k * DW_H, behavior: 'smooth' }); } catch (er) { l.scrollTop = k * DW_H; } };
+A.durAjSi = function () { var X = S.ses, D = S.x.du; if (!X || !D) return cerrarHoja(); X.inicio = (X.pausa || Date.now()) - D.m * 60000; guardaEnCurso(); S.x.du = null;
+  if (D.de === 'fin') return A.terminar(); cerrarHoja(); pintar(); toast('Tiempo del entreno: ' + durTxt(D.m), 'ok'); };
 A.durPausa = function () { var X = S.ses; if (!X) return; if (X.pausa) { X.inicio += Date.now() - X.pausa; X.pausa = 0; } else X.pausa = Date.now(); guardaEnCurso(); cerrarHoja(); pintar(); toast(X.pausa ? 'Tiempo en pausa' : 'El tiempo sigue', 'ok'); };
 A.durCero = function () { var X = S.ses; if (!X) return; X.inicio = Date.now(); if (X.pausa) X.pausa = X.inicio; guardaEnCurso(); cerrarHoja(); pintar(); toast('Tiempo a 0', 'ok'); };
 
@@ -6695,7 +6718,9 @@ A.terminar = function () {
   if (!n) return hoja('<h2>No has marcado ninguna serie</h2><p class="mut">¿Quieres descartar este entreno?</p><button class="btn rojo" data-a="descartar">Descartar</button><button class="btn sec" data-a="cerrarHoja">Seguir entrenando</button>');
   var pend = X.ej.filter(function (e) { return !e.cal && !exHecho(e); }).length;
   var C = sesCambiosRut(X);      // yo-1.48: si has cambiado la rutina, ¿solo hoy o en tu rutina?
-  hoja('<h2>¿Terminar el entreno?</h2>' + (pend ? '<p class="mut">Te quedan ' + pend + (pend === 1 ? ' ejercicio' : ' ejercicios') + ' sin completar. Se guarda lo que has hecho.</p>' : '<p class="mut">¡Lo has completado todo!</p>') + (C ? sesCambiosHtml(C) : '') + '<button class="btn" data-a="terminarSi">Terminar y guardar</button><button class="btn sec" data-a="cerrarHoja">Seguir entrenando</button>');
+  var mn = Math.max(1, Math.round(sesSeg(X) / 60));      // 25 nov, 00:06: la duración, que se puede cambiar antes de guardar
+  hoja('<h2>¿Terminar el entreno?</h2>' + (pend ? '<p class="mut">Te quedan ' + pend + (pend === 1 ? ' ejercicio' : ' ejercicios') + ' sin completar. Se guarda lo que has hecho.</p>' : '<p class="mut">¡Lo has completado todo!</p>') +
+    '<button class="tr-du" data-a="durAj" data-de="fin">' + ic('reloj', 17) + '<span>Duración</span><b>' + durTxt(mn) + '</b><i>Cambiar</i></button>' + (C ? sesCambiosHtml(C) : '') + '<button class="btn" data-a="terminarSi">Terminar y guardar</button><button class="btn sec" data-a="cerrarHoja">Seguir entrenando</button>');
 };
 /* 17 nov (Javier): cancelar el entreno desde la barra «Entreno en curso», preguntando antes */
 A.sesCancelar = function () { hoja('<h2>¿Seguro que quieres cancelar el entreno?</h2><p class="mut">Se borra lo que llevas apuntado de «' + esc(S.ses ? S.ses.nombre : '') + '». No se guarda en tu historial.</p><button class="btn rojo" data-a="descartar">Sí, cancelar el entreno</button><button class="btn sec" data-a="cerrarHoja">No, seguir</button>'); };
