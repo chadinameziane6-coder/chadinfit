@@ -2583,6 +2583,20 @@ html[data-tema="oscuro"] .met-b.met-apx2:not(.on){background:rgba(127,214,255,.1
 .ss-op{flex-direction:row;align-items:center;gap:12px}.ss-op .col{display:flex;flex-direction:column;gap:2px;min-width:0}
 .ss-ck{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--borde2);display:inline-flex;align-items:center;justify-content:center;flex:none;font-size:11.5px;font-weight:800}
 .ss-op.on .ss-ck{background:linear-gradient(135deg,#7FD6FF,#9A8CFF);border-color:transparent;color:#0D0D10}
+/* 24 nov, 17:34 (Javier): «Método» y «Aproximación» en tonos más oscuros, sin llegar a negro (cada uno el suyo) */
+.met-b{background:#3B2E86;border-color:#3B2E86;color:#fff}.met-b em{color:#CFC7FF}.met-b .ic{color:#CFC7FF}
+.met-b.met-apx2:not(.on),.met-b.met-apx2.on{background:#0E4D6E;border-color:#0E4D6E;color:#fff}.met-b.met-apx2 .ic{color:#9FE0FF}
+html[data-tema="oscuro"] .met-b:not(.met-apx2){background:#4A3BA6!important;border-color:#4A3BA6!important;color:#fff!important}
+html[data-tema="oscuro"] .met-b.met-apx2{background:#136088!important;border-color:#136088!important;color:#fff!important}
+/* 24 nov, 17:29: crear ejercicio: músculos en desplegable; qué apuntas y con qué peso */
+.dd-b{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;height:48px;padding:0 14px;border-radius:14px;border:1.5px solid var(--borde2);background:var(--card);font-size:15.5px;font-weight:700;color:var(--tx);text-align:left}
+.dd-b>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dd-b .mut{font-weight:600}.dd-b.ab{border-color:#0D0D10}.dd-b.ab .ic{transform:rotate(180deg)}
+.dd-l{margin-top:6px;border:1.5px solid var(--borde2);border-radius:14px;background:var(--card);max-height:264px;overflow-y:auto;overscroll-behavior:contain;padding:4px}
+.dd-o{display:flex;align-items:center;gap:10px;width:100%;height:44px;padding:0 10px;border:0;border-radius:10px;background:none;font-size:15px;font-weight:600;color:var(--tx);text-align:left}.dd-o.on{background:var(--suave);font-weight:800}
+.dd-c{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--borde2);display:inline-flex;align-items:center;justify-content:center;flex:none}.dd-o.on .dd-c{background:#0D0D10;border-color:#0D0D10;color:#fff}
+.dd-ok{position:sticky;bottom:0;width:100%;height:42px;margin-top:4px;border:0;border-radius:10px;background:#0D0D10;color:#fff;font-weight:800}
+.seg2.seg-pc{grid-template-columns:1fr 1fr 1.35fr}.seg2.seg-pc button{font-size:13px;padding:0 4px}.ej-apt{display:block;margin-top:6px;font-size:12.5px}
+#ej-mus,#ej-ap{display:flex;flex-direction:column;gap:14px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -3690,7 +3704,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.42';
+var YO_V = 'yo-1.43';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -5269,14 +5283,15 @@ function vEjercicios() {
 var EQUIPOS = ['Peso corporal', 'Mancuerna', 'Barra', 'Máquina', 'Polea', 'Banda', 'Kettlebell', 'Otro'];
 A.ejCrear = function (el) {
   var n = (el && el.dataset.n) || (el && el.dataset.q && S.x.bus && S.x.bus.q ? S.x.bus.q.trim() : ''), ed = el && el.dataset.ed ? ((S.perfil && S.perfil.misEj) || []).filter(function (e) { return e.nombre === el.dataset.ed; })[0] : null;
-  S.x.ejN = { para: (el && el.dataset.para) || '', ed: ed ? ed.nombre : '', eq: ed ? ed.equipo : '', reg: ed ? ed.reg || '' : '', sec: ed ? (ed.sec || []).slice() : [], foto: ed ? ed.foto || '' : '', fNueva: null, fUrl: ed && ed.foto ? ejFotoUrl(ed.foto) : '' };
+  S.x.ejN = { para: (el && el.dataset.para) || '', ed: ed ? ed.nombre : '', eq: ed ? ed.equipo : '', reg: ed ? ed.reg || '' : '', pc: ed ? +ed.pc || 0 : 0, g: ed && ed.grupo ? ed.grupo : '', sec: ed ? (ed.sec || []).slice() : [], dd: null, foto: ed ? ed.foto || '' : '', fNueva: null, fUrl: ed && ed.foto ? ejFotoUrl(ed.foto) : '' };
+  /* 24 nov, 17:29 (Javier: «añadir foto, que salga lo primero arriba; elegir grupo principal… que salga desplegable con los músculos, en primario y
+     secundario, lo de secundario opcional; que puedan poner peso corporal y añadir lastre si quieres, ej. en fondos, dominadas o abdominales») */
   hoja('<h2>' + (ed ? 'Cambiar ejercicio' : 'Crear ejercicio') + '</h2><form class="acc-f" data-f="ejCrear" novalidate>' +
-    '<label class="f">Nombre<input id="ej-n" maxlength="60" autocomplete="off" value="' + esc(ed ? ed.nombre : n) + '" placeholder="Ej.: Patada de glúteo en polea"></label>' +
-    '<label class="f">Grupo principal<select id="ej-g" data-ch="ejG">' + GRUPOS.map(function (g) { return '<option' + (ed && ed.grupo === g ? ' selected' : '') + '>' + g + '</option>'; }).join('') + '</select></label>' +
-    '<div class="f"><span>Grupos secundarios <span class="mut">(opcional, hasta 3)</span></span><div class="chips" id="ej-sec">' + ejSecChips() + '</div></div>' +
     '<div class="f"><span>Foto <span class="mut">(opcional)</span></span><div id="ej-fo">' + ejFotoForm() + '</div></div>' +
+    '<label class="f">Nombre<input id="ej-n" maxlength="60" autocomplete="off" value="' + esc(ed ? ed.nombre : n) + '" placeholder="Ej.: Patada de glúteo en polea"></label>' +
+    '<div id="ej-mus">' + ejMusHtml() + '</div>' +
     '<div class="f">Material<div class="chips" id="ej-eq">' + EQUIPOS.map(function (q) { return '<button type="button" class="chip' + (S.x.ejN.eq === q ? ' on' : '') + '" data-a="ejEq" data-v="' + q + '">' + q + '</button>'; }).join('') + '</div></div>' +
-    '<div class="f">Cómo lo apuntas<div class="seg2"><button type="button" class="' + (S.x.ejN.reg ? '' : 'on') + '" data-a="ejReg" data-v="">Kilos y repeticiones</button><button type="button" class="' + (S.x.ejN.reg ? 'on' : '') + '" data-a="ejReg" data-v="s">Tiempo</button></div></div>' +
+    '<div id="ej-ap">' + ejApHtml() + '</div>' +
     '<label class="f">Cómo se hace (opcional)<textarea id="ej-nota" rows="3" maxlength="600" placeholder="Un paso por línea">' + esc(ed ? ed.nota || '' : '') + '</textarea></label>' +
     '<p class="msg err" id="ej-err" hidden></p><button class="btn" type="submit">' + (ed ? 'Guardar cambios' : 'Crear ejercicio') + '</button>' +
     (ed ? '<button class="btn sec" type="button" data-a="ejBorrar" data-n="' + esc(ed.nombre) + '">' + ic('papelera', 18) + 'Borrar este ejercicio</button>' : '') + '</form>');
@@ -5284,12 +5299,25 @@ A.ejCrear = function (el) {
 /* 18 nov 2026 (Javier, nota del móvil): «al crear ejercicios en usuario que puedas poner grupo secundario y añadir foto».
    Los grupos secundarios salen en la ficha y en la lista (como los del banco). La foto se reduce en el móvil (800 px, JPEG) y va a su carpeta
    privada de Storage (yo-fotos/<su id>/ej_….jpg, como las fotos de progreso, que no la listan): solo la ve ella; al borrar la cuenta se borra con todo */
-function ejSecChips() { var X = S.x.ejN, g = ($('#ej-g') || {}).value || (X.ed ? ((S.perfil.misEj || []).filter(function (e) { return e.nombre === X.ed; })[0] || {}).grupo : GRUPOS[0]);
-  return GRUPOS.filter(function (q) { return q !== g; }).map(function (q) { var on = X.sec.indexOf(q) >= 0; return '<button type="button" class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="ejSec" data-v="' + q + '">' + q + '</button>'; }).join(''); }
+var MUSC = ['Glúteo', 'Cuádriceps', 'Isquios', 'Aductores', 'Abductores', 'Gemelo', 'Espalda', 'Pecho', 'Hombro', 'Bíceps', 'Tríceps', 'Antebrazo', 'Core', 'Lumbar', 'Cuerpo completo', 'Movilidad', 'Cardio'];
+function ejMusHtml() { var X = S.x.ejN;
+  var lista = function (k) { return '<div class="dd-l" role="listbox" aria-label="' + (k === 'g' ? 'Músculo principal' : 'Músculos secundarios') + '">' + MUSC.filter(function (m) { return k === 'g' || m !== X.g; }).map(function (m) { var on = k === 'g' ? X.g === m : X.sec.indexOf(m) >= 0;
+    return '<button type="button" class="dd-o' + (on ? ' on' : '') + '" role="option" aria-selected="' + on + '" data-a="' + (k === 'g' ? 'ejDDg' : 'ejSec') + '" data-v="' + m + '"><span class="dd-c">' + (on ? ic('check', 14, null, 3) : '') + '</span>' + m + '</button>'; }).join('') + (k === 's' ? '<button type="button" class="dd-ok" data-a="ejDD" data-v="s">Listo</button>' : '') + '</div>'; };
+  return '<div class="f"><span>Músculo principal</span><button type="button" class="dd-b' + (X.dd === 'g' ? ' ab' : '') + '" data-a="ejDD" data-v="g" aria-expanded="' + (X.dd === 'g') + '"><span' + (X.g ? '' : ' class="mut"') + '>' + esc(X.g || 'Elige el músculo') + '</span>' + ic('abajo', 16, null, 2.4) + '</button>' + (X.dd === 'g' ? lista('g') : '') + '</div>' +
+    '<div class="f"><span>Músculos secundarios <span class="mut">(opcional, hasta 3)</span></span><button type="button" class="dd-b' + (X.dd === 's' ? ' ab' : '') + '" data-a="ejDD" data-v="s" aria-expanded="' + (X.dd === 's') + '"><span' + (X.sec.length ? '' : ' class="mut"') + '>' + esc(X.sec.length ? X.sec.join(', ') : 'Ninguno') + '</span>' + ic('abajo', 16, null, 2.4) + '</button>' + (X.dd === 's' ? lista('s') : '') + '</div>'; }
+function ejMusPinta() { var w = $('#ej-mus'); if (w) w.innerHTML = ejMusHtml(); }
+A.ejDD = function (el) { var X = S.x.ejN, v = el.dataset.v; X.dd = X.dd === v ? null : v; ejMusPinta(); };
+A.ejDDg = function (el) { var X = S.x.ejN; X.g = el.dataset.v; X.sec = X.sec.filter(function (q) { return q !== X.g; }); X.dd = null; ejMusPinta(); };
 A.ejSec = function (el) { var X = S.x.ejN, v = el.dataset.v, i = X.sec.indexOf(v);
-  if (i >= 0) X.sec.splice(i, 1); else { if (X.sec.length >= 3) return toast('Como mucho, 3 grupos secundarios'); X.sec.push(v); }
-  var w = $('#ej-sec'); if (w) w.innerHTML = ejSecChips(); };
-CH.ejG = function () { var X = S.x.ejN, g = $('#ej-g').value; X.sec = X.sec.filter(function (q) { return q !== g; }); var w = $('#ej-sec'); if (w) w.innerHTML = ejSecChips(); };
+  if (i >= 0) X.sec.splice(i, 1); else { if (X.sec.length >= 3) return toast('Como mucho, 3 músculos secundarios'); X.sec.push(v); }
+  ejMusPinta(); };
+/* qué apuntas en cada serie (repeticiones o tiempo) y con qué peso (kilos, tu peso o tu peso + lastre) */
+var EJ_PC = [['0', 'Kilos', 'Apuntas los kilos de cada serie.'], ['1', 'Tu peso', 'Sin kilos: flexiones, dominadas, plancha, crunch…'], ['2', 'Tu peso + lastre', 'Tu peso y, si llevas, los kilos extra (fondos, dominadas, abdominales con disco…): apuntas solo el lastre.']];
+function ejApHtml() { var X = S.x.ejN;
+  return '<div class="f">Qué apuntas en cada serie<div class="seg2"><button type="button" class="' + (X.reg ? '' : 'on') + '" data-a="ejReg" data-v="">Repeticiones</button><button type="button" class="' + (X.reg ? 'on' : '') + '" data-a="ejReg" data-v="s">Tiempo</button></div>' +
+    '<small class="mut ej-apt">' + (X.reg ? 'En cada serie apuntas los segundos y tienes la cuenta atrás (plancha, isométricos…).' : 'En cada serie apuntas cuántas repeticiones haces.') + '</small></div>' +
+    '<div class="f">Con qué peso<div class="seg2 seg-pc">' + EJ_PC.map(function (o) { return '<button type="button" class="' + (String(X.pc || 0) === o[0] ? 'on' : '') + '" data-a="ejPc" data-v="' + o[0] + '">' + o[1] + '</button>'; }).join('') + '</div><small class="mut ej-apt">' + EJ_PC[+X.pc || 0][2] + '</small></div>'; }
+A.ejPc = function (el) { S.x.ejN.pc = +el.dataset.v || 0; var w = $('#ej-ap'); if (w) w.innerHTML = ejApHtml(); };
 function ejFotoForm() { var X = S.x.ejN, u = X.fNueva ? X.fNuevaUrl : X.foto ? X.fUrl : '';
   if (!u && !X.foto) return '<label class="ej-fadd">' + ic('foto', 18) + '<span><b>Añadir foto</b><small>Solo la ves tú</small></span><input type="file" accept="image/*" data-ch="ejFoto" hidden></label>';
   return '<div class="ej-fprev">' + (u ? '<img src="' + esc(u) + '" alt="Foto del ejercicio">' : '<span class="ej-fcar">' + ic('foto', 22, 'var(--tx3)') + '</span>') + '<div class="ej-fbt"><label class="btn-o sm">Cambiar<input type="file" accept="image/*" data-ch="ejFoto" hidden></label><button type="button" class="btn-o sm" data-a="ejFotoQuitar">Quitar</button><small class="mut">Solo la ves tú</small></div></div>'; }
@@ -5306,14 +5334,15 @@ function ejFotosCarga() {
     function () { L.forEach(function (p) { EJF[p] = { t: Date.now() + 60e3 }; }); });
 }
 A.ejEq = function (el) { S.x.ejN.eq = S.x.ejN.eq === el.dataset.v ? '' : el.dataset.v; Array.prototype.forEach.call(document.querySelectorAll('#ej-eq .chip'), function (b) { b.classList.toggle('on', b.dataset.v === S.x.ejN.eq); }); };
-A.ejReg = function (el) { S.x.ejN.reg = el.dataset.v; Array.prototype.forEach.call(el.parentNode.children, function (b) { b.classList.toggle('on', b === el); }); };
+A.ejReg = function (el) { S.x.ejN.reg = el.dataset.v; var w = $('#ej-ap'); if (w) w.innerHTML = ejApHtml(); };
 F.ejCrear = function () {
   var X = S.x.ejN, n = $('#ej-n').value.replace(/\s+/g, ' ').trim(), e = $('#ej-err');
   if (n.length < 3) { e.hidden = false; e.textContent = 'Escribe el nombre del ejercicio.'; return; }
   var choca = S.banco.filter(function (b) { return clave(b.nombre) === clave(n) && !(X.ed && clave(X.ed) === clave(n)); })[0];
   if (choca) { e.hidden = false; e.textContent = choca.mio ? 'Ya tienes un ejercicio con ese nombre.' : 'Ese ejercicio ya está en la lista: búscalo y úsalo.'; return; }
+  if (!X.g) { e.hidden = false; e.textContent = 'Elige el músculo principal.'; X.dd = 'g'; ejMusPinta(); return; }
   if (!S.perfil) S.perfil = perfilNuevo();
-  var L = S.perfil.misEj = S.perfil.misEj || [], o = { nombre: n, grupo: $('#ej-g').value, equipo: X.eq || '', reg: X.reg || '', nota: $('#ej-nota').value.trim().slice(0, 600) };
+  var L = S.perfil.misEj = S.perfil.misEj || [], o = { nombre: n, grupo: X.g || '', equipo: X.eq || (X.pc === 1 ? 'Peso corporal' : ''), reg: X.reg || '', nota: $('#ej-nota').value.trim().slice(0, 600) }; if (X.pc) o.pc = X.pc;
   var g0 = o.grupo; o.sec = X.sec.filter(function (q) { return q !== g0; }).slice(0, 3); if (!o.sec.length) delete o.sec;
   var antes = X.ed ? (L.filter(function (x) { return x.nombre === X.ed; })[0] || {}).foto || '' : '', btn = $('form[data-f=ejCrear] button[type=submit]');
   if (X.fNueva && S.user) {      // primero la foto (si falla, no se guarda nada y puede volver a probar)
@@ -5387,7 +5416,8 @@ function medDef(n, b) { var t = clave(n), bb = typeof bancoN === 'function' ? ba
   var u = /plancha|hollow|isometric|wall sit|sentadilla en pared|dead hang|l-sit|comba|cuerdas de batida|battle rope|jumping jack|step jack|skipping|mountain climber|escaladores/.test(t) && !/toque|dinamic/.test(t) ? 's' : /trineo|sled|farmer|granjero|carry|acarreo/.test(t) ? 'm' : '';
   return { u: u, pc: eq === 'corp' && !/lastrad/.test(t) ? 1 : 0 }; }
 function ejNuevo(n, fz) { if (!fz && esCardioB(bancoDe(n))) return ejCardio(n); var b = bancoDe(n), md = medDef(n, b), uni = b && /^(s)$/.test(b.reg || '') ? 's' : md.u; var e = { n: n, tipo: 'fuerza', d: '90', sets: [0, 1, 2].map(function () { return { t: 'normal', r: uni ? U_YO[uni][3] : '10', rir: '', kg: '' }; }) }; if (uni) e.u = uni; if (md.pc) e.pc = 1;
-  var M = ((S.perfil || {}).medEj || {})[clave(n)]; if (M) { if (M.pc) e.pc = 1; if ((M.u || '') !== (e.u || '')) { e.u = M.u || ''; if (!e.u) delete e.u; e.sets.forEach(function (s) { s.r = U_YO[M.u || ''][3]; }); } }      // 24 nov: como lo mides tú (peso corporal, segundos, metros…)
+  var mio = ((S.perfil || {}).misEj || []).filter(function (x) { return clave(x.nombre) === clave(n); })[0]; if (mio && mio.pc) e.pc = +mio.pc;      // 24 nov, 17:29: tus ejercicios, como los creaste (tu peso o tu peso + lastre)
+  var M = ((S.perfil || {}).medEj || {})[clave(n)]; if (M) { if (M.pc != null) e.pc = +M.pc || 0; if (!e.pc) delete e.pc; if ((M.u || '') !== (e.u || '')) { e.u = M.u || ''; if (!e.u) delete e.u; e.sets.forEach(function (s) { s.r = U_YO[M.u || ''][3]; }); } }      // 24 nov: como lo mides tú (peso corporal, segundos, metros…)
   return e; }
 A.ejARutinaSi = function (el) { var r = rutinaDe(el.dataset.id); if (!r) return; r.ejercicios = r.ejercicios || []; r.ejercicios.push(ejNuevo(el.dataset.n)); guardaRutina(r); cerrarHoja(); toast(el.dataset.n + ' añadido a ' + r.nombre, 'ok'); };
 A.ejNuevaRut = function (el) { cerrarHoja(); S.x.ed = { id: nuevoId(), nombre: '', ejercicios: [ejNuevo(el.dataset.n)], nuevo: true, dias: [] }; ir({ t: 'rutina' }); };
@@ -6564,13 +6594,16 @@ function objetivoHoy(e) {
   var W = U.sets.filter(function (s) { return s.ok && s.t !== 'aprox' && num(s.kg) != null && num(s.reps) != null; }); if (!W.length) return null;
   var top = W.reduce(function (a, s) { return !a || num(s.kg) > num(a.kg) || (num(s.kg) === num(a.kg) && num(s.reps) > num(a.reps)) ? s : a; }, null), p = num(top.kg), r = num(top.reps);
   var rg = String((e.sets[0] || {}).r || '').match(/\d+/g), lo = rg ? +rg[0] : null, hi = rg ? +(rg[1] || rg[0]) : null;
-  var b = bancoDe(e.n), mc = b && b.mc, inc = mc ? (p < 10 ? 1 : 2) : (p < 20 ? 1 : 2.5);
+  /* 24 nov, 17:29 (Javier: «en mancuernas no podemos hacer sobrecarga de 1 kg más (press militar máx 10 kg y me sugiere 11)… que te sugiera
+     primero subir hasta lo más alto de repes, 15, y ya cuando lo alcances, subirle peso»): con mancuernas o kettlebell, primero repeticiones
+     hasta 15 con el mismo peso y luego el siguiente peso que existe de verdad (10 → 12), volviendo al principio del rango */
+  var tc = tipoCarga(e), techo = tc ? Math.max(15, hi || 0) : hi, base = lo != null && (!tc || lo < techo) ? lo : 10;
   var duro = W.every(function (s) { return num(s.rir) != null && num(s.rir) <= 0; });
   if (!p) return { p: 0, r: Math.min((hi || r) + 2, r + 1) };
-  if (hi == null) return { p: p, r: r + 1 };
-  if (r >= hi && !duro) return { p: p + inc, r: lo };
-  if (duro && r < lo) return { p: p, r: lo };
-  return { p: p, r: Math.min(hi, r + 1) };
+  if (techo == null) return { p: p, r: r + 1 };
+  if (r >= techo && !duro) return { p: pesoSig(p, tc), r: base };
+  if (duro && lo != null && r < lo) return { p: p, r: lo };
+  return { p: p, r: Math.min(techo, r + 1) };
 }
 
 function empezarSes(r) {
@@ -6761,7 +6794,7 @@ A.stOk = function (el) {
   if (ladOn(e)) { if (!serLadosOk(e, s, fila)) { toast('Apunta las repeticiones de los dos lados'); return; } }
   else if (ins.length) { var cas = function (k) { return fila.querySelector('input[data-k=' + k + ']'); };      // 24 nov: cada casilla por su nombre (con peso corporal no hay de kilos)
     ['kg', 'reps', 'rir'].forEach(function (k) { var c = cas(k), v = c ? String(c.value || '').trim().replace(',', '.') : ''; if (v) s[k] = v; });      // lo que se ve escrito en la casilla, siempre
-    var cK = cas('kg'), cR = cas('reps'); if (e.pc) s.kg = ''; else if (s.kg === '' && cK && cK.placeholder) s.kg = cK.placeholder.replace(',', '.'); if (s.reps === '' && cR && cR.placeholder) s.reps = cR.placeholder.replace(',', '.'); }
+    var cK = cas('kg'), cR = cas('reps'); if (+e.pc === 1) s.kg = ''; else if (s.kg === '' && cK && cK.placeholder) s.kg = cK.placeholder.replace(',', '.'); if (s.reps === '' && cR && cR.placeholder) s.reps = cR.placeholder.replace(',', '.'); }
   if (!num(s.reps)) { toast(e.u ? 'Apunta ' + ({ s: 'los segundos', min: 'los minutos', m: 'los metros', kcal: 'las calorías' }[e.u] || 'lo que has hecho') + ' de la serie' : 'Apunta las repeticiones de la serie'); return; }
   s.ok = true;
   if (s.t === 'aprox' && S.x.apxAb && e.sets.every(function (z) { return z.t !== 'aprox' || z.ok; })) delete S.x.apxAb[i];      // 22 nov: hecha la última, se pliega
@@ -7337,7 +7370,18 @@ function ejUni(e) { var b = bancoDe(e.n); return !!(e.uni || e.ld || (b ? b.ld :
 /* 23 nov (Chadín: «No sale izquierda y derecha en usuario»): como en la app de clientas, los ejercicios a una mano o una pierna (los del banco
    marcados «unilateral» o por su nombre) salen ya con izquierda y derecha; «···» → «Cada lado» lo quita o lo pone (en cualquier ejercicio de fuerza) */
 function ladOn(e) { if (!e || e.u || (e.tipo && e.tipo !== 'fuerza')) return false; return e.lados === undefined || e.lados === null || e.lados === '' ? ejUni(e) : !!+e.lados || e.lados === true; }
-function redKg(v) { if (!(v > 0)) return 0; var p = v < 20 ? 1 : 2.5; return Math.round(v / p) * p; }
+/* 24 nov, 17:29 (Javier: «en mancuernas no podemos hacer sobrecarga de 1 kg más… que tenga en cuenta los saltos reales de las mancuernas»):
+   los pesos que hay de verdad: mancuernas de 1 en 1 hasta 10 y luego de 2 en 2; kettlebells 4, 6, 8… 16, 20, 24…; barra y máquina, como antes */
+var PESOS_MANC = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 55, 60];
+var PESOS_KB = [4, 6, 8, 10, 12, 14, 16, 20, 24, 28, 32, 36, 40, 48];
+function tipoCarga(e) { if (!e) return ''; var t = clave(e.n), bb = typeof bancoN === 'function' ? bancoN(e.n) : null, q = bb && typeof eqDe === 'function' ? eqDe(bb) : '', b = bancoDe(e.n);
+  return /kettlebell|pesa rusa/.test(t) || q === 'kb' ? 'kb' : /mancuerna/.test(t) || q === 'manc' || (b && b.mc) || e.mc ? 'manc' : ''; }
+function redKg(v, t) { if (!(v > 0)) return 0; var L = t === 'manc' ? PESOS_MANC : t === 'kb' ? PESOS_KB : null;
+  if (L) return L.reduce(function (a, x) { return Math.abs(x - v) < Math.abs(a - v) ? x : a; }, L[0]);
+  var p = v < 20 ? 1 : 2.5; return Math.round(v / p) * p; }
+function pesoSig(p, t) { var L = t === 'manc' ? PESOS_MANC : t === 'kb' ? PESOS_KB : null;
+  if (L) { for (var k = 0; k < L.length; k++) if (L[k] > p + 0.01) return L[k]; return p + (t === 'kb' ? 4 : 2); }
+  return p + (p < 20 ? 1 : 2.5); }
 /* el peso de referencia: el de la primera serie de trabajo (escrito o el que sugiere la app) */
 function serRef(e, O, W) {
   var t = e.sets.filter(function (s) { return s.t !== 'aprox'; }), s0 = t[0] || {};
@@ -7348,10 +7392,11 @@ function serRef(e, O, W) {
 /* los kilos que calcula la app para una serie (aproximación, back-off, pirámide); 0 = nada que calcular */
 function serCalc(e, j, O, W) {
   var s = e.sets[j], ref = serRef(e, O, W); if (!ref) return 0;
-  if (s.t === 'aprox') { if (num(s.pct)) return redKg(ref * num(s.pct) / 100);      // 21 nov: el % de su sitio (como la app de clientas)
-    var ka = e.sets.slice(0, j).filter(function (z) { return z.t === 'aprox'; }).length, na = e.sets.filter(function (z) { return z.t === 'aprox'; }).length, L = APX_YO[Math.min(Math.max(na, 1), 5)], p = L[Math.min(ka, L.length - 1)]; return redKg(ref * p[0] / 100); }
-  if (s.t === 'back') return redKg(ref * (1 - mpDe(e, 'top') / 100));
-  if (s.t === 'pir') { var kp = e.sets.slice(0, j).filter(function (z) { return z.t === 'pir'; }).length; return kp ? redKg(ref * (1 + mpDe(e, 'pir') / 100 * kp)) : 0; }
+  var tc = tipoCarga(e);
+  if (s.t === 'aprox') { if (num(s.pct)) return redKg(ref * num(s.pct) / 100, tc);      // 21 nov: el % de su sitio (como la app de clientas)
+    var ka = e.sets.slice(0, j).filter(function (z) { return z.t === 'aprox'; }).length, na = e.sets.filter(function (z) { return z.t === 'aprox'; }).length, L = APX_YO[Math.min(Math.max(na, 1), 5)], p = L[Math.min(ka, L.length - 1)]; return redKg(ref * p[0] / 100, tc); }
+  if (s.t === 'back') return redKg(ref * (1 - mpDe(e, 'top') / 100), tc);
+  if (s.t === 'pir') { var kp = e.sets.slice(0, j).filter(function (z) { return z.t === 'pir'; }).length; return kp ? redKg(ref * (1 + mpDe(e, 'pir') / 100 * kp), tc) : 0; }
   return 0;
 }
 function serTag(t) { return { aprox: 'Aprox.', top: 'Top', back: 'Back-off', pir: 'Pirámide', drop: 'Drop', rp: 'Rest-pause', myo: 'Myo', fallo: 'Fallo' }[t] || ''; }
@@ -7400,7 +7445,7 @@ function serMetHtml(e, i) {
     (m !== 'normal' ? '<p class="met-i">' + ic('chispa', 14) + '<span><b>' + esc(metNom(m)) + ':</b> ' + esc(metDesc(e, m)) + '</span></p>' : '');
 }
 var MET_D = { normal: 'Todas las series iguales.', pir: 'Cada serie, un poco más de peso y menos repeticiones.', top: 'Una serie pesada y las demás con un 15 % menos.', drop: 'En la última serie, sin descansar: bajas el peso un 20 % y sigues. 2 bajadas.',
-  rp: 'La última serie casi al fallo; 15 s y 2 mini-series con el mismo peso.', myo: 'Una serie de activación de 12-15 y mini-series de 3-5 con 15 s entre ellas. Paras cuando no llegues a 3.', fallo: 'La última serie, hasta no poder hacer otra con buena técnica.' };
+  rp: 'La última serie casi al fallo; 15 s y 2 mini-series de 2-3 repeticiones con el mismo peso.', myo: 'Una serie de activación de 12-15 repeticiones y mini-series de 3-5 repeticiones con 15 s entre ellas. Paras cuando no llegues a 3.', fallo: 'La última serie, hasta no poder hacer otra con buena técnica.' };
 var MINI_N = { rp: 2, myo: 4 }, MINI_R = { rp: '2-3', myo: '3-5' };
 /* 18 nov (Javier: «si quieren modificar el porcentaje del drop set o de la pirámide, ¿cómo lo hacen?»): cada ejercicio guarda sus ajustes (e.mp, también en la rutina) */
 var MP_DEF = { pir: 7.5, top: 15, drop: 20, nb: 2, rs: 15, mnrp: 2, mnmyo: 4 };
@@ -7411,8 +7456,8 @@ function metDesc(e, m) {
   if (m === 'pir') return 'Cada serie, un ' + fN(mpDe(e, 'pir')) + ' % más de peso y menos repeticiones.';
   if (m === 'top') return 'Una serie pesada y las demás con un ' + fN(mpDe(e, 'top')) + ' % menos.';
   if (m === 'drop') { var nb = mpDe(e, 'nb'); return 'En la última serie, sin descansar: bajas el peso un ' + fN(mpDe(e, 'drop')) + ' % y sigues. ' + nb + (nb === 1 ? ' bajada.' : ' bajadas.'); }
-  if (m === 'rp') { var n = mpDe(e, 'mnrp'); return 'La última serie casi al fallo; ' + mpDe(e, 'rs') + ' s y ' + n + (n === 1 ? ' mini-serie' : ' mini-series') + ' con el mismo peso.'; }
-  if (m === 'myo') return 'Una serie de activación de 12-15 y ' + mpDe(e, 'mnmyo') + ' mini-series de 3-5 con ' + mpDe(e, 'rs') + ' s entre ellas. Paras cuando no llegues a 3.';
+  if (m === 'rp') { var n = mpDe(e, 'mnrp'); return 'La última serie casi al fallo; ' + mpDe(e, 'rs') + ' s y ' + n + (n === 1 ? ' mini-serie' : ' mini-series') + ' de 2-3 repeticiones con el mismo peso.'; }
+  if (m === 'myo') return 'Una serie de activación de 12-15 repeticiones y ' + mpDe(e, 'mnmyo') + ' mini-series de 3-5 repeticiones con ' + mpDe(e, 'rs') + ' s entre ellas. Paras cuando no llegues a 3 repeticiones.';      // 24 nov, 17:34 (Javier): «especifica que son reps»
   return MET_D[m] || '';
 }
 function metNom(m) { return (MET_SER.filter(function (x) { return x[0] === m; })[0] || [0, 'Normal'])[1]; }
@@ -7420,7 +7465,7 @@ function serMinis(t, e) { return Array.apply(null, { length: t === 'rp' ? mpDe(e
 /* el esquema de cada método con los kilos de esta rutina (para la hoja): '!' = en negro, '~' = descanso corto, '→' = flecha */
 function serEsq(e, m, O, W) {
   var ref = serRef(e, O, W), Wk = e.sets.filter(function (s) { return s.t !== 'aprox'; }), n = Math.max(1, e.n0 || Wk.length), z = Wk[0] || {}, rg = serRango(z.r0 || z.r);
-  var rr = rg[0] === rg[1] ? String(rg[0]) : rg[0] + '-' + rg[1], K = function (f) { return ref ? fN(redKg(ref * f)) : '—'; }, B = K(1) + '×' + rr, L = [];
+  var rr = rg[0] === rg[1] ? String(rg[0]) : rg[0] + '-' + rg[1], K = function (f) { return ref ? fN(redKg(ref * f, tipoCarga(e))) : '—'; }, B = K(1) + '×' + rr, L = [];
   var rep = function (c) { if (c > 2) L.push(c + ' × ' + B); else for (var q = 0; q < c; q++) L.push(B); };
   var up = mpDe(e, 'pir') / 100, bo = 1 - mpDe(e, 'top') / 100, dr = 1 - mpDe(e, 'drop') / 100, nb = mpDe(e, 'nb'), rs = mpDe(e, 'rs') + ' s';
   if (m === 'normal') rep(n);
@@ -7438,7 +7483,7 @@ A.serMetHoja = function (el) { S.x.metI = +el.dataset.i; var e = S.ses.ej[S.x.me
 function serMetHojaPinta() {
   var i = S.x.metI, e = S.ses && S.ses.ej[i]; if (!e) return; var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id, e.u || ''), W = U ? U.sets.filter(function (s) { return s.ok; }) : [], ref = serRef(e, O, W), ap = e.sets.some(function (s) { return s.t === 'aprox'; });
   hoja('<h2>Método · ' + esc(e.n) + '</h2><div class="met-l">' + MET_SER.map(function (x) { var on = S.x.metSel === x[0]; return '<button class="met-o' + (on ? ' on' : '') + '" data-a="serMetSel" data-v="' + x[0] + '" aria-pressed="' + on + '"><span class="rb"></span><span class="t"><b>' + x[1] + '</b><small>' + esc(MET_D[x[0]]) + '</small>' + esqHtml(serEsq(e, x[0], O, W)) + '</span></button>'; }).join('') + '</div>' +
-    serMetAjHtml(e, S.x.metSel) + '<div class="met-apx"><b>Series de aproximación</b>' + apxElige(e, i, ref) + '</div>' +      // 21 nov: cuántas quieras (0 a 5)
+    serMetAjHtml(e, S.x.metSel) +      // 24 nov, 17:34 (Javier): sin «Series de aproximación» aquí: tienen su botón al lado
     '<button class="btn" data-a="serMetUsar">' + (S.x.metSel === (e.met || 'normal') ? 'Listo' : 'Usar ' + esc(metNom(S.x.metSel))) + '</button>');
 }
 A.serMetSel = function (el) { S.x.metSel = el.dataset.v; serMetHojaPinta(); };
@@ -7491,7 +7536,7 @@ function serFilasHtml(e, i, O, W) {
   /* 24 nov, 16:23 (Javier: «al poner izquierda y derecha mira qué hueco sale ahí»): con cada lado, sin columna de «última vez» (sale en pequeño encima
      de los dos lados) y las casillas a todo lo ancho, igual en todas las series */
   /* 24 nov, 17:08 (Javier: «que al dar a kg puedas cambiar a peso corporal, y en repes, a seg, min, calorías o metros»): «Kg» y «Reps» se tocan */
-  var hK = '<button class="st-hb" data-a="serMedK" data-i="' + i + '" aria-label="Cambiar cómo mides el peso (ahora: ' + (e.pc ? 'peso corporal' : 'kilos') + ')">' + (e.pc ? 'Peso' : 'Kg') + ic('abajo', 10, null, 2.8) + '</button>',
+  var hK = '<button class="st-hb" data-a="serMedK" data-i="' + i + '" aria-label="Cambiar cómo mides el peso (ahora: ' + (+e.pc === 1 ? 'peso corporal' : +e.pc === 2 ? 'tu peso más lastre' : 'kilos') + ')">' + (+e.pc === 1 ? 'Peso' : +e.pc === 2 ? 'Lastre' : 'Kg') + ic('abajo', 10, null, 2.8) + '</button>',
     hR = '<button class="st-hb" data-a="serMedR" data-i="' + i + '" aria-label="Cambiar lo que cuentas (ahora: ' + uU.toLowerCase() + ')">' + uU + ic('abajo', 10, null, 2.8) + '</button>';
   var cabDe = function (hayPv, apx) { return LD ? '<div class="st-h st-l2"><span>#</span><span class="st-hl"><i></i><i>' + hK + '</i><i>' + hR + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>' + hK + '</span><span>' + hR + '</span><span>' + (apx ? '%' : 'RIR') + '</span><span></span></div>'; };      // 23 nov: en la aproximación, «%» en vez de RIR
   var cab = cabDe(hayPv);      // 22 nov, 19:45 (Chadín): en la aproximación, sin «Última vez» (cabDe(false))
@@ -7504,7 +7549,7 @@ function serFilasHtml(e, i, O, W) {
     var tg = serTag(s.t), esp = /^(drop|rp|myo|fallo)$/.test(s.t);
     var mk = s.ok ? marcaYo(e, j) : null;
     var row = LD ? serLadosHtml(e, i, s, j, W && W.length ? pvDe(j) : null, phK, phR, lab, { tg: tg && !esp && s.t !== 'aprox' ? tg : '', cK: cK, ya: j === ya, uU: uU }) + (mk ? '<div class="st-mk"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '') : '<div class="st st2' + (s.t === 'aprox' ? '' : ' ef') + (hayPvF ? ' pv' : '') + (s.ok ? ' ok' : '') + (j === ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n"><i>' + lab + '</i>' + (tg && !esp && s.t !== 'aprox' ? '<small>' + tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' + (hayPvF ? pvCel(j) : '') +
-      (e.pc ? '<span class="st-pc" title="Peso corporal: sin kilos">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(String(s.kg || '').replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">') +
+      (+e.pc === 1 ? '<span class="st-pc" title="Peso corporal: sin kilos">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(String(s.kg || '').replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">') +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="' + (e.u === 'min' ? 'decimal' : 'numeric') + '" value="' + esc(String(s.reps || '').replace('.', ',')) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + lab + '">' +
       (s.t === 'aprox' ? '<span class="st-pct" data-pct="' + i + '-' + j + '">' + apxPctTxt(e, j, O, W) + '</span>' :      // 23 nov (Chadín: «¿Cuánto porcentaje aproxima?»): el % de tu peso de trabajo
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '" placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + '">') +
@@ -7514,7 +7559,7 @@ function serFilasHtml(e, i, O, W) {
     var k = num(s.kg) || num(s.kgI) || num(s.kgD) || num(String(phK).replace(',', '.')) || 0, sub = { drop: 'sin descanso', rp: 'mismo peso', myo: 'mismo peso', fallo: 'hasta no poder más' }[s.t];
     h += '<div class="st-grp st-g-' + s.t + '"><div class="st-gh"><span><em class="st-gi">' + ic({ drop: 'rayo', rp: 'reloj', myo: 'reloj', fallo: 'diana' }[s.t] || 'rayo', 12, null, 2.4) + '</em>Serie ' + lab + ' · ' + esc(metNom(s.t)) + '</span><small>' + sub + '</small></div>' + (s.det ? '<p class="st-gn st-det">' + esc(s.det) + '</p>' : '') + row;
     var dm = /(\d+)\s*bajadas?.*?(\d+)\s*%/.exec(s.det || ''), tieneMp = e.mp && (e.mp.drop != null || e.mp.nb != null);      // las del motor («2 bajadas de −25 %»), si no las has cambiado
-    var dpc = tieneMp || !dm ? mpDe(e, 'drop') : +dm[2], dnb = tieneMp || !dm ? mpDe(e, 'nb') : Math.min(4, +dm[1]), dr = 1 - dpc / 100, SQ = [k]; for (var q3 = 1; q3 <= dnb; q3++) SQ.push(redKg(k * Math.pow(dr, q3)));
+    var dpc = tieneMp || !dm ? mpDe(e, 'drop') : +dm[2], dnb = tieneMp || !dm ? mpDe(e, 'nb') : Math.min(4, +dm[1]), dr = 1 - dpc / 100, SQ = [k]; for (var q3 = 1; q3 <= dnb; q3++) SQ.push(redKg(k * Math.pow(dr, q3), tipoCarga(e)));
     /* 23 nov (Chadín: «por mucho que te sugiera kg las series especiales, que te deje modificar peso»): cada bajada del drop set es una fila con
        sus kilos (los calculados, en gris, se cambian escribiendo) y sus repeticiones; en rest-pause y myo-reps, los kilos de cada mini-serie también */
     var dropB = s.t === 'drop';
@@ -7522,7 +7567,7 @@ function serFilasHtml(e, i, O, W) {
     if (s.mini) s.mini.forEach(function (x, m) {
       var kp = dropB ? SQ[m + 1] : k, lb = dropB ? 'Bajada ' + (m + 1) : 'Mini-serie ' + (m + 1);
       h += '<div class="st-mr"><span>' + (dropB ? ic('rayo', 12, null, 2.4) + '−' + fN(dpc) + ' % · sin descanso' : ic('reloj', 12) + mpDe(e, 'rs') + ' s') + '</span></div><div class="st st2 st-mini' + (dropB ? ' st-bj' : '') + (hayPvF ? ' pv' : '') + (LD ? ' st-ml' : '') + (x.ok ? ' ok' : '') + '"><span class="st-n"><i>' + (dropB ? '↓' : '+') + (m + 1) + '</i></span>' + (hayPvF || LD ? '<span></span>' : '') +
-        (e.pc ? '<span class="st-pc">Tu peso</span>' : '<input data-in="miniV" data-k="kg" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="decimal" value="' + esc(String(x.kg || '').replace('.', ',')) + '" placeholder="' + (kp ? esc(fN(kp)) : '') + '"' + (kp && !x.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la ' + lb.toLowerCase() + '">') +
+        (+e.pc === 1 ? '<span class="st-pc">Tu peso</span>' : '<input data-in="miniV" data-k="kg" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="decimal" value="' + esc(String(x.kg || '').replace('.', ',')) + '" placeholder="' + (kp ? esc(fN(kp)) : '') + '"' + (kp && !x.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la ' + lb.toLowerCase() + '">') +
         '<input data-in="miniV" data-k="reps" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="numeric" value="' + esc(x.reps) + '" placeholder="' + (dropB ? 'máx' : MINI_R[s.t]) + '" aria-label="Repeticiones de la ' + lb.toLowerCase() + '">' + (LD ? '' : '<span></span>') +
         '<button class="st-ok' + (x.ok ? ' on' : '') + '" data-a="miniOk" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" aria-pressed="' + !!x.ok + '" aria-label="' + lb + ' hecha">' + ic('check', 17, null, 3) + '</button></div>'; });
     h += '</div>';
@@ -7562,7 +7607,7 @@ function serLadosHtml(e, i, s, j, pv, phK, phR, lab, o) {
   o = o || {}; lab = lab || (s.t === 'aprox' ? 'C' : String(j + 1));
   var uU = o.uU || 'Reps', pvT = pv && num(pv.reps) != null ? (num(pv.kg) ? fN(num(pv.kg)) + ' × ' : '') + fN(num(pv.reps)) : '';
   var f = function (ld, nm) { var kv = s['kg' + ld] || '';
-    return '<div class="st-ld"><span>' + nm + '</span>' + (e.pc ? '<span class="st-pc">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg' + ld + '" inputmode="decimal" value="' + esc(String(kv).replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (o.cK && !kv ? ' class="kg-calc"' : '') + ' aria-label="Kilos ' + nm + ' serie ' + lab + '">') +
+    return '<div class="st-ld"><span>' + nm + '</span>' + (+e.pc === 1 ? '<span class="st-pc">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg' + ld + '" inputmode="decimal" value="' + esc(String(kv).replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (o.cK && !kv ? ' class="kg-calc"' : '') + ' aria-label="Kilos ' + nm + ' serie ' + lab + '">') +
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps' + ld + '" inputmode="numeric" value="' + esc(s['reps' + ld] || '') + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' ' + nm + ' serie ' + lab + '"></div>'; };
   return '<div class="st st-l2' + (s.t === 'aprox' ? '' : ' ef') + (s.ok ? ' ok' : '') + (o.ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n st-nl"><i>' + lab + '</i>' + (o.tg ? '<small>' + o.tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' +
     '<div class="st-lds">' + (pvT ? '<small class="st-lu">Última vez <b>' + esc(pvT) + '</b></small>' : '') + f('I', 'Izq.') + f('D', 'Der.') + '</div>' +
@@ -7617,7 +7662,7 @@ function apxPct(e, j, O, W) { var s = e.sets[j], ref = serRef(e, O, W), k = num(
   if (num(s.pct)) return num(s.pct); var ka = e.sets.slice(0, j).filter(function (z) { return z.t === 'aprox'; }).length, na = e.sets.filter(function (z) { return z.t === 'aprox'; }).length, L = APX_YO[Math.min(Math.max(na, 1), 5)]; return L[Math.min(ka, L.length - 1)][0]; }
 function apxPctTxt(e, j, O, W) { var p = apxPct(e, j, O, W); return p ? p + ' %' : '—'; }
 function apxN(e) { return (e.sets || []).filter(function (s) { return s.t === 'aprox'; }).length; }
-function apxPrev(e, n, ref) { return (APX_YO[n] || []).map(function (p) { return (ref ? fN(redKg(ref * p[0] / 100)) + ' kg' : p[0] + ' %') + ' × ' + p[1]; }).join(' · '); }
+function apxPrev(e, n, ref) { return (APX_YO[n] || []).map(function (p) { return (ref ? fN(redKg(ref * p[0] / 100, tipoCarga(e))) + ' kg' : p[0] + ' %') + ' × ' + p[1]; }).join(' · '); }
 function apxElige(e, i, ref) {
   var n = apxN(e);
   return '<div class="apx-n" role="radiogroup" aria-label="Series de aproximación">' + [0, 1, 2, 3, 4, 5].map(function (v) { return '<button role="radio" aria-checked="' + (n === v) + '" class="' + (n === v ? 'on' : '') + '" data-a="serApxN" data-i="' + i + '" data-v="' + v + '">' + (v || 'No') + '</button>'; }).join('') + '</div>' +
@@ -7627,11 +7672,11 @@ function apxElige(e, i, ref) {
    cada serie de aproximación con su % (el que pone la app, cambiable) y los kilos que salen */
 function apxFilas(e, i, ref) { var L = [], n = apxN(e); e.sets.forEach(function (s, j) { if (s.t === 'aprox') L.push(j); });
   return '<div class="apx-fs">' + L.map(function (j, k) { var s = e.sets[j], p = num(s.pct) || ((APX_YO[Math.min(n, 5)] || [])[k] || [50])[0];
-    return '<div class="apx-r' + (s.ok ? ' ok' : '') + '"><b>A' + (k + 1) + '</b><label class="apx-pi"><input data-in="apxPct" data-i="' + i + '" data-j="' + j + '" inputmode="numeric" value="' + fN(p) + '" aria-label="Porcentaje de la aproximación ' + (k + 1) + '"' + (s.ok ? ' disabled' : '') + '><i>%</i></label><span class="apx-kg" data-apk="' + j + '">' + apxKgTxt(ref, p, s.r) + '</span></div>'; }).join('') +
+    return '<div class="apx-r' + (s.ok ? ' ok' : '') + '"><b>A' + (k + 1) + '</b><label class="apx-pi"><input data-in="apxPct" data-i="' + i + '" data-j="' + j + '" inputmode="numeric" value="' + fN(p) + '" aria-label="Porcentaje de la aproximación ' + (k + 1) + '"' + (s.ok ? ' disabled' : '') + '><i>%</i></label><span class="apx-kg" data-apk="' + j + '">' + apxKgTxt(ref, p, s.r, tipoCarga(e)) + '</span></div>'; }).join('') +
     '</div><small class="mut apx-p">' + (ref ? 'Del peso de tu primera serie efectiva (' + fN(ref) + ' kg).' : 'Del peso de tu primera serie efectiva.') + ' Cambia el % si quieres otro.</small>'; }
-function apxKgTxt(ref, p, r) { return (ref ? '≈ ' + fN(redKg(ref * p / 100)) + ' kg' : p + ' %') + (r ? ' × ' + esc(String(r)) : ''); }
+function apxKgTxt(ref, p, r, t) { return (ref ? '≈ ' + fN(redKg(ref * p / 100, t)) + ' kg' : p + ' %') + (r ? ' × ' + esc(String(r)) : ''); }
 IN.apxPct = function (t) { var e = S.ses && S.ses.ej[+t.dataset.i], s = e && e.sets[+t.dataset.j]; if (!s) return; var v = num(String(t.value).replace(',', '.')); if (v == null || v < 5 || v > 100) return;
-  s.pct = Math.round(v); guardaEnCurso(); var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id, e.u || ''), W = U ? U.sets.filter(function (z) { return z.ok; }) : [], ref = serRef(e, O, W), sp = document.querySelector('#hoja [data-apk="' + t.dataset.j + '"]'); if (sp) sp.innerHTML = apxKgTxt(ref, s.pct, s.r); };
+  s.pct = Math.round(v); guardaEnCurso(); var O = objetivoHoy(e), U = ultimaDe(e.n, S.ses.id, e.u || ''), W = U ? U.sets.filter(function (z) { return z.ok; }) : [], ref = serRef(e, O, W), sp = document.querySelector('#hoja [data-apk="' + t.dataset.j + '"]'); if (sp) sp.innerHTML = apxKgTxt(ref, s.pct, s.r, tipoCarga(e)); };
 A.apxListo = function () { cerrarHoja(); pintar(); };
 A.serApxHoja = function (el) { S.x.apxI = +el.dataset.i; apxHojaPinta(); };
 function apxHojaPinta() {
@@ -7660,30 +7705,32 @@ function serARutina(e, fn) { var r = S.ses && S.ses.rid ? rutinaDe(S.ses.rid) : 
    «Añadir un ajuste que no está» (nombre y valor) y una nota. Se guarda por ejercicio en tu perfil (maqD) y, en texto, en maq (lo que se ve en el entreno) */
 var MAQ_C = [['asiento', 'Asiento', '4'], ['respaldo', 'Respaldo', '2'], ['rodillo', 'Rodillo', '3'], ['banco', 'Grados del banco', '30°'], ['bancoA', 'Altura del banco', '45 cm'],
   ['polea', 'Altura de la polea', '12'], ['accesorio', 'Accesorio', 'Cuerda'], ['agarre', 'Agarre', 'Neutro'], ['soporte', 'Altura del soporte', '8'], ['topes', 'Topes de seguridad', '5'],
-  ['pies', 'Posición de los pies', 'Altos y abiertos'], ['pecho', 'Apoyo de pecho', '3'], ['recorrido', 'Inicio del recorrido', '2'], ['hombreras', 'Hombreras', '4'], ['apertura', 'Apertura', '3']];
+  ['pies', 'Posición de los pies', 'Altos y abiertos'], ['apertura', 'Apertura', '3']];      // 24 nov, 17:34 (Javier): fuera hombreras, apoyo de pecho e inicio del recorrido
+var MAQ_FUERA = { hombreras: 'Hombreras', pecho: 'Apoyo de pecho', recorrido: 'Inicio del recorrido' };
 var MAQ_L = {}; MAQ_C.forEach(function (c) { MAQ_L[c[0]] = c; });
 function maqSug(n) {
   var t = clave(n), b = typeof bancoN === 'function' ? bancoN(n) : null, q = b && typeof eqDe === 'function' ? eqDe(b) : '';
-  if (/curl femoral|curl de pierna|extension de (cuadriceps|pierna|rodilla)|cuadriceps en maquina/.test(t)) return ['asiento', 'respaldo', 'rodillo', 'recorrido'];
+  if (/curl femoral|curl de pierna|extension de (cuadriceps|pierna|rodilla)|cuadriceps en maquina/.test(t)) return ['asiento', 'respaldo', 'rodillo'];
   if (/prensa/.test(t)) return ['respaldo', 'pies', 'topes'];
-  if (/hack|pendulo|sentadilla (en )?maquina|belt squat/.test(t)) return ['hombreras', 'pies', 'topes'];
+  if (/hack|pendulo|sentadilla (en )?maquina|belt squat/.test(t)) return ['pies', 'topes'];
   if (/hip thrust|puente de gluteo/.test(t)) return q === 'maq' || /maquina/.test(t) ? ['asiento', 'rodillo', 'pies'] : ['bancoA', 'pies'];
   if (/jalon|pulldown/.test(t)) return ['asiento', 'rodillo', 'agarre', 'accesorio'];
   if (/abduccion|aduccion/.test(t)) return ['asiento', 'respaldo', 'apertura'];
-  if (/gemelo|talones|pantorrilla/.test(t)) return ['hombreras', 'asiento', 'pies'];
-  if (/pec deck|contractora|aperturas en maquina|deltoides posterior en maquina|mariposa/.test(t)) return ['asiento', 'agarre', 'recorrido'];
+  if (/gemelo|talones|pantorrilla/.test(t)) return ['asiento', 'pies'];
+  if (/pec deck|contractora|aperturas en maquina|deltoides posterior en maquina|mariposa/.test(t)) return ['asiento', 'agarre'];
   if (/polea|cable|face pull|cruce|crossover/.test(t) || q === 'polea') return ['polea', 'accesorio', 'agarre'];
-  if (/(press|remo|pecho|hombro).*(maquina|hammer|articulad)|maquina de (press|remo|pecho|hombro)/.test(t)) return /remo/.test(t) ? ['asiento', 'pecho', 'agarre'] : ['asiento', 'respaldo', 'agarre', 'recorrido'];
+  if (/(press|remo|pecho|hombro).*(maquina|hammer|articulad)|maquina de (press|remo|pecho|hombro)/.test(t)) return /remo/.test(t) ? ['asiento', 'agarre'] : ['asiento', 'respaldo', 'agarre'];
   if (/smith|multipower/.test(t)) return ['soporte', 'topes', 'banco'];
   if (/banca|press inclinado|press declinado|inclinado|declinado/.test(t)) return q === 'manc' || /mancuerna/.test(t) ? ['banco'] : ['banco', 'soporte', 'agarre'];
   if (/sentadilla|press militar|good morning|zancada|split/.test(t) && (q === 'barra' || /barra/.test(t))) return ['soporte', 'topes'];
   if (/banco|sentado|inclinado/.test(t) && (q === 'manc' || /mancuerna/.test(t))) return ['banco'];
-  if (q === 'maq' || /maquina/.test(t)) return ['asiento', 'respaldo', 'agarre', 'recorrido'];
+  if (q === 'maq' || /maquina/.test(t)) return ['asiento', 'respaldo', 'agarre'];
   if (q === 'barra') return ['soporte', 'agarre'];
   return ['asiento', 'respaldo', 'agarre'];
 }
 function maqDe(n) { var P = S.perfil || {}, k = serK(n), D = (P.maqD || {})[k];
-  if (D) return { c: Object.assign({}, D.c || {}), x: (D.x || []).map(function (z) { return [z[0], z[1]]; }), t: D.t || '' };
+  if (D) { var c = Object.assign({}, D.c || {}), x = (D.x || []).map(function (z) { return [z[0], z[1]]; }); Object.keys(MAQ_FUERA).forEach(function (q) { if (c[q]) { x.push([MAQ_FUERA[q], c[q]]); } delete c[q]; });      // los que ya no salen, como ajustes tuyos
+    return { c: c, x: x, t: D.t || '' }; }
   return { c: {}, x: [], t: (P.maq || {})[k] || '' }; }
 function maqTxt(D) { var L = MAQ_C.filter(function (c) { return String((D.c || {})[c[0]] || '').trim(); }).map(function (c) { return c[1] + ' ' + String(D.c[c[0]]).trim(); });
   (D.x || []).forEach(function (z) { var a = String(z[0] || '').trim(), b = String(z[1] || '').trim(); if (a || b) L.push((a + ' ' + b).trim()); });
@@ -7845,19 +7892,19 @@ var U_YO = { '': ['Reps', '', 'Repeticiones', '10'], s: ['Seg', ' s', 'Segundos'
 function uSuf(u) { return (U_YO[u || ''] || U_YO[''])[1]; }
 function uLab(u) { return (U_YO[u || ''] || U_YO[''])[0]; }
 A.serMedK = function (el) { var i = +el.dataset.i, e = S.ses && S.ses.ej[i]; if (!e) return;
-  hoja('<h2>¿Cómo mides el peso?</h2><p class="mut sm">' + esc(e.n) + '</p><div class="lista">' + [['', 'Kilos', 'Apuntas los kilos de cada serie'], ['pc', 'Tu peso corporal', 'Sin kilos (flexiones, dominadas, crunch…): en la casilla pone «Tu peso»']].map(function (o) { var on = (o[0] === 'pc') === !!e.pc;
+  hoja('<h2>¿Cómo mides el peso?</h2><p class="mut sm">' + esc(e.n) + '</p><div class="lista">' + [['', 'Kilos', 'Apuntas los kilos de cada serie'], ['1', 'Tu peso corporal', 'Sin kilos (flexiones, dominadas, crunch…): en la casilla pone «Tu peso»'], ['2', 'Tu peso + lastre', 'Con kilos extra si los llevas (fondos, dominadas, abdominales…): apuntas solo el lastre']].map(function (o) { var on = String(+e.pc || '') === o[0];
     return '<button class="fila-b med-op' + (on ? ' on' : '') + '" data-a="serMedSi" data-i="' + i + '" data-k="pc" data-v="' + o[0] + '" aria-pressed="' + on + '"><b class="fb-ic">' + (on ? ic('check', 15, null, 3) : '<i class="med-v"></i>') + o[1] + '</b><small>' + o[2] + '</small></button>'; }).join('') + '</div><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
 A.serMedR = function (el) { var i = +el.dataset.i, e = S.ses && S.ses.ej[i]; if (!e) return;
   hoja('<h2>¿Qué cuentas en cada serie?</h2><p class="mut sm">' + esc(e.n) + '</p><div class="lista">' + ['', 's', 'min', 'm', 'kcal'].map(function (u) { var on = (e.u || '') === u, U = U_YO[u];
     return '<button class="fila-b med-op' + (on ? ' on' : '') + '" data-a="serMedSi" data-i="' + i + '" data-k="u" data-v="' + u + '" aria-pressed="' + on + '"><b class="fb-ic">' + (on ? ic('check', 15, null, 3) : '<i class="med-v"></i>') + U[2] + '</b><small>' + { '': 'Lo normal: cuántas haces', s: 'Planchas, crunch en tiempo, isométricos…', min: 'Bici, remo o elíptica por tiempo', m: 'Farmer carry, trineo, zancadas por distancia…', kcal: 'Remo, bici de aire o esquí por calorías' }[u] + '</small></button>'; }).join('') + '</div><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
 A.serMedSi = function (el) { var X = S.ses, i = +el.dataset.i, e = X && X.ej[i]; cerrarHoja(); if (!e) return; var k = el.dataset.k, v = el.dataset.v;
-  if (k === 'pc') e.pc = v ? 1 : 0;
+  if (k === 'pc') e.pc = +v || 0;      // 1: tu peso, sin kilos; 2: tu peso + lastre (los kilos son el lastre)
   else if ((e.u || '') !== v) { var antes = e.u || ''; e.u = v;
     e.sets.forEach(function (s) { if (s.ok) return; if (v) { if (s.t !== 'aprox') s.t = 'normal'; delete s.mini; } s.r = U_YO[v][3]; });      // las que faltan, con un objetivo de su unidad
     if (v) { e.met = 'normal'; e.lados = 0; } }
-  var P = S.perfil = S.perfil || perfilNuevo(), kk = serK(e.n); P.medEj = P.medEj || {}; var M = { u: e.u || '', pc: e.pc ? 1 : 0 }; if (!M.u && !M.pc) delete P.medEj[kk]; else P.medEj[kk] = M; guardaPerfil();
-  serARutina(e, function (q) { q.u = e.u || ''; q.pc = e.pc ? 1 : 0; if (k === 'u') q.sets = (q.sets || []).map(function (z) { return Object.assign({}, z, { r: U_YO[e.u || ''][3], t: e.u ? 'normal' : z.t }); }); });
-  guardaEnCurso(); pintar(); toast(k === 'pc' ? (e.pc ? 'Peso corporal' : 'En kilos') : 'Cuentas ' + U_YO[e.u || ''][2].toLowerCase(), 'ok'); };
+  var P = S.perfil = S.perfil || perfilNuevo(), kk = serK(e.n); P.medEj = P.medEj || {}; var M = { u: e.u || '', pc: +e.pc || 0 }; if (!M.u && !M.pc) delete P.medEj[kk]; else P.medEj[kk] = M; guardaPerfil();
+  serARutina(e, function (q) { q.u = e.u || ''; q.pc = +e.pc || 0; if (k === 'u') q.sets = (q.sets || []).map(function (z) { return Object.assign({}, z, { r: U_YO[e.u || ''][3], t: e.u ? 'normal' : z.t }); }); });
+  guardaEnCurso(); pintar(); toast(k === 'pc' ? (+e.pc === 1 ? 'Tu peso corporal' : +e.pc === 2 ? 'Tu peso + lastre' : 'En kilos') : 'Cuentas ' + U_YO[e.u || ''][2].toLowerCase(), 'ok'); };
 
 ;
 /* ---------- Bloques: AMRAP, EMOM, For Time, vueltas, circuitos por tiempo e intervalos (17 nov 2026) ----------
