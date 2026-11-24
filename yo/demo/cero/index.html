@@ -2169,6 +2169,7 @@ html[data-tema=oscuro] .cm21-dep .cm-acc .redondo{background:#fff;color:#111}
 .ord-c.lk{background:var(--suave);border-color:transparent;color:var(--tx3);cursor:default}.ord-c.lk>.ic{color:var(--verde)}
 .ord-c.sel{border:2px solid var(--tx)}
 .ord-c.arr{z-index:5;border:2px solid var(--tx);box-shadow:0 14px 30px rgba(0,0,0,.22);cursor:grabbing}
+.ord-c.des.arr{background:var(--card);border-style:solid}      /* 24 nov: un descanso, al arrastrarlo, tapa lo que tiene debajo (era transparente y se mezclaban los textos) */
 .ord-f.dst .ord-c:not(.arr){border:1.5px dashed var(--tx2);background:var(--suave)}
 body.ord-on{user-select:none;-webkit-user-select:none}
 .ord-pie{display:flex;flex-direction:column;align-items:stretch;gap:8px;margin-top:14px;text-align:center}.ord-pie .btn{margin:0}
@@ -3572,7 +3573,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.31';
+var YO_V = 'yo-1.32';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 function yoNueva() {
@@ -4617,8 +4618,9 @@ function semEsta() {
 function camQuedan() { var i = DIAS7.indexOf(hoyLetra()); return DIAS7.slice(i + 1); }
 /* 21 nov, 10:56 (Chadín: «para ordenar la rutina, que sea como en el panel de la clienta… deslizando con el dedo, rápido»): «Ordena tu semana»,
    los 7 días en lista; arrastras una rutina (o un descanso) a otro día y se cambian (la tarjeta sigue al dedo y, al soltar, se colocan con una
-   animación corta). También con dos toques. Lo ya hecho no se mueve. Solo esta semana (semMov). En borrador (OR21) hasta su OK. */
-var OR21 = false, ORDY = null, DCORTO = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+   animación corta). También con dos toques. Lo ya hecho no se mueve. Solo esta semana (semMov). En borrador (OR21) hasta su OK.
+   24 nov, 09:39 (Chadín: «cuando vas a ordenar… que se pueda ordenar arrastrando, como en el de la clienta»): publicado para todas (yo-1.32). */
+var OR21 = true, ORDY = null, DCORTO = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
 function or21() { return OR21 || rpBorr(); }
 function ordHecho(i) { var f = sumar(S.x.ord.l, i); return S.sesiones.some(function (x) { return x.fecha === f; }); }
 function ordFilaY(i) {
