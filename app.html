@@ -1463,7 +1463,7 @@ body.ancho #mchat.en-pag .mc-x[data-a=mcVolver]{display:none}
 .wkq-n b{display:block;font-size:14.5px}.wkq-n small{color:#6A6A72;font-size:12px}
 .wkq-p{font-size:13.5px;line-height:1.35;color:#141414}.wkq-p em{font-style:normal;color:#6A6A72}
 .wkq-t{justify-self:start;border-radius:999px;padding:4px 10px;font-size:12px;font-weight:800;white-space:nowrap}
-.wq-em{background:#FFE9E4;color:#B3261E}.wq-al{background:#FDE4E2;color:#8E1D16}.wq-ad{background:#FFEEE2;color:#C2410C}.wq-es{background:#F1ECFB;color:#5B3BA8}.wq-en{background:#FBE7F1;color:#A11D5E}.wq-di{background:#fff;color:#55555E;border:1.5px dashed #C9C9D1}.wq-ok{background:#E7EFFD;color:#1F3A7A}
+.wq-em{background:#FFE9E4;color:#B3261E}.wq-bj{background:#E9EEF7;color:#2F4A75}.wq-al{background:#FDE4E2;color:#8E1D16}.wq-ad{background:#FFEEE2;color:#C2410C}.wq-es{background:#F1ECFB;color:#5B3BA8}.wq-en{background:#FBE7F1;color:#A11D5E}.wq-di{background:#fff;color:#55555E;border:1.5px dashed #C9C9D1}.wq-ok{background:#E7EFFD;color:#1F3A7A}
 .wkq-pr{font-size:12.5px;font-weight:800;display:flex;align-items:center;gap:6px}.wkq-pr i{width:8px;height:8px;border-radius:50%}
 .wqp-a{color:#B4231B}.wqp-a i{background:#D93025}.wqp-m{color:#B05A10}.wqp-m i{background:#E07A2E}.wqp-b{color:#6A6A72}.wqp-b i{background:#B9B9C2}
 .wkq-ch{color:#8A8A92}
@@ -5943,6 +5943,12 @@ html.dsc-h{--ds-a:#2E9CC4;--ds-bg:#E8F6FD;--ds-bd:#BDE3F5;--ds-tx:#0B3A4E;--ds-t
 :where(html[data-tema=oscuro]) .dsc-cbh b,:where(html[data-tema=oscuro]) .dsc-ses b{color:#fff}:where(html[data-tema=oscuro]) .dsc-cb p,:where(html[data-tema=oscuro]) .dsc-ses{color:#E4E1F0}
 :where(html[data-tema=oscuro]) .dsc-cbh small,:where(html[data-tema=oscuro]) .dsc-nota small{color:#B5B0CC}:where(html[data-tema=oscuro]) .dsc-nota{background:#000;border-color:var(--ds-dkb);color:#E4E1F0}
 :where(html[data-tema=oscuro]) .semana .dia.dsc-d:not(.sel){background:var(--ds-dk)}:where(html[data-tema=oscuro]) .dsc-ses .link{color:var(--ds-ch)}
+
+/* v53.4.255 · «Sugerencias de peso en su app» (sí / no) */
+.os-cf{display:flex;align-items:center;gap:12px}.os-cf .col{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}.os-cf b{font-size:15px}.os-cf small{font-size:12.5px;color:var(--mu);line-height:1.4}
+.os-sw{position:relative;width:48px;height:28px;border-radius:14px;border:0;padding:0;margin:0;flex:none;background:#D1D1D6;cursor:pointer}
+.os-sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:11px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .15s}
+.os-sw[aria-checked=true]{background:#111}.os-sw[aria-checked=true]::after{left:23px}.os-sw:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
 </style>
 </head>
 <body>
@@ -6004,7 +6010,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.254';
+var APP_V = 'v53.4.255';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -6584,8 +6590,11 @@ function ejcEstado(d,E,S){
   var hoy=CO.hoy||hoyStr(), k=clave(E.n), W=ejcSemEst(d), u=S[S.length-1], act=ejcRutinas(d,hoy,hoy), en=act.some(function(r){ return (r.ejercicios||[]).some(function(e){ return clave(e.n)===k; }); });
   var a2=sumar(hoy,-13), prog=en?ejcProgDias(act,k,a2,hoy):0, hechos=S.filter(function(s){ return s.f>=a2; }).length;
   if(prog>=3&&hechos/prog<0.6) return {c:'con',t:'Poca constancia',s:'hizo '+hechos+' de '+prog+' entrenos de este ejercicio en 2 semanas'};
-  if(u.racha>=3){ var j=S.length-1; while(j>0&&S[j].baja) j--; var ref=S[j];
-    if(diff(S[Math.min(S.length-1,j+1)].f,u.f)>=14) return {c:'baja',t:'Ha retrocedido',s:'de '+fN(ref.top.p)+' kg × '+fN(ref.top.r,0)+' a '+fN(u.top.p)+' kg × '+fN(u.top.r,0)+' en las últimas '+Math.max(3,Math.round(diff(ref.f,u.f)/7))+' semanas'}; }
+  /* v53.4.255 (Javier: «4 sesiones bajando… la semana de la regla y la premenstrual son 2 semanas, yo daría de margen 2 más»): ha retrocedido si sus 4 últimas
+     sesiones (sin la semana de descarga) están todas por debajo del 95 % de su mejor marca de antes (kilos × (1 + reps/30)). Sin quitar los días del ciclo: el margen ya los cubre */
+  var e1s=function(s){ return s.top.p*(1+(s.top.r||0)/30); };
+  if(S.length>=5){ var U4=S.slice(-4), mej=S.slice(0,-4).reduce(function(m,s){ return !m||e1s(s)>e1s(m)?s:m; },null);
+    if(mej&&U4.every(function(s){ return e1s(s)<e1s(mej)*0.95; })) return {c:'baja',t:'Ha retrocedido',s:'4 sesiones seguidas por debajo de su mejor marca: de '+fN(mej.top.p)+' kg × '+fN(mej.top.r,0)+' a '+fN(u.top.p)+' kg × '+fN(u.top.r,0),ref:mej}; }
   var ini=sumar(hoy,-(W*7-1)), dentro=S.filter(function(s){ return s.f>=ini; }), antes=S.filter(function(s){ return s.f<ini; });
   var mejorAntes=antes.reduce(function(m,s){ return !m||ejcPeor(m,s)?s:m; },null), progresa=!mejorAntes||dentro.some(function(s){ return ejcPeor(mejorAntes,s); });
   if(mejorAntes&&dentro.length>=4&&!progresa) return {c:'est',t:cG('Estancada','Estancado'),s:W+' semanas sin pasar de '+fN(mejorAntes.top.p)+' kg × '+fN(mejorAntes.top.r,0)};
@@ -8435,32 +8444,44 @@ function sugerenciaEj(e,uv){
   if(dx.tipo==='peso') p=dscRed(p*(1-dx.pct/100),tipoCargaEj(e))||p;
   return {p:p,r:lo,t:fN(p)+' kg × '+fN(lo,0)+' reps',dsc:dx,rg:rg?rg[0]+(rg[1]?'-'+rg[1]:''):''};
 }
+/* v53.4.255 · SOBRECARGA PROGRESIVA (24 nov 2026, Javier, «aplica a todos según lo hablado en cada panel»). Una regla, completa:
+   · Sube el peso solo si TODAS sus series de trabajo con ese peso llegan a lo alto del rango (accesorios y mancuernas/kettlebell: primero hasta 15) y el RIR
+     que apunta no queda más de 1 por debajo del que toca (pone 2: vale 1, no 0). Sin RIR apuntado, solo por las repeticiones. Unilateral: los dos lados.
+     Al subir, el rango («12 kg × 8-10»). La aproximación no cuenta; drop set y rest-pause, su serie principal (las mini-series no son series aparte).
+   · Si no, mismo peso y una repetición más que la peor serie de su mejor día de las 3 últimas veces con ese peso: un mal día no le baja el objetivo.
+   · Si lleva 4 sesiones seguidas por debajo de su mejor marca en ese ejercicio: mismo peso, sin apretar (lo bajo del rango). En su app no se le dice nada:
+     el aviso le llega a su entrenador (Revisiones). Lo de una semana de descarga no cuenta. Su entrenador puede quitarle las sugerencias. */
+function seriesSes(n){ var k=clave(n), g={};
+  (CL.d.series||[]).forEach(function(x){ if(clave(x.e)!==k||!esEfectiva(x)||num(x.sb)>0||x.ld==='I'||uFila(x)) return; var f=String(x.f).slice(0,10); if(dscEn(f)) return; var o=g[x.sid]||(g[x.sid]={f:f,rows:[]}); o.rows.push(x); });
+  return Object.keys(g).map(function(k2){ return g[k2]; }).sort(function(a,b){ return a.f<b.f?-1:a.f>b.f?1:0; }); }
+function e1Fila(x){ var p=num(x.p)||0, r=num(x.r)||0; return p*(1+r/30); }
+function bajaCl(n){ var L=seriesSes(n).map(function(s){ return s.rows.reduce(function(m,x){ return Math.max(m,e1Fila(x)); },0); }).filter(function(v){ return v>0; });
+  if(L.length<5) return false; var M=Math.max.apply(null,L.slice(0,-4)); return M>0&&L.slice(-4).every(function(v){ return v<M*0.95; }); }
 function sugerenciaEj0(e,uv){
   if(!uv||e.mov||uEj(e)!=='r') return null;
+  if(BOOT.mode==='clienta'&&CL.d&&CL.d.clienta&&CL.d.clienta.sinSug) return null;      // su entrenador le ha quitado las sugerencias
   var W=uv.sets.filter(function(x){ return x.t!=='aprox'&&x.t!=='mov'&&num(x.p)!=null&&num(x.r)!=null; }); if(!W.length) return null;
   var s0=e.sets.filter(function(s){ return s.t!=='aprox'; })[0]; if(!s0) return null;
   var rg=String(s0.ro||'').match(/\d+/g), lo=rg?+rg[0]:null, hi=rg?+(rg[1]||rg[0]):null;
   var top=W.reduce(function(a,x){ return !a||num(x.p)>num(a.p)||(num(x.p)===num(a.p)&&num(x.r)>num(a.r))?x:a; },null), p=num(top.p), r=num(top.r);
-  var tc=tipoCargaEj(e);
-  var rirs=W.map(function(x){ return num(x.rir); }).filter(function(v){ return v!=null; }), duro=rirs.length&&rirs.every(function(v){ return v<=0; });
-  function S(pp,rr){ return {p:pp,r:rr,t:fN(pp)+' kg × '+fN(rr,0)+' reps'}; }
-  // v22: en los accesorios, primero llegar a 15 repeticiones con el mismo peso; en los principales (compuestos), subir el peso dentro de su rango
-  // v53.4.250 (Javier): con mancuernas o kettlebell, también en los principales: primero hasta 15 repeticiones y luego el siguiente peso que existe (10 → 12)
-  if(fnEj(e.n)!=='principal'||tc){
-    var tope=Math.max(15,hi||0), base=lo&&lo<tope?lo:10;
-    if(r>=tope&&!duro) return S(pesoSig(p,tc),base);
-    if(duro&&lo&&r<lo) return S(p,lo);
-    return S(p,Math.min(tope,r+1));
-  }
-  if(lo==null) return S(p,r+1);
-  if(r>=hi&&!duro) return S(pesoSig(p,''),lo);
-  if(duro&&r<lo) return S(p,lo);
-  return S(p,Math.min(hi,r+1));
+  var tc=tipoCargaEj(e), acc=fnEj(e.n)!=='principal'||!!tc, tope=acc?Math.max(15,hi||0):hi;
+  function S(pp,rr,rgx){ return {p:pp,r:rr,t:fN(pp)+' kg × '+fN(rr,0)+' reps',rg:rgx||''}; }
+  if(!p) return null;
+  if(bajaCl(e.n)) return S(p,lo!=null?lo:r);
+  var Wp=W.filter(function(x){ return num(x.p)===p; }), Wn=Wp.filter(function(x){ return !x.t||x.t==='normal'||x.t==='top'; }); if(Wn.length) Wp=Wn;
+  var mr=String(s0.rio||'').match(/\d+/), rirO=mr?+mr[0]:null, rirOk=function(x){ var v=num(x.rir); return v==null||rirO==null||v>=rirO-1; };
+  var izq=function(x){ var o=uv.porN&&uv.porN[num(x.n)||1]; return o&&o.izq&&num(o.izq.r)!=null?num(o.izq.r):null; };
+  if(tope==null) return S(p,r+1);
+  var arriba=Wp.every(function(x){ var ri=izq(x); return num(x.r)>=tope&&(ri==null||ri>=tope)&&rirOk(x); });
+  if(arriba){ var base=lo!=null&&lo<tope?lo:10; return S(pesoSig(p,acc?tc:''),base,rg?lo+(hi!==lo?'-'+hi:''):''); }
+  var mejor=null; seriesSes(e.n).slice(-3).forEach(function(s){ var R=s.rows.filter(function(x){ return num(x.p)===p&&num(x.r)!=null; }); if(!R.length) return; var mn=Math.min.apply(null,R.map(function(x){ return num(x.r); })); if(mejor==null||mn>mejor) mejor=mn; });
+  var rt=Math.min(tope,(mejor!=null?mejor:Math.min.apply(null,Wp.map(function(x){ return num(x.r); })))+1); if(lo!=null&&rt<lo) rt=lo;
+  return S(p,rt);
 }
 /* v37 · arriba, dos fichas: el objetivo de hoy (en negro) y su récord con el 1RM. La última vez va al lado de cada serie */
 function sugHtml(e,i,uv){
   var S=sugerenciaEj(e,uv), M=mejorMarca(e.n), rec=M.b&&M.b.p?M.b:null; if(!S&&!rec) return '';
-  var o=S?'<div class="o3 o3-h">'+ic('diana')+'<div><small>'+(S.dsc?'Objetivo sugerido':'Objetivo de hoy')+'</small><b>'+fN(S.p)+' kg × '+(S.dsc&&S.rg?esc(S.rg):fN(S.r,0))+'</b>'+(S.dsc?'<span class="dsc-st">'+(S.dsc.tipo==='peso'?'Descarga · −'+S.dsc.pct+' %':'Descarga · RIR 3–4')+'</span>':'')+'</div></div>':'';      // v53.4.253
+  var o=S?'<div class="o3 o3-h">'+ic('diana')+'<div><small>Objetivo sugerido</small><b>'+fN(S.p)+' kg × '+(S.rg?esc(S.rg):fN(S.r,0))+'</b>'+(S.dsc?'<span class="dsc-st">'+(S.dsc.tipo==='peso'?'Descarga · −'+S.dsc.pct+' %':'Descarga · RIR 3–4')+'</span>':'')+'</div></div>':'';      // v53.4.253
   var uu=uEj(e), e1=uu==='r'?M.e1:null, cont=rec?ic('trofeo')+'<div><small>Tu récord</small><b>'+fN(rec.p)+' × '+rU(fN(rec.r,0),uu)+'</b>'+(e1?'<i>1RM ≈ '+fN(redKg(M.e1.v,e.mc))+' kg</i>':'')+'</div>':'';
   var r=rec?(e1?'<button class="o3 o3-r" data-a="ver1rm" data-i="'+i+'" aria-label="Tu récord y qué es el 1RM">'+cont+'</button>':'<div class="o3 o3-r">'+cont+'</div>'):'';
   return '<div class="sug sug3'+(o&&r?'':' uno')+'">'+o+r+'</div>';
@@ -14956,13 +14977,19 @@ function semKpis(x){
 /* 23 nov 2026, 15:06–15:16 (Chadín): la lista de «Revisiones» de la semana, por prioridad: solo los que te tocan esa semana; en cada uno, lo principal
    en una línea, su etiqueta (la pone la app) y la prioridad; primero las alertas; los revisados abajo y en gris; filtros, buscador y «Ver más».
    «Empezar por…» es un atajo: puedes tocar a quien quieras. Maquetas: o1-lista, q1-vacio, q2-muchos. */
-var SEM_K={al:['Alerta','wq-al',0],ad:['Baja adherencia','wq-ad',1],en:['Energía o sueño peor','wq-en',2],em:['Empeora','wq-em',3],es:['Estancada','wq-es',4],di:['Datos insuficientes','wq-di',5],ok:['Todo bien','wq-ok',6]};      // v53.4.242: + Empeora y Estancada
+var SEM_K={al:['Alerta','wq-al',0],ad:['Baja adherencia','wq-ad',1],en:['Energía o sueño peor','wq-en',2],em:['Empeora','wq-em',3],es:['Estancada','wq-es',4],bj:['Baja en un ejercicio','wq-bj',5],di:['Datos insuficientes','wq-di',6],ok:['Todo bien','wq-ok',7]};      // v53.4.255: + «Baja en un ejercicio»      // v53.4.242: + Empeora y Estancada
+function progBajan(b){ b=String(b||''); if(/^\[/.test(b)){ try{ var L=JSON.parse(b); return Array.isArray(L)?L.filter(String):[]; }catch(e){ return []; } } return b?[b]:[]; }
 function semProg(x){      // con su cálculo (al guardar cada entreno): empeora en un ejercicio o lleva semanas sin mejorar
   var c=cliDe(x.id)||{}, P=c.prog||{}, hoy=CO.hoy||hoyStr(); if(!P.c||!c.activa) return null;
-  if(P.b) return {k:'em',pr:2,tg:'Empeora',p:'Empeora en '+P.b.charAt(0).toLowerCase()+P.b.slice(1),s:'sus 2 últimas veces, por debajo de su mejor marca'};
-  if(!P.d||(c.entrenos30||0)<3||!c.ultimoEntreno||diff(c.ultimoEntreno,hoy)>7) return null;
-  var ref=P.m&&P.m>P.d?P.m:P.d, w=Math.floor(diff(ref,hoy)/7); if(w<cl3N('est')) return null;
-  return {k:'es',pr:2,tg:cG('Estancada','Estancado',c),p:'Sin mejorar desde hace '+w+' semanas',s:'ni kilos ni repeticiones'};
+  /* v53.4.255 (Javier, 19:37–19:47): «Empeora» solo si bajan 4 ejercicios o más (cada uno, 4 sesiones seguidas por debajo de su mejor marca); con 1 a 3, un aviso
+     sin esa etiqueta («Baja en un ejercicio»). Dentro de la revisión salen siempre los ejercicios que bajan */
+  var B=progBajan(P.b), mn=function(n){ return String(n).charAt(0).toLowerCase()+String(n).slice(1); };
+  if(B.length>=4) return {k:'em',pr:2,tg:'Empeora',p:'Baja en '+B.length+' ejercicios',s:(B.length>3?B.slice(0,3).map(mn).join(', ')+' y '+(B.length-3)+' más':listaY(B.map(mn)))+' · 4 sesiones seguidas'};
+  var es=null;
+  if(P.d&&(c.entrenos30||0)>=3&&c.ultimoEntreno&&diff(c.ultimoEntreno,hoy)<=7){ var ref=P.m&&P.m>P.d?P.m:P.d, w=Math.floor(diff(ref,hoy)/7); if(w>=cl3N('est')) es={k:'es',pr:2,tg:cG('Estancada','Estancado',c),p:'Sin mejorar desde hace '+w+' semanas',s:'ni kilos ni repeticiones'}; }
+  if(es) return es;
+  if(B.length) return {k:'bj',pr:1,tg:B.length===1?'Baja en 1 ejercicio':'Baja en '+B.length+' ejercicios',p:'Baja en '+listaY(B.map(mn)),s:'4 sesiones seguidas por debajo de su mejor marca'};
+  return null;
 }
 function semEval(x){
   if(x._ev) return x._ev;
@@ -15258,7 +15285,7 @@ function rvEjs(d,P){
       var e; try{ e=ejcEstado(rvD(),E,S); }catch(err){ e={c:'eq',t:'',s:''}; }
       var ant=S.filter(function(s){ return s.f<P.a; }), u=den[den.length-1], p0=ant.length?ant[ant.length-1]:den[0];
       var maxAnt=ant.reduce(function(m,s){ return Math.max(m,s.top.p); },0), rec=ant.length>=2&&den.some(function(s){ return s.top.p>maxAnt; });
-      var ref=null, nB=0; if(e.c==='baja'){ var j=S.length-1; while(j>0&&S[j].baja) j--; ref=S[j]; nB=Math.max(3,Math.round(diff(ref.f,u.f)/7)); }
+      var ref=null, nB=0; if(e.c==='baja'){ ref=e.ref||null; nB=4; }      // v53.4.255: 4 sesiones seguidas
       var ciclo=den.some(function(s){ return s.baja&&s.ciclo; });
       var c=e.c==='baja'?'baja':e.c==='est'?'est':(e.c==='sube'||u.top.p>p0.top.p||(u.top.p===p0.top.p&&u.top.r>p0.top.r))?'sube':(u.top.p<p0.top.p&&ciclo)?'cy':'eq';
       out.push({n:E.n,k:k,e:e,c:c,u:u,p0:p0,ref:ref,nB:nB,dif:u.top.p-p0.top.p,rec:rec&&u.top.p>maxAnt,ciclo:ciclo,sp:S.slice(-10).map(function(z){ return {p:z.top.p,en:z.f>=P.a}; })});
@@ -15953,7 +15980,7 @@ function semGuiaHtml(){
     [6,'Cada cliente','Lo principal en una línea, su etiqueta y la prioridad. Tócalo y se abre su revisión.',fila('LG','Laura','Perder grasa · cada semana','Dolor de rodilla · lo ha dicho 1 vez','Alerta','wq-al','Alta','a',1)],
     [7,'Revisados','Abajo, plegados y en gris, con cómo los viste.','<span class="smg-fold"><b>Revisados · 2</b><span>Ver</span></span>']
   ];
-  var ET=[['Alerta','wq-al','Ha dicho que le duele algo (en el chat, el check-in o un entreno).'],['Baja adherencia','wq-ad','Ha hecho menos de 3 de cada 4 entrenos.'],['Energía o sueño peor','wq-en','Su energía ha bajado 2 puntos o duerme menos de 6 h.'],['Empeora','wq-em','En un ejercicio, sus 2 últimas veces por debajo de su mejor marca (te dice cuál).'],['Estancada','wq-es','Entrena, pero lleva 4 semanas o más sin mejorar ni kilos ni repeticiones.'],['Datos insuficientes','wq-di','Ni entrenos ni check-ins: no se sabe si entrena.'],['Todo bien','wq-ok','Ha cumplido y no hay nada raro.']];
+  var ET=[['Alerta','wq-al','Ha dicho que le duele algo (en el chat, el check-in o un entreno).'],['Baja adherencia','wq-ad','Ha hecho menos de 3 de cada 4 entrenos.'],['Energía o sueño peor','wq-en','Su energía ha bajado 2 puntos o duerme menos de 6 h.'],['Empeora','wq-em','Bajan 4 ejercicios o más: cada uno, 4 sesiones seguidas por debajo de su mejor marca (sin contar la semana de descarga).'],['Baja en un ejercicio','wq-bj','Uno, dos o tres ejercicios con 4 sesiones seguidas por debajo de su mejor marca (te dice cuáles). Dentro de su revisión, en «Va mal».'],['Estancada','wq-es','Entrena, pero lleva 4 semanas o más sin mejorar ni kilos ni repeticiones.'],['Datos insuficientes','wq-di','Ni entrenos ni check-ins: no se sabe si entrena.'],['Todo bien','wq-ok','Ha cumplido y no hay nada raro.']];
   var CA=[
     ['A','Cada cuánto','Lo mismo para todos, en semanas (revisas siempre los mismos días). «Otro…»: las semanas que quieras.','<span class="smg-chs">'+chip('Cada semana',1)+chip('Cada 2 semanas')+chip('Cada 3 semanas')+chip('Cada 4 semanas')+chip('Otro…')+'</span>'],
     ['B','Qué días revisas','Se reparten solos a partes iguales. Si es cada 2 semanas o más, también entre semanas: cada 2 semanas, 2 grupos (A y B); cada 3, 3 grupos…, y cada semana revisas a uno. De lunes a miércoles revisas la semana que acabó; de jueves a domingo, la que acaba ese domingo.','<span class="gq-ds">'+['L','M','X','J','V','S','D'].map(function(d){ return '<button class="'+(d==='V'||d==='S'?'on':'')+'">'+d+'</button>'; }).join('')+'</span>'],
@@ -16617,6 +16644,11 @@ A.dscQuitar=function(el){ var id=el.dataset.id, x=dscL().filter(function(z){ ret
 /* calendario de la ficha: los días de descarga en morado y una fila por semana */
 function dscFilasCal(Y){ var h=CO.hoy||hoyStr(); return dscL().filter(function(x){ return x.hasta>=Y+'-01-01'&&x.desde<=Y+'-12-31'; }).map(function(x){ var pas=x.hasta<h;
   return '<div class="dsc-cr'+(pas?' pas':'')+'"><span class="dsc-cf"><b>'+esc(fCorta(x.desde))+'</b><small>al '+esc(fCorta(x.hasta))+'</small></span><span class="dsc-ct"><b>Semana de descarga</b><small>'+esc(dscQue(x))+(x.nota?' · con tu nota':'')+'</small></span>'+(pas?'<span class="c2-st c2-ya">Hecha</span>':'<span class="dsc-cb"><button class="btn sm sec" data-a="dscAbrir" data-id="'+esc(x.id)+'">Cambiar</button><button class="btn sm sec" data-a="dscQuitar" data-id="'+esc(x.id)+'">Quitar</button></span>')+'</div>'; }).join(''); }
+/* v53.4.255 · «Sugerencias de peso en su app» sí / no, por cliente (Entrenos, debajo de «Programación actual») */
+function sugCard(){ if(!CO.cid||!CO.d||!CO.d.clienta||CO.md) return ''; var on=CO.d.clienta.sugPeso!==false;
+  return '<div class="card os-card"><div class="os-cf"><span class="col"><b>Sugerencias de peso en su app</b><small>'+(on?'«Objetivo sugerido» en cada ejercicio, con tu rango y tu RIR.':'No le salen: solo ve su última vez.')+'</small></span><button class="os-sw" role="switch" aria-checked="'+on+'" aria-label="Sugerencias de peso en su app" data-a="sugPeso"></button></div></div>'; }
+A.sugPeso=function(el){ var cid=CO.cid, on=CO.d.clienta.sugPeso!==false; el.disabled=true;
+  cargando(api('coachSugPeso',CO.pin,cid,!on)).then(function(r){ if(CO.d&&CO.cid===cid) CO.d.clienta.sugPeso=r.sugPeso; pintarClienta(false); toast(r.sugPeso?'Le salen las sugerencias de peso':'Sin sugerencias de peso en su app','ok'); },function(e){ el.disabled=false; toast(e.message,'err'); }); };
 function progCard(){
   var R=CO.d.rutinas, hoy=CO.hoy||hoyStr(), vig=R.filter(function(r){ return vigenteEn(r,hoy,R); }), fut=R.filter(function(r){ return r.desde&&r.desde>hoy; });
   var d=vig.map(function(r){ return r.desde; }).filter(String).sort()[0], h2=vig.map(function(r){ return r.hasta; }).filter(String).sort().slice(-1)[0], st=semanaTxtR(vig,hoy);
@@ -16774,7 +16806,7 @@ function vRutinas(){
   if(CO.diaRut==null) CO.diaRut=conDia(hoyK)?hoyK:(DIAS.filter(conDia)[0]||'todas');
   var sel=CO.diaRut, esDia=DIAS.indexOf(sel)>=0, sinDia=RB.filter(function(r){ return !r.dias.length; }).length;
   var hoyF=CO.hoy||hoyStr();
-  var h=progCard()+'<div class="card"><div class="card-t sem-tt">Su semana'+(hayF?'<small>'+(CO.progSel!=='a'?'desde el '+fCorta(Bq.dP):'la de ahora')+'</small>':'')+'</div><div class="semana-plan'+(CO.progSel!=='a'?' sp-fut':'')+'">'+DIAS.map(function(k){
+  var h=progCard()+sugCard()+'<div class="card"><div class="card-t sem-tt">Su semana'+(hayF?'<small>'+(CO.progSel!=='a'?'desde el '+fCorta(Bq.dP):'la de ahora')+'</small>':'')+'</div><div class="semana-plan'+(CO.progSel!=='a'?' sp-fut':'')+'">'+DIAS.map(function(k){
     var rs=RB.filter(function(r){ return r.dias.indexOf(k)>=0; });
     return '<button class="sp'+(sel===k?' on':'')+(k===hoyK&&CO.progSel==='a'?' hoy':'')+'" data-a="diaRut" data-d="'+k+'" aria-pressed="'+(sel===k)+'" aria-label="Ver el '+DLARGO[k]+'"><b>'+DL[k]+'</b>'+(rs.length?rs.map(function(r){ return '<span class="sp-n" title="'+esc(r.nombre||'')+'">'+esc(spCorto(r.nombre)||'Sin nombre')+'</span>'+(!hayF&&r.desde&&r.desde>hoyF?' <i class="sp-f">desde '+fCorta(r.desde)+'</i>':''); }).join('<br>'):'<span class="muted">—</span>')+'</button>';
   }).join('')+'</div><div class="tipos sem-f"><button class="'+(sel==='todas'?'on':'')+'" data-a="diaRut" data-d="todas">Todas las rutinas ('+RB.length+')</button>'+
@@ -22498,7 +22530,7 @@ var AYUDA=[
   {g:1,q:'¿Cómo le pongo una rutina?',r:'En su ficha, pestaña Entrenos: «+ Nueva rutina» y añade los ejercicios, o usa una de tu Banco de rutinas. Guárdala y le sale en su app.',a:'sdRutBib',k:'rutina entreno ejercicios plan semana crear'},
   {g:1,q:'¿Cómo copio una rutina a otro cliente o a otra semana?',r:'Abre la rutina y pulsa «Copiar rutina»: eliges a quién (o a qué fecha) y la ajustas antes de guardar.',k:'copiar duplicar rutina otra semana otro cliente'},
   {g:1,q:'¿Cómo añado un ejercicio o su vídeo?',r:'En el Banco de ejercicios: busca el ejercicio (sus palabras, en cualquier orden: «tríceps banco barra») o crea uno nuevo, y pega el enlace de su vídeo (por ejemplo, de YouTube) y sus indicaciones.',a:'sdBanco',k:'ejercicio video youtube banco nuevo tecnica buscar'},
-  {g:1,q:'¿Cómo le sugiere la app el peso de cada día?',r:'En su app, «Objetivo de hoy» sale de su última vez. En los ejercicios principales sube el peso dentro de su rango; en los accesorios, primero llega a 15 repeticiones con el mismo peso. Con mancuernas o kettlebell, siempre primero hasta 15 repeticiones y luego la siguiente mancuerna con un salto de verdad (de 3 a 5, de 5 a 7,5, de 10 a 12, o de 12,5 a 15 si usas las de 12,5; nunca de 1 en 1). Si la última vez fue a RIR 0 en todas, no sube. En una semana de descarga, le salen los kilos de esa semana (y lo que haga no cuenta para la siguiente).',k:'sugerencia peso objetivo sobrecarga progresiva mancuernas repeticiones subir'},
+  {g:1,q:'¿Cómo le sugiere la app el peso de cada día?',r:'En su app, «Objetivo sugerido» sale de sus últimas veces, con tu rango y tu RIR. Sube el peso solo cuando todas sus series llegan a lo alto del rango y el RIR que apunta no queda más de 1 por debajo del que pusiste (sin RIR apuntado, por las repeticiones); al subir, le propone el rango («12 kg × 8-10»). Si no, mismo peso y una repetición más; mira sus 3 últimas veces, así un mal día no le baja el objetivo. En los accesorios y con mancuernas o kettlebell, primero hasta 15 repeticiones y luego la siguiente que existe (de 10 a 12, nunca de 1 en 1). Si lleva 4 sesiones seguidas por debajo de su mejor marca en un ejercicio, mantiene el peso y a ti te sale en Revisiones. En una semana de descarga, le salen los kilos de esa semana (y lo que haga no cuenta para la siguiente). Para quitárselas: Entrenos → «Sugerencias de peso en su app».',k:'sugerencia peso objetivo sobrecarga progresiva mancuernas repeticiones subir'},
   {g:1,q:'¿Cómo le pongo una semana de descarga?',r:'En su ficha, pestaña Entrenos, «Programación actual» → «Semana de descarga» (el botón morado). Eliges la semana (esta, la próxima u otra; de lunes a domingo) y cómo: menos series (la mitad, con el mismo peso y RIR 3–4), menos peso (−10, −20 o −30 %), menos días (quitas los que quieras) o descanso total. Ves cómo le queda y le puedes dejar una nota. Su rutina no cambia: esa semana su app le pone los kilos o las series que tocan y la siguiente vuelve sola a lo normal. Para cambiarla o quitarla, en el mismo sitio o en su Calendario. Lo que haga esa semana no cuenta como «Empeora» ni como referencia para sus kilos.',k:'descarga deload semana suave recuperar menos peso menos series menos dias descanso'},
   {g:1,q:'¿Cómo le mando su dieta en PDF?',r:'Al guardar su dieta te sale «¿Avisar a…?»: deja activado «Enviarle también la dieta en PDF por email» y pulsa «Sí» (se recuerda para la próxima). Cuando quieras, en su pestaña Dieta: «Descargar en PDF» o «Enviársela por email». Sale lo guardado, en tarjetas para imprimir y pegar en la nevera: cada plan en su hoja, siempre con los gramos y con las kcal solo si se las dejas ver en su app.',k:'pdf dieta email correo mandar enviar descargar imprimir exportar nevera'},
   {g:1,q:'¿Cómo uso la misma dieta con varios clientes?',r:'En la dieta de un cliente, «Guardar en tu banco de dietas». Después, en otro cliente, pestaña Dieta → «Desde tu banco de dietas» (o «Poner una de tu banco»): eliges una y, si quieres, la ajustas a sus kcal (se escalan los gramos de cada plato). La que tenía queda en su historial.',k:'banco dietas plantilla copiar misma dieta kcal ajustar'},
