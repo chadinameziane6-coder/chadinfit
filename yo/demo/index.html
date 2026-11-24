@@ -2478,7 +2478,7 @@ html.ges-on,html.ges-on body{overflow-x:hidden}
 .atras-v .atras-in{position:relative;max-width:480px;margin-left:auto!important;margin-right:auto;min-height:100vh;background:var(--fondo)}
 .atras-v .atras-in *{animation:none!important;transition:none!important}
 .atras-v .atras-os{position:absolute;inset:0;background:#000;opacity:.35;pointer-events:none}
-.st input.kg-pre{background:var(--card)!important}      /* 24 nov: la sugerencia, ya como número de la casilla, lista para cambiarla */
+.st input.kg-calc.kg-foc{background:var(--card)}.st input.kg-calc.kg-foc::placeholder{color:var(--t3);font-weight:600}      /* 24 nov: al tocarla, la sugerencia en gris claro, como pista; lo que escribes es lo que vale */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3586,7 +3586,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.35';
+var YO_V = 'yo-1.36';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7492,17 +7492,13 @@ A.sdDesh = function () { var u = SD_ULT, e = u && S.ses && S.ses.ej[u.i]; if (!e
    de la drop set o el myo-rep o cualquier serie, que yo pueda modificarlo»). Los kilos sugeridos (fondo ámbar) parecían ya escritos: al tocarlos, borrar
    no hacía nada (era solo la sugerencia) y el cursor salía en medio del número. Ahora, al tocar uno, la sugerencia pasa a ser el número de la casilla,
    seleccionado: escribes encima y se cambia, o lo borras. Si sales sin tocarlo, sigue siendo la sugerencia (y se recalcula si cambias la serie de arriba). */
-document.addEventListener('focusin', function (ev) {
-  var t = ev.target; if (!t || t.tagName !== 'INPUT' || !t.classList.contains('kg-calc') || t.value || !t.placeholder) return;
-  t.value = t.placeholder; t._kgPre = t.value; t.classList.add('kg-pre');
-  var sel = function () { try { t.setSelectionRange(0, t.value.length); } catch (e) { try { t.select(); } catch (e2) { } } };
-  sel(); setTimeout(sel, 0); setTimeout(sel, 60);
-});
-document.addEventListener('input', function (ev) { var t = ev.target; if (t && t._kgPre != null) t._kgPre = null; }, true);      // 24 nov, 13:05: sin tocar sus clases mientras escribes
-/* al salir de la casilla: si no la tocaste, vuelve a ser la sugerencia; si escribiste, se apunta lo que se ve (por si el iPhone no avisó al escribir) y ya no es sugerencia */
+/* 24 nov, 16:18 (Javier, en el ordenador: «al seleccionar una serie especial, no me deja cambiar el peso sugerido»): meter la sugerencia en la casilla
+   y seleccionarla no aguanta en todos los navegadores (el cursor se queda en medio y lo que escribes se mete dentro: 5|0 → 5450). Ahora, al tocarla,
+   la casilla se queda vacía con la sugerencia en gris claro, como pista: lo que escribes es lo que vale. Si no escribes nada, vale la sugerencia */
+document.addEventListener('focusin', function (ev) { var t = ev.target; if (t && t.tagName === 'INPUT' && t.classList.contains('kg-calc') && !t.value) t.classList.add('kg-foc'); });
+/* al salir de la casilla se apunta lo que se ve (por si el iPhone no avisó al escribir) y, si escribiste, ya no es sugerencia */
 document.addEventListener('focusout', function (ev) {
-  var t = ev.target; if (!t || t.tagName !== 'INPUT') return; var pre = t._kgPre; t._kgPre = null; t.classList.remove('kg-pre');
-  if (pre != null && t.value === pre) { t.value = ''; return; }
+  var t = ev.target; if (!t || t.tagName !== 'INPUT') return; t.classList.remove('kg-foc');
   var k = t.dataset && t.dataset.in; if ((k === 'stV' || k === 'miniV') && IN[k]) { try { IN[k](t); } catch (e) { } if (t.value) t.classList.remove('kg-calc'); }
 });
 
