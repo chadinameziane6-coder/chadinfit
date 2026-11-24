@@ -2780,6 +2780,16 @@ html[data-tema="oscuro"] .ses-k .ses-du b{background:linear-gradient(90deg,#7FD6
 .ej-cn{width:28px;height:28px;border-radius:50%;flex:none;display:flex;align-items:center;justify-content:center;background:var(--suave);color:var(--tx);font-size:13px;font-weight:800;font-variant-numeric:tabular-nums}
 .ej-cn.ok{background:linear-gradient(135deg,#7FD6FF,#9A8CFF);color:#0D0D10}
 html[data-tema="oscuro"] .ej-cn:not(.ok){background:rgba(255,255,255,.1);color:#fff}
+/* 25 nov, 00:02: la cabecera del entreno, todo en una pastilla (un poco más oscura que los botones) y el nombre centrado */
+.ses-f .ses-t{align-items:center;text-align:center}.ses-f .ses-t b{text-align:center}
+.ses-k.ses-pl{display:flex;justify-content:center;align-items:center;gap:10px;width:max-content;max-width:100%;margin:0 auto;padding:7px 14px;border-radius:999px;background:#E3E4EA;font-size:13.5px;font-weight:700;color:#4A4D57;white-space:nowrap}
+.ses-pl>span{display:inline;min-width:0;overflow:hidden;text-overflow:ellipsis}.ses-pl b{color:#0D0D10;font-weight:800;font-variant-numeric:tabular-nums}
+.ses-pl>i{width:1px;height:14px;background:rgba(13,13,16,.18);flex:none}
+.ses-pl .ses-du{display:inline-flex;flex-direction:row;align-items:center;gap:6px;flex:none}.ses-pl .ses-du .ic{color:#5B4BD6}
+.ses-pl .ses-du b{font-size:13.5px;background:none;-webkit-text-fill-color:currentColor;color:#0D0D10}
+.ses-pl .ses-du.pz b{color:#8A8D97}.ses-pl .ses-du.pz .ic{color:#8A8D97}
+@media (max-width:350px){.ses-k.ses-pl{gap:7px;padding:7px 11px;font-size:12.5px}.ses-pl .ses-du b{font-size:12.5px}}
+html[data-tema="oscuro"] .ses-k.ses-pl{background:rgba(255,255,255,.12);color:#C9CCD8}html[data-tema="oscuro"] .ses-pl b,html[data-tema="oscuro"] .ses-pl .ses-du b{color:#fff}html[data-tema="oscuro"] .ses-pl>i{background:rgba(255,255,255,.22)}html[data-tema="oscuro"] .ses-pl .ses-du .ic{color:#B4A9FF}
 
 </style>
 </head>
@@ -3434,7 +3444,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.50';
+var YO_V = 'yo-1.51';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6457,7 +6467,9 @@ VISTAS.entreno = function () {
      arriba el nombre y, debajo, tres datos: Duración · Ejercicios (hechos de cuántos) · Series (hechas de cuántas) */
   var SR = sesSeries(X);
   var h = '<div class="ses"><header class="ses-cab"><div class="ses-f"><button class="redondo gris" data-a="volver" aria-label="Minimizar el entreno">' + ic('abajo', 20) + '</button><span class="ses-t"><b>' + esc(X.nombre) + '</b></span>' + '<button class="btn-neg" data-a="terminar">Terminar</button></div>' +      /* 23:30 (Javier): fuera las flechas de ordenar: se ordena manteniendo pulsado el ejercicio */
-    '<div class="ses-k"><button class="ses-du' + (X.pausa ? ' pz' : '') + '" data-a="durH" aria-label="Tiempo del entreno: pausar o poner a 0"><small>' + (X.pausa ? 'En pausa' : 'Duración') + ic(X.pausa ? 'play' : 'pausa', 11, null, 2.6) + '</small><b id="crono">' + crono() + '</b></button>' + (tot.length ? '<span><small>Ejercicios</small><b>' + hechos + '<i> de ' + tot.length + '</i></b></span>' : '') + (SR[1] ? '<span><small>Series</small><b>' + SR[0] + '<i> de ' + SR[1] + '</i></b></span>' : '') + '</div>' +
+    /* 25 nov, 00:02 (Javier: «todo en una pastilla, pero quizá un poco más oscuro»): tiempo · ejercicios · series en una pastilla centrada; el tiempo se toca */
+    '<div class="ses-k ses-pl"><button class="ses-du' + (X.pausa ? ' pz' : '') + '" data-a="durH" aria-label="Tiempo del entreno' + (X.pausa ? ', en pausa' : '') + ': pausar o poner a 0">' + ic(X.pausa ? 'pausa' : 'reloj', 15, null, 2.2) + '<b id="crono">' + crono() + '</b></button>' +
+    (tot.length ? '<i aria-hidden="true"></i><span><b>' + hechos + '</b>/' + tot.length + ' ejercicios</span>' : '') + (SR[1] ? '<i aria-hidden="true"></i><span><b>' + SR[0] + '</b>/' + SR[1] + ' series</span>' : '') + '</div>' +
     '</header><div class="ses-c">';      // 23:50 (Javier: «las rayas de colores no me gustan»): fuera las rayas de progreso (los ejercicios hechos ya salen arriba)
   var cal = X.ej.filter(function (e) { return e.cal; });
   if (X.suave) { var sx = suaveHoy(); h += '<p class="ses-dsc ss-ban"><span class="ss-bi">' + ic('luna', 16) + '</span><span><b>Semana suave</b>' + (sx ? ' · día ' + (dDias(sx.desde, hoyStr()) + 1) + ' de 7' : '') + ' · la mitad de las series, RIR 3–4</span><button class="link" data-a="suaveFin">Terminarla</button></p>'; }      // yo-1.47
