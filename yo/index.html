@@ -2793,6 +2793,18 @@ html[data-tema="oscuro"] .ses-k.ses-pl{background:rgba(255,255,255,.12);color:#C
 /* «¿Terminar el entreno?»: la duración, con «Cambiar» (abre la rueda) */
 .tr-du{display:flex;align-items:center;gap:10px;width:100%;border:0;border-radius:16px;background:var(--suave);padding:12px 14px;margin:2px 0 12px;font:inherit;color:var(--tx);text-align:left;cursor:pointer}
 .tr-du .ic{color:#5B4BD6;flex:none}.tr-du span{flex:1;font-size:14px;font-weight:600;color:var(--tx2)}.tr-du b{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}.tr-du i{font-style:normal;font-size:13px;font-weight:800;color:#5B4BD6;margin-left:4px}
+/* series por músculo (rutina, Ver rutina, Mi semana y el entreno) */
+.rp-l{display:flex;flex-direction:column;gap:9px;margin:4px 0 2px}
+.rp-f{display:grid;grid-template-columns:84px minmax(0,1fr) 54px;align-items:center;gap:10px;font-size:13.5px}
+.rp-g{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rp-b{position:relative;height:10px;border-radius:5px;background:#ECEDF2;overflow:hidden}
+.rp-b i{position:absolute;left:0;top:0;bottom:0;border-radius:5px}.rp-b i.hc{background:#2E2A3E}.rp-b i.pv{background:#C9C6DD}
+.rp-f b{text-align:right;font-size:14px;font-weight:800;font-variant-numeric:tabular-nums}.rp-f b small{font-size:12px;font-weight:600;color:var(--tx2)}
+.rp-ley{display:flex;flex-wrap:wrap;gap:6px 14px;margin:10px 0 0;font-size:11.5px;color:var(--tx2)}.rp-ley span{display:inline-flex;align-items:center;gap:5px}.rp-ley i{width:10px;height:10px;border-radius:3px;display:inline-block}.rp-ley i.hc{background:#2E2A3E}.rp-ley i.pv{background:#C9C6DD}
+.rp-v{margin:2px 0}
+.rz-rp{padding:4px 2px 8px}
+.ses-pl .ses-sr{border:0;background:none;padding:0;margin:0;font:inherit;color:inherit;cursor:pointer;white-space:nowrap}
+html[data-tema="oscuro"] .rp-b{background:rgba(255,255,255,.1)}html[data-tema="oscuro"] .rp-b i.hc,html[data-tema="oscuro"] .rp-ley i.hc{background:#E4E0FF}html[data-tema="oscuro"] .rp-b i.pv,html[data-tema="oscuro"] .rp-ley i.pv{background:rgba(228,224,255,.3)}
 
 </style>
 </head>
@@ -3447,7 +3459,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.52';
+var YO_V = 'yo-1.53';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4386,7 +4398,9 @@ VISTAS.semana = function () {
   var h = '<div class="pant pad">' + cab('Mi semana') + '<p class="mut sm">Qué rutina toca cada día. Lo que pongas aquí te sale en Inicio.</p><section class="card lista-d">';
   DIAS7.forEach(function (d) { var r = rutinaDe(sem[d]);
     h += '<div class="fila-d"><span class="dn' + (r || d === hoy ? ' on' : '') + '">' + DIA_N[d].slice(0, 3) + '</span><span class="dt"><b class="' + (r ? '' : 'mut') + '">' + (r ? esc(r.nombre) : 'Descanso') + '</b>' + (H[d] ? '<small class="ok">' + ic('check', 13, 'var(--verde)', 2.6) + 'Hecho</small>' : d === hoy ? '<small class="pill">Hoy</small>' : '') + '</span><button class="btn-o" data-a="semCambiar" data-v="' + d + '">Cambiar</button></div>'; });
-  return h + '</section></div>';
+  h += '</section>';
+  var RS = repartoSemana(); if (RS.length) h += '<section class="card rp-c"><div class="card-h"><b>Series por músculo</b><small class="mut">esta semana</small></div>' + repartoHtml(RS, true) + '</section>';      // 25 nov
+  return h + '</div>';
 };
 A.semana = function () { ir({ t: 'semana' }); };
 /* 21 nov, 23:50 (Chadín: «en Mi semana, al darle a cambiar, que te dé opción de poner una rutina suelta de las que ya vienen hechas o crear una desde ahí») */
@@ -4453,7 +4467,8 @@ A.rutResumen = function (el) {
   hoja('<div class="rzw"><div class="rz-hd"><button class="redondo gris rz-x" data-a="cerrarHoja" aria-label="Cerrar">' + ic('x', 16) + '</button><h2>' + esc(r.nombre) + '</h2><small>' + (hoy ? 'Hoy · ' : '') + (sr ? sr.replace('/', ' de ') + ' · ' : '') + nn(ej.length) + ' · ~' + minRut(r) + ' min</small>' +
     '<button class="btn rz-go" data-a="rrEmpezar" data-id="' + r.id + '">' + ic('play', 15, null) + (S.ses ? 'Seguir con tu entreno' : 'Comenzar rutina') + '</button></div>' +
     (cal.length ? sec('Movilidad', nn(cal.length)) + cal.map(function (e, i) { return fila(e, 'M' + (i + 1)); }).join('') : '') +
-    (ej.length ? sec(cal.length ? 'Principal' : 'Entrenamiento', nn(ej.length)) + ej.map(function (e, i) { return fila(e, String(i + 1)); }).join('') : '') + '</div>');
+    (ej.length ? sec(cal.length ? 'Principal' : 'Entrenamiento', nn(ej.length)) + ej.map(function (e, i) { return fila(e, String(i + 1)); }).join('') : '') +
+    (repartoDe(ej).length ? sec('Series por músculo', 'de esta rutina') + '<div class="rz-rp">' + repartoHtml(repartoDe(ej)) + '</div>' : '') + '</div>');      // 25 nov: el reparto
   var c = document.querySelector('#hoja .hoja-c'); if (c) c.classList.add('rz-h');
 };
 A.rrVer = function (el) { cerrarHoja(); ir({ t: 'ficha', n: el.dataset.n }); };
@@ -4912,6 +4927,7 @@ VISTAS.rutina = function () {
       edPlanHtml(e, i) + '</div>';
   });
   h += '<button class="btn-dash" data-a="edAnadir">' + ic('mas', 16, null, 2.4) + 'Añadir ejercicio</button></section>';
+  h += repartoCard(r.ejercicios);      // 25 nov: el reparto de series por músculo, mientras la montas
   h += '<div class="pie-fijo"><button class="btn" data-a="edGuardar">Guardar rutina</button></div></div>';
   return h;
 };
@@ -6492,7 +6508,7 @@ VISTAS.entreno = function () {
   var h = '<div class="ses"><header class="ses-cab"><div class="ses-f"><button class="redondo gris" data-a="volver" aria-label="Minimizar el entreno">' + ic('abajo', 20) + '</button><span class="ses-t"><b>' + esc(X.nombre) + '</b></span>' + '<button class="btn-neg" data-a="terminar">Terminar</button></div>' +      /* 23:30 (Javier): fuera las flechas de ordenar: se ordena manteniendo pulsado el ejercicio */
     /* 25 nov, 00:02 (Javier: «todo en una pastilla, pero quizá un poco más oscuro»): tiempo · ejercicios · series en una pastilla centrada; el tiempo se toca */
     '<div class="ses-k ses-pl"><button class="ses-du' + (X.pausa ? ' pz' : '') + '" data-a="durH" aria-label="Tiempo del entreno' + (X.pausa ? ', en pausa' : '') + ': pausar o poner a 0">' + ic(X.pausa ? 'pausa' : 'reloj', 15, null, 2.2) + '<b id="crono">' + crono() + '</b></button>' +
-    (tot.length ? '<i aria-hidden="true"></i><span><b>' + hechos + '</b>/' + tot.length + ' ejercicios</span>' : '') + (SR[1] ? '<i aria-hidden="true"></i><span><b>' + SR[0] + '</b>/' + SR[1] + ' series</span>' : '') + '</div>' +
+    (tot.length ? '<i aria-hidden="true"></i><span><b>' + hechos + '</b>/' + tot.length + ' ejercicios</span>' : '') + (SR[1] ? '<i aria-hidden="true"></i><button class="ses-sr" data-a="repSes" aria-label="' + SR[0] + ' de ' + SR[1] + ' series: ver el reparto por músculo"><b>' + SR[0] + '</b>/' + SR[1] + ' series</button>' : '') + '</div>' +
     '</header><div class="ses-c">';      // 23:50 (Javier: «las rayas de colores no me gustan»): fuera las rayas de progreso (los ejercicios hechos ya salen arriba)
   var cal = X.ej.filter(function (e) { return e.cal; });
   if (X.suave) { var sx = suaveHoy(); h += '<p class="ses-dsc ss-ban"><span class="ss-bi">' + ic('luna', 16) + '</span><span><b>Semana suave</b>' + (sx ? ' · día ' + (dDias(sx.desde, hoyStr()) + 1) + ' de 7' : '') + ' · la mitad de las series, RIR 3–4</span><button class="link" data-a="suaveFin">Terminarla</button></p>'; }      // yo-1.47
@@ -8177,6 +8193,48 @@ function sesGuardaEnRut(X, C) {
   var r = C.r, R = (r.ejercicios || []).slice(), sal = R.filter(function (q) { return q.cal; }), usa = {};
   X.ej.forEach(function (e) { if (e.cal) return; for (var q = 0; q < R.length; q++) if (!R[q].cal && !usa[q] && clave(R[q].n) === clave(e.n)) { usa[q] = 1; sal.push(R[q]); return; } sal.push(rutDeSes(e)); });
   r.ejercicios = sal; guardaRutina(r);
+}
+
+/* ---------- 25 nov, 00:03–00:09 (Javier: «que en cada rutina puedan ver cuántas series por grupo muscular tiene, el reparto»; «durante el
+   entreno, arriba, al dar a series, que salga el reparto visual»): las series de trabajo por músculo. Cada serie cuenta 1 para el músculo
+   principal del ejercicio y media para los secundarios; las aproximaciones, la movilidad, el cardio y los bloques no cuentan.
+   Sale al crear o cambiar una rutina, en «Ver rutina», en «Mi semana» (todas las de la semana: hechas de las previstas) y en el entreno
+   (tocando las series de la pastilla de arriba: hechas de las de hoy) ---------- */
+var MUS_OK = { 'Glúteo': 'Glúteo', 'Glúteos': 'Glúteo', 'Cuádriceps': 'Cuádriceps', 'Isquios': 'Isquios', 'Isquiosurales': 'Isquios', 'Aductores': 'Aductores', 'Gemelo': 'Gemelo', 'Gemelos': 'Gemelo', 'Espalda': 'Espalda', 'Pecho': 'Pecho', 'Hombro': 'Hombro', 'Hombros': 'Hombro', 'Bíceps': 'Bíceps', 'Tríceps': 'Tríceps', 'Core': 'Core' };
+function musDe(n) { var b = bancoN(n) || bancoDe(n) || {}, g = MUS_OK[b.grupo || ''] || MUS_OK[grupoN(n)] || '', S2 = (Array.isArray(b.g2) ? b.g2 : []).concat(String(b.grupos || '').split(/[,·]/));
+  return { g: g, s: S2.map(function (x) { return MUS_OK[String(x).trim()] || ''; }).filter(function (x, k, A0) { return x && x !== g && A0.indexOf(x) === k; }) }; }
+function repartoDe(L, R) {
+  var G = {}; (L || []).forEach(function (e) {
+    if (!e || e.cal || e.tipo === 'run' || e.tipo === 'cardio' || e.tipo === 'bloque' || e.rp) return;
+    var W = (e.sets || []).filter(function (s) { return s.t !== 'aprox'; }), n = W.length, h = W.filter(function (s) { return s.ok; }).length; if (!n) return;
+    var M = musDe(e.n); if (!M.g) return;
+    var add = function (k, f) { var o = G[k] = G[k] || { n: 0, h: 0 }; o.n += n * f; o.h += h * f; };
+    add(M.g, 1); M.s.forEach(function (x) { add(x, 0.5); });
+  });
+  if (R) Object.keys(R).forEach(function (k) { var o = G[k] = G[k] || { n: 0, h: 0 }; o.h += R[k]; });      // lo hecho que no estaba previsto
+  return Object.keys(G).map(function (k) { return { g: k, n: G[k].n, h: G[k].h }; }).sort(function (a, b) { return b.n - a.n || b.h - a.h || a.g.localeCompare(b.g, 'es'); });
+}
+function repN(v) { v = Math.round(v * 2) / 2; return String(v).replace('.', ','); }
+function repartoHtml(R, vivo, vacio) {
+  if (!R.length) return '<p class="mut sm rp-v">' + (vacio || 'Añade ejercicios de fuerza y aquí verás cuántas series hace cada músculo.') + '</p>';
+  var mx = Math.max.apply(null, R.map(function (x) { return Math.max(x.n, x.h); }).concat([1])), pc = function (v) { return Math.round(v * 100 / mx); };
+  return '<div class="rp-l' + (vivo ? ' vivo' : '') + '">' + R.map(function (x) {
+    return '<div class="rp-f"><span class="rp-g">' + esc(x.g) + '</span><span class="rp-b">' + (vivo ? '<i class="pv" style="width:' + pc(x.n) + '%"></i><i class="hc" style="width:' + pc(x.h) + '%"></i>' : '<i class="hc" style="width:' + pc(x.n) + '%"></i>') + '</span>' +
+      '<b>' + (vivo ? repN(x.h) + '<small>/' + repN(x.n) + '</small>' : repN(x.n)) + '</b></div>'; }).join('') + '</div>' +
+    '<p class="rp-ley">' + (vivo ? '<span><i class="hc"></i>Hechas</span><span><i class="pv"></i>Previstas</span>' : '') + '<span>Las series de un músculo secundario cuentan media</span></p>';
+}
+function repartoCard(L, tit) { return '<section class="card rp-c"><div class="card-h"><b>' + (tit || 'Series por músculo') + '</b></div>' + repartoHtml(repartoDe(L)) + '</section>'; }
+/* en el entreno: tocando las series de la pastilla */
+A.repSes = function () { var X = S.ses; if (!X) return; var R = repartoDe(X.ej), SR = sesSeries(X);
+  hoja('<h2>Series por músculo</h2><p class="mut sm">Hoy llevas ' + SR[0] + ' de ' + SR[1] + ' series de trabajo.</p>' + repartoHtml(R, true, 'Hoy no hay ejercicios de fuerza.') + '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>'); };
+/* en Mi semana: todas las rutinas de la semana (previstas) y lo hecho estos días */
+function repartoSemana() {
+  var sem = semEsta(), lun = lunesDe(hoyStr()), L = [], R = {};
+  DIAS7.forEach(function (d) { var r = rutinaDe(sem[d]); if (r) (r.ejercicios || []).forEach(function (e) { L.push(e); }); });
+  var P = repartoDe(L); var idx = {}; P.forEach(function (x) { idx[x.g] = x; x.h = 0; });
+  S.sesiones.forEach(function (s) { if (s.fecha < lun || s.fecha > sumar(lun, 6)) return; repartoDe((s.ej || []).map(function (e) { return Object.assign({}, e, { sets: (e.sets || []).map(function (z) { return Object.assign({}, z, { ok: true }); }) }); })).forEach(function (x) {
+    if (idx[x.g]) idx[x.g].h += x.h; else { idx[x.g] = { g: x.g, n: 0, h: x.h }; P.push(idx[x.g]); } }); });
+  return P;
 }
 
 ;
