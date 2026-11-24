@@ -2508,6 +2508,26 @@ html[data-tema="oscuro"] .st-l2.ok .st-ok,html[data-tema="oscuro"] .st-l2 .st-ok
 .ej-pie{align-items:center;gap:8px}.ej-pie-s{display:flex;gap:8px}
 .ej-pie button.ej-pie-q{color:var(--rojo);background:rgba(229,72,77,.09)}
 .ed-x.ed-q{color:var(--rojo)}
+/* 24 nov, 16:44 (Javier): la serie especial (drop set, rest-pause, myo-reps, fallo), resaltada en su bloque lila; «Historial» del ejercicio en mitad del entreno */
+.ej-f2 .st-grp{margin-top:10px;background:linear-gradient(180deg,rgba(154,140,255,.16),rgba(127,214,255,.07) 70%);border:1.5px solid rgba(124,104,240,.55);box-shadow:0 12px 26px -20px rgba(92,72,220,.7)}
+.ej-f2 .st-gh{color:#2E2560;padding:7px 4px 6px}.ej-f2 .st-gh span{display:inline-flex;align-items:center;gap:7px}.ej-f2 .st-gh small{color:#5A5378}
+.st-gi{width:22px;height:22px;border-radius:50%;background:#0D0D10;color:#9ADFFF;display:inline-flex;align-items:center;justify-content:center;flex:none;font-style:normal}
+.ej-f2 .st-grp .st2.ef,.ej-f2 .st-grp .st-l2.ef{border-color:rgba(124,104,240,.45)}
+.ej-f2 .st-grp .st-mr:before,.ej-f2 .st-grp .st-mr:after{border-top-color:rgba(124,104,240,.45)}
+html[data-tema="oscuro"] .ej-f2 .st-grp{background:linear-gradient(180deg,rgba(154,140,255,.2),rgba(127,214,255,.06) 70%)!important;border-color:rgba(154,140,255,.55)!important}
+html[data-tema="oscuro"] .ej-f2 .st-gh,html[data-tema="oscuro"] .ej-f2 .st-gh small{color:#D9D4FF}
+.ej-f2 .ej-acc4 button{flex-direction:column;gap:3px;padding:8px 2px 7px;font-size:11.5px;white-space:nowrap}
+.eh-sub{margin:-4px 0 2px;font-size:13px;color:var(--tx2);font-weight:600}.eh-sub b{color:var(--tx);font-weight:800}
+.eh-g{border-radius:18px;background:var(--suave);padding:12px 10px 4px}.eh-g .p3-g{width:100%;height:auto;display:block}
+.eh-dato{display:flex;flex-direction:column;gap:1px;padding:0 4px 4px}.eh-dato b{font-size:20px;font-weight:800;letter-spacing:-.01em}.eh-dato span{font-size:12px;color:var(--tx2);font-weight:600}
+.eh-l{display:flex;flex-direction:column}
+.eh-f{display:grid;grid-template-columns:52px minmax(0,1fr);gap:10px;align-items:start;padding:10px 4px;border-top:1px solid var(--linea)}.eh-f:first-child{border-top:0}
+.eh-f.sel{background:linear-gradient(90deg,rgba(127,214,255,.14),rgba(154,140,255,.14));border-radius:12px;border-top-color:transparent}.eh-f.sel+.eh-f{border-top-color:transparent}
+.eh-d{font-size:12.5px;font-weight:800;color:var(--tx2);padding-top:4px}
+.eh-s{display:flex;flex-wrap:wrap;gap:5px}.eh-s i{font-style:normal;display:inline-flex;align-items:baseline;gap:4px;background:var(--card);border:1px solid var(--borde2);border-radius:9px;padding:4px 8px;font-size:13.5px;font-weight:800}.eh-s small{font-size:10.5px;color:var(--tx3);font-weight:700}
+.eh-mas{display:inline-flex;align-items:center;gap:4px;margin:4px 0 0}
+.ej-f2 .st-grp .st2.ef,.ej-f2 .st-grp .st-l2.ef{margin-left:0;margin-right:0}.ej-f2 .st-grp .st-mini{padding-left:8px;padding-right:8px}
+@media (max-width:350px){.ej-f2 .ej-acc4 button{font-size:10.5px;letter-spacing:-.01em}}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -3615,7 +3635,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.37';
+var YO_V = 'yo-1.38';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6556,9 +6576,7 @@ function ejFuerza(e, i) {
     (M ? '<div class="o3-r">' + ic('trofeo', 20) + '<span><small>Tu récord</small><b>' + (M.p ? fN(M.p) + ' × ' : '') + M.r + '</b>' + (M.e1 ? '<i>1RM ≈ ' + fN(Math.round(M.e1)) + ' kg</i>' : '') + '</span></div>' : '') + '</div>';
   if (e.u === 's') h += ctaSetBtn(e, i, O, W);
   h += serMetHtml(e, i) + serFilasHtml(e, i, O, W);
-  if (U && W.length && !ladOn(e)) h += '<p class="pie-u">' + ic('info', 14) + '<span>«Última vez»: lo que hiciste el ' + esc(fCorta(U.fecha)) + ' en cada serie.</span></p>';
-  if (e.nota) { var nab = (S.x.ntAb || {})[i];      // 18 nov (Javier: «¿no puedes ocultar esto? sale demasiada información»): las pautas, plegadas
-    h += '<button class="ej-nt" data-a="ejNtAb" data-i="' + i + '" aria-expanded="' + !!nab + '">' + ic('info', 14) + '<span>Pautas de este ejercicio</span>' + ic('abajo', 14) + '</button>' + (nab ? '<p class="nota ej-nt-t">' + esc(e.nota) + '</p>' : ''); }
+  /* 24 nov, 16:44 (Javier): fuera la línea de «Última vez: lo que hiciste el…» y las «Pautas de este ejercicio» (tocando el nombre ves cómo se hace) */
   /* 24 nov, 16:35 (Javier: «el quitar un ejercicio de la rutina, que esté accesible»): «Quitar» a la vista, al pie de cada ejercicio (con «Deshacer») */
   return h + '<div class="ej-pie"><span class="ej-pie-s"><button data-a="stMas" data-i="' + i + '">' + ic('mas', 13, null, 2.6) + 'Serie</button><button data-a="stMenos" data-i="' + i + '">' + ic('menos', 13, null, 2.6) + 'Serie</button></span>' +
     '<button class="ej-pie-q" data-a="sesQuitar" data-i="' + i + '" aria-label="Quitar ' + esc(e.n) + ' de este entreno">' + ic('papelera', 13, null, 2.4) + 'Quitar</button></div></section>';
@@ -7255,9 +7273,34 @@ function serCabHtml(e, i) {
   if (nt.p && nt.pd === S.ses.id) nt.p = '';      // la de «para la próxima vez» sale la próxima, no en el entreno en que la escribes
   if (nt.p) { S.ses.vistoP = S.ses.vistoP || {}; S.ses.vistoP[k] = 1; }
   return '<div class="ej-acc4"><button data-a="verEj" data-n="' + esc(e.n) + '">' + ic('play', 15) + 'Vídeo</button><button data-a="sesCambiar" data-i="' + i + '">' + ic('cambiar', 15) + 'Cambiar</button>' +
-    '<button class="' + (mq ? 'on' : '') + '" data-a="ejMaq" data-i="' + i + '">' + ic('ajustes', 15) + 'Máquina</button><button class="' + (nt.f || nt.p ? 'on' : '') + '" data-a="ejNota" data-i="' + i + '">' + ic('lapiz', 15) + 'Nota</button></div>' +
+    '<button class="' + (mq ? 'on' : '') + '" data-a="ejMaq" data-i="' + i + '">' + ic('ajustes', 15) + 'Máquina</button><button class="' + (nt.f || nt.p ? 'on' : '') + '" data-a="ejNota" data-i="' + i + '">' + ic('lapiz', 15) + 'Nota</button>' +
+    '<button data-a="ejHist" data-i="' + i + '">' + ic('histo', 15) + 'Historial</button></div>' +
     (mq ? '<p class="ej-maq">' + ic('ajustes', 14) + '<span>' + esc(mq) + '</span></p>' : '') + (nt.f ? '<p class="nota">' + esc(nt.f) + '</p>' : '') + (nt.p ? '<p class="ej-para">' + ic('info', 14) + '<span><b>Para hoy:</b> ' + esc(nt.p) + '</span></p>' : '');
 }
+/* 24 nov, 16:44 (Javier: «que en medio de la rutina puedas ver el historial de ese ejercicio de peso y reps»): «Historial» junto a Vídeo · Cambiar ·
+   Máquina · Nota. Una hoja con la gráfica de tu serie más pesada de cada día y, debajo, cada día con todas sus series (kilos × repeticiones) */
+IC.histo = IC.histo || '<path d="M3.6 12.5A8.5 8.5 0 1 0 6.2 6"/><path d="M3.5 3.8v4.4h4.4"/><path d="M12 7.6V12l3 1.9"/>';
+function ejHistDatos(n) { var sid = S.ses && S.ses.id;
+  return S.sesiones.filter(function (s) { return s.id !== sid; }).map(function (s) { return p3Datos(s, n); }).filter(Boolean).sort(function (a, b) { return a.f < b.f ? -1 : a.f > b.f ? 1 : 0; }); }
+A.ejHist = function (el) { var e = S.ses && S.ses.ej[+el.dataset.i]; if (!e) return; S.x.eh = { n: e.n, sel: null }; ejHistPinta(); };
+A.ejHistPt = function (el) { if (!S.x.eh) return; S.x.eh.sel = +el.dataset.i; ejHistPinta(); };
+A.ejHistTodo = function () { var X = S.x.eh; cerrarHoja(); if (X) { S.x.pe = X.n; ir({ t: 'p3ejh' }); } };
+function ejHistPinta() {
+  var X = S.x.eh, n = X.n, A0 = ejHistDatos(n), ti = p3TipoEj(n, A0), u = (A0[0] || {}).u || '', h = '<h2>' + esc(n) + '</h2>';
+  if (!A0.length) return hoja(h + '<p class="mut">Aún no lo has hecho ningún día: cuando termines este entreno, saldrá aquí.</p><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  var M = ejsSesMejor(A0, ti), G = A0.slice(-10), sel = X.sel != null && G[X.sel] ? X.sel : G.length - 1, val = function (y) { return ti === 'kg' ? y.top.p : ti === 'tiempo' || ti === 'dist' ? Math.max.apply(null, y.Z.map(function (z) { return z.r; })) : y.rmax; }, uni = ti === 'kg' ? 'kg' : ti === 'tiempo' ? 's' : ti === 'dist' ? 'm' : 'rep.';
+  h += '<p class="eh-sub">' + A0.length + (A0.length === 1 ? ' día' : ' días') + (M ? ' · tu récord <b>' + esc(M) + '</b>' : '') + '</p>';
+  if (G.length > 1) { var y = G[sel];
+    h += '<div class="eh-g"><div class="eh-dato"><b>' + esc(ti === 'kg' ? fN(y.top.p) + ' kg × ' + y.top.r : p3Num(val(y)) + ' ' + uni) + '</b><span>' + esc(ti === 'kg' ? 'tu serie más pesada · ' : 'tu mejor serie · ') + esc(p3Dia(y.f)) + '</span></div>' +
+      p3Linea(G.map(function (y) { var v = val(y); return { v: v, l: p3Dia(y.f), ar: p3Dia(y.f) + ': ' + p3Num(v) + ' ' + uni }; }), { sel: sel, act: 'ejHistPt', uni: uni, min: uni === 'kg' ? 5 : 3, ar: 'Tu serie más pesada de cada día' }) + '</div>'; }
+  var L = A0.slice().reverse(), V = L.slice(0, 12);
+  h += '<div class="eh-l">' + V.map(function (y) { var hoyS = G.length > 1 && y === G[sel];
+    return '<div class="eh-f' + (hoyS ? ' sel' : '') + '"><span class="eh-d">' + esc(p3Dia(y.f)) + '</span><span class="eh-s">' + y.Z.map(function (z) { return '<i>' + esc(p3Set(z, u)) + (z.rir != null ? '<small>RIR ' + fN(z.rir, 0) + '</small>' : '') + '</i>'; }).join('') + '</span></div>'; }).join('') + '</div>';
+  if (L.length > V.length) h += '<button class="link eh-mas" data-a="ejHistTodo">Ver los ' + L.length + ' días' + ic('sig', 15) + '</button>';
+  hoja(h + '<button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+}
+function ejsSesMejor(A0, ti) { var b = null; A0.forEach(function (y) { if (!y.top) return; if (!b || (ti === 'kg' ? y.top.p > b.p || (y.top.p === b.p && y.top.r > b.r) : y.rmax > b.r)) b = ti === 'kg' ? y.top : { p: 0, r: y.rmax }; });
+  return b ? (ti === 'kg' && b.p ? fN(b.p) + ' kg × ' + b.r : b.r + (ti === 'tiempo' ? ' s' : ti === 'dist' ? ' m' : ' rep.')) : ''; }
 /* el método de series y la aproximación (18 nov, maqueta aprobada: «Método» abre una hoja con las 7; «Cada lado» va en «···») */
 function serMetHtml(e, i) {
   if (e.u === 's' || e.u === 'm') return '';      // por tiempo o metros (carrera, trineo, intervalos…): sin métodos de series
@@ -7363,7 +7406,7 @@ function serFilasHtml(e, i, O, W) {
       (mk ? '<div class="st-mk' + (hayPvF ? ' pv' : '') + '"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '');
     if (!esp) { h += row; return h; }
     var k = num(s.kg) || num(s.kgI) || num(s.kgD) || num(String(phK).replace(',', '.')) || 0, sub = { drop: 'sin descanso', rp: 'mismo peso', myo: 'mismo peso', fallo: 'hasta no poder más' }[s.t];
-    h += '<div class="st-grp"><div class="st-gh"><span>Serie ' + lab + ' · ' + esc(metNom(s.t)) + '</span><small>' + sub + '</small></div>' + (s.det ? '<p class="st-gn st-det">' + esc(s.det) + '</p>' : '') + row;
+    h += '<div class="st-grp st-g-' + s.t + '"><div class="st-gh"><span><em class="st-gi">' + ic({ drop: 'rayo', rp: 'reloj', myo: 'reloj', fallo: 'diana' }[s.t] || 'rayo', 12, null, 2.4) + '</em>Serie ' + lab + ' · ' + esc(metNom(s.t)) + '</span><small>' + sub + '</small></div>' + (s.det ? '<p class="st-gn st-det">' + esc(s.det) + '</p>' : '') + row;
     var dm = /(\d+)\s*bajadas?.*?(\d+)\s*%/.exec(s.det || ''), tieneMp = e.mp && (e.mp.drop != null || e.mp.nb != null);      // las del motor («2 bajadas de −25 %»), si no las has cambiado
     var dpc = tieneMp || !dm ? mpDe(e, 'drop') : +dm[2], dnb = tieneMp || !dm ? mpDe(e, 'nb') : Math.min(4, +dm[1]), dr = 1 - dpc / 100, SQ = [k]; for (var q3 = 1; q3 <= dnb; q3++) SQ.push(redKg(k * Math.pow(dr, q3)));
     /* 23 nov (Chadín: «por mucho que te sugiera kg las series especiales, que te deje modificar peso»): cada bajada del drop set es una fila con
