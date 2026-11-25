@@ -4001,7 +4001,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.58';
+var YO_V = 'yo-1.59';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7496,6 +7496,13 @@ function tarjetaGrande(U, tipo, modo, foto) {
       add(68, function (y) { x.fillStyle = FG; var T = tit.toUpperCase(), px = ajusta(x, T, AN, 58, '800'); x.font = '800 ' + px + 'px' + F; x.fillText(recorta(x, T, AN), M, y + 56); });
       logoBajo();
       add(58, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.fillText(recorta(x, sub, AN), M, y + 38); grEsp(x, '0px'); }); };
+    /* yo-1.59: el encabezado centrado: el título, MOOD ON en medio y debajo la fecha, con un pequeño hueco */
+    var cabC = function (sub) {
+      add(68, function (y) { x.fillStyle = FG; var T = tit.toUpperCase(), px = ajusta(x, T, AN, 58, '800'); x.font = '800 ' + px + 'px' + F; x.textAlign = 'center'; x.fillText(recorta(x, T, AN), W / 2, y + 56); x.textAlign = 'left'; });
+      add(20, function () { });
+      add(50, function (y) { logoEn(x, W / 2 - 105, y + 8, 210, FG); });
+      add(52, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '4px'); x.textAlign = 'center'; x.fillText(recorta(x, sub, AN), W / 2, y + 34); x.textAlign = 'left'; grEsp(x, '0px'); });
+      add(22, function () { }); };
     if (tipo === 'sum') {
       cabL(fe);      // 21 nov, 23:50 (Chadín): el logo, a la altura de la fecha (como en todo lo que se comparte)
       if (wod && BL.length) add(52, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; grEsp(x, '3px'); x.fillText(recorta(x, BL.map(function (e) { return String((e.fmt || e.n) + (e.txt && e.txt !== 'Hecho' ? ' · ' + e.txt : '')).toUpperCase(); }).join('  +  '), AN), M, y + 36); grEsp(x, '0px'); });      // yo-1.48: más pequeña y sutil
@@ -7507,8 +7514,10 @@ function tarjetaGrande(U, tipo, modo, foto) {
       L.forEach(function (l, li) { add(172, function (y) { x.fillStyle = l[2] ? ORO : FG; var px = ajusta(x, l[0], AN - 230 - (li === iL ? LW : 0), 170, '800'); x.font = '800 ' + px + 'px' + F; grEsp(x, '-6px'); x.fillText(l[0], M, y + 150); var w = x.measureText(l[0]).width; grEsp(x, '3px');
         x.fillStyle = l[2] ? ORO : FG; x.font = '800 44px' + F; x.fillText(l[1], M + w + 18, y + 150); var w2 = x.measureText(l[1]).width; grEsp(x, '0px'); if (li === iL) logoDer(y, y + 150, M + w + 18 + w2); }); });
     } else if (tipo === 'res') {
-      cabL(fe + (nser ? ' · ' + nser + (nser === 1 ? ' SERIE' : ' SERIES') : ''));
-      var E = [], NX = M + 170, NW = AN - 170, disp = (H - 330) - 260 - 180 - 80, usado = 0, k = 0;
+      /* yo-1.59 (25 nov, 11:33–11:47, Javier: «bajaría el tamaño de los ejercicios… las series también… el título en medio»): el encabezado centrado (título, MOOD ON y
+         la fecha), los nombres al 68 % y las series al 56 %; y la lista no pasa de 960 px, para que en una historia quede dentro, con aire (Instagram tapa 250 arriba y 340 abajo) */
+      cabC(fe + (nser ? ' · ' + nser + (nser === 1 ? ' SERIE' : ' SERIES') : ''));
+      var FS = 30, LH = 34, NX = M + 95, NW = AN - 95, E = [], disp = 960, usado = 0, k = 0;
       (U.ej || []).forEach(function (e) {
         /* yo-1.48 (Javier: «3 vueltas y el descanso y trabajo, ponlo más pequeño y sutil, no como el título de grande»): el nombre del bloque (si no repite
            el del entreno) en grande; «3 vueltas · 30 s de trabajo y 30 s de descanso», en una línea pequeña y suave; y sus ejercicios */
@@ -7519,16 +7528,16 @@ function tarjetaGrande(U, tipo, modo, foto) {
         E.push({ n: e.n, c: grSer(e), t: e.hecho ? (e.txt || '') : '', r: !!rec[clave(e.n)] }); });
       for (; k < E.length; k++) { var e = E[k];
         if (e.meta != null) { if (usado + 46 > disp) break; usado += 46; (function (t3) { add(46, function (y) { x.fillStyle = SUB; x.font = '700 25px' + F; grEsp(x, '3px'); x.fillText(recorta(x, t3, AN), M, y + 32); grEsp(x, '0px'); }); })(e.meta); continue; }
-        if (e.sub) { var t2 = (e.q ? e.q + '  ' : '') + String(e.n).toUpperCase(); if (usado + 50 > disp) break; usado += 50;
-          (function (t2) { add(50, function (y) { x.fillStyle = SUB; x.font = '700 34px' + F; x.fillText(recorta(x, t2, AN - 40), M + 40, y + 38); }); })(t2); continue; }
+        if (e.sub) { var t2 = (e.q ? e.q + '  ' : '') + String(e.n).toUpperCase(); if (usado + 40 > disp) break; usado += 40;
+          (function (t2) { add(40, function (y) { x.fillStyle = SUB; x.font = '700 26px' + F; x.fillText(recorta(x, t2, AN - 40), M + 40, y + 30); }); })(t2); continue; }
         var nm = String(e.n || '').toUpperCase() + (e.c ? '' : (e.t ? ' · ' + String(e.t).toUpperCase() : ''));
-        x.font = '800 44px' + F; var Ls = grLin(x, nm, (e.c ? NW : AN) - (e.r ? 60 : 0), 2), hh = Math.max(Ls.length * 50 + 26, e.c ? 112 : 70);
+        x.font = '800 ' + FS + 'px' + F; var Ls = grLin(x, nm, (e.c ? NW : AN) - (e.r ? 44 : 0), 2), hh = Math.max(Ls.length * LH + 18, e.c ? 76 : 50);
         if (usado + hh > disp) break; usado += hh;
         (function (e, Ls, hh) { add(hh, function (y) { var cy = y + hh / 2;
-          if (e.c) { x.fillStyle = FG; x.font = '800 96px' + F; grEsp(x, '-3px'); x.fillText(String(e.c), M, cy + 34); var w = x.measureText(String(e.c)).width; grEsp(x, '0px'); x.font = '800 70px' + F; x.globalAlpha = .9; x.fillText('×', M + w + 4, cy + 34); x.globalAlpha = 1; }
-          var bx = e.c ? NX : M, by = cy - (Ls.length * 50) / 2 + 38; x.fillStyle = FG; x.font = '800 44px' + F; Ls.forEach(function (t, j) { x.fillText(t, bx, by + j * 50); });
-          if (e.r && I[0]) { var lw = x.measureText(Ls[Ls.length - 1]).width; x.drawImage(I[0], bx + lw + 12, by + (Ls.length - 1) * 50 - 38, 46, 46); } }); })(e, Ls, hh); }
-      if (k < E.length) { var mas = E.slice(k).filter(function (z) { return !z.sub && z.meta == null; }).length || E.length - k; add(56, function (y) { x.fillStyle = SUB; x.font = '800 34px' + F; grEsp(x, '3px'); x.fillText('Y ' + mas + (mas === 1 ? ' EJERCICIO MÁS' : ' EJERCICIOS MÁS'), M, y + 42); grEsp(x, '0px'); }); }
+          if (e.c) { x.fillStyle = FG; x.font = '800 54px' + F; grEsp(x, '-2px'); x.fillText(String(e.c), M, cy + 19); var w = x.measureText(String(e.c)).width; grEsp(x, '0px'); x.font = '800 39px' + F; x.globalAlpha = .9; x.fillText('×', M + w + 3, cy + 19); x.globalAlpha = 1; }
+          var bx = e.c ? NX : M, by = cy - (Ls.length * LH) / 2 + 26; x.fillStyle = FG; x.font = '800 ' + FS + 'px' + F; Ls.forEach(function (t, j) { x.fillText(t, bx, by + j * LH); });
+          if (e.r && I[0]) { var lw = x.measureText(Ls[Ls.length - 1]).width; x.drawImage(I[0], bx + lw + 10, by + (Ls.length - 1) * LH - 26, 32, 32); } }); })(e, Ls, hh); }
+      if (k < E.length) { var mas = E.slice(k).filter(function (z) { return !z.sub && z.meta == null; }).length || E.length - k; add(50, function (y) { x.fillStyle = SUB; x.font = '800 26px' + F; grEsp(x, '3px'); x.fillText('Y ' + mas + (mas === 1 ? ' EJERCICIO MÁS' : ' EJERCICIOS MÁS'), M, y + 36); grEsp(x, '0px'); }); }
     } else if (C) {
       add(420, function (y) { if (I[1]) x.drawImage(I[1], W / 2 - 200, y, 400, 400); });      // 21 nov: el dibujo centrado y el logo debajo
       add(84, function (y) { logoEn(x, W / 2 - 140, y + 18, 280, FG); });
