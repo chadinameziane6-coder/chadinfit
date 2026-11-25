@@ -6119,7 +6119,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.265';
+var APP_V = 'v53.4.266';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9752,7 +9752,8 @@ function vHoy(){
    (transform) y, al soltar, las dos se colocan con una animación corta (FLIP). También con dos toques (uno y otro). Lo ya hecho no se mueve */
 var DCORTO=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'], ORD=null;
 A.ordAbrir=function(){ var l=lunesDe(hoyStr()); CL.ord={l:l,P:semPermL(l).slice(),sel:-1}; modal('<div id="ord-box"></div>'); var b=document.querySelector('#modal .mbox'); if(b) b.classList.add('ord-mb'); ordPintar(); };
-function ordFila(i){ var O=CL.ord, f=sumar(O.l,i), hoy=hoyStr(), ds=DIAS[O.P[i]-1], R=rutDiaDe(ds,f), hecho=CL.d.sesiones.some(function(x){ return x.fecha===f; }), lk=hecho;
+function ordHecho(i){ var O=CL.ord, f=sumar(O.l,i), R=rutDiaDe(DIAS[O.P[i]-1],f); return R.some(function(r){ return CL.d.sesiones.some(function(x){ return x.fecha===f&&sesDeRut(x,r); }); }); }      // v53.4.266: hecha la rutina de ese día, no cualquier entreno
+function ordFila(i){ var O=CL.ord, f=sumar(O.l,i), hoy=hoyStr(), ds=DIAS[O.P[i]-1], R=rutDiaDe(ds,f), hecho=ordHecho(i), lk=hecho;
   var nm=R.length?R.map(function(r){ return r.nombre; }).join(' + '):'Descanso', sb=lk?'hecho':R.length?R.reduce(function(a,r){ return a+r.ejercicios.length; },0)+' ejercicios':'';
   return '<div class="ord-f" data-i="'+i+'"><span class="ord-d'+(f===hoy?' hoy':'')+'"><b>'+(f===hoy?'Hoy':DCORTO[i])+'</b><small>'+(f===hoy?DCORTO[i].toLowerCase()+' ':'')+aDate(f).getDate()+'</small></span>'+
     '<div class="ord-c'+(R.length?'':' des')+(lk?' lk':'')+(O.sel===i?' sel':'')+'" data-i="'+i+'" data-k="'+O.P[i]+'" role="button" tabindex="0" aria-label="'+esc((f===hoy?'Hoy':DLARGO[DIAS[i]])+': '+nm+(lk?' (hecho)':''))+'">'+ic(lk?'ok':'asa')+'<span><b>'+esc(nm)+'</b>'+(sb?'<small>'+esc(sb)+'</small>':'')+'</span></div></div>'; }
@@ -9766,7 +9767,7 @@ function ordPintar(fl){
   if(fl) [].forEach.call(b.querySelectorAll('.ord-c'),function(c){ var t0=F[c.dataset.k]; if(t0==null) return; var dy=t0-c.getBoundingClientRect().top; if(!dy) return; c.style.transition='none'; c.style.transform='translateY('+dy+'px)'; c.getBoundingClientRect(); c.style.transition='transform .22s cubic-bezier(.2,.8,.2,1)'; c.style.transform=''; });
 }
 function ordCambia(i,j){ var O=CL.ord; if(!O||i===j) return; var t=O.P[i]; O.P[i]=O.P[j]; O.P[j]=t; O.sel=-1; ordPintar(true); try{ if(navigator.vibrate) navigator.vibrate(12); }catch(e){} }
-function ordLk(i){ var f=sumar(CL.ord.l,i); return CL.d.sesiones.some(function(x){ return x.fecha===f; }); }
+function ordLk(i){ return ordHecho(i); }
 function ordTap(i){ var O=CL.ord; if(!O||ordLk(i)) return; if(O.sel<0||O.sel===i){ O.sel=O.sel===i?-1:i; ordPintar(); } else ordCambia(O.sel,i); }
 function ordDestino(y){ var best=null, bd=1e9; [].forEach.call(document.querySelectorAll('#ord-box .ord-f'),function(r){ var i=+r.dataset.i; if(ordLk(i)) return; var R=r.getBoundingClientRect(), d=y<R.top?R.top-y:y>R.bottom?y-R.bottom:0; if(d<bd){ bd=d; best=i; } }); return bd<40?best:null; }
 document.addEventListener('pointerdown',function(ev){ var c=ev.target&&ev.target.closest&&ev.target.closest('#ord-box .ord-c'); if(!c||c.classList.contains('lk')||(ev.button&&ev.button!==0)) return;
@@ -10187,8 +10188,28 @@ function qOcCl(){ var M=miaCl(); M.q=M.q||{}; return M.q; }      // los platos q
 function guardarOc(){ guardarMia(); }
 /* v53.4.151 · PUNTO 10 (Javier: «que dé a semana y con un desliz pueda cambiar el orden rápido y en segundos… solo para esa semana»):
    su semana en otro orden. pref.n['ws|<lunes>|<1..7>'] = el día (1 = lunes … 7 = domingo) cuyo entreno hace ese día. La semana siguiente, como la programó su coach */
-function semPermL(l){ var n=(prefCl().n)||{}, P=[]; for(var i=1;i<=7;i++){ var v=num(n['ws|'+l+'|'+i]); P.push(v>=1&&v<=7?v:i); } return P.slice().sort().join()==='1,2,3,4,5,6,7'?P:[1,2,3,4,5,6,7]; }
-function semOrdenada(l){ return semPermL(l).some(function(v,i){ return v!==i+1; }); }
+function semPermBase(l){ var n=(prefCl().n)||{}, P=[]; for(var i=1;i<=7;i++){ var v=num(n['ws|'+l+'|'+i]); P.push(v>=1&&v<=7?v:i); } return P.slice().sort().join()==='1,2,3,4,5,6,7'?P:[1,2,3,4,5,6,7]; }
+/* v53.4.266 · 25 nov 2026, 22:04 (Javier: un cliente hizo hoy «Pierna 1.3», la de su jueves, en vez de «Cardio + abdomen»; al ordenar la semana
+   salía hoy «Cardio + abdomen · hecho» sin poder moverla, en Hoy le seguía saliendo «También hoy · Cardio + abdomen» y el jueves, otra vez pierna:
+   «ese fallo no puede ocurrir»). Si un día haces la rutina de otro día de esta semana (y no la tuya), la semana se coloca sola: ese día pasa a ser
+   el de la rutina que hiciste y la tuya se va al día de esa (primero los días que vienen; si no, uno anterior que no hayas hecho). Solo esta
+   semana y encima de lo que hayas ordenado tú. Y «hecho» es solo la rutina que hiciste ese día, no cualquier entreno de ese día */
+function sesDeRut(s,r){ return !!s&&!!r&&(s.rutina_id===r.id||(!s.rutina_id&&!!s.rutina&&clave(s.rutina)===clave(r.nombre))); }
+function semAjusta(l,P){
+  var hoy=hoyStr(), fin=sumar(l,6), Q=P.slice(), W=((CL.d&&CL.d.sesiones)||[]).filter(function(s){ return s.fecha>=l&&s.fecha<=fin&&s.fecha<=hoy; }); if(!W.length) return Q;
+  var Rd=function(i){ return rutDiaDe(DIAS[Q[i]-1],sumar(l,i)); }, hizo=function(i,r){ var f=sumar(l,i); return W.some(function(s){ return s.fecha===f&&sesDeRut(s,r); }); };
+  for(var i=0;i<7;i++){ var f=sumar(l,i); if(f>hoy) break; var Si=W.filter(function(s){ return s.fecha===f; }); if(!Si.length) continue;
+    var R=Rd(i); if(R.some(function(r){ return hizo(i,r); })) continue;      // hizo la suya
+    var j=-1;
+    for(var pass=0;pass<2&&j<0;pass++) for(var k=0;k<7;k++){ if(k===i||(pass===0?k<i:k>i)) continue;
+      var Rk=Rd(k); if(!Rk.length||Rk.some(function(r){ return hizo(k,r); })) continue;      // ese día ya hizo la suya: no se toca
+      if(Rk.some(function(r){ return Si.some(function(x){ return sesDeRut(x,r); }); })){ j=k; break; } }
+    if(j>=0){ var t=Q[i]; Q[i]=Q[j]; Q[j]=t; }
+  }
+  return Q;
+}
+function semPermL(l){ return semAjusta(l,semPermBase(l)); }
+function semOrdenada(l){ return semPermBase(l).some(function(v,i){ return v!==i+1; }); }
 function diaFuente(f){ var P=semPermL(lunesDe(f)), i=DIAS.indexOf(diaSem(f)); return DIAS[P[i]-1]; }
 function rutDiaDe(ds,f){ var d=CL.d; return (d.rutinas||[]).filter(function(r){ return r.dias.indexOf(ds)>=0&&vigenteEn(r,f,d.rutinas); }); }
 function rutDia(f){ var x=dscEn(f); if(x&&(x.tipo==='nada'||(x.tipo==='dias'&&(x.quita||[]).indexOf(diaFuente(f))>=0))) return []; return rutDiaDe(diaFuente(f),f); }      // v53.4.253: en su semana de descarga, los días que le has quitado (o todos) descansa
