@@ -2245,7 +2245,7 @@ details.be-meta summary .muted{font-weight:500;margin-left:auto;text-align:right
 /* v53.4.200-201: mantener 1 s para mover · el anillo se llena mientras mantienes */
 .ex-grip{position:relative;-webkit-touch-callout:none}.ex-grip.carga,.ses .ex .ex-grip.carga,.ses .ex.abierto .ex-grip.carga{color:#9A8CFF}
 .ex-grip-r{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;transform:rotate(-90deg);pointer-events:none;overflow:visible}
-.ex-grip-r circle{fill:none;stroke:#9A8CFF;stroke-width:3;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:gripCarga 1s linear forwards}
+.ex-grip-r circle{fill:none;stroke:#9A8CFF;stroke-width:3;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:100;animation:gripCarga .2s linear forwards}
 @keyframes gripCarga{to{stroke-dashoffset:0}}
 .ord-r{touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab}.ord-r.arr{box-shadow:0 10px 26px rgba(20,20,20,.22);border-color:var(--mg);transform:scale(1.02);background:#fff}
 .ord-ov{position:fixed;inset:0;z-index:80;background:rgba(20,20,20,.45);display:flex;align-items:center;justify-content:center;padding:16px;touch-action:none}
@@ -5949,6 +5949,65 @@ html.dsc-h{--ds-a:#2E9CC4;--ds-bg:#E8F6FD;--ds-bd:#BDE3F5;--ds-tx:#0B3A4E;--ds-t
 .os-sw{position:relative;width:48px;height:28px;border-radius:14px;border:0;padding:0;margin:0;flex:none;background:#D1D1D6;cursor:pointer}
 .os-sw::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:11px;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .15s}
 .os-sw[aria-checked=true]{background:#111}.os-sw[aria-checked=true]::after{left:23px}.os-sw:focus-visible{outline:2px solid var(--tx);outline-offset:2px}
+/* v53.4.256 (25 nov 2026): Inicio como el panel de usuaria. «Hoy toca» en grande y la semana compacta */
+.zb.zb2,.z2-hero.zbw .zb.zb2{display:flex;flex-direction:column;padding:18px 18px 16px;border-radius:26px;color:#fff;background:radial-gradient(120% 90% at 100% 0%,rgba(127,214,255,.24),transparent 55%),radial-gradient(90% 80% at 0% 100%,rgba(154,140,255,.18),transparent 60%),#0D0D10;box-shadow:0 16px 34px rgba(13,13,16,.22)}
+.zb.zb2.zb-ok{background:radial-gradient(120% 90% at 100% 0%,rgba(95,208,142,.26),transparent 55%),#0D0D10}
+.zb2 .zb-hd{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px}
+.zb2 .zb-hd h2{margin:0;font:800 31px/1.05 Plus Jakarta Sans,sans-serif;letter-spacing:-.03em;color:#fff}
+.zb2 .zb-hd small{font-size:12.5px;font-weight:700;color:rgba(255,255,255,.62)}.zb2 .zb-hd small.v{color:#5FD08E}
+.zb2 .zb-tx{display:flex;flex-direction:column;gap:3px;margin-top:9px}
+.zb2 .zb-tx b{font-size:19px;line-height:1.2;white-space:normal;overflow:visible}.zb2 .zb-tx span{font-size:13.5px;color:rgba(255,255,255,.66)}
+.zb2 .zb-row{display:flex;gap:10px;margin-top:15px}
+.zb2 .zb-c.zb-go{flex:1;min-width:0;width:auto;height:52px;border-radius:999px;background:#fff;color:#0D0D10;gap:8px;font:800 16px Plus Jakarta Sans,sans-serif}.zb2 .zb-c.zb-go .ic{width:16px;height:16px}.zb2 .zb-c.zb-go.ok{background:#fff;color:#0D0D10}.zb2 .zb-c.zb-go.ok .ic{color:#1F9D57;stroke:#1F9D57}
+.zb2 .zb-ot{height:52px;padding:0 18px;border-radius:999px;font-size:15px;font-weight:800;background:rgba(255,255,255,.14);display:inline-flex;align-items:center;justify-content:center;gap:7px}.zb2 .zb-ot.ancho{flex:1}.zb2 .zb-ot .ic{width:15px;height:15px;margin:0}
+.zb2 .zb-i{width:52px;height:52px;background:rgba(255,255,255,.14)}
+:where(html[data-tema=oscuro]) .zb.zb2{background:radial-gradient(120% 90% at 100% 0%,rgba(127,214,255,.2),transparent 55%),#1C1C1E}
+.semc{padding:9px 12px 11px;border-radius:22px}.semc .sem-n{margin:0 0 2px;gap:6px}.semc .sem-n .ico{width:30px;height:30px;min-height:0}.semc .sem-n span{font-size:14px}
+.sem-n .cz-mb.cz-mbi,.sem-n .cz-mb.sem-ob2{width:34px;height:34px;min-height:0;padding:0;justify-content:center;border-radius:50%}.sem-n .cz-mb.sem-ob2{margin-left:auto;background:#111;border-color:#111;color:#fff}.sem-n .cz-mb.sem-ob2+.cz-mbi{margin-left:0}
+.semc .semana .dia{padding:4px 0 17px;font-size:10.5px}.semc .semana .dia small{font-size:14.5px}.semc .semana .dia.hc i{width:14px;height:14px;bottom:2px}.semc .semana .dia.plan:not(.hc) i{bottom:7px}
+.semc .sem-or{margin-top:4px;padding-top:7px}
+/* v53.4.259: «Hoy toca» compacto (como /yo) */
+.zb.hx{display:flex;flex-direction:row;align-items:center;gap:13px;padding:14px;border-radius:20px;background:linear-gradient(140deg,#24252B 0%,#111114 50%,#060607 100%);box-shadow:0 10px 24px rgba(0,0,0,.16);color:#fff}
+.zb.hx .hx-ic{width:50px;height:50px;border-radius:15px;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.10);display:flex;align-items:center;justify-content:center;flex:none;color:#fff}.zb.hx .hx-ic .ic{width:24px;height:24px}
+.zb.hx.ok .hx-ic{background:rgba(31,164,90,.22);border-color:rgba(31,164,90,.35);color:#7FE0A8}
+.zb.hx .hx-c{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}.zb.hx .hx-lb{display:flex;align-items:center;gap:8px;font:800 13.5px Plus Jakarta Sans,sans-serif;color:#fff;min-width:0}
+.zb.hx .hx-tg{font-size:12px;font-weight:700;color:#A9AEC0;white-space:nowrap}.zb.hx .hx-tg.v{color:#A9AEC0}
+.zb.hx .hx-tx{border:0;background:none;padding:0;margin:0;min-height:0;color:inherit;text-align:left;display:flex;flex-direction:column;gap:2px;min-width:0;font:inherit;cursor:pointer}
+.zb.hx .hx-nm{font:800 18px/1.18 Plus Jakarta Sans,sans-serif;color:#fff;letter-spacing:-.01em;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.zb.hx .hx-mt{font-size:12.5px;font-weight:600;color:#9C9EA8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.zb.hx .hx-r{display:flex;align-items:center;gap:8px;flex:none}.zb.hx .hx-go{width:50px;height:50px;min-height:0;padding:0;border-radius:50%;border:0;background:#fff;color:#0D0D10;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer}.zb.hx .hx-go .ic{width:20px;height:20px}
+.zb.hx .zb-i{width:44px;height:44px;min-height:0;border-radius:50%;border:0;background:rgba(255,255,255,.12);color:#fff;display:flex;align-items:center;justify-content:center}
+.zb.hx .zb-ot{height:40px;min-height:0;padding:0 14px;border-radius:999px;border:0;background:rgba(255,255,255,.12);color:#fff;font:800 13.5px Plus Jakarta Sans,sans-serif;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}.zb.hx .zb-ot.ancho{flex:none;background:#fff;color:#0D0D10}.zb.hx .zb-ot .ic{width:14px;height:14px}
+:where(html[data-tema=oscuro]) .zb.hx{background:linear-gradient(140deg,#2C2D33 0%,#18181B 55%,#0E0E10 100%);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+/* v53.4.259: la cabecera del entreno, como /yo */
+.wk-top.wk2{flex-direction:column;align-items:stretch;justify-content:flex-start;gap:9px;padding:10px 14px 10px}
+.wk2-f{display:flex;align-items:center;gap:10px}.wk2-f .wk-t{flex:1;min-width:0;text-align:center;font:800 15px/1.2 Plus Jakarta Sans,sans-serif;text-transform:uppercase;letter-spacing:.02em;white-space:normal;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.rz-ot{display:block;margin:10px auto 0;border:0;background:none;padding:6px 10px;min-height:0;font:700 14px Plus Jakarta Sans,sans-serif;color:var(--mu);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.wk2-b{width:40px;height:40px;min-height:0;border-radius:50%;border:0;padding:0;background:#E9E9EE;color:#0D0D10;display:flex;align-items:center;justify-content:center;flex:none;cursor:pointer}.wk2-b .ic{width:20px;height:20px}
+.wk2-fin{height:40px;min-height:0;padding:0 16px;border-radius:20px;border:0;background:#0D0D10;color:#fff;font:700 14px Plus Jakarta Sans,sans-serif;white-space:nowrap;flex:none;cursor:pointer}
+.wk2-pl{display:flex;align-items:center;justify-content:center;gap:10px;width:max-content;max-width:100%;margin:0 auto;padding:7px 14px;border-radius:999px;background:#E3E4EA;font:700 13.5px Plus Jakarta Sans,sans-serif;color:#4A4D57;white-space:nowrap}
+.wk2-pl>span{min-width:0;overflow:hidden;text-overflow:ellipsis}.wk2-pl b{color:#0D0D10;font-weight:800;font-variant-numeric:tabular-nums}.wk2-pl>i{width:1px;height:14px;background:rgba(13,13,16,.18);flex:none}
+.wk2-du{display:inline-flex;align-items:center;gap:6px;border:0;background:none;padding:0;margin:0;min-height:0;font:inherit;color:inherit;cursor:pointer}.wk2-du .ic{width:15px;height:15px;color:#5B4BD6}.wk2-du b{font-size:13.5px}
+.wk2-du.pz b,.wk2-du.pz .ic{color:#8A8D97}
+.wk2-pl .sync{display:inline-flex;align-items:center;justify-content:center;width:15px;height:15px;font-size:0;margin-left:-2px}.wk2-pl .sync .ic{width:15px;height:15px}.wk2-pl .sync.ok .ic{color:#1F8F55}.wk2-pl .sync.local .ic,.wk2-pl .sync.solo .ic{color:#C47A12}
+.wk2-pl .sync.sub:before,.wk2-pl .sync.envio:before{content:"";width:8px;height:8px;border-radius:50%;background:#A9ACB6}.wk2-pl .sync.envio:before{background:#C47A12}
+.esp-x{display:flex;flex-direction:column;gap:6px;margin:10px 0 2px}.esp-x p{display:flex;gap:8px;align-items:flex-start;margin:0;background:#F1F1F5;border-radius:14px;padding:9px 11px;font-size:12.5px;line-height:1.4;color:#4A4D57;font-weight:600}.esp-x .ic{width:14px;height:14px;color:#8F6CF0;flex:none;margin:1px 0 0}.esp-x b{color:#0D0D10}
+.ses .ex.abierto .ex-h .ex-esp{display:none}
+:where(html[data-tema=oscuro]) .esp-x p{background:#1C1C1E;color:#C9CCD8}:where(html[data-tema=oscuro]) .esp-x b{color:#fff}
+.ecb.ecb2{left:50%;right:auto;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);width:calc(100% - 24px);max-width:456px;height:62px;border-radius:31px;padding:0 8px;gap:8px;background:rgba(28,28,32,.94);-webkit-backdrop-filter:blur(14px) saturate(1.4);backdrop-filter:blur(14px) saturate(1.4);box-shadow:0 12px 30px rgba(0,0,0,.28),inset 0 0 0 1px rgba(255,255,255,.08);color:#fff;cursor:default}
+.ecb-up,.ecb-x{width:46px;height:46px;min-height:0;border-radius:50%;border:0;padding:0;display:flex;align-items:center;justify-content:center;flex:none;background:rgba(255,255,255,.1);color:#fff;cursor:pointer}.ecb-up .ic{transform:rotate(180deg);width:20px;height:20px}.ecb-x{color:#FF5A5F}.ecb-x .ic{width:18px;height:18px}
+.ecb-v2{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:2px;height:100%;padding:0 2px;border:0;background:none;color:#fff;font:inherit;text-align:left;cursor:pointer}
+.ecb-l1{display:flex;align-items:center;gap:7px;width:100%;min-width:0}.ecb-l1 b{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}.ecb-l1 em{font-style:normal;font-size:15px;font-weight:600;color:rgba(255,255,255,.78);font-variant-numeric:tabular-nums;white-space:nowrap;flex:none}
+.ecb-v2 small{display:block;width:100%;font-size:12.5px;font-weight:600;color:rgba(255,255,255,.55);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums}
+.ecb-dot{width:9px;height:9px;border-radius:50%;background:#34C759;flex:none;box-shadow:0 0 0 3px rgba(52,199,89,.22);animation:ecbLate 1.6s ease-in-out infinite}.ecb-dot.pz{background:#A9ACB6;box-shadow:none;animation:none}
+body:has(.ecb2) main.wrap{padding-bottom:170px}
+@keyframes ecbLate{50%{box-shadow:0 0 0 5px rgba(52,199,89,.08)}}@media (prefers-reduced-motion:reduce){.ecb-dot{animation:none}}
+.du-h{display:flex;flex-direction:column;align-items:center;gap:2px;margin:6px 0 16px}.du-h b{font:800 40px/1.1 Plus Jakarta Sans,sans-serif;font-variant-numeric:tabular-nums;letter-spacing:-.02em}.du-h b.pz{color:#8A8D97}.du-h span{font-size:13px;font-weight:700;color:var(--mu)}.du-n{margin-top:12px;text-align:center}
+@media (max-width:350px){.wk2-pl{gap:7px;padding:7px 11px;font-size:12.5px}.wk2-du b{font-size:12.5px}}
+:where(html[data-tema=oscuro]) .wk2-pl{background:rgba(255,255,255,.12);color:#C9CCD8}:where(html[data-tema=oscuro]) .wk2-pl b{color:#fff}:where(html[data-tema=oscuro]) .wk2-pl>i{background:rgba(255,255,255,.22)}:where(html[data-tema=oscuro]) .wk2-du .ic{color:#B4A9FF}
+:where(html[data-tema=oscuro]) .wk2-b{background:#2C2C2E;color:#fff}:where(html[data-tema=oscuro]) .wk2-fin{background:#fff;color:#000}
+.semc .z2-st{display:flex;gap:14px;margin:6px 2px 0;padding-top:8px;border-top:1px solid #F0F0F3}.semc .z2-st .z2-sd{flex:1;flex-direction:row;align-items:center;gap:8px;background:none;padding:0;border-radius:0;min-width:0}
+.semc .z2-st .z2-sd small{font-size:11.5px}.semc .z2-st .z2-sd b{font-size:13.5px;margin:0;white-space:nowrap}.semc .z2-st .z2-sd b span{font-size:11px}.semc .z2-st .z2-sd i{flex:1;height:4px;min-width:20px}
+:where(html[data-tema=oscuro]) .semc .z2-st{border-top-color:#2C2C2E}:where(html[data-tema=oscuro]) .sem-n .cz-mb.sem-ob2{background:#fff;border-color:#fff;color:#000}
 </style>
 </head>
 <body>
@@ -6010,7 +6069,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.257';
+var APP_V = 'v53.4.259';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8560,12 +8619,12 @@ function arrastreFila(row,list,ev,fin){
 /* v53.4.200 (Javier: «que se active al estar dos seg presionando, porque si no a la mínima que pulsas se abre ese panel»):
    el panel para mover solo se abre tras mantener ⠿ pulsado 2 segundos sin mover el dedo (un anillo se va llenando).
    Un toque corto avisa de cómo se hace; si el dedo se mueve antes de tiempo, no pasa nada. */
-var ORD_MS=1000, ORDP=null;      // v53.4.201 (Javier: «reduce a un seg porfa, dos es mucho»)
+var ORD_MS=200, ORDP=null;      // v53.4.259 (Javier, 25 nov: «presionando 0,2 seg»); antes 1 s      // v53.4.201 (Javier: «reduce a un seg porfa, dos es mucho»)
 function ordPCancela(aviso){
   var p=ORDP; if(!p) return; ORDP=null; clearTimeout(p.t);
   p.g.classList.remove('carga'); var r=p.g.querySelector('.ex-grip-r'); if(r) r.remove();
   document.removeEventListener('pointermove',p.mv,true); document.removeEventListener('pointerup',p.up,true); document.removeEventListener('pointercancel',p.cc,true);
-  if(aviso) toast('Mantén '+'⠿'+' pulsado 1 segundo para mover el ejercicio');
+  if(aviso) toast('Mantén '+'⠿'+' pulsado un momento y arrastra para mover el ejercicio');
 }
 function ordAbrePanel(g,y){
   if(!CL.dr) return;
@@ -8941,11 +9000,16 @@ function temaClCard(){ var tm=clTemaDe();
    encima del menú con el tiempo que lleva y, si está descansando, lo que le queda. Al tocarla vuelve al entreno */
 function enCursoBarCl(){
   var dr=CL.dr; if(BOOT.mode!=='clienta'||!dr||dr.edit||!dr.t0||String(dr.fecha||hoyStr())<hoyStr()) return '';
-  return '<button class="ecb" data-a="continuar" aria-label="Volver a tu entreno"><span class="ecb-i">'+ic('reloj')+'</span><span class="ecb-t"><b>'+esc(dr.rutina||'Entreno')+'</b><small id="ecb-s">'+esc(ecbTxt())+'</small></span><span class="ecb-v">Volver</span></button>';
+  /* v53.4.259 · 25 nov 2026, 16:02 (Javier: «lo de entreno en curso también, que salga igual que usuario»): oscura, con la flecha para volver, el punto
+     de «en directo», el nombre y el tiempo; debajo el ejercicio de ahora (o el descanso que queda); a la derecha, la papelera (cancelar, con confirmación) */
+  return '<div class="ecb ecb2"><button class="ecb-up" data-a="continuar" aria-label="Volver a tu entreno">'+ic('abajo')+'</button><button class="ecb-v2" data-a="continuar"><span class="ecb-l1"><i class="ecb-dot'+(dr.pausaIni?' pz':'')+'" aria-hidden="true"></i><b>'+esc(dr.rutina||'Entreno')+'</b><em id="ecb-t">'+esc(ecbT())+'</em></span><small id="ecb-s">'+esc(ecbSub())+'</small></button><button class="ecb-x" data-a="descartar" aria-label="Cancelar el entreno">'+ic('papelera')+'</button></div>';
 }
 function ecbTxt(){ var dr=CL.dr; if(!dr) return ''; var m=Math.floor(durMs(dr)/1000), t=(m>=3600?Math.floor(m/3600)+':'+('0'+Math.floor(m%3600/60)).slice(-2):Math.floor(m/60))+':'+('0'+m%60).slice(-2), r=CL.restFin?Math.ceil((CL.restFin-Date.now())/1000):0;
   return (dr.pausaIni?'En pausa · ':'En curso · ')+t+(r>0?' · descanso '+Math.floor(r/60)+':'+('0'+r%60).slice(-2):''); }
-setInterval(function(){ var e=document.getElementById('ecb-s'); if(e) e.textContent=ecbTxt(); },1000);
+function ecbT(){ var dr=CL.dr; if(!dr) return ''; var m=Math.floor(durMs(dr)/1000); return m>=3600?Math.floor(m/3600)+' h '+Math.floor(m%3600/60)+' min':Math.floor(m/60)+':'+('0'+m%60).slice(-2); }
+function ecbSub(){ var dr=CL.dr; if(!dr) return ''; var r=CL.restFin?Math.ceil((CL.restFin-Date.now())/1000):0, e=null; try{ e=dr.ej.filter(function(x,i){ return uIni(i)===dr.uab; })[0]; }catch(x){} var n=e&&e.n?e.n:'';
+  return (dr.pausaIni?'En pausa'+(n?' · ':''):'')+(r>0?'Descanso '+Math.floor(r/60)+':'+('0'+r%60).slice(-2)+(n?' · '+n:''):n?n:dr.pausaIni?'':'En curso'); }
+setInterval(function(){ var e=document.getElementById('ecb-s'); if(e) e.textContent=document.getElementById('ecb-t')?ecbSub():ecbTxt(); var t=document.getElementById('ecb-t'); if(t) t.textContent=ecbT(); var z=document.getElementById('zb-cur'); if(z) z.textContent='Llevas '+ecbT(); },1000);
 function topComCl(){
   if(BOOT.mode!=='clienta'||CHT.com||!CL.d||!CL.d.com) return '';      // 21 nov, 22:41 (Chadín): el grupo arriba a la izquierda en todas las pestañas (y sin la luna: el modo oscuro, en Ajustes)
   var c=CL.d.com, nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu coach';
@@ -9334,9 +9398,17 @@ function z2Cab(hoy){ var d=CL.d, nombre=String(d.clienta.nombre||'').split(' ')[
 function z2CitaHoy(hoy){ var l=llProx(), c=czCitas()[0]; return (c&&c.fecha===hoy?citaClHtml():'')+(l&&l.fecha===hoy?llamadaClHtml():''); }
 /* ---------- Hoy toca · hecho ---------- */
 /* v53.4.178 · la barra negra (B1): a la izquierda el círculo (empezar o ✓ verde), en medio el nombre y los datos, a la derecha «Otra» o compartir */
-function zbCl(o){ var tx='<small'+(o.v?' class="v"':'')+'>'+o.sm+'</small><b>'+esc(o.nom)+'</b>'+(o.meta?'<span>'+o.meta+'</span>':'');
-  return '<div class="zb'+(o.cls?' '+o.cls:'')+'"><div class="zb-r">'+o.ini+(o.txA?'<button class="zb-tx" '+o.txA+'>'+tx+'</button>':'<div class="zb-tx">'+tx+'</div>')+(o.fin||'')+'</div></div>'; }
-function zbClC(a,id,n,lab,cls){ return '<button class="zb-c'+(cls?' '+cls:'')+'" data-a="'+a+'"'+(id?' data-id="'+esc(id)+'"':'')+' aria-label="'+esc(lab)+'">'+ic(n)+'</button>'; }
+/* v53.4.256 (25 nov, Javier: «que salga así en cliente también», como el panel de usuaria): arriba, en grande, «Hoy toca» (o «Hecho hoy»…), al lado
+   la semana del programa o el esfuerzo; debajo el nombre y sus datos (tocándolos, la rutina); abajo el botón grande blanco y, al lado, «Otra» o compartir */
+var ZB_T={empezar:'Empezar entreno',z2VerSes:'Ver entreno'};
+/* v53.4.259 · 25 nov 2026, 14:29–14:30 (Javier: «el diseño de donde aparecen los entrenos, pusimos un poco más pequeño… y esto igual, que salga el
+   entreno arriba en el de clienta»): como en /yo (yo-1.58): negro y compacto, con su icono a la izquierda (pesa, ✓ o luna), «Hoy toca» y el nombre;
+   a la derecha, el botón redondo blanco (empezar) o compartir. Hecho: tocando el nombre se abre */
+function zbCl(o){ var p=String(o.sm||'').split(' · '), big=p.shift(), tag=p.join(' · '), ok=/zb-ok/.test(o.cls||'');
+  var go=ok?'':/<button/.test(o.ini||'')?o.ini:'', ico=o.ico||(ok?'ok':go?'pesa':'luna'), tx='<b class="hx-nm">'+esc(o.nom)+'</b>'+(o.meta?'<span class="hx-mt">'+o.meta+'</span>':'');
+  return '<div class="zb hx'+(ok?' ok':'')+(o.cls?' '+o.cls:'')+'"><span class="hx-ic">'+ic(ico)+'</span><div class="hx-c"><span class="hx-lb">'+big+(tag?'<span class="hx-tg'+(o.v?' v':'')+'">'+tag+'</span>':'')+'</span>'+
+    (o.txA?'<button class="hx-tx" '+o.txA+'>'+tx+'</button>':'<div class="hx-tx">'+tx+'</div>')+'</div>'+(go||o.fin?'<div class="hx-r">'+(o.fin||'')+go+'</div>':'')+'</div>'; }
+function zbClC(a,id,n,lab,cls){ return '<button class="hx-go zb-go'+(cls?' '+cls:'')+'" data-a="'+a+'"'+(id?' data-id="'+esc(id)+'"':'')+' aria-label="'+esc(lab)+'">'+ic(n==='ok'?'ok':'play')+'</button>'; }
 function zbClHecho(L){ var mins=0, ser=0, vol=0, nom=[], rpe=null;
   L.forEach(function(s){ var U=ultDeSesion(s); mins+=U.r.min||0; ser+=U.r.efectivas||0; vol+=U.r.vol||0; nom.push(s.rutina||'Entreno'); if(num(s.rpe)) rpe=num(s.rpe); });
   var u=L[L.length-1], meta=[mins?fN(mins,0)+' min':'',ser?ser+(ser===1?' serie':' series'):'',vol?fP(Math.round(vol))+' kg':''].filter(Boolean).join(' · ');
@@ -9363,7 +9435,7 @@ A.z2Rut=function(el){ var r=CL.d.rutinas.filter(function(x){ return x.id===el.da
     h+=rzFila(r,x,L[j]);
   });
   modal('<div class="rzw zb-rutm"><div class="rz-hd"><button class="mh-x rz-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button><h2>'+esc(r.nombre)+'</h2><small>'+(rutDia(hoy).indexOf(r)>=0?'Hoy · ':'')+(sr?'Semana '+sr.n+' de '+sr.tot+' · ':'')+esc(cuentaEjCl(r.ejercicios,nMov))+' · ~'+minRutCl(r,series)+' min</small>'+
-    '<button class="rz-go" data-a="empezar" data-id="'+esc(r.id)+'">'+ic('play')+'Comenzar rutina</button></div>'+h+'</div>');
+    '<button class="rz-go" data-a="empezar" data-id="'+esc(r.id)+'">'+ic('play')+'Comenzar rutina</button>'+(rutDia(hoy).indexOf(r)>=0&&CL.d.rutinas.some(function(x){ return rutDia(hoy).indexOf(x)<0&&vigenteEn(x,hoy,CL.d.rutinas); })?'<button class="rz-ot" data-a="z2Otras">Hacer otra hoy</button>':'')+'</div>'+h+'</div>');
   var b=document.querySelector('#modal .mbox'); if(b) b.classList.add('rz-mb'); };
 A.z2Otras=function(){ var hoy=hoyStr(), d=CL.d, rh=rutDia(hoy), hecho=d.sesiones.filter(function(s){ return s.fecha===hoy; });
   var hechaR=function(r){ return hecho.some(function(s){ return s.rutina_id===r.id; }); }, otras=d.rutinas.filter(function(r){ return rh.indexOf(r)<0&&vigenteEn(r,hoy,d.rutinas); });
@@ -9579,17 +9651,19 @@ function vHoy(){
      las casillas (ciclo u objetivo a lo ancho y debajo, en fila, objetivo · último récord · lo próximo) y el check-in. Sin el peso (va en su apartado) */
   var h=z2Cab(hoy)+(esHoy?dscBannerCl(hoy)+avisoSesHtml(false)+z2CitaHoy(hoy)+planAvisoHoy()+(d.logros?logroAvisoHtml():''):'');
   var cu=z2Cuenta(hoy), ps=pasosOn()?z2Pasos(hoy):null;
-  h+='<div class="semc z2-sem">'+semanaStrip(hoy,sel)+
-    (d.rutinas.length&&estaSem?'<div class="sem-or"><span>'+(semOrdenada(lunesDe(hoy))?'<b>Ordenada por ti</b> · solo esta semana':'Toca un día para verlo')+'</span><button class="sem-ob" data-a="ordAbrir">'+ic('orden')+'Ordenar</button></div>':      // v53.4.151
-     d.rutinas.length||d.sesiones.length?'<p class="sem-ayuda">Toca un día para ver su entreno · con las flechas, otras semanas</p>':'')+
+  /* v53.4.256 (25 nov, 00:56, Javier: «que salga así en cliente también»): como el panel de usuaria: primero «Hoy toca» en grande y debajo la semana,
+     compacta (solo los iconos de ordenar y del mes; sin «Toca un día para verlo»; entrenos y pasos en una fila fina) */
+  var semH='<div class="semc z2-sem">'+semanaStrip(hoy,sel)+
+    (d.rutinas.length&&estaSem&&semOrdenada(lunesDe(hoy))?'<div class="sem-or"><span><b>Ordenada por ti</b> · solo esta semana</span></div>':'')+
     ((cu.t||ps)&&estaSem?'<div class="z2-st'+(cu.t&&ps?'':' uno')+'">'+(cu.t?'<div class="z2-sd"><small>Entrenos</small><b>'+cu.k+'<span>/'+cu.t+'</span></b><i><u style="width:'+Math.min(100,Math.round(cu.k/cu.t*100))+'%"></u></i></div>':'')+
       (ps?'<button class="z2-sd" data-a="pasosAbre" aria-label="Ver tus pasos de hoy y de la semana"><small>Pasos</small><b>'+fP(ps.n)+'<span>/'+fP(ps.obj)+'</span></b><i><u style="width:'+Math.min(100,Math.round(ps.n/(ps.obj||1)*100))+'%"></u></i></button>':'')+'</div>':'')+'</div>';
-  if(esHoy&&ps&&CL.psAb) h+=pasosCard(hoy);                 // v47: al tocar «Pasos», el detalle (apuntar, la semana, compartir)
-  if(esHoy) h+=pushHoyCard();      // v53.4.54
-  if(esHoy) h+=z2EvPend(hoy); else h+=eventoDiaCard(sel);
+  var h0=h; h='';      // lo de hoy (o el día elegido) se monta aparte y va antes de la semana
   if(CL.dr&&CL.dr.envio){
     var en=CL.dr.envio, er=en.r||{};
     h+='<div class="card hl pend"><div class="card-t">'+ic('sinred')+(CL.dr.edit?'Cambios pendientes de enviar':'Entreno terminado · pendiente de enviar')+'</div><h2>'+esc(CL.dr.rutina)+'</h2><div class="muted">'+(CL.dr.edit?'':(er.efectivas||0)+' series · '+(er.min||0)+' min · ')+'Está guardado en este móvil y se enviará solo en cuanto haya conexión.</div><div class="gap"></div><button class="btn" data-a="enviarPend">Enviar ahora</button><button class="btn sec mt" data-a="volverPend">'+(CL.dr.edit?'Volver a los cambios':'Volver al entreno')+'</button></div>';
+  } else if(CL.dr&&!CL.dr.edit&&!(CL.dr.fecha<hoy)&&CL.dr.t0){
+    var cw0=cuentaW(CL.dr);      // v53.4.259: «Entreno en curso», como en /yo
+    h+='<div class="z2-hero zbw">'+zbCl({ico:'reloj',ini:zbClC('continuar','','play','Seguir con tu entreno'),sm:'Entreno en curso'+(CL.dr.pausaIni?' · En pausa':''),nom:CL.dr.rutina||'Entreno',meta:'<span id="zb-cur">Llevas '+ecbT()+'</span> · '+cw0.ok+'/'+cw0.tot+' series',txA:'data-a="continuar"'})+'</div>';
   } else if(CL.dr){
     var cu=cuentaDr(CL.dr), viejo=!CL.dr.edit&&CL.dr.fecha<hoy;
     h+='<div class="card hl"><div class="card-t">'+(CL.dr.edit?'Editando un entreno':viejo?'Entreno sin terminar':'Entreno en curso')+'</div><h2>'+esc(CL.dr.rutina)+'</h2><div class="muted">'+(CL.dr.edit?'Del '+fCorta(CL.dr.fecha)+' · ':viejo?'Empezado el '+fCorta(CL.dr.fecha)+' · ':'')+cu.ok+'/'+cu.tot+' hecho'+(CL.dr.pausaIni&&!CL.dr.edit?' · <b>en pausa</b>':'')+'</div><div class="sync-n" id="sync-hoy"></div><div class="gap"></div><button class="btn" data-a="continuar">'+(CL.dr.edit?'Seguir editando':'Continuar entreno')+'</button>'+(viejo&&cu.ok?'<button class="btn sec mt" data-a="terminarYa">Guardarlo como está</button>':'')+'<button class="btn sec mt" data-a="descartar">'+(CL.dr.edit?'Salir sin guardar cambios':'Cancelar entreno')+'</button></div>';
@@ -9604,14 +9678,18 @@ function vHoy(){
     else {
       h+='<div class="z2-hero zbw">';
       hecho.forEach(function(s){ h+=zbClHecho([s]); });
-      if(!d.rutinas.length) h+=zbCl({ini:'<span class="zb-c gr">'+ic('reloj')+'</span>',sm:'Hoy',nom:'Muy pronto',meta:'Tu coach todavía no te ha asignado rutinas'});
+      if(!d.rutinas.length) h+=zbCl({ini:'',sm:'Hoy',nom:'Muy pronto',meta:'Tu coach todavía no te ha asignado rutinas'});
       else if(!rh.length){ var pp=pasosOn()?z2Pasos(hoy):null;      // v53.4.180 (20 nov, 12:15, Chadín: «el de los pasos me gusta»; fuera la luna)
-        h+=zbCl({ini:'<span class="zb-c">'+ic('huellas')+'</span>',sm:'Hoy toca',nom:'Descanso activo',meta:pp&&pp.obj?(pp.n>=pp.obj?'Tus '+fP(pp.obj)+' pasos de hoy, hechos':'A por tus '+fP(pp.obj)+' pasos'):'Camina, estira e hidrátate',fin:otras.length?'<button class="zb-ot" data-a="z2Otras">Entrenar</button>':''}); }
+        h+=zbCl({ini:'',sm:'Hoy toca',nom:'Descanso activo',meta:pp&&pp.obj?(pp.n>=pp.obj?'Tus '+fP(pp.obj)+' pasos de hoy, hechos':'A por tus '+fP(pp.obj)+' pasos'):'Camina, estira e hidrátate',fin:otras.length?'<button class="zb-ot ancho" data-a="z2Otras">'+ic('play')+'Entrenar</button>':''}); }
       pend.forEach(function(r,k){ var O=ordenMov(r.ejercicios), nMov=O.filter(function(x){ return x.mov; }).length, series=r.ejercicios.reduce(function(a,e){ return a+efectivasEj(e); },0), sr=semRut(r,hoy);
-        h+=zbCl({ini:zbClC('empezar',r.id,'play','Comenzar '+r.nombre),sm:'Hoy toca'+(sr?' · Semana '+sr.n+'/'+sr.tot:''),nom:r.nombre,meta:cuentaEjCl(r.ejercicios,nMov)+' · '+minRutCl(r,series)+' min'+(series?' · '+series+' series':''),txA:'data-a="z2Rut" data-id="'+esc(r.id)+'"',fin:k===0&&otras.length?'<button class="zb-ot" data-a="z2Otras">Otra</button>':''}); });
+        h+=zbCl({ini:zbClC('empezar',r.id,'play','Comenzar '+r.nombre),sm:(k||hecho.length?'También hoy':'Hoy toca')+(sr?' · Semana '+sr.n+'/'+sr.tot:''),nom:r.nombre,meta:cuentaEjCl(r.ejercicios,nMov)+' · '+minRutCl(r,series)+' min'+(series?' · '+series+' series':''),txA:'data-a="z2Rut" data-id="'+esc(r.id)+'"'}); /* v53.4.259: «Otra», dentro (tocando el nombre: «Hacer otra hoy»), como en /yo */ });
       h+='</div>';
     }
   }
+  h=h0+h+semH;      // v53.4.256: primero «Hoy toca», luego la semana
+  if(esHoy&&ps&&CL.psAb) h+=pasosCard(hoy);                 // v47: al tocar «Pasos», el detalle (apuntar, la semana, compartir)
+  if(esHoy) h+=pushHoyCard();      // v53.4.54
+  if(esHoy) h+=z2EvPend(hoy); else h+=eventoDiaCard(sel);
   // v21: el check-in de hoy solo hoy; en un día pasado, el que hizo ese día; en uno futuro, nada
   if(CL.ckF&&CL.ckF>=hoy) CL.ckF=null;
   if(esHoy&&!CL.ckF) h+=z2Casillas(hoy)+ckAyerHtml();
@@ -9684,7 +9762,7 @@ function dscSesHtml(x){ dscColor(); return '<div class="dsc-ses"><span class="ds
 A.dscNota=function(){ var x=dscEn(hoyStr()); if(!x) return; var nom=CL.d.coachNombre&&CL.d.coachNombre!=='tu coach'?CL.d.coachNombre:'tu entrenador';
   modal('<h2>Semana de descarga</h2><p class="muted sm">Hasta el domingo '+esc(fCorta(x.hasta))+'</p><p>'+esc(dscTxtCl(x,true))+'</p>'+(x.nota?'<div class="dsc-nota">«'+esc(x.nota)+'»<small>Nota de '+esc(nom)+'</small></div>':'')+'<button class="btn mt" data-a="cerrarModal">Entendido</button>'); };
 function semanaStrip(hoy,sel){
-  var l=lunesDe(sel), d=CL.d, lh=lunesDe(hoy), h='<div class="sem-n cz-sn"><button class="ico" data-a="semCl" data-v="-7" aria-label="Semana anterior">'+ic('atras')+'</button><span>'+(l===lh?'Esta semana':l===sumar(lh,-7)?'Semana pasada':l===sumar(lh,7)?'Semana que viene':'Semana del '+esc(fCorta(l)))+'</span><button class="ico" data-a="semCl" data-v="7" aria-label="Semana siguiente">'+ic('flecha')+'</button><button class="cz-mb" data-a="czMes">'+ic('cal')+'Mes</button></div><div class="semana">';
+  var l=lunesDe(sel), d=CL.d, lh=lunesDe(hoy), h='<div class="sem-n cz-sn"><button class="ico" data-a="semCl" data-v="-7" aria-label="Semana anterior">'+ic('atras')+'</button><span>'+(l===lh?'Esta semana':l===sumar(lh,-7)?'Semana pasada':l===sumar(lh,7)?'Semana que viene':'Semana del '+esc(fCorta(l)))+'</span><button class="ico" data-a="semCl" data-v="7" aria-label="Semana siguiente">'+ic('flecha')+'</button>'+(l===lh&&d.rutinas.length?'<button class="cz-mb sem-ob2" data-a="ordAbrir" aria-label="Ordenar tu semana">'+ic('orden')+'</button>':'')+'<button class="cz-mb cz-mbi" data-a="czMes" aria-label="Ver el mes">'+ic('cal')+'</button></div><div class="semana">';      // v53.4.256 (25 nov, Javier): solo los iconos de ordenar y del mes
   for(var i=0;i<7;i++){
     var f=sumar(l,i), k=DIAS[i];
     var hecho=d.sesiones.some(function(s){ return s.fecha===f; });
@@ -10275,7 +10353,7 @@ function pintarEntreno(){
     var tI=dr.ej.map(function(e,i){ return i; }), mI=dr.edit?[]:tI.filter(function(i){ return dr.ej[i].mov; });
     h+='<div class="ses-l">'+(mI.length?movHtml(mI,G,L):'')+filaUnidades(tI.filter(function(i){ return mI.indexOf(i)<0; }),G,L)+'</div>'+(lib?addB:'');
   }
-  app.innerHTML='<header class="top wk-top"><button class="ico" data-a="salirEntreno" aria-label="Salir">←</button><div class="wk-c"><div class="wk-t">'+esc(dr.rutina)+'</div><div class="wk-s">'+(dr.edit?'Editando el entreno del '+fCorta(dr.fecha):'<span class="reloj-w"><button class="reloj-b'+(dr.pausaIni?' pausado':'')+'" id="reloj-b" data-a="pausaToggle" aria-label="'+(dr.pausaIni?'Reanudar el reloj':'Pausar el reloj')+'">'+ic(dr.pausaIni?'play':'pausa')+'<span id="reloj">0:00</span></button><button class="reloj-r" data-a="relojCero" aria-label="Empezar a contar de nuevo">'+ic('reinicio')+'</button></span>')+' · <span id="wk-prog"></span> · <button class="sync" id="sync" data-a="infoSync" aria-label="Estado del guardado"></button></div></div><button class="ico" data-a="ordenar" aria-label="Cambiar el orden de los ejercicios">'+ic('orden')+'</button><div class="wk-bar" aria-hidden="true"><i id="wk-bar"></i></div></header>'+
+  app.innerHTML=(dr.edit?'<header class="top wk-top"><button class="ico" data-a="salirEntreno" aria-label="Salir">←</button><div class="wk-c"><div class="wk-t">'+esc(dr.rutina)+'</div><div class="wk-s">'+(dr.edit?'Editando el entreno del '+fCorta(dr.fecha):'<span class="reloj-w"><button class="reloj-b'+(dr.pausaIni?' pausado':'')+'" id="reloj-b" data-a="pausaToggle" aria-label="'+(dr.pausaIni?'Reanudar el reloj':'Pausar el reloj')+'">'+ic(dr.pausaIni?'play':'pausa')+'<span id="reloj">0:00</span></button><button class="reloj-r" data-a="relojCero" aria-label="Empezar a contar de nuevo">'+ic('reinicio')+'</button></span>')+' · <span id="wk-prog"></span> · <button class="sync" id="sync" data-a="infoSync" aria-label="Estado del guardado"></button></div></div><button class="ico" data-a="ordenar" aria-label="Cambiar el orden de los ejercicios">'+ic('orden')+'</button><div class="wk-bar" aria-hidden="true"><i id="wk-bar"></i></div></header>':wk2Cab(dr))+
     '<main class="wrap ses">'+(dr.pausaIni&&!dr.edit?'<div class="pausa-b" id="pausa-b">'+ic('pausa')+'<span><b>Reloj en pausa</b><small>Puedes seguir apuntando series</small></span><button class="btn sm" data-a="reanudarEntreno">'+ic('play')+'Reanudar</button></div>':'')+(dr.edit?'<div class="hecho" style="margin-top:12px">Estás editando un entreno ya guardado. Corrige lo que necesites y pulsa Guardar cambios.</div>':'')+(!dr.edit&&dscEn(dr.fecha||hoyStr())?dscSesHtml(dscEn(dr.fecha||hoyStr())):'')+videoSesCard()+h+'<button class="btn big mt" data-a="finalizar">'+(dr.edit?'Guardar cambios':'Finalizar entreno')+'</button><button class="link danger" data-a="cancelarEntreno" style="display:block;margin:16px auto 0;text-align:center">'+(dr.edit?'Salir sin guardar cambios':'Cancelar entreno (no se guarda)')+'</button><div style="height:80px"></div></main>'+
     '<div id="rest" class="rest hidden"><div><div class="rest-l" id="rest-l">Descanso</div><div class="rest-t" id="rest-t">1:30</div></div><div class="rest-b"><button data-a="restMas" data-v="-15">−15</button><button data-a="restMas" data-v="15">+15</button><button data-a="restFin">Saltar</button><button class="rest-son" id="rest-son" data-a="restSon" aria-label="Silenciar el aviso del descanso">'+ic(descCfg().son?'son':'mudo')+'</button></div></div>';
   progresoEntreno(); arrancarReloj(); pintarSync();
@@ -10320,8 +10398,8 @@ function cabEj(e,i,lab,sub,completo,cls,extra){
   return '<section class="ex'+(completo?' completo':'')+(cls?' '+cls:'')+(ab?' abierto':' cerrado')+'" id="ex-'+i+'"><div class="ex-h">'+thSes(e,i)+
     '<div class="ex-tg"'+(dr&&!dr.edit?' data-a="exTog" data-i="'+i+'" role="button" tabindex="0" aria-expanded="'+ab+'"':'')+'><span class="ex-n">'+esc(lab)+'</span><div class="ex-info"><h3>'+esc(e.n)+'</h3><div class="ex-sub">'+presHtml(sub)+'</div>'+(extra||'')+'</div>'+
     '<div class="ex-r"><span class="ex-num">'+esc(lab)+'</span><span class="ex-pr" id="pr-'+i+'" style="--p:'+prPct(e)+'">'+prHtml(e)+'</span></div></div>'+
-    (arr?'<button class="ex-grip" data-dd-ex="'+i+'" aria-label="Mantén 1 segundo y arrastra para cambiar el orden" title="Mantén 1 segundo y arrastra para cambiar el orden">'+ic('agarre')+'</button>':'')+'</div>'+
-    '<div class="ex-b">'+(T.length?'<div class="ex-bt ex-top n'+T.length+'">'+T.join('')+'</div>':'')+(e.nota?'<div class="nota">'+br(e.nota)+'</div>':'')+
+    (arr?'<button class="ex-grip" data-dd-ex="'+i+'" aria-label="Mantén pulsado y arrastra para cambiar el orden" title="Mantén pulsado y arrastra para cambiar el orden">'+ic('agarre')+'</button>':'')+'</div>'+
+    '<div class="ex-b">'+(T.length?'<div class="ex-bt ex-top n'+T.length+'">'+T.join('')+'</div>':'')+(ab&&dr&&!dr.edit&&(e.tipo||'fuerza')==='fuerza'?espExpl(e):'')+(e.nota?'<div class="nota">'+br(e.nota)+'</div>':'')+
     (e.sust?'<div class="sust-n">'+ic('cambiar')+'En lugar de «'+esc(e.sust)+'» · tu coach lo verá</div>':'');
 }
 /* 22 nov, 19:00 (Chadín: «cuando hagas las aproximaciones que se cierre»): hechas todas, la caja se pliega en una línea con lo que hiciste; «Ver» la abre */
@@ -10723,7 +10801,7 @@ A.blOk=function(el){
   guardarBorrador(true); CL.keep=true; pintarCl(); if(sigU>=0) irUnidad(sigU);
 };
 function progresoEntreno(){
-  var c=cuentaDr(CL.dr), p=document.getElementById('wk-prog'), b=document.getElementById('wk-bar'); if(p) p.textContent=c.ok+'/'+c.tot+' hecho'; if(b) b.style.width=(c.tot?Math.round(c.ok*100/c.tot):0)+'%';
+  var c=cuentaDr(CL.dr), p=document.getElementById('wk-prog'), b=document.getElementById('wk-bar'), q=document.getElementById('wk-ej'), cw=q?cuentaW(CL.dr):null; if(p) p.innerHTML=cw?'<b>'+cw.ok+'</b>/'+cw.tot+' series':c.ok+'/'+c.tot+' hecho'; if(q) q.innerHTML='<b>'+cw.eo+'</b>/'+cw.et+' ejercicios'; if(b) b.style.width=(c.tot?Math.round(c.ok*100/c.tot):0)+'%';
   CL.dr.ej.forEach(function(e,i){ var x=document.getElementById('ex-'+i); if(!x) return; x.classList.toggle('completo',ejHecho(e)); var q=document.getElementById('pr-'+i); if(q){ q.innerHTML=prHtml(e); q.style.setProperty('--p',prPct(e)); } });
   actualizarBloques();
 }
@@ -10755,7 +10833,7 @@ function actualizarBloques(){
   dr.blqH=ahora;
 }
 var relojI=null;
-function arrancarReloj(){ clearInterval(relojI); relojI=null; wlPedir(); function tick(){ var r=document.getElementById('reloj'); if(!r||!CL.dr){ pararReloj(); return; } r.textContent=(CL.dr.pausaIni?'En pausa · ':'')+hms(relojMs(CL.dr)); } tick(); relojI=setInterval(tick,1000); }
+function arrancarReloj(){ clearInterval(relojI); relojI=null; wlPedir(); function tick(){ var r=document.getElementById('reloj'); if(!r||!CL.dr){ pararReloj(); return; } r.textContent=(CL.dr.pausaIni&&!r.dataset.c?'En pausa · ':'')+hms(relojMs(CL.dr)); } tick(); relojI=setInterval(tick,1000); }
 /* v22: el reloj del entreno. Un toque lo pausa o lo reanuda; ↺ empieza a contar de nuevo. Los minutos se corrigen al terminar. */
 function relojCambio(txt){ guardarBorrador(true); cerrarModal(); CL.keep=true; pintarCl(); if(txt) toast(txt,'ok'); }
 A.pausaToggle=function(){ if(CL.dr&&CL.dr.pausaIni) A.reanudarEntreno(); else A.pausarEntreno(); };
@@ -10763,6 +10841,18 @@ A.pausarEntreno=function(){ var dr=CL.dr; if(!dr||dr.pausaIni) return; dr.pausaI
 A.reanudarEntreno=function(){ var dr=CL.dr; if(!dr||!dr.pausaIni) return; var n=Date.now(); dr.pausa=(num(dr.pausa)||0)+(n-dr.pausaIni); dr.pausaIni=null; dr.upd=n; relojCambio('El reloj vuelve a contar'); };
 A.relojCero=function(){ confirmar('¿Empezar a contar desde cero? El reloj vuelve a 0:00 y lo que llevas apuntado se queda igual.','Empezar de cero',function(){ var dr=CL.dr; if(!dr) return; var n=Date.now(); dr.t0=n; dr.pausa=0; dr.pausaIni=null; dr.upd=n; relojCambio('Reloj a cero'); }); };
 function pararReloj(){ clearInterval(relojI); relojI=null; wlSoltar(); }
+/* v53.4.259 · 25 nov 2026, 14:29 (Javier: «la cabecera que hemos puesto en el de usuaria, ponla en el de cliente también, pero sin ver las series
+   por grupo; pero sí pausar el tiempo y poner desde 0 o desde donde se quedó»): como en /yo: ⌄ (minimizar), el nombre en el centro y «Terminar»;
+   debajo una pastilla con el tiempo · ejercicios hechos · series de trabajo hechas y el estado del guardado (solo el icono). El tiempo se toca:
+   «Pausar el tiempo» / «Seguir contando» (desde donde se quedó) y «Poner a 0». Sin el botón de ordenar: se ordena manteniendo ⠿ un momento */
+function wk2Cab(dr){
+  return '<header class="top wk-top wk2"><div class="wk2-f"><button class="wk2-b" data-a="salirLuego" aria-label="Minimizar el entreno">'+ic('abajo')+'</button><div class="wk-t">'+esc(dr.rutina)+'</div><button class="wk2-fin" data-a="finalizar">Terminar</button></div>'+
+    '<div class="wk2-pl"><button class="wk2-du'+(dr.pausaIni?' pz':'')+'" id="reloj-b" data-a="relojH" aria-label="Tiempo del entreno'+(dr.pausaIni?', en pausa':'')+': pausar o poner a 0">'+ic(dr.pausaIni?'pausa':'reloj')+'<b id="reloj" data-c="1">0:00</b></button><i aria-hidden="true"></i><span id="wk-ej"></span><i aria-hidden="true"></i><span id="wk-prog"></span><button class="sync" id="sync" data-a="infoSync" aria-label="Estado del guardado"></button></div></header>'; }
+function cuentaW(dr){ var t=0,o=0,et=0,eo=0; dr.ej.forEach(function(e){ et++; if(ejHecho(e)) eo++; if(e.tipo==='bloque'||e.tipo==='run'){ t++; if(e.ok) o++; } else (e.sets||[]).forEach(function(s){ if(s.t==='aprox') return; t++; if(s.ok) o++; }); }); return {tot:t,ok:o,et:et,eo:eo}; }
+A.relojH=function(){ var dr=CL.dr; if(!dr) return; var pz=!!dr.pausaIni;
+  modal('<h2>Tiempo del entreno</h2><div class="du-h"><b class="'+(pz?'pz':'')+'">'+hms(relojMs(dr))+'</b><span>'+(pz?'En pausa':'En marcha')+'</span></div>'+
+    '<button class="btn" data-a="pausaToggle">'+ic(pz?'play':'pausa')+(pz?'Seguir contando':'Pausar el tiempo')+'</button><button class="btn sec mt" data-a="relojCero">'+ic('reinicio')+'Poner a 0</button>'+
+    '<p class="muted sm du-n">«Seguir contando» sigue desde donde se quedó; «Poner a 0» empieza a contar desde ahora. Lo que llevas apuntado no se toca.</p>'); };
 /* descanso */
 var restI=null;
 function descanso(seg,lab){ CL.restFin=Date.now()+seg*1000; CL.restAv=false; CL.restLab=lab||'Descanso'; prepararAudio(); mostrarRest(); }
@@ -24409,6 +24499,12 @@ function espLista(e){
   T.forEach(function(x){ if(vis[x.t]) return; vis[x.t]=1; L.push({t:x.t,txt:TS[x.t][0]+(x.det?' · '+x.det:'')}); });
   return L;
 }
+/* v53.4.259 · 25 nov 2026, 16:02 (Javier: «aquí lo de top set y back-off no se ve; que salga como en la de usuaria una explicación de qué es, cuando
+   se le programe una serie especial»): con el ejercicio abierto, debajo de sus botones, qué es cada serie especial en una frase (top set y back-off, juntos) */
+function espExpl(e){ var L=espLista(e); if(!L.length) return ''; var ts=L.map(function(x){ return x.t; }), tb=ts.indexOf('top')>=0&&ts.indexOf('backoff')>=0, I=[];
+  if(tb) I.push(['Top set y back-off','La primera serie de trabajo es la más pesada del día: dalo todo con buena técnica. En las siguientes bajas el peso ('+tsCorto('backoff',{})+') y haces más repeticiones.']);
+  L.forEach(function(x){ if(tb&&(x.t==='top'||x.t==='backoff')) return; var c=tsCorto(x.t,setsPlan(e).filter(function(y){ return y.t===x.t; })[0]||{}); I.push([TS[x.t][1],TS[x.t][2]+(c&&x.t!=='top'?' ('+c+')':'')]); });
+  return '<div class="esp-x">'+I.map(function(t){ return '<p>'+ic('chispa')+'<span><b>'+esc(t[0])+':</b> '+esc(t[1])+'</span></p>'; }).join('')+'</div>'; }
 function espLinea(e,click){
   var L=espLista(e); if(!L.length) return '';
   return '<div class="ex-esp">'+L.map(function(x){ return click?'<button class="ex-espb" data-a="verTipo" data-t="'+x.t+'" data-det="">'+ic('info')+esc(x.txt)+'</button>':'<span>'+esc(x.txt)+'</span>'; }).join('')+'</div>';
