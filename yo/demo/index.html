@@ -2904,6 +2904,15 @@ html[data-tema="oscuro"] .ip-sg i{background:rgba(255,255,255,.12)}html[data-tem
 /* yo-1.63: Progreso dentro de Entreno, con el mismo hueco entre tarjetas que el resto; el resumen, la aproximación en gris */
 .p3-en{display:flex;flex-direction:column;gap:12px}.mes-lk .md-i{background:var(--suave);color:var(--tx)}
 .fila-r.fr-apx>span:last-child{color:var(--tx3)}
+/* yo-1.64: caras «Grafito con punto de color» en «¿Qué mood tienes hoy?» */
+.cara-i{position:relative;display:flex!important;align-items:center;justify-content:center;width:36px!important;height:36px!important;flex:none;background:none!important;box-shadow:none!important;border-radius:50%;font-style:normal}
+.cara-i:after{display:none!important}
+.cara{width:100%;height:100%;fill:none;stroke:#3A3B42;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;overflow:visible}.cara .f{fill:#3A3B42;stroke:none}.cara .o{stroke:#C9CBD3;fill:none}
+.cara-i.on .cara .o{fill:#0D0D10;stroke:#0D0D10}.cara-i.on .cara{stroke:#fff}.cara-i.on .cara .f{fill:#fff}
+.cara-i.on:before{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff;z-index:1}
+html[data-tema="oscuro"] .cara{stroke:#D6D7DD}html[data-tema="oscuro"] .cara .f{fill:#D6D7DD}html[data-tema="oscuro"] .cara .o{stroke:#4A4B52}
+html[data-tema="oscuro"] .cara-i.on .cara .o{fill:#fff;stroke:#fff}html[data-tema="oscuro"] .cara-i.on .cara{stroke:#0D0D10}html[data-tema="oscuro"] .cara-i.on .cara .f{fill:#0D0D10}html[data-tema="oscuro"] .cara-i.on:before{box-shadow:0 0 0 2px #1C1C1E}
+.ck5 small{font-size:10.5px;font-weight:600;color:var(--tx3,#8A8C96)}.ck5 button.on small{color:var(--tx);font-weight:700}.ck5 button.on .cara-i{box-shadow:none!important}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -4011,7 +4020,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.63';
+var YO_V = 'yo-1.64';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -11540,6 +11549,15 @@ var FASES5 = [['menstrual', 'Menstrual'], ['folicular', 'Folicular'], ['ovulator
 var SINT = { cansancio: 'Cansancio', dolor: 'Dolor o cólicos', cabeza: 'Dolor de cabeza', hinchazon: 'Hinchazón', animo: 'Ánimo bajo', antojos: 'Antojos', sueno: 'Dormí mal' };
 var SINT_F = { cansancio: 'cansancio', dolor: 'dolor o cólicos', cabeza: 'dolor de cabeza', hinchazon: 'hinchazón', animo: 'el ánimo bajo', antojos: 'más hambre o antojos', sueno: 'que duermes peor' };
 var CK5 = [[2, 'Agotada', '#E5484D'], [4, 'Cansada', '#F08A4B'], [6, 'Normal', '#C9B458'], [8, 'A tope', '#5DBB7A'], [10, 'Súper a tope', '#1E8E5A']];
+/* yo-1.64 · 25 nov 2026, 16:19–16:27 (Javier: «¿podemos poner caras en vez de eso?… más elegantes y más pequeñas»; eligió «Grafito con punto de color»):
+   caras dibujadas (no emoji) en línea fina gris, con su círculo; la elegida, en negro con un punto de su color (rojo → verde). En masculino si es hombre */
+var CARAS = { 2: '<path d="M8 10.6q1 .9 2 0M14 10.6q1 .9 2 0M9.3 16.4q2.7-2 5.4 0"/>',
+  4: '<path d="M8 10.7h2M14 10.7h2M9.4 15.6q1.3-.6 2.6 0t2.6 0"/>',
+  6: '<circle cx="9" cy="10.5" r=".85" class="f"/><circle cx="15" cy="10.5" r=".85" class="f"/><path d="M9.6 15.3h4.8"/>',
+  8: '<circle cx="9" cy="10.5" r=".85" class="f"/><circle cx="15" cy="10.5" r=".85" class="f"/><path d="M9.1 14.3q2.9 2.6 5.8 0"/>',
+  10: '<path d="M8 11q1-1.5 2 0M14 11q1-1.5 2 0M8.8 14h6.4q-.5 3.4-3.2 3.4T8.8 14z"/>' };
+function caraMood(v, on, c) { return '<i class="cara-i' + (on ? ' on' : '') + '"' + (c ? ' style="--c:' + c + '"' : '') + '><svg class="cara" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4" class="o"/>' + (CARAS[v] || CARAS[6]) + '</svg></i>'; }
+function ck5N(c) { return esHombreYo() ? c[1].replace(/^Agotada$/, 'Agotado').replace(/^Cansada$/, 'Cansado') : c[1]; }
 
 S.salud = S.salud || {};
 function salud(f) { return S.salud[f] || null; }
@@ -11621,9 +11639,9 @@ function iniCiclo() {
 function ckHoyCard() {
   var x = salud(hoyStr()) || {}, e = num(x.e);
   if (e != null) { var k = CK5.filter(function (c) { return c[0] >= e; })[0] || CK5[4];
-    return '<button class="card ck-hecho" data-a="ckAfinar"><span class="ck-p" style="background:' + k[2] + '"></span><span class="col"><b>Hoy te sientes: ' + k[1].toLowerCase() + '</b><small class="mut">' + esc([x.regla ? 'Con la regla' : '', (x.sint || []).map(function (s) { return SINT[s]; }).join(', '), x.sueno ? x.sueno + ' h de sueño' : ''].filter(Boolean).join(' · ') || 'Toca para añadir cómo has dormido o lo que notas') + '</small></span>' + ic('lapiz', 16) + '</button>'; }
+    return '<button class="card ck-hecho" data-a="ckAfinar">' + caraMood(k[0], 1, k[2]) + '<span class="col"><b>Hoy te sientes: ' + ck5N(k).toLowerCase() + '</b><small class="mut">' + esc([x.regla ? 'Con la regla' : '', (x.sint || []).map(function (s) { return SINT[s]; }).join(', '), x.sueno ? x.sueno + ' h de sueño' : ''].filter(Boolean).join(' · ') || 'Toca para añadir cómo has dormido o lo que notas') + '</small></span>' + ic('lapiz', 16) + '</button>'; }
   return '<section class="card ck-c"><div class="ck-h"><b>¿Qué mood tienes hoy?</b><small class="mut">Toca cómo estás y, si quieres, completa lo demás</small></div><div class="ck5">' +
-    CK5.map(function (c) { return '<button data-a="ckE" data-v="' + c[0] + '" aria-label="' + c[1] + '"><i style="--c:' + c[2] + '"></i><small>' + c[1] + '</small></button>'; }).join('') + '</div></section>';
+    CK5.map(function (c) { return '<button data-a="ckE" data-v="' + c[0] + '" aria-label="' + ck5N(c) + '">' + caraMood(c[0], 0, c[2]) + '<small>' + ck5N(c) + '</small></button>'; }).join('') + '</div></section>';
 }
 function pasosDia(f) { return num((salud(f) || {}).pasos) || 0; }
 function iniPasos(mini) {
@@ -11647,7 +11665,7 @@ A.ckE = function (el) { var f = hoyStr(), x = S.salud[f] = Object.assign({}, S.s
 A.ckAfinar = function () {
   var f = hoyStr(), x = salud(f) || {}, C = cicEstado();
   hoja('<h2>Hoy</h2><p class="mut sm">Cuanto más lo apuntes, mejor te digo cómo te sienta cada fase. Solo lo ves tú.</p>' +
-    '<b class="lab">¿Cómo te sientes?</b><div class="ck5 sm">' + CK5.map(function (c) { return '<button data-a="ckE2" data-v="' + c[0] + '" class="' + (num(x.e) === c[0] ? 'on' : '') + '"><i style="--c:' + c[2] + '"></i><small>' + c[1] + '</small></button>'; }).join('') + '</div>' +
+    '<b class="lab">¿Cómo te sientes?</b><div class="ck5 sm">' + CK5.map(function (c) { return '<button data-a="ckE2" data-v="' + c[0] + '" class="' + (num(x.e) === c[0] ? 'on' : '') + '">' + caraMood(c[0], num(x.e) === c[0], c[2]) + '<small>' + ck5N(c) + '</small></button>'; }).join('') + '</div>' +
     (C ? '<b class="lab">¿Tienes la regla hoy?</b><div class="seg2"><button class="' + (x.regla ? 'on' : '') + '" data-a="ckRegla" data-v="1">Sí</button><button class="' + (x.regla === false || (!x.regla && C.f !== 'menstrual') ? 'on' : '') + '" data-a="ckRegla" data-v="0">No</button></div>' : '') +
     '<b class="lab">¿Notas algo?</b><div class="chips">' + Object.keys(SINT).map(function (k) { var on = (x.sint || []).indexOf(k) >= 0; return '<button class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="ckSint" data-v="' + k + '">' + SINT[k] + '</button>'; }).join('') + '</div>' +
     '<b class="lab">¿Cuánto has dormido?</b><div class="chips">' + [5, 6, 7, 8, 9].map(function (h) { return '<button class="chip' + (num(x.sueno) === h ? ' on' : '') + '" data-a="ckSueno" data-v="' + h + '">' + (h === 5 ? '5 h o menos' : h === 9 ? '9 h o más' : h + ' h') + '</button>'; }).join('') + '</div>' +

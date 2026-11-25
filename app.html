@@ -4589,6 +4589,16 @@ button.pf-fe{cursor:pointer}
 .ck-rn i{position:relative;width:44px;height:44px;border-radius:50%;background:color-mix(in srgb,var(--c) 16%,#fff);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--c) 45%,#fff)}
 .ck-rn i:after{content:'';position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:16px;height:16px;border-radius:50%;background:var(--c)}
 .ck-rn small{font:700 11px/1.2 Plus Jakarta Sans,sans-serif;color:#6A6A70;text-align:center}
+/* v53.4.260: caras «Grafito con punto de color» */
+.cara-i{position:relative;display:flex!important;align-items:center;justify-content:center;width:36px!important;height:36px!important;flex:none;background:none!important;box-shadow:none!important;border-radius:50%;font-style:normal}
+.cara-i:after{display:none!important}
+.cara{width:100%;height:100%;fill:none;stroke:#3A3B42;stroke-width:1.25;stroke-linecap:round;stroke-linejoin:round;overflow:visible}.cara .f{fill:#3A3B42;stroke:none}.cara .o{stroke:#C9CBD3;fill:none}
+.cara-i.on .cara .o{fill:#0D0D10;stroke:#0D0D10}.cara-i.on .cara{stroke:#fff}.cara-i.on .cara .f{fill:#fff}
+.cara-i.on:before{content:"";position:absolute;right:-1px;bottom:-1px;width:10px;height:10px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff;z-index:1}
+:where(html[data-tema=oscuro]) .cara{stroke:#D6D7DD}:where(html[data-tema=oscuro]) .cara .f{fill:#D6D7DD}:where(html[data-tema=oscuro]) .cara .o{stroke:#4A4B52}
+:where(html[data-tema=oscuro]) .cara-i.on .cara .o{fill:#fff;stroke:#fff}:where(html[data-tema=oscuro]) .cara-i.on .cara{stroke:#0D0D10}:where(html[data-tema=oscuro]) .cara-i.on .cara .f{fill:#0D0D10}:where(html[data-tema=oscuro]) .cara-i.on:before{box-shadow:0 0 0 2px #1C1C1E}
+.ck-rn small{font-size:10.5px;font-weight:600;color:#8A8C96}.ck-rn button{gap:5px}
+
 .ck-rnota{display:flex;align-items:center;gap:7px;width:100%;margin-top:12px;padding:10px 0 0;border:0;border-top:1px solid #F0F0F3;background:none;font:700 13px Plus Jakarta Sans,sans-serif;color:#4A4A50;cursor:pointer;text-align:left}.ck-rnota .ic{width:15px;height:15px;margin:0}
 .escala.ck-col button{background:color-mix(in srgb,var(--c) 16%,#fff);border-color:transparent;color:#111}
 .escala.ck-col button.on{background:var(--c);color:#fff;box-shadow:0 0 0 2px #fff,0 0 0 3.5px var(--c)}
@@ -6069,7 +6079,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.259';
+var APP_V = 'v53.4.260';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9954,7 +9964,8 @@ function checkinCard(hoy){
   if(CL.ckQ!=null&&CL.ck.energia==null) CL.ck.energia=CL.ckQ;
   if(esH&&hecho&&!CL.ckEd){      // v38: ya hecho, en pequeño
     var mj=!hombreCl(), res=[mj&&e.regla?'Con el periodo':'',mj&&!vacio(e.dia_ciclo)?'Día '+e.dia_ciclo+' del ciclo':'',num(e.energia)!=null?'Energía '+e.energia+'/10':'',!vacio(e.sueno)?fN(e.sueno)+' h de sueño':'',mj&&e.premenstrual?'Síntomas premenstruales':'',(e.sintomas||[]).length?listaY((e.sintomas||[]).map(sintF)):''].filter(String).join(' · ');
-    return '<div class="card ck-min'+(vacio(e.sueno)?' ck-min2':'')+'" id="ck-card"><span class="ck-ok">'+ic('ok')+'</span><div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Qué mood tienes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button>'+(vacio(e.sueno)?ckSuenoHtml(e):'')+'</div>';
+    var kq=num(e.energia)!=null?CK_R.filter(function(x){ return x[0]>=num(e.energia); })[0]||CK_R[4]:null;
+    return '<div class="card ck-min'+(vacio(e.sueno)?' ck-min2':'')+'" id="ck-card">'+(kq?caraMood(kq[0],1,kq[1]):'<span class="ck-ok">'+ic('ok')+'</span>')+'<div class="ck-tx"><small class="ck-q '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'¿Qué mood tienes hoy?</small><b>Check-in de hoy hecho</b><small>'+esc(res||'Guardado')+'</small>'+(e.notas?'<small class="ck-nt">«'+esc(String(e.notas).slice(0,90))+(String(e.notas).length>90?'…':'')+'»</small>':'')+'</div><button class="btn sm sec" data-a="ckEditar">Editar</button>'+(vacio(e.sueno)?ckSuenoHtml(e):'')+'</div>';
   }
   return '<div class="card'+(esH?' ck-hoy':' ck-pasado')+'" id="ck-card">'+(esH?'<div class="ck-cab '+(hombreCl()?'ck-m':'ck-f')+'">'+icCk()+'<div><h2>¿Qué mood tienes hoy?</h2><small>Check-in de hoy · menos de un minuto'+(hecho?' · <span class="pill ok">Hecho</span>':'')+'</small></div>'+(CL.ckAb||CL.ckEd?'<button class="ck-x" data-a="ckCierra" aria-label="Cerrar">'+ic('abajo')+'</button>':'')+'</div>':'<div class="card-t">Check-in del '+esc(fLarga(hoy).toLowerCase())+' '+(hecho?'<span class="pill ok">Hecho</span>':'')+'</div>')+      // v52.3: el título fijo, encima del formulario (no un botón)
 
@@ -9973,6 +9984,14 @@ function checkinCard(hoy){
    (el periodo, el día del ciclo, los síntomas, el sueño, la energía del 1 al 10 para afinar y la nota) y se guarda como siempre */
 var CK_10=['#E5484D','#EC6A3A','#F08A24','#F2A62A','#F2C230','#C7C83A','#8CC448','#3DBE6A','#239A54','#147A43'];
 var CK_R=[[2,'#E5484D'],[4,'#F08A24'],[6,'#F2C230'],[8,'#3DBE6A'],[10,'#147A43']];
+/* v53.4.260 · 25 nov 2026, 16:19–16:27 (Javier: «¿podemos poner caras en vez de eso?… más elegantes y más pequeñas»; eligió «Grafito con punto de color»):
+   caras dibujadas (no emoji) en línea fina gris, con su círculo; la elegida, rellena en negro y con un punto de su color (rojo → verde) */
+var CARAS = { 2: '<path d="M8 10.6q1 .9 2 0M14 10.6q1 .9 2 0M9.3 16.4q2.7-2 5.4 0"/>',
+  4: '<path d="M8 10.7h2M14 10.7h2M9.4 15.6q1.3-.6 2.6 0t2.6 0"/>',
+  6: '<circle cx="9" cy="10.5" r=".85" class="f"/><circle cx="15" cy="10.5" r=".85" class="f"/><path d="M9.6 15.3h4.8"/>',
+  8: '<circle cx="9" cy="10.5" r=".85" class="f"/><circle cx="15" cy="10.5" r=".85" class="f"/><path d="M9.1 14.3q2.9 2.6 5.8 0"/>',
+  10: '<path d="M8 11q1-1.5 2 0M14 11q1-1.5 2 0M8.8 14h6.4q-.5 3.4-3.2 3.4T8.8 14z"/>' };
+function caraMood(v,on,c){ return '<i class="cara-i'+(on?' on':'')+'"'+(c?' style="--c:'+c+'"':'')+'><svg class="cara" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9.4" class="o"/>'+(CARAS[v]||CARAS[6])+'</svg></i>'; }
 function ckNiv(){ return [gCl('Agotada','Agotado'),gCl('Cansada','Cansado'),'Normal','A tope','Súper a tope']; }
 /* 23 nov, 13:21 (Chadín): «aparte de lo que está ahora en un clic, que puedas poner las horas de sueño con un clic también: menos de 5, 6, 7, 8, más de 9» */
 var CK_SU=[[5,'5 h o menos'],[6,'6 h'],[7,'7 h'],[8,'8 h'],[9,'9 h o más']];
@@ -9985,7 +10004,7 @@ A.ckSueno=function(el){
 function ckRapidoHtml(e){
   var N=ckNiv();
   return '<div class="card ck-rap" id="ck-card"><div class="ck-rh"><b>¿Qué mood tienes hoy?</b><small>'+(cicloOn()?'Toca cómo estás y, si quieres, completa lo demás':'Toca cómo estás y se guarda')+'</small></div>'+
-    '<div class="ck-rn">'+CK_R.map(function(x,i){ return '<button data-a="ckRapido" data-v="'+x[0]+'" style="--c:'+x[1]+'" aria-label="'+esc(N[i])+'"><i></i><small>'+esc(N[i])+'</small></button>'; }).join('')+'</div>'+
+    '<div class="ck-rn">'+CK_R.map(function(x,i){ return '<button data-a="ckRapido" data-v="'+x[0]+'" style="--c:'+x[1]+'" aria-label="'+esc(N[i])+'">'+caraMood(x[0])+'<small>'+esc(N[i])+'</small></button>'; }).join('')+'</div>'+
     ckSuenoHtml(e)+'<button class="ck-rnota" data-a="ckRapido" data-v="">'+ic('nota')+'Añadir una nota para '+esc(czCoach())+'</button></div>';
 }
 /* 22 nov, 20:19 (Chadín): «si no tiene ciclo menstrual, el “cómo te sientes” se rellena de un clic, no se le abre la otra vista»: sin ciclo (hombre
