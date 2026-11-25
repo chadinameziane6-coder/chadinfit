@@ -2971,6 +2971,13 @@ html[data-tema="oscuro"] .pd-op{background:#2C2C2E;border-color:#3A3A3E;color:#f
 html[data-tema="oscuro"] .pd-op.mo{background:none}
 html[data-tema="oscuro"] .pd-ch{background:color-mix(in srgb,var(--c) 22%,#1C1C1E)}
 html[data-tema="oscuro"] .pd-ch i,html[data-tema="oscuro"] .pd-op i{box-shadow:0 0 0 1px rgba(255,255,255,.28)}
+.pd-ch.arra{touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none}
+.pd-ch.arr{position:relative;z-index:5;box-shadow:0 14px 30px rgba(0,0,0,.22);cursor:grabbing}
+.pd-ch.dst{box-shadow:inset 0 0 0 2px var(--tx)}
+.pd-dr.dst .pd-cs{border-radius:12px;box-shadow:0 0 0 2px var(--tx3,#9A9CA5);background:rgba(0,0,0,.03)}
+.pd-dr.mov .pd-cs{animation:pdmov .7s ease}
+@keyframes pdmov{0%{transform:scale(.97);opacity:.4}60%{transform:scale(1.01);opacity:1}100%{transform:none}}
+@media (prefers-reduced-motion:reduce){.pd-dr.mov .pd-cs{animation:none}}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4082,7 +4089,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.66';
+var YO_V = 'yo-1.67';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -5555,7 +5562,7 @@ A.planDias = function (el) {
   pdPinta();
 };
 function pdChip(id, d, quitar) { var r = rutinaDe(id); if (!r) return ''; var c = rutCol(id);
-  return '<span class="pd-ch" style="--c:' + c + ';--b:' + c + '1A"><i>' + esc(rutIni(r)) + '</i><b>' + esc(r.nombre) + '</b>' + (quitar ? '<button class="pd-x" data-a="pdQuita" data-d="' + d + '" data-r="' + esc(id) + '" aria-label="Quitar ' + esc(r.nombre) + ' del ' + DIA_N[d].toLowerCase() + '">' + ic('x', 14, null, 2.4) + '</button>' : '') + '</span>'; }
+  return '<span class="pd-ch' + (quitar ? ' arra' : '') + '" data-d="' + d + '" data-r="' + esc(id) + '" style="--c:' + c + ';--b:' + c + '1A"><i>' + esc(rutIni(r)) + '</i><b>' + esc(r.nombre) + '</b>' + (quitar ? '<button class="pd-x" data-a="pdQuita" data-d="' + d + '" data-r="' + esc(id) + '" aria-label="Quitar ' + esc(r.nombre) + ' del ' + DIA_N[d].toLowerCase() + '">' + ic('x', 14, null, 2.4) + '</button>' : '') + '</span>'; }
 function pdOps(X, d) {
   var ya = diaIds(X.sem, X.s2, d), L = S.rutinas.filter(function (r) { return ya.indexOf(r.id) < 0; }).sort(function (a, b) { return (a.plan === X.pid && X.pid ? 0 : 1) - (b.plan === X.pid && X.pid ? 0 : 1) || ordenRut(a, b); });
   var r0 = ya.length ? rutinaDe(ya[0]) : null;
@@ -5565,9 +5572,9 @@ function pdOps(X, d) {
 }
 function pdPinta() {
   var X = S.x.pd, hoy = hoyLetra();
-  var h = '<h2>Cambiar días</h2><p class="mut sm pd-sub">Toca + para poner una rutina. Puedes poner dos el mismo día, por ejemplo estiramientos y fuerza.</p><div class="pd-w">' + DIAS7.map(function (d, i) {
+  var h = '<h2>Cambiar días</h2><p class="mut sm pd-sub">Toca + para poner una rutina (hasta dos el mismo día, por ejemplo estiramientos y fuerza). Para cambiarla de día, arrástrala.</p><div class="pd-w">' + DIAS7.map(function (d, i) {
     var ids = diaIds(X.sem, X.s2, d), ab = X.add === d;
-    return '<div class="pd-dr' + (ab ? ' ab' : '') + '" data-d="' + d + '"><span class="pd-dn' + (ids.length ? '' : ' off') + '">' + DCORTO[i] + (d === hoy ? '<small>Hoy</small>' : '') + '</span><div class="pd-cs">' + (ids.length ? ids.map(function (id) { return pdChip(id, d, true); }).join('') : '<span class="pd-des">Descanso</span>') + '</div>' +
+    return '<div class="pd-dr' + (ab ? ' ab' : '') + (X.mov && X.mov.indexOf(d) >= 0 ? ' mov' : '') + '" data-d="' + d + '"><span class="pd-dn' + (ids.length ? '' : ' off') + '">' + DCORTO[i] + (d === hoy ? '<small>Hoy</small>' : '') + '</span><div class="pd-cs">' + (ids.length ? ids.map(function (id) { return pdChip(id, d, true); }).join('') : '<span class="pd-des">Descanso</span>') + '</div>' +
       (ids.length < 2 || ab ? '<button class="pd-mas' + (ab ? ' on' : '') + '" data-a="pdMas" data-d="' + d + '" aria-expanded="' + ab + '" aria-label="' + (ab ? 'Cerrar' : 'Añadir una rutina el ' + DIA_N[d].toLowerCase()) + '">' + ic(ab ? 'x' : 'mas', 16, null, 2.4) + '</button>' : '<span class="pd-ll">2 de 2</span>') +
       (ab ? (ids.length < 2 ? pdOps(X, d) : '<div class="pd-add"><p>El ' + DIA_N[d].toLowerCase() + ' ya tiene dos. Quita una con × para poner otra.</p></div>') : '') + '</div>'; }).join('') + '</div>' +
     (X.nota ? '<p class="sm aviso-t pd-nota">' + ic('info', 15) + '<span>' + esc(X.nota) + '</span></p>' : '') +
@@ -5581,6 +5588,39 @@ A.pdMas = function (el) { var X = S.x.pd; if (!X) return; X.add = X.add === el.d
 A.pdPon = function (el) { var X = S.x.pd; if (!X) return; var d = el.dataset.d, fuera = diaPon(X.sem, X.s2, d, el.dataset.r), r = rutinaDe(el.dataset.r);
   X.add = ''; X.nota = fuera ? 'El ' + DIA_N[d].toLowerCase() + ' tenía «' + ((rutinaDe(fuera) || {}).nombre || '') + '»: ahora, «' + (r ? r.nombre : '') + '».' : ''; pdPinta(); };
 A.pdQuita = function (el) { var X = S.x.pd; if (!X) return; diaQuita(X.sem, X.s2, el.dataset.d, el.dataset.r); X.nota = ''; pdPinta(); };
+/* yo-1.67 · 25 nov 2026, 18:08 (Javier: «que se puedan mover arrastrando con el dedo, por si quieres cambiar el orden»): arrastras una rutina a otro día.
+   Encima de otra rutina, se cambian de sitio (también dentro del mismo día: cuál va primero). En un día con sitio, se pasa allí. Como «Ordena tu semana» */
+var PDY = null;
+function pdSlot(X, d, viejo, nuevo) { if (X.sem[d] === viejo) X.sem[d] = nuevo; else if (X.s2[d] === viejo) X.s2[d] = nuevo; }
+function pdMueve(X, d1, id1, d2, id2) {
+  var nom = function (id) { return ((rutinaDe(id) || {}).nombre || ''); }, A2 = diaIds(X.sem, X.s2, d2), A1 = diaIds(X.sem, X.s2, d1);
+  if (d1 === d2) { if (!id2 || id2 === id1) return ''; pdSlot(X, d1, id1, '#'); pdSlot(X, d1, id2, id1); pdSlot(X, d1, '#', id2); return '«' + nom(id1) + '» va primero el ' + DIA_N[d1].toLowerCase() + '.'; }
+  if (id2) { if (A2.indexOf(id1) >= 0 || A1.indexOf(id2) >= 0) return 'Ese día ya tiene «' + nom(A2.indexOf(id1) >= 0 ? id1 : id2) + '».';
+    pdSlot(X, d2, id2, id1); pdSlot(X, d1, id1, id2); return 'Cambiadas: «' + nom(id1) + '» el ' + DIA_N[d2].toLowerCase() + ' y «' + nom(id2) + '» el ' + DIA_N[d1].toLowerCase() + '.'; }
+  if (A2.indexOf(id1) >= 0) return 'Ese día ya tiene «' + nom(id1) + '».';
+  if (A2.length >= 2) return '';
+  diaQuita(X.sem, X.s2, d1, id1); diaPon(X.sem, X.s2, d2, id1); return '«' + nom(id1) + '» pasa al ' + DIA_N[d2].toLowerCase() + '.';
+}
+/* el destino: la fila del día bajo el dedo y, dentro, la rutina que tienes encima (en un día lleno, la más cercana) */
+function pdDestino(x, y) { var best = null;
+  [].forEach.call(document.querySelectorAll('#pd-box .pd-dr'), function (r) { var R = r.getBoundingClientRect(); if (y < R.top || y > R.bottom) return; best = { r: r, d: r.dataset.d, c: null };
+    var C = [].filter.call(r.querySelectorAll('.pd-ch'), function (c) { return !c.classList.contains('arr'); }), bd = 1e9;
+    C.forEach(function (c) { var Q = c.getBoundingClientRect(), dd = y < Q.top ? Q.top - y : y > Q.bottom ? y - Q.bottom : 0; if (dd < bd) { bd = dd; best.c = c; } });
+    if (best.c && bd > 0 && C.length + (PDY && PDY.d === best.d ? 1 : 0) < 2) best.c = null; });
+  return best; }
+function pdMarca(t) { [].forEach.call(document.querySelectorAll('#pd-box .dst'), function (e) { e.classList.remove('dst'); }); if (!t) return; if (t.c) t.c.classList.add('dst'); else t.r.classList.add('dst'); }
+document.addEventListener('pointerdown', function (ev) { var c = ev.target && ev.target.closest && ev.target.closest('#pd-box .pd-ch.arra'); if (!c || ev.target.closest('.pd-x') || (ev.button && ev.button !== 0)) return;
+  PDY = { c: c, d: c.dataset.d, id: c.dataset.r, x0: ev.clientX, y0: ev.clientY, act: false, pid: ev.pointerId, t: null }; });
+document.addEventListener('pointermove', function (ev) { var o = PDY; if (!o || ev.pointerId !== o.pid) return; var dx = ev.clientX - o.x0, dy = ev.clientY - o.y0;
+  if (!o.act) { if (Math.abs(dy) < 6 && Math.abs(dx) < 6) return; o.act = true; o.c.classList.add('arr'); document.body.classList.add('ord-on'); try { o.c.setPointerCapture(ev.pointerId); } catch (e) { } }
+  var sc = o.c.closest('.hoja-c'); if (sc) { var R = sc.getBoundingClientRect(); if (ev.clientY < R.top + 50) sc.scrollTop -= 8; else if (ev.clientY > R.bottom - 50) sc.scrollTop += 8; }
+  o.c.style.transition = 'none'; o.c.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(1.03)';
+  o.t = pdDestino(ev.clientX, ev.clientY); if (o.t && o.t.d === o.d && !o.t.c) o.t = null; pdMarca(o.t);
+  if (ev.cancelable) ev.preventDefault(); }, { passive: false });
+function pdFin(ev, ok) { var o = PDY; if (!o || (ev && ev.pointerId !== o.pid)) return; PDY = null; document.body.classList.remove('ord-on'); pdMarca(null); if (!o.act) return;
+  var X = S.x.pd, t = o.t; if (!ok || !X || !t) { o.c.classList.remove('arr'); o.c.style.transition = 'transform .2s cubic-bezier(.2,.8,.2,1)'; o.c.style.transform = ''; return; }
+  X.nota = pdMueve(X, o.d, o.id, t.d, t.c ? t.c.dataset.r : null) || ''; X.add = ''; X.mov = [t.d, o.d]; pdPinta(); X.mov = null; try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { } }
+document.addEventListener('pointerup', function (ev) { pdFin(ev, true); }); document.addEventListener('pointercancel', function (ev) { pdFin(ev, false); });
 A.pdVolver = function () { if (!S.x.pd) return A.planDias({ dataset: { v: '', d: S.x.semD || '' } }); hoja('<div id="pd-box"></div>'); pdPinta(); };
 A.planDiasSi = function () { var X = S.x.pd; if (!X) return cerrarHoja(); S.perfil.semana = X.sem; S.perfil.semana2 = sem2Limpia(X.s2); guardaPerfil(); S.x.pd = null; cerrarHoja(); toast('Días cambiados', 'ok'); pintar(); };
 A.abPlan = function (el) { S.x.abPlan = S.x.abPlan === el.dataset.v ? '' : el.dataset.v; pintar(); };
