@@ -3033,6 +3033,16 @@ html[data-tema="oscuro"] .cp-o.on .cp-k .ic{color:#000}
 .mr-cin .g-acc{justify-content:space-between;gap:8px;padding:10px 4px 8px}
 .mr-cin .g-acc .link{white-space:nowrap;font-size:13px}
 
+/* yo-1.71 · 25 nov 2026 (opción A de Entreno → Rutinas): iconos en círculo negro; el degradado azul hielo-lila, solo en Mi semana y en tus rutinas de
+   estiramientos o movilidad. En oscuro, el círculo pasa a blanco (--neg) */
+.mis-pl .mis-sem .li-ic{width:40px;height:40px;border-radius:50%}
+.mis-pl .mis-sem .li-ic.c1{background:var(--neg);color:var(--neg-t)}
+.mis-pl .mis-sem .li-ic.c2{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F}
+.mr-l .mr-th.mr-ic{width:46px;height:46px;border-radius:50%;background:var(--neg);color:var(--neg-t)}
+.mr-l .mr-th.mr-ic.c2{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F}
+.mr-g{font-size:12.5px;font-weight:800;color:var(--tx)}
+.lista-rut.mr-l{padding:4px 14px}.mr-l>.fila-r2:first-child{border-top:0}
+
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
 <body>
@@ -4143,7 +4153,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.70';
+var YO_V = 'yo-1.71';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -5511,7 +5521,9 @@ A.sub = function (el) { S.sub = el.dataset.v; if (el.dataset.v === 'progreso' &&
 /* 21 nov, 10:58 (Chadín: «aquí destacaría mi rutina con algún color o algo»): tus rutinas, más a la vista. 'foto': con una foto, como los programas;
    'negro': la tarjeta en negro. En borrador (MR21) hasta que elija; en las demos sale 'foto' (se cambia con window.MR21_DEMO). */
 var MR21 = '';
-function mr21() { return window.MR21_DEMO || MR21 || (rpBorr() ? 'foto' : ''); }
+/* yo-1.71 · 25 nov 2026, 19:48 (Javier: «elijo este diseño», la opción A): lista clara para todas. Las tuyas, sin foto: un círculo negro con el
+   icono de lo que es (pesa, carrera o estirar) y, solo en las de estiramientos o movilidad, el degradado azul hielo-lila; las de MOOD ON, con su foto */
+function mr21() { return window.MR21_DEMO || MR21 || 'lista'; }
 function filaRutFoto(r) {
   var dias = diasDeRut(r.id).map(function (d) { return DIA_N[d].toLowerCase(); });
   return '<div class="mr-fc"><img src="' + imgDe(r.id, r.nombre) + '" alt="" loading="lazy" decoding="async"><button class="mr-fo" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
@@ -5519,7 +5531,7 @@ function filaRutFoto(r) {
 }
 function filaRut(r, sangria, tag) {
   var dias = diasDeRut(r.id).map(function (d) { return DIA_N[d].toLowerCase(); });
-  return '<div class="fila-r2' + (sangria ? ' sang' : ' mr-f') + '">' + (sangria ? '' : rutPropia(r) ? '<span class="mr-th mr-ic">' + ic('pesa', 22) + '</span>' : '<span class="mr-th"><img src="' + imgRut(r) + '" alt="" loading="lazy" decoding="async"></span>') + '<button class="fr-t" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + (tag && !rutPropia(r) ? '<span class="mr-tg">MOOD ON</span>' : '') + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
+  return '<div class="fila-r2' + (sangria ? ' sang' : ' mr-f') + '">' + (sangria ? '' : rutPropia(r) ? '<span class="mr-th mr-ic' + (rutIco(r) === 'estirar' ? ' c2' : '') + '">' + ic(rutIco(r), 22) + '</span>' : '<span class="mr-th"><img src="' + imgRut(r) + '" alt="" loading="lazy" decoding="async"></span>') + '<button class="fr-t" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + (tag && !rutPropia(r) ? '<span class="mr-tg">MOOD ON</span>' : '') + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
     '<button class="redondo ' + (sangria ? 'gris' : 'mr-play') + '" data-a="empezarRut" data-id="' + r.id + '" aria-label="Empezar ' + esc(r.nombre) + '">' + ic('play', 15) + '</button></div>';
 }
 /* ===== Semana a semana de un programa (17 nov, Javier: «los programas ya no salen por semanas… ¿qué ocurre con la progresión?»; maqueta aprobada)
@@ -5574,8 +5586,8 @@ function aplicaDescarga(r, ej) {
 function vMisRutinas() {
   /* 20 nov (Chadín: «esto lo quitaría, porque puedes verlo tanto en Inicio como en Progreso»): sin «Esta semana»; queda la entrada a «Mi semana» */
   /* 25 nov (reorganización): tu plan, en un sitio: Mi semana y Rehacer mi plan (antes en Perfil) */
-  var h = '<section class="card mis-pl"><button class="enlace mis-sem" data-a="semana"><span class="li-ic">' + ic('cal', 20) + '</span><span><b>Mi semana</b><small class="mut">Qué rutina toca cada día</small></span>' + ic('sig', 18) + '</button>' +
-    '<button class="enlace mis-sem" data-a="pedirPlan"><span class="li-ic">' + ic('diana', 20) + '</span><span><b>Rehacer mi plan</b><small class="mut">Vuelve a responder las preguntas</small></span>' + ic('sig', 18) + '</button></section>';
+  var h = '<section class="card mis-pl"><button class="enlace mis-sem" data-a="semana"><span class="li-ic c2">' + ic('cal', 20) + '</span><span><b>Mi semana</b><small class="mut">Qué rutina toca cada día</small></span>' + ic('sig', 18) + '</button>' +
+    '<button class="enlace mis-sem" data-a="pedirPlan"><span class="li-ic c1">' + ic('diana', 20) + '</span><span><b>Rehacer mi plan</b><small class="mut">Vuelve a responder las preguntas</small></span>' + ic('sig', 18) + '</button></section>';
   var grupos = {}, orden = [], sueltas = [];
   S.rutinas.slice().sort(ordenRut).forEach(function (r) { if (r.plan) { if (!grupos[r.plan]) { grupos[r.plan] = []; orden.push(r.plan); } grupos[r.plan].push(r); } else sueltas.push(r); });
   if (!S.rutinas.length) return h + '<section class="card lista-rut"><b class="card-tt">Mis rutinas</b><p class="mut sm">Todavía no tienes rutinas. Crea la tuya, empieza un programa o pide un plan.</p><div class="fila2"><button class="btn sec" data-a="pedirPlan">Pedir un plan</button><button class="btn sec" data-a="sub" data-v="programas">Ver programas</button></div></section>';
@@ -6275,9 +6287,14 @@ function imgPicker(evita) { var uso = {}, ev = {}; (evita || []).forEach(functio
   return function (tit, id, mat, lug) { var c = imgElige(imgTemas(tit, mat, lug), id, uso, ev); ev[c] = 1; return IMG_F + c + '.webp'; }; }
 /* la foto de una rutina de Mis rutinas: la de su programa o rutina suelta si viene de uno; si no, la del tema de su nombre */
 /* 19 nov (Chadín: «¿por qué mis rutinas que creo yo me salen con imágenes?»): las tuyas, sin foto; las de los programas, con la suya */
-function rutPropia(r) { return !r.suelta && !r.plan && !r.planNom; }
+/* yo-1.71 · 25 nov 2026, 19:48 (Javier eligió la opción A): una rutina de MOOD ON guardada sin la marca de dónde viene («HIIT · 20/10 en dos bloques»,
+   «Rutina tirada larga suave»…) salía en «Creadas por ti». Ahora se reconoce por el nombre (solo para mostrarla; no se cambian sus datos) */
+var RS_NOM = null;
+function rsPorNombre(r) { if (!RS_NOM) { RS_NOM = {}; RSUELTAS.forEach(function (x) { RS_NOM[clave(x.n)] = x; }); } return RS_NOM[clave(r && r.nombre)] || null; }
+function rutPropia(r) { return !r.suelta && !r.plan && !r.planNom && !rsPorNombre(r); }
 function imgRut(r) {
   if (r.suelta) return imgDe(r.suelta, r.nombre, 1);
+  var rs = !r.plan && rsPorNombre(r); if (rs) return imgDe(rs.id, r.nombre, 1);      // yo-1.71: la de MOOD ON reconocida por el nombre, con su foto
   var pl = r.plan ? progDe(r.plan) : null; if (pl && pl.prog) return imgDe(pl.prog, r.planNom || r.nombre);
   var nom = clave(r.planNom || ''), p = nom && (PROG_FIJOS.filter(function (x) { return clave(x.n) === nom; })[0] || PROGRAMAS.filter(function (x) { return clave(x.n) === nom; })[0] || (typeof RUN_PROG !== 'undefined' ? RUN_PROG.filter(function (x) { return clave(x.n) === nom; })[0] : null));
   if (p) return imgDe(p.id, p.n);
