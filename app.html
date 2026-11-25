@@ -6032,6 +6032,32 @@ body:has(.ecb2) main.wrap{padding-bottom:170px}
 .semc .z2-st{display:flex;gap:14px;margin:6px 2px 0;padding-top:8px;border-top:1px solid #F0F0F3}.semc .z2-st .z2-sd{flex:1;flex-direction:row;align-items:center;gap:8px;background:none;padding:0;border-radius:0;min-width:0}
 .semc .z2-st .z2-sd small{font-size:11.5px}.semc .z2-st .z2-sd b{font-size:13.5px;margin:0;white-space:nowrap}.semc .z2-st .z2-sd b span{font-size:11px}.semc .z2-st .z2-sd i{flex:1;height:4px;min-width:20px}
 :where(html[data-tema=oscuro]) .semc .z2-st{border-top-color:#2C2C2E}:where(html[data-tema=oscuro]) .sem-n .cz-mb.sem-ob2{background:#fff;border-color:#fff;color:#000}
+/* v53.4.265 · movilidad del entreno, más pequeña (Javier) */
+.ses .mvc{padding:12px 12px 10px;border-radius:18px;margin:6px 0 10px}
+.ses .mvc-pill{font-size:11px;padding:5px 10px}
+.ses .mvc-r{font-size:12.5px;padding:5px 10px;gap:5px}
+.ses .mvc-r .ic{width:14px;height:14px}
+.ses .mvc .esp-x.mvc-x{margin:10px 0 10px;color:inherit;font-size:inherit}
+.ses .mvc-l::before{left:13px;top:24px;bottom:24px}
+.ses .mvp{gap:8px}
+.ses .mvp+.mvp{margin-top:6px}
+.ses .mvp-n{width:28px;height:28px;font-size:11px}
+.ses .mvp-n .ic{width:13px;height:13px}
+.ses .mvp-c,.ses .mvs{padding:8px;border-radius:14px}
+.ses .mvs{margin:6px 0}
+.ses .mvp-c .mvp-f,.ses .mvs .mvp-f{gap:10px}
+.ses .mvp-th{width:40px;height:40px;border-radius:10px}
+.ses .mvp-th img{border-radius:10px}
+.ses .mvp-th .ex-li{width:24px;height:24px}
+.ses .mvp-th i{width:18px;height:18px;right:-4px;bottom:-4px}
+.ses .mvp-th i .ic{width:8px;height:8px}
+.ses .mvp-t b{font-size:13.5px;line-height:1.25}
+.ses .mvp-ch{font-size:11.5px;padding:2px 8px;margin-top:4px}
+.ses .mvp-co{font-size:11.5px;margin-top:4px}
+.ses .mvp-k{width:36px;height:36px}
+.ses .mvp-k .ic{width:16px;height:16px}
+.ses .mvp-nb{font-size:11.5px;padding:4px 0 0 50px}
+.ses .mvp-nt{margin-left:50px;width:calc(100% - 50px);font-size:13px}
 </style>
 </head>
 <body>
@@ -6093,7 +6119,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.264';
+var APP_V = 'v53.4.265';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -7179,6 +7205,9 @@ function runBl(r,d,du,p,rec,rt){ return {r:r||'1',d:d||'',du:du||'',p:p||'',rec:
 var RUN_PLANT={rodaje:{bl:[runBl('1','8 km','','6:00')]},larga:{bl:[runBl('1','14 km','','6:15')]},series:{ca:'15',vc:'10',bl:[runBl('6','800 m','','4:50','2:00','trotando')]},
   fartlek:{ca:'10',vc:'10',bl:[runBl('8','','2 min','5:00','1:00','trotando')]},cuestas:{ca:'15',vc:'10',bl:[runBl('8','','45 s','','1:30','caminando')]},
   test:{ca:'15',vc:'10',bl:[runBl('1','5 km')]},compe:{bl:[runBl('1','10 km')]}};
+/* v53.4.265: zonas de carrera Z0-Z6 (las de Javier). «Zona 1» o «Z1» se lee con su nombre; lo demás (140-150) sigue como FC */
+var RUN_ZN=['regenerativo','suave','moderado','fuerte','muy fuerte','máximo','sprint'];
+function runZTxt(fc){ var m=String(fc||'').match(/^\s*(?:zona|z)\s*([0-6])\b(.*)$/i); return m?'Zona '+m[1]+' ('+RUN_ZN[+m[1]]+')'+m[2]:'FC '+fc; }
 function runVacio(){ var t=RUN_PLANT.rodaje; return {n:'',tipo:'run',st:'rodaje',ro:'suave',ca:'',vc:'',bl:copia(t.bl),rpe:'',fc:'',nota:'',video:''}; }
 /* competición: el ritmo objetivo sale del tiempo objetivo y la distancia */
 function runCompeP(e){ var b=e.bl[0]||(e.bl[0]=runBl()), d=runM(b.d), t=runS(e.ot,'min'); b.r='1'; b.du=''; b.rec=''; b.rt=''; b.p=d&&t?runT(Math.round(t/(d/1000))):''; }
@@ -7265,7 +7294,7 @@ function runCard(e,i,lab){
     h+='<div class="rn-bs" id="rbs-'+i+'-'+bi+'">'+esc(runBlSumTxt(e,bi))+'</div></div>';      // v52.17: media, velocidad y frente al objetivo
   });
   if(e.vc) h+='<div class="rn-fase">'+ic('reloj')+'<span><b>Vuelta a la calma</b> · '+esc(e.vc)+' min</span></div>';
-  if(e.rpe||e.fc) h+='<div class="nota">'+esc(['Esfuerzo objetivo: RPE '+e.rpe,e.fc?'FC '+e.fc:''].filter(function(x){ return x&&x!=='Esfuerzo objetivo: RPE '; }).join(' · '))+'</div>';
+  if(e.rpe||e.fc) h+='<div class="nota">'+esc(['Esfuerzo objetivo: RPE '+e.rpe,e.fc?runZTxt(e.fc):''].filter(function(x){ return x&&x!=='Esfuerzo objetivo: RPE '; }).join(' · '))+'</div>';
   h+='<div class="rn-tot">'+(uno?'':'<div class="lab">Total de la sesión <span class="muted">(lo que marca tu reloj, opcional)</span></div><div class="rn-tg">'+
     '<label class="f">Distancia (km)<input'+at+' data-rto="km" inputmode="decimal" placeholder="8,2" value="'+esc(t.km||'')+'"></label>'+
     '<label class="f">Tiempo<input'+at+' data-rto="t" inputmode="text" placeholder="h:mm:ss" value="'+esc(t.t||'')+'"></label>'+
@@ -7632,7 +7661,7 @@ function runEd(e,ri,ei,lab){
   else h+='<div class="lab">'+(e.bl.length>1?'Bloques':'Bloque principal')+'</div>'+e.bl.map(function(b,j){
       return '<div class="rn-bed">'+(e.bl.length>1?'<div class="rn-bed-t"><b>Bloque '+(j+1)+'</b><button class="link danger" data-a="runDelBl"'+at+' data-rb="'+j+'">Quitar</button></div>':'')+cBl(j,['r','d','du','p','rec','rt'])+'</div>'; }).join('')+
     '<button class="link" data-a="runAddBl"'+at+'>+ Otro bloque</button>';
-  if(st!=='test'&&st!=='compe') h+='<div class="grid2"><label class="f">RPE objetivo (0-10)<input'+at+' data-k="rpe" inputmode="numeric" value="'+esc(e.rpe||'')+'" placeholder="Opcional"></label><label class="f">FC objetivo<input'+at+' data-k="fc" value="'+esc(e.fc||'')+'" placeholder="Opcional: Z2, 140-150…"></label></div>';
+  if(st!=='test'&&st!=='compe') h+='<div class="grid2"><label class="f">RPE objetivo (0-10)<input'+at+' data-k="rpe" inputmode="numeric" value="'+esc(e.rpe||'')+'" placeholder="Opcional"></label><label class="f">FC objetivo<input'+at+' data-k="fc" value="'+esc(e.fc||'')+'" placeholder="Opcional: Zona 1, 140-150…"></label></div>';
   return h+'<label class="f">Nombre que verá '+cG('ella','él')+' <span class="muted">(opcional)</span><input'+at+' data-k="n" value="'+esc(e.n||'')+'" placeholder="Si lo dejas vacío: «'+esc(runNombre(e))+'»"></label>'+
     '<div class="muted sm rn-ay">Déjalo vacío y verá «'+esc(runNombre(e))+'». Escribe uno solo si quieres llamarlo de otra forma.</div>'+
     '<label class="f">Indicaciones para '+cG('ella','él')+' <span class="muted">(opcional)</span><input'+at+' data-k="nota" value="'+esc(e.nota||'')+'" placeholder="Por ejemplo: en cinta al 1 %, terreno llano, sin mirar el reloj…"></label>'+
@@ -10377,7 +10406,7 @@ function pintarEntreno(){
     if(!dr.blq||!BQ.some(function(b){ return b.k===dr.blq; })){ var pend=BQ.filter(function(b){ return !b.hecho; })[0]; dr.blq=(pend||BQ[0]).k; }
     if(!dr.edit) uAbierta();
     BQ.forEach(function(b){
-      h+='<section class="blq blq-'+b.k+(dr.blq===b.k?' on':'')+(b.hecho?' hecho':'')+'" id="blq-'+b.k+'"><button class="blq-h" data-a="blqTog" data-k="'+b.k+'" aria-expanded="'+(dr.blq===b.k)+'"><span class="blq-i">'+ic(BLQ[b.k][1])+'</span><span class="blq-t"><b>'+BLQ[b.k][0]+'</b><small id="blq-s-'+b.k+'">'+blqSub(b)+'</small></span><span class="blq-ok">'+ic('okc')+'</span>'+ic('flecha','blq-ch')+'</button><div class="blq-b">'+(b.k==='mov'?'<p class="blq-ex">Prepara el cuerpo antes de empezar. No cuenta como series de trabajo.</p>':'')+
+      h+='<section class="blq blq-'+b.k+(dr.blq===b.k?' on':'')+(b.hecho?' hecho':'')+'" id="blq-'+b.k+'"><button class="blq-h" data-a="blqTog" data-k="'+b.k+'" aria-expanded="'+(dr.blq===b.k)+'"><span class="blq-i">'+ic(BLQ[b.k][1])+'</span><span class="blq-t"><b>'+BLQ[b.k][0]+'</b><small id="blq-s-'+b.k+'">'+blqSub(b)+'</small></span><span class="blq-ok">'+ic('okc')+'</span>'+ic('flecha','blq-ch')+'</button><div class="blq-b">'+
         (b.k==='mov'&&!dr.edit?movHtml(b.ii,G,L):filaUnidades(b.ii,G,L))+(lib&&b.k==='pri'?addB:'')+'</div></section>';
     });
     if(lib&&!BQ.some(function(b){ return b.k==='pri'; })) h+=addB;
@@ -10558,8 +10587,9 @@ function mvCoach(e){ return e.nota?'<span class="mvp-co">'+esc(String(e.nota).sl
 function mvGrupoHtml(g,L){
   var dr=CL.dr, R=mvRondas(g), act=-1, hecho=true, k;
   for(k=g.ini;k<=g.fin;k++) if(!ejHecho(dr.ej[k])){ hecho=false; if(act<0) act=k; }
-  var x='Haz '+(g.n===2?'los 2':'los '+g.n)+' seguidos, sin descanso'+(R>1?', y repítelo <b>'+R+' veces</b>. Marca ✓ cuando acabes las '+R+' rondas de cada uno.':'. Marca ✓ al acabar cada uno.');
-  var h='<div class="mvc'+(hecho?' mv-ok':'')+'" id="mvg-'+g.ini+'"><div class="mvc-h"><span class="mvc-pill">'+esc(g.label)+' '+g.letra+'</span><span class="mvc-r">'+ic('reinicio')+R+(R===1?' ronda':' rondas')+'</span></div><p class="mvc-x">'+x+'</p><ol class="mvc-l">';
+  /* v53.4.265 (Javier: «en el mismo formato que lo de top set»): las indicaciones, en las cajitas grises de las series especiales */
+  var x='<div class="esp-x mvc-x"><p>'+ic('chispa')+'<span>Haz '+(g.n===2?'los 2':'los '+g.n)+' seguidos, sin descanso'+(R>1?', y repítelo <b>'+R+' veces</b>.':'.')+'</span></p></div>';      // Javier: «Marca ✓…» fuera, «es obvio»
+  var h='<div class="mvc'+(hecho?' mv-ok':'')+'" id="mvg-'+g.ini+'"><div class="mvc-h"><span class="mvc-pill">'+esc(g.label)+' '+g.letra+'</span><span class="mvc-r">'+ic('reinicio')+R+(R===1?' ronda':' rondas')+'</span></div>'+x+'<ol class="mvc-l">';
   for(k=g.ini;k<=g.fin;k++){
     var e=dr.ej[k], ok=ejHecho(e), st=(e.sets||[])[0];
     h+='<li class="mvp'+(ok?' ok':'')+(k===act?' act':'')+'" id="ex-'+k+'"><span class="mvp-n">'+(ok?ic('ok'):esc(L[k]))+'</span><div class="mvp-c"><div class="mvp-f">'+mvTh(e,k)+
@@ -28211,17 +28241,17 @@ function plnCardioEj(P,cand,ctx,tipo){      // tipo: 'suave', 'hiit' o 'fin' (al
 }
 /* v53.4.122 · carrera (Javier: «2 días de fuerza y 3 de carrera: un día en zona 2, intensidad moderada-baja, y otro de HIIT o series») */
 var PLN_RUNSEQ={1:['z2'],2:['z2','series'],3:['z2','series','larga'],4:['z2','series','recup','larga']};
-var PLN_RUNN={z2:['Rodaje suave','Rodaje','Zona 2'],series:['Series','Series','Intensidad alta'],larga:['Tirada larga','Larga','Zona 2, más largo'],recup:['Rodaje de recuperación','Recup.','Muy suave']};
+var PLN_RUNN={z2:['Rodaje suave','Rodaje','Zona 1'],series:['Series','Series','Zona 3'],larga:['Tirada larga','Larga','Zona 1, más largo'],recup:['Rodaje de recuperación','Recup.','Zona 0']};      // v53.4.265: zonas Z0-Z6 (la clave z2 se queda por compatibilidad)
 function plnRunEj(t,P){
   var ini=P.niv==='ini', ava=P.niv==='ava', e={n:'',tipo:'run',st:'rodaje',ro:'suave',ca:'',vc:'',bl:[],rpe:'',fc:'',nota:'',video:'',_p:{run:t,k:'run-'+t}};
-  if(t==='z2'){ e.n='Rodaje suave (zona 2)'; e.bl=[runBl('1','',ini?'25 min':ava?'45 min':'35 min')]; e.rpe='3-4'; e.fc='Zona 2'; e.nota=ini?'A un ritmo en el que puedas hablar. Si no aguantas seguido, alterna 3 min corriendo y 1 caminando.':'A un ritmo en el que puedas hablar (zona 2).'; }
-  else if(t==='series'){ e.st=ini?'fartlek':'series'; delete e.ro; e.n=ini?'Fartlek suave':'Series'; e.ca='10'; e.vc='5'; e.bl=[ini?runBl('6','','1 min','','2:00','caminando'):ava?runBl('6','','3 min','','2:00','trotando'):runBl('6','','2 min','','1:30','trotando')]; e.rpe=ini?'6':'8'; e.nota=ini?'1 min a ritmo alegre y 2 caminando.':'Fuerte pero controlado: la última, igual de rápida que la primera.'; }
-  else if(t==='larga'){ e.st='larga'; delete e.ro; e.n='Tirada larga'; e.bl=[runBl('1','',ini?'35 min':ava?'75 min':'55 min')]; e.rpe='3-4'; e.fc='Zona 2'; e.nota='Suave y más larga: cuenta el tiempo, no el ritmo.'; }
-  else { e.ro='recup'; e.n='Rodaje de recuperación'; e.bl=[runBl('1','','25 min')]; e.rpe='2-3'; e.nota='Muy suave, para soltar piernas.'; }
+  if(t==='z2'){ e.n='Rodaje suave (Z1)'; e.bl=[runBl('1','',ini?'25 min':ava?'45 min':'35 min')]; e.rpe='3-4'; e.fc='Zona 1'; e.nota=ini?'A un ritmo en el que puedas hablar. Si no aguantas seguido, alterna 3 min corriendo y 1 caminando.':'A un ritmo en el que puedas hablar (Z1).'; }
+  else if(t==='series'){ e.st=ini?'fartlek':'series'; delete e.ro; e.n=ini?'Fartlek suave':'Series'; e.ca='10'; e.vc='5'; e.bl=[ini?runBl('6','','1 min','','2:00','caminando'):ava?runBl('6','','3 min','','2:00','trotando'):runBl('6','','2 min','','1:30','trotando')]; e.rpe=ini?'5-6':'7-8'; e.fc=ini?'Zona 2':'Zona 3'; e.nota=ini?'1 min a ritmo alegre (Z2, frases cortas) y 2 caminando.':'Fuerte pero controlado (Z3): la última, igual de rápida que la primera.'; }
+  else if(t==='larga'){ e.st='larga'; delete e.ro; e.n='Tirada larga'; e.bl=[runBl('1','',ini?'35 min':ava?'75 min':'55 min')]; e.rpe='3-4'; e.fc='Zona 1'; e.nota='Suave (Z1) y más larga: cuenta el tiempo, no el ritmo.'; }
+  else { e.ro='recup'; e.n='Rodaje de recuperación'; e.bl=[runBl('1','','25 min')]; e.rpe='1-2'; e.fc='Zona 0'; e.nota='Muy suave (Z0), para soltar piernas.'; }
   return e;
 }
 function plnRunSes(i,t,P,cand,ctx){
-  var N=PLN_RUNN[t], s={key:'run'+i,nombre:'Carrera · '+N[0].toLowerCase(),corto:N[1],foco:N[2],z:'cv',run:1,ej:[]}, us={};
+  var N=PLN_RUNN[t], s={key:'run'+i,nombre:'Carrera · '+N[0].toLowerCase(),corto:N[1],foco:t==='series'&&P.niv==='ini'?'Zona 2':N[2],z:'cv',run:1,ej:[]}, us={};
   ['tobillo','cadera'].forEach(function(z){ var L=cand.filter(function(x){ return (x.g==='Movilidad'||x.mod==='movilidad')&&zonasDe(x.zona).indexOf(z)>=0&&!us[x.k]&&!plnEvita(x,P); });
     L.sort(function(a,b){ return plnHash(ctx.seed+b.k+i)-plnHash(ctx.seed+a.k+i); }); var x=L[0]; if(!x) return; us[x.k]=1;
     var hold=/estir|manten|sosten|isometr|respira/.test(x.k), e={n:x.n,tipo:'fuerza',d:'0',nota:'',sets:[{t:'normal',r:hold?'30':'8-10',rir:'',kg:''}],_p:{k:x.k,mov:1,zona:z,spec:'mov:'+z}}; if(hold) e.u='s'; s.ej.push(e); });
@@ -28460,7 +28490,7 @@ function plnChecks(D,P){
   var pg=plnPrioG(P).map(function(x){ return [x,true]; }).concat(D.banco?[]:PLN_PRIO.filter(function(x){ return (P.prio||[]).indexOf(x[0])<0&&P.serP&&num(P.serP[x[0]]); }).map(function(x){ return [x,false]; }));
   if(pg.length){ var falta=false, PG=pg.map(function(z){ var x=z[0], n=G[x[2]]||0, meta=z[1]?plnMetaG(P,x[0]):num(P.serP[x[0]]), mal=Math.abs(n-meta)>2&&!(z[1]&&!num(P.serP[x[0]])&&n>=meta); if(mal) falta=true; return [x[1]+(z[1]?' (prioridad)':''),n,meta,mal]; });
     C.push({t:falta?'warn':'ok',tit:'Series a la semana de lo que pides',x:falta?'Donde no llega, no cabe más en sus sesiones: sube el tiempo por sesión o los días.':'',pg:PG}); }
-  var RN=R.filter(function(r){ return r.run; }); if(RN.length) C.push({t:'ok',tit:RN.length+(RN.length>1?' días':' día')+' de carrera',x:listaY(RN.map(function(r){ return r.foco==='Zona 2'?'rodaje suave en zona 2':r.nombre.replace(/^Carrera · /,''); }))+'; nunca dos días fuertes seguidos.'});
+  var RN=R.filter(function(r){ return r.run; }); if(RN.length) C.push({t:'ok',tit:RN.length+(RN.length>1?' días':' día')+' de carrera',x:listaY(RN.map(function(r){ return r.foco==='Zona 1'?'rodaje suave en Z1':r.nombre.replace(/^Carrera · /,''); }))+'; nunca dos días fuertes seguidos.'});
   var cv=R.filter(function(r){ return r.z==='cv'&&!r.run; }).reduce(function(a,r){ return a+r.dias.length; },0), fins=R.filter(function(r){ return r.ejercicios.some(function(e){ return e._p&&e._p.fin; }); }).length;
   if(cv||fins) C.push({t:'ok',tit:'Cardio',x:(cv?cv+(cv>1?' días':' día')+' de cardio'+(fins?' y ':''):'')+(fins?'cardio al acabar en '+fins+(fins>1?' sesiones':' sesión'):'')+' a la semana.'});
   var LES_EN={rodilla:'la rodilla',hombro:'el hombro',lumbar:'la zona lumbar',cadera:'la cadera',muneca:'la muñeca',tobillo:'el tobillo',cuello:'el cuello'};
@@ -28489,7 +28519,7 @@ function plnPorque(D,P){
   L.push('Nivel '+plnL(PLN_NIV,P.niv).toLowerCase()+' y objetivo '+plnL(PLN_OBJ,P.obj).toLowerCase()+': '+z.P[1]+' repeticiones con RIR '+rir+' en los principales y '+z.A[1]+' en los accesorios.');
   L.push('Los principales suben por doble progresión: primero repeticiones y, al llegar arriba en todas las series, peso.');
   var pg=plnPrioG(P); if(pg.length) L.push('Prioriza '+listaY(pg.map(function(x){ return x[1].toLowerCase(); }))+': más series por semana que el resto.');
-  if(P.dCarr) L.push('Carrera: el rodaje suave en zona 2 (puedes hablar mientras corres), las series a intensidad alta y, con 3 días o más, una tirada larga suave.');
+  if(P.dCarr) L.push('Carrera: el rodaje suave en Z1 (puedes hablar mientras corres), las series en Z3 (fuertes pero controladas) y, con 3 días o más, una tirada larga suave en Z1.');
   else if(P.cv) L.push('Cardio: '+plnL(PLN_CV,P.cv).toLowerCase()+((P.cvT||[]).indexOf('hiit')>=0?', con un día de HIIT':'')+((P.cvT||[]).indexOf('bajo')>=0?' y de bajo impacto (elíptica, escaleras, bici, caminar en cuesta)':'')+'.');
   L.push('Cada día empieza con movilidad de las articulaciones que trabaja'+((P.les||[]).length?' y de su molestia':'')+' y series de aproximación del primer ejercicio.');
   if(Object.keys(D.prev||{}).length&&!D.banco) L.push('Tiene en cuenta sus rutinas anteriores: cambia los accesorios y la mayoría de variantes para que no sea lo mismo.');
