@@ -6010,7 +6010,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.255';
+var APP_V = 'v53.4.257';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9558,12 +9558,13 @@ function tarjetaRecord(L,modo){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), n=L.length, f=L[0].f||hoyStr();
     if(tr) x.clearRect(0,0,W,H); else { var g=x.createRadialGradient(W/2,H*0.42,40,W/2,H*0.42,900); g.addColorStop(0,'#2B2414'); g.addColorStop(1,'#0B0B0C'); x.fillStyle=g; x.fillRect(0,0,W,H); }
     if(tr){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=18; }
-    var alto=n===1?190+60+110+220+60+70+80:190+60+n*250+60+70+80, y=Math.max(160,(H-alto)/2), cx=W/2;
+    x.font='800 48px'+FCV; var ext=n>1?L.reduce(function(a,R){ return a+(Math.min(2,lineasTxt(x,String(R.e),W-160).length)-1)*56; },0):0;      // v53.4.257: el nombre en dos líneas si hace falta
+    var alto=(n===1?190+60+110+220+60+70+80:190+60+n*250+60+70+80)+ext, y=Math.max(160,(H-alto)/2), cx=W/2;
     x.strokeStyle='rgba(243,210,122,.6)'; x.lineWidth=4; x.beginPath(); x.arc(cx,y+80,80,0,Math.PI*2); x.stroke(); x.drawImage(tro,cx-48,y+32,96,96); y+=190;
     x.fillStyle='#F3D27A'; x.font='800 34px'+FCV; txtEsp(x,n===1?'NUEVO RÉCORD':n+' NUEVOS RÉCORDS',cx,y+20,11); y+=60;
     logoCanvas(x,cx-140,y+6,280,'#FFFFFF',true); y+=86;      // 21 nov, 22:41 (Chadín): el logo debajo de «Nuevo récord» (abajo lo recortan al subirlo)
     if(n===1){ x.fillStyle='#FFFFFF'; x.font='800 84px'+FCV; var nm=lineasTxt(x,L[0].e,W-160).slice(0,2); nm.forEach(function(l,i){ x.fillText(l,cx,y+70+i*92); }); y+=110+(nm.length-1)*92; kgRepsCanvas(x,L[0],cx,y+170,200); y+=220; }
-    else L.forEach(function(R,i){ x.fillStyle='#FFFFFF'; x.font='800 52px'+FCV; x.fillText(String(R.e).slice(0,30),cx,y+60); kgRepsCanvas(x,R,cx,y+170,104); y+=210;
+    else L.forEach(function(R,i){ x.fillStyle='#FFFFFF'; x.font='800 48px'+FCV; var Ln=lineasTxt(x,String(R.e),W-160); if(Ln.length>2){ Ln=Ln.slice(0,2); Ln[1]=recortar(x,Ln[1]+' …',W-160); } Ln.forEach(function(t,j){ x.fillText(t,cx,y+58+j*56); }); y+=(Ln.length-1)*56; kgRepsCanvas(x,R,cx,y+170,104); y+=210;
       if(i<n-1){ x.fillStyle='rgba(243,210,122,.3)'; x.fillRect(cx-300,y+10,600,2); } y+=40; });
     var gl=x.createLinearGradient(cx-70,0,cx+70,0); gl.addColorStop(0,'#F3D27A'); gl.addColorStop(1,'#C99A1A'); x.fillStyle=gl; x.fillRect(cx-70,y+20,140,6); y+=60;
     var dt=aDate(f); x.fillStyle='rgba(255,255,255,.88)'; x.font='700 40px'+FCV; x.fillText(dt.getDate()+' de '+MESES_L[dt.getMonth()]+' de '+dt.getFullYear(),cx,y+30); y+=80;
@@ -24189,16 +24190,19 @@ function tarjetaRunCl(modo){
     var W=1080, H=1920, cv=document.createElement('canvas'); cv.width=W; cv.height=H; var x=cv.getContext('2d'), M=90, AN=W-2*M, LW=250, ops=[], add=function(h,f){ ops.push({h:h,f:f}); };
     fondoCard(x,W,H,modo); x.textAlign='left'; x.textBaseline='alphabetic';
     var logoDer=function(base,fin){ var w=LW, lx=W-M-w; if(fin+34>lx){ w=Math.max(150,W-M-fin-34); lx=W-M-w; } x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,lx,base-w*0.14,w,'#FFFFFF',true); x.restore(); };
-    add(76,function(y){ x.fillStyle='#fff'; var T=String(nom).toUpperCase(), px=textoAjustado(x,T,AN,60,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+58); });
-    /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
-    add(54,function(y){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,M,y+12,LOGO_B,'#FFFFFF',true); x.restore(); });
-    add(70,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,grFecha(U),AN),M,y+42); grEsp(x,'0px'); });
+    /* v53.4.257 (25 nov, Javier: «cambia todos para que se vea así… incluso clientes»): el encabezado centrado (título, MOOD ON y la fecha) y debajo, los km y sus datos, centrados; en negro, en medio */
+    var cT=function(t,y){ x.textAlign='center'; x.fillText(t,W/2,y); x.textAlign='left'; };
+    add(70,function(y){ x.fillStyle='#fff'; var T=String(nom).toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; cT(recortar(x,T,AN),y+58); });
+    add(20,function(){}); add(50,function(y){ x.save(); if(modo==='trans'){ x.shadowColor='rgba(0,0,0,.45)'; x.shadowBlur=16; } logoCanvas(x,W/2-105,y+8,210,'#FFFFFF',true); x.restore(); });
+    add(52,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); cT(recortar(x,grFecha(U),AN),y+34); grEsp(x,'0px'); });
+    add(30,function(){});
     var big=km?fN(km,km>=10?1:2):String(r.min||0), uni=km?'KM':'MIN';
-    add(250,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,big,AN-200,250,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-8px'); x.fillText(big,M-6,y+220); var w=x.measureText(big).width; grEsp(x,'2px'); x.font='800 46px'+FCV; x.fillText(uni,M+w+14,y+220); grEsp(x,'0px'); });
+    add(230,function(y){ var px=textoAjustado(x,big,AN-200,230,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-8px'); var w=x.measureText(big).width; grEsp(x,'2px'); x.font='800 44px'+FCV; var w2=x.measureText(uni).width+14, x0=W/2-(w+w2)/2;
+      x.fillStyle='#fff'; x.font='800 '+px+'px'+FCV; grEsp(x,'-8px'); x.fillText(big,x0,y+200); grEsp(x,'2px'); x.font='800 44px'+FCV; x.fillText(uni,x0+w+14,y+200); grEsp(x,'0px'); });
     var K=[]; if(km) K.push([sg?runT(sg):(r.min||0)+' min','TIEMPO']); if(rit&&km) K.push([runT(rit),'MIN/KM']); if(rpe) K.push([rpe+'/10','ESFUERZO']);
-    if(K.length) add(150,function(y){ var cx=M, gap=K.length>3?44:64; K.forEach(function(k){ x.font='800 66px'+FCV; var vw=x.measureText(k[0]).width; x.font='700 22px'+FCV; grEsp(x,'3px'); var lw=x.measureText(k[1]).width; grEsp(x,'0px');
-      x.fillStyle='#fff'; x.font='800 66px'+FCV; x.fillText(k[0],cx,y+70); x.fillStyle='rgba(255,255,255,.72)'; x.font='700 22px'+FCV; grEsp(x,'3px'); x.fillText(k[1],cx,y+112); grEsp(x,'0px'); cx+=Math.max(vw,lw)+gap; }); });
-    var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=Math.max(250,(H-(modo==='trans'?330:300))-tot);
+    if(K.length) add(140,function(y){ var gap=56, Wd=K.map(function(k){ x.font='800 60px'+FCV; var vw=x.measureText(k[0]).width; x.font='700 22px'+FCV; grEsp(x,'3px'); var lw=x.measureText(k[1]).width; grEsp(x,'0px'); return Math.max(vw,lw); }), tw=Wd.reduce(function(a,b){ return a+b; },0)+gap*(K.length-1), cx=W/2-tw/2;
+      K.forEach(function(k,i){ var mx=cx+Wd[i]/2; x.textAlign='center'; x.fillStyle='#fff'; x.font='800 60px'+FCV; x.fillText(k[0],mx,y+66); x.fillStyle='rgba(255,255,255,.72)'; x.font='700 22px'+FCV; grEsp(x,'3px'); x.fillText(k[1],mx,y+106); grEsp(x,'0px'); x.textAlign='left'; cx+=Wd[i]+gap; }); });
+    var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=modo==='negro'?Math.max(250,Math.round((H-tot)/2)-30):Math.max(250,(H-330)-tot);
     sombraCard(x,modo); ops.forEach(function(o){ o.f(y); y+=o.h; });
     return cv;
   });
@@ -24246,52 +24250,59 @@ function tarjetaGrande(tipo,modo){
     var logoDer=function(base,fin){ var w=LW, lx=W-M-w; if(fin+34>lx){ w=Math.max(150,W-M-fin-34); lx=W-M-w; } logoSh(function(){ logoCanvas(x,lx,base-w*0.14,w,'#FFFFFF',true); }); };
     /* 22 nov, 09:53 (Chadín): «el MOOD ON debajo del título y ya que salga la fecha y lo demás» (en todo lo que se comparte) */
     var logoBajo=function(){ add(54,function(y){ logoSh(function(){ logoCanvas(x,M,y+14,LOGO_B,'#FFFFFF',true); }); }); };
+    /* v53.4.257 (25 nov, 11:33–11:53, Javier: «el título en medio… baja el tamaño de los ejercicios y las series… aplica y publica a todos, incluso clientes»):
+       el encabezado centrado (el título, MOOD ON en medio y la fecha, con un pequeño hueco), como en el panel de usuaria */
+    var cabC=function(sub){
+      add(68,function(y){ x.fillStyle='#fff'; var T=tit.toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; x.textAlign='center'; x.fillText(recortar(x,T,AN),W/2,y+56); x.textAlign='left'; });
+      add(20,function(){});
+      add(50,function(y){ logoSh(function(){ logoCanvas(x,W/2-105,y+8,210,'#FFFFFF',true); }); });
+      add(52,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.textAlign='center'; x.fillText(recortar(x,sub,AN),W/2,y+34); x.textAlign='left'; grEsp(x,'0px'); });
+      add(22,function(){}); };
     var cabL=function(sub){
       add(68,function(y){ x.fillStyle='#fff'; var T=tit.toUpperCase(), px=textoAjustado(x,T,AN,58,'800'); x.font='800 '+px+'px'+FCV; x.fillText(recortar(x,T,AN),M,y+56); });
       logoBajo();
       add(58,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,sub,AN),M,y+38); grEsp(x,'0px'); }); };
     if(tipo==='sum'){
-      cabL(grFecha(U));      // 21 nov, 23:50 (Chadín): el logo, a la altura de la fecha (en todo lo que se comparte)
-      if(wod&&BL.length) add(64,function(y){ x.fillStyle='#fff'; x.font='800 38px'+FCV; grEsp(x,'2px'); x.fillText(recortar(x,BL.map(function(e){ return String((e.bl.nb||e.n)+(e.txt?' · '+e.txt:'')).toUpperCase(); }).join('  +  '),AN),M,y+44); grEsp(x,'0px'); });
+      cabC(grFecha(U));      // v53.4.257: centrado
+      if(wod&&BL.length) add(64,function(y){ x.fillStyle='#fff'; x.font='800 38px'+FCV; grEsp(x,'2px'); x.textAlign='center'; x.fillText(recortar(x,BL.map(function(e){ return String((e.bl.nb||e.n)+(e.txt?' · '+e.txt:'')).toUpperCase(); }).join('  +  '),AN),W/2,y+44); x.textAlign='left'; grEsp(x,'0px'); });
       var L=[durGrCl(r.min)];
       if(wod){ var nE=BL.reduce(function(a,e){ return a+((e.bl.ej||[]).length||1); },0)+(U.ej||[]).filter(function(e){ return !e.bl; }).length; L.push([String(nE),nE===1?'EJERCICIO':'EJERCICIOS']); if(BL.length>1) L.push([String(BL.length),'BLOQUES']); }
       if(r.vol) L.push([fN(r.vol,0),'KG']);
       if(r.runKm) L.push([fN(r.runKm,1),'KM']);
       if(nr) L.push([String(nr),nr===1?'RÉCORD':'RÉCORDS',1]); else if(nser&&!wod) L.push([String(nser),nser===1?'SERIE':'SERIES']);
       var iL=-1;      // (antes, el logo iba en la de los récords)
-      L.forEach(function(l,li){ add(172,function(y){ x.fillStyle=l[2]?GR_ORO:'#fff'; var px=textoAjustado(x,l[0],AN-230-(li===iL?LW:0),170,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-6px'); x.fillText(l[0],M,y+150); var w=x.measureText(l[0]).width; grEsp(x,'3px');
-        x.fillStyle=l[2]?GR_ORO:'rgba(255,255,255,.92)'; x.font='800 44px'+FCV; x.fillText(l[1],M+w+18,y+150); var w2=x.measureText(l[1]).width; grEsp(x,'0px'); if(li===iL) logoDer(y+150,M+w+18+w2); }); });
+      L.forEach(function(l){ add(160,function(y){ var px=textoAjustado(x,l[0],AN-260,150,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-6px'); var w=x.measureText(l[0]).width; grEsp(x,'3px'); x.font='800 40px'+FCV; var w2=x.measureText(l[1]).width, x0=W/2-(w+16+w2)/2;
+        x.fillStyle=l[2]?GR_ORO:'#fff'; x.font='800 '+px+'px'+FCV; grEsp(x,'-6px'); x.fillText(l[0],x0,y+136); grEsp(x,'3px'); x.fillStyle=l[2]?GR_ORO:'rgba(255,255,255,.92)'; x.font='800 40px'+FCV; x.fillText(l[1],x0+w+16,y+136); grEsp(x,'0px'); }); });      // v53.4.257: centradas
     } else if(tipo==='res'){
-      cabL(grFecha(U)+(nser?' · '+nser+(nser===1?' SERIE':' SERIES'):''));
-      var NX=M+170, NW=AN-170, disp=(H-330)-260-180-80, usado=0, E=[], k=0;
+      cabC(grFecha(U)+(nser?' · '+nser+(nser===1?' SERIE':' SERIES'):''));
+      var FS=30, LH=34, NX=M+95, NW=AN-95, disp=960, usado=0, E=[], k=0;      // v53.4.257: los nombres a 30 px y las series a 54; la lista, como mucho 960 px (en una historia queda dentro, con aire)
       (U.ej||[]).forEach(function(e){ E.push(e); if(e.bl) (e.bl.ej||[]).forEach(function(z){ if(z&&z.n) E.push({sub:1,n:z.n,q:z.r||''}); }); });      // 21 nov: en los WOD, también sus ejercicios
       x.font='800 44px'+FCV;
       for(;k<E.length;k++){ var e=E[k];
-        if(e.sub){ var t2=(e.q?e.q+'  ':'')+String(e.n).toUpperCase(); if(usado+50>disp) break; usado+=50;
-          (function(t2){ add(50,function(y){ x.fillStyle='rgba(255,255,255,.8)'; x.font='700 34px'+FCV; x.fillText(recortar(x,t2,AN-40),M+40,y+38); }); })(t2); continue; }
+        if(e.sub){ var t2=(e.q?e.q+'  ':'')+String(e.n).toUpperCase(); if(usado+40>disp) break; usado+=40;
+          (function(t2){ add(40,function(y){ x.fillStyle='rgba(255,255,255,.8)'; x.font='700 26px'+FCV; x.fillText(recortar(x,t2,AN-40),M+40,y+30); }); })(t2); continue; }
         var n=grSeries(e), nm=String(e.n||'').toUpperCase()+(n?'':(e.txt?' · '+String(e.txt).toUpperCase():'')), tr=!!rec[clave(e.n)];
-        x.font='800 44px'+FCV; var Ls=grLineas(x,nm,(n?NW:AN)-(tr?60:0),2), h=Math.max(Ls.length*50+26,n?112:70);
+        x.font='800 '+FS+'px'+FCV; var Ls=grLineas(x,nm,(n?NW:AN)-(tr?44:0),2), h=Math.max(Ls.length*LH+18,n?76:50);
         if(usado+h>disp&&k<E.length) break; usado+=h;
         (function(e,n,Ls,tr,h){ add(h,function(y){ var cy=y+h/2;
-          if(n){ x.fillStyle='#fff'; x.font='800 96px'+FCV; grEsp(x,'-3px'); x.fillText(String(n),M,cy+34); var w=x.measureText(String(n)).width; grEsp(x,'0px'); x.font='800 70px'+FCV; x.globalAlpha=.9; x.fillText('×',M+w+4,cy+34); x.globalAlpha=1; }
-          var bx=n?NX:M, by=cy-(Ls.length*50)/2+38; x.fillStyle='#fff'; x.font='800 44px'+FCV;
-          Ls.forEach(function(t,j){ x.fillText(t,bx,by+j*50); });
-          if(tr&&I[0]){ var lw=x.measureText(Ls[Ls.length-1]).width; x.drawImage(I[0],bx+lw+12,by+(Ls.length-1)*50-38,46,46); } }); })(e,n,Ls,tr,h); }
-      if(k<E.length){ var mas=E.slice(k).filter(function(z){ return !z.sub; }).length||E.length-k; add(56,function(y){ x.fillStyle='rgba(255,255,255,.8)'; x.font='800 34px'+FCV; grEsp(x,'3px'); x.fillText('Y '+mas+(mas===1?' EJERCICIO MÁS':' EJERCICIOS MÁS'),M,y+42); grEsp(x,'0px'); }); }
+          if(n){ x.fillStyle='#fff'; x.font='800 54px'+FCV; grEsp(x,'-2px'); x.fillText(String(n),M,cy+19); var w=x.measureText(String(n)).width; grEsp(x,'0px'); x.font='800 39px'+FCV; x.globalAlpha=.9; x.fillText('×',M+w+3,cy+19); x.globalAlpha=1; }
+          var bx=n?NX:M, by=cy-(Ls.length*LH)/2+26; x.fillStyle='#fff'; x.font='800 '+FS+'px'+FCV;
+          Ls.forEach(function(t,j){ x.fillText(t,bx,by+j*LH); });
+          if(tr&&I[0]){ var lw=x.measureText(Ls[Ls.length-1]).width; x.drawImage(I[0],bx+lw+10,by+(Ls.length-1)*LH-26,32,32); } }); })(e,n,Ls,tr,h); }
+      if(k<E.length){ var mas=E.slice(k).filter(function(z){ return !z.sub; }).length||E.length-k; add(50,function(y){ x.fillStyle='rgba(255,255,255,.8)'; x.font='800 26px'+FCV; grEsp(x,'3px'); x.fillText('Y '+mas+(mas===1?' EJERCICIO MÁS':' EJERCICIOS MÁS'),M,y+36); grEsp(x,'0px'); }); }
     } else {
       if(C){
-        add(420,function(y){ if(I[1]) x.drawImage(I[1],W/2-200,y,400,400); });
-        add(84,function(y){ logoSh(function(){ logoCanvas(x,W/2-140,y+18,280,'#FFFFFF',true); }); });
-        add(64,function(y){ x.fillStyle='rgba(255,255,255,.92)'; x.font='700 34px'+FCV; grEsp(x,'4px'); x.fillText('HOY HE LEVANTADO LO MISMO QUE',M,y+44); grEsp(x,'0px'); });
-        if(C.cant) add(280,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,C.cant,AN,330,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-14px'); x.fillText(C.cant,M,y+260); grEsp(x,'0px'); });
-        add(C.cant?132:150,function(y){ x.fillStyle='#fff'; var T=String(C.nom).toUpperCase(), px=textoAjustado(x,T,AN,C.cant?104:128,'800'); x.font='800 '+px+'px'+FCV; x.fillText(T,M,y+(C.cant?116:130)); });
-        add(96,function(y){ var kg=fN(r.vol,0)+' kg'; x.font='800 34px'+FCV; var w=x.measureText(kg).width; x.save(); x.shadowColor='transparent'; x.fillStyle='#fff'; rrect(x,M,y+26,w+48,62,31); x.fill(); x.restore();
-          x.fillStyle='#111'; x.save(); x.shadowColor='transparent'; x.fillText(kg,M+24,y+70); x.restore(); x.fillStyle='rgba(255,255,255,.95)'; x.font='600 32px'+FCV; x.fillText(recortar(x,'en '+tit,AN-w-70),M+w+66,y+69); });
+        cabC(grFecha(U));      // v53.4.257: el encabezado centrado y debajo todo centrado
+        add(380,function(y){ if(I[1]) x.drawImage(I[1],W/2-170,y+20,340,340); });
+        add(60,function(y){ x.fillStyle='rgba(255,255,255,.92)'; x.font='700 30px'+FCV; grEsp(x,'4px'); x.textAlign='center'; x.fillText('HOY HE LEVANTADO LO MISMO QUE',W/2,y+42); x.textAlign='left'; grEsp(x,'0px'); });
+        if(C.cant) add(230,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,C.cant,AN,260,'800'); x.font='800 '+px+'px'+FCV; grEsp(x,'-12px'); x.textAlign='center'; x.fillText(C.cant,W/2,y+214); x.textAlign='left'; grEsp(x,'0px'); });
+        add(C.cant?116:140,function(y){ x.fillStyle='#fff'; var T=String(C.nom).toUpperCase(), px=textoAjustado(x,T,AN,C.cant?88:110,'800'); x.font='800 '+px+'px'+FCV; x.textAlign='center'; x.fillText(T,W/2,y+(C.cant?96:116)); x.textAlign='left'; });
+        add(96,function(y){ var kg=fN(r.vol,0)+' kg'; x.font='800 34px'+FCV; var w=x.measureText(kg).width; x.save(); x.shadowColor='transparent'; x.fillStyle='#fff'; rrect(x,W/2-(w+48)/2,y+22,w+48,62,31); x.fill(); x.restore();
+          x.fillStyle='#111'; x.save(); x.shadowColor='transparent'; x.textAlign='center'; x.fillText(kg,W/2,y+66); x.restore(); x.textAlign='left'; });
       } else {
-        add(150,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,'¡ENTRENO HECHO!',AN,130,'800'); x.font='800 '+px+'px'+FCV; x.fillText('¡ENTRENO HECHO!',M,y+125); });
-        logoBajo();
-        add(58,function(y){ x.fillStyle='rgba(255,255,255,.78)'; x.font='700 26px'+FCV; grEsp(x,'4px'); x.fillText(recortar(x,grFecha(U),AN),M,y+38); grEsp(x,'0px'); });
-        add(70,function(y){ x.fillStyle='rgba(255,255,255,.9)'; x.font='700 40px'+FCV; var t=durLargoCl(r.min)+' DÁNDOLO TODO'; x.fillText(recortar(x,t,AN),M,y+52); });
+        cabC(grFecha(U));      // v53.4.257: centrado
+        add(140,function(y){ x.fillStyle='#fff'; var px=textoAjustado(x,'¡ENTRENO HECHO!',AN,120,'800'); x.font='800 '+px+'px'+FCV; x.textAlign='center'; x.fillText('¡ENTRENO HECHO!',W/2,y+118); x.textAlign='left'; });
+        add(70,function(y){ x.fillStyle='rgba(255,255,255,.9)'; x.font='700 36px'+FCV; var t=durLargoCl(r.min)+' DÁNDOLO TODO'; x.textAlign='center'; x.fillText(recortar(x,t,AN),W/2,y+50); x.textAlign='left'; });
       }
     }
     var tot=ops.reduce(function(a,o){ return a+o.h; },0), y=modo==='negro'?Math.max(200,Math.round((H-tot)/2)-30):Math.max(230,(H-330)-tot);
