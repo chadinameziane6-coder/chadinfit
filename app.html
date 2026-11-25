@@ -6004,6 +6004,11 @@ html.dsc-h{--ds-a:#2E9CC4;--ds-bg:#E8F6FD;--ds-bd:#BDE3F5;--ds-tx:#0B3A4E;--ds-t
 .apx-ar{margin:14px 0 0}.apx-p{display:inline-flex;align-items:center;gap:6px;height:36px;min-height:0;padding:0 14px;border-radius:999px;border:1.5px solid rgba(40,150,210,.35);background:rgba(127,214,255,.24);color:#0B3A55;font:800 13px Plus Jakarta Sans,sans-serif;cursor:pointer}.apx-p .ic{width:14px;height:14px;margin:0}.apx-p.on{background:#0E4D6E;border-color:#0E4D6E;color:#fff}.apx-p.on .ic{color:#9FE0FF}
 :where(html[data-tema=oscuro]) .apx-p:not(.on){background:rgba(127,214,255,.18);border-color:rgba(127,214,255,.45);color:#D6F1FF}
 .st-tag.st-tag2{cursor:default}
+/* v53.4.263: series especiales como /yo: el nombre corto debajo del número y los kilos calculados en amarillo suave */
+.set.con-t .sn{position:relative;overflow:visible}.set .sn .sn-t{position:absolute;top:calc(100% + 3px);left:50%;transform:translateX(-50%);display:block;margin:0;font:700 9.5px/1.1 Plus Jakarta Sans,sans-serif;letter-spacing:0;text-transform:none;color:#4A4D57;white-space:nowrap}
+.set input.calc:placeholder-shown,.ses .ex.abierto .set input.calc:placeholder-shown{background:#FFF4D6;border-color:#F1D98C;box-shadow:inset 0 0 0 1px #F1D98C;color:#0D0D10}.set input.calc::placeholder,.ses .ex.abierto .set input.calc::placeholder{color:#0D0D10;opacity:1;font-weight:800}
+.st-det{margin:8px 0 -2px 37px;font:600 11.5px Plus Jakarta Sans,sans-serif;color:var(--mu)}
+:where(html[data-tema=oscuro]) .set .sn .sn-t{color:#C9CCD8}html[data-tema=oscuro] .ses .ex.abierto .set input.calc:placeholder-shown{background:#3A3220;border-color:#6B5A2A;box-shadow:inset 0 0 0 1px #6B5A2A}html[data-tema=oscuro] .ses .ex.abierto .set input.calc::placeholder{color:#FFE6A3}
 .rir-t2{display:flex;flex-direction:column;gap:9px;margin:12px 0}.rir-f{display:flex;align-items:center;gap:12px}.rir-f span{display:flex;flex-direction:column}.rir-f span b{font-size:15px}.rir-f small{font-size:12.5px;color:var(--mu)}
 .rir-n{width:40px;height:40px;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font:800 17px Plus Jakarta Sans,sans-serif;flex:none}
 input[data-k=rir][data-v="0"],.rir-n[data-v="0"]{color:#C62E2E}input[data-k=rir][data-v="1"],.rir-n[data-v="1"]{color:#D2601A}input[data-k=rir][data-v="2"],.rir-n[data-v="2"]{color:#6A55E0}input[data-k=rir][data-v="3"],.rir-n[data-v="3"]{color:#2373B0}input[data-k=rir][data-v="4"],.rir-n[data-v="4"]{color:#6B7488}
@@ -6088,7 +6093,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.262';
+var APP_V = 'v53.4.263';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8502,7 +8507,7 @@ function phSub(e,j,qi,ph){
 function refrescarPh(i){
   var e=CL.dr&&CL.dr.ej[i]; if(!e||e.tipo!=='fuerza'||e.mov) return; var uv=ultimaVez(e.n);
   e.sets.forEach(function(s,j){
-    var ph=phSet(e,j,uv), a=document.querySelector('input[data-i="'+i+'"][data-j="'+j+'"][data-k=p]:not([data-q])'); if(a) a.placeholder=ph.p||'';
+    var ph=phSet(e,j,uv), a=document.querySelector('input[data-i="'+i+'"][data-j="'+j+'"][data-k=p]:not([data-q])'); if(a){ a.placeholder=ph.p||''; if(CL.dr&&!CL.dr.edit) a.classList.toggle('calc',!!ph.calc); }      // v53.4.263: los kilos calculados, en amarillo suave
     (s.sub||[]).forEach(function(q,qi){ var b=document.querySelector('input[data-i="'+i+'"][data-j="'+j+'"][data-q="'+qi+'"][data-k=p]'); if(b) b.placeholder=phSub(e,j,qi,ph).p||''; });
   });
 }
@@ -10675,8 +10680,14 @@ function fuerzaCard(e,i,lab){
   e.sets.forEach(function(s,j){
     if(s.t==='aprox') return; nW++;
     var ph=phSet(e,j,uv), at=' data-i="'+i+'" data-j="'+j+'"', ts=TS[s.t]||TS.normal, esp=s.t!=='normal'&&s.t!=='mov', C=cfgSer();
-    if(esp) h+='<div class="esp t-'+s.t+'">';
-    if(esp||s.det) h+=(CL.dr&&!CL.dr.edit?'<div class="st-tag st-tag2 t-'+s.t+'">':'<button class="st-tag t-'+s.t+'" data-a="verTipo" data-t="'+s.t+'" data-det="'+esc(s.det||'')+'" aria-label="Qué es: '+esc(ts[1])+'">'+ic('info'))+esc(ts[0])+(s.det?' · '+esc(s.det):'')+(tsCorto(s.t,s)?' · '+esc(tsCorto(s.t,s)):'')+(CL.dr&&!CL.dr.edit?'</div>':'<i>?</i></button>');      // v53.4.261: en el entreno, solo la etiqueta (la explicación va arriba)
+    /* v53.4.263 · 25 nov 2026, 16:48 (Javier: «que se vea igual que en usuaria; quita lo de "Top set · la más pesada" y la calculadora, eso que no se muestre,
+       ya que se lo programa el entrenador y sale el general; igualmente, que pueda poner el peso levantado real aunque sugiera ese»): en el entreno, cada serie
+       especial lleva su nombre corto debajo del número («Top», «Back-off»…), sin la raya azul, sin la etiqueta encima y sin «10 % menos que tu top set»;
+       los kilos calculados, en amarillo suave (se pueden cambiar) */
+    var wk=CL.dr&&!CL.dr.edit, snT=wk&&esp?'<small class="sn-t">'+esc(s.t==='top'?'Top':ts[0])+'</small>':'';
+    if(esp&&!wk) h+='<div class="esp t-'+s.t+'">';
+    if(wk&&s.det) h+='<div class="st-det">'+esc(s.det)+'</div>';
+    else if(!wk&&(esp||s.det)) h+=(CL.dr&&!CL.dr.edit?'<div class="st-tag st-tag2 t-'+s.t+'">':'<button class="st-tag t-'+s.t+'" data-a="verTipo" data-t="'+s.t+'" data-det="'+esc(s.det||'')+'" aria-label="Qué es: '+esc(ts[1])+'">'+ic('info'))+esc(ts[0])+(s.det?' · '+esc(s.det):'')+(tsCorto(s.t,s)?' · '+esc(tsCorto(s.t,s)):'')+(CL.dr&&!CL.dr.edit?'</div>':'<i>?</i></button>');      // v53.4.261: en el entreno, solo la etiqueta (la explicación va arriba)
     var pm=pvOn?prevSet(e,j,uv):null, pz=pm&&uv.porN[num(pm.n)||1]?uv.porN[num(pm.n)||1].izq:null;
     if(e.ld){
       h+='<div class="set-ld ef'+(s.ok?' ok':'')+'" id="s-'+i+'-'+j+'"><div class="set'+(sk?' sk':'')+PV+'"><span class="sn">'+nW+'<small>Dcha</small></span>'+(pvOn?pvCell(pm,sk):'')+
@@ -10686,18 +10697,18 @@ function fuerzaCard(e,i,lab){
         '<button class="chk"'+at+' data-a="setOk" aria-label="Serie hecha">'+ic('ok')+'</button></div>'+
         '<div class="set li'+(sk?' sk':'')+PV+'"><span class="sn"><small>Izq</small></span>'+(pvOn?pvCell(pz,sk):'')+K('<input'+at+' data-k="pi" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.pi)+'" value="'+esc(s.pi||'')+'" aria-label="Kg izquierda">')+
         '<input'+at+' data-k="ri" inputmode="numeric" placeholder="'+esc(ph.ri)+'" value="'+esc(s.ri||'')+'" aria-label="Reps izquierda"><span></span><span></span></div></div>';
-    } else h+='<div class="set ef'+(sk?' sk':'')+PV+(s.ok?' ok':'')+'" id="s-'+i+'-'+j+'"><span class="sn">'+nW+'</span>'+(pvOn?pvCell(pm,sk):'')+
-      K('<input'+at+' data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.p)+'" value="'+esc(s.p)+'" aria-label="Kg">')+
+    } else h+='<div class="set ef'+(sk?' sk':'')+PV+(s.ok?' ok':'')+(snT?' con-t':'')+'" id="s-'+i+'-'+j+'"><span class="sn">'+nW+snT+'</span>'+(pvOn?pvCell(pm,sk):'')+
+      K('<input'+at+(wk&&ph.calc?' class="calc"':'')+' data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.p)+'" value="'+esc(s.p)+'" aria-label="Kg'+(wk&&ph.calc?' ('+esc(ph.calc)+')':'')+'">')+
       '<input'+at+' data-k="r" inputmode="numeric" placeholder="'+esc(ph.r)+'" value="'+esc(s.r)+'" aria-label="Reps">'+
       '<input'+at+' data-k="rir"'+(s.rir!==''&&s.rir!=null?' data-v="'+Math.min(4,+s.rir||0)+'"':'')+' inputmode="numeric" placeholder="'+esc(ph.rir)+'" value="'+esc(s.rir)+'" aria-label="RIR">'+
       '<button class="chk"'+at+' data-a="setOk" aria-label="Serie hecha">'+ic('ok')+'</button></div>';
-    if(ph.calc) h+='<div class="calc-h">'+ic('calc')+esc(ph.calc)+'</div>';      // 22 nov, 19:45 (Chadín): menos texto de ayuda en el entreno
+    if(ph.calc&&!wk) h+='<div class="calc-h">'+ic('calc')+esc(ph.calc)+'</div>';      // 22 nov, 19:45 (Chadín): menos texto de ayuda en el entreno
     if(ts[3]&&!e.ld){
       s.sub.forEach(function(q,qi){ var pq=phSub(e,j,qi,ph);
         h+='<div class="set sub'+PV+(q.ok?' ok':'')+'" id="q-'+i+'-'+j+'-'+qi+'"><span class="sn"><small>'+esc(pq.lab)+'</small></span>'+(pvOn?'<span></span>':'')+'<input'+at+' data-q="'+qi+'" data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(pq.p||'')+'" value="'+esc(q.p)+'" aria-label="Kg"><input'+at+' data-q="'+qi+'" data-k="r" inputmode="numeric" placeholder="'+esc(pq.r||'')+'" value="'+esc(q.r)+'" aria-label="Reps"><button class="sub-x"'+at+' data-q="'+qi+'" data-a="delSub" aria-label="Quitar">'+ic('x')+'</button><button class="chk"'+at+' data-q="'+qi+'" data-a="subOk" aria-label="Hecha">'+ic('ok')+'</button></div>'; });
       h+='<button class="link sub-add"'+at+' data-a="addSub">+ '+(ts[3]==='baj'?'Bajada':'Mini-serie')+'</button>';
     }
-    if(esp) h+='</div>';
+    if(esp&&!wk) h+='</div>';
     h+='<div class="mk" id="mk-'+i+'-'+j+'">'+(e.ld?badge(mk[j],'Dcha')+badge(mk['i'+j],'Izq'):badge(mk[j]))+'</div>';
   });
   if(pvOn) h+='<p class="pv-pie">'+ic('info')+'<span>«Última vez»: lo que hiciste el '+esc(fCorta(uv.f))+' en cada serie.</span></p>';
