@@ -2913,6 +2913,12 @@ html[data-tema="oscuro"] .ip-sg i{background:rgba(255,255,255,.12)}html[data-tem
 html[data-tema="oscuro"] .cara{stroke:#D6D7DD}html[data-tema="oscuro"] .cara .f{fill:#D6D7DD}html[data-tema="oscuro"] .cara .o{stroke:#4A4B52}
 html[data-tema="oscuro"] .cara-i.on .cara .o{fill:#fff;stroke:#fff}html[data-tema="oscuro"] .cara-i.on .cara{stroke:#0D0D10}html[data-tema="oscuro"] .cara-i.on .cara .f{fill:#0D0D10}html[data-tema="oscuro"] .cara-i.on:before{box-shadow:0 0 0 2px #1C1C1E}
 .ck5 small{font-size:10.5px;font-weight:600;color:var(--tx3,#8A8C96)}.ck5 button.on small{color:var(--tx);font-weight:700}.ck5 button.on .cara-i{box-shadow:none!important}
+/* yo-1.65: las zonas de carrera (Z0-Z6) */
+.zn-t{display:flex;flex-direction:column;gap:9px;margin:10px 0}.zn-f{display:flex;align-items:flex-start;gap:12px}.zn-f>span{display:flex;flex-direction:column;gap:1px;min-width:0}
+.zn-f b em{font-style:normal;font-size:12px;font-weight:700;color:var(--tx3);margin-left:4px}.zn-f small{font-size:12.5px;color:var(--tx2);line-height:1.35}.zn-f small.zn-x{font-size:11.5px;color:var(--tx3)}
+.zn-n{width:40px;height:40px;border-radius:12px;flex:none;display:inline-flex;align-items:center;justify-content:center;font-size:15px;font-weight:800;color:var(--c);background:color-mix(in srgb,var(--c) 13%,#fff)}
+html[data-tema="oscuro"] .zn-n{background:color-mix(in srgb,var(--c) 22%,#1C1C1E);color:color-mix(in srgb,var(--c) 70%,#fff)}
+.link.zn-l{display:inline;padding:0;margin:0;font-size:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px;color:var(--tx)}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3872,59 +3878,63 @@ function faseTxt(k, sem) {
   sem = Math.max(1, sem || 8); var a = Math.floor(k * sem / 4) + 1, b = Math.floor((k + 1) * sem / 4);
   if (b < a) b = a; return a === b ? 'Semana ' + a : 'Semanas ' + a + '-' + b;
 }
+/* yo-1.65 · 25 nov 2026, 17:03 (Javier, con la tabla de zonas y cómo programar la carrera: «la zona 2 no es fuerte… revisa todas las rutinas»): zonas
+   de MOOD ON (tramos.js, ZN): Z0 regenerativo, Z1 suave (umbral aeróbico, ritmo de charla), Z2 moderado (umbral anaeróbico), Z3 fuerte (VO₂máx),
+   Z4-Z6 anaeróbicas. Reparto de la semana piramidal: casi todo en Z0-Z1, una sesión de calidad en Z2-Z3. Cada bloque de 4 semanas acaba en descarga (3:1)
+   en intermedio y avanzado; en principiante, progresión continua */
 var RUN_YO = {
   ini: {
     z2: { n: 'Rodaje suave con caminata', ca: 'Antes de correr: 5 min andando rápido y los ejercicios de calentamiento de esta rutina (tobillo, rodilla y cadera)', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
-      rpe: '3-4', fc: 'Zonas 1-2', int: 'Suave (Z1-Z2): puedes hablar con frases largas. Si te ahogas, anda más rato.',
-      F: ['8 × (2 min trotando en Z1-Z2 + 1 min andando) · 24 min', '6 × (3 min trotando en Z1-Z2 + 1 min andando) · 24 min', '4 × (5 min trotando en Z2 + 1 min andando) · 24 min', '20-25 min seguidos trotando suave en Z2 (unos 3-3,5 km)'],
+      rpe: '3-4', fc: 'Zona 1', int: 'Suave (Z1): puedes hablar con frases largas. Andando, Z0. Si te ahogas, anda más rato.',
+      F: ['8 × (2 min trotando en Z1 + 1 min andando) · 24 min', '6 × (3 min trotando en Z1 + 1 min andando) · 24 min', '4 × (5 min trotando en Z1 + 1 min andando) · 24 min', '20-25 min seguidos trotando suave en Z1 (unos 3-3,5 km)'],
       nota: 'Lo importante es acabar con ganas, no la velocidad. Si una semana se hace dura, repítela antes de avanzar.' },
     series: { n: 'Fartlek suave', ca: 'Antes de correr: 5 min andando + 5 min trotando muy suave (Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min andando',
-      rpe: '5-6', fc: 'Zonas 2-3', int: '«Rápido» (Z3) es más deprisa que tu trote, pero puedes decir frases cortas. Nunca a tope.',
-      F: ['6 × (30 s rápido en Z3 + 90 s andando)', '6 × (45 s rápido en Z3 + 75 s trotando suave en Z1 o andando)', '8 × (1 min rápido en Z3 + 1 min trotando suave en Z1-Z2)', '5 × (2 min rápido en Z3 + 1 min trotando suave en Z1-Z2)'],
+      rpe: '5-6', fc: 'Zona 2', int: '«Rápido» (Z2, moderado) es más deprisa que tu trote, pero puedes decir frases cortas. Nunca a tope.',
+      F: ['6 × (30 s rápido en Z2 + 90 s andando)', '6 × (45 s rápido en Z2 + 75 s trotando suave en Z1 o andando)', '8 × (1 min rápido en Z2 + 1 min trotando suave en Z1)', '5 × (2 min rápido en Z2 + 1 min trotando suave en Z1)'],
       nota: 'Fartlek = juego de ritmos. Puedes usar referencias: de farola a farola, una cuesta suave… Si duele algo, para.' },
     larga: { n: 'Salida larga suave', ca: 'Antes de correr: 5 min andando rápido y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min andando y estiramientos suaves',
-      rpe: '3-4', fc: 'Zona 2', int: 'Más larga, no más rápida: ritmo de charla (Z2) todo el rato.',
-      F: ['30 min: 6 × (4 min trotando en Z2 + 1 min andando)', '35 min: 6 × (5 min trotando en Z2 + 1 min andando)', '40 min: 4 × (8 min trotando en Z2 + 1 min andando)', '4-5 km seguidos (unos 35-40 min) muy suave, en Z2'],
+      rpe: '3-4', fc: 'Zona 1', int: 'Más larga, no más rápida: ritmo de charla (Z1) todo el rato.',
+      F: ['30 min: 6 × (4 min trotando en Z1 + 1 min andando)', '35 min: 6 × (5 min trotando en Z1 + 1 min andando)', '40 min: 4 × (8 min trotando en Z1 + 1 min andando)', '4-5 km seguidos (unos 35-40 min) muy suave, en Z1'],
       nota: 'Es la sesión que más resistencia te da. Bebe agua antes y, si hace calor, llévala.' },
     recup: { n: 'Recuperación activa', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: estiramientos suaves 5 min',
-      rpe: '2-3', fc: 'Zona 1-2', int: 'Muy suave (Z1): si dudas, ve más lento o anda.',
-      F: ['20 min andando rápido', '20 min: 4 × (4 min trotando muy suave en Z1 + 1 min andando)', '20-25 min trotando muy suave en Z1', '25 min trotando muy suave en Z1'],
+      rpe: '1-2', fc: 'Zona 0', int: 'Regenerativo (Z0): muy suave, si dudas, ve más lento o anda.',
+      F: ['20 min andando rápido', '20 min: 4 × (4 min trotando muy suave en Z0 + 1 min andando)', '20-25 min trotando muy suave en Z0', '25 min trotando muy suave en Z0'],
       nota: 'Sirve para soltar piernas. Con cansancio o agujetas, haz solo la caminata.' }
   },
   int: {
-    z2: { n: 'Rodaje en zona 2', ca: 'Antes de correr: 10 min muy suave (Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave y estiramientos',
-      rpe: '3-4', fc: 'Zona 2', int: 'Cómodo: respiras por la nariz y puedes hablar.',
-      F: ['6 km suaves en Z2 + 4 × 80 m progresivos', '7 km suaves en Z2 + 4 × 80 m progresivos', '8 km suaves en Z2 + 6 × 80 m progresivos', '6 km suaves en Z2 (semana de descarga)'],
+    z2: { n: 'Rodaje aeróbico suave', ca: 'Antes de correr: 10 min muy suave (Z0-Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave y estiramientos',
+      rpe: '3-4', fc: 'Zona 1', int: 'Suave (Z1): respiras cómoda y puedes hablar con frases largas.',
+      F: ['6 km suaves en Z1 + 4 × 80 m progresivos', '7 km suaves en Z1 + 4 × 80 m progresivos', '8 km suaves en Z1 + 6 × 80 m progresivos', '6 km suaves en Z1 (semana de descarga)'],
       nota: 'Progresivos: 80 m acelerando poco a poco hasta un 85 %, vuelta andando. Mejoran la técnica sin cansar.' },
-    series: { n: 'Series', ca: 'Antes: 15 min suave (Z1-Z2), los ejercicios de calentamiento de esta rutina, técnica de carrera y 4 × 80 m progresivos', vc: 'Vuelta a la calma: 10 min muy suave',
-      rpe: '7-8', fc: 'Zonas 4-5', int: 'Fuertes pero iguales: la última tan rápida como la primera. Si no, sobra una.',
-      F: ['6 × 400 m a ritmo de 5 km · recuperación 90 s trotando', '5 × 800 m a ritmo de 5 km · recuperación 2 min trotando', '4 × 1.000 m a ritmo de 10 km · recuperación 2 min trotando', 'Pirámide 200-400-600-800-600-400-200 m · recuperación: la mitad de lo que tardas en cada una'],
-      nota: 'Si no sabes tu ritmo de 5 km: el más rápido que aguantarías unos 25-30 min.' },
-    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km muy suaves (Z1)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
-      rpe: '3-4', fc: 'Zona 2', int: 'Ritmo de charla (Z2). En el último bloque, los 2 últimos km algo más rápidos (Z3, RPE 5-6).',
-      F: ['9 km suaves en Z2', '10 km suaves en Z2', '12 km suaves en Z2', '10 km: 8 suaves en Z2 + 2 algo más rápidos en Z3'],
+    series: { n: 'Series', ca: 'Antes: 15 min suave (Z1), los ejercicios de calentamiento de esta rutina, técnica de carrera y 4 × 80 m progresivos', vc: 'Vuelta a la calma: 10 min muy suave (Z0)',
+      rpe: '7-8', fc: 'Zona 3', int: 'Fuertes (Z3, VO₂máx) pero iguales: la última tan rápida como la primera. Si no, sobra una.',
+      F: ['6 × 400 m a ritmo de 5 km en Z3 · recuperación 90 s trotando', '5 × 800 m a ritmo de 5 km en Z3 · recuperación 2 min trotando', '4 × 1.000 m a ritmo de 10 km en Z3 · recuperación 2 min trotando', 'Pirámide 200-400-600-800-600-400-200 m en Z3 · recuperación: la mitad de lo que tardas en cada una'],
+      nota: 'Si no sabes tu ritmo de 5 km: el más rápido que aguantarías unos 25-30 min. Trabajo y recuperación, de 1:1 a 2:1.' },
+    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km muy suaves (Z0-Z1)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
+      rpe: '3-4', fc: 'Zona 1', int: 'Ritmo de charla (Z1). En el último bloque, los 2 últimos km algo más rápidos (Z2, RPE 5-6).',
+      F: ['9 km suaves en Z1', '10 km suaves en Z1', '12 km suaves en Z1', '10 km: 8 suaves en Z1 + 2 algo más rápidos en Z2'],
       nota: 'Lleva agua si pasa de 1 hora. La tirada larga construye tu base: no la conviertas en carrera.' },
     recup: { n: 'Rodaje de recuperación', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: estiramientos suaves',
-      rpe: '2-3', fc: 'Zona 1-2', int: 'Más lento que tu rodaje suave.',
-      F: ['30 min muy suaves en Z1-Z2 (unos 4-5 km)', '30 min muy suaves en Z1-Z2', '35 min muy suaves en Z1-Z2', '30 min muy suaves en Z1-Z2'],
+      rpe: '1-2', fc: 'Zona 0', int: 'Regenerativo (Z0): más lento que tu rodaje suave.',
+      F: ['30 min muy suaves en Z0 (unos 4-5 km)', '30 min muy suaves en Z0', '35 min muy suaves en Z0', '30 min muy suaves en Z0'],
       nota: 'Va justo después de los días duros: suelta piernas y ayuda a recuperar.' }
   },
   ava: {
-    z2: { n: 'Rodaje aeróbico', ca: 'Antes de correr: 10 min suave (Z1-Z2) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave',
-      rpe: '3-4', fc: 'Zona 2', int: 'Cómodo y constante.',
-      F: ['10 km en zona 2 + 6 × 100 m progresivos', '11 km en zona 2 + 6 × 100 m progresivos', '12 km en zona 2 + 6 × 100 m progresivos', '10 km en zona 2 (descarga)'],
+    z2: { n: 'Rodaje aeróbico', ca: 'Antes de correr: 10 min suave (Z0-Z1) y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: 5 min suave',
+      rpe: '3-4', fc: 'Zona 1', int: 'Suave (Z1), cómodo y constante.',
+      F: ['10 km en Z1 + 6 × 100 m progresivos', '11 km en Z1 + 6 × 100 m progresivos', '12 km en Z1 + 6 × 100 m progresivos', '10 km en Z1 (descarga)'],
       nota: 'Que el reloj no mande: si el pulso sube, baja el ritmo.' },
-    series: { n: 'Series de calidad', ca: 'Antes: 20 min suave (Z1-Z2), los ejercicios de calentamiento de esta rutina, técnica y 4 × 100 m progresivos', vc: 'Vuelta a la calma: 10-15 min muy suave',
-      rpe: '8', fc: 'Zonas 4-5', int: 'Controladas: acabarías 1-2 más. La última, la más rápida.',
-      F: ['10 × 400 m a ritmo de 5 km · recuperación 60 s trotando', '6 × 1.000 m a ritmo de 10 km · recuperación 90 s trotando', '4 × 2.000 m a ritmo umbral (media maratón) · recuperación 2 min trotando', 'Pirámide 400-800-1.200-1.600-1.200-800-400 m a ritmo 10 km · recuperación 90 s'],
+    series: { n: 'Series de calidad', ca: 'Antes: 20 min suave (Z1), los ejercicios de calentamiento de esta rutina, técnica y 4 × 100 m progresivos', vc: 'Vuelta a la calma: 10-15 min muy suave (Z0)',
+      rpe: '7-8', fc: 'Zonas 2-3', int: 'Controladas: acabarías 1-2 más. Las de ritmo 5-10 km, en Z3; las de umbral, en Z2.',
+      F: ['10 × 400 m a ritmo de 5 km en Z3 · recuperación 60 s trotando', '6 × 1.000 m a ritmo de 10 km en Z3 · recuperación 90 s trotando', '4 × 2.000 m a ritmo umbral (media maratón) en Z2 · recuperación 2 min trotando', 'Pirámide 400-800-1.200-1.600-1.200-800-400 m a ritmo 10 km en Z3 · recuperación 90 s'],
       nota: 'El día anterior y el siguiente, suaves. Si la semana va cargada, quita una repetición.' },
-    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km suaves (Z1-Z2)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
-      rpe: '3-5', fc: 'Zonas 2-3', int: 'Suave; en el tercer bloque, los últimos 3 km a ritmo de media maratón.',
-      F: ['14 km suaves en Z2', '16 km suaves en Z2', '18 km: 15 suaves en Z2 + 3 a ritmo de media maratón (Z3-Z4)', '14 km suaves en Z2 (descarga)'],
+    larga: { n: 'Tirada larga', ca: 'Antes: los ejercicios de calentamiento de esta rutina y los 2 primeros km suaves (Z0-Z1)', vc: 'Vuelta a la calma: 5 min andando y estiramientos',
+      rpe: '3-5', fc: 'Zonas 1-2', int: 'Suave (Z1); en el tercer bloque, los últimos 3 km a ritmo de media maratón (Z2).',
+      F: ['14 km suaves en Z1', '16 km suaves en Z1', '18 km: 15 suaves en Z1 + 3 a ritmo de media maratón (Z2)', '14 km suaves en Z1 (descarga)'],
       nota: 'Prueba aquí lo que comerás y beberás en carrera (geles, agua) a partir de 75-90 min.' },
     recup: { n: 'Rodaje regenerativo', ca: 'Antes de correr: 5 min andando y los ejercicios de calentamiento de esta rutina', vc: 'Vuelta a la calma: movilidad suave',
-      rpe: '2-3', fc: 'Zona 1-2', int: 'Muy suave de verdad.',
-      F: ['40 min muy suaves en Z1-Z2 (unos 7 km)', '40 min muy suaves en Z1-Z2', '45 min muy suaves en Z1-Z2', '35 min muy suaves en Z1-Z2'],
+      rpe: '1-2', fc: 'Zona 0', int: 'Regenerativo (Z0): muy suave de verdad.',
+      F: ['40 min muy suaves en Z0 (unos 7 km)', '40 min muy suaves en Z0', '45 min muy suaves en Z0', '35 min muy suaves en Z0'],
       nota: 'Recuperar también es entrenar.' }
   }
 };
@@ -3970,7 +3980,7 @@ function runFicha(e, r) {
   var k = faseHoy(r, e.fases.length), sw = semanaDe(r);
   var h = '<div class="run-f"><div class="run-p"><small>' + (sw ? 'Hoy toca · semana ' + sw.w + ' de ' + sw.sem : 'Parte principal') + '</small><b>' + esc(e.fases[k].p) + '</b></div>';
   h += '<ul class="run-l"><li>' + ic('play', 13) + '<span>' + esc(e.ca) + '</span></li><li>' + ic('check', 13) + '<span>' + esc(e.vc) + '</span></li></ul>';
-  if (e.int) h += '<p class="run-i"><b>Intensidad: RPE ' + esc(e.rpe) + (e.fc ? ' · ' + esc(e.fc) : '') + '.</b> ' + esc(e.int) + '</p>';
+  if (e.int) h += '<p class="run-i"><b>Intensidad: RPE ' + esc(e.rpe) + (e.fc ? ' · ' + esc(e.fc) : '') + '.</b> ' + esc(e.int) + ' <button class="link zn-l" data-a="zonasInfo">Ver las zonas</button></p>';
   h += '<details class="run-pr"><summary>Cómo progresa</summary><ol>' + e.fases.map(function (f, j) { return '<li' + (j === k ? ' class="on"' : '') + '><small>' + esc(f.t) + '</small><span>' + esc(f.p) + '</span></li>'; }).join('') + '</ol></details>';
   if (e.nota) h += '<p class="txt mut sm">' + esc(e.nota) + '</p>';
   return h + '</div>';
@@ -4020,7 +4030,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.64';
+var YO_V = 'yo-1.65';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6395,9 +6405,11 @@ function rpInt(B) {
   var L = B.intervalCount ? [].concat.apply([], Array.apply(null, Array(B.intervalCount)).map(function () { return [[B.intervalDuration, 'on'], [B.recoveryDuration, 'off']]; })) : B.tramos ? B.tramos.map(function (x) { return [x.durationSeconds, x.kind]; }) : [[B.durationSeconds, 'on']];
   return '<div class="rp-int" aria-hidden="true">' + L.map(function (x) { return '<i style="flex:' + x[0] + ';height:' + (x[1] === 'on' ? 40 : 14) + 'px;background:' + (x[1] === 'on' ? 'var(--neg)' : 'var(--gris)') + '"></i>'; }).join('') + '</div>';
 }
-/* zonas (17 nov, Javier: «especificar trotar a Z1-Z2, aparte de intensidad baja»): del esfuerzo de 0 a 10 a la zona de pulso */
-function rpZona(rpe) { var a = String(rpe || '').split('-').map(Number), lo = a[0] || 0, hi = a[1] || lo, z = function (v) { return v <= 3 ? 1 : v <= 5 ? 2 : v <= 6 ? 3 : v <= 8 ? 4 : 5; }, z1 = z(lo), z2 = z(hi); return 'Z' + z1 + (z2 !== z1 ? '-Z' + z2 : ''); }
-function rpRpeTxt(B) { return B.recoveryRPE ? '<b>Trote en ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): puedes hablar con frases cortas. <b>Andando en ' + rpZona(B.recoveryRPE) + '</b> (' + B.recoveryRPE + ' de 10). Si te ahogas, baja el ritmo o anda antes.' : '<b>En ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): ritmo de charla. Si te ahogas, baja el ritmo; si lo necesitas, anda un minuto y sigue.'; }
+/* zonas (17 nov, Javier: «especificar trotar a Z1-Z2, aparte de intensidad baja»): del esfuerzo de 0 a 10 a la zona. yo-1.65 (25 nov): las de MOOD ON, Z0-Z6
+   (RPE 1-2 → Z0, 3-4 → Z1, 5-6 → Z2, 7-8 → Z3, 9 → Z4, 10 → Z5; Z6, solo sprints) */
+function rpZona(rpe) { var a = String(rpe || '').split('-').map(Number), lo = a[0] || 0, hi = a[1] || lo, z = function (v) { return v <= 2 ? 0 : v <= 4 ? 1 : v <= 6 ? 2 : v <= 8 ? 3 : v < 10 ? 4 : 5; }, z1 = z(lo), z2 = z(hi); return 'Z' + z1 + (z2 !== z1 ? '-Z' + z2 : ''); }
+function rpRpeTxt(B) { var zd = function (r) { var m = /Z(\d)/.exec(rpZona(r)); return m && ZN[+m[1]] ? ZN[+m[1]][1].replace(/^[^:]*:\s*/, '').replace(/^./, function (c) { return c.toLowerCase(); }) : ''; };      // yo-1.65: lo que se nota en esa zona
+  return (B.recoveryRPE ? '<b>Trote en ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): ' + zd(B.intensityRPE) + '. <b>Andando en ' + rpZona(B.recoveryRPE) + '</b> (' + B.recoveryRPE + ' de 10). Si te ahogas, baja el ritmo o anda antes.' : '<b>En ' + rpZona(B.intensityRPE) + '</b> (esfuerzo ' + B.intensityRPE + ' de 10): ' + zd(B.intensityRPE) + '. Si te ahogas, baja el ritmo; si lo necesitas, anda un minuto y sigue.') + ' <button class="link zn-l" data-a="zonasInfo">Ver las zonas</button>'; }
 function rpFila(x, i, k, ck) {
   var E = RUN_EJ[x.ex] || { n: x.ex, co: [''] }, on = ck && ck.indexOf(i) >= 0, tm = ck && !x.reps && !x.sets;
   return '<div class="rp-ej' + (on ? ' on' : '') + (tm ? ' con-tm' : '') + '">' + (ck ? '<button class="rp-ck' + (on ? ' on' : '') + '" data-a="rpCk" data-k="' + k + '" data-j="' + i + '" aria-pressed="' + !!on + '" aria-label="' + esc(E.n) + ' hecho">' + ic('check', 14, null, 3) + '</button>' : '') +
@@ -6733,7 +6745,7 @@ var PROG_FIJOS = [
     D: [{ n: 'Sentadilla + MetCon', p: 'pierna', ej: [FJ('Sentadilla', 4, '5', { rir: '2-3' }), FJ('Peso muerto rumano', 3, '8', { rir: '2-3' }),
         BQ('MetCon', 'amrap', { min: 12, nota: 'RPE 7-8.' }, [BE('Wall ball', 15, '', '9/6'), BE('Kettlebell swing', 12, '', '24/16'), BE('Burpees', 9)])] },
       { n: 'Halterofilia técnica + gimnásticos', p: 'completo', ej: [FJ('Power clean', 5, '3', { rir: '3', nota: 'Técnica: carga ligera y cada repetición perfecta' }), FJ('Push press con barra', 4, '5', { rir: '3' }), FJ('Dominadas', 4, '5-8', { rir: '2' }), FJ('Hollow hold', 3, '30', { seg: 1, rir: '' }), FJ('Flexiones', 3, '10-15', { rir: '2' })] },
-      { n: 'Resistencia aeróbica', p: 'cardio', ej: [FJ('Remo ergómetro', 1, '', { cardio: 20, nota: 'Zona 2: a un ritmo en el que puedas hablar' }), FJ('Assault bike', 1, '', { cardio: 15, nota: 'Zona 2, cómodo' })] },
+      { n: 'Resistencia aeróbica', p: 'cardio', ej: [FJ('Remo ergómetro', 1, '', { cardio: 20, nota: 'Zona 1: a un ritmo en el que puedas hablar' }), FJ('Assault bike', 1, '', { cardio: 15, nota: 'Zona 1, cómodo' })] },
       { n: 'Empuje y tracción + WOD', p: 'torso', ej: [FJ('Press banca', 4, '6', { rir: '2' }), FJ('Remo', 4, '8', { rir: '2' }), FJ('Press militar con mancuernas', 3, '10'),
         BQ('Engine', 'fortime', { rondas: 4, tc: 18, nota: 'RPE 7-8.' }, [BE('Remo ergómetro', 400, 'm'), BE('Arrancada con mancuerna', 10, '', '', 'alternando'), BE('Burpees', 8)])] },
       { n: 'Endurance WOD moderado', p: 'completo', ej: [BQ('Endurance', 'rondas', { rondas: 3, nota: 'A un ritmo que puedas mantener (RPE 6): no es para ir a tope.' }, [BE('Remo ergómetro', 500, 'm'), BE('Kettlebell swing', 15), BE('Step-up subida en banco', 10, '', '', 'por pierna'), BE('Comba', 60, 's')])] }] },
@@ -6757,7 +6769,7 @@ var PROG_FIJOS = [
   { id: 'fn1', n: 'Funcional · intermedio', c: 'hibrido resistencia', niv: 'int', dias: 4, min: 50, sem: 8, rir: '2', d: 90, lug: 'gym', obj: 'recomp', tag: 'Funcional',
     D: [{ n: 'Tren inferior', p: 'pierna', ej: [FJ('Sentadilla goblet', 4, '8-10'), FJ('Kettlebell swing', 4, '15', { rir: '' }), FJ('Zancada inversa con mancuernas', 3, '10', { ld: 1 }), FJ('Step-up subida en banco', 3, '10', { ld: 1 }), FJ('Puente de glúteo con mancuerna', 3, '12'), FJ('Plancha lateral', 2, '30', { seg: 1, ld: 1, rir: '' })] },
       { n: 'Tren superior', p: 'torso', ej: [FJ('Press militar con kettlebell', 3, '8', { ld: 1 }), FJ('Remo gorila con kettlebells', 3, '10'), FJ('Flexiones', 3, '8-15'), FJ('Remo invertido en TRX', 3, '10'), FJ('Farmer carry con kettlebells', 4, '40', { m: 1, rir: '' }), FJ('Gateo de oso', 3, '20', { m: 1, rir: '' })] },
-      { n: 'Cardio', p: 'cardio', ej: [FJ('Remo ergómetro', 1, '', { cardio: 20, nota: 'Ritmo cómodo (zona 2)' }), FJ('Escalador', 1, '', { cardio: 10, nota: 'Ritmo cómodo' })] },
+      { n: 'Cardio', p: 'cardio', ej: [FJ('Remo ergómetro', 1, '', { cardio: 20, nota: 'Ritmo cómodo (zona 1)' }), FJ('Escalador', 1, '', { cardio: 10, nota: 'Ritmo cómodo' })] },
       { n: 'Full body funcional', p: 'completo', ej: [BQ('Full body', 'circuito', { rondas: 4, tw: 40, tr: 20, trr: 75, nota: 'RPE 6-8.' }, [BE('Sentadilla goblet', 40, 's'), BE('Kettlebell swing', 40, 's'), BE('Mountain climbers', 40, 's'), BE('Remo con mancuerna a una mano', 40, 's', '', 'cambia de brazo a mitad'), BE('Zancada inversa con mancuernas', 40, 's', '', 'alternando'), BE('Burpees', 40, 's')])] }] },
   { id: 'hi1', n: 'HIIT + fuerza · intermedio', c: 'hibrido resistencia', niv: 'int', dias: 3, min: 45, sem: 8, rir: '2-3', d: 90, lug: 'gym', obj: 'grasa', tag: 'HIIT',
     nota: 'Los intervalos, fuertes pero no a tope (RPE 7-9). Si en los últimos rindes mucho menos, para ahí.',
@@ -6964,13 +6976,13 @@ var RSUELTAS = [
   SU('s5', 'Rutina fuerza · cuerpo completo', 'fuerza', 'ini', 55, { rir: '3', d: 150, nota: 'Técnica antes que peso. Sube cuando hagas todas las repeticiones con buena técnica.' }, [FJ('Sentadilla', 3, '5', { rir: '3-4' }), FJ('Press banca', 3, '5', { rir: '3-4' }), FJ('Remo', 3, '8'), FJ('Peso muerto rumano', 2, '8'), FJ('Dead bug', 2, '10', { rir: '' })]),
   SU('s6', 'Rutina fuerza · 5 × 5', 'fuerza', 'int', 60, { rir: '2-3', d: 180, nota: 'El mismo peso en las 5 series. Cuando salgan todas, la próxima vez 2,5 kg más.' }, [FJ('Sentadilla', 5, '5'), FJ('Press banca', 5, '5'), FJ('Remo', 5, '5')]),
   // ---- Carrera (con su calentamiento antes y las zonas)
-  SU('c1', 'Rutina fartlek', 'carrera', 'ini', 40, {}, [FJ('', 1, '', { runE: RU('Fartlek', 'fartlek', '10', '5', [runBl('8', '', '1 min', '', '1:30', 'trotando')], '6-7', 'Zona 3-4 en los cambios', '8 cambios de 1 min a ritmo alegre (Z3-Z4) y 1:30 trotando suave (Z1-Z2). Antes, 10 min suaves; al final, 5 min andando.') })]),
-  SU('c2', 'Rutina series cortas · 10 × 200 m', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Series cortas', 'series', '15', '10', [runBl('10', '200 m', '', '', '1:00', 'andando o trotando')], '8', 'Zona 4-5', 'Rápidas pero controladas: la última, igual de rápida que la primera. 15 min suaves antes y 10 al final.') })]),
-  SU('c3', 'Rutina series de 400 m', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Series de 400 m', 'series', '15', '10', [runBl('8', '400 m', '', '', '1:30', 'trotando')], '8', 'Zona 4', 'A ritmo de 5 km o algo más rápido; 1:30 trotando entre series.') })]),
-  SU('c4', 'Rutina series largas · 5 × 1000 m', 'carrera', 'ava', 55, {}, [FJ('', 1, '', { runE: RU('Series largas', 'series', '15', '10', [runBl('5', '1000 m', '', '', '2:00', 'trotando')], '7-8', 'Zona 4', 'A ritmo de 10 km; 2 min trotando entre series.') })]),
-  SU('c5', 'Rutina umbral', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Umbral', 'umbral', '15', '10', [runBl('2', '', '10 min', '', '3:00', 'trotando')], '7', 'Zona 3-4 (umbral)', '«Cómodamente duro»: puedes decir frases cortas. 2 bloques de 10 min con 3 min trotando.') })]),
-  SU('c6', 'Rutina cuestas', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Cuestas', 'cuestas', '15', '10', [runBl('8', '', '45 s', '', 'bajando', 'andando')], '8', 'Zona 4', '8 subidas de 45 s fuertes en una cuesta moderada; baja andando o trotando muy suave.') })]),
-  SU('c7', 'Rutina tirada larga suave', 'carrera', 'int', 70, {}, [FJ('', 1, '', { runE: RU('Tirada larga', 'larga', '', '', [runBl('1', '', '60 min')], '3-4', 'Zona 2', 'Suave y larga: cuenta el tiempo, no el ritmo. Si hace falta, camina 1 min cada 10.') })])
+  SU('c1', 'Rutina fartlek', 'carrera', 'ini', 40, {}, [FJ('', 1, '', { runE: RU('Fartlek', 'fartlek', '10', '5', [runBl('8', '', '1 min', '', '1:30', 'trotando')], '5-6', 'Zona 2 en los cambios', '8 cambios de 1 min a ritmo alegre (Z2, moderado) y 1:30 trotando suave (Z1). Antes, 10 min suaves; al final, 5 min andando.') })]),
+  SU('c2', 'Rutina series cortas · 10 × 200 m', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Series cortas', 'series', '15', '10', [runBl('10', '200 m', '', '', '1:00', 'andando o trotando')], '9', 'Zona 4', 'Muy rápidas (Z4) pero controladas: la última, igual de rápida que la primera. 15 min suaves antes y 10 al final.') })]),
+  SU('c3', 'Rutina series de 400 m', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Series de 400 m', 'series', '15', '10', [runBl('8', '400 m', '', '', '1:30', 'trotando')], '7-8', 'Zona 3', 'A ritmo de 5 km (Z3, VO₂máx); 1:30 trotando suave entre series.') })]),
+  SU('c4', 'Rutina series largas · 5 × 1000 m', 'carrera', 'ava', 55, {}, [FJ('', 1, '', { runE: RU('Series largas', 'series', '15', '10', [runBl('5', '1000 m', '', '', '2:00', 'trotando')], '7-8', 'Zona 3', 'A ritmo de 10 km (Z3); 2 min trotando suave entre series.') })]),
+  SU('c5', 'Rutina umbral', 'carrera', 'int', 45, {}, [FJ('', 1, '', { runE: RU('Umbral', 'umbral', '15', '10', [runBl('2', '', '10 min', '', '3:00', 'trotando')], '5-6', 'Zona 2 (umbral)', '«Cómodamente duro» (Z2): puedes decir frases cortas. 2 bloques de 10 min con 3 min trotando.') })]),
+  SU('c6', 'Rutina cuestas', 'carrera', 'int', 40, {}, [FJ('', 1, '', { runE: RU('Cuestas', 'cuestas', '15', '10', [runBl('8', '', '45 s', '', 'bajando', 'andando')], '7-8', 'Zona 3', '8 subidas de 45 s fuertes (Z3) en una cuesta moderada; baja andando o trotando muy suave.') })]),
+  SU('c7', 'Rutina tirada larga suave', 'carrera', 'int', 70, {}, [FJ('', 1, '', { runE: RU('Tirada larga', 'larga', '', '', [runBl('1', '', '60 min')], '3-4', 'Zona 1', 'Suave y larga (Z1, ritmo de charla): cuenta el tiempo, no el ritmo. Si hace falta, camina 1 min cada 10.') })])
 ];
 var RS_P = { p4: 'torso', p5: 'tiron', p6: 'empuje', p9: 'torso', p10: 'torso', s2: 'empuje', s4: 'empuje', p7: 'pierna', s1: 'pierna', s3: 'pierna', h4: 'pierna' };      // el calentamiento, según lo que se trabaja
 RSUELTAS.forEach(function (x) { x.p = x.ej[0].runE ? 'carrera' : RS_P[x.id] || (/gluteo/.test(x.c) ? 'pierna' : 'completo'); });
@@ -8931,6 +8943,21 @@ function repartoSemana() {
    pantalla completa) los va marcando: qué toca, su zona, cuánto queda y qué viene luego, con pitidos distintos para apretar y para aflojar.
    Los tramos por distancia (400 m…) no tienen tiempo: el reloj sube y ella toca «Hecho» al llegar. Los programas del piloto (e.rp) ya
    tienen su cronómetro (correr.js) y no cambian. */
+/* yo-1.65 · 25 nov 2026, 17:03 (Javier: «la zona 2 no es fuerte… nosotros vamos a usar la Z, no la R»; con la tabla de zonas que mandó): las zonas
+   de carrera de MOOD ON, de Z0 a Z6. En los tramos, el nombre sale de la zona («Suave · Z1», «Moderado · Z2»), nunca «Fuerte» a secas */
+var ZN = [['Regenerativo', 'Muy suave: puedes ir andando o cantar', '1-2', 'Menos del 65 % del VO₂máx', 'Recuperar entre días duros y soltar piernas'],
+  ['Suave', 'Ritmo de charla: frases largas', '3-4', '65-75 % del VO₂máx (umbral aeróbico)', 'Base aeróbica: rodajes y tiradas largas'],
+  ['Moderado', '«Cómodamente duro»: frases cortas', '5-6', '75-85 % del VO₂máx (umbral anaeróbico)', 'Ritmo de media maratón, tempo y cambios de ritmo'],
+  ['Fuerte', 'Solo palabras sueltas', '7-8', '90-100 % del VO₂máx', 'Series de 400 a 1.000 m a ritmo de 3-5 km'],
+  ['Muy fuerte', 'No puedes hablar', '9', '105-120 % de la VAM (capacidad anaeróbica)', 'Series cortas de 200 a 400 m'],
+  ['Máximo', 'A tope, de 20 a 60 s', '9-10', '120-140 % de la VAM (potencia anaeróbica)', 'Repeticiones de 100 a 200 m'],
+  ['Sprint', 'A tope, menos de 15 s', '10', 'Más del 160 % de la VAM', 'Velocidad: 60-80 m con recuperación completa']];
+var ZN_C = ['#8A8C96', '#2F80C8', '#5B4BD6', '#E07A1F', '#DE4B32', '#C62E2E', '#8E1F2B'];
+function znNom(z) { var m = /Z(\d)(?:-Z?(\d))?/.exec(z || ''); if (!m || !ZN[+m[1]]) return ''; return ZN[+m[1]][0] + (m[2] && m[2] !== m[1] && ZN[+m[2]] ? ' a ' + ZN[+m[2]][0].toLowerCase() : ''); }
+A.zonasInfo = function () {
+  hoja('<h2>Las zonas de carrera</h2><p class="mut sm">Cuánto aprietas, de Z0 a Z6. El esfuerzo va de 0 a 10 (RPE). Si no llevas pulsómetro, guíate por cómo hablas.</p><div class="zn-t">' +
+    ZN.map(function (z, i) { return '<div class="zn-f"><b class="zn-n" style="--c:' + ZN_C[i] + '">Z' + i + '</b><span><b>' + z[0] + ' <em>RPE ' + z[2] + '</em></b><small>' + z[1] + '. ' + z[4] + '.</small><small class="zn-x">' + z[3] + '</small></span></div>'; }).join('') + '</div>' +
+    '<p class="mut sm">La mayor parte de la semana va en Z0-Z1; una o dos sesiones, en Z2-Z3; lo demás, poco y con buena recuperación.</p><button class="btn" data-a="cerrarHoja">Entendido</button>'); };
 function trSeg(v, u) {      // «1:30» → 90 · «45 s» → 45 · «2 min» → 120 · «1,5 min» → 90
   v = String(v || '').trim(); var m = /^(\d+):(\d{2})$/.exec(v); if (m) return +m[1] * 60 + +m[2];
   var n = parseFloat(v.replace(',', '.')); if (!(n > 0)) return 0; return Math.round(/^s/.test(u || '') ? n : n * 60);
@@ -8943,12 +8970,12 @@ function trKind(t) { return /andando|caminando|camina\b|parado|descans/i.test(t)
 function trNom(t, k) {      // el nombre corto del tramo, sin la duración ni la zona
   var s = String(t || '').replace(/\(?\bZ\d(\s*[-–]\s*Z?\d)?\)?/gi, '').replace(/\ben\s*$/i, '').replace(/\ben\s+zona\s*\d.*$/i, '').replace(/\s{2,}/g, ' ').trim();
   s = s.replace(/^(a\s+)?/, '').replace(/\s+en$/, '');
-  return s ? s.charAt(0).toUpperCase() + s.slice(1) : k === 'off' ? 'Suave' : 'Fuerte';
+  return s ? s.charAt(0).toUpperCase() + s.slice(1) : '';      // yo-1.65: sin nombre, lo pone su zona (trDe)
 }
 function trUno(txt, def) {      // «1 min rápido en Z3», «1:30 suave», «90 s andando» → { s, k, t, z }
   var m = /^\s*(\d+(?::\d{2})?(?:[.,]\d+)?)\s*(min|s|seg)?\b\.?\s*(.*)$/i.exec(txt || ''); if (!m) return null;
   var s = trSeg(m[1], m[2] || (/:/.test(m[1]) ? '' : 'min')); if (!s) return null;
-  var r = m[3] || '', k = trKind(r); return { s: s, k: k, t: trNom(r, k), z: trZona(r, k === 'on' ? def : /trot/i.test(r) ? 'Z1-Z2' : '') };
+  var r = m[3] || '', k = trKind(r); return { s: s, k: k, t: trNom(r, k), z: trZona(r, k === 'on' ? def : /trot/i.test(r) ? 'Z0-Z1' : /andando|caminando/i.test(r) ? 'Z0' : '') };
 }
 function trRepite(n, L, out) { for (var i = 0; i < n; i++) L.forEach(function (x) { out.push(Object.assign({ v: i + 1, nv: n }, x)); }); }
 /* de un texto de sesión a tramos. Devuelve [] si no hay nada que marcar (por km, o sin tiempos) */
@@ -8978,7 +9005,7 @@ function trDeTexto(txt, def) {
     }
     if ((c = /^(\d+)(?:-(\d+))?\s*min\b\s*(.*)$/i.exec(fr))) {      // «20-25 min seguidos trotando suave en Z2 (unos 3-3,5 km)»: un tramo seguido
       var r2 = c[3].replace(/\(.*?\)/g, '').trim();
-      return out.push({ s: +c[1] * 60, k: 'on', t: trNom(r2.replace(/^seguidos?\s*/, ''), 'on') || 'Seguido', z: trZona(c[3], def), largo: 1 });
+      return out.push({ s: +c[1] * 60, k: 'on', t: trNom(r2.replace(/^seguidos?\s*/, ''), 'on'), z: trZona(c[3], def), largo: 1 });
     }
   });
   return out.length && out.some(function (x) { return x.s || x.m != null; }) ? out : [];
@@ -9001,6 +9028,7 @@ function trDe(e) {
       if (off) off.k = 'off'; trRepite(+b.r || 1, off ? [on, off] : [on], L); if (off && (+b.r || 1) > 1) L.pop(); });
     if (L.length) L = trExtra(e.ca, 'cal').concat(L, trExtra(e.vc, 'vc'));
   } else if (e.tipo === 'cardio') L = trDeTexto(e.nota || '', def);
+  L.forEach(function (x) { if (!x.t) x.t = znNom(x.z) || (x.k === 'off' ? 'Suave' : 'A tu ritmo'); });      // yo-1.65: el nombre, de su zona
   return L.length >= 2 || L.length === 1 && L[0].s ? L : [];
 }
 function trTot(L) { return L.reduce(function (a, x) { return a + (x.s || 0); }, 0); }
