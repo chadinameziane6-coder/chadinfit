@@ -2997,6 +2997,41 @@ html[data-tema="oscuro"] .pd-ch i{background:#fff;color:#000}
 .sem-l .fila-d.dst .dt{border-radius:12px;box-shadow:0 0 0 2px #9A9CA5;background:rgba(0,0,0,.03)}
 .sem-l .fila-d.mov .dt{animation:pdmov .7s ease}
 @media (prefers-reduced-motion:reduce){.sem-l .fila-d.mov .dt{animation:none}}
+/* yo-1.69 · «Hecho» dentro de la rutina (Mi semana) y carpetas en «Mis rutinas» */
+.fila-d .dn small{display:block;font-size:10.5px;font-weight:600;color:#9A9CA5;margin-top:1px}
+.pd-ch.hch i{background:#1FA45A;color:#fff}
+.pd-ch.hch i .ic{margin:0}
+.pd-ch em{font-style:normal;font-size:11.5px;font-weight:700;color:#1F8A4C;padding-right:6px;white-space:nowrap}
+.sem-cs .pd-ch.hch{grid-template-columns:22px minmax(0,1fr) auto}
+html[data-tema="oscuro"] .pd-ch.hch i{background:#1FA45A;color:#fff}
+html[data-tema="oscuro"] .pd-ch em{color:#6FD69A}
+.mr-cab{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 2px 8px}
+.mr-cab .mr-t{margin:0!important}
+.mr-nc{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:999px;border:1.5px solid var(--borde2,#E4E4E8);background:var(--card);color:var(--tx);font:inherit;font-size:12.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.mr-nc .ic{margin:0}
+.mr-cp{background:var(--card);border-radius:18px;margin-bottom:10px;box-shadow:0 1px 2px rgba(0,0,0,.04);overflow:hidden}
+.mr-cb{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:none;color:var(--tx);font:inherit;text-align:left;cursor:pointer}
+.mr-ci{width:40px;height:40px;border-radius:12px;background:#F2F2F5;display:flex;align-items:center;justify-content:center;flex:none;color:#0D0D10}
+.mr-ci .ic{margin:0}
+.mr-cn{flex:1;min-width:0;display:flex;flex-direction:column}
+.mr-cn b{font-size:15px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mr-cn small{font-size:12px;font-weight:600;color:var(--tx3,#8A8C96)}
+.mr-cin{padding:0 10px 4px;border-top:1px solid var(--linea)}
+.mr-cin .mr-fl,.mr-cin .lista-rut{margin-top:10px}
+.mr-cv{margin:12px 4px 4px}
+.mr-g{display:block;font-size:12px;font-weight:700;color:var(--tx3,#8A8C96);margin:14px 4px 8px}
+.mr-tg{display:inline-block;font-size:10px;font-weight:800;letter-spacing:.02em;color:#0D0D10;background:#EDEDF0;border-radius:6px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.cp-l{margin:4px 0 2px}
+.cp-o{grid-template-columns:28px minmax(0,1fr) 24px}
+.cp-k{width:24px;height:24px;border-radius:50%;border:1.5px solid #D8D8DE;display:flex;align-items:center;justify-content:center;text-decoration:none}
+.cp-k .ic{margin:0;color:#fff}
+.cp-o.on .cp-k{background:#0D0D10;border-color:#0D0D10}
+html[data-tema="oscuro"] .mr-ci{background:#2C2C2E;color:#fff}
+html[data-tema="oscuro"] .mr-tg{background:#2C2C2E;color:#fff}
+html[data-tema="oscuro"] .cp-o.on .cp-k{background:#fff;border-color:#fff}
+html[data-tema="oscuro"] .cp-o.on .cp-k .ic{color:#000}
+.mr-cin .g-acc{justify-content:space-between;gap:8px;padding:10px 4px 8px}
+.mr-cin .g-acc .link{white-space:nowrap;font-size:13px}
 
 </style>
 </head>
@@ -3655,7 +3690,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.68';
+var YO_V = 'yo-1.69';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -3715,6 +3750,7 @@ var IC = {
   compartir: '<path d="M12 3v12M7 8l5-5 5 5M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>', descargar: '<path d="M12 4v11M7 10l5 5 5-5M5 20h14"/>',
   foto: '<path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13.5" r="3.5"/>',
   papelera: '<path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/>', grip: '<circle cx="9" cy="6" r="1.2"/><circle cx="15" cy="6" r="1.2"/><circle cx="9" cy="12" r="1.2"/><circle cx="15" cy="12" r="1.2"/><circle cx="9" cy="18" r="1.2"/><circle cx="15" cy="18" r="1.2"/>',
+  carpeta: '<path d="M3 7.5A2.5 2.5 0 0 1 5.5 5h3.6l2 2.2h7.4A2.5 2.5 0 0 1 21 9.7v7.8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z"/>',
   lapiz: '<path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M14 6l4 4"/>',
   ajustes: '<path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/>',      // 20 nov (Chadín: «no me pega un sol»): ajustes como dos controles deslizantes
   codigo: '<path d="M4 6v12M7 6v12M10 6v12M14 6v12M16 6v12M20 6v12"/>', olla: '<path d="M4 10h16v6a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4z"/><path d="M2 10h20M9 6.5c0-1 1-1.5 1-2.5M13 6.5c0-1 1-1.5 1-2.5"/>',
@@ -3800,6 +3836,7 @@ function rutIni(r) { return (String((r && r.nombre) || '?').replace(/^(Correr|Ca
 function borraRutina(id) {
   S.rutinas = S.rutinas.filter(function (r) { return r.id !== id; });
   var sem = (S.perfil && S.perfil.semana) || {}, s2 = sem2De(S.perfil); DIAS7.forEach(function (k) { diaQuita(sem, s2, k, id); });
+  ((S.perfil && S.perfil.carpetas) || []).forEach(function (c) { c.ids = (c.ids || []).filter(function (x) { return x !== id; }); });      // yo-1.69
   guardar('yo_borrar_rutina', { rid: id }, 'rut_' + id); return guardaPerfil();
 }
 
@@ -4668,8 +4705,10 @@ function recsMejora(n) {
 VISTAS.semana = function () {
   var sem = (S.perfil && S.perfil.semana) || {}, s2 = sem2De(S.perfil), H = hechosSemana(), hoy = hoyLetra();
   var h = '<div class="pant pad">' + cab('Mi semana') + '<p class="mut sm">Qué rutina toca cada día (hasta dos). Para cambiarla de día, arrástrala.</p><section class="card lista-d sem-l">';
-  DIAS7.forEach(function (d) { var ids = diaIds(sem, s2, d);      // yo-1.66: las dos rutinas del día, en color
-    h += '<div class="fila-d' + (S.x.semMov && S.x.semMov.indexOf(d) >= 0 ? ' mov' : '') + '" data-dd="' + d + '"><span class="dn' + (ids.length || d === hoy ? ' on' : '') + '">' + DIA_N[d].slice(0, 3) + '</span><span class="dt">' + (ids.length ? '<span class="pd-cs sem-cs">' + ids.map(function (id) { return pdChip(id, d, false, true); }).join('') + '</span>' : '<b class="mut">Descanso</b>') + (H[d] ? '<small class="ok">' + ic('check', 13, 'var(--verde)', 2.6) + 'Hecho</small>' : d === hoy ? '<small class="pill">Hoy</small>' : '') + '</span><button class="btn-o" data-a="semCambiar" data-v="' + d + '">Cambiar</button></div>'; });
+  var lun = lunesDe(hoyStr());
+  DIAS7.forEach(function (d, i) { var ids = diaIds(sem, s2, d), f = sumar(lun, i), SD = S.sesiones.filter(function (x) { return x.fecha === f; }), ok = ids.map(function (id) { return SD.some(function (x) { return x.rid === id; }); });
+    if (SD.length && ids.length && !ok.some(Boolean)) ok[0] = true;      // yo-1.69 (Javier: «lo veo más claro en el lateral derecho… o en el circulito»): «Hecho» dentro de la rutina hecha, y «Hoy» bajo el día
+    h += '<div class="fila-d' + (S.x.semMov && S.x.semMov.indexOf(d) >= 0 ? ' mov' : '') + '" data-dd="' + d + '"><span class="dn' + (ids.length || d === hoy ? ' on' : '') + '">' + DIA_N[d].slice(0, 3) + (d === hoy ? '<small>Hoy</small>' : '') + '</span><span class="dt">' + (ids.length ? '<span class="pd-cs sem-cs">' + ids.map(function (id, k) { return pdChip(id, d, false, true, ok[k]); }).join('') + '</span>' : '<b class="mut">' + (H[d] ? 'Descanso · entrenaste' : 'Descanso') + '</b>') + '</span><button class="btn-o" data-a="semCambiar" data-v="' + d + '">Cambiar</button></div>'; });
   h += '</section>';
   return h + '</div>';
 };
@@ -5023,9 +5062,9 @@ function filaRutFoto(r) {
   return '<div class="mr-fc"><img src="' + imgDe(r.id, r.nombre) + '" alt="" loading="lazy" decoding="async"><button class="mr-fo" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
     '<button class="redondo mr-play" data-a="empezarRut" data-id="' + r.id + '" aria-label="Empezar ' + esc(r.nombre) + '">' + ic('play', 15) + '</button></div>';
 }
-function filaRut(r, sangria) {
+function filaRut(r, sangria, tag) {
   var dias = diasDeRut(r.id).map(function (d) { return DIA_N[d].toLowerCase(); });
-  return '<div class="fila-r2' + (sangria ? ' sang' : ' mr-f') + '">' + (sangria ? '' : rutPropia(r) ? '<span class="mr-th mr-ic">' + ic('pesa', 22) + '</span>' : '<span class="mr-th"><img src="' + imgRut(r) + '" alt="" loading="lazy" decoding="async"></span>') + '<button class="fr-t" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
+  return '<div class="fila-r2' + (sangria ? ' sang' : ' mr-f') + '">' + (sangria ? '' : rutPropia(r) ? '<span class="mr-th mr-ic">' + ic('pesa', 22) + '</span>' : '<span class="mr-th"><img src="' + imgRut(r) + '" alt="" loading="lazy" decoding="async"></span>') + '<button class="fr-t" data-a="abrirRut" data-id="' + r.id + '"><b>' + esc(r.nombre) + '</b><small>' + (tag && !rutPropia(r) ? '<span class="mr-tg">MOOD ON</span>' : '') + nEjTxt(r) + ' · ' + minRut(r) + ' min' + (dias.length ? ' · ' + dias.join(', ') : '') + '</small></button>' +
     '<button class="redondo ' + (sangria ? 'gris' : 'mr-play') + '" data-a="empezarRut" data-id="' + r.id + '" aria-label="Empezar ' + esc(r.nombre) + '">' + ic('play', 15) + '</button></div>';
 }
 /* ===== Semana a semana de un programa (17 nov, Javier: «los programas ya no salen por semanas… ¿qué ocurre con la progresión?»; maqueta aprobada)
@@ -5097,8 +5136,20 @@ function vMisRutinas() {
     if (ab) h += '<div class="mp-in">' + progSemHtml(pid) + L.map(function (r) { return filaRut(r, true); }).join('') + '<div class="g-acc"><button class="link" data-a="planDias" data-v="' + pid + '">' + ic('cambiar', 15) + 'Cambiar días</button><button class="link" data-a="borrarPlan" data-v="' + pid + '">Quitar este bloque</button>' + (esPlan ? '<button class="link" data-a="pedirPlan">Hacer otro plan</button>' : '') + '</div></div>';
     h += '</section>';
   });
-  var m21 = mr21();
-  if (sueltas.length) h += '<b class="prog-niv mr-t">Mis rutinas · ' + sueltas.length + '</b>' + (m21 === 'foto' ? '<div class="mr-fl">' + sueltas.map(function (r) { return rutPropia(r) ? filaRutFoto(r) : '<section class="card lista-rut mr-l">' + filaRut(r, false) + '</section>'; }).join('') + '</div>' : '<section class="card lista-rut mr-l' + (m21 === 'negro' ? ' mr-neg' : '') + '">' + sueltas.map(function (r) { return filaRut(r, false); }).join('') + '</section>');
+  /* yo-1.69 · 25 nov 2026, 18:27 (Javier: «en mis rutinas, que puedas crear carpetas y que se distingan las que coges predeterminadas de las tuyas creadas»):
+     arriba tus carpetas (se abren y cierran); fuera de carpetas, «Creadas por ti» y «De MOOD ON» por separado. Las carpetas viven en perfil.carpetas */
+  var m21 = mr21(), CP = carpetas(), enC = {}; CP.forEach(function (c) { (c.ids || []).forEach(function (id) { enC[id] = c.id; }); });
+  var tarj = function (L, tag) { return m21 === 'foto' ? '<div class="mr-fl">' + L.map(function (r) { return rutPropia(r) ? filaRutFoto(r) : '<section class="card lista-rut mr-l">' + filaRut(r, false, tag) + '</section>'; }).join('') + '</div>' : '<section class="card lista-rut mr-l' + (m21 === 'negro' ? ' mr-neg' : '') + '">' + L.map(function (r) { return filaRut(r, false, tag); }).join('') + '</section>'; };
+  if (sueltas.length || CP.length) {
+    h += '<div class="mr-cab"><b class="prog-niv mr-t">Mis rutinas · ' + sueltas.length + '</b><button class="mr-nc" data-a="carpNueva">' + ic('carpeta', 15) + 'Nueva carpeta</button></div>';
+    CP.forEach(function (c) { var L = sueltas.filter(function (r) { return enC[r.id] === c.id; }), ab = S.x.abCarp === c.id;
+      h += '<section class="mr-cp' + (ab ? ' ab' : '') + '"><button class="mr-cb" data-a="carpAb" data-v="' + esc(c.id) + '" aria-expanded="' + ab + '"><span class="mr-ci">' + ic('carpeta', 20) + '</span><span class="mr-cn"><b>' + esc(c.n) + '</b><small>' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + '</small></span><span class="mp-gi giro' + (ab ? ' on' : '') + '">' + ic('abajo', 18) + '</span></button>';
+      if (ab) h += '<div class="mr-cin">' + (L.length ? tarj(L, true) : '<p class="mut sm mr-cv">Está vacía. Añade rutinas para tenerlas juntas.</p>') + '<div class="g-acc"><button class="link" data-a="carpRuts" data-v="' + esc(c.id) + '">' + ic('mas', 15) + 'Elegir rutinas</button><button class="link" data-a="carpRen" data-v="' + esc(c.id) + '">Renombrar</button><button class="link" data-a="carpBorrar" data-v="' + esc(c.id) + '">Borrar</button></div></div>';
+      h += '</section>'; });
+    var sin = sueltas.filter(function (r) { return !enC[r.id]; }), tu = sin.filter(rutPropia), mo = sin.filter(function (r) { return !rutPropia(r); });
+    if (tu.length) h += '<small class="mr-g">Creadas por ti · ' + tu.length + '</small>' + tarj(tu);
+    if (mo.length) h += '<small class="mr-g">De MOOD ON · ' + mo.length + '</small>' + tarj(mo);
+  }
   return h;
 }
 /* yo-0.9 (estilo MOOD ON): «Esta semana» en negro, con los entrenos hechos de los que tocan, los minutos y kilos de la semana y una barra por día */
@@ -5125,8 +5176,8 @@ A.planDias = function (el) {
   if (ds.v != null || ds.d != null || !S.x.pd) S.x.pd = { pid: ds.v || '', sem: Object.assign({}, (S.perfil && S.perfil.semana) || {}), s2: Object.assign({}, sem2De(S.perfil)), add: ds.d || '', nota: '' };
   pdPinta();
 };
-function pdChip(id, d, quitar, arr) { var r = rutinaDe(id); if (!r) return '';
-  return '<span class="pd-ch' + (quitar || arr ? ' arra' : '') + '" data-d="' + d + '" data-r="' + esc(id) + '"><i>' + esc(rutIni(r)) + '</i><b>' + esc(r.nombre) + '</b>' + (quitar ? '<button class="pd-x" data-a="pdQuita" data-d="' + d + '" data-r="' + esc(id) + '" aria-label="Quitar ' + esc(r.nombre) + ' del ' + DIA_N[d].toLowerCase() + '">' + ic('x', 14, null, 2.4) + '</button>' : '') + '</span>'; }
+function pdChip(id, d, quitar, arr, hecho) { var r = rutinaDe(id); if (!r) return '';
+  return '<span class="pd-ch' + (quitar || arr ? ' arra' : '') + (hecho ? ' hch' : '') + '" data-d="' + d + '" data-r="' + esc(id) + '"><i>' + (hecho ? ic('check', 12, null, 3.2) : esc(rutIni(r))) + '</i><b>' + esc(r.nombre) + '</b>' + (hecho ? '<em>Hecho</em>' : '') + (quitar ? '<button class="pd-x" data-a="pdQuita" data-d="' + d + '" data-r="' + esc(id) + '" aria-label="Quitar ' + esc(r.nombre) + ' del ' + DIA_N[d].toLowerCase() + '">' + ic('x', 14, null, 2.4) + '</button>' : '') + '</span>'; }
 /* yo-1.68 (Javier: «esto más claro, estético y ordenado»): en filas, agrupadas (el plan que estás cambiando primero, luego tus otros planes y tus rutinas),
    con lo que dura cada una; abajo, «Una rutina de MOOD ON» y «Crear una rutina» */
 function pdOps(X, d) {
@@ -5201,6 +5252,27 @@ document.addEventListener('pointerup', function (ev) { pdFin(ev, true); }); docu
 A.semDesh = function () { if (!SEM_ANT) return; var a = JSON.parse(SEM_ANT); SEM_ANT = null; S.perfil.semana = a[0]; S.perfil.semana2 = a[1]; guardaPerfil(); pintar(); toast('Tu semana, como la tenías', 'ok'); };
 A.pdVolver = function () { if (!S.x.pd) return A.planDias({ dataset: { v: '', d: S.x.semD || '' } }); hoja('<div id="pd-box"></div>'); pdPinta(); };
 A.planDiasSi = function () { var X = S.x.pd; if (!X) return cerrarHoja(); S.perfil.semana = X.sem; S.perfil.semana2 = sem2Limpia(X.s2); guardaPerfil(); S.x.pd = null; cerrarHoja(); toast('Días cambiados', 'ok'); pintar(); };
+/* yo-1.69 · carpetas de «Mis rutinas»: { id, n, ids: [rutinas] }; una rutina está como mucho en una carpeta; borrar una carpeta no borra sus rutinas */
+function carpetas() { return (S.perfil && S.perfil.carpetas) || []; }
+function carpDe(id) { return carpetas().filter(function (c) { return c.id === id; })[0] || null; }
+A.carpAb = function (el) { S.x.abCarp = S.x.abCarp === el.dataset.v ? '' : el.dataset.v; pintar(); };
+function carpNomHoja(tit, val, acc, id) { hoja('<h2>' + tit + '</h2><label class="f">Nombre<input id="cp-n" maxlength="30" autocomplete="off" value="' + esc(val || '') + '" placeholder="Por ejemplo: En casa, Cardio, Verano"></label>' +
+  '<p class="msg err" id="cp-e" style="display:none">Ponle un nombre.</p><button class="btn" data-a="' + acc + '"' + (id ? ' data-v="' + esc(id) + '"' : '') + '>' + (id ? 'Guardar' : 'Crear carpeta') + '</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  setTimeout(function () { var i = document.getElementById('cp-n'); if (i) i.focus(); }, 60); }
+function carpNomLee() { var i = document.getElementById('cp-n'), v = i ? i.value.trim().replace(/\s+/g, ' ') : ''; if (!v) { var e = document.getElementById('cp-e'); if (e) e.style.display = ''; } return v; }
+A.carpNueva = function () { carpNomHoja('Nueva carpeta', '', 'carpCrear'); };
+A.carpCrear = function () { var n = carpNomLee(); if (!n) return; var c = { id: 'c' + nuevoId(), n: n, ids: [] }; S.perfil.carpetas = carpetas().concat([c]); guardaPerfil(); S.x.abCarp = c.id; pintar(); A.carpRuts({ dataset: { v: c.id } }); };
+A.carpRen = function (el) { var c = carpDe(el.dataset.v); if (c) carpNomHoja('Cambiar nombre', c.n, 'carpRenSi', c.id); };
+A.carpRenSi = function (el) { var c = carpDe(el.dataset.v), n = carpNomLee(); if (!c || !n) return; c.n = n; guardaPerfil(); cerrarHoja(); pintar(); };
+A.carpRuts = function (el) { var c = carpDe(el.dataset.v); if (!c) return; var L = S.rutinas.filter(function (r) { return !r.plan; }).sort(ordenRut);
+  hoja('<h2>' + esc(c.n) + '</h2><p class="mut sm">Toca las rutinas que quieres en esta carpeta.</p><div class="pd-gl cp-l">' + (L.length ? L.map(function (r) { var on = (c.ids || []).indexOf(r.id) >= 0, o = !on && carpetas().filter(function (x) { return x.id !== c.id && (x.ids || []).indexOf(r.id) >= 0; })[0];
+    return '<button class="pd-op cp-o' + (on ? ' on' : '') + '" data-a="carpTog" data-c="' + esc(c.id) + '" data-r="' + esc(r.id) + '" aria-pressed="' + on + '"><i>' + esc(rutIni(r)) + '</i><span><b>' + esc(r.nombre) + '</b><small>' + esc((rutPropia(r) ? 'Creada por ti' : 'De MOOD ON') + (o ? ' · en «' + o.n + '»' : '')) + '</small></span><u class="cp-k">' + (on ? ic('check', 13, null, 3) : '') + '</u></button>'; }).join('') : '<p class="mut sm" style="padding:12px">Todavía no tienes rutinas sueltas.</p>') + '</div>' +
+    '<button class="btn" data-a="cerrarHoja">Listo</button>'); };
+A.carpTog = function (el) { var c = carpDe(el.dataset.c), id = el.dataset.r; if (!c) return; c.ids = c.ids || [];
+  if (c.ids.indexOf(id) >= 0) c.ids = c.ids.filter(function (x) { return x !== id; }); else { carpetas().forEach(function (x) { x.ids = (x.ids || []).filter(function (y) { return y !== id; }); }); c.ids.push(id); }
+  guardaPerfil(); pintar(); var sc = document.querySelector('#hoja .hoja-c'), t = sc ? sc.scrollTop : 0; A.carpRuts({ dataset: { v: c.id } }); sc = document.querySelector('#hoja .hoja-c'); if (sc) sc.scrollTop = t; };
+A.carpBorrar = function (el) { var c = carpDe(el.dataset.v); if (!c) return; hoja('<h2>¿Borrar «' + esc(c.n) + '»?</h2><p class="mut sm">Sus rutinas no se borran: vuelven a Mis rutinas.</p><button class="btn" data-a="carpBorrarSi" data-v="' + esc(c.id) + '">Borrar carpeta</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
+A.carpBorrarSi = function (el) { S.perfil.carpetas = carpetas().filter(function (c) { return c.id !== el.dataset.v; }); guardaPerfil(); cerrarHoja(); toast('Carpeta borrada', 'ok'); pintar(); };
 A.abPlan = function (el) { S.x.abPlan = S.x.abPlan === el.dataset.v ? '' : el.dataset.v; pintar(); };
 A.pedirPlan = function () { if (!S.perfil) S.perfil = perfilNuevo(); S.perfil.modo = 'plan'; S.paso = 1; S.v = 'preg'; arriba(); pintar(); };
 A.borrarPlan = function (el) {
