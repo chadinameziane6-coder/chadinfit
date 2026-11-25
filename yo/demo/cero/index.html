@@ -2894,6 +2894,12 @@ html[data-tema="oscuro"] .ip-sg i{background:rgba(255,255,255,.12)}html[data-tem
 .pf2 .pf-f.rojo b{color:var(--rojo-tx,#C0392B)}.pf2 .os-pf{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--linea)}.pf2 .os-pf .col{flex:1;display:flex;flex-direction:column;gap:2px}.pf2 .os-pf small{color:var(--tx2);font-size:12.5px}
 .pf2 .pf2-nom{margin:12px 0}.pf2 .tit-sec{margin:18px 4px 8px}.pf2 .seg3.tema{margin:12px 0 6px}.pf2 .pf2-tm{display:block;margin:0 0 12px}.pf2 .pf2-salir{margin-top:18px}
 .pf2 .pf2-cg{padding:14px 0;margin:0}
+/* yo-1.61: borrar una rutina deslizándola (como las series) */
+.mr-l{overflow:hidden}.mr-l .fila-r2.mr-f{position:relative;touch-action:pan-y;transition:transform .22s ease;background:var(--card)}.mr-l .fila-r2.mr-f.rs-mv{transition:none}
+.mr-l .fila-r2.mr-f:after{content:"Borrar";position:absolute;top:8px;bottom:8px;left:calc(100% + 18px);width:84px;border-radius:16px;background:#E5484D url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13'/%3E%3C/svg%3E") center 24% / 20px no-repeat;color:#fff;font-size:12.5px;font-weight:800;display:flex;align-items:flex-end;justify-content:center;padding-bottom:9px;box-sizing:border-box;cursor:pointer}
+.mr-l .fila-r2.mr-f.rs-ya:after{width:max(84px,60%);background-color:#D32F2F}.mr-l .fila-r2.mr-f.rs-fuera{opacity:0;transition:transform .18s ease-in,opacity .18s ease-in}
+@media (prefers-reduced-motion:reduce){.mr-l .fila-r2.mr-f{transition:none}}
+.mr-l.mr-neg .fila-r2.mr-f{background:#111}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4001,7 +4007,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.60';
+var YO_V = 'yo-1.61';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6054,6 +6060,42 @@ A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProg
 function verProgSi(id) { var p = PROGRAMAS.filter(function (x) { return x.id === id; })[0]; if (!p) return; var P = JSON.parse(JSON.stringify(p.P)), est = P.est; delete P.est;
   S.x.plan = null; var D; try { D = pautasWord(plnEntreno(P, { seed: plnHash(p.id) * 100 | 0, est: est }), P); } catch (e) { console.error(e); return toast('No he podido preparar el programa'); }
   S.x.plan = { D: D, P: P, seed: plnHash(p.id) * 100 | 0, ab: 0, origen: p, est: est }; S.v = 'plan'; arriba(); pintar(); }
+
+/* yo-1.61 · 25 nov 2026, 12:04 (Javier: «que tus rutinas puedas eliminarlas deslizando»): en «Mis rutinas», como las series: deslizas la rutina
+   y aparece «Borrar» en rojo; si la llevas más de la mitad, se borra sola; si no, se queda abierta y la tocas. Sale «Rutina borrada · Deshacer»
+   (vuelve con sus días). Solo las tuyas y las sueltas guardadas; las de un programa, desde el programa («Quitar este bloque») */
+var RSW = null, RS_ULT = null;
+function rsFila(t) { return t && t.closest ? t.closest('.mr-l .fila-r2.mr-f') : null; }
+function rsCierra(salvo) { document.querySelectorAll('.mr-l .fila-r2.rs-ab').forEach(function (r) { if (r !== salvo) { r.classList.remove('rs-ab'); r.style.transform = ''; } }); }
+document.addEventListener('pointerdown', function (ev) {
+  var r = rsFila(ev.target); if (!r) { if (!(ev.target.closest && ev.target.closest('.mr-l'))) rsCierra(); return; }
+  if (r.classList.contains('rs-ab') && ev.clientX > r.getBoundingClientRect().right) { ev.preventDefault(); return rsBorra(r); }      // toca «Borrar»
+  rsCierra(r); RSW = { r: r, x: ev.clientX, y: ev.clientY, b: r.classList.contains('rs-ab') ? -96 : 0, on: false, id: ev.pointerId, dx: 0 };
+}, true);
+document.addEventListener('pointermove', function (ev) {
+  var d = RSW; if (!d || ev.pointerId !== d.id) return; var dx = ev.clientX - d.x, dy = ev.clientY - d.y;
+  if (!d.on) { if (Math.abs(dy) > 12 && Math.abs(dy) > Math.abs(dx)) { RSW = null; return; } if (Math.abs(dx) < 12 || Math.abs(dx) < Math.abs(dy) * 1.4 || (dx > 0 && !d.b)) return;
+    d.on = true; d.r.classList.add('rs-mv'); try { d.r.setPointerCapture(ev.pointerId); } catch (e) { } }
+  ev.preventDefault(); var w = d.r.offsetWidth; d.dx = Math.max(-w * 0.95, Math.min(0, d.b + dx)); d.r.style.transform = 'translateX(' + d.dx + 'px)'; d.r.classList.toggle('rs-ya', d.dx < -w * 0.5);
+}, { passive: false });
+function rsSuelta(ev) {
+  var d = RSW; if (!d || (ev && ev.pointerId !== d.id)) return; RSW = null; if (!d.on) return;
+  var r = d.r, w = r.offsetWidth; r.classList.remove('rs-mv', 'rs-ya'); r._swT = Date.now();
+  if (d.dx < -w * 0.5) return rsBorra(r);
+  if (d.dx < -48) { r.classList.add('rs-ab'); r.style.transform = 'translateX(-96px)'; } else { r.classList.remove('rs-ab'); r.style.transform = ''; }
+}
+document.addEventListener('pointerup', rsSuelta, true); document.addEventListener('pointercancel', rsSuelta, true);
+document.addEventListener('click', function (ev) { var r = rsFila(ev.target); if (r && ((r._swT && Date.now() - r._swT < 350) || r.classList.contains('rs-ab'))) { ev.stopPropagation(); ev.preventDefault(); if (r.classList.contains('rs-ab') && !(r._swT && Date.now() - r._swT < 350)) { r.classList.remove('rs-ab'); r.style.transform = ''; } } }, true);      // tras deslizar, no la abre
+function rsBorra(r) {
+  var b = r.querySelector('[data-id]'), id = b && b.dataset.id, i = S.rutinas.findIndex(function (x) { return x.id === id; }); if (i < 0) return;
+  var sem = (S.perfil && S.perfil.semana) || {}, dias = DIAS7.filter(function (k) { return sem[k] === id; });
+  r.classList.add('rs-fuera'); r.style.transform = 'translateX(-110%)';
+  setTimeout(function () { RS_ULT = { r: S.rutinas[i], i: i, dias: dias }; borraRutina(id); pintar();
+    toast('«' + esc(RS_ULT.r.nombre) + '» borrada', 'desh', '<button class="toast-b" data-a="rsDesh">Deshacer</button>'); }, 180);
+}
+A.rsDesh = function () { var u = RS_ULT; if (!u) return; RS_ULT = null; if (S.rutinas.some(function (x) { return x.id === u.r.id; })) return;
+  S.rutinas.splice(Math.min(u.i, S.rutinas.length), 0, u.r); var sem = S.perfil.semana = S.perfil.semana || {}; u.dias.forEach(function (k) { if (!sem[k]) sem[k] = u.r.id; });
+  guardaRutina(u.r); guardaPerfil(); pintar(); toast('Rutina recuperada', 'ok'); };
 
 ;
 /* ---------- Programas de carrera completos (prompt maestro, fase 1) · solo panel usuario /yo ----------
