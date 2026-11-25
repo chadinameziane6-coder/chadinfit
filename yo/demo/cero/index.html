@@ -2900,6 +2900,7 @@ html[data-tema="oscuro"] .ip-sg i{background:rgba(255,255,255,.12)}html[data-tem
 .mr-l .fila-r2.mr-f.rs-ya:after{width:max(84px,60%);background-color:#D32F2F}.mr-l .fila-r2.mr-f.rs-fuera{opacity:0;transition:transform .18s ease-in,opacity .18s ease-in}
 @media (prefers-reduced-motion:reduce){.mr-l .fila-r2.mr-f{transition:none}}
 .mr-l.mr-neg .fila-r2.mr-f{background:#111}
+.ej-f2 .o3-h.os .os-m{font-style:normal;font-size:11.5px;font-weight:600;color:var(--tx2);line-height:1.25;margin-top:-1px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4007,7 +4008,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.61';
+var YO_V = 'yo-1.62';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7044,6 +7045,16 @@ function objetivoHoy(e) {
   var rt = Math.min(techo, (mej != null ? mej : Math.min.apply(null, lst)) + 1); if (lo != null && rt < lo) rt = lo;
   return Object.assign(o, { est: 'mant', r: rt, rirMal: rirMal });
 }
+/* yo-1.62 · 25 nov 2026, 13:29 (Javier, en el gimnasio: «si la última vez hice 30 × 12, ¿por qué me sugiere 30 × 11? Sería menos»): el «11» es lo mínimo
+   para todas (las que hiciste a 10 suben a 11), pero ninguna serie te pide menos de lo que hiciste en ella la última vez con ese peso: la 1.ª, 12.
+   objRSerie: lo que te toca en la serie j; objMasTxt: «12 en la 1.ª» (las que van por encima del objetivo), para la ficha y la ⓘ */
+function objPv(e, W, j) { if (!W || !W.length || !e.sets[j]) return null; var cat = function (t) { return t === 'aprox' ? 'a' : 'w'; }, c = cat(e.sets[j].t), k = 0;
+  for (var q = 0; q < j; q++) if (cat(e.sets[q].t) === c) k++; var L = W.filter(function (x) { return x.ok !== false && cat(x.t) === c; }); return k < L.length ? L[k] : null; }
+function objRSerie(e, O, W, j) { var s = e.sets[j]; if (!O || O.est !== 'mant' || !O.p || !s || (s.t && s.t !== 'normal')) return null;
+  var pv = objPv(e, W, j), r = pv && num(pv.kg) === O.p ? num(pv.reps) : null; if (r == null || !(r > O.r)) return null; return O.techo ? Math.min(O.techo, r) : r; }
+function objMasTxt(e, O, W) { if (!O || O.est !== 'mant') return ''; var G = {}, ord = [], n = 0;
+  (e.sets || []).forEach(function (s, j) { if (s.t === 'aprox') return; n++; var r = objRSerie(e, O, W, j); if (r == null) return; if (!G[r]) { G[r] = []; ord.push(r); } G[r].push(n + '.ª'); });
+  return ord.map(function (r) { var L = G[r]; return r + ' en la ' + (L.length > 1 ? L.slice(0, -1).join(', ') + ' y ' + L[L.length - 1] : L[0]); }).join(', '); }
 var OBJ_E = { sube: ['subir', 'Sube el peso'], mant: ['mas', 'Mantén y suma repeticiones'], rev: ['info', 'Revisa tu entreno'], pri: ['info', 'Primeros días'], sua: ['luna', 'Semana suave'] };
 function objSugTxt(O) { return O.est === 'pri' ? 'Un peso con el que te sobren 2' : (O.p ? fN(O.p) + ' kg × ' : '') + (O.rg || O.r) + (O.est === 'sua' ? ' · RIR 3–4' : ''); }
 /* la ⓘ: el estado, el porqué y qué hacer hoy (19:28, Javier: «el estado, dentro de la i»; 19:36: «sin "Cómo lo decide la app"») */
@@ -7060,11 +7071,12 @@ A.objInfo = function (el) {
       '<p class="mut sm">Si te pasa en varios ejercicios, en Inicio te propondremos una semana suave.</p><button class="btn sec" data-a="cerrarHoja">Ahora no</button>');
   }
   var igual = (O.lst || []).every(function (v) { return v === O.lst[0]; });
+  var Ui = ultimaDe(e.n, S.ses.id, e.u || ''), mas = objMasTxt(e, O, Ui ? Ui.sets.filter(function (s) { return s.ok; }) : []);
   var why = O.est === 'sube' ? 'La última vez hiciste ' + (O.lst.length > 1 ? 'tus ' + O.lst.length + ' series' : 'tu serie') + ' a <b>' + (igual ? O.lst[0] : O.techo + ' o más') + ' repeticiones</b> (' + esc(ul) + '), lo alto de tu rango, con el RIR bien.'
     : O.est === 'mant' ? 'La última vez: ' + esc(ul) + '.' + (O.rirMal ? ' Llegaste, pero con menos RIR del que toca: mejor afianzarlo antes de subir.' : O.techo ? ' Para subir, todas tus series tienen que llegar a ' + O.techo + '.' : '')
     : O.est === 'pri' ? 'Aún no tienes ninguna vez apuntada de este ejercicio.' : 'Estás en tu semana suave: tu peso de siempre, la mitad de las series y dejando 3 o 4 repeticiones en reserva.';
   var que = O.est === 'sube' ? 'Sube a ' + fN(O.p) + ' kg y haz ' + (O.rg && O.rg.indexOf('-') > 0 ? 'entre ' + O.rg.replace('-', ' y ') : O.r) + '. Cuando vuelvas a llegar arriba en todas, volverá a subir.'
-    : O.est === 'mant' ? 'Hoy, ' + esc(objSugTxt(O)) + '. Un mal día no te baja el objetivo: mira tus 3 últimas veces.'
+    : O.est === 'mant' ? 'Hoy, ' + esc(objSugTxt(O)) + (mas ? '; ' + esc(mas) + ', como la última vez: ninguna serie te pide menos de lo que ya hiciste' : '') + '. Un mal día no te baja el objetivo: mira tus 3 últimas veces.'
     : O.est === 'pri' ? 'Elige un peso con el que te sobren 2 repeticiones. Desde la próxima vez, te saldrá tu objetivo.' : 'Hoy, ' + esc(objSugTxt(O)) + '. Al terminar la semana, todo vuelve a lo normal.';
   hoja('<h2>Objetivo sugerido</h2>' + cab + caja + '<div class="osi-why">' + ic('info', 16, null, 2.2) + '<span>' + why + '</span></div><p class="osi-p">' + que + '</p>' +
     '<p class="mut sm osi-pf">Puedes quitar las sugerencias en Perfil → Sugerencias de peso.</p><button class="btn" data-a="cerrarHoja">Entendido</button>');
@@ -7199,7 +7211,7 @@ function ejFuerza(e, i) {
     '<button class="pz desc-ch" data-a="descEj" data-i="' + i + '" aria-label="Descanso: ' + (+e.d ? mmss(+e.d) : 'sin descanso') + '. Cambiarlo">' + ic('reloj', 11) + (+e.d ? mmss(+e.d) : 'Sin descanso') + ic('lapiz', 10, null, 2.4) + '</button></span></div>' + pistaBtn(e, i) + '<button class="redondo ej-mas" data-a="ejMas" data-i="' + i + '" aria-label="Más opciones de ' + esc(e.n) + '">' + ic('puntos', 18, null, 3) + '</button></div>';
   h += serCabHtml(e, i);
   /* 22 nov, 10:47 (Chadín): «igual que en el panel clienta»: debajo de Vídeo · Cambiar…, dos fichas: el objetivo de hoy (en negro) y tu récord con el 1RM (en gris); la última vez, al lado de cada serie */
-  if (O || M) h += '<div class="o3 o3b' + (O && M ? '' : ' uno') + '">' + (O ? '<div class="o3-h os"><div class="os-t"><small>Objetivo sugerido</small><button class="os-i' + (O.est === 'rev' ? ' rev' : '') + '" data-a="objInfo" data-i="' + i + '" aria-label="Por qué este objetivo: ' + OBJ_E[O.est][1] + '">' + ic('info', 15, null, 2.2) + '</button></div><b>' + esc(objSugTxt(O)) + '</b></div>' : '') +
+  if (O || M) h += '<div class="o3 o3b' + (O && M ? '' : ' uno') + '">' + (O ? '<div class="o3-h os"><div class="os-t"><small>Objetivo sugerido</small><button class="os-i' + (O.est === 'rev' ? ' rev' : '') + '" data-a="objInfo" data-i="' + i + '" aria-label="Por qué este objetivo: ' + OBJ_E[O.est][1] + '">' + ic('info', 15, null, 2.2) + '</button></div><b>' + esc(objSugTxt(O)) + '</b>' + (function () { var m = objMasTxt(e, O, W); return m ? '<i class="os-m">y ' + esc(m) + '</i>' : ''; })() + '</div>' : '') +
     (M ? '<div class="o3-r">' + ic('trofeo', 20) + '<span><small>Tu récord</small><b>' + (M.p ? fN(M.p) + ' × ' : '') + M.r + '</b>' + (M.e1 ? '<i>1RM ≈ ' + fN(Math.round(M.e1)) + ' kg</i>' : '') + '</span></div>' : '') + '</div>';
   if (e.u === 's') h += ctaSetBtn(e, i, O, W);
   h += serMetHtml(e, i) + serFilasHtml(e, i, O, W);
@@ -8103,6 +8115,7 @@ function serFilasHtml(e, i, O, W) {
     var pv = W[j] || null, an = null; for (var q = j - 1; q >= 0 && s.t !== 'aprox'; q--) { var z = e.sets[q]; if (z.t !== 'aprox' && z.kg !== '' && num(z.kg) != null) { an = z; break; } }
     var phK = an ? fN(an.kg) : O && O.p ? fN(O.p) : pv && pv.kg ? fN(pv.kg) : '', phR = s.t === 'aprox' || s.t === 'pir' || s.t === 'top' || s.t === 'myo' ? String(s.r || '').split('-').pop() : O && O.r !== '' && O.r != null ? String(O.r) : pv ? String(pv.reps) : String(s.r || '').split('-').pop();
     var cK = serCalc(e, j, O, W); if (cK) phK = fN(cK);      // kilos calculados (aproximación, back-off, pirámide)
+    var rS = objRSerie(e, O, W, j); if (rS != null) phR = String(rS);      // yo-1.62: nunca menos de lo que hiciste en esa serie con ese peso
     if (s.t === 'fallo') phR = 'máx';
     var tg = serTag(s.t), esp = /^(drop|rp|myo|fallo)$/.test(s.t);
     var mk = s.ok ? marcaYo(e, j) : null;
