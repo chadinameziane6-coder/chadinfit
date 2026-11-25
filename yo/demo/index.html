@@ -2901,6 +2901,9 @@ html[data-tema="oscuro"] .ip-sg i{background:rgba(255,255,255,.12)}html[data-tem
 @media (prefers-reduced-motion:reduce){.mr-l .fila-r2.mr-f{transition:none}}
 .mr-l.mr-neg .fila-r2.mr-f{background:#111}
 .ej-f2 .o3-h.os .os-m{font-style:normal;font-size:11.5px;font-weight:600;color:var(--tx2);line-height:1.25;margin-top:-1px}
+/* yo-1.63: Progreso dentro de Entreno, con el mismo hueco entre tarjetas que el resto; el resumen, la aproximación en gris */
+.p3-en{display:flex;flex-direction:column;gap:12px}.mes-lk .md-i{background:var(--suave);color:var(--tx)}
+.fila-r.fr-apx>span:last-child{color:var(--tx3)}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -4008,7 +4011,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.62';
+var YO_V = 'yo-1.63';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -5160,8 +5163,11 @@ function mesPlan(f) {
   if (!r) return null; if (p && p.hasta && r.plan && r.plan === p.id && f > p.hasta) return null; return r;
 }
 function mesHm(m) { m = Math.round(m || 0); return m < 60 ? m + ' min' : Math.floor(m / 60) + ' h' + (m % 60 ? ' ' + (m % 60 < 10 ? '0' : '') + (m % 60) : ''); }      // 7 h 27 (en la casilla)
-/* 25 nov (reorganización): el mes vive en Progreso → Actividad; el icono del calendario de Inicio lleva ahí */
-function mesIr(ym, d) { S.x.mes = ym; S.x.mesD = d; S.x.p3 = 'act'; irTab('prog'); var c = document.getElementById('p3-mes'); if (c) try { window.scrollTo(0, Math.max(0, c.getBoundingClientRect().top + (window.pageYOffset || 0) - 14)); } catch (e) { } }
+/* yo-1.63 · 25 nov 2026, 14:20 (Javier: «en la semana de Inicio, el mes te lleva a Entreno; me gustaría como estaba antes: todo el calendario, los días
+   verdes, qué te toca los demás días, tocar el día, el nombre de la rutina… y si tienes alguna competición»): vuelve a su pantalla, «Tu mes».
+   En Entreno → Progreso → Actividad queda solo un acceso («Tu mes»), para que no se amontone */
+function mesIr(ym, d) { S.x.mes = ym; S.x.mesD = d; ir({ t: 'mes' }); }
+function mesLink() { return '<button class="card enlace mes-mt mes-lk" data-a="mes"><span class="md-i">' + ic('cal', 18) + '</span><span><b>Tu mes</b><small class="mut">Lo que has hecho, lo que te toca y tus competiciones</small></span>' + ic('sig', 18) + '</button>'; }
 A.mes = function () { mesIr(hoyStr().slice(0, 7), hoyStr()); };
 A.mesMover = function (el) {
   var p = (S.x.mes || hoyStr().slice(0, 7)).split('-'), ym = fechaDe(new Date(+p[0], +p[1] - 1 + (+el.dataset.v), 1)).slice(0, 7);
@@ -5236,11 +5242,15 @@ function ordFilaY(i) {
     '<div class="ord-c' + (r ? '' : ' des') + (lk ? ' lk' : '') + (O.sel === i ? ' sel' : '') + '" data-i="' + i + '" data-k="' + i + '_' + (O.P[i] || '') + '" role="button" tabindex="0" aria-label="' + esc((f === hoy ? 'Hoy' : DIA_N[DIAS7[i]]) + ': ' + nm + (lk ? ' (hecho)' : '')) + '">' + ic(lk ? 'check' : 'grip', 16) + '<span><b>' + esc(nm) + '</b>' + (sb ? '<small>' + esc(sb) + '</small>' : '') + '</span></div></div>';
 }
 function ordBase() { var b = (S.perfil && S.perfil.semana) || {}; return DIAS7.map(function (d) { return b[d] || null; }); }
+/* yo-1.63 · 25 nov 2026, 14:22 (Javier, con la cuenta de Chadín: «le he dado sin querer a Volver a mi plan y no puedo retroceder… se me ha duplicado
+   el de cuádriceps»): «Volver a mi plan» pone tu plan teniendo en cuenta lo que ya has hecho esta semana (si hoy hiciste la del jueves, el jueves
+   pasa a tener lo que tocaba hoy: no se repite), y después sale «Deshacer» para dejarla como la tenías. Al tocar «Listo», también «Deshacer» */
+function ordPlan() { var c = semConcilia((S.perfil && S.perfil.semana) || {}); return DIAS7.map(function (d) { return c[d] || null; }); }
 function ordPintarY(fl) {
-  var b = document.getElementById('ord-box'), O = S.x.ord; if (!b || !O) return; var B0 = ordBase(), id = O.P.every(function (v, i) { return v === B0[i]; });
+  var b = document.getElementById('ord-box'), O = S.x.ord; if (!b || !O) return; var B0 = ordPlan(), id = O.P.every(function (v, i) { return v === B0[i]; });
   var h = '<h2>Ordena tu semana</h2><p class="mut sm ord-ay">' + (O.sel >= 0 ? 'Ahora toca el día con el que lo cambias.' : 'Arrastra una rutina (o un descanso) a otro día: se cambian.') + '</p><div class="ord-l">';
   for (var i = 0; i < 7; i++) h += ordFilaY(i);
-  h += '</div><div class="ord-pie">' + (id ? '' : '<button class="link ord-rs" data-a="ordResetY">' + ic('deshacer', 15) + 'Volver a mi plan</button>') + '<small class="mut">Solo esta semana · la próxima, como en tu plan</small><button class="btn" data-a="ordOkY">Listo</button></div>';
+  h += '</div><div class="ord-pie">' + (O.prev ? '<button class="link ord-rs" data-a="ordDeshY">' + ic('deshacer', 15) + 'Deshacer</button>' : id ? '' : '<button class="link ord-rs" data-a="ordResetY">' + ic('deshacer', 15) + 'Volver a mi plan</button>') + '<small class="mut">Solo esta semana · la próxima, como en tu plan</small><button class="btn" data-a="ordOkY">Listo</button></div>';
   b.innerHTML = h;
   if (fl) [].forEach.call(b.querySelectorAll('.ord-c'), function (c) { var t0 = O.F && O.F[c.dataset.i] != null ? O.F[c.dataset.i] : null; if (t0 == null) return; var dy = t0 - c.getBoundingClientRect().top; if (!dy) return;
     c.style.transition = 'none'; c.style.transform = 'translateY(' + dy + 'px)'; c.getBoundingClientRect(); c.style.transition = 'transform .22s cubic-bezier(.2,.8,.2,1)'; c.style.transform = ''; });
@@ -5250,7 +5260,7 @@ A.ordAbrirY = function () { var sem = semEsta(), l = lunesDe(hoyStr()); S.x.ord 
 function ordCambiaY(i, j, y0) { var O = S.x.ord; if (!O || i === j) return; var b = document.getElementById('ord-box'), R = {};
   [].forEach.call(b.querySelectorAll('.ord-c'), function (c) { R[c.dataset.i] = c.getBoundingClientRect().top; });
   O.F = {}; O.F[j] = y0 != null ? y0 : R[i]; O.F[i] = R[j];      // las dos tarjetas salen de donde estaban
-  var t = O.P[i]; O.P[i] = O.P[j]; O.P[j] = t; O.sel = -1; ordPintarY(true); try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { } }
+  var t = O.P[i]; O.P[i] = O.P[j]; O.P[j] = t; O.sel = -1; O.prev = null; ordPintarY(true); try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { } }
 function ordTapY(i) { var O = S.x.ord; if (!O || ordHecho(i)) return; if (O.sel < 0 || O.sel === i) { O.sel = O.sel === i ? -1 : i; ordPintarY(); } else ordCambiaY(O.sel, i); }
 function ordDestinoY(y) { var best = null, bd = 1e9; [].forEach.call(document.querySelectorAll('#ord-box .ord-f'), function (r) { var i = +r.dataset.i; if (ordHecho(i)) return; var R = r.getBoundingClientRect(), d = y < R.top ? R.top - y : y > R.bottom ? y - R.bottom : 0; if (d < bd) { bd = d; best = i; } }); return bd < 40 ? best : null; }
 document.addEventListener('pointerdown', function (ev) { var c = ev.target && ev.target.closest && ev.target.closest('#ord-box .ord-c'); if (!c || c.classList.contains('lk') || (ev.button && ev.button !== 0)) return;
@@ -5265,10 +5275,15 @@ function ordFinY(ev, ok) { var o = ORDY; if (!o || (ev && ev.pointerId !== o.pid
   o.c.classList.remove('arr'); if (ok && o.t != null && o.t !== o.i) ordCambiaY(o.i, o.t, o.c.getBoundingClientRect().top); else { o.c.style.transition = 'transform .2s cubic-bezier(.2,.8,.2,1)'; o.c.style.transform = ''; } }
 document.addEventListener('pointerup', function (ev) { ordFinY(ev, true); }); document.addEventListener('pointercancel', function (ev) { ordFinY(ev, false); });
 document.addEventListener('keydown', function (ev) { var c = ev.target && ev.target.closest && ev.target.closest('#ord-box .ord-c'); if (c && (ev.key === 'Enter' || ev.key === ' ')) { ev.preventDefault(); ordTapY(+c.dataset.i); } });
-A.ordResetY = function () { var O = S.x.ord; if (!O) return; O.P = ordBase(); O.sel = -1; ordPintarY(); };
+A.ordResetY = function () { var O = S.x.ord; if (!O) return; O.prev = O.P.slice(); O.P = ordPlan(); O.sel = -1; ordPintarY(); };
+A.ordDeshY = function () { var O = S.x.ord; if (!O || !O.prev) return; O.P = O.prev; O.prev = null; O.sel = -1; ordPintarY(); };
+var ORD_ANT;
+A.ordDeshOk = function () { if (ORD_ANT === undefined) return; S.perfil.semMov = ORD_ANT; ORD_ANT = undefined; guardaPerfil(); S.x.diaV = null; toast('Tu semana, como la tenías', 'ok'); pintar(); };
 A.ordOkY = function () { var O = S.x.ord; if (!O) return cerrarHoja(); var B0 = ordBase(), m = {}, n = 0;
   DIAS7.forEach(function (d, i) { if (O.P[i] !== B0[i]) { m[d] = O.P[i]; n++; } });
-  S.perfil.semMov = n ? { l: O.l, m: m } : null; guardaPerfil(); S.x.ord = null; S.x.diaV = null; cerrarHoja(); toast(n ? 'Semana ordenada · solo esta semana' : 'Tu semana, como en tu plan', 'ok'); pintar(); };
+  var ant = S.perfil.semMov ? JSON.parse(JSON.stringify(S.perfil.semMov)) : null, P0 = ordPlan(), comoPlan = O.P.every(function (v, i) { return v === P0[i]; }), igual = JSON.stringify(ant) === JSON.stringify(n ? { l: O.l, m: m } : null);
+  S.perfil.semMov = n ? { l: O.l, m: m } : null; guardaPerfil(); S.x.ord = null; S.x.diaV = null; cerrarHoja(); ORD_ANT = igual ? undefined : ant;
+  toast(comoPlan ? 'Tu semana, como en tu plan' : 'Semana ordenada · solo esta semana', igual ? 'ok' : 'desh', igual ? '' : '<button class="toast-b" data-a="ordDeshOk">Deshacer</button>'); pintar(); };
 A.camDia = function () {
   if (or21()) return A.ordAbrirY();
   var sem = semEsta(), hoy = hoyLetra(), r = rutinaDe(sem[hoy]), lun = lunesDe(hoyStr()), Q = camQuedan(), x = S.perfil.semMov && S.perfil.semMov.l === lun;
@@ -5286,7 +5301,7 @@ A.camDiaSi = function (el) {
   x.m[h] = b; if (d) x.m[d] = a; guardaPerfil(); cerrarHoja(); S.x.diaV = null;
   toast(!d ? 'Hoy descansas' : a && b ? 'Cambiados: hoy toca ' + (rutinaDe(b) || {}).nombre : a ? 'Pasado al ' + DIA_N[d].toLowerCase() : 'Hoy haces ' + (rutinaDe(b) || {}).nombre, 'ok'); pintar();
 };
-A.camDiaQuitar = function () { S.perfil.semMov = null; guardaPerfil(); cerrarHoja(); toast('Tu semana, como en tu plan', 'ok'); pintar(); };
+A.camDiaQuitar = function () { ORD_ANT = S.perfil.semMov ? JSON.parse(JSON.stringify(S.perfil.semMov)) : null; S.perfil.semMov = null; guardaPerfil(); cerrarHoja(); toast('Tu semana, como en tu plan', 'desh', '<button class="toast-b" data-a="ordDeshOk">Deshacer</button>'); pintar(); };
 /* publicar en la Comunidad el entreno de hoy, desde Inicio (como al terminar) */
 A.comuHoy = function (el) { var s = S.sesiones.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!s) return; if (!(S.fin && S.fin.id === s.id)) S.fin = Object.assign({}, s, { modo: 'negro', slide: 0, foto: null, primero: false, libreEj: null }); A.finComu(); };
 
@@ -9046,11 +9061,16 @@ VISTAS.sesion = function (p) {
   (s.ej || []).forEach(function (e) {
     /* bloque (AMRAP, For Time, circuito…): la tarjeta negra con el resultado y la lista */
     if (e.f && e.hecho) { h += '<div class="blq-card peque"><small>' + esc(e.n || 'Bloque') + '</small><b class="blq-fm">' + esc(e.fmt || '') + '</b><span class="blq-hres">' + esc(e.txt || 'Hecho') + '</span><div class="blq-li">' + (e.lista || []).map(function (x) { return '<div><span class="q">' + esc(x.q || '') + '</span><span class="nm">' + esc(x.n) + '</span></div>'; }).join('') + '</div></div>'; return; }
-    h += '<section class="card"><b>' + esc(e.n) + '</b>' + (e.hecho ? '<small class="mut">' + esc(e.txt || 'Hecho') + (runRes(e) ? ' · ' + esc(runRes(e)) : '') + (e.rp ? '<br>' + esc(rpResTxt(e.rp)) : '') + '</small>' + (e.rp && e.rp.nota ? '<p class="nota rp-nt">' + ic('lapiz', 14) + '<span>' + esc(e.rp.nota) + '</span></p>' : '') : (e.sets || []).map(function (z, i) { return '<div class="fila-r"><span class="mut">Serie ' + (i + 1) + (z.rec ? ' ' + ic('trofeo', 13, 'var(--verde)', 2.4) : '') + '</span><span>' + (num(z.kg) ? fN(z.kg) + ' kg × ' : '') + esc(z.reps) + (e.u === 's' ? ' s' : '') + (z.rir !== '' && z.rir != null ? ' · RIR ' + esc(z.rir) : '') + '</span></div>'; }).join('')) + '</section>'; });
+    h += '<section class="card"><b>' + esc(e.n) + '</b>' + (e.hecho ? '<small class="mut">' + esc(e.txt || 'Hecho') + (runRes(e) ? ' · ' + esc(runRes(e)) : '') + (e.rp ? '<br>' + esc(rpResTxt(e.rp)) : '') + '</small>' + (e.rp && e.rp.nota ? '<p class="nota rp-nt">' + ic('lapiz', 14) + '<span>' + esc(e.rp.nota) + '</span></p>' : '') : sesFilas(e)) + '</section>'; });
   if (S.sesiones.some(function (x) { return x.id !== s.id && x.fecha <= s.fecha; })) h += '<button class="btn" data-a="cmpAnterior" data-id="' + s.id + '">' + ic('grafica', 18, null) + 'Comparar con el anterior</button>';
   h += '<button class="btn sec" data-a="compartirSes" data-id="' + s.id + '">' + ic('compartir', 18) + 'Compartir este entreno</button>';
   return h + '</div>';
 };
+/* yo-1.63 · 25 nov 2026, 14:19 (Javier: «en el resumen del entreno pones serie 1, 2, 3… deja claro que las primeras son de aproximación»): las de
+   aproximación, «Aprox. 1, 2…» en gris; las de trabajo, «Serie 1, 2…» desde 1, como en el entreno. Sin kilos, «10 rep.» (antes salía «10» a secas) */
+function sesFilas(e) { var na = 0, nw = 0;
+  return (e.sets || []).map(function (z) { var ap = z.t === 'aprox', lb = ap ? 'Aprox. ' + (++na) : 'Serie ' + (++nw), tg = !ap && z.t && z.t !== 'normal' && typeof serTag === 'function' ? serTag(z.t) : '';
+    return '<div class="fila-r' + (ap ? ' fr-apx' : '') + '"><span class="mut">' + lb + (tg ? ' · ' + esc(tg) : '') + (z.rec ? ' ' + ic('trofeo', 13, 'var(--verde)', 2.4) : '') + '</span><span>' + (num(z.kg) ? fN(z.kg) + ' kg × ' : '') + esc(z.reps) + (e.u === 's' ? ' s' : !e.u && !num(z.kg) ? ' rep.' : '') + (z.rir !== '' && z.rir != null ? ' · RIR ' + esc(z.rir) : '') + '</span></div>'; }).join(''); }
 A.compartirSes = function (el) { var s = S.sesiones.filter(function (x) { return x.id === el.dataset.id; })[0]; if (!s) return; S.fin = Object.assign({}, s, { modo: 'negro', slide: 0, foto: null, primero: false, libreEj: null }); ir({ t: 'fin' }); };
 
 A.perfil = function () { irTab('perfil'); };      // yo-1.58: Perfil es una pestaña de abajo
@@ -10043,7 +10063,7 @@ function p3Grupos(nw) {
   return { G: G, por: 'mes' };
 }
 function p3Act() {
-  if (!S.sesiones.length) return '<section class="card p3-c">' + p3Vacio('Todavía no hay entrenamientos', 'Cuando termines el primero, aquí verás cuántos haces cada semana.') + '<button class="btn" data-a="tab" data-v="entreno">' + ic('pesa', 18, null) + 'Ir a Entrenar</button></section>' + mesCal() + mesMetas();
+  if (!S.sesiones.length) return '<section class="card p3-c">' + p3Vacio('Todavía no hay entrenamientos', 'Cuando termines el primero, aquí verás cuántos haces cada semana.') + '<button class="btn" data-a="tab" data-v="entreno">' + ic('pesa', 18, null) + 'Ir a Entrenar</button></section>' + mesLink();
   var nw = S.x.a3 || 4, R = p3Grupos(nw), G = R.G, tot = G.reduce(function (a, x) { return a + x.v; }, 0), f0 = p3Ini(), desde = G.length ? (G[0].a > f0 ? G[0].a : f0) : f0;
   var sel = S.x.a3s != null && G[S.x.a3s] ? S.x.a3s : G.length - 1, w = G[sel];
   var h = '<section class="card p3-c p3-hero"><div class="p3-h"><b class="p3-tt">Actividad</b>' + p3Seg('p3Per', nw, P3_PER) + '</div>' +
@@ -10053,7 +10073,7 @@ function p3Act() {
   if (w) h += '<div class="p3-inf"><b>' + esc(w.t) + ' · ' + w.v + (w.v === 1 ? ' entrenamiento' : ' entrenamientos') + '</b>' + (w.L.length ? '<span>' + w.L.slice().reverse().map(function (s) { return esc(nomSes(s)); }).join(' · ') + '</span>' : '') +
     (w.cur ? '<small>' + (R.por === 'semana' ? 'La semana aún no ha terminado.' : 'El mes aún no ha terminado.') + '</small>' : '') + '</div>';
   h += '</section>';
-  h += mesCal() + mesMetas();      // 25 nov (reorganización): el calendario del mes y las competiciones, aquí (antes, escondidos en Inicio)
+  h += mesLink();      // yo-1.63: el calendario vuelve a su pantalla («Tu mes»); aquí, su acceso
   /* 21 nov, 22:41 (Chadín: «en actividad metería también ver volumen general de todo, no solo por ejercicio»): los kilos de todos los entrenos
      (en esas mismas semanas o meses), sus series y su tiempo; con sus barras, y al tocar una, lo de ese periodo */
   var VT = G.map(function (x) { return x.L.reduce(function (a, s) { return a + (+s.vol || 0); }, 0); }), vt = VT.reduce(function (a, b) { return a + b; }, 0);
