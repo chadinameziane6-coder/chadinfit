@@ -3159,6 +3159,8 @@ html[data-tema="oscuro"] .ent-tabs button.on{color:var(--neg-t)}@media (prefers-
 .p3-cn .p5-tag{display:inline-flex;flex-direction:row;flex:none;width:auto;max-width:100%}
 html[data-tema="oscuro"] .p5-res b.up{color:#7EE2A8}html[data-tema="oscuro"] .p5-res b.dn{color:#FF9A9D}
 @media (prefers-color-scheme:dark){html:not([data-tema="claro"]) .p5-res b.up{color:#7EE2A8}html:not([data-tema="claro"]) .p5-res b.dn{color:#FF9A9D}}
+/* yo-1.76: la pantalla de «No se ha podido abrir esto» */
+.err-v .carga{min-height:60vh;text-align:center;gap:10px;padding:0 24px}.err-c{font-size:11px;color:var(--tx3);word-break:break-word;margin-top:14px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4270,7 +4272,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.75';
+var YO_V = 'yo-1.76';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4560,6 +4562,9 @@ function cab(tit, opts) {
 function pintar() {
   var el = $('#app'); if (!el) return;
   var h = '';
+  /* yo-1.76 · 27 nov 2026, 23:03 (Javier: «no me deja pulsar ningún programa: le doy y no se me abre»; no sale en la demo ni en la app de prueba):
+     si una pantalla falla al dibujarse, en vez de no hacer nada, sale una pantalla con «Volver» y el motivo en pequeño (para que nos lo pase) */
+  try {
   if (S.v === 'cargando') h = '<div class="carga">' + logo(200) + '<i></i></div>';
   else if (S.v === 'error') h = '<div class="carga"><p>' + esc(S.err) + '</p><button class="btn" data-a="reintentar">Reintentar</button></div>';
   else if (S.v === 'acceso') h = vAcceso();
@@ -4578,6 +4583,8 @@ function pintar() {
     var dentro = p && S.pila.some(function (q) { return q && q.t === 'entreno'; });
     if (S.ses && (!p || p.t !== 'entreno') && !(p && p.t === 'fin') && !dentro) h += miniSesHtml();
   }
+  } catch (e) { try { console.error(e); } catch (x) { }
+    h = '<div class="pant pad err-v"><div class="carga"><p><b>No se ha podido abrir esto</b></p><p class="sm mut">Vuelve e inténtalo otra vez. Si sigue pasando, mándanos una captura de esta pantalla.</p><button class="btn" data-a="errVolver">Volver</button><p class="err-c">' + esc((S.v === 'app' ? (S.pant && S.pant.t) || S.tab : S.v) + ' · ' + YO_V + ' · ' + String(e && (e.message || e)).slice(0, 160)) + '</p></div></div>'; }
   var chX = [].map.call(el.querySelectorAll('.chips.scroll'), function (c) { return c.scrollLeft; });      // 21 nov (Chadín: «en rutinas sueltas, le doy a Carrera y me sitúa en el principio de nuevo»): las filas de filtros no vuelven al principio
   el.innerHTML = h + '<p id="pend" class="pend" hidden></p>';
   [].forEach.call(el.querySelectorAll('.chips.scroll'), function (c, k) { if (chX[k]) c.scrollLeft = chX[k]; var on = c.querySelector('.chip.on'); if (on && (on.offsetLeft < c.scrollLeft || on.offsetLeft + on.offsetWidth > c.scrollLeft + c.clientWidth)) c.scrollLeft = Math.max(0, on.offsetLeft - 16); });
@@ -4585,6 +4592,7 @@ function pintar() {
   pintaPend(); if (typeof trasPintar === 'function') trasPintar(); if (typeof pintaDescanso === 'function') pintaDescanso();
 }
 var VISTAS = {};
+A.errVolver = function () { if (S.v !== 'app' && S.perfil) { S.v = 'app'; S.x.plan = null; } else if (S.pant) { S.pant = null; S.pila = []; } else S.tab = 'inicio'; pintar(); };
 A.reintentar = function () { cargar(); };
 
 /* un solo escuchador para toda la app */
@@ -4595,7 +4603,7 @@ document.addEventListener('click', function (ev) {
   var el = ev.target.closest('[data-a]'); if (!el) return;
   var f = A[el.dataset.a]; if (!f) return;
   if (el.tagName === 'A' && el.getAttribute('href') === '#') ev.preventDefault();
-  f(el, ev);
+  try { f(el, ev); } catch (e) { try { console.error(e); } catch (x) { } toast('No se ha podido hacer · ' + el.dataset.a + ' · ' + String(e && (e.message || e)).slice(0, 90)); }      // yo-1.76: si algo falla, se dice (antes, no pasaba nada)
 });
 document.addEventListener('submit', function (ev) { var f = ev.target.dataset.f; if (f && F[f]) { ev.preventDefault(); F[f](ev.target); } });
 document.addEventListener('input', function (ev) { var t = ev.target, k = t.dataset && t.dataset.in; if (k && IN[k]) IN[k](t, ev); });
