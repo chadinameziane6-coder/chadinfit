@@ -3619,6 +3619,15 @@ function inferirMeta(n,g){
 }
 var RE_PRINCIPAL=/hip thrust(?! unilateral| a una)|sentadilla(?! sissy| con salto)|hack|prensa|p[eé]ndulo|peso muerto(?! a una)|press (de )?banca|press inclinado|press de pecho|press militar|press de hombro|dominada|jal[oó]n|remo(?! ergómetro| ergometro)|zancada|b[uú]lgara|step.?up|thruster|flexiones|puente de gl[uú]teo con barra/i;
 var RE_MANC=/mancuerna/i, RE_UNI=/unilateral|b[uú]lgara|zancada|step.?up|a una (mano|pierna)|un brazo|una pierna|\b1 (brazo|pierna)|pistol|split|patada de gl[uú]teo|plancha lateral|copenhague|monopodal/i;
+/* yo-1.77: también faltaban PLN_RELL (con qué se rellena un día corto al hacer un plan) y PLN_LES_PAT (qué ejercicios van más lentos si tienes
+   una molestia): al hacer o rehacer un plan en esos casos, fallaba. Copiadas tal cual de la app de clientas */
+var PLN_RELL={pie:['g:Glúteo','g:Cuádriceps','g:Isquiosurales','abduccion','g:Gemelo','core'],tor:['g:Hombro','g:Bíceps','g:Tríceps','g:Espalda','g:Pecho','core'],fb:['g:Hombro','g:Glúteo','g:Espalda','g:Bíceps','g:Tríceps','core']};
+var PLN_LES_PAT={rodilla:/sentadilla|zancada/,cadera:/sentadilla|bisagra|puente|zancada/,lumbar:/bisagra|sentadilla/,hombro:/empuje|tiron_v/,muneca:/empuje_h/,tobillo:/zancada|sentadilla/,cuello:/empuje_v/};
+/* yo-1.77 · 27 nov 2026, 23:10 (Javier: «no me deja pulsar ningún programa» y las rutinas sueltas, con «Can't find variable: RE_CARGA»): el motor
+   copiado de la app de clientas usaba RE_CARGA y RE_CORP sin traerlas. Con el banco aún sin cargar o un ejercicio que no está en él, fallaba al
+   abrir cualquier programa o rutina suelta. Copiadas tal cual de la app de clientas */
+var RE_CORP=/flexiones|dominadas(?! asistid)|plancha|puente de gl[uú]teo(?! con)|frog pump|sissy|burpee|fondos(?! en m)|crunch(?! en polea)|abdominal(?!.*m[aá]quina)|mountain|superman|bird dog|dead bug|hollow|elevaci[oó]n(es)? de piernas|n[oó]rdico|peso corporal|sin peso|jumping|skipping|sentadilla con salto/i;
+var RE_CARGA=/polea|cable|m[aá]quina|mancuerna|kettlebell|pesa rusa|disco|lastr|con peso|goblet|multipower|smith|landmine|bal[oó]n medicinal|wall ball|trineo|chaleco|con barra|barra (recta|z|ez|hexagonal)/i;
 function apuntaDe(b,n){ n=String(n||(b&&b.nombre)||'');
   if(b&&b.reg) return b.reg;
   if(b&&b.eq) return b.eq==='corporal'?(RE_LASTRE.test(n)?'lastre':'corporal'):'kg';
@@ -3819,7 +3828,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.76';
+var YO_V = 'yo-1.77';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
