@@ -4270,7 +4270,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.74';
+var YO_V = 'yo-1.75';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6460,7 +6460,7 @@ function vProgramas() {
 }
 function vProgramasL() {      // 17 nov (Javier: «quita principiante y avanzado; eso debe clasificarse dentro de cada programa»): sin esos filtros; dentro de cada uno, por nivel
   var f = S.x.pf || '', fav = f === '__fav'; if (fav) f = '';
-  if (f === 'carrera' && rpHay()) return progChips(f) + rpCatalogo();
+  if (f === 'carrera' && rpHay()) { var tuC = nivTuyo(), Cc = {}; RP_NIV.forEach(function (x) { var Q = rpDeNivel(x[0]); Cc[x[0]] = Q.N.length + Q.V.length + Q.F.length; }); return nivTabs(S.x.pniv || tuC, Cc, tuC) + progChips(f) + rpCatalogo(); }      // yo-1.75: con sus pestañas de nivel
   var F = fjVisibles(f);      // los programas hechos con el Word; con ellos, fuera los de antes que repiten (FJ_SUST)
   var L = PROGRAMAS.filter(function (p) { return (!f || p.c.split(' ').indexOf(f) >= 0) && !(F.length && FJ_SUST[p.id]); }), N = !f ? rpVisibles() : [];
   var sd = function (sem, d) { return [sem + ' semanas', d + ' días/sem']; };      // 18 nov (Javier): además de los días, cuántas semanas
@@ -6480,14 +6480,16 @@ function vProgramasL() {      // 17 nov (Javier: «quita principiante y avanzado
   }
   var tuN = nivTuyo(), nv = S.x.pniv || tuN, C = {}; NV.forEach(function (n) { C[n[0]] = it.filter(function (x) { return x.niv === n[0]; }).length; });
   var cur = NV.filter(function (n) { return n[0] === nv; })[0] || NV[0], G = it.filter(function (x) { return x.niv === cur[0]; });
-  var h = '<div class="nv-tabs" role="tablist" aria-label="Nivel">' + NV.map(function (n) { var on = n[0] === cur[0];
-    return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progNiv" data-v="' + n[0] + '"' + (n[0] === tuN ? ' aria-label="' + n[1] + ', tu nivel, ' + C[n[0]] + ' programas"' : '') + '>' + (n[0] === tuN ? '<em class="nv-tu">Tu nivel</em>' : '') + '<span>' + nivBarras(n[2]) + n[1] + '</span><small>' + C[n[0]] + (C[n[0]] === 1 ? ' programa' : ' programas') + '</small></button>'; }).join('') + '</div>';
+  var h = nivTabs(cur[0], C, tuN);
   h += progChips(f) + '<div class="prog-lst"><small class="mut">' + G.length + (G.length === 1 ? ' programa' : ' programas') + ' de nivel ' + cur[1].toLowerCase() + '</small>';
   if (!G.length) h += '<p class="mut sm fav-v">No hay programas de este nivel' + (f ? ' con este filtro' : '') + '. Prueba con otro nivel' + (f ? ' o quita el filtro' : '') + '.</p>';
   return h + G.map(function (x) { return x.h(); }).join('') + '</div>';
 }
 A.progF = function (el) { S.x.pf = el.dataset.v; pintar(); };
 A.progNiv = function (el) { S.x.pniv = el.dataset.v; pintar(); };
+function nivTabs(cur, C, tuN) { var NV = [['ini', 'Principiante', 1], ['int', 'Intermedio', 2], ['ava', 'Avanzado', 3]];      // yo-1.75: las pestañas de nivel, para todos los filtros (también Carrera)
+  return '<div class="nv-tabs" role="tablist" aria-label="Nivel">' + NV.map(function (n) { var on = n[0] === cur;
+    return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progNiv" data-v="' + n[0] + '"' + (n[0] === tuN ? ' aria-label="' + n[1] + ', tu nivel, ' + C[n[0]] + ' programas"' : '') + '>' + (n[0] === tuN ? '<em class="nv-tu">Tu nivel</em>' : '') + '<span>' + nivBarras(n[2]) + n[1] + '</span><small>' + C[n[0]] + (C[n[0]] === 1 ? ' programa' : ' programas') + '</small></button>'; }).join('') + '</div>'; }
 function nivTuyo() { var q = (S.perfil && S.perfil.q) || {}; return { ini: 'ini', medio: 'int', avz: 'ava' }[q.niv] || 'ini'; }
 function nivBarras(n) { return '<svg class="nv-b" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">' + [[1, 8, 5], [5.5, 5, 8], [10, 2, 11]].map(function (b, i) { return '<rect x="' + b[0] + '" y="' + b[1] + '" width="3" height="' + b[2] + '" rx="1"' + (i < n ? '' : ' opacity=".25"') + '/>'; }).join('') + '</svg>'; }
 A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProgSi(id); }, 'prog'); };
@@ -6749,18 +6751,21 @@ function rpTit(e) { var X = rpDeEj(e); return X ? X.s.t : e.n; }
 var RP_NIV = [['ini', 'Principiante'], ['int', 'Intermedio'], ['ava', 'Avanzado']];
 var RP_COL = { a: '#7C8CFF', b: 'var(--neg)', c: '#9AA0A8' };
 /* catálogo de Carrera: por nivel, con los programas nuevos arriba y los de siempre debajo */
+/* yo-1.75 · 27 nov 2026 (Javier, 25 nov 22:05: «cuando elijo programa carrera, me desaparece la cabecera de principiante, intermedio y avanzado»):
+   en Carrera, las mismas pestañas de nivel con color (las de todos los programas, encima de los filtros) en lugar de su selector propio; el nivel es
+   el mismo para todos los filtros */
+function rpDeNivel(nv) { return { N: rpVisibles(nv), V: PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv; }), F: fjVisibles('carrera').filter(function (p) { return p.niv === nv; }) }; }      // 17 nov: también los nuevos (b: 1) y los del Word con carrera
 function rpCatalogo() {
-  var nv = S.x.rpNiv || 'ini', N = rpVisibles(nv), V = PROGRAMAS.filter(function (p) { return p.c.split(' ').indexOf('carrera') >= 0 && p.P.niv === nv; }), F = fjVisibles('carrera').filter(function (p) { return p.niv === nv; });      // 17 nov: también los nuevos (b: 1, publicados el 18 nov) y los del Word con carrera
-  var h = '<div class="rp-niv" role="tablist">' + RP_NIV.map(function (x) { return '<button role="tab" aria-selected="' + (x[0] === nv) + '" class="' + (x[0] === nv ? 'on' : '') + '" data-a="rpNiv" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>';
-  var n = N.length + V.length + F.length;      // 18 nov: con foto, como los demás programas
-  h += '<div class="prog-lst"><small class="mut">' + n + (n === 1 ? ' programa' : ' programas') + '</small>' + N.map(function (P) {
+  var tuN = nivTuyo(), nv = S.x.pniv || tuN, C = {}; RP_NIV.forEach(function (x) { var Q = rpDeNivel(x[0]); C[x[0]] = Q.N.length + Q.V.length + Q.F.length; });
+  var Q = rpDeNivel(nv), N = Q.N, V = Q.V, F = Q.F, n = N.length + V.length + F.length, nom = (RP_NIV.filter(function (x) { return x[0] === nv; })[0] || RP_NIV[0])[1];
+  var h = '<div class="prog-lst"><small class="mut">' + n + (n === 1 ? ' programa' : ' programas') + ' de carrera de nivel ' + nom.toLowerCase() + '</small>' + (!n ? '<p class="mut sm fav-v">No hay programas de carrera de este nivel. Prueba con otro nivel.</p>' : '') + N.map(function (P) {
     var rg = rpRango(P), act = rpActivo(P.id);
     return progPh('rpVer', P.id, imgDe(P.id, P.n), [P.sem + ' semanas', P.dias + ' días/sem'], P.n, rg[0] + '-' + rg[1] + ' min · Meta: ' + esc(P.meta) + (act ? ' · <b class="pp-ok">Lo estás haciendo</b>' : '')); }).join('') +
     V.map(function (p) { return progPh('verProg', p.id, imgDe(p.id, p.n), [(p.P.sem || 8) + ' semanas', p.P.dias + ' días/sem'], p.n, esc(p.sub)); }).join('') +
     F.map(function (p) { return progPh('verFijo', p.id, imgDe(p.id, p.n), [(p.sem || 8) + ' semanas', p.dias + ' días/sem'], p.n, esc(p.sub)); }).join('') + '</div>';
   return h;
 }
-A.rpNiv = function (el) { S.x.rpNiv = el.dataset.v; pintar(); };
+A.rpNiv = function (el) { S.x.pniv = el.dataset.v; pintar(); };      // yo-1.75: el mismo nivel que en el resto de programas
 A.rpVer = function (el) { S.x.rpW = null; ir({ t: 'rprog', id: el.dataset.v }); };
 
 /* la ficha del programa */
