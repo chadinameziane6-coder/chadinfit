@@ -3161,6 +3161,28 @@ html[data-tema="oscuro"] .p5-res b.up{color:#7EE2A8}html[data-tema="oscuro"] .p5
 @media (prefers-color-scheme:dark){html:not([data-tema="claro"]) .p5-res b.up{color:#7EE2A8}html:not([data-tema="claro"]) .p5-res b.dn{color:#FF9A9D}}
 /* yo-1.76: la pantalla de «No se ha podido abrir esto» */
 .err-v .carga{min-height:60vh;text-align:center;gap:10px;padding:0 24px}.err-c{font-size:11px;color:var(--tx3);word-break:break-word;margin-top:14px}
+/* yo-1.78 · programas para una carrera: la puesta a punto y el reparto (piramidal o polarizado) */
+.ca-bar{display:flex;gap:3px;margin:10px 0 10px}.ca-bar i{flex:1;height:10px;border-radius:3px;background:var(--gris)}
+.ca-bar i.pp{background:linear-gradient(135deg,#9AE6FF,#7C8CFF)}.ca-bar i.car{background:var(--tx)}
+.ca-lg{display:grid;grid-template-columns:minmax(0,.95fr) minmax(0,1.25fr) minmax(0,.8fr);gap:8px;margin-bottom:10px}
+.ca-lg span{display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-start;gap:1px;min-width:0;padding-left:8px;border-left:3px solid var(--gris);text-align:left}
+.ca-lg span.ca-pp{border-left-color:#7C8CFF}.ca-lg span.ca-car{border-left-color:var(--tx)}
+.ca-lg b{font-size:13px;line-height:1.25;white-space:nowrap}.ca-lg small{font-size:11.5px;color:var(--tx2)}
+.ca-c .sm{margin:0;line-height:1.45}
+.rep-c .rep-s{display:block;margin:-2px 0 10px;font-size:12.5px}
+.rep-l{display:flex;flex-direction:column;gap:8px}
+.rep-o{align-items:flex-start}.rep-o>span{flex:1;min-width:0}.rep-o .punto{margin-top:2px}
+.rep-o b{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.rep-tag{font-style:normal;font-size:10.5px;font-weight:800;line-height:1;padding:4px 8px;border-radius:999px;background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F}
+.rep-o .rep-b{display:flex;flex-direction:row;gap:2px;height:8px;margin:8px 0 4px;border-radius:4px;overflow:hidden}
+.rep-b i,.rep-lg i{display:block;min-width:3px;background:var(--gris)}.rep-b i.z2,.rep-lg i.z2{background:#8A8A93}.rep-b i.z3,.rep-lg i.z3{background:var(--tx)}
+.rep-o small.rep-n{font-size:11.5px;color:var(--tx3)}
+.rep-lg{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font-size:11.5px;color:var(--tx2)}
+.rep-lg span{display:flex;align-items:center;gap:5px}.rep-lg i{width:9px;height:9px;border-radius:3px}
+.run-pv li.ca-pp,.run-pr li.ca-pp{border-left-color:#7C8CFF}.run-pv li.ca-car,.run-pr li.ca-car{border-left-color:var(--tx)}
+.run-pv li.ca-pp small,.run-pr li.ca-pp small,.run-pv li.ca-car small,.run-pr li.ca-car small{color:var(--tx)}
+.run-p.ca-pp{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F}.rep-o .nw{white-space:nowrap;display:inline}
+.run-ppn{margin:0;font-size:12.5px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -4191,12 +4213,56 @@ var RUN_YO = {
 };
 /* minutos aproximados de cada sesión (con calentamiento y vuelta a la calma) */
 var RUN_MIN = { ini: { z2: 34, series: 35, larga: 45, recup: 25 }, int: { z2: 50, series: 55, larga: 70, recup: 35 }, ava: { z2: 65, series: 75, larga: 95, recup: 45 } };
+/* yo-1.78 · 27 nov 2026 (Javier, 23:27: «si eliges un programa para una carrera concreta de 10 kilómetros, por ejemplo, las últimas semanas vengan
+   ya así»; «mete también el modelo polarizado. Yo dejaría los dos, polarizado y el otro en reparto piramidal»).
+   · PUESTA A PUNTO (tapering) en los programas para una carrera (De 0 a 5 km, Prepara 10 km, Media maratón, P.ca): el entreno va en 4 bloques y las
+     últimas semanas bajan los kilómetros (un 30-60 % menos) con algo de ritmo, para llegar con las piernas frescas; la última acaba con la carrera.
+     T = semanas de puesta a punto contando la de la carrera. Cada fase lleva sus semanas (s) y las de la puesta a punto, pp ('pp' o 'car').
+   · REPARTO de la semana (se elige en Prepara 10 km y Media maratón, P.rep): piramidal (casi todo suave, algo moderado en Z2 y poco fuerte; el de siempre)
+     o polarizado (casi todo muy suave y un 20 % fuerte en Z3-Z4, casi nada en Z2): cambian las series y la tirada larga.
+   Cada lista: 4 bloques de entreno + T semanas de puesta a punto. */
+var RUN_CA = {
+  '5k': { d: '5 km', T: 1, x: { larga: { nota: 'Es la sesión que más resistencia te da. En la última semana, tu carrera ocupa su lugar.' } }, pir: {
+    z2: RUN_YO.ini.z2.F.concat(['15 min seguidos trotando suave en Z1']),
+    series: RUN_YO.ini.series.F.concat(['4 × (1 min rápido en Z2 + 2 min trotando suave en Z1)']),
+    larga: RUN_YO.ini.larga.F.concat(['¡Tu carrera de 5 km! Sal suave (Z1) y, si vas bien, aprieta en el último km (Z2).']),
+    recup: RUN_YO.ini.recup.F.concat(['15 min andando rápido']) } },
+  '10k': { d: '10 km', T: 2, x: { larga: { int: 'Ritmo de charla (Z1). En las semanas 7 y 8, los 2 últimos km algo más rápidos (Z2, RPE 5-6).', nota: 'La tirada larga construye tu base: no la conviertas en carrera. En la última semana, tu carrera ocupa su lugar.' } }, pir: {
+    z2: ['6 km suaves en Z1 + 4 × 80 m progresivos', '7 km suaves en Z1 + 4 × 80 m progresivos', '8 km suaves en Z1 + 6 × 80 m progresivos', '8 km suaves en Z1 + 6 × 80 m progresivos', '6 km suaves en Z1 + 4 × 80 m progresivos', '4 km suaves en Z1 + 4 × 80 m progresivos'],
+    series: ['6 × 400 m a ritmo de 5 km en Z3 · recuperación 90 s trotando', '4 × 1.500 m a ritmo umbral en Z2 · recuperación 90 s trotando', '5 × 1.000 m a ritmo de 10 km en Z3 · recuperación 2 min trotando', '3 × 2.000 m a ritmo de 10 km en Z3 · recuperación 2:30 trotando', '4 × 1.000 m a ritmo de 10 km en Z3 · recuperación 2 min trotando', '4 × 400 m a ritmo de 10 km en Z3 · recuperación 90 s trotando'],
+    recup: ['30 min muy suaves en Z0', '30 min muy suaves en Z0', '35 min muy suaves en Z0', '35 min muy suaves en Z0', '25 min muy suaves en Z0', '20 min muy suaves en Z0 (o descansa)'],
+    larga: ['9 km suaves en Z1', '10 km suaves en Z1', '12 km suaves en Z1', '12 km: 10 suaves en Z1 + 2 algo más rápidos en Z2', '8 km suaves en Z1', '¡Tu carrera de 10 km! Los 2 primeros km controlados y luego a tu ritmo de 10 km (Z3). Lo que te quede, en el último.'] },
+    pol: {
+      series: { F: ['6 × 400 m en Z4 · recuperación 2 min trotando', '5 × 800 m a ritmo de 5 km en Z3 · recuperación 2:30 trotando', '5 × 1.000 m a ritmo de 5 km en Z3 · recuperación 2:30 trotando', '4 × 1.200 m a ritmo de 5 km en Z3 · recuperación 3 min trotando', '4 × 800 m a ritmo de 10 km en Z3 · recuperación 2 min trotando', '4 × 400 m a ritmo de 10 km en Z3 · recuperación 2 min trotando'],
+        rpe: '8-9', fc: 'Zonas 3-4', int: 'Fuertes de verdad (Z3-Z4) y con recuperaciones largas. El resto de la semana, todo suave: nada en medio.' },
+      larga: { F: ['9 km suaves en Z1', '10 km suaves en Z1', '12 km suaves en Z1', '12 km suaves en Z1', '8 km suaves en Z1', '¡Tu carrera de 10 km! Los 2 primeros km controlados y luego a tu ritmo de 10 km (Z3). Lo que te quede, en el último.'],
+        rpe: '3-4', fc: 'Zona 1', int: 'Ritmo de charla (Z1) todo el rato, también al final.' } } },
+  '21k': { d: 'media maratón', T: 2, x: { larga: { int: 'Suave (Z1). Desde la semana 6, los últimos km a ritmo de media maratón (Z2).', nota: 'Prueba aquí lo que comerás y beberás en carrera (geles, agua) a partir de 75-90 min. En la última semana, tu carrera ocupa su lugar.' } }, pir: {
+    z2: ['10 km en Z1 + 6 × 100 m progresivos', '11 km en Z1 + 6 × 100 m progresivos', '12 km en Z1 + 6 × 100 m progresivos', '12 km en Z1 + 6 × 100 m progresivos', '9 km en Z1 + 4 × 100 m progresivos', '6 km en Z1 + 4 × 100 m progresivos'],
+    series: ['6 × 1.000 m a ritmo de 10 km en Z3 · recuperación 90 s trotando', '4 × 2.000 m a ritmo de media maratón en Z2 · recuperación 2 min trotando', '3 × 3.000 m a ritmo de media maratón en Z2 · recuperación 2 min trotando', '2 × 5.000 m a ritmo de media maratón en Z2 · recuperación 3 min trotando', '3 × 2.000 m a ritmo de media maratón en Z2 · recuperación 2 min trotando', '4 × 1.000 m a ritmo de media maratón en Z2 · recuperación 90 s trotando'],
+    recup: ['40 min muy suaves en Z0', '40 min muy suaves en Z0', '45 min muy suaves en Z0', '45 min muy suaves en Z0', '35 min muy suaves en Z0', '25 min muy suaves en Z0 (o descansa)'],
+    larga: ['14 km suaves en Z1', '16 km suaves en Z1', '18 km: 15 suaves en Z1 + 3 a ritmo de media maratón (Z2)', '20 km: 14 suaves en Z1 + 6 a ritmo de media maratón (Z2)', '14 km: 11 suaves en Z1 + 3 a ritmo de media maratón (Z2)', '¡Tu media maratón! Los primeros 5 km, controlados a tu ritmo de media (Z2). Bebe en cada avituallamiento.'] },
+    pol: {
+      series: { F: ['8 × 400 m en Z4 · recuperación 2 min trotando', '6 × 800 m a ritmo de 5 km en Z3 · recuperación 2:30 trotando', '5 × 1.000 m a ritmo de 5 km en Z3 · recuperación 2:30 trotando', '4 × 1.200 m a ritmo de 5 km en Z3 · recuperación 3 min trotando', '4 × 1.000 m a ritmo de 5 km en Z3 · recuperación 2:30 trotando', '5 × 400 m en Z3 · recuperación 2 min trotando'],
+        rpe: '8-9', fc: 'Zonas 3-4', int: 'Fuertes de verdad (Z3-Z4) y con recuperaciones largas. El resto de la semana, todo suave: nada en medio.' },
+      larga: { F: ['14 km suaves en Z1', '16 km suaves en Z1', '18 km suaves en Z1', '20 km suaves en Z1', '14 km: 12 suaves en Z1 + 2 a ritmo de media maratón (Z2)', '¡Tu media maratón! Los primeros 5 km, controlados a tu ritmo de media (Z2). Bebe en cada avituallamiento.'],
+        rpe: '3-4', fc: 'Zona 1', int: 'Ritmo de charla (Z1) todo el rato. Solo en la puesta a punto, 2 km a ritmo de carrera para tenerlo en las piernas.' } } }
+};
+function caDe(P) { return P && P.ca ? RUN_CA[P.ca] || null : null; }
+function caRepOk(P) { var C = caDe(P); return !!(C && C.pol && (P.niv === 'int' || P.niv === 'ava')); }      // el reparto se elige en intermedio y avanzado (28 nov, 00:22, Javier: «haz también la opción de polarizado en 10 kilómetros intermedio»)
+function caFases(F, sem, T, dia) {      // dia: la sesión que es la carrera (la tirada larga)
+  var B = Math.max(1, sem - T), L = F.slice(0, 4).map(function (p, k) { var a = Math.ceil(k * B / 4) + 1, b = Math.ceil((k + 1) * B / 4); if (b < a) b = a; return { t: a === b ? 'Semana ' + a : 'Semanas ' + a + '-' + b, p: p, s: [a, b] }; });      // los bloques largos, al principio: el último antes de la puesta a punto es el más corto
+  for (var i = 0; i < T; i++) { var w = B + 1 + i, car = i === T - 1; L.push({ t: 'Semana ' + w + ' · ' + (car ? (dia ? 'Carrera' : 'Antes de la carrera') : 'Puesta a punto'), p: F[4 + i], s: [w, w], pp: car ? 'car' : 'pp' }); }
+  return L;
+}
 /* la sesión de carrera completa (sustituye a la del motor solo en /yo) */
 function yoRunEj(t, P) {
-  var nv = RUN_YO[P.niv] || RUN_YO.int, T = nv[t] || nv.z2, sem = P.sem || 8;
+  var nv = RUN_YO[P.niv] || RUN_YO.int, T = nv[t] || nv.z2, sem = P.sem || 8, C = caDe(P), O = C && P.rep === 'pol' && caRepOk(P) && C.pol[t] || null, Fc = C ? (O && O.F) || C.pir[t] || null : null;
+  if (C && C.x && C.x[t]) T = Object.assign({}, T, C.x[t]);
+  if (O) T = Object.assign({}, T, { rpe: O.rpe || T.rpe, fc: O.fc || T.fc, int: O.int || T.int });
   var e = { n: T.n, tipo: 'run', st: t === 'series' ? (P.niv === 'ini' ? 'fartlek' : 'series') : t === 'larga' ? 'larga' : 'rodaje', ro: t === 'recup' ? 'recup' : t === 'z2' ? 'suave' : '',
     ca: T.ca, vc: T.vc, rpe: T.rpe, fc: T.fc, int: T.int, nota: T.nota, video: '',
-    fases: T.F.map(function (p, k) { return { t: faseTxt(k, sem), p: p }; }), bl: [runBl('1', '', T.F[0])], res: T.F[0], min: (RUN_MIN[P.niv] || RUN_MIN.int)[t] || 40, _p: { run: t, k: 'run-' + t } };
+    fases: Fc ? caFases(Fc, sem, C.T, t === 'larga') : T.F.map(function (p, k) { return { t: faseTxt(k, sem), p: p }; }), bl: [runBl('1', '', (Fc || T.F)[0])], res: (Fc || T.F)[0], min: (RUN_MIN[P.niv] || RUN_MIN.int)[t] || 40, _p: { run: t, k: 'run-' + t } };
   return e;
 }
 plnRunEj = yoRunEj;
@@ -4223,16 +4289,21 @@ function faseHoy(r, nf) {
   w = Math.max(1, Math.min(sem, w)); return Math.min((nf || 4) - 1, Math.floor((w - 1) * 4 / sem));
 }
 function semanaDe(r) { var p = planDeRut(r); if (!p || !p.desde) return null; var sem = p.sem || 8, w = Math.floor((aDate(hoyStr()) - aDate(p.desde)) / (7 * 864e5)) + 1; return { w: Math.max(1, Math.min(sem, w)), sem: sem }; }
+/* yo-1.78: la fase de hoy; las de los programas para una carrera llevan sus semanas (s) */
+function faseIdx(e, r) { var F = e.fases || []; if (!F.length) return 0; if (!F[0].s) return faseHoy(r, F.length);
+  var sw = semanaDe(r), w = sw ? sw.w : 1; for (var i = 0; i < F.length; i++) if (w >= F[i].s[0] && w <= F[i].s[1]) return i; return w > F[F.length - 1].s[1] ? F.length - 1 : 0; }
 /* lo que toca hoy en una sesión de carrera (o su resumen) */
-function runHoy(e, r) { if (e.rp) return rpHoyTxt(e); if (e.fases && e.fases.length) return e.fases[faseHoy(r, e.fases.length)].p; return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || (e.tipo === 'run' ? 'Carrera' : 'Cardio'); }
+function runHoy(e, r) { if (e.rp) return rpHoyTxt(e); if (e.fases && e.fases.length) return e.fases[faseIdx(e, r)].p; return e.res || (e.bl && e.bl[0] && e.bl[0].du) || e.ro || (e.tipo === 'run' ? 'Carrera' : 'Cardio'); }
 /* la ficha de la sesión de carrera: calentamiento, parte principal, vuelta a la calma, intensidad y cómo progresa */
 function runFicha(e, r) {
   if (!e.fases) return e.nota ? '<p class="txt">' + esc(e.nota) + '</p>' : '';
-  var k = faseHoy(r, e.fases.length), sw = semanaDe(r);
-  var h = '<div class="run-f"><div class="run-p"><small>' + (sw ? 'Hoy toca · semana ' + sw.w + ' de ' + sw.sem : 'Parte principal') + '</small><b>' + esc(e.fases[k].p) + '</b></div>';
+  var k = faseIdx(e, r), sw = semanaDe(r), pp = e.fases[k].pp;
+  var h = '<div class="run-f"><div class="run-p' + (pp ? ' ca-' + pp : '') + '"><small>' + (sw ? 'Hoy toca · semana ' + sw.w + ' de ' + sw.sem : 'Parte principal') + (pp ? ' · ' + e.fases[k].t.replace(/^Semanas? [\d-]+ · /, '') : '') + '</small><b>' + esc(e.fases[k].p) + '</b></div>';
+  if (pp === 'pp') h += '<p class="run-i run-ppn">Puesta a punto: menos kilómetros y algo de ritmo, para llegar a la carrera con las piernas frescas.</p>';
   h += '<ul class="run-l"><li>' + ic('play', 13) + '<span>' + esc(e.ca) + '</span></li><li>' + ic('check', 13) + '<span>' + esc(e.vc) + '</span></li></ul>';
-  if (e.int) h += '<p class="run-i"><b>Intensidad: RPE ' + esc(e.rpe) + (e.fc ? ' · ' + esc(e.fc) : '') + '.</b> ' + esc(e.int) + ' <button class="link zn-l" data-a="zonasInfo">Ver las zonas</button></p>';
-  h += '<details class="run-pr"><summary>Cómo progresa</summary><ol>' + e.fases.map(function (f, j) { return '<li' + (j === k ? ' class="on"' : '') + '><small>' + esc(f.t) + '</small><span>' + esc(f.p) + '</span></li>'; }).join('') + '</ol></details>';
+  if (pp === 'car' && / · Carrera$/.test(e.fases[k].t)) h += '<p class="run-i"><b>Hoy es tu carrera.</b> Empieza controlado, guarda algo para el final y disfrútala. <button class="link zn-l" data-a="zonasInfo">Ver las zonas</button></p>';
+  else if (e.int) h += '<p class="run-i"><b>Intensidad: RPE ' + esc(e.rpe) + (e.fc ? ' · ' + esc(e.fc) : '') + '.</b> ' + esc(e.int) + ' <button class="link zn-l" data-a="zonasInfo">Ver las zonas</button></p>';
+  h += '<details class="run-pr"><summary>Cómo progresa</summary><ol>' + e.fases.map(function (f, j) { var c = (j === k ? 'on' : '') + (f.pp ? ' ca-' + f.pp : ''); return '<li' + (c.trim() ? ' class="' + c.trim() + '"' : '') + '><small>' + esc(f.t) + '</small><span>' + esc(f.p) + '</span></li>'; }).join('') + '</ol></details>';
   if (e.nota) h += '<p class="txt mut sm">' + esc(e.nota) + '</p>';
   return h + '</div>';
 }
@@ -4276,12 +4347,11 @@ plnRunSes = function (i, t, P, cand, ctx) {
   s.ej = calYo(s, P, cand, mov).concat(resto); return s;
 };
 
-
 ;
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.77';
+var YO_V = 'yo-1.78';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4934,6 +5004,7 @@ function vTuPlan() {
     '<button class="ph-r" data-a="planAtras" aria-label="Volver">' + ic('atras', 20) + '</button>', prog ? '' : '<button class="ph-l" data-a="planRespuestas">Cambiar respuestas</button>');
   h += heroSt3([[(prog && prog.sem) || P.sem || 8, 'semanas'], [P.dias || D.rutinas.length, 'días'], [(P.min || (prog && prog.min) || '') + "'", 'por sesión']]);
   if (prog && prog.fijo) h += '<p class="sm mut">' + esc((prog.rir ? 'Deja ' + prog.rir + ' repeticiones en reserva (RIR ' + prog.rir + ').' : '') + (prog.nota ? (prog.rir ? ' ' : '') + prog.nota : '')) + '</p>';      // yo-1.70: sin RIR en movilidad y flexibilidad
+  h += caPlanHtml(P);      // yo-1.78: programas para una carrera: la puesta a punto y (en avanzado) el reparto
   var dsem = {}; D.rutinas.forEach(function (r, i) { (r.dias || []).forEach(function (d) { dsem[DQ_A[d]] = i; }); });
   var pkD = imgPicker([hImg]);      // las miniaturas de los días: la del tema de cada día, sin repetir ni la de arriba
   h += '<div class="card semana7">' + DIAS7.map(function (d) { var i = dsem[d]; return '<span class="d7' + (i != null ? ' on' : '') + '">' + d + '<i>' + (i != null ? String.fromCharCode(65 + i) : '·') + '</i></span>'; }).join('') + '</div>';
@@ -4947,7 +5018,7 @@ function vTuPlan() {
       if (cal.length) h += '<div class="cal">Calentamiento: ' + esc(cal.map(function (e) { return e.n; }).join(', ')) + '</div>';
       r.ejercicios.forEach(function (e, j) { if (esCal(e)) return;
         if (e.tipo === 'bloque') { h += blqCardHtml(e, true); return; }
-        if (e.tipo === 'run' && e.fases) { h += '<div class="ej-f run-pv"><span class="ej-n"><b>' + esc(e.n) + '</b><small>' + esc(e.ca) + '</small><ol>' + e.fases.map(function (f) { return '<li><small>' + esc(f.t) + '</small>' + esc(f.p) + '</li>'; }).join('') + '</ol><small>' + esc(e.vc) + ' · RPE ' + esc(e.rpe) + '</small></span></div>'; return; }
+        if (e.tipo === 'run' && e.fases) { h += '<div class="ej-f run-pv"><span class="ej-n"><b>' + esc(e.n) + '</b><small>' + esc(e.ca) + '</small><ol>' + e.fases.map(function (f) { return '<li' + (f.pp ? ' class="ca-' + f.pp + '"' : '') + '><small>' + esc(f.t) + '</small>' + esc(f.p) + '</li>'; }).join('') + '</ol><small>' + esc(e.vc) + ' · RPE ' + esc(e.rpe) + '</small></span></div>'; return; }
         h += '<div class="ej-f"><button class="ej-n" data-a="verEj" data-de="r" data-n="' + esc(e.n) + '"><b>' + esc(e.n) + '</b><small>' + esc(setsTxt(e)) + '</small></button>' + (e.tipo === 'run' ? '' : '<button class="redondo sm" data-a="planCambiar" data-r="' + i + '" data-e="' + j + '" aria-label="Cambiar ' + esc(e.n) + '">' + ic('cambiar', 16) + '</button>') + '</div>'; });
     }
     h += '</section>';
@@ -4955,6 +5026,30 @@ function vTuPlan() {
   h += '<div class="pie-fijo"><div class="fila2">' + (prog && prog.fijo ? '' : '<button class="btn sec" data-a="planOtro">' + (prog ? 'Otra versión' : 'Hacer otro plan') + '</button>') + '<button class="btn sec" data-a="planGuardar" data-v="editar">Editarlo yo</button></div><button class="btn" data-a="planGuardar">' + (prog ? 'Empezar este programa' : 'Empezar mi plan') + '</button></div></div>';
   return h;
 }
+/* yo-1.78: en la vista previa de un programa para una carrera, cuándo es la puesta a punto y (en avanzado) cómo repartes el esfuerzo */
+function caPlanHtml(P) {
+  var C = caDe(P); if (!C) return ''; var sem = P.sem || 8, B = Math.max(1, sem - C.T), seg = '';
+  for (var w = 1; w <= sem; w++) seg += '<i class="' + (w === sem ? 'car' : w > B ? 'pp' : '') + '"></i>';
+  var h = '<section class="card ca-c"><b class="card-tt">Tu carrera: ' + esc(C.d) + '</b><div class="ca-bar" aria-hidden="true">' + seg + '</div><div class="ca-lg">' +
+    '<span><b>Entreno</b><small>' + (B > 1 ? 'Semanas 1-' + B : 'Semana 1') + '</small></span>' +
+    (C.T > 1 ? '<span class="ca-pp"><b>Puesta a punto</b><small>Semana ' + (B + 1) + (sem - 1 > B + 1 ? '-' + (sem - 1) : '') + '</small></span>' : '') +
+    '<span class="ca-car"><b>Carrera</b><small>Semana ' + sem + '</small></span></div>' +
+    '<p class="sm mut">' + (C.T > 1 ? 'En la puesta a punto bajas los kilómetros y mantienes algo de ritmo, para llegar con las piernas frescas. La carrera es la última salida de la semana ' + sem + '.' : 'La última semana es más suave y acaba con tu carrera de ' + esc(C.d) + '.') + '</p></section>';
+  if (!caRepOk(P)) return h;
+  var pol = P.rep === 'pol', op = function (v, on, t, tag, d, Z) {
+    return '<button class="opc rep-o' + (on ? ' on' : '') + '" role="radio" aria-checked="' + on + '" data-a="planRep" data-v="' + v + '"><span><b>' + t + (tag ? '<em class="rep-tag">' + tag + '</em>' : '') + '</b><small>' + d + '</small>' +
+      '<span class="rep-b" aria-hidden="true"><i class="z1" style="flex:' + Z[0] + '"></i><i class="z2" style="flex:' + Z[1] + '"></i><i class="z3" style="flex:' + Z[2] + '"></i></span>' +
+      '<small class="rep-n">' + Z[0] + ' % suave · ' + Z[1] + ' % moderado · ' + Z[2] + ' % fuerte</small></span><i class="punto"></i></button>'; };
+  return h + '<section class="card rep-c"><b class="card-tt">Cómo repartes el esfuerzo</b><small class="mut rep-s">Cambia tus series y tu tirada larga. Lo demás, igual.</small><div class="rep-l" role="radiogroup" aria-label="Reparto de la semana">' +
+    op('pir', !pol, 'Piramidal', 'Recomendado', 'Casi todo suave, algo a ritmo moderado (Z2) y poco fuerte.', [75, 18, 7]) +
+    op('pol', pol, 'Polarizado', '', 'El 80 % de lo que corres va muy suave y el 20 %, fuerte <span class="nw">(Z3-Z4)</span>. Casi no corres a ritmo moderado (Z2). Va mejor si ya corres 4 o 5 días a la semana.', [80, 3, 17]) +
+    '</div><div class="rep-lg"><span><i class="z1"></i>Suave · Z0-Z1</span><span><i class="z2"></i>Moderado · Z2</span><span><i class="z3"></i>Fuerte · Z3-Z4</span></div></section>';
+}
+A.planRep = function (el) {
+  var X = S.x.plan, v = el.dataset.v === 'pol' ? 'pol' : ''; if (!X || (X.P.rep || '') === v) return; X.P.rep = v;
+  try { var D = plnEntreno(X.P, { seed: X.seed || 0, est: X.est || '' }); if (X.origen && !X.origen.fijo) D = pautasWord(D, X.P); X.D = D; } catch (e) { console.error(e); return toast('No he podido cambiarlo. Vuelve a probar.'); }
+  pintar();
+};
 A.planAb = function (el) { var X = S.x.plan, i = +el.dataset.i; X.ab = X.ab === i ? -1 : i; pintar(); };
 A.planAtras = function () { var X = S.x.plan; if (X.origen) { S.v = 'app'; return pintar(); } S.v = 'preg'; S.paso = 6; pintar(); };
 A.planRespuestas = function () { S.v = 'preg'; S.paso = 1; pintar(); };
@@ -6245,7 +6340,7 @@ var PROGRAMAS = [
   { id: 'ini2', n: 'Principiante 2 días', c: 'principiante', P: PP({ obj: 'salud', niv: 'ini', dias: 2, min: 45 }) },
   { id: 'fzi', n: 'Fuerza para principiantes', c: 'principiante fuerza', P: PP({ obj: 'fuerza', niv: 'ini', dias: 3, min: 60, est: 'fb3' }) },
   { id: 'casa0', n: 'En casa sin material', c: 'principiante casa', P: PP({ obj: 'salud', niv: 'ini', dias: 3, min: 30, lug: 'casa' }) },
-  { id: 'run5', n: 'De 0 a 5 km', c: 'principiante carrera', P: PP({ obj: 'resist', niv: 'ini', dias: 4, min: 35, cv: 'normal', cvT: ['carrera'], dCarr: 3 }) },
+  { id: 'run5', n: 'De 0 a 5 km', c: 'principiante carrera', P: PP({ obj: 'resist', niv: 'ini', dias: 4, min: 35, cv: 'normal', cvT: ['carrera'], dCarr: 3, ca: '5k' }) },
   { id: 'fb3', n: 'Full body 3 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 3, min: 60, est: 'fb3' }) },
   { id: 'hip3', n: 'Hipertrofia 3 días', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 3, min: 60, est: 'tpf' }) },
   { id: 'hip4', n: 'Hipertrofia 4 días · torso / pierna', c: 'hipertrofia', P: PP({ obj: 'musculo', dias: 4, min: 60, est: 'tp4' }) },
@@ -6264,8 +6359,8 @@ var PROGRAMAS = [
   { id: 'rec4', n: 'Recomposición 4 días', c: 'hipertrofia resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60 }) },
   { id: 'res3', n: 'Mejora tu resistencia · circuitos', c: 'resistencia', P: PP({ obj: 'resist', dias: 3, min: 45, cv: 'mucho', cvT: ['hiit', 'bajo'] }) },
   { id: 'run', n: 'Mejora tu carrera · fuerza para corredores', c: 'carrera', P: PP({ obj: 'resist', dias: 5, min: 45, cv: 'normal', cvT: ['carrera'], dCarr: 3 }) },
-  { id: 'run10', n: 'Prepara 10 km', c: 'carrera', P: PP({ obj: 'resist', niv: 'int', dias: 5, min: 60, sem: 10, cv: 'normal', cvT: ['carrera'], dCarr: 4 }) },
-  { id: 'runmm', n: 'Media maratón', c: 'carrera avanzado', P: PP({ obj: 'resist', niv: 'ava', dias: 5, min: 75, sem: 12, cv: 'normal', cvT: ['carrera'], dCarr: 4 }) },
+  { id: 'run10', n: 'Prepara 10 km', c: 'carrera', P: PP({ obj: 'resist', niv: 'int', dias: 5, min: 60, sem: 10, cv: 'normal', cvT: ['carrera'], dCarr: 4, ca: '10k' }) },
+  { id: 'runmm', n: 'Media maratón', c: 'carrera avanzado', P: PP({ obj: 'resist', niv: 'ava', dias: 5, min: 75, sem: 12, cv: 'normal', cvT: ['carrera'], dCarr: 4, ca: '21k' }) },
   { id: 'hib4', n: 'Híbrido fuerza + resistencia', c: 'hibrido fuerza resistencia', P: PP({ obj: 'recomp', dias: 4, min: 60, cv: 'normal', cvT: ['hiit', 'bajo'] }) },
   { id: 'hib5', n: 'Híbrido avanzado 5 días', c: 'hibrido avanzado', P: PP({ obj: 'recomp', niv: 'ava', dias: 5, min: 75, cv: 'normal', cvT: ['hiit', 'carrera'], dCarr: 1 }) },
   /* 17 nov (Javier: «mejor 100 programas totales, un poco de cada»): 54 más, armados por el motor con un perfil fijo cada uno.
@@ -6419,11 +6514,12 @@ function imgCatalogo() {
   if (IMG_A) return IMG_A; IMG_A = {};
   var it = [], up = {}, us = {};
   ['ini', 'int', 'ava'].forEach(function (n) {
-    PROG_FIJOS.forEach(function (p) { if (p.niv === n) it.push([p.id, p.n, '', p.lug]); });
+    PROG_FIJOS.forEach(function (p) { if (p.niv === n && p.estado !== 'borrador') it.push([p.id, p.n, '', p.lug]); });      // yo-1.78: los borradores, al final (no quitan su foto a lo publicado)
     if (typeof RUN_PROG !== 'undefined') RUN_PROG.forEach(function (P) { if (P.niv === n) it.push([P.id, 'carrera ' + P.n, '', '']); });
     PROGRAMAS.forEach(function (p) { if (p.P.niv === n && !FJ_SUST[p.id]) it.push([p.id, p.n, '', p.P.lug]); });
   });
   PROGRAMAS.forEach(function (p) { if (FJ_SUST[p.id]) it.push([p.id, p.n, '', p.P.lug]); });      // los antiguos (solo salen si no hay los nuevos), al final
+  PROG_FIJOS.forEach(function (p) { if (p.estado === 'borrador') it.push([p.id, p.n, '', p.lug]); });
   it.forEach(function (x) { IMG_A[x[0]] = imgElige(imgTemas(x[1], x[2], x[3]), x[0], up); });
   RSUELTAS.forEach(function (x) { IMG_A['rs:' + x.id] = imgElige(imgTemas(x.n, x.lug === 'casa' ? x.mat : '', x.lug), x.id, us); });
   return IMG_A;
@@ -7269,6 +7365,43 @@ var PROG_FIJOS = [
     nota: 'Core para rendir más corriendo, en el híbrido y en la fuerza: estabilidad frente a giros y cargas, y transmitir fuerza. En los acarreos, 2-4 kg más cada semana si la técnica aguanta. Semanas 4-6: Copenhagen dinámica en lugar de la estática.',
     D: [{ n: 'Core atlético · día A', p: 'completo', ej: [FJ('Pallof press', 3, '10', { ld: 1 }), FJ('Plancha Copenhagen de palanca larga', 3, '15-25', { seg: 1, ld: 1, rir: '' }), FJ('Elevación de piernas colgado', 3, '6-10'), FJ('Farmer carry con kettlebells', 3, '30-40', { m: 1, rir: '' })] },
       { n: 'Core atlético · día B', p: 'completo', ej: [FJ('Rueda abdominal', 3, '6-10'), FJ('Levantamiento turco', 2, '2-3', { ld: 1 }), FJ('Suitcase carry (acarreo a una mano)', 3, '30', { m: 1, ld: 1, rir: '' }), FJ('Hollow hold', 3, '20-30', { seg: 1, rir: '' })] }] },
+  /* ---- yo-1.78 · 27 nov 2026 (Javier, 23:27: «añadiría más programas de abdomen para todos los niveles, tanto principiante, intermedio y avanzado»):
+     dos más por nivel. Solo ejercicios de la biblioteca; misma forma que ab0-ab3 (fases, sig, complementos sin calentamiento).
+     En 'borrador' (solo en las demos) hasta el OK de Javier ---- */
+  { id: 'ab5', estado: 'borrador', n: 'Core en 10 minutos · principiante', c: 'abdomen casa principiante', niv: 'ini', dias: 3, min: 10, sem: 4, rir: '2-3', d: 30, mat: 'Sin material', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 2, t: 'Aprende la técnica', x: 'Lento y controlado, con un esfuerzo suave (5-6 de 10).', tec: 1 }, { d: 3, h: 4, t: 'Suma repeticiones y segundos', x: 'Cada día, tu objetivo te pide 1 repetición o 5 segundos más que la última vez, hasta llegar arriba.' }], sig: 'ab0',
+    nota: 'Diez minutos, tres días a la semana, para crear el hábito: al levantarte, después de caminar o detrás de tu entreno. Si notas escapes de orina, peso o dolor en la pelvis, baja la dificultad y consúltalo con un fisioterapeuta de suelo pélvico; en el posparto, empieza después de tu revisión.',
+    D: [{ n: 'Core 10 · día A', p: 'completo', ej: [FJ('Dead bug', 2, '6', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Plancha frontal', 2, '20-30', { seg: 1, rir: '' }), FJ('Puente de glúteos', 2, '12')] },
+      { n: 'Core 10 · día B', p: 'completo', ej: [FJ('Bird dog', 2, '6', { ld: 1, nota: 'Pausa de 2 s con brazo y pierna estirados' }), FJ('Plancha lateral', 2, '15-20', { seg: 1, ld: 1, rir: '', nota: 'Con las rodillas apoyadas si cuesta' }), FJ('Crunch', 2, '10-15')] },
+      { n: 'Core 10 · día C', p: 'completo', ej: [FJ('Crunch inverso', 2, '8-12'), FJ('Plancha con toque de hombros', 2, '6', { ld: 1, nota: 'Pies separados: la cadera no se mueve' }), FJ('Superman', 2, '10')] }] },
+  { id: 'ab4', estado: 'borrador', n: 'Abdomen en el gimnasio · principiante', c: 'abdomen principiante', niv: 'ini', dias: 2, min: 20, sem: 6, rir: '2-3', d: 60, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 2, t: 'Aprende la técnica', x: 'Peso ligero y movimiento lento, con un esfuerzo de 5-6 de 10.', tec: 1 }, { d: 3, h: 4, t: 'Suma repeticiones', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 5, h: 6, t: 'Sube el peso', x: 'Cuando llegas arriba en todas las series, un poco más de peso en la polea o en la mancuerna.' }], sig: 'ab2',
+    nota: 'Tus primeros pasos con poleas y mancuernas: aprendes a mover el tronco con control antes de cargar más. Puedes hacerlo detrás de tu entreno de fuerza. Trabajar el abdomen no quema la grasa de la tripa: eso depende de la alimentación y del gasto total.',
+    D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch abdominal en polea', 3, '12-15', { nota: 'Poco peso: el movimiento sale del tronco, no de los brazos' }), FJ('Crunch inverso', 2, '8-12'), FJ('Pallof press', 2, '10', { ld: 1 }), FJ('Plancha frontal', 2, '20-30', { seg: 1, rir: '' })] },
+      { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Elevación de piernas tumbada', 3, '8-12'), FJ('Flexión lateral con mancuerna', 2, '10-12', { ld: 1 }), FJ('Dead bug', 2, '6', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Suitcase carry (acarreo a una mano)', 2, '20', { m: 1, ld: 1, rir: '' })] }] },
+  { id: 'ab6', estado: 'borrador', n: 'Core para corredores · intermedio', c: 'abdomen casa carrera', niv: 'int', dias: 2, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 3, t: 'Suma repeticiones y segundos', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 4, h: 4, t: 'Semana suave', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Versión más difícil', x: 'Arriba en todas las series, te propone la versión difícil o 2-3 repeticiones más.' }], sig: 'ab3',
+    nota: 'Un tronco estable y un glúteo fuerte te ayudan a correr con mejor postura y a aguantar al final de la carrera. Mejor los días sin series ni tirada larga, o detrás de un rodaje suave.',
+    D: [{ n: 'Core corredores · día A', p: 'completo', ej: [FJ('Plancha lateral', 3, '30', { seg: 1, ld: 1, rir: '' }), FJ('Dead bug', 3, '8', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Puente de glúteos a una pierna', 3, '10', { ld: 1 }), FJ('Bird dog', 2, '8', { ld: 1 }), FJ('Mountain climbers', 2, '30', { seg: 1, rir: '' })] },
+      { n: 'Core corredores · día B', p: 'completo', ej: [FJ('Plancha con toque de hombros', 3, '10', { ld: 1 }), FJ('Puente de glúteos con marcha (Glute Bridge March)', 3, '10', { ld: 1 }), FJ('Plancha frontal', 3, '40', { seg: 1, rir: '' }), FJ('Superman', 2, '12'), FJ('Gateo de oso', 2, '30', { seg: 1, rir: '' })] }] },
+  { id: 'ab7', estado: 'borrador', n: 'Abdomen con mancuernas · intermedio', c: 'abdomen casa', niv: 'int', dias: 3, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Mancuernas', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 3, t: 'Suma repeticiones', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 4, h: 4, t: 'Semana suave', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Sube el peso', x: 'Arriba en todas las series, la siguiente mancuerna y vuelta a lo bajo del rango.' }], sig: 'ab8',
+    nota: 'Con un par de mancuernas el abdomen progresa como cualquier músculo: primero repeticiones y luego peso. La semana 4, la mitad de series. Trabajar el abdomen no quema la grasa de la tripa: eso depende de la alimentación y del gasto total.',
+    D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch', 3, '12-15', { nota: 'Con una mancuerna en el pecho' }), FJ('Crunch inverso', 3, '10-15'), FJ('Flexión lateral con mancuerna', 2, '12', { ld: 1 }), FJ('Plancha frontal', 3, '40', { seg: 1, rir: '' })] },
+      { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Dead bug', 3, '8', { ld: 1, nota: 'Con una mancuerna ligera en las manos' }), FJ('Elevación de piernas tumbada', 3, '10-15'), FJ('Suitcase carry (acarreo a una mano)', 3, '30', { m: 1, ld: 1, rir: '' }), FJ('Plancha lateral', 2, '30', { seg: 1, ld: 1, rir: '' })] },
+      { n: 'Abdomen · día C', p: 'completo', ej: [FJ('Hollow hold', 3, '20-30', { seg: 1, rir: '' }), FJ('Crunch bicicleta', 3, '12', { ld: 1 }), FJ('Flexión lateral con mancuerna', 2, '12', { ld: 1 }), FJ('Superman', 2, '12')] }] },
+  { id: 'ab8', estado: 'borrador', n: 'Abdomen en el gimnasio · avanzado', c: 'abdomen hipertrofia avanzado', niv: 'ava', dias: 3, min: 25, sem: 8, rir: '1', d: 75, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 3, t: 'Doble progresión', x: 'Primero repeticiones; arriba en todas las series, más peso.' }, { d: 4, h: 4, t: 'Descarga', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Más carga', x: 'Sube el peso en las poleas y en los acarreos; en la rueda, más recorrido.' }],
+    nota: 'Para ganar músculo en el abdomen con carga: doble progresión (primero repeticiones, luego peso) y unas 15 series a la semana. Semana 4: descarga (la mitad de series). Trabajar el abdomen no quema la grasa de la tripa.',
+    D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch abdominal en polea', 4, '8-12'), FJ('Elevación de piernas colgado', 3, '8-12'), FJ('Pallof press', 3, '12', { ld: 1 })] },
+      { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Rueda abdominal', 3, '8-12', { nota: 'De pie solo si ya la dominas desde rodillas' }), FJ('Leñador en polea', 3, '10-12', { ld: 1 }), FJ('Flexión lateral con mancuerna', 3, '10-12', { ld: 1 }), FJ('Hollow hold', 2, '30-40', { seg: 1, rir: '' })] },
+      { n: 'Abdomen · día C', p: 'completo', ej: [FJ('Abdominal en GHD', 3, '10-12', { nota: 'Poco recorrido al principio; si te molesta la espalda, crunch en polea' }), FJ('Rodillas a los codos', 3, '10-12'), FJ('Suitcase carry (acarreo a una mano)', 3, '40', { m: 1, ld: 1, rir: '' })] }] },
+  { id: 'ab9', estado: 'borrador', n: 'Core en casa · avanzado', c: 'abdomen casa avanzado', niv: 'ava', dias: 3, min: 20, sem: 6, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 2, t: 'Base', x: 'Técnica limpia en los ejercicios difíciles.' }, { d: 3, h: 4, t: 'Más tiempo', x: '5-10 segundos o 2 repeticiones más que la última vez.' }, { d: 5, h: 6, t: 'Más palanca', x: 'Hollow con los brazos por encima de la cabeza y Copenhague con la pierna más estirada.' }],
+    nota: 'Sin material pero exigente: palancas largas, antirrotación y aductores. Baja la dificultad si se te arquea la zona lumbar.',
+    D: [{ n: 'Core avanzado · día A', p: 'completo', ej: [FJ('V-up', 3, '10-15'), FJ('Plancha Copenhague', 3, '20-30', { seg: 1, ld: 1, rir: '' }), FJ('Elevación de piernas tumbada', 3, '12-15', { nota: 'Baja en 3 s sin despegar la zona lumbar' }), FJ('Gateo de oso', 3, '40', { seg: 1, rir: '' })] },
+      { n: 'Core avanzado · día B', p: 'completo', ej: [FJ('Hollow hold', 3, '30-45', { seg: 1, rir: '' }), FJ('Plancha lateral', 3, '40', { seg: 1, ld: 1, rir: '', nota: 'Con la pierna de arriba elevada' }), FJ('Crunch bicicleta', 3, '15', { ld: 1 }), FJ('Plank jacks', 3, '30', { seg: 1, rir: '' })] },
+      { n: 'Core avanzado · día C', p: 'completo', ej: [FJ('Plancha con toque de hombros', 3, '12', { ld: 1 }), FJ('V-up', 3, '12-15'), FJ('Plancha invertida', 3, '30', { seg: 1, rir: '' }), FJ('Superman', 3, '15'), FJ('Mountain climbers', 3, '40', { seg: 1, rir: '' })] }] },
   { id: 'fx0', n: 'Flexibilidad general · principiante', c: 'flexibilidad casa principiante', niv: 'ini', dias: 3, min: 20, sem: 6, rir: '', d: 20, mat: 'Sin material (una toalla o una goma ayudan)', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 2, t: '30 segundos', x: 'Tensión de 5-7 sobre 10, nunca dolor, y respira despacio.' }, { d: 3, h: 4, t: 'Hasta 45 segundos', x: 'Cada día, 5 segundos más en cada estiramiento, hasta 45.', seg: 15 }, { d: 5, h: 6, t: 'Hasta 60 segundos', x: '5 segundos más cada día, hasta 60.', seg: 30 }], sig: 'fx1',
     nota: 'Todo el cuerpo: piernas, cadera, espalda, hombros, brazos y cuello. Tensión de 5-7 sobre 10, nunca dolor, y respira despacio. Semanas 1-2: 30 s; 3-4: 45 s; 5-6: 60 s. Mejor después de entrenar o en otro momento del día; si lo haces justo antes de fuerza o de saltar, menos de 60 s por músculo.',
@@ -7294,7 +7427,7 @@ var PROG_FIJOS = [
       { n: 'Movilidad con carga · día B', p: 'completo', ej: [FJ('Retracción de cuello (doble mentón)', 2, '8'), FJ('YTW', 2, '8'), FJ('Deslizamientos de pared del serrato', 2, '10'), FJ('Jefferson Curl', 2, '6', { nota: 'Muy ligero y lento' }), FJ('Sentadilla lateral profunda con kettlebell', 2, '6', { ld: 1 }), FJ('Rotación tibial sentada', 2, '10', { ld: 1 }), FJ('Inversión y eversión activa de tobillo con goma', 2, '12', { ld: 1 })] },
       { n: 'Movilidad con carga · día C', p: 'completo', ej: [FJ('Dislocaciones de hombro con pica', 2, '10'), FJ('Extensión torácica en foam roller', 2, '8', { nota: 'O sobre una toalla enrollada' }), FJ('Pronación y supinación de antebrazo', 2, '12', { ld: 1 }), FJ('Elevación de pie en 90/90', 2, '8', { ld: 1 }), FJ('Desplazamientos laterales en sentadilla profunda', 2, '6', { ld: 1 }), FJ('Extensión de rodilla con banda', 2, '12', { ld: 1 }), FJ('Elevaciones de talones con rodillas flexionadas (sóleo)', 2, '12')] }] }
 ];
-PROG_FIJOS.forEach(function (p) { p.estado = 'publicado'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
+PROG_FIJOS.forEach(function (p) { p.estado = p.estado || 'publicado'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
 var FJ_SUST = { casa0: 1, casa4: 1, fzi: 1, hip4: 1, ppl6: 1, glu4: 1, glcasa: 1 };      // + «Glúteo y pierna 4 días» y «Glúteo en casa» (los sustituyen los de glúteo)
       // los del motor que repiten estos: «En casa sin material», «En casa con mancuernas», «Fuerza para principiantes», «Hipertrofia 4 días · torso / pierna» y «Avanzado 6 días · empuje, tirón y pierna»
 function fjVisibles(f) { var b = rpBorr(); return PROG_FIJOS.filter(function (p) { return (p.estado === 'publicado' || b) && (!f || p.c.split(' ').indexOf(f) >= 0); }); }
@@ -9568,7 +9701,7 @@ function trDe(e) {
   if (!e || e.rp || e.hecho && !CTA.on) return [];
   var def = trZona(e.fc || '', ''), L = [];
   if (e.tipo === 'run') {
-    var r = S.ses ? rutinaDe(S.ses.rid) : null, txt = e.fases && e.fases.length ? e.fases[faseHoy(r, e.fases.length)].p : '';
+    var r = S.ses ? rutinaDe(S.ses.rid) : null, txt = e.fases && e.fases.length ? e.fases[faseIdx(e, r)].p : '';
     if (txt) L = trDeTexto(txt, def);
     else if (e.bl && e.bl.length) e.bl.forEach(function (b) { var on = trUno(b.du, def), off = b.rec ? trUno(b.rec + ' ' + (b.rt || 'suave'), '') : null; if (!on) return; if (on.k === 'off') on.k = 'on'; if (b.p) on.t = trNom(b.p, 'on');
       if (off) off.k = 'off'; trRepite(+b.r || 1, off ? [on, off] : [on], L); if (off && (+b.r || 1) > 1) L.pop(); });
