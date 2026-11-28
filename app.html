@@ -6120,7 +6120,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.268';
+var APP_V = 'v53.4.269';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -6151,7 +6151,7 @@ function fMedia(f){ f=String(f).slice(0,10); return _FM[f]||(_FM[f]=aDate(f).toL
 function fLarga(f){ f=String(f).slice(0,10); if(_FL[f]) return _FL[f]; var s=aDate(f).toLocaleDateString('es-ES',{weekday:'long',day:'numeric',month:'long'}); return (_FL[f]=s.charAt(0).toUpperCase()+s.slice(1)); }
 function hace(f,hoy){ if(!f) return '—'; var d=diff(f,hoy||hoyStr()); return d<=0?'hoy':d===1?'ayer':'hace '+d+' d'; }
 function num(v){ if(v===''||v==null) return null; var x=parseFloat(String(v).replace(',','.')); return isFinite(x)?x:null; }
-function fN(x,dec){ var v=num(x); if(v==null) return '–'; var d=dec==null?1:dec, nf=_NF[d]; if(!nf){ try{ nf=_NF[d]=new Intl.NumberFormat('es-ES',{maximumFractionDigits:d}); }catch(e){ return v.toLocaleString('es-ES',{maximumFractionDigits:d}); } } return nf.format(v); }
+function fN(x,dec){ var v=num(x); if(v==null) return '–'; var d=dec==null?(Math.abs(v*4-Math.round(v*4))<1e-9&&Math.abs(v*2-Math.round(v*2))>1e-9?2:1):dec, nf=_NF[d]; if(!nf){ try{ nf=_NF[d]=new Intl.NumberFormat('es-ES',{maximumFractionDigits:d}); }catch(e){ return v.toLocaleString('es-ES',{maximumFractionDigits:d}); } } return nf.format(v); }
 function vacio(v){ return v===''||v==null; }
 function rand(n){ var a='abcdefghijkmnpqrstuvwxyz23456789',s='',r; try{ r=crypto.getRandomValues(new Uint32Array(n)); }catch(e){ r=[]; for(var i=0;i<n;i++) r.push(Math.random()*1e9|0); } for(var j=0;j<n;j++) s+=a[r[j]%a.length]; return s; }
 function okUrl(u){ return /^https?:\/\/\S+$/i.test(String(u||'')); }
@@ -8415,7 +8415,7 @@ function cfgSer(c){ c=c||cfgDe(); var o={}; Object.keys(CFG_DEF).forEach(functio
 var PESOS_MANC=[1,2,2.5,3,5,6,7.5,8,10,12,12.5,14,15,16,17.5,18,20,22,22.5,24,25,26,27.5,28,30,32,32.5,34,35,36,37.5,38,40,42,42.5,44,45,46,47.5,48,50,55,60], PESOS_KB=[4,6,8,10,12,14,16,20,24,28,32,36,40,48];
 function redKg(v,mc){ if(v==null||!isFinite(v)||v<=0) return null; if(mc) return PESOS_MANC.reduce(function(a,x){ return Math.abs(x-v)<Math.abs(a-v)?x:a; },PESOS_MANC[0]); var p=v<12?1:2.5; return Math.max(p,Math.round(v/p)*p); }
 function tipoCargaEj(e){ var n=String(e&&e.n||''), b=bancoDe(n), m=b?metaEj(b):{}, q=String((m&&m.eq)||(b&&b.equipo)||''); return /kettlebell|pesa rusa/i.test(n+' '+q)?'kb':(e&&e.mc)||RE_MANC.test(n)||/mancuerna/i.test(q)?'manc':''; }
-function pesoSig(p,t){ var L=t==='manc'?PESOS_MANC:t==='kb'?PESOS_KB:null, sj=t==='manc'?(p<2.5?1:p<3?0.5:2):0.01; if(L){ for(var k=0;k<L.length;k++) if(L[k]>=p+sj-0.001) return L[k]; return p+(t==='kb'?4:2.5); } return p+(p<20?1:2.5); }
+function pesoSig(p,t){ if(t==='lastre') return p+1.25; var L=t==='manc'?PESOS_MANC:t==='kb'?PESOS_KB:null, sj=t==='manc'?(p<2.5?1:p<3?0.5:2):0.01; if(L){ for(var k=0;k<L.length;k++) if(L[k]>=p+sj-0.001) return L[k]; return p+(t==='kb'?4:2.5); } return p+(p<20?1:2.5); }
 function apxTxt(l){ return (l||[]).map(function(p){ return p[0]+' % × '+p[1]; }).join(' · '); }
 function e1rmF(p,r,f){ p=num(p); r=num(r); if(!p||!r) return null; if(r===1) return p; if(f==='brzycki') return r<37?p*36/(37-r):null; if(f==='lombardi') return p*Math.pow(r,0.10); return p*(1+r/30); }
 var F1RM={epley:'Epley',brzycki:'Brzycki',lombardi:'Lombardi'};
@@ -8551,7 +8551,7 @@ function dscHoyCl(){ return BOOT.mode==='clienta'?dscEn(hoyStr()):null; }
 function dscColor(){ try{ document.documentElement.classList.toggle('dsc-h',!!(CL.d&&CL.d.clienta&&CL.d.clienta.sexo==='hombre')); }catch(e){} }
 /* v53.4.253: en su semana de descarga, el objetivo es su peso de siempre (menos el % si es «Menos peso») y lo bajo de su rango */
 function sugerenciaEj(e,uv){
-  var S=sugerenciaEj0(e,uv), dx=dscHoyCl(); if(!S||!dx||(dx.tipo!=='peso'&&dx.tipo!=='series')) return S;
+  var S=sugerenciaEj0(e,uv), dx=dscHoyCl(); if(!S||S.las||!dx||(dx.tipo!=='peso'&&dx.tipo!=='series')) return S;
   var W=uv.sets.filter(function(x){ return x.t!=='aprox'&&x.t!=='mov'&&num(x.p)!=null&&num(x.r)!=null; }), top=W.reduce(function(a,x){ return !a||num(x.p)>num(a.p)||(num(x.p)===num(a.p)&&num(x.r)>num(a.r))?x:a; },null);
   var s0=e.sets.filter(function(s){ return s.t!=='aprox'; })[0], rg=String((s0&&s0.ro)||'').match(/\d+/g), lo=rg?+rg[0]:num(top.r), p=num(top.p);
   if(dx.tipo==='peso') p=dscRed(p*(1-dx.pct/100),tipoCargaEj(e))||p;
@@ -8570,14 +8570,24 @@ function seriesSes(n){ var k=clave(n), g={};
 function e1Fila(x){ var p=num(x.p)||0, r=num(x.r)||0; return p*(1+r/30); }
 function bajaCl(n){ var L=seriesSes(n).map(function(s){ return s.rows.reduce(function(m,x){ return Math.max(m,e1Fila(x)); },0); }).filter(function(v){ return v>0; });
   if(L.length<5) return false; var M=Math.max.apply(null,L.slice(0,-4)); return M>0&&L.slice(-4).every(function(v){ return v<M*0.95; }); }
+/* v53.4.269 · 28 nov 2026 (Javier: «en dominadas, dominada con lastre o fondos con lastre, los saltos más pequeños… priorizamos antes las repes al
+   peso»; 07:59, «si apruebo aplica»; igual que /yo, yo-1.83): los de su peso con lastre (dominadas, fondos, «lastre» en el nombre o «lastre opcional»)
+   suben de 1,25 en 1,25 kg y, al subir, una repetición menos (no al principio del rango). Sin lastre, al llegar arriba en todas: «Añade 1,25 kg de lastre» */
+function lastreCl(e){ if(!e||e.sk===true) return false; var t=clave(e.n||''); if(/asist|kipping|maquina/.test(t)) return false; return !!e.lt||/lastr/.test(t)||/^(dominadas|fondos)\b/.test(t); }
+function lastreSinCl(uv,lo,hi){ if(hi==null) return null;
+  var Wr=uv.sets.filter(function(x){ return x.t!=='aprox'&&x.t!=='mov'&&num(x.r)!=null&&!(num(x.p)>0)&&(!x.t||x.t==='normal'||x.t==='top'); }); if(!Wr.length||!Wr.every(function(x){ return num(x.r)>=hi; })) return null;
+  var r=lo!=null&&lo<hi?Math.max(lo,hi-1):lo!=null?lo:hi;
+  return {p:1.25,r:r,t:'1,25 kg × '+r+' reps',rg:'',est:'sube',tope:hi,p0:0,las:1,lin:'Llegaste a '+hi+' en todas: añade 1,25 kg de lastre'}; }
 function sugerenciaEj0(e,uv){
   if(!uv||e.mov||uEj(e)!=='r') return null;
   if(BOOT.mode==='clienta'&&CL.d&&CL.d.clienta&&CL.d.clienta.sinSug) return null;      // su entrenador le ha quitado las sugerencias
-  var W=uv.sets.filter(function(x){ return x.t!=='aprox'&&x.t!=='mov'&&num(x.p)!=null&&num(x.r)!=null; }); if(!W.length) return null;
+  var W=uv.sets.filter(function(x){ return x.t!=='aprox'&&x.t!=='mov'&&num(x.p)!=null&&num(x.r)!=null; }), LT=lastreCl(e);
   var s0=e.sets.filter(function(s){ return s.t!=='aprox'; })[0]; if(!s0) return null;
   var rg=String(s0.ro||'').match(/\d+/g), lo=rg?+rg[0]:null, hi=rg?+(rg[1]||rg[0]):null;
+  if(LT&&!W.some(function(x){ return num(x.p)>0; })) return lastreSinCl(uv,lo,hi);      // v53.4.269: sin lastre todavía
+  if(!W.length) return null;
   var top=W.reduce(function(a,x){ return !a||num(x.p)>num(a.p)||(num(x.p)===num(a.p)&&num(x.r)>num(a.r))?x:a; },null), p=num(top.p), r=num(top.r);
-  var tc=tipoCargaEj(e), acc=fnEj(e.n)!=='principal'||!!tc, tope=acc?Math.max(15,hi||0):hi;
+  var tc=LT?'lastre':tipoCargaEj(e), acc=!LT&&(fnEj(e.n)!=='principal'||!!tc), tope=acc?Math.max(15,hi||0):hi;
   function S(pp,rr,rgx,est){ return {p:pp,r:rr,t:fN(pp)+' kg × '+fN(rr,0)+' reps',rg:rgx||'',est:est||'mant',tope:tope}; }      // v53.4.267: est (sube, mant, baja) y tope, para el objetivo de cada serie
   if(!p) return null;
   if(bajaCl(e.n)) return S(p,lo!=null?lo:r,'','baja');
@@ -8586,7 +8596,7 @@ function sugerenciaEj0(e,uv){
   var izq=function(x){ var o=uv.porN&&uv.porN[num(x.n)||1]; return o&&o.izq&&num(o.izq.r)!=null?num(o.izq.r):null; };
   if(tope==null) return S(p,r+1);
   var arriba=Wp.every(function(x){ var ri=izq(x); return num(x.r)>=tope&&(ri==null||ri>=tope)&&rirOk(x); });
-  var subir=function(){ var base=lo!=null&&(lo<tope||!acc)?lo:10; return Object.assign(S(pesoSig(p,acc?tc:''),base,rg?lo+(hi!==lo?'-'+hi:''):'','sube'),{p0:p,lin:'Llegaste a '+tope+' en todas: sube el peso'}); };      // v53.4.268: con un número fijo (6), ese número; los accesorios a 15, 10
+  var subir=function(){ var base=LT?(lo!=null&&lo<tope?Math.max(lo,tope-1):lo!=null?lo:tope):lo!=null&&(lo<tope||!acc)?lo:10; return Object.assign(S(pesoSig(p,LT?'lastre':acc?tc:''),base,LT?'':rg?lo+(hi!==lo?'-'+hi:''):'','sube'),{p0:p,lin:LT?'Llegaste a '+tope+' en todas: suma 1,25 kg y haz '+base:'Llegaste a '+tope+' en todas: sube el peso'}); };      // v53.4.269: con lastre, +1,25 kg y una menos      // v53.4.268: con un número fijo (6), ese número; los accesorios a 15, 10
   if(arriba) return subir();
   /* v53.4.268 · 28 nov 2026 (Javier, 00:40–00:47; igual que /yo, yo-1.79): una repetición más en UNA serie. Primero la 1.ª, hasta lo alto del rango
      («40 kg × 12», sin más); cuando la 1.ª ya llega, se mantiene el peso y se empuja la siguiente que no llegó («40 kg × 12» y «Mantén 40 kg hasta que
@@ -8615,7 +8625,7 @@ function objRSerieCl(e,S,uv,j,iz){
 function objMasCl(){ return ''; }
 /* la etiqueta de la casilla: «+1» en las repeticiones de la serie que toca; «+2,5» en los kilos al subir */
 function objMasRCl(e,S,j){ if(!S||S.est!=='mant'||S.dsc||!S.R||S.k<0||objPosCl(e,j)!==S.k) return ''; var d=S.rk-S.R[S.k]; return d>0?'+'+d:''; }
-function objMasKCl(e,S,j){ if(!S||S.est!=='sube'||S.dsc||!S.p0||objPosCl(e,j)<0) return ''; var d=S.p-S.p0; return d>0?'+'+fN(d):''; }
+function objMasKCl(e,S,j){ if(!S||S.est!=='sube'||S.dsc||S.p0==null||objPosCl(e,j)<0) return ''; var d=S.p-S.p0; return d>0?'+'+fN(d):''; }
 function objMasW(inp,t){ return t?'<span class="o-w">'+inp+'<em class="o-mas">'+esc(t)+'</em></span>':inp; }
 /* v37 · arriba, dos fichas: el objetivo de hoy (en negro) y su récord con el 1RM. La última vez va al lado de cada serie */
 function sugHtml(e,i,uv){
