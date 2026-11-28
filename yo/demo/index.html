@@ -4543,7 +4543,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.88';
+var YO_V = 'yo-1.89';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4584,7 +4584,7 @@ function ponTema() { document.documentElement.setAttribute('data-tema', 'claro')
 /* ---------- yo-1.88 · propuestas visuales (Javier, 28 nov, 09:38: «propónme cosas antes de aplicar»): nutrición (sin naranja, la fibra, el
    recuadro de «Te faltan»), Escanear y Recetas con color, la gráfica de peso como las demás, Comunidad y Perfil. Apagado hasta su OK: solo con
    window.NV28_DEMO (capturas). Al aprobar: NV28_ON = true ---------- */
-var NV28_ON = false, NV28_OK = { peso: 1 };      // yo-1.88 (Javier, 10:22: «el color y diseño de peso corporal sí me cuadra»): la gráfica, ya aprobada
+var NV28_ON = true, NV28_OK = { peso: 1 };      // yo-1.89 (Javier, 28 nov, 10:45: «aplica»): todo lo de la 2.ª vuelta y el Perfil; antes, yo-1.88: la gráfica de peso
 function nv28(k) { return !!(window.NV28_DEMO || NV28_ON || (k && NV28_OK[k])); }
 function fibraObj(N) { return N && N.kcal ? Math.round(N.kcal * 14 / 1000) : 25; }      // 14 g por cada 1.000 kcal (unos 25 g al día)
 
@@ -10274,6 +10274,7 @@ VISTAS.pfFoto = function () {
     (typeof avMio === 'function' && avMio() ? '<p class="nota-p">' + ic('comu', 14, 'var(--tx2)') + '<span>También se ve en la Comunidad, junto a tu nombre. <button class="link izq" data-a="cAvQuitar">Quitar de la Comunidad</button></span></p>' : '<p class="nota-p">' + ic('escudo', 14, 'var(--tx2)') + '<span>Tu foto de perfil solo la ves tú.</span></p>') + '</div>';
 };
 A.pfFotoQuitar = function () { if (S.perfil.fotoCm) { delete S.perfil.fotoCm; avQuita().then(null, function () { toast('En la Comunidad no se ha podido quitar: inténtalo luego'); }); } delete S.perfil.foto; guardaPerfil(); toast('Foto quitada'); if (S.pant && S.pant.t === 'pfFoto') volver(); else pintar(); };
+(function () { var q0 = A.pfFotoQuitar; A.pfFotoQuitar = function () { var ed = !!$('#hoja .pf28-ef'); q0.apply(this, arguments); if (ed) A.pfEditar(); }; })();      // en «Editar perfil», la hoja se queda al día
 
 ;
 /* ---------- Progreso: peso (con la media semanal), medidas, fotos privadas, récords y volumen (tablero 24) ---------- */
@@ -10281,7 +10282,7 @@ var MED_K = [['cintura', 'Cintura'], ['cadera', 'Cadera'], ['pecho', 'Pecho'], [
 /* yo-1.87 (Javier, 28 nov, 09:38: «falta medidas por extremidad, muslo derecho e izquierdo etc.»): como las clientas (MED_COLS de la app), cada lado
    aparte: brazo, muslo, gemelo y antebrazo, derecho e izquierdo. «brazo» y «muslo» de antes pasan a ser el derecho. Necesita que el servidor acepte las
    claves nuevas (supabase/indep/019_medidas_lados.sql): hasta aplicarlo, MED_LADOS_ON = false y solo se ve en las demos con borradores */
-var MED_LADOS_ON = false;
+var MED_LADOS_ON = true;      // yo-1.89 (10:45, «aplica»): 019_medidas_lados.sql ya está en Supabase
 var MED_K2 = [['cintura', 'Cintura'], ['cadera', 'Cadera'], ['pecho', 'Pecho'], ['brazo', 'Brazo dcho.'], ['brazo_i', 'Brazo izq.'], ['muslo', 'Muslo dcho.'], ['muslo_i', 'Muslo izq.'],
   ['gemelo_d', 'Gemelo dcho.'], ['gemelo_i', 'Gemelo izq.'], ['antebrazo_d', 'Antebrazo dcho.'], ['antebrazo_i', 'Antebrazo izq.']];
 function medLados() { return MED_LADOS_ON || (typeof rpBorr === 'function' && rpBorr()); }
