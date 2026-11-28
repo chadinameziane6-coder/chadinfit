@@ -3195,6 +3195,15 @@ html[data-tema="oscuro"] .p5-res b.up{color:#7EE2A8}html[data-tema="oscuro"] .p5
 html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C2E;color:#fff}
 .st-h.st-l2>span:nth-child(3){text-align:center}
 .st.st2.st-mini.st-ml{grid-template-columns:30px 34px minmax(0,1fr) minmax(0,1fr) 46px 40px;gap:6px}
+/* yo-1.82 · nutrición: recetas desde una comida, raciones de media en media y ordenar los alimentos de una comida */
+.nb-acc3{grid-template-columns:repeat(3,minmax(0,1fr))!important}.nb-acc3 .btn{flex-direction:column;height:auto;min-height:62px;padding:9px 4px;font-size:13px;line-height:1.15;gap:5px;white-space:normal;text-align:center;border-radius:18px}
+.ar-st{display:flex;align-items:center;justify-content:center;gap:18px;margin:12px 0 10px}.ar-st>span{display:flex;flex-direction:column;align-items:center;min-width:96px}.ar-st>span b{font-size:30px;font-weight:800;line-height:1.1}.ar-st>span small{font-size:12.5px;color:var(--tx2)}
+.ar-st .redondo:disabled{opacity:.35}
+.ar-ch{justify-content:center}
+.n-sw.n-ins-a{box-shadow:0 -3px 0 0 var(--tx)}.n-sw.n-ins-b{box-shadow:0 3px 0 0 var(--tx)}
+/* yo-1.82 · 28 nov (Javier: «compartí una receta en la comunidad y la foto se ve como cortada»): la caja toma la forma de la foto (antes, 4:5 fija:
+   una foto apaisada salía arriba con un hueco gris debajo); mientras carga una receta, apaisada */
+.cm-foto.ig-f.ok{aspect-ratio:auto}.cm-foto.ig-f.rc:not(.ok){aspect-ratio:16/10;min-height:0}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4363,7 +4372,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.81';
+var YO_V = 'yo-1.82';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -11486,17 +11495,33 @@ A.nPegarDesh = function () { var U = SW.pp; SW.pp = null; var t = $('#toast'); i
 function nMover(id, c) { var f = nd(), D = diaDe(f), x = D.it.filter(function (y) { return y.id === id; })[0]; if (!x || (x.c | 0) === c) return;
   SW.mv = { f: f, id: id, c: x.c | 0 }; x.c = c; S.diario[f] = D; guardaDia(f); pintar();
   toast(esc(x.n) + ' → ' + esc((comidas()[c] || '').toLowerCase()), 'desh', '<button class="toast-b" data-a="nMoverDesh">Deshacer</button>'); }
-A.nMoverDesh = function () { var U = SW.mv; SW.mv = null; var t = $('#toast'); if (t) t.className = 'toast'; if (!U) return; var D = diaDe(U.f), x = D.it.filter(function (y) { return y.id === U.id; })[0]; if (x) { x.c = U.c; guardaDia(U.f); pintar(); } };
+A.nMoverDesh = function () { var U = SW.mv; SW.mv = null; var t = $('#toast'); if (t) t.className = 'toast'; if (!U) return; var D = diaDe(U.f), x = D.it.filter(function (y) { return y.id === U.id; })[0]; if (x) { x.c = U.c;
+  if (U.ord) { var pos = {}; U.ord.forEach(function (id, k) { pos[id] = k; }); D.it.sort(function (a, b) { return (pos[a.id] != null ? pos[a.id] : 1e6) - (pos[b.id] != null ? pos[b.id] : 1e6); }); }      // yo-1.82: también el orden
+  guardaDia(U.f); pintar(); } };
 A.nMoverA = function (el) { cerrarHoja(); nMover(el.dataset.id, +el.dataset.c); };
 IC.pegar = '<rect x="6" y="4" width="12" height="17" rx="2"/><path d="M9 4V3h6v1M9 10h6M9 14h4"/>';
 /* arrastrar: mantener pulsado medio segundo (sin mover) y llevarlo a otra comida */
 var DR = { t: 0, on: false, id: '', x0: 0, y0: 0, g: null, sobre: null, pid: null };
 function drFin(mover) {
   clearTimeout(DR.t); DR.t = 0; if (!DR.on) { DR.id = ''; return; }
-  var c = DR.sobre ? +DR.sobre.dataset.c : null, id = DR.id; DR.on = false; DR.id = '';
+  var c = DR.sobre ? +DR.sobre.dataset.c : null, id = DR.id, ref = DR.ref, des = DR.des; DR.on = false; DR.id = ''; DR.ref = null; document.querySelectorAll('.n-sw.n-ins-a,.n-sw.n-ins-b').forEach(function (s) { s.classList.remove('n-ins-a', 'n-ins-b'); });
   if (DR.g) DR.g.remove(); DR.g = null; document.body.classList.remove('n-arr'); document.querySelectorAll('.n-com.n-dest').forEach(function (s) { s.classList.remove('n-dest'); });
   document.querySelectorAll('.n-sw.n-cogido').forEach(function (s) { s.classList.remove('n-cogido'); }); SW.ignora = Date.now(); DR.sobre = null;
-  if (mover && c != null && !isNaN(c)) nMover(id, c);
+  if (mover && c != null && !isNaN(c)) nColoca(id, c, ref, des);
+}
+/* yo-1.82 · 28 nov 2026 (Javier: «puedes mover un alimento de desayuno a la comida, pero no puedes cambiar el orden de los alimentos dentro de la misma
+   comida»): al soltarlo, va delante (o detrás) del alimento sobre el que lo sueltas, en esa comida o en otra. Con «Deshacer» */
+function nColoca(id, c, ref, des) {
+  var f = nd(), D = diaDe(f), i = D.it.findIndex(function (y) { return y.id === id; }); if (i < 0) return;
+  var x = D.it[i], c0 = x.c | 0, antes = D.it.map(function (y) { return y.id; });
+  D.it.splice(i, 1); x.c = c;
+  var j = ref && ref !== id ? D.it.findIndex(function (y) { return y.id === ref && (y.c | 0) === c; }) : -1;
+  if (j >= 0) D.it.splice(des ? j + 1 : j, 0, x);
+  else { var u = -1; D.it.forEach(function (y, k) { if ((y.c | 0) === c) u = k; }); D.it.splice(u + 1, 0, x); }
+  var ahora = D.it.map(function (y) { return y.id; }).join();
+  if (c0 === c && ahora === antes.join()) return;
+  SW.mv = { f: f, id: id, c: c0, ord: antes }; S.diario[f] = D; guardaDia(f); pintar();
+  toast(c0 === c ? esc(x.n) + ': cambiado de sitio' : esc(x.n) + ' → ' + esc((comidas()[c] || '').toLowerCase()), 'desh', '<button class="toast-b" data-a="nMoverDesh">Deshacer</button>');
 }
 document.addEventListener('pointerdown', function (ev) {
   var it = ev.target.closest && ev.target.closest('.n-sw > .n-it'); if (!it || ev.pointerType === 'mouse' && ev.button !== 0) return;
@@ -11514,6 +11539,8 @@ document.addEventListener('pointermove', function (ev) {
   DR.g.style.left = (ev.clientX - DR.dx) + 'px'; DR.g.style.top = (ev.clientY - DR.dy) + 'px';
   var bajo = document.elementFromPoint(ev.clientX, ev.clientY), sec = bajo && bajo.closest && bajo.closest('.n-com[data-c]');
   if (sec !== DR.sobre) { if (DR.sobre) DR.sobre.classList.remove('n-dest'); DR.sobre = sec; if (sec) sec.classList.add('n-dest'); }
+  var fi = sec && bajo.closest('.n-sw'), des = false; document.querySelectorAll('.n-sw.n-ins-a,.n-sw.n-ins-b').forEach(function (s) { s.classList.remove('n-ins-a', 'n-ins-b'); });      // yo-1.82: dónde cae dentro de la comida
+  if (fi && fi.dataset.id !== DR.id) { var rr = fi.getBoundingClientRect(); des = ev.clientY > rr.top + rr.height / 2; fi.classList.add(des ? 'n-ins-b' : 'n-ins-a'); DR.ref = fi.dataset.id; DR.des = des; } else { DR.ref = null; DR.des = false; }
   if (ev.clientY < 90) window.scrollBy(0, -14); else if (ev.clientY > innerHeight - 130) window.scrollBy(0, 14);
 }, true);
 document.addEventListener('pointerup', function (ev) { if (DR.id && ev.pointerId === DR.pid) drFin(true); }, true);
@@ -11692,7 +11719,7 @@ VISTAS.nbuscar = function () {
   return '<div class="pant pad' + ((B.hechos || []).length ? ' con-bar' : '') + (e21 ? ' nb21 nb21-' + e21 + '" style="--nbc:' + c21 + ';--nbs:' + nbRgba(c21, .13) + ';--nbs2:' + nbRgba(c21, .32) : '') + '">' + cab(para === 'rec' ? 'Añadir ingrediente' : 'Añadir a ' + esc(comidas()[B.c].toLowerCase())) +
     '<label class="buscar">' + ic('buscar', 18, 'var(--tx2)') + '<input id="nb-q" data-in="nbQ" value="' + esc(B.q) + '" placeholder="Buscar: pollo, yogur, arroz…" aria-label="Buscar alimento" autocomplete="off"></label>' +
     (para === 'rec' ? '' : '<div class="chips scroll">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (B.c === i ? ' on' : '') + '" data-a="nbCom" data-v="' + i + '"' + (e21 ? ' style="--c:' + nbColor(n) + '"' : '') + '>' + esc(n) + '</button>'; }).join('') + '</div>') +
-    '<div class="fila2"><button class="btn sec" data-a="nEscanear">' + ic('codigo', 18) + 'Escanear</button><button class="btn sec" data-a="nAlNuevo">' + ic('mas', 18) + 'Alimento nuevo</button></div>' +
+    '<div class="fila2' + (para === 'rec' ? '' : ' nb-acc3') + '"><button class="btn sec" data-a="nEscanear">' + ic('codigo', 18) + 'Escanear</button>' + (para === 'rec' ? '' : '<button class="btn sec" data-a="nRecetas" data-de="nb">' + ic('olla', 18) + 'Mis recetas</button>') + '<button class="btn sec" data-a="nAlNuevo">' + ic('mas', 18) + 'Alimento nuevo</button></div>' +      // yo-1.82 (Javier: «dentro de una comida no te da opción de ver tus recetas»)
     nbFilas() + nbBarra() + '</div>';
 };
 function nbFila(a, m, n) {      // n: las veces que sale (en esa comida, si va en «En el desayuno sueles tomar»)
@@ -11943,7 +11970,7 @@ A.nCopiarCom = function (el) {      // 17 nov 2026: copiar solo una comida del d
 A.nCopiarSi = function () { var f = nd(), D = S.diario[f] = diaDe(f); diaDe(sumar(f, -1)).it.forEach(function (x) { D.it.push(Object.assign({}, x, { id: rand(8) })); }); guardaDia(f); cerrarHoja(); toast('Copiado', 'ok'); pintar(); };
 
 /* ---------- recetas: las suyas y las de MOOD ON; apuntar por raciones o por peso ---------- */
-A.nRecetas = function () { S.x.nr = { q: '', t: '' }; ir({ t: 'nrecetas' }); };
+A.nRecetas = function (el) { if (!(el && el.dataset && el.dataset.de === 'nb')) S.x.nb = null; S.x.nr = { q: '', t: '' }; ir({ t: 'nrecetas' }); };      // desde una comida (data-de="nb"), la receta va a esa comida
 var REC_T = [['', 'Todas'], ['d', 'Desayunos'], ['c', 'Comidas y cenas'], ['m', 'Meriendas']];
 function recsMO() { return NUT_OK ? RECS_MO : []; }
 function recDe(id) { if (id.indexOf('u:') === 0) { var b = S.biblio.filter(function (x) { return 'u:' + x.id === id; })[0]; return b ? Object.assign({ mio: 1, key: id }, b) : null; } var r = recsMO().filter(function (x) { return 'r:' + x.id === id; })[0]; return r ? Object.assign({ key: id }, r) : null; }
@@ -11977,7 +12004,8 @@ VISTAS.napuntar = function () {
   h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">' + (recUd(r) === 'ml' ? 'Por cantidad' : 'Por peso') + '</button></div>' : '');
   if (X.modo === 'g' && porPeso) h += (recUd(r) === 'ml' ? '<label class="f">Mililitros en tu plato<span class="rc-u"><input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 350"><i>ml</i></span></label><small class="mut">Con un vaso medidor, o en la báscula (1 g ≈ 1 ml) · de ' + fmil(r.olla) + ' ml en total</small>'
     : '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · de una olla de ' + fmil(r.olla) + ' g</small>') + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + '¿La has vuelto a cocinar? Pesa la olla llena</button>' : '');
-  else h += '<div class="chips">' + [0.5, 1, 1.5, 2].map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === 0.5 ? '½' : v === 1.5 ? '1½' : v) + '</button>'; }).join('') + '</div><small class="mut">' + (X.r === 1 ? '1 ración' : fN(X.r, 1).replace(/,0$/, '') + ' raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small>';
+  else h += '<div class="ar-st"><button class="redondo" data-a="arRMenos" aria-label="Media ración menos"' + (X.r <= 0.5 ? ' disabled' : '') + '>' + ic('menos', 18, null, 2.6) + '</button><span><b>' + racTxt(X.r) + '</b><small>' + (X.r === 1 ? 'ración' : 'raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small></span><button class="redondo" data-a="arRMas" aria-label="Media ración más"' + (X.r >= 40 ? ' disabled' : '') + '>' + ic('mas', 18, null, 2.6) + '</button></div>' +      // yo-1.82 (Javier: «una receta de 6 raciones solo te deja poner hasta 2»): de media en media
+    '<div class="chips ar-ch">' + [0.5, 1, 2].concat(r.rac > 2 ? [r.rac] : []).map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === r.rac && v > 2 ? 'Toda (' + v + ')' : racTxt(v)) + '</button>'; }).join('') + '</div>';
   h += '</section><section class="card n-tot" id="ar-t">' + arTotHtml(q) + '</section>';
   h += '<section class="card"><b>¿En qué comida?</b><div class="chips">' + comOrden().map(function (i) { var n = comidas()[i]; return '<button class="chip' + (X.c === i ? ' on' : '') + '" data-a="arC" data-v="' + i + '">' + esc(n) + '</button>'; }).join('') + '</div></section>';
   if (r.ing && r.ing.length) h += '<section class="card"><b>Ingredientes' + (r.rac > 1 ? ' (la receta entera)' : ' (1 ración)') + '</b>' + r.ing.map(function (i) { var nom = Array.isArray(i) ? alNombre(i[0]) : i.n, g = Array.isArray(i) ? i[1] : i.g; return '<div class="fila-r"><span>' + esc(nom) + '</span><span class="mut">' + fmil(g) + ' g</span></div>'; }).join('') + (r.ex ? '<small class="mut">Además: ' + esc(r.ex) + '</small>' : '') + '</section>';
@@ -12005,6 +12033,9 @@ A.arOllaSi = function () {
 };
 A.arModo = function (el) { S.x.ar.modo = el.dataset.v; pintar(); };
 A.arR = function (el) { S.x.ar.r = +el.dataset.v; pintar(); };
+A.arRMas = function () { S.x.ar.r = Math.min(40, (S.x.ar.r || 1) + 0.5); pintar(); };
+A.arRMenos = function () { S.x.ar.r = Math.max(0.5, (S.x.ar.r || 1) - 0.5); pintar(); };
+function racTxt(v) { var e = Math.floor(v), m = v - e >= 0.5; return (e ? String(e) : '') + (m ? '½' : '') || '0'; }
 A.arC = function (el) { S.x.ar.c = +el.dataset.v; pintar(); };
 IN.arG = function (t) { S.x.ar.g = t.value; var r = recDe(S.x.ar.key), e = $('#ar-t'); if (r && e) e.innerHTML = arTotHtml(arCuanto(r)); };
 A.arOk = function () {
