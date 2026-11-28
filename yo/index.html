@@ -4014,6 +4014,11 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
 .c32-ios-s{display:flex;gap:6px;margin:10px 0 14px}.c32-ios-s svg{stroke:#007AFF}.c32-ios button{width:calc(100% + 32px);border:0;border-top:1px solid #D1D1D6;background:none;padding:12px;font:inherit;font-size:16px;color:#007AFF}
 .cm33-resp[hidden]{display:none}
 .c32-ih-c{font-style:normal;font-size:12.5px;font-weight:700;color:rgba(255,255,255,.85)}.c32-ih-c .c33-cmp{font-size:12px}
+/* 17:42: «Invita a un amigo», a secas y más pequeño (Perfil y Descubrir) */
+.c32-inv{width:100%;border:0;font:inherit;text-align:left;padding:10px 10px 10px 12px;border-radius:14px;gap:10px}
+.c32-inv>b{flex:1;min-width:0;font-size:14.5px;font-weight:800;color:#fff}
+.c32-inv-i{width:32px;height:32px;border-radius:9px;flex:0 0 32px}.c32-inv-b{padding:7px 13px;font-size:12.5px}
+.hv-gx+.c32-inv{margin:14px 0 6px}
 
 </style>
 </head>
@@ -4729,7 +4734,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.97.1';
+var YO_V = 'yo-1.97.2';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4745,6 +4750,12 @@ setTimeout(function () { yoNueva(true); }, 1500);
 document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') yoNueva(); });
 var COND_V = '2026-11-16';   // versión de las Condiciones de uso (moodonapp.com/condiciones.html); si cambia, se vuelven a aceptar
 var SB_URL = 'https://spmibfqbhgbcomfqlvlc.supabase.co', SB_KEY = 'sb_publishable_HqhB19V_CEc73BQ0CLt_OQ_yoTodmpN';
+/* 28 nov 2026, 17:46 (Javier: «al darle al enlace de olvidar la contraseña se abre su cuenta sin cambiarla ni escribir ninguna contraseña»):
+   el enlace del email es la llave de un solo uso, pero la app tiene que pedir la contraseña nueva antes de dejar entrar. Se mira aquí, antes de que
+   Supabase lea y borre el enlace, y se guarda hasta que la cambie o cierre la sesión (aunque cierre la app y vuelva) */
+var YO_RECUP = /(^|[#&])type=recovery(&|$)/.test(location.hash || ''), YO_RECUP_ERR = /(^|[#&])error_code=otp_expired/.test(location.hash || '');
+try { if (YO_RECUP) localStorage.setItem('yo_recup', '1'); else if (localStorage.getItem('yo_recup') === '1') YO_RECUP = true; } catch (e) { }
+function recupFin() { YO_RECUP = false; try { localStorage.removeItem('yo_recup'); } catch (e) { } }
 var SB = window.YO_FAKE || (window.supabase && window.supabase.createClient(SB_URL, SB_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } }));
 /* 22 nov: la app guardada en el móvil (sw.js): abre al momento y también sin conexión (no en las demos ni en las pruebas) */
 if (!window.YO_FAKE && 'serviceWorker' in navigator && location.protocol === 'https:' && !/\/demo\//.test(location.pathname)) { try { navigator.serviceWorker.register('sw.js').catch(function () { }); } catch (e) { } }
@@ -5101,14 +5112,18 @@ var IN = {}, CH = {};
 /* ---------- arranque ---------- */
 function arrancar() {
   if (!SB) { S.v = 'error'; S.err = 'No se ha podido cargar. Comprueba la conexión.'; return pintar(); }
+  if (YO_RECUP) { S.v = 'acceso'; S.acc = { modo: 'nueva', msg: '', err: '' }; }      // 17:46: primero, la contraseña nueva
+  else if (YO_RECUP_ERR) { S.v = 'acceso'; S.acc = { modo: 'rec', msg: '', err: 'Ese enlace ya se usó o ha caducado. Pide otro aquí.' }; }
   pintar();
   SB.auth.onAuthStateChange(function (evt, ses) {
-    if (evt === 'PASSWORD_RECOVERY') { S.v = 'acceso'; S.acc = { modo: 'nueva', msg: '', err: '' }; return pintar(); }
+    if (evt === 'PASSWORD_RECOVERY') { YO_RECUP = true; try { localStorage.setItem('yo_recup', '1'); } catch (e) { } S.v = 'acceso'; S.acc = { modo: 'nueva', msg: '', err: '' }; return pintar(); }
+    if (YO_RECUP) return;
     if (evt === 'SIGNED_OUT') return;
     if (ses && ses.user && (!S.user || S.user.id !== ses.user.id) && !(S.acc && S.acc.modo === 'nueva')) entra(ses);
   });
   SB.auth.getSession().then(function (r) {
     var ses = r && r.data && r.data.session;
+    if (YO_RECUP) { if (ses) { S.v = 'acceso'; S.acc = { modo: 'nueva', msg: '', err: '' }; return pintar(); } recupFin(); S.v = 'acceso'; S.acc = { modo: 'rec', msg: '', err: 'Ese enlace ya se usó o ha caducado. Pide otro aquí.' }; return pintar(); }
     if (ses) entra(ses); else if (!(S.acc && S.acc.modo === 'nueva')) { S.v = 'acceso'; pintar(); }
   });
 }
@@ -5231,6 +5246,7 @@ function vAcceso() {
   h += '<button class="btn" type="submit" id="a-go">' + (alta ? 'Crear mi cuenta' : rec ? 'Enviar el email' : nueva ? 'Guardar contraseña' : 'Entrar') + '</button>' + (alta ? '<p class="mut sm center">Las dos casillas son obligatorias para crear la cuenta.</p>' : '') + '</form>';
   if (!alta && !rec && !nueva) h += '<button class="link" data-a="accModo" data-v="rec">¿Has olvidado tu contraseña?</button>';
   if (rec) h += '<button class="link" data-a="accModo" data-v="entrar">Volver a entrar</button>';
+  if (nueva) h += '<button class="link" data-a="recCancelar">Ahora no: cerrar la sesión</button>';      // 17:46: sin la contraseña nueva no se entra
   h += '<p class="mut sm center acc-pie">¿Tienes entrenador? Entra desde <a href="../">moodonapp.com</a> → Entrar → Soy cliente.</p></div>';
   return h;
 }
@@ -5259,6 +5275,7 @@ F.aceptar = function () {
   rpc('yo_aceptar', { v: COND_V, salud: true }).then(function () { S.acp = {}; S.aceptada = COND_V; S.v = S.vTras || 'app'; arriba(); pintar(); },
     function (e) { a.err = accErr(e); pintar(); });
 };
+A.recCancelar = function () { recupFin(); SB.auth.signOut().then(function () { S.user = null; S.acc = { modo: 'entrar', msg: '', err: '' }; S.v = 'acceso'; pintar(); }); };
 A.accModo = function (el) { var o = S.acc || {}; S.acc = { modo: el.dataset.v, msg: '', err: '', em: o.em, nom: o.nom }; pintar(); };
 A.verPw = function () { var i = $('#a-pw'); if (i) i.type = i.type === 'password' ? 'text' : 'password'; };
 function accErr(e) {
@@ -5294,7 +5311,7 @@ F.acc = function () {
       if (!r.data.session) { S.acc = { modo: 'entrar', msg: 'Te hemos enviado un email a ' + em + '. Ábrelo y toca el enlace para confirmar tu cuenta; después entra aquí.', err: '' }; return pintar(); }
     }
     if (a.modo === 'rec') { S.acc = { modo: 'entrar', msg: 'Si hay una cuenta con ese email, te llegará un enlace para crear una contraseña nueva.', err: '' }; return pintar(); }
-    if (a.modo === 'nueva') { S.acc = { modo: 'entrar', msg: '', err: '' }; toast('Contraseña cambiada', 'ok'); }
+    if (a.modo === 'nueva') { recupFin(); S.acc = { modo: 'entrar', msg: '', err: '' }; toast('Contraseña cambiada', 'ok'); a.pw = ''; return SB.auth.getSession().then(function (q) { var s = q && q.data && q.data.session; if (s) { S.user = null; entra(s); } else pintar(); }); }
     a.pw = ''; if (r.data && r.data.session) entra(r.data.session);
   }, function (e) { mal(accErr(e)); });
 };
@@ -13729,6 +13746,7 @@ function vSiguiendo(C) {
 function vDescubrir(C) {
   var h = '', T0 = (C.top || []).filter(noOculta), T = C.ff === 'rec' ? [] : T0.filter(function (x) { return x.tipo !== 'rec'; }), TR = C.ff === 'ent' ? [] : T0.filter(function (x) { return x.tipo === 'rec'; }), G = C.ff ? [] : (C.gente || []).slice(0, 12), F = C.feed.d.filter(noOculta).filter(deFiltro);
   if (G.length) h += '<div class="hv-sec"><h2 class="cm-h2">Gente para seguir</h2>' + ((C.gente || []).length > 3 ? '<button class="link" data-a="cBuscar">Ver todas</button>' : '') + '</div><div class="hv-gx">' + G.map(tarjGente).join('') + '</div>';
+  if (typeof pf32Invita === 'function') h += pf32Invita();      // 17:42 (Javier): «que salga en Descubrir»
   var TT = TR.concat(T);
   if (TT.length) h += '<div class="hv-sec"><h2 class="cm-h2">Lo más guardado</h2></div><div class="hv-tx">' + TT.map(tarjTop).join('') + '</div>';
   h += '<div class="hv-sec"><h2 class="cm-h2">Lo último</h2></div>';
@@ -14949,9 +14967,9 @@ function hd32(i, t, p) { return '<div class="c32-h"><span class="c32-i">' + ic(i
 function mesNom(m) { return aDate(m + '-01').toLocaleDateString('es-ES', { month: 'long' }); }
 
 /* ---------- Perfil: lo nuevo (lo llama vPerfil28) ---------- */
-function pf32Invita() {
+function pf32Invita() {      // 17:42 (Javier): «Invita a un amigo, así a secas, y no tan grande»; también en Descubrir
   if (!v32('inv')) return '';
-  return '<section class="c32-inv"><span class="c32-inv-i">' + ic('regalo', 20, null, 2) + '</span><span class="c32-inv-t"><b>Invita a un amigo</b><small>Comparte MOOD ON con quien quieras para que entrene por su cuenta.</small></span><button class="c32-inv-b" data-a="invitar">Invitar</button></section>';
+  return '<button class="c32-inv" data-a="invitar"><span class="c32-inv-i">' + ic('regalo', 17, null, 2.2) + '</span><b>Invita a un amigo</b><span class="c32-inv-b">Invitar</span></button>';
 }
 function pf32Pref() {
   var h = '';
