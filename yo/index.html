@@ -3188,6 +3188,13 @@ html[data-tema="oscuro"] .p5-res b.up{color:#7EE2A8}html[data-tema="oscuro"] .p5
 .st-mas{position:absolute;top:-8px;right:-4px;z-index:1;font-style:normal;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;border-radius:999px;background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F;pointer-events:none;white-space:nowrap}
 .os .os-m{white-space:normal}
 .st2.ok .st-mas{display:none}
+/* yo-1.81 · 28 nov (Javier: «en ejercicios unilaterales no sale RIR»): con cada lado, un RIR por serie, a la derecha de los dos lados */
+.st.st-l2,.st-h.st-l2,.st.st-l2.sin-u,.st-h.st-l2.sin-u{grid-template-columns:30px minmax(0,1fr) 46px 40px;gap:8px}
+.st.st-l2 .st-rir{align-self:center;height:42px;border-radius:13px;background:#F2F4FA;border:1.5px solid #D5D9E4;font-size:17px;font-weight:800;color:#0D0D0F;min-width:0}
+.st.st-l2 .st-rir::placeholder{color:#A6AAB6;font-weight:700}.st.st-l2.ok .st-rir{background:#fff;border-color:transparent}
+html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C2E;color:#fff}
+.st-h.st-l2>span:nth-child(3){text-align:center}
+.st.st2.st-mini.st-ml{grid-template-columns:30px 34px minmax(0,1fr) minmax(0,1fr) 46px 40px;gap:6px}
 
 </style>
 </head>
@@ -3903,7 +3910,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.80';
+var YO_V = 'yo-1.81';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -8388,7 +8395,7 @@ function serFilasHtml(e, i, O, W) {
   /* 24 nov, 17:08 (Javier: «que al dar a kg puedas cambiar a peso corporal, y en repes, a seg, min, calorías o metros»): «Kg» y «Reps» se tocan */
   var hK = '<button class="st-hb" data-a="serMedK" data-i="' + i + '" aria-label="Cambiar cómo mides el peso (ahora: ' + (+e.pc === 1 ? 'peso corporal' : +e.pc === 2 ? 'tu peso más lastre' : 'kilos') + ')">' + (+e.pc === 1 ? 'Peso' : +e.pc === 2 ? 'Lastre' : 'Kg') + ic('abajo', 10, null, 2.8) + '</button>',
     hR = '<button class="st-hb" data-a="serMedR" data-i="' + i + '" aria-label="Cambiar lo que cuentas (ahora: ' + uU.toLowerCase() + ')">' + uU + ic('abajo', 10, null, 2.8) + '</button>';
-  var cabDe = function (hayPv, apx) { return LD ? '<div class="st-h st-l2"><span>#</span><span class="st-hl"><i></i><i>' + hK + '</i><i>' + hR + '</i></span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>' + hK + '</span><span>' + hR + '</span><span>' + (apx ? '%' : '<button class="st-hb" data-a="rirInfo" aria-label="Qué es el RIR">RIR' + ic('info', 11, null, 2.4) + '</button>') + '</span><span></span></div>'; };      // 23 nov: en la aproximación, «%» en vez de RIR
+  var cabDe = function (hayPv, apx) { return LD ? '<div class="st-h st-l2"><span>#</span><span class="st-hl"><i></i><i>' + hK + '</i><i>' + hR + '</i></span><span>' + (apx ? '' : '<button class="st-hb" data-a="rirInfo" aria-label="Qué es el RIR">RIR' + ic('info', 11, null, 2.4) + '</button>') + '</span><span></span></div>' : '<div class="st2-h' + (hayPv ? ' pv' : '') + '"><span>' + (hayPv ? '#' : 'Serie') + '</span>' + (hayPv ? '<span>Última vez</span>' : '') + '<span>' + hK + '</span><span>' + hR + '</span><span>' + (apx ? '%' : '<button class="st-hb" data-a="rirInfo" aria-label="Qué es el RIR">RIR' + ic('info', 11, null, 2.4) + '</button>') + '</span><span></span></div>'; };      // 23 nov: en la aproximación, «%» en vez de RIR
   var cab = cabDe(hayPv);      // 22 nov, 19:45 (Chadín): en la aproximación, sin «Última vez» (cabDe(false))
   var fila = function (s, j) {
     var h = '', lab = labDe(j), hayPvF = hayPv && s.t !== 'aprox';
@@ -8419,7 +8426,7 @@ function serFilasHtml(e, i, O, W) {
       var kp = dropB ? SQ[m + 1] : k, lb = dropB ? 'Bajada ' + (m + 1) : 'Mini-serie ' + (m + 1);
       h += '<div class="st-mr"><span>' + (dropB ? ic('rayo', 12, null, 2.4) + '−' + fN(dpc) + ' % · sin descanso' : ic('reloj', 12) + mpDe(e, 'rs') + ' s') + '</span></div><div class="st st2 st-mini' + (dropB ? ' st-bj' : '') + (hayPvF ? ' pv' : '') + (LD ? ' st-ml' : '') + (x.ok ? ' ok' : '') + '"><span class="st-n"><i>' + (dropB ? '↓' : '+') + (m + 1) + '</i></span>' + (hayPvF || LD ? '<span></span>' : '') +
         (+e.pc === 1 ? '<span class="st-pc">Tu peso</span>' : '<input data-in="miniV" data-k="kg" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="decimal" value="' + esc(String(x.kg || '').replace('.', ',')) + '" placeholder="' + (kp ? esc(fN(kp)) : '') + '"' + (kp && !x.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la ' + lb.toLowerCase() + '">') +
-        '<input data-in="miniV" data-k="reps" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="numeric" value="' + esc(x.reps) + '" placeholder="' + (dropB ? 'máx' : MINI_R[s.t]) + '" aria-label="Repeticiones de la ' + lb.toLowerCase() + '">' + (LD ? '' : '<span></span>') +
+        '<input data-in="miniV" data-k="reps" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" inputmode="numeric" value="' + esc(x.reps) + '" placeholder="' + (dropB ? 'máx' : MINI_R[s.t]) + '" aria-label="Repeticiones de la ' + lb.toLowerCase() + '">' + '<span></span>' +
         '<button class="st-ok' + (x.ok ? ' on' : '') + '" data-a="miniOk" data-i="' + i + '" data-j="' + j + '" data-m="' + m + '" aria-pressed="' + !!x.ok + '" aria-label="' + lb + ' hecha">' + ic('check', 17, null, 3) + '</button></div>'; });
     h += '</div>';
     return h;
@@ -8462,6 +8469,7 @@ function serLadosHtml(e, i, s, j, pv, phK, phR, lab, o) {
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps' + ld + '" inputmode="numeric" value="' + esc(s['reps' + ld] || '') + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' ' + nm + ' serie ' + lab + '"></div>'; };
   return '<div class="st st-l2' + (s.t === 'aprox' ? '' : ' ef') + (s.ok ? ' ok' : '') + (o.ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n st-nl"><i>' + lab + '</i>' + (o.tg ? '<small>' + o.tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' +
     '<div class="st-lds">' + (pvT ? '<small class="st-lu">Última vez <b>' + esc(pvT) + '</b></small>' : '') + f('I', 'Izq.') + f('D', 'Der.') + '</div>' +
+    (s.t === 'aprox' ? '<span></span>' : '<input class="st-rir" data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir == null ? '' : s.rir) + '"' + (s.rir !== '' && s.rir != null ? ' data-v="' + esc(String(Math.min(4, +s.rir || 0))) + '"' : '') + ' placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + ' (repeticiones que te quedaban)">') +      // 28 nov (Javier: «en ejercicios unilaterales no sale RIR»): uno por serie
     '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + lab + ' hecha">' + ic('check', 17, null, 3) + '</button></div>';
 }
 /* al marcar una serie con los dos lados: se guarda el peor lado como la serie (para récords) y los dos lados aparte */
