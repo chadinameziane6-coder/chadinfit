@@ -2251,7 +2251,7 @@ body.ord-on{user-select:none;-webkit-user-select:none}
 .sem-o{display:flex;flex-direction:column;align-items:flex-start;gap:8px;text-align:left;border:1.5px solid var(--borde2);border-radius:16px;padding:12px;background:var(--card);color:var(--tx);font:inherit}
 .sem-o .ic{margin:0}.sem-o span{display:flex;flex-direction:column;gap:2px}.sem-o b{font-size:14.5px;font-weight:800;line-height:1.2}.sem-o small{font-size:12px;color:var(--tx3);line-height:1.3}
 .sem-g{display:block;margin:0 2px 6px}
-.sem-ch{margin:0 0 10px}
+.sem-ch{margin:0 -18px 2px;padding:0 18px;flex-shrink:0;min-height:38px}.hoja-c>.sem-rs{flex-shrink:0}
 /* ===== 21 nov, 23:50 · Métricas como en la app de clientas: peso y medidas, la tabla, las fotos por fechas y comparar lado a lado ===== */
 .cue{display:flex;flex-direction:column;gap:10px}
 .cue-t{font-size:17px;font-weight:800;display:flex;align-items:center;justify-content:space-between;gap:8px}
@@ -3228,6 +3228,7 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
 .rcp-e span{display:flex;flex-direction:column;flex:1;min-width:0}.rcp-e b{font-size:14px}.rcp-e small{font-size:12px;color:var(--tx2);line-height:1.35}
 .rcp-e em{font-style:normal;font-weight:800;font-size:14px;white-space:nowrap}
 .rc-res small{display:block;font-size:13px;font-weight:700;margin-top:2px}
+.p3-inf .p3-x{font-style:normal;font-weight:800;color:inherit;opacity:.75;white-space:nowrap}      /* yo-1.85: «Pierna B ×3» */
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -4396,7 +4397,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.84';
+var YO_V = 'yo-1.85';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -5459,9 +5460,12 @@ A.semana = function () { ir({ t: 'semana' }); };
    yo-1.66: «Cambiar» abre «Cambiar días» con ese día abierto (sus rutinas, «Una rutina de MOOD ON» y «Crear una rutina») */
 A.semCambiar = function (el) { A.planDias({ dataset: { v: '', d: el.dataset.v } }); };
 /* las rutinas sueltas de MOOD ON: con sus filtros; al elegir una, se guarda en Mis rutinas (si no estaba) y se pone ese día */
-A.semSuelta = function (el) { S.x.semD = el.dataset.d || S.x.semD; var f = S.x.semF || '', L = rsVisibles(f);
-  hoja('<h2>Rutina de MOOD ON para el ' + DIA_N[S.x.semD].toLowerCase() + '</h2><div class="chips scroll sem-ch">' + RS_CATS.map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="semSueltaF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>' +
-    '<div class="lista">' + L.map(function (x) { var ya = rsGuardada(x); return '<button class="fila-b" data-a="semSueltaSi" data-v="' + x.id + '"><b>' + esc(x.n) + '</b><small>' + esc([x.min + ' min', NIV_N[x.niv], x.lug === 'casa' ? 'Casa' : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio'].join(' · ')) + (ya ? ' · ya en tus rutinas' : '') + '</small></button>'; }).join('') + '</div>' +
+/* yo-1.85 (Javier, 28 nov, 08:48: «al buscar rutina para tu semana te salga igual que cuando buscas por fuerza, con las imágenes, niveles y todo»): las
+   mismas fichas con foto, minutos y nivel que en Entrenar → Rutinas (con «Favoritas»); al tocar una, se pone ese día */
+A.semSuelta = function (el) { S.x.semD = el.dataset.d || S.x.semD; var f = S.x.semF || '', fav = f === '__fav', L = rsVisibles(fav ? '' : f); if (fav) L = L.filter(function (x) { return favOn(x.id); });
+  hoja('<h2>Rutina de MOOD ON para el ' + DIA_N[S.x.semD].toLowerCase() + '</h2><div class="chips scroll sem-ch">' + [['__fav', '♥ Favoritas']].concat(RS_CATS).map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="semSueltaF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>' +
+    '<div class="prog-lst sem-rs"><small class="mut">' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + ' · toca una para ponerla el ' + DIA_N[S.x.semD].toLowerCase() + '</small>' + (fav && !L.length ? '<p class="mut sm fav-v">Aún no tienes rutinas en favoritas.</p>' : '') +
+    L.map(function (x) { var ya = rsGuardada(x); return progPh0('semSueltaSi', x.id, imgDe(x.id, x.n, 1), x.min + ' min', x.n, NIV_N[x.niv] + ' · ' + (x.lug === 'casa' ? 'Casa' + (x.mat ? ' · ' + esc(x.mat) : '') : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio') + (ya ? ' · ya en tus rutinas' : '')); }).join('') + '</div>' +
     '<button class="btn sec" data-a="pdVolver">Volver</button>');
 };
 A.semSueltaF = function (el) { S.x.semF = el.dataset.v; A.semSuelta({ dataset: {} }); };
@@ -10867,6 +10871,10 @@ function p3Grupos(nw) {
 /* yo-1.72 (Javier, 19:59: «el volumen total lo metería dentro de la primera gráfica… solo una, puedes filtrar por actividad o volumen»; «quitaría lo
    de tu mes, porque ya aparece en la pantalla inicial»; «últimos entrenamientos… un poco más visual»): una tarjeta con «Entrenamientos | Volumen» y
    los últimos 4, con la fecha grande, el músculo principal, los minutos y los kilos (o los km) */
+/* yo-1.85 (Javier, 28 nov, 08:48: «no repitas los entrenos que se han hecho… si he hecho pierna B, no me pongas 3 veces pierna B»): cada entreno una vez,
+   del más reciente al más antiguo, y cuántas veces si fueron más de una («Pierna B ×3») */
+function p3Nombres(L) { var o = [], c = {}; L.slice().reverse().forEach(function (s) { var n = nomSes(s), k = clave(n); if (!c[k]) { c[k] = { n: n, v: 0 }; o.push(k); } c[k].v++; });
+  return o.map(function (k) { return esc(c[k].n) + (c[k].v > 1 ? ' <i class="p3-x">×' + c[k].v + '</i>' : ''); }).join(' · '); }
 function p3Act() {
   if (!S.sesiones.length) return '<section class="card p3-c">' + p3Vacio('Todavía no hay entrenamientos', 'Cuando termines el primero, aquí verás cuántos haces cada semana.') + '<button class="btn" data-a="tab" data-v="entreno">' + ic('pesa', 18, null) + 'Ir a Entrenar</button></section>';
   var nw = S.x.a3 || 4, R = p3Grupos(nw), G = R.G, f0 = p3Ini(), desde = G.length ? (G[0].a > f0 ? G[0].a : f0) : f0, m = S.x.p3am === 'vol' ? 'vol' : 'ent';
@@ -10878,7 +10886,7 @@ function p3Act() {
     var tot = Lt.length;
     h += '<div class="p3-big"><b>' + tot + '</b><span>' + (tot === 1 ? 'entrenamiento' : 'entrenamientos') + '</span><small>Desde el ' + esc(p3Largo(desde)) + ' · ' + esc(hm(sum(Lt, 'min'))) + ' entrenando</small></div>' +
       p3Barras(G.map(function (x) { return { v: x.v, l: x.l, cur: x.cur, ar: x.t + ': ' + x.v + (x.v === 1 ? ' entrenamiento' : ' entrenamientos') }; }), { sel: sel, act: 'p3ASel', ent: 1, ar: 'Entrenamientos por ' + R.por });
-    if (w) h += '<div class="p3-inf"><b>' + esc(w.t) + ' · ' + w.v + (w.v === 1 ? ' entrenamiento' : ' entrenamientos') + '</b>' + (w.L.length ? '<span>' + w.L.slice().reverse().map(function (s) { return esc(nomSes(s)); }).join(' · ') + '</span>' : '') +
+    if (w) h += '<div class="p3-inf"><b>' + esc(w.t) + ' · ' + w.v + (w.v === 1 ? ' entrenamiento' : ' entrenamientos') + '</b>' + (w.L.length ? '<span>' + p3Nombres(w.L) + '</span>' : '') +
       (w.cur ? '<small>' + (R.por === 'semana' ? 'La semana aún no ha terminado.' : 'El mes aún no ha terminado.') + '</small>' : '') + '</div>';
   } else {
     var vt = VT.reduce(function (a, b) { return a + b; }, 0), ns = sum(Lt, 'nser');
