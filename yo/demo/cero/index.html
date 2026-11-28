@@ -3183,6 +3183,11 @@ html[data-tema="oscuro"] .p5-res b.up{color:#7EE2A8}html[data-tema="oscuro"] .p5
 .run-pv li.ca-pp small,.run-pr li.ca-pp small,.run-pv li.ca-car small,.run-pr li.ca-car small{color:var(--tx)}
 .run-p.ca-pp{background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F}.rep-o .nw{white-space:nowrap;display:inline}
 .run-ppn{margin:0;font-size:12.5px}
+/* yo-1.79 · objetivo: la etiqueta de la casilla que tiene que mejorar («+1») o de los kilos al subir («+2,5») */
+.st-w{position:relative;display:block;min-width:0}
+.st-mas{position:absolute;top:-8px;right:-4px;z-index:1;font-style:normal;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;border-radius:999px;background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F;pointer-events:none;white-space:nowrap}
+.os .os-m{white-space:normal}
+.st2.ok .st-mas{display:none}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}.acc-top::after{content:"Demo: inventa un email y una contraseña. No se envía nada ni se crea ninguna cuenta de verdad.";display:block;margin:12px auto 0;max-width:340px;background:var(--ambar-bg);color:var(--ambar-tx);border:1px solid var(--ambar-b);border-radius:12px;padding:8px 12px;font-size:12.5px;font-weight:600;line-height:1.4;text-align:left}</style></head>
@@ -4351,7 +4356,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.78';
+var YO_V = 'yo-1.79';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7738,21 +7743,33 @@ function objetivoHoy(e) {
   if (bajaYo(e.n)) return Object.assign(o, { est: 'rev', r: lo != null ? lo : r });
   if (techo == null) return Object.assign(o, { est: 'mant', r: r + 1 });
   var mr = String(s0.rirO || '').match(/\d+/), rirO = mr ? +mr[0] : null, rirMal = Wp.some(function (s) { var v = num(s.rir); return v != null && rirO != null && v < rirO - 1; });
-  if (!rirMal && Wp.every(function (s) { return num(s.reps) >= techo; })) return Object.assign(o, { est: 'sube', p: pesoSig(p, tc), r: base, rg: rgT, p0: p });
-  var mej = null; sesFz(e.n).filter(function (x) { return x.sid !== (S.ses && S.ses.id); }).slice(-3).forEach(function (x) { var R = x.sets.filter(function (s) { return s.ok && s.t !== 'aprox' && num(s.kg) === p && num(s.reps) != null; }); if (!R.length) return; var mn = Math.min.apply(null, R.map(function (s) { return num(s.reps); })); if (mej == null || mn > mej) mej = mn; });
-  var rt = Math.min(techo, (mej != null ? mej : Math.min.apply(null, lst)) + 1); if (lo != null && rt < lo) rt = lo;
-  return Object.assign(o, { est: 'mant', r: rt, rirMal: rirMal });
+  if (!rirMal && Wp.every(function (s) { return num(s.reps) >= techo; })) return Object.assign(o, { est: 'sube', p: pesoSig(p, tc), r: base, rg: rgT, p0: p, lin: 'Llegaste a ' + techo + ' en todas: sube el peso' });
+  /* yo-1.79 · 28 nov 2026 (Javier, 00:40–00:47): una repetición más en UNA serie. Primero la 1.ª, hasta lo alto del rango («40 kg × 12», sin más);
+     cuando la 1.ª ya llega, se mantiene el peso y se empuja la siguiente que no llegó («40 kg × 12» y «Mantén 40 kg hasta que todas las series lleguen
+     a 12 repeticiones»); todas arriba, sube el peso («Llegaste a 12 en todas: sube el peso»). Las demás series, lo de tu mejor día de las 3 últimas
+     veces con ese peso (un mal día no te baja el objetivo). R: las repeticiones de cada serie de ese día; k: la que toca; rk: lo que te pide */
+  var R = objRef(e.n, p, lst), k = -1; for (var q = 0; q < R.length; q++) if (R[q] < techo) { k = q; break; }
+  if (k < 0 && !rirMal) return Object.assign(o, { est: 'sube', p: pesoSig(p, tc), r: base, rg: rgT, p0: p, lin: 'Llegaste a ' + techo + ' en todas: sube el peso' });
+  if (k < 0) return Object.assign(o, { est: 'mant', r: techo, R: R, k: -1, rirMal: true, lin: 'Mantén ' + fN(p) + ' kg hasta hacerlo con el RIR que toca' });
+  var rk = Math.min(techo, R[k] + 1); if (lo != null && rk < lo) rk = lo;
+  return Object.assign(o, { est: 'mant', r: k === 0 ? rk : techo, R: R, k: k, rk: rk, rirMal: rirMal, lin: k > 0 ? 'Mantén ' + fN(p) + ' kg hasta que todas las series lleguen a ' + techo + ' repeticiones' : '' });
 }
-/* yo-1.62 · 25 nov 2026, 13:29 (Javier, en el gimnasio: «si la última vez hice 30 × 12, ¿por qué me sugiere 30 × 11? Sería menos»): el «11» es lo mínimo
-   para todas (las que hiciste a 10 suben a 11), pero ninguna serie te pide menos de lo que hiciste en ella la última vez con ese peso: la 1.ª, 12.
-   objRSerie: lo que te toca en la serie j; objMasTxt: «12 en la 1.ª» (las que van por encima del objetivo), para la ficha y la ⓘ */
-function objPv(e, W, j) { if (!W || !W.length || !e.sets[j]) return null; var cat = function (t) { return t === 'aprox' ? 'a' : 'w'; }, c = cat(e.sets[j].t), k = 0;
-  for (var q = 0; q < j; q++) if (cat(e.sets[q].t) === c) k++; var L = W.filter(function (x) { return x.ok !== false && cat(x.t) === c; }); return k < L.length ? L[k] : null; }
-function objRSerie(e, O, W, j) { var s = e.sets[j]; if (!O || O.est !== 'mant' || !O.p || !s || (s.t && s.t !== 'normal')) return null;
-  var pv = objPv(e, W, j), r = pv && num(pv.kg) === O.p ? num(pv.reps) : null; if (r == null || !(r > O.r)) return null; return O.techo ? Math.min(O.techo, r) : r; }
-function objMasTxt(e, O, W) { if (!O || O.est !== 'mant') return ''; var G = {}, ord = [], n = 0;
-  (e.sets || []).forEach(function (s, j) { if (s.t === 'aprox') return; n++; var r = objRSerie(e, O, W, j); if (r == null) return; if (!G[r]) { G[r] = []; ord.push(r); } G[r].push(n + '.ª'); });
-  return ord.map(function (r) { var L = G[r]; return r + ' en la ' + (L.length > 1 ? L.slice(0, -1).join(', ') + ' y ' + L[L.length - 1] : L[0]); }).join(', '); }
+/* tu mejor día de las 3 últimas veces con ese peso (el de más repeticiones en total): las repeticiones de cada serie, en orden */
+function objRef(n, p, def) { var best = null;
+  sesFz(n).filter(function (x) { return x.sid !== (S.ses && S.ses.id); }).slice(-3).forEach(function (x) {
+    var R = x.sets.filter(function (z) { return z.ok && z.t !== 'aprox' && num(z.kg) === p && num(z.reps) != null; }), Rn = R.filter(function (z) { return !z.t || z.t === 'normal' || z.t === 'top'; }); if (Rn.length) R = Rn; if (!R.length) return;
+    var L = R.map(function (z) { return num(z.reps); }), t = L.reduce(function (a, v) { return a + v; }, 0); if (!best || t >= best.t) best = { L: L, t: t }; });
+  return best ? best.L : def; }
+/* el lugar de la serie j entre las de trabajo normales o top set (las que llevan el objetivo); -1 en las demás */
+function objPos(e, j) { var s = e.sets[j], f = function (z) { return z && z.t !== 'aprox' && (!z.t || z.t === 'normal' || z.t === 'top'); }; if (!f(s)) return -1; var n = 0; for (var q = 0; q < j; q++) if (f(e.sets[q])) n++; return n; }
+/* yo-1.62 → yo-1.79: lo que te toca en cada serie (objRSerie): en la que toca, una más (rk); en las demás, lo de tu mejor día (R). objMasTxt ya no se usa
+   (la línea «y 12 en la 1.ª» sale de la ficha: Javier, 28 nov, 00:47) */
+function objRSerie(e, O, W, j) { if (!O || O.est !== 'mant' || !O.p || !O.R) return null; var n = objPos(e, j); if (n < 0) return null;
+  return n === O.k ? O.rk : n < O.R.length ? O.R[n] : (O.lo != null ? O.lo : O.R[O.R.length - 1]); }
+/* la etiqueta de la casilla: «+1» en las repeticiones de la serie que toca; «+2,5» en los kilos al subir */
+function objMasR(e, O, j) { if (!O || O.est !== 'mant' || !O.R || O.k < 0 || objPos(e, j) !== O.k) return ''; var d = O.rk - O.R[O.k]; return d > 0 ? '+' + d : ''; }
+function objMasK(e, O, j) { if (!O || O.est !== 'sube' || !O.p0 || objPos(e, j) < 0) return ''; var d = O.p - O.p0; return d > 0 ? '+' + fN(d) : ''; }
+function objMasTxt() { return ''; }
 var OBJ_E = { sube: ['subir', 'Sube el peso'], mant: ['mas', 'Mantén y suma repeticiones'], rev: ['info', 'Revisa tu entreno'], pri: ['info', 'Primeros días'], sua: ['luna', 'Semana suave'],
   sum: ['mas', 'Suma un poco'], dif: ['subir', 'Toca subir de nivel'], mas: ['subir', 'Ya llegas arriba: un poco más'], pri0: ['info', 'Primeros días'], tec: ['info', 'Céntrate en la técnica'] };
 function objChip(O) { var E = OBJ_E[O.est]; if (O.est === 'sum') return O.u ? 'Suma ' + O.d + ' segundos' : 'Suma ' + O.d + (O.d === 1 ? ' repetición' : ' repeticiones'); return E ? E[1] : ''; }
@@ -7790,7 +7807,7 @@ A.objInfo = function (el) {
     : O.est === 'mant' ? 'La última vez: ' + esc(ul) + '.' + (O.rirMal ? ' Llegaste, pero con menos RIR del que toca: mejor afianzarlo antes de subir.' : O.techo ? ' Para subir, todas tus series tienen que llegar a ' + O.techo + '.' : '')
     : O.est === 'pri' ? 'Aún no tienes ninguna vez apuntada de este ejercicio.' : 'Estás en tu semana suave: tu peso de siempre, la mitad de las series y dejando 3 o 4 repeticiones en reserva.';
   var que = O.est === 'sube' ? 'Sube a ' + fN(O.p) + ' kg y haz ' + (O.rg && O.rg.indexOf('-') > 0 ? 'entre ' + O.rg.replace('-', ' y ') : O.r) + '. Cuando vuelvas a llegar arriba en todas, volverá a subir.'
-    : O.est === 'mant' ? 'Hoy, ' + esc(objSugTxt(O)) + (mas ? '; ' + esc(mas) + ', como la última vez: ninguna serie te pide menos de lo que ya hiciste' : '') + '. Un mal día no te baja el objetivo: mira tus 3 últimas veces.'
+    : O.est === 'mant' ? (O.R && O.k >= 0 ? 'Hoy, una repetición más en la ' + (O.k + 1) + '.ª serie (' + O.R[O.k] + ' → ' + O.rk + ')' + (O.k > 0 ? '. Mantén ' + fN(O.p) + ' kg hasta que todas las series lleguen a ' + O.techo + ' repeticiones; entonces subirá el peso' : '') + '. Las demás, como tu mejor día.' : O.R ? 'Repite ' + fN(O.p) + ' kg con el RIR que toca antes de subir.' : 'Hoy, ' + esc(objSugTxt(O)) + '.') + ' Un mal día no te baja el objetivo: sale de tu mejor día de las 3 últimas veces.'
     : O.est === 'pri' ? 'Elige un peso con el que te sobren 2 repeticiones. Desde la próxima vez, te saldrá tu objetivo.' : 'Hoy, ' + esc(objSugTxt(O)) + '. Al terminar la semana, todo vuelve a lo normal.';
   hoja('<h2>Objetivo sugerido</h2>' + cab + caja + '<div class="osi-why">' + ic('info', 16, null, 2.2) + '<span>' + why + '</span></div><p class="osi-p">' + que + '</p>' +
     '<p class="mut sm osi-pf">Puedes quitar las sugerencias en Perfil → Sugerencias de peso.</p><button class="btn" data-a="cerrarHoja">Entendido</button>');
@@ -7926,7 +7943,7 @@ function ejFuerza(e, i) {
   h += serCabHtml(e, i);
   /* 22 nov, 10:47 (Chadín): «igual que en el panel clienta»: debajo de Vídeo · Cambiar…, dos fichas: el objetivo de hoy (en negro) y tu récord con el 1RM (en gris); la última vez, al lado de cada serie */
   if (O && O.sp && O.est === 'dif') M = null;      // yo-1.72: al proponerte la versión difícil, el objetivo a lo ancho
-  if (O || M) h += '<div class="o3 o3b' + (O && M ? '' : ' uno') + '">' + (O ? '<div class="o3-h os"><div class="os-t"><small>Objetivo sugerido</small><button class="os-i' + (O.est === 'rev' ? ' rev' : '') + '" data-a="objInfo" data-i="' + i + '" aria-label="Por qué este objetivo: ' + OBJ_E[O.est][1] + '">' + ic('info', 15, null, 2.2) + '</button></div><b>' + esc(objSugTxt(O)) + '</b>' + (function () { var m = objMasTxt(e, O, W); return m ? '<i class="os-m">y ' + esc(m) + '</i>' : ''; })() + (O.sp ? objSpHtml(O, i) : '') + '</div>' : '') +
+  if (O || M) h += '<div class="o3 o3b' + (O && M ? '' : ' uno') + '">' + (O ? '<div class="o3-h os"><div class="os-t"><small>Objetivo sugerido</small><button class="os-i' + (O.est === 'rev' ? ' rev' : '') + '" data-a="objInfo" data-i="' + i + '" aria-label="Por qué este objetivo: ' + OBJ_E[O.est][1] + '">' + ic('info', 15, null, 2.2) + '</button></div><b>' + esc(objSugTxt(O)) + '</b>' + (O.lin ? '<i class="os-m">' + esc(O.lin) + '</i>' : '') + (O.sp ? objSpHtml(O, i) : '') + '</div>' : '') +
     (M ? '<div class="o3-r">' + ic('trofeo', 20) + '<span><small>Tu récord</small><b>' + (M.p ? fN(M.p) + ' × ' : '') + M.r + '</b>' + (M.e1 ? '<i>1RM ≈ ' + fN(Math.round(M.e1)) + ' kg</i>' : '') + '</span></div>' : '') + '</div>';
   if (e.u === 's') h += ctaSetBtn(e, i, O, W);
   h += serMetHtml(e, i) + serFilasHtml(e, i, O, W);
@@ -8835,8 +8852,8 @@ function serFilasHtml(e, i, O, W) {
     var tg = serTag(s.t), esp = /^(drop|rp|myo|fallo)$/.test(s.t);
     var mk = s.ok ? marcaYo(e, j) : null;
     var row = LD ? serLadosHtml(e, i, s, j, W && W.length ? pvDe(j) : null, phK, phR, lab, { tg: tg && !esp && s.t !== 'aprox' ? tg : '', cK: cK, ya: j === ya, uU: uU }) + (mk ? '<div class="st-mk"><span class="bdg ' + mk.t + '">' + ic(mk.t === 'rec' ? 'trofeo' : 'sube', 13, null, 2.2) + esc(mk.txt) + '</span></div>' : '') : '<div class="st st2' + (s.t === 'aprox' ? '' : ' ef') + (hayPvF ? ' pv' : '') + (s.ok ? ' ok' : '') + (j === ya ? ' ya' : '') + (S.x.brillo === i + '-' + j ? ' brillo' : '') + '"><span class="st-n"><i>' + lab + '</i>' + (tg && !esp && s.t !== 'aprox' ? '<small>' + tg + '</small>' : '') + (s.rec ? ic('trofeo', 12, '#E0A100', 2.4) : '') + '</span>' + (hayPvF ? pvCel(j) : '') +
-      (+e.pc === 1 ? '<span class="st-pc" title="Peso corporal: sin kilos">Tu peso</span>' : '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(String(s.kg || '').replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">') +
-      '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="' + (e.u === 'min' ? 'decimal' : 'numeric') + '" value="' + esc(String(s.reps || '').replace('.', ',')) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + lab + '">' +
+      (+e.pc === 1 ? '<span class="st-pc" title="Peso corporal: sin kilos">Tu peso</span>' : objMasW('<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="kg" inputmode="decimal" value="' + esc(String(s.kg || '').replace('.', ',')) + '" placeholder="' + esc(phK) + '"' + (cK && !s.kg ? ' class="kg-calc"' : '') + ' aria-label="Kilos de la serie ' + lab + '">', s.ok || s.kg !== '' && s.kg != null ? '' : objMasK(e, O, j))) +
+      objMasW('<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="reps" inputmode="' + (e.u === 'min' ? 'decimal' : 'numeric') + '" value="' + esc(String(s.reps || '').replace('.', ',')) + '" placeholder="' + esc(phR) + '" aria-label="' + uU + ' de la serie ' + lab + '">', s.ok || s.reps !== '' && s.reps != null ? '' : objMasR(e, O, j)) +
       (s.t === 'aprox' ? '<span class="st-pct" data-pct="' + i + '-' + j + '">' + apxPctTxt(e, j, O, W) + '</span>' :      // 23 nov (Chadín: «¿Cuánto porcentaje aproxima?»): el % de tu peso de trabajo
       '<input data-in="stV" data-i="' + i + '" data-j="' + j + '" data-k="rir" inputmode="numeric" value="' + esc(s.rir) + '"' + (s.rir !== '' && s.rir != null ? ' data-v="' + esc(String(Math.min(4, +s.rir || 0))) + '"' : '') + ' placeholder="' + esc(s.rirO || '') + '" aria-label="RIR de la serie ' + lab + ' (repeticiones que te quedaban)">') +
       '<button class="st-ok' + (s.ok ? ' on' : '') + '" data-a="stOk" data-i="' + i + '" data-j="' + j + '" aria-pressed="' + !!s.ok + '" aria-label="Serie ' + lab + ' hecha">' + ic('check', 17, null, 3) + '</button></div>' +
@@ -9220,6 +9237,9 @@ A.rirInfo = function () {
     '<p class="mut sm">En gris, en la casilla, el que toca hoy. Si te sale más fácil, la próxima vez sube un poco el peso.</p><button class="btn" data-a="cerrarHoja">Entendido</button>'); };
 /* 17:55 (Javier: «que lo de RIR solo salga al pinchar el nombre RIR, a modo de información, no debajo de la serie»): sin la ayuda debajo de la serie */
 document.addEventListener('input', function (ev) { var t = ev.target; if (t && t.dataset && t.dataset.k === 'rir' && t.tagName === 'INPUT') { if (t.value === '') delete t.dataset.v; else t.dataset.v = String(Math.min(4, +t.value || 0)); } });
+
+/* yo-1.79: la casilla con su etiqueta («+1», «+2,5») arriba a la derecha */
+function objMasW(inp, t) { return t ? '<span class="st-w">' + inp + '<em class="st-mas">' + esc(t) + '</em></span>' : inp; }
 
 ;
 /* ---------- Bloques: AMRAP, EMOM, For Time, vueltas, circuitos por tiempo e intervalos (17 nov 2026) ----------

@@ -3343,6 +3343,7 @@ body.ancho .die-side{max-height:calc(100vh - 136px);overflow-y:auto;overscroll-b
 .ses .o3 b{display:block;font:700 15.5px/1.2 Plus Jakarta Sans,sans-serif;letter-spacing:-.01em}
 .ses .o3 i{display:block;font:600 11.5px Plus Jakarta Sans,sans-serif;font-style:normal;color:#5C5C62;margin-top:2px}
 .ses .o3-h{background:#000;color:#fff}.ses .o3-h small{color:#B8B8BE}.ses .o3-h .o3-m{color:#B8B8BE;margin-top:3px;white-space:normal;line-height:1.25}
+.ses .set.ok .o-mas{display:none}.ses .o-w{position:relative;display:block;min-width:0}.ses .o-w input{width:100%}.ses .o-mas{position:absolute;top:-8px;right:-4px;z-index:1;font-style:normal;font-size:10.5px;font-weight:800;line-height:1;padding:3px 6px;border-radius:999px;background:linear-gradient(135deg,#9AE6FF,#7C8CFF);color:#0D0D0F;pointer-events:none;white-space:nowrap}
 .ses .sug.sug3>.o3{flex-direction:row;align-items:center;justify-content:flex-start;gap:9px;font-size:inherit}.ses .sug.sug3 .o3>div{display:block;min-width:0}.ses .sug.sug3 .o3 b{font-size:15.5px}
 .ses .o3-r{background:#F4F4F6;color:#000;border:0;width:100%;font:inherit;cursor:pointer}
 .sug .o3-r>.ic{color:#E2A000;stroke:#E2A000}      /* v53.4.254 (Javier): «Tu récord» con el trofeo en oro, como en el panel de usuaria */
@@ -6119,7 +6120,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.267';
+var APP_V = 'v53.4.268';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -8585,29 +8586,41 @@ function sugerenciaEj0(e,uv){
   var izq=function(x){ var o=uv.porN&&uv.porN[num(x.n)||1]; return o&&o.izq&&num(o.izq.r)!=null?num(o.izq.r):null; };
   if(tope==null) return S(p,r+1);
   var arriba=Wp.every(function(x){ var ri=izq(x); return num(x.r)>=tope&&(ri==null||ri>=tope)&&rirOk(x); });
-  if(arriba){ var base=lo!=null&&lo<tope?lo:10; return S(pesoSig(p,acc?tc:''),base,rg?lo+(hi!==lo?'-'+hi:''):'','sube'); }
-  var mejor=null; seriesSes(e.n).slice(-3).forEach(function(s){ var R=s.rows.filter(function(x){ return num(x.p)===p&&num(x.r)!=null; }); if(!R.length) return; var mn=Math.min.apply(null,R.map(function(x){ return num(x.r); })); if(mejor==null||mn>mejor) mejor=mn; });
-  var rt=Math.min(tope,(mejor!=null?mejor:Math.min.apply(null,Wp.map(function(x){ return num(x.r); })))+1); if(lo!=null&&rt<lo) rt=lo;
-  return S(p,rt);
+  var subir=function(){ var base=lo!=null&&(lo<tope||!acc)?lo:10; return Object.assign(S(pesoSig(p,acc?tc:''),base,rg?lo+(hi!==lo?'-'+hi:''):'','sube'),{p0:p,lin:'Llegaste a '+tope+' en todas: sube el peso'}); };      // v53.4.268: con un número fijo (6), ese número; los accesorios a 15, 10
+  if(arriba) return subir();
+  /* v53.4.268 · 28 nov 2026 (Javier, 00:40–00:47; igual que /yo, yo-1.79): una repetición más en UNA serie. Primero la 1.ª, hasta lo alto del rango
+     («40 kg × 12», sin más); cuando la 1.ª ya llega, se mantiene el peso y se empuja la siguiente que no llegó («40 kg × 12» y «Mantén 40 kg hasta que
+     todas las series lleguen a 12 repeticiones»); todas arriba, sube («Llegaste a 12 en todas: sube el peso»). Las demás series, lo de su mejor día de
+     las 3 últimas veces con ese peso (un mal día no le baja el objetivo). R: repeticiones de cada serie ese día; k: la que toca; rk: lo que se le pide */
+  var rirMal=Wp.some(function(x){ return !rirOk(x); }), R=refCl(e.n,p,Wp.map(function(x){ return num(x.r); })), k=-1; for(var q=0;q<R.length;q++) if(R[q]<tope){ k=q; break; }
+  if(k<0&&!rirMal) return subir();
+  if(k<0) return Object.assign(S(p,tope,'','mant'),{R:R,k:-1,lin:'Mantén '+fN(p)+' kg hasta hacerlo con el RIR que toca'});
+  var rk=Math.min(tope,R[k]+1); if(lo!=null&&rk<lo) rk=lo;
+  return Object.assign(S(p,k===0?rk:tope,'','mant'),{R:R,k:k,rk:rk,lin:k>0?'Mantén '+fN(p)+' kg hasta que todas las series lleguen a '+tope+' repeticiones':''});
 }
-/* v53.4.267 · 27 nov 2026 (Javier: «lo de objetivo por serie de clientes, sí, aplicado a los clientes también»), como en /yo (yo-1.62):
-   con «mismo peso y una más», ninguna serie le pide menos de lo que hizo en ella la última vez con ese peso (hasta lo alto del rango).
-   Ej.: 3 × 10-12 y la última vez 30 × 12, 10, 10 → objetivo 30 × 11; la 1.ª pide 12 y las demás 11. Solo series normales (no top set, back-off, pirámide…).
-   objRSerieCl: lo que le toca en la serie j (lado I con iz); objMasCl: «12 en la 1.ª» para debajo del objetivo */
+/* su mejor día de las 3 últimas veces con ese peso (el de más repeticiones en total): las repeticiones de cada serie, en orden */
+function refCl(n,p,def){ var best=null;
+  seriesSes(n).slice(-3).forEach(function(x){ var R=x.rows.filter(function(z){ return num(z.p)===p&&num(z.r)!=null; }), Rn=R.filter(function(z){ return !z.t||z.t==='normal'||z.t==='top'; }); if(Rn.length) R=Rn; if(!R.length) return;
+    R=R.slice().sort(function(a,b){ return (num(a.n)||0)-(num(b.n)||0); }); var L=R.map(function(z){ return num(z.r); }), t=L.reduce(function(a,v){ return a+v; },0); if(!best||t>=best.t) best={L:L,t:t}; });
+  return best?best.L:def; }
+/* v53.4.267 → v53.4.268: lo que le toca en cada serie. En la que toca, una más (rk); en las demás, lo de su mejor día (R). El lado izquierdo, con lo
+   suyo de la última vez (una más en la que toca). objMasCl ya no se usa: fuera la línea «y 12 en la 1.ª» (Javier, 28 nov, 00:47) */
+function objPosCl(e,j){ var f=function(z){ return z&&z.t!=='aprox'&&z.t!=='mov'&&(!z.t||z.t==='normal'||z.t==='top'); }; if(!f(e.sets[j])) return -1; var n=0; for(var q=0;q<j;q++) if(f(e.sets[q])) n++; return n; }
 function objRSerieCl(e,S,uv,j,iz){
-  var s=e.sets[j]; if(!S||S.est!=='mant'||S.dsc||!S.p||!s||(s.t&&s.t!=='normal')) return null;
-  var pv=prevSet(e,j,uv); if(pv&&iz){ var o=uv.porN&&uv.porN[num(pv.n)||1]; pv=o&&o.izq; }
-  var r=pv&&num(pv.p)===S.p?num(pv.r):null; if(r==null||!(r>S.r)) return null; return S.tope?Math.min(S.tope,r):r;
+  if(!S||S.est!=='mant'||S.dsc||!S.p||!S.R) return null; var n=objPosCl(e,j); if(n<0) return null;
+  if(iz){ var pv=prevSet(e,j,uv), o=pv&&uv&&uv.porN&&uv.porN[num(pv.n)||1], L=o&&o.izq, r=L&&num(L.p)===S.p?num(L.r):null; if(r==null) return null; return n===S.k&&r<S.tope?Math.min(S.tope,r+1):r; }
+  if(n===S.k) return S.rk; if(n<S.R.length) return S.R[n];
+  var pv0=prevSet(e,j,uv); return pv0&&num(pv0.r)!=null?num(pv0.r):null;      // más series que aquel día: lo de la última vez
 }
-function objMasCl(e,S,uv){
-  if(!S||S.est!=='mant'||S.dsc) return ''; var G={}, ord=[], n=0;
-  e.sets.forEach(function(s,j){ if(s.t==='aprox') return; n++; var r=objRSerieCl(e,S,uv,j); if(r==null) return; if(!G[r]){ G[r]=[]; ord.push(r); } G[r].push(n+'.ª'); });
-  return ord.map(function(r){ var L=G[r]; return fN(r,0)+' en la '+(L.length>1?L.slice(0,-1).join(', ')+' y '+L[L.length-1]:L[0]); }).join(', ');
-}
+function objMasCl(){ return ''; }
+/* la etiqueta de la casilla: «+1» en las repeticiones de la serie que toca; «+2,5» en los kilos al subir */
+function objMasRCl(e,S,j){ if(!S||S.est!=='mant'||S.dsc||!S.R||S.k<0||objPosCl(e,j)!==S.k) return ''; var d=S.rk-S.R[S.k]; return d>0?'+'+d:''; }
+function objMasKCl(e,S,j){ if(!S||S.est!=='sube'||S.dsc||!S.p0||objPosCl(e,j)<0) return ''; var d=S.p-S.p0; return d>0?'+'+fN(d):''; }
+function objMasW(inp,t){ return t?'<span class="o-w">'+inp+'<em class="o-mas">'+esc(t)+'</em></span>':inp; }
 /* v37 · arriba, dos fichas: el objetivo de hoy (en negro) y su récord con el 1RM. La última vez va al lado de cada serie */
 function sugHtml(e,i,uv){
   var S=sugerenciaEj(e,uv), M=mejorMarca(e.n), rec=M.b&&M.b.p?M.b:null; if(!S&&!rec) return '';
-  var o=S?'<div class="o3 o3-h">'+ic('diana')+'<div><small>Objetivo sugerido</small><b>'+fN(S.p)+' kg × '+(S.rg?esc(S.rg):fN(S.r,0))+'</b>'+(function(){ var m=objMasCl(e,S,uv); return m?'<i class="o3-m">y '+esc(m)+'</i>':''; })()+(S.dsc?'<span class="dsc-st">'+(S.dsc.tipo==='peso'?'Descarga · −'+S.dsc.pct+' %':'Descarga · RIR 3–4')+'</span>':'')+'</div></div>':'';      // v53.4.253
+  var o=S?'<div class="o3 o3-h">'+ic('diana')+'<div><small>Objetivo sugerido</small><b>'+fN(S.p)+' kg × '+(S.rg?esc(S.rg):fN(S.r,0))+'</b>'+(S.lin&&!S.dsc?'<i class="o3-m">'+esc(S.lin)+'</i>':'')+(S.dsc?'<span class="dsc-st">'+(S.dsc.tipo==='peso'?'Descarga · −'+S.dsc.pct+' %':'Descarga · RIR 3–4')+'</span>':'')+'</div></div>':'';      // v53.4.253
   var uu=uEj(e), e1=uu==='r'?M.e1:null, cont=rec?ic('trofeo')+'<div><small>Tu récord</small><b>'+fN(rec.p)+' × '+rU(fN(rec.r,0),uu)+'</b>'+(e1?'<i>1RM ≈ '+fN(redKg(M.e1.v,e.mc))+' kg</i>':'')+'</div>':'';
   var r=rec?(e1?'<button class="o3 o3-r" data-a="ver1rm" data-i="'+i+'" aria-label="Tu récord y qué es el 1RM">'+cont+'</button>':'<div class="o3 o3-r">'+cont+'</div>'):'';
   return '<div class="sug sug3'+(o&&r?'':' uno')+'">'+o+r+'</div>';
@@ -10270,7 +10283,7 @@ function itemEntreno(e){
     if(!b.mov){ var eS={n:b.n,mc:b.mc,sets:b.sets,u:b.u}, sg=sugerenciaEj(eS,uv);
       b.sets.forEach(function(o,j){ var rg=String(o.ro||'').match(/\d+/g); if(!rg||(b.u==='r'&&/s\b|seg|min|''|"/.test(o.ro))) return;
         var lo=+rg[0], hi=+(rg[1]||rg[0]), v=o.t==='aprox'?lo:(sg&&sg.r&&(o.t==='normal'||o.t==='top')?sg.r:(rg[1]?lo:hi)), vi=v;
-        if(o.t==='normal'&&sg&&sg.r){ var q1=objRSerieCl(eS,sg,uv,j), q2=b.ld?objRSerieCl(eS,sg,uv,j,1):null; if(q1!=null) v=q1; if(q2!=null) vi=q2; }      // v53.4.267: nunca menos de lo que hizo en esa serie con ese peso
+        if((o.t==='normal'||o.t==='top')&&sg&&sg.r){ var q1=objRSerieCl(eS,sg,uv,j), q2=b.ld?objRSerieCl(eS,sg,uv,j,1):null; if(q1!=null) v=q1; if(q2!=null) vi=q2; }      // v53.4.267: nunca menos de lo que hizo en esa serie con ese peso
         o.r=String(v); if(b.ld) o.ri=String(vi); }); }
   } else if(t==='run'){      // v52.13: una fila por serie de cada bloque
     b.st=e.st; b.ro=e.ro; runSt(b); if(e.ot) b.ot=e.ot; b.ca=e.ca||''; b.vc=e.vc||''; b.rpe=e.rpe||''; b.fc=e.fc||''; b.bl=copia(e.bl&&e.bl.length?e.bl:[runBl()]); b.reps=[]; b.sets=[]; b.tot={km:'',t:'',fc:'',cond:''}; b.ok=false;
@@ -10429,7 +10442,7 @@ function placeholders(e,j,uv){
   var kg=!vacio(s.kgo)?s.kgo:(m&&num(m.p)!=null?fN(m.p):'');
   // v22: en las series de trabajo, el peso que se le propone es el de «Hoy puedes intentar» (igual que las reps que ya vienen puestas)
   var deSug=false, rObj=null, riObj=null; if(c==='w'&&vacio(s.kgo)&&uv&&!e.mov&&(s.t==='normal'||s.t==='top')){ var sgP=sugerenciaEj(e,uv); if(sgP&&sgP.p!=null){ kg=fN(sgP.p); deSug=!!sgP.dsc;
-    if((!s.t||s.t==='normal')&&!sgP.dsc&&(sgP.est==='mant'||sgP.est==='sube')&&sgP.r!=null){ var o1=objRSerieCl(e,sgP,uv,j), o2=objRSerieCl(e,sgP,uv,j,1); rObj=fN(o1!=null?o1:sgP.r,0); riObj=fN(o2!=null?o2:sgP.r,0); } } }      // v53.4.267: las reps de cada serie, las del objetivo (nunca menos de lo que hizo en esa serie con ese peso)
+    if((!s.t||s.t==='normal'||s.t==='top')&&!sgP.dsc&&(sgP.est==='mant'||sgP.est==='sube')&&sgP.r!=null){ var o1=objRSerieCl(e,sgP,uv,j), o2=objRSerieCl(e,sgP,uv,j,1); rObj=fN(o1!=null?o1:sgP.r,0); riObj=fN(o2!=null?o2:sgP.r,0); } } }      // v53.4.267: las reps de cada serie, las del objetivo (nunca menos de lo que hizo en esa serie con ese peso)
   if(!kg&&c==='a'&&uv){ var w=uv.sets.filter(function(x){ return x.t!=='aprox'&&num(x.p)!=null; }); if(w.length) kg=fN(Math.round(Math.max.apply(null,w.map(function(x){ return num(x.p); }))*0.5/2.5)*2.5); }
   var rir=String(s.rio||'')==='3-4'?'3-4':!vacio(s.rio)&&String(s.rio).match(/\d+/)?String(s.rio).match(/\d+/)[0]:'';      // v53.4.253: semana de descarga, RIR 3-4
   var iz=pv&&pv.izq, piz=iz&&num(iz.p)!=null&&vacio(s.kgo)?fN(iz.p):kg;
@@ -10712,7 +10725,7 @@ document.addEventListener('focusout',function(ev){ var t=ev.target; if(BOOT.mode
   setTimeout(function(){ if(document.activeElement!==t&&document.body.contains(t)) notaVaciaCierra(t); },150); });
 A.notaEj=function(el){ var e=CL.dr.ej[+el.dataset.i]; e.notaAb=true; CL.keep=true; pintarCl(); var t=document.querySelector('textarea[data-i="'+el.dataset.i+'"][data-nc]'); if(t) t.focus(); };
 function fuerzaCard(e,i,lab){
-  var uv=ultimaVez(e.n), mk=marcasDraft(i), mv=e.mov, obj=[resumenSets({u:e.u,sets:e.sets.map(function(s){ return {t:s.t,r:s.ro,rir:s.rio}; })}),num(e.d)>0?e.d+' s de descanso':''].filter(String).join(' · ');
+  var uv=ultimaVez(e.n), SGc=e.mov?null:sugerenciaEj(e,uv), mk=marcasDraft(i), mv=e.mov, obj=[resumenSets({u:e.u,sets:e.sets.map(function(s){ return {t:s.t,r:s.ro,rir:s.rio}; })}),num(e.d)>0?e.d+' s de descanso':''].filter(String).join(' · ');
   var h=cabEj(e,i,lab,obj,e.sets.length&&e.sets.every(function(s){ return s.ok; }),mv?'mov':'',mv?'':espLinea({sets:e.sets.map(function(s){ return {t:s.t,r:s.ro,rir:s.rio,det:s.det}; })},true));
   if(mv){
     h+=ctaBtnHtml(e,i);      // v53.4.63
@@ -10769,8 +10782,8 @@ function fuerzaCard(e,i,lab){
         '<div class="set li'+(sk?' sk':'')+PV+'"><span class="sn"><small>Izq</small></span>'+(pvOn?pvCell(pz,sk):'')+K('<input'+at+' data-k="pi" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.pi)+'" value="'+esc(s.pi||'')+'" aria-label="Kg izquierda">')+
         '<input'+at+' data-k="ri" inputmode="numeric" placeholder="'+esc(ph.ri)+'" value="'+esc(s.ri||'')+'" aria-label="Reps izquierda"><span></span><span></span></div></div>';
     } else h+='<div class="set ef'+(sk?' sk':'')+PV+(s.ok?' ok':'')+(snT?' con-t':'')+'" id="s-'+i+'-'+j+'"><span class="sn">'+nW+snT+'</span>'+(pvOn?pvCell(pm,sk):'')+
-      K('<input'+at+(wk&&ph.calc?' class="calc"':'')+' data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.p)+'" value="'+esc(s.p)+'" aria-label="Kg'+(wk&&ph.calc?' ('+esc(ph.calc)+')':'')+'">')+
-      '<input'+at+' data-k="r" inputmode="numeric" placeholder="'+esc(ph.r)+'" value="'+esc(s.r)+'" aria-label="Reps">'+
+      K(objMasW('<input'+at+(wk&&ph.calc?' class="calc"':'')+' data-k="p" inputmode="decimal" enterkeyhint="next" placeholder="'+esc(ph.p)+'" value="'+esc(s.p)+'" aria-label="Kg'+(wk&&ph.calc?' ('+esc(ph.calc)+')':'')+'">',wk&&!s.ok?objMasKCl(e,SGc,j):''))+
+      objMasW('<input'+at+' data-k="r" inputmode="numeric" placeholder="'+esc(ph.r)+'" value="'+esc(s.r)+'" aria-label="Reps">',wk&&!s.ok?objMasRCl(e,SGc,j):'')+
       '<input'+at+' data-k="rir"'+(s.rir!==''&&s.rir!=null?' data-v="'+Math.min(4,+s.rir||0)+'"':'')+' inputmode="numeric" placeholder="'+esc(ph.rir)+'" value="'+esc(s.rir)+'" aria-label="RIR">'+
       '<button class="chk"'+at+' data-a="setOk" aria-label="Serie hecha">'+ic('ok')+'</button></div>';
     if(ph.calc&&!wk) h+='<div class="calc-h">'+ic('calc')+esc(ph.calc)+'</div>';      // 22 nov, 19:45 (Chadín): menos texto de ayuda en el entreno
