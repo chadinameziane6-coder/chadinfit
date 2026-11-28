@@ -4646,7 +4646,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.94';
+var YO_V = 'yo-1.95';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4698,10 +4698,12 @@ function v29(k) { var d = window.V29_DEMO; return (d && d[k] != null ? d[k] : V2
    mes: competiciones en «Tu mes» · pasos: la gráfica desde Perfil · run: sin «Carrera» en Inicio · dsc: semana suave en amarillo ·
    acc: accesos encima de las series y más pequeños · wk: elegir la semana de un toque · peso: 'a' (solo la media) o 'b' (media por semana) ·
    fo: fotos con poses (propias) y comparar · lg: logos de WhatsApp e Instagram · com: macros arriba, «Copiar de ayer» y elegir alimentos */
-var V30 = { mes: '1', pasos: '1', run: '1', dsc: '1', acc: '', wk: '1', peso: '', fo: '1', lg: '', com: '' };      // 13:06 (Javier): aprobadas competiciones, pasos, semana suave y poses (y sin «Carrera» en Inicio, que lo pidió él)
+var V30 = { mes: '1', pasos: '1', run: '1', dsc: '1', acc: '', wk: '1', peso: 'a', fo: '1', lg: '', com: '' };      // 15:57 (Javier): «gráfica A de peso»      // 13:06 (Javier): aprobadas competiciones, pasos, semana suave y poses (y sin «Carrera» en Inicio, que lo pidió él)
 function v30(k) { var d = window.V30_DEMO; return (d && d[k] != null ? d[k] : V30[k]) || ''; }
 /* 28 nov, 13:06 (Javier): la siguiente tanda de propuestas, en borrador hasta su OK (en las capturas, window.V31_DEMO) */
-var V31 = { ptab: '', acc2: '', wk2: '', cop2: '', cuad: '', obj: '1', meses: '1', act: '1', pub: '', rec: '', cfondo: '', priv: '', shp: '', pfo: '', carp: '', sh: '', vol: '', n18: '', ldu: '', hv: '1', per2: '1', sol: '', acc3: '', ej2: 'f', rc2: 'e', pfb: '1', ruI: 's', acc4: 'a', pub2: '', pf2: '1', port: '', ps2: '1', pub3: '', pub4: '1', sut: '', neg: '1', lug: '', emo: '' };      // 15:36 (Javier: «genial, aplica»): las publicaciones con sus diapositivas (rutina F, ingredientes E y «Cómo se hace», en negro) y la pantalla nueva de publicar; fecha y ubicación (lug), cuando el servidor las guarde      // 15:02 (Javier): el perfil de la Comunidad en blanco y las rutinas sin icono, los accesos A y el Perfil sin «Tus rutinas» ni «Comunidad»; la portada, cuando el servidor la guarde      // 14:26 (Javier): «tu objetivo de calorías ok, muy top; tus meses ok; lo de Actividad me gusta mucho»; elegir semana, «como estaba» (la lista, V30.wk)
+var V31 = { ptab: '', acc2: '', wk2: '', cop2: '', cuad: '', obj: '1', meses: '1', act: '1', pub: '', rec: '', cfondo: '', priv: '1', shp: '', pfo: '', carp: '', sh: '', vol: '', n18: '1', ldu: '', hv: '1', per2: '1', sol: '1', acc3: '', ej2: 'f', rc2: 'e', pfb: '1', ruI: 's', acc4: 'a', pub2: '', pf2: '1', port: '1', ps2: '1', pub3: '', pub4: '1', sut: '', neg: '1', lug: '1', emo: '' };      // 15:36 (Javier: «genial, aplica»): las publicaciones con sus diapositivas (rutina F, ingredientes E y «Cómo se hace», en negro) y la pantalla nueva de publicar; fecha y ubicación (lug), cuando el servidor las guarde      // 15:02 (Javier): el perfil de la Comunidad en blanco y las rutinas sin icono, los accesos A y el Perfil sin «Tus rutinas» ni «Comunidad»; la portada, cuando el servidor la guarde      // 14:26 (Javier): «tu objetivo de calorías ok, muy top; tus meses ok; lo de Actividad me gusta mucho»; elegir semana, «como estaba» (la lista, V30.wk)
+/* yo-1.95 (15:57, Javier: «lo de Supabase, adelante»; servidor: 020): encendidos la cuenta privada y las solicitudes (priv, sol), la portada (port),
+   el lugar y la fecha al publicar (lug) y «Le gusta a…» */
 function v31(k) { var d = window.V31_DEMO; return (d && d[k] != null ? d[k] : V31[k]) || ''; }
 function fibraObj(N) { return N && N.kcal ? Math.round(N.kcal * 14 / 1000) : 25; }      // 14 g por cada 1.000 kcal (unos 25 g al día)
 
@@ -10267,7 +10269,7 @@ function vPerfil28() {
   var fo31 = v31('pfo') ? (P.pfFondo || 'noche') : '';      // yo-1.92 (propuesta; 13:06: «donde mi perfil, que se pueda poner un fondo, que salga más oscuro por defecto»)
   h += '<section class="pf28-hero' + (fo31 ? ' pfo31 pfo31-' + fo31 : '') + '">' + (fo31 ? '<button class="pfo31-b" data-a="pfFondo" aria-label="Cambiar el fondo">' + ic('lapiz', 14, null, 2.2) + 'Fondo</button>' : '') + '<button class="pf28-av" data-a="' + (fo ? 'pfFotoVer' : 'pfEditar') + '" aria-label="' + (fo ? 'Ver tu foto en grande' : 'Poner una foto') + '"><span>' + avatarIn(P.nombre || '', 30) + '</span><i>' + ic('foto', 13, null) + '</i></button>' +
     '<span class="pf28-q"><b>' + esc(P.nombre || 'Tu nombre') + '</b><small>' + esc(em) + '</small><button class="pf28-ed" data-a="pfEditar">' + ic('lapiz', 14, null, 2.2) + 'Editar perfil</button></span>' +
-    '<div class="pf28-n">' + [[ses.length, ses.length === 1 ? 'entreno' : 'entrenos'], [nMes, v31('n18') ? 'en ' + aDate(hoyStr()).toLocaleDateString('es-ES', { month: 'long' }) : 'este mes'], [nRec, nRec === 1 ? 'receta' : 'recetas']].concat(ce && ce.activo ? [[ce.seguidores || 0, ce.seguidores === 1 ? 'seguidor' : 'seguidores']] : []).map(function (x) { return '<span><b>' + fmil(x[0]) + '</b><small>' + x[1] + '</small></span>'; }).join('') + '</div></section>';
+    '<div class="pf28-n">' + [[ses.length, ses.length === 1 ? 'entreno' : 'entrenos'], [nMes, v31('n18') ? (nMes === 1 ? 'entreno este mes' : 'entrenos este mes') : 'este mes'], [nRec, nRec === 1 ? 'receta' : 'recetas']].concat(ce && ce.activo ? [[ce.seguidores || 0, ce.seguidores === 1 ? 'seguidor' : 'seguidores']] : []).map(function (x) { return '<span><b>' + fmil(x[0]) + '</b><small>' + x[1] + '</small></span>'; }).join('') + '</div></section>';
   h += '<div class="pf28-g">' +
     '<button class="pf28-t t-c" data-a="nAjustes"><i>' + ic('diana', 18, null, 2.2) + '</i><small>Tu objetivo</small><b>' + (N && N.kcal ? fmil(N.kcal) + ' kcal' : 'Calcularlo') + '</b></button>' +
     '<button class="pf28-t t-i" data-a="pf28Prog"><i>' + ic('cinta', 18, null, 2.2) + '</i><small>Peso y medidas</small><b>' + (up ? fN(num(up.peso), 1) + ' kg' : 'Anotar') + '</b></button>' +
@@ -13610,7 +13612,7 @@ function vComu() {
   var vt = v29('tab'), nS = (C.est || {}).siguiendo || 0;      // yo-1.90 (propuesta): otra forma para las pestañas Siguiendo / Descubrir
   h += cabComu(true) + '<div class="cm-tabs' + (vt ? ' tb29 tb29-' + vt : '') + '" role="tablist">' + [['s', 'Siguiendo', 'comu', nS === 1 ? '1 persona' : fmil(nS) + ' personas'], ['d', 'Descubrir', 'brujula', 'Todo el mundo']].map(function (x) { var on = t === x[0];
     return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="cTab" data-v="' + x[0] + '">' + (vt === 'c' ? '<i>' + ic(x[2], 18, null, 2.1) + '</i><span><b>' + x[1] + '</b><small>' + x[3] + '</small></span>' : x[1]) + '</button>'; }).join('') + '</div>';
-  if (v31('sol') && C.est && C.est.solicitudes) h += '<button class="sol31" data-a="cAvisos"><span class="sol31-a">' + ic('usuario', 16, null, 2.2) + '</span><span><b>' + C.est.solicitudes + (C.est.solicitudes === 1 ? ' persona quiere' : ' personas quieren') + ' seguirte</b><small>Acéptalas o recházalas</small></span>' + ic('sig', 16) + '</button>';      // yo-1.93 (propuesta; 14:26: «eso, en la vista de Comunidad»)
+  if (v31('sol') && C.est && C.est.solicitudes) h += '<button class="sol31" data-a="cAvisos"><span class="sol31-a">' + ic('usuario', 16, null, 2.2) + '</span><span><b>' + C.est.solicitudes + (C.est.solicitudes === 1 ? ' persona quiere' : ' personas quieren') + ' seguirte</b><small>' + (C.est.solicitudes === 1 ? 'Acéptala o recházala' : 'Acéptalas o recházalas') + '</small></span>' + ic('sig', 16) + '</button>';      // yo-1.93 (propuesta; 14:26: «eso, en la vista de Comunidad»)
   var priv = '<div class="cm-priv">' + ic('escudo', 16) + '<span>Solo se ve lo que tú eliges compartir. Tu peso, tus fotos de progreso y lo que comes nunca salen aquí.</span></div>', ig = e21 === 'insta';
   if (!ig) h += priv;      // 12:09 (Chadín): tipo Instagram, sin tanto texto arriba: el aviso va abajo del todo, en pequeño
   if (C.ferr[t] && C.feed[t] === null) return h + errCard(C.ferr[t]) + '</div>';
@@ -13781,7 +13783,7 @@ document.addEventListener('scroll', function (ev) { var c = ev.target; if (!c ||
 function cardInsta(x, prev) {
   var C = CMU(), ab = !prev && C.menu === x.id, rec = x.tipo === 'rec', r = x.rc || {}, A_ = function (a) { return prev ? ' tabindex="-1"' : ' data-a="' + a + '"'; };
   var h = '<article class="ig-p hv' + (prev ? ' prev' : '') + (x.vis === 'priv' ? ' priv' : '') + (v31('pub') ? ' pb31' : '') + '" data-pub="' + x.id + '"><div class="ig-h"><button class="ig-av"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '" aria-label="Ver a ' + esc(x.nombre) + '">' + avIn(x.pid, x.nombre) + '</button>' +
-    '<button class="ig-n"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.creado)) + visEt(x.vis) + (v31('hv') && x.lug ? ' · <span class="hv31-lug">' + ic('pin', 11, null, 2.4) + esc(x.lug) + '</span>' : '') + '</small></button>' +
+    '<button class="ig-n"' + A_('cPersona') + ' data-p="' + esc(x.pid) + '"><b>' + esc(x.nombre) + '</b><small>' + esc(cuandoTxt(x.fec || x.creado)) + visEt(x.vis) + (v31('hv') && x.lug ? ' · <span class="hv31-lug">' + ic('pin', 11, null, 2.4) + esc(x.lug) + '</span>' : '') + '</small></button>' +
     (v29('seg') && !prev && !x.mio && !x.sigo && !(S.pant && S.pant.t === 'comuPersona') ? '<button class="ig-seg" data-a="cSeguir" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">Seguir</button>' : '') +      // yo-1.90: si no la sigues, «Seguir» junto a su nombre
     (prev ? '' : '<button class="cm-dots' + (ab ? ' on' : '') + '" data-a="cMenu" data-id="' + x.id + '" aria-label="Más opciones" aria-expanded="' + ab + '">' + ic('dots', 20) + '</button>') + '</div>';
   h += '<div class="hv-t' + (rec ? ' rc' : '') + '"><small>' + (rec ? ic('olla', 13) + 'Receta' + (r.k != null ? ' · por ración' : '') : ic('pesa', 13) + 'Entreno') + '</small><b class="cm-t">' + esc(x.t) + '</b></div>';
@@ -14030,7 +14032,11 @@ A.cLike = function (el) {
 
 function seguir(pid, si, n) {
   var C = CMU();
-  return rpc('yo_comu_seguir', { p: pid, si: si }).then(function () {
+  return rpc('yo_comu_seguir', { p: pid, si: si }).then(function () {      // yo-1.95: si es una cuenta privada, queda pedido (no la sigues aún)
+    if (!si || !v31('priv')) return true;
+    return rpc('yo_comu_persona', { p: pid }).then(function (P) { if (P && P.solicitado && !P.sigo) { C.pers[pid] = P; [C.gente, C.bus && C.bus.L].forEach(function (L) { (L || []).forEach(function (g) { if (g.pid === pid) g.sol = 1; }); });
+      toast('Solicitud enviada a ' + esc(nom1(n)) + '. Cuando te acepte, verás lo que publica', 'ok'); repintaComu(); if (S.pant && S.pant.t === 'comuBuscar') pintaBus(); return false; } return true; }, function () { return true; });
+  }).then(function (sigue) { if (sigue === false) return;
     listasPub().forEach(function (L) { L.forEach(function (x) { if (x.pid === pid) x.sigo = si; }); });
     [C.gente, C.bus && C.bus.L, C.red && C.red.seguidores, C.red && C.red.siguiendo].forEach(function (L) { (L || []).forEach(function (g) { if (g.pid === pid) g.sigo = si; }); });
     var P = C.pers[pid]; if (P && P.nombre) { if (P.sigo !== si) P.seguidores = Math.max(0, (P.seguidores || 0) + (si ? 1 : -1)); P.sigo = si; }
@@ -14083,7 +14089,7 @@ A.cDesbloquear = function (el) {
 
 function denunciaHoja(tipo, id, n) {
   S.x.den = { tipo: tipo, id: +id };
-  hoja('<h2>' + (tipo === 'pub' ? 'Denunciar publicación' : tipo === 'ava' ? 'Denunciar su foto' : 'Denunciar comentario') + '</h2><p class="mut sm">¿Qué pasa? Lo revisa el equipo de MOOD ON. ' + esc(nom1(n) || 'La otra persona') + ' no sabrá quién lo ha denunciado.</p><div class="cm-mot">' +
+  hoja('<h2>' + (tipo === 'pub' ? 'Denunciar publicación' : tipo === 'ava' ? 'Denunciar su foto' : tipo === 'por' ? 'Denunciar su portada' : 'Denunciar comentario') + '</h2><p class="mut sm">¿Qué pasa? Lo revisa el equipo de MOOD ON. ' + esc(nom1(n) || 'La otra persona') + ' no sabrá quién lo ha denunciado.</p><div class="cm-mot">' +
     MOTIVOS.map(function (m, i) { return '<label class="chk"><input type="radio" name="den-mot" value="' + i + '" data-ch="denMot"><span>' + m + '</span></label>'; }).join('') +
     '</div><label class="f">Cuéntanos más (si quieres)<textarea id="den-t" maxlength="200" rows="2"></textarea></label><button class="btn rojo" id="den-go" data-a="cDenunciarSi" disabled>Enviar denuncia</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
 }
@@ -14098,6 +14104,7 @@ A.cDenunciarSi = function (el) {
     cerrarHoja(); var C = CMU();
     if (D.tipo === 'pub') ocultar(D.id);
     else if (D.tipo === 'ava') { Object.keys(C.avs || {}).forEach(function (k) { if (C.avs[k] && C.avs[k].id === D.id) C.avs[k] = 0; }); }
+    else if (D.tipo === 'por') { Object.keys(C.pers || {}).forEach(function (k) { var P = C.pers[k]; if (P && P.portada_id === D.id) { P.portada = null; P.portada_id = null; } }); }
     else if (C.coms && C.coms.L) { C.coms.L = C.coms.L.filter(function (c) { return c.id !== D.id; }); }
     toast('Gracias. Lo revisaremos pronto', 'ok'); repintaComu();
   }, function (e) { el.disabled = false; el.textContent = 'Enviar denuncia'; toast(cErr(e)); });
@@ -14208,7 +14215,7 @@ VISTAS.comuPersona = function (p) {
   var h = '<div class="pant pad' + (v31('cfondo') ? ' cf31 cf31-' + v31('cfondo') : '') + (v31('pfb') ? ' pfb32' : '') + '">' + cab(esc(nom || 'Comunidad'), { der: nom && !P.yo ? '<button class="redondo" data-a="cPerMenu" aria-label="Más opciones">' + ic('dots', 18) + '</button>' : '' });
   if (!P.pubs) return h + (P.err ? errCard(P.err, 'cPersonaRe') : CARGANDO) + '</div>';
   var nS = P.seguidores || 0, L = P.pubs.filter(noOculta);
-  var e = C.est || {}, nP = P.pubs.length, num3 = [[nP + (nP >= 20 ? '+' : ''), 'entrenos', ''], [P.yo ? e.seguidores || 0 : nS, 'seguidores', P.yo ? 'seguidores' : '']];
+  var e = C.est || {}, nP = P.npubs != null && P.privado && !P.sigo && !P.yo ? P.npubs : P.pubs.length, num3 = [[nP + (nP >= 20 && P.npubs == null ? '+' : ''), 'entrenos', ''], [P.yo ? e.seguidores || 0 : nS, 'seguidores', P.yo ? 'seguidores' : '']];
   if (P.yo) num3.push([e.siguiendo || 0, 'seguidos', 'siguiendo']);
   if (v29('per')) { num3[0][1] = nP === 1 ? 'publicación' : 'publicaciones'; h += v31('per2') ? perfil31(P, nom, L, num3) : perfil29(P, nom, L, num3); return h + '</div>'; }      // entrenos y recetas
   h += '<section class="card cm-perfil2">' + (P.yo && comuAv() ? '<button class="cm-av gr xl cm-av-yo" data-a="cAvatar" aria-label="' + (avMio() ? 'Tu foto en la Comunidad' : 'Poner tu foto en la Comunidad') + '">' + avIn(P.pid, nom) + '<span class="cm-av-cam">' + ic('foto', 13, null, 2.2) + '</span></button>' : '<span class="cm-av gr xl">' + avIn(P.pid, nom) + '</span>') + '<b class="cm-nom">' + esc(nom) + (P.yo ? ' <span class="mio">TÚ</span>' : '') + '</b>' +
@@ -14230,7 +14237,7 @@ function perfil29(P, nom, L, num3) {
       : v31('priv') && P.privado && P.solicitado ? '<button class="btn-o per29-seg pv31-sd" data-a="cSolNo" data-p="' + esc(P.pid) + '">Solicitado</button>'
       : '<button class="btn per29-seg" data-a="' + (v31('priv') && P.privado ? 'cSolicitar' : 'cSeguir') + '" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') + '</section>';
   if (P.silencio) h += '<section class="card cm-aviso"><small>Has silenciado a ' + esc(nom1(nom)) + ': sus entrenos no te salen en Comunidad.</small><button class="link izq" data-a="cQuitarSil" data-p="' + esc(P.pid) + '">Quitar el silencio</button></section>';
-  if (v31('priv') && P.privado && !P.sigo && !P.yo) return h + '<section class="pv31-lock"><span>' + ic('candado', 26, null, 2) + '</span><b>Esta cuenta es privada</b><small>' + (P.solicitado ? 'Le has pedido seguirla. Cuando te acepte, verás sus entrenos y recetas.' : 'Síguela para ver sus entrenos y recetas.') + '</small></section>';
+  if (v31('priv') && P.privado && !P.sigo && !P.yo) return h + '<section class="pv31-lock"><span>' + ic('candado', 26, null, 2) + '</span><b>Esta cuenta es privada</b><small>' + (P.solicitado ? 'Has pedido seguir a esta cuenta. Cuando te acepte, verás sus entrenos y recetas.' : 'Sigue a esta cuenta para ver sus entrenos y recetas.') + '</small></section>';
   var F = L.filter(function (x) { return x.foto; });
   if (F.length) { h += '<div class="per29-st"><b>Fotos</b><small>' + F.length + '</small></div><div class="per29-g">' + F.map(function (x) { var fs = (CMU().fotos || {})[x.id];
     return '<button class="per29-f" data-a="cIrPub" data-id="' + x.id + '" aria-label="' + esc(x.t) + '"><span class="cm-foto' + (fs ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fs ? '<img src="' + fs + '" alt="">' : '') + '</span><i>' + ic(x.tipo === 'rec' ? 'olla' : 'pesa', 13, null, 2.2) + '</i></button>'; }).join('') + '</div>'; setTimeout(cargaFotosComu, 0); }
@@ -14238,8 +14245,23 @@ function perfil29(P, nom, L, num3) {
   h += L.length ? L.map(function (x) { return cardPub(x); }).join('') : '<p class="mut center sm">' + (P.yo ? 'Todavía no has publicado nada. Al terminar un entreno, pulsa «Publicar en la Comunidad».' : 'Todavía no ha compartido nada.') + '</p>';
   return h;
 }
-A.cSolicitar = function (el) { var P = CMU().pers[el.dataset.p]; if (P) { P.solicitado = 1; pintar(); toast('Solicitud enviada', 'ok'); } };      // propuesta (demo)
-A.cSolNo = function (el) { var P = CMU().pers[el.dataset.p]; if (P) { P.solicitado = 0; pintar(); } };
+A.cSolicitar = function (el) {      // yo-1.95: pedir seguir a una cuenta privada (servidor: 020; yo_comu_seguir deja la solicitud)
+  var p = el.dataset.p; if (el.disabled) return; el.disabled = true;
+  rpc('yo_comu_seguir', { p: p, si: true }).then(function () { var P = CMU().pers[p]; if (P) P.solicitado = true; toast('Solicitud enviada. Cuando te acepte, verás lo que publica', 'ok'); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); });
+};
+A.cSolNo = function (el) {
+  var p = el.dataset.p; if (el.disabled) return; el.disabled = true;
+  rpc('yo_comu_seguir', { p: p, si: false }).then(function () { var P = CMU().pers[p]; if (P) P.solicitado = false; toast('Solicitud retirada'); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); });
+};
+/* aceptar o rechazar a quien te pide seguirte (en Actividad) */
+function solResponde(el, si) {
+  var C = CMU(), p = el.dataset.p, n = el.dataset.n; if (!p || el.disabled) return; el.disabled = true;
+  rpc('yo_comu_solicitud', { p: p, si: si }).then(function (r) { if (r) C.est = Object.assign({}, C.est || {}, r); if (C.av && C.av.L) C.av.L = C.av.L.filter(function (x) { return !(x.t === 'sol' && x.pid === p); });
+    if (si && C.av && C.av.L) C.av.L.unshift({ t: 'sigue', f: new Date().toISOString(), pid: p, nombre: n, sigo: false });
+    toast(si ? esc(nom1(n)) + ' ya te sigue' : 'Solicitud rechazada', si ? 'ok' : ''); avPinta(); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); });
+}
+A.cSolAcepta = function (el) { solResponde(el, true); };
+A.cSolRechaza = function (el) { solResponde(el, false); };
 /* yo-1.93 (propuesta; Javier, 13:21 y 14:26: «cuando ves el perfil de alguien, además de sus fotos, sus rutinas con nombre, bonito y ordenado, y que puedas
    guardarlas; sus recetas con foto; y abajo todo lo que sube, en orden»; «lo de elegir fondo: la vista que ven tus seguidores cuando entran en tu perfil,
    que salga oscuro, pero puedas poner imagen de fondo»). Portada oscura (o tu imagen), tu foto encima, y por apartados */
@@ -14251,7 +14273,9 @@ function perfil31(P, nom, L, num3) {
     '<div class="per29-num">' + num3.map(function (k) { return k[2] ? '<button data-a="cRed" data-v="' + k[2] + '"><b>' + k[0] + '</b><small>' + k[1] + '</small></button>' : '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>' +
     (P.yo ? '<div class="per29-b"><button class="btn-o" data-a="cAjustes">' + ic('ajustes', 16) + 'Ajustes</button>' + (comuSh() ? '<button class="btn-o" data-a="cPerCompartir" data-p="' + esc(P.pid) + '">' + ic('compartir', 16) + 'Compartir perfil</button>' : '') + '</div>'
       : P.sigo ? '<div class="per29-b"><span class="per29-si">' + ic('check', 16, null, 2.6) + 'Siguiendo</span><button class="btn-o" data-a="cDejar" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Dejar de seguir</button></div>'
-      : '<button class="btn per29-seg" data-a="cSeguir" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') + '</div></section>';
+      : v31('priv') && P.privado && P.solicitado ? '<button class="btn-o per29-seg pv31-sd" data-a="cSolNo" data-p="' + esc(P.pid) + '">Solicitado</button>'      // yo-1.95: cuenta privada
+      : '<button class="btn per29-seg" data-a="' + (v31('priv') && P.privado ? 'cSolicitar' : 'cSeguir') + '" data-p="' + esc(P.pid) + '" data-n="' + esc(nom) + '">Seguir</button>') + '</div></section>';
+  if (v31('priv') && P.privado && !P.sigo && !P.yo) return h + '<section class="pv31-lock"><span>' + ic('candado', 26, null, 2) + '</span><b>Esta cuenta es privada</b><small>' + (P.solicitado ? 'Has pedido seguir a esta cuenta. Cuando te acepte, verás sus entrenos y recetas.' : 'Sigue a esta cuenta para ver sus entrenos y recetas.') + '</small></section>';
   if (F.length) { h += '<div class="pf31-st"><b>Fotos</b><small>' + F.length + '</small></div><div class="per29-g">' + F.slice(0, 6).map(function (x) { var fs = (C.fotos || {})[x.id];
     return '<button class="per29-f" data-a="cIrPub" data-id="' + x.id + '" aria-label="' + esc(x.t) + '"><span class="cm-foto' + (fs ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fs ? '<img src="' + fs + '" alt="">' : '') + '</span><i>' + ic(x.tipo === 'rec' ? 'olla' : 'pesa', 13, null, 2.2) + '</i></button>'; }).join('') + '</div>'; setTimeout(cargaFotosComu, 0); }
   if (RU.length) h += '<div class="pf31-st"><b>Rutinas</b><small>' + RU.length + '</small></div><div class="pf31-row">' + RU.map(function (x, i) {
@@ -14264,13 +14288,38 @@ function perfil31(P, nom, L, num3) {
   h += L.length ? L.map(function (x) { return cardPub(x); }).join('') : '<p class="mut center sm">' + (P.yo ? 'Todavía no has publicado nada.' : 'Todavía no ha compartido nada.') + '</p>';
   return h;
 }
-A.cPortada = function () { hoja('<h2>Tu portada</h2><p class="mut sm">La ven quienes entran en tu perfil de la Comunidad. Sin portada, sale oscura.</p><label class="btn">' + ic('foto', 18) + 'Elegir una imagen<input type="file" accept="image/*" data-ch="cPortadaF" hidden></label>' + (CMU().est && CMU().est.portada ? '<button class="btn sec" data-a="cPortadaQuitar">Quitar la portada</button>' : '') + '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
+A.cPortada = function () { hoja('<h2>Tu portada</h2><p class="mut sm">La ven quienes entran en tu perfil de la Comunidad. Sin portada, sale oscura. No subas fotos de otras personas sin su permiso.</p><label class="btn">' + ic('foto', 18) + 'Elegir una imagen<input type="file" accept="image/*" data-ch="cPortadaF" hidden></label>' + (CMU().est && CMU().est.portada ? '<button class="btn sec" data-a="cPortadaQuitar">Quitar la portada</button>' : '') + '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>'); };
+/* yo-1.95: la portada de verdad (servidor: 020, yo_comu_portada_poner): recortada a lo ancho, en JPEG y sin los datos de la cámara */
+function portadaJpeg(file) {
+  return new Promise(function (ok, ko) {
+    var img = new Image(), url = URL.createObjectURL(file);
+    img.onload = function () { try { var W = 1200, H = 460, c = document.createElement('canvas'); c.width = W; c.height = H; var g = c.getContext('2d'), k = Math.max(W / img.naturalWidth, H / img.naturalHeight), w = img.naturalWidth * k, h = img.naturalHeight * k;
+      g.fillStyle = '#0D0D10'; g.fillRect(0, 0, W, H); g.drawImage(img, (W - w) / 2, (H - h) / 2, w, h); URL.revokeObjectURL(url); var q = 0.8, d = c.toDataURL('image/jpeg', q); while (d.length > 240000 && q > 0.35) { q -= 0.1; d = c.toDataURL('image/jpeg', q); } ok(d); } catch (e) { ko(e); } };
+    img.onerror = function () { URL.revokeObjectURL(url); ko(new Error('No se ha podido abrir esa imagen')); };
+    img.src = url; });
+}
+function portadaPon(d) { var C = CMU(); if (C.est) C.est.portada = !!d; var P = C.est && C.pers[C.est.pid]; if (P) { P.portada = d || null; if (!d) P.portada_id = null; } }
+CH.cPortadaF = function (t) { var f = t.files && t.files[0]; if (!f) return; cerrarHoja(); toast('Poniendo tu portada…');
+  portadaJpeg(f).then(function (d) { return rpc('yo_comu_portada_poner', { foto: d }).then(function () { portadaPon(d); toast('Portada puesta', 'ok'); pintar(); }); }).catch(function (e) { toast(cErr(e)); }); };
+A.cPortadaQuitar = function (el) { if (el.disabled) return; el.disabled = true; rpc('yo_comu_portada_poner', { foto: null }).then(function () { portadaPon(null); cerrarHoja(); toast('Portada quitada'); pintar(); }, function (e) { el.disabled = false; toast(cErr(e)); }); };
+/* yo-1.95: a quién le gusta (servidor: 020, yo_comu_likes) */
+A.cLikes = function (el) {
+  var id = +el.dataset.id; hoja('<h2>Me gusta</h2><div id="lk-l"><p class="mut sm">Cargando…</p></div><button class="btn sec" data-a="cerrarHoja">Cerrar</button>');
+  rpc('yo_comu_likes', { pub: id }).then(function (L) { var b = $('#lk-l'); if (!b) return; L = Array.isArray(L) ? L : [];
+    b.innerHTML = L.length ? '<section class="cm-lista lk31">' + L.map(function (p) { var a = ' data-p="' + esc(p.pid) + '" data-n="' + esc(p.nombre) + '"';
+      return '<div class="cm-fila"><span class="cm-av">' + avIn(p.pid, p.nombre) + '</span><button class="fr-t" data-a="cLkPer"' + a + '><b>' + esc(p.nombre) + '</b>' + (p.yo ? '<small>Tú</small>' : '') + '</button>' +
+        (p.yo ? '' : p.sigo ? '<span class="mut sm">Siguiendo</span>' : '<button class="btn-o" data-a="cLkSeg"' + a + '>Seguir</button>') + '</div>'; }).join('') + '</section>' : '<p class="mut sm">Aún no le gusta a nadie.</p>'; },
+    function (e) { var b = $('#lk-l'); if (b) b.innerHTML = '<p class="mut sm">' + esc(cErr(e)) + '</p>'; });
+};
+A.cLkPer = function (el) { cerrarHoja(); A.cPersona(el); };
+A.cLkSeg = function (el) { if (el.disabled) return; el.disabled = true; seguir(el.dataset.p, true, el.dataset.n).then(function () { el.outerHTML = '<span class="mut sm">Hecho</span>'; }, function () { el.disabled = false; }); };
 A.cIrPub = function (el) { var a = document.querySelector('.ig-p[data-pub="' + el.dataset.id + '"]'); if (a) { a.scrollIntoView({ behavior: 'smooth', block: 'start' }); setTimeout(function () { window.scrollBy(0, -70); }, 350); } };
 A.cPerMenu = function () {
   var P = CMU().pers[S.pant && S.pant.p]; if (!P) return; var n = esc(nom1(P.nombre)), a = ' data-p="' + esc(P.pid) + '" data-n="' + esc(P.nombre) + '"';
   var av = comuAv() && (CMU().avs || {})[P.pid];
   hoja('<h2>' + esc(P.nombre) + '</h2>' + (P.silencio ? '<button class="btn sec" data-a="cQuitarSilH"' + a + '>Quitar el silencio</button>' : '<button class="btn sec" data-a="cSilenciar"' + a + '>Silenciar a ' + n + '</button>') +
     (av ? '<button class="btn sec" data-a="cDenAva" data-id="' + av.id + '"' + a + '>Denunciar su foto</button>' : '') +
+    (P.portada_id && !P.yo ? '<button class="btn sec" data-a="cDenPor" data-id="' + P.portada_id + '"' + a + '>Denunciar su portada</button>' : '') +
     '<button class="btn rojo" data-a="cBloquear"' + a + '>Bloquear a ' + n + '</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
 };
 A.cQuitarSilH = function (el) { cerrarHoja(); A.cQuitarSil(el); };
@@ -14324,7 +14373,11 @@ A.cIrActivar = function () { cerrarHoja(); ir({ t: 'comuActivar' }); };
 
 /* ---------- tu Comunidad: nombre, bloqueos, normas, salir y borrar ---------- */
 A.cAjustes = function () { ir({ t: 'comuAjustes' }); };
-A.cPrivado = function () { var e = CMU().est; if (!e) return; e.privado = !e.privado; pintar(); toast(e.privado ? 'Tu cuenta es privada' : 'Tu cuenta es pública', 'ok'); };      // propuesta: en la demo; de verdad, con el servidor
+A.cPrivado = function (el) {      // yo-1.95: de verdad (servidor: 020, yo_comu_privado). Al volverla pública, quien te lo pidió pasa a seguirte
+  var C = CMU(), e = C.est; if (!e || (el && el.disabled)) return; if (el) el.disabled = true; var si = !e.privado;
+  rpc('yo_comu_privado', { si: si }).then(function (r) { if (r) C.est = Object.assign({}, e, r); C.pers = {}; olvidaFeeds(); toast(si ? 'Tu cuenta es privada: solo te ven quienes aceptas' : 'Tu cuenta es pública' + (e.solicitudes ? ': quien te lo pidió ya te sigue' : ''), 'ok'); pintar(); },
+    function (x) { if (el) el.disabled = false; toast(cErr(x)); });
+};
 /* 18 nov 2026 (Javier, nota del móvil: «falta un apartado de seguidores y seguidos»): sus dos listas. Solo las suyas (de los demás, solo
    los números): nombre de Comunidad y nada más. Desde aquí puede seguir de vuelta, dejar de seguir o abrir el perfil. Servidor: yo_comu_red (011) */
 A.cRed = function (el) { var C = CMU(); C.redV = el.dataset.v === 'siguiendo' ? 'siguiendo' : 'seguidores'; ir({ t: 'comuRed' }); cargaRed(C.redV, true); };
@@ -14510,6 +14563,7 @@ A.cPublicar = function (el) {
   var U = S.fin, d = S.x.cpub, C = CMU(); if (!U || !d || el.disabled) return;
   var t = String(($('#cp-t') || {}).value || '').trim(); if (!t) return toast('Ponle un título');
   var dd = { t: t.slice(0, 60), min: d.min, nser: d.nser, vol: d.vol, rec: d.rec }, cm = String(($('#cp-c') || {}).value || '').replace(/\s+/g, ' ').trim(); if (cm) dd.c = cm.slice(0, 200); if (d.rut && $('#cp-rut') && $('#cp-rut').checked) dd.rut = d.rut;
+  if (v31('lug')) { var lg = String((($('#cp-l') || {}).value) || d.lug || '').replace(/\s+/g, ' ').trim(); if (lg) dd.lug = lg.slice(0, 50); var fd = new Date(String((($('#cp-f') || {}).value) || pubFec(d))); if (!isNaN(fd.getTime())) dd.fec = fd.toISOString(); }      // yo-1.95 (servidor: 020)
   var foto = CPF ? cpfJpeg() : null;
   el.disabled = true; el.textContent = 'Publicando…';
   rpcPublicar(U.id, dd, d.vis).then(function (r) {
@@ -14623,6 +14677,7 @@ A.cAvQuitar = function (el) { if (el.disabled) return; el.disabled = true; avQui
 /* elegir una foto desde la Comunidad: se coloca como la de perfil y, al guardarla, se guarda en tu perfil y se pone en la Comunidad */
 CH.cAvFoto = function (t) { S.x.avCm = 1; cerrarHoja(); CH.pfFoto(t); };
 A.cDenAva = function (el) { cerrarHoja(); denunciaHoja('ava', el.dataset.id, el.dataset.n); };
+A.cDenPor = function (el) { cerrarHoja(); denunciaHoja('por', el.dataset.id, el.dataset.n); };      // yo-1.95 (servidor: 020)
 
 /* ---------- 21 nov (Chadín: «que al publicar entreno o receta puedas editarlo también»): editar lo publicado ----------
    El título, el comentario, la foto (cambiarla, colocarla o quitarla) y, en los entrenos, quién lo ve. Servidor: yo_comu_editar_pub2 (015) */
@@ -14726,7 +14781,7 @@ function avisos31(C, L, v0) {
   var mini = function (x) { var fs = (C.fotos || {})[x.pub]; return '<span class="av31-mi cm-foto' + (fs ? ' ok' : '') + (x.tipo === 'rec' ? ' rc' : '') + '" data-pf="' + x.pub + '">' + (fs ? '<img src="' + fs + '" alt="">' : ic(x.tipo === 'rec' ? 'olla' : 'pesa', 18, null, 2)) + '</span>'; };
   var fila = function (x) {
     var p0 = x.t === 'like' ? x.quien[0] : x, av = '<span class="av31-av' + (x.t === 'like' && x.quien.length > 1 ? ' dos' : '') + '"><span class="cm-av">' + avIn(p0.pid, p0.nombre) + '</span>' + (x.t === 'like' && x.quien.length > 1 ? '<span class="cm-av b2">' + avIn(x.quien[1].pid, x.quien[1].nombre) + '</span>' : '') + '<i class="av31-ic ' + x.t + '">' + ic(x.t === 'like' ? 'corazon' : x.t === 'coment' ? 'coment' : x.t === 'sol' ? 'candado' : 'usuario', 10, null, 2.6) + '</i></span>';
-    if (x.t === 'sol') return '<div class="av31-f"><button class="av31-b" data-a="cPersona" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">' + av + '<span class="av31-tx"><b>' + esc(x.nombre) + '</b> quiere seguirte.' + t(x) + '</span></button><span class="av31-ac"><button class="av31-bt" data-a="cSolAcepta">Aceptar</button><button class="av31-bt on" data-a="cSolRechaza">Rechazar</button></span></div>';
+    if (x.t === 'sol') return '<div class="av31-f"><button class="av31-b" data-a="cPersona" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">' + av + '<span class="av31-tx"><b>' + esc(x.nombre) + '</b> quiere seguirte.' + t(x) + '</span></button><span class="av31-ac"><button class="av31-bt" data-a="cSolAcepta" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">Aceptar</button><button class="av31-bt on" data-a="cSolRechaza" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">Rechazar</button></span></div>';
     if (x.t === 'sigue') return '<div class="av31-f"><button class="av31-b" data-a="cPersona" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">' + av + '<span class="av31-tx"><b>' + esc(x.nombre) + '</b> ha empezado a seguirte.' + t(x) + '</span></button>' +
       (x.sigo ? '<span class="av31-bt on">Siguiendo</span>' : '<button class="av31-bt" data-a="cSeguirAv" data-p="' + esc(x.pid) + '" data-n="' + esc(x.nombre) + '">Seguir</button>') + '</div>';
     if (x.t === 'coment') return '<button class="av31-f av31-b" data-a="cAvPub" data-t="coment" data-id="' + x.pub + '">' + av + '<span class="av31-tx"><b>' + esc(x.nombre) + '</b> ha comentado: «' + esc(x.txt) + '»' + t(x) + '</span>' + mini(x) + '</button>';
