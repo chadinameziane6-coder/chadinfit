@@ -3205,15 +3205,6 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
    una foto apaisada salía arriba con un hueco gris debajo); mientras carga una receta, apaisada */
 .cm-foto.ig-f.ok{aspect-ratio:auto}.cm-foto.ig-f.rc:not(.ok){aspect-ratio:16/10;min-height:0}
 /* yo-1.83: tus recipientes (olla, sartén, molde, tupper…) con su nombre y su peso vacío */
-.rcp-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin-top:12px}
-.rcp-c{display:flex;align-items:center;gap:10px;min-width:0;min-height:58px;padding:9px 12px;border-radius:16px;border:1px solid var(--borde);background:var(--card);color:var(--tx);text-align:left}
-.rcp-c .ic{flex:0 0 auto;color:var(--tx2)}
-.rcp-c span{display:flex;flex-direction:column;min-width:0}
-.rcp-c b{font-size:14px;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
-.rcp-c small{font-size:12px;color:var(--tx2);margin-top:2px}
-.rcp-c.on{border:2px solid var(--tx);padding:8px 11px}.rcp-c.on .ic{color:var(--tx)}
-.rcp-c.rcp-n{border:1.5px dashed var(--borde2);background:transparent;justify-content:center}.rcp-c.rcp-n .ic{color:var(--tx)}
-.rcp .btn-dash.rcp-1{margin-top:12px}
 .rcp-ej{margin-top:4px}
 .rc-res.av{background:var(--suave);color:var(--tx)}
 .rcp-ts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
@@ -3229,6 +3220,30 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
 .rcp-e em{font-style:normal;font-weight:800;font-size:14px;white-space:nowrap}
 .rc-res small{display:block;font-size:13px;font-weight:700;margin-top:2px}
 .p3-inf .p3-x{font-style:normal;font-weight:800;color:inherit;opacity:.75;white-space:nowrap}      /* yo-1.85: «Pierna B ×3» */
+/* yo-1.86: el recipiente, como en la app de clientas: la lista (filas con su círculo) o el elegido en una línea con «Cambiar» */
+.rpx .rpx-q{display:block;margin:12px 0 6px;font-size:13px;font-weight:700;color:var(--tx2)}
+.rpx .rpx-l{display:flex;flex-direction:column;gap:8px}
+.rpx-f{display:flex;align-items:center;gap:12px;width:100%;min-height:58px;padding:9px 14px;border-radius:16px;border:1px solid var(--borde);background:var(--card);color:var(--tx);text-align:left;font:inherit}
+.rpx-f>.ic{flex:0 0 auto;color:var(--tx2)}
+.rpx-f span{flex:1;min-width:0;display:flex;flex-direction:column}
+.rpx-f b{font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rpx-f small{font-size:12.5px;color:var(--tx2);line-height:1.3}
+.rpx-f i{flex:0 0 auto;width:22px;height:22px;border-radius:50%;border:1.5px solid var(--borde2);box-sizing:border-box}
+.rpx-f.on{border:2px solid var(--tx);padding:8px 13px}.rpx-f.on>.ic{color:var(--tx)}.rpx-f.on i{border:7px solid var(--tx)}
+.rpx-f.rpx-fn{border:1.5px dashed var(--borde2);background:transparent}.rpx-f.rpx-fn>.ic{color:var(--tx)}
+.rpx-sel{display:flex;align-items:center;gap:12px;margin-top:12px;padding:10px 14px;border-radius:16px;background:var(--suave)}
+.rpx-sel>.ic{flex:0 0 auto;color:var(--tx)}
+.rpx-sel span{flex:1;min-width:0;display:flex;flex-direction:column}
+.rpx-sel b{font-size:15px;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rpx-sel small{font-size:12.5px;color:var(--tx2)}
+.rpx-sel .link{flex:0 0 auto;font-weight:800}
+.rpx-nf{margin-top:12px;display:flex;flex-direction:column;gap:2px}
+.rpx-nh{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.rpx-nh b{font-size:15px}
+.rpx-nf .rcp-ts button{min-height:58px}
+.rpx-h{display:block;margin-top:6px;font-size:12.5px;font-weight:500;color:var(--tx2);line-height:1.35}
+.rpx>.link.izq{margin-top:8px}
+.rpx-ho{display:flex;flex-direction:column}.rpx-ho .rpx-q{margin-top:2px}
+.rpx-ho .f{margin-top:12px}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -4397,7 +4412,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.85';
+var YO_V = 'yo-1.86';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -12095,8 +12110,8 @@ A.arOk = function () {
 A.arQuitar = function () { var X = S.x.ar, f = nd(), D = diaDe(f); D.it = D.it.filter(function (x) { return x.id !== X.it.id; }); S.diario[f] = D; guardaDia(f); toast('Quitado'); S.pant = null; S.pila = []; pintar(); };
 
 /* nueva receta (o cambiarla): ingredientes en crudo, raciones y, si quiere, el peso de la olla cocinada */
-A.nRecNueva = function () { S.x.rec = { id: 'rc' + rand(8), n: '', ing: [], pasos: '', rac: 4, olla: '', tara: taraYo(), llena: '', foto: '', fotoN: 0, nueva: true }; if (recipOk()) { var L = recips(); S.x.rec.rp = L.length === 1 ? L[0].id : null; S.x.rec.tara = ''; } ir({ t: 'nreceta' }); };
-A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false, ud: r.ud || 'g' }; if (recipOk()) { S.x.rec.rp = rcpDeRec(r); S.x.rec.tara = r.tara || ''; } ir({ t: 'nreceta' }); };
+A.nRecNueva = function () { S.x.rec = { id: 'rc' + rand(8), n: '', ing: [], pasos: '', rac: 4, olla: '', tara: taraYo(), llena: '', foto: '', fotoN: 0, nueva: true }; if (recipOk()) { S.x.rec.rp = rcpUlt(); S.x.rec.tara = ''; } ir({ t: 'nreceta' }); };      // yo-1.86: la última que usaste
+A.nRecEditar = function (el) { var r = recDe(el.dataset.k); if (!r || !r.mio) return; S.x.rec = { id: r.id, n: r.n, ing: (r.ing || []).map(function (i) { return Object.assign({}, i); }), pasos: r.pasos || '', rac: r.rac || 1, olla: r.olla || '', tara: r.tara || taraYo(), llena: r.llena || '', foto: r.foto ? (RFOTO[r.id] || '') : '', tuvo: !!r.foto, fotoN: 0, nueva: false, ud: r.ud || 'g' }; if (recipOk()) { S.x.rec.rp = r.sin ? null : rcpDeRec(r); S.x.rec.sin = !!r.sin; S.x.rec.tara = r.tara || ''; } ir({ t: 'nreceta' }); };
 function recCalc(R) { var t = { k: 0, p: 0, h: 0, g: 0, peso: 0 }; R.ing.forEach(function (i) { t.k += i.k * i.g / 100; t.p += i.p * i.g / 100; t.h += i.h * i.g / 100; t.g += i.gr * i.g / 100; t.peso += i.g; }); return t; }
 VISTAS.nreceta = function () {
   var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = num(R.olla) || 0;
@@ -12126,7 +12141,7 @@ function rcTotHtml() { var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac
 function rcTot() { var e = $('#rc-t'); if (e) e.innerHTML = rcTotHtml(); var o = $('#rc-ol'); if (o) o.innerHTML = rcOllaHtml(); }
 /* la olla: vacía (la recuerda la app) y llena → el peso de la receta cocinada */
 function taraYo() { var t = S.perfil && +S.perfil.tara; return t > 0 ? String(t) : ''; }
-function rcNeto(R) { var ll = num(R.llena) || 0, ta = num(R.tara) || 0; if (recipOk() && ll) { var c = R.rp && rcpDe(R.rp); return c ? ll - c.g : ta ? ll - ta : 0; } return ll ? ll - ta : num(R.olla) || 0; }
+function rcNeto(R) { var ll = num(R.llena) || 0, ta = num(R.tara) || 0; if (recipOk() && ll) { var c = !R.otra && R.rp && rcpDe(R.rp); if (c) return ll - c.g; if (R.otra) return num(R.otra.g) ? ll - num(R.otra.g) : 0; return R.sin ? ll : ta ? ll - ta : 0; } return ll ? ll - ta : num(R.olla) || 0; }
 function rcOllaHtml() {
   if (recipOk()) return rcpRes(S.x.rec);
   var R = S.x.rec, ll = num(R.llena) || 0, ta = num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), n = rcNeto(R);
@@ -12153,32 +12168,58 @@ function rcpT(t) { return RCP_T.filter(function (x) { return x[0] === t; })[0] |
 function rcpIc(t, s) { return ic(t === 'otro' ? 'bol' : t, s || 22, null, 1.8); }
 function rcpVac(c) { return rcpT(c.t)[3] === 'a' ? 'vacía' : 'vacío'; }
 function rcpDeRec(r) { if (r.rp && rcpDe(r.rp)) return r.rp; var t = +r.tara, c = t > 0 ? recips().filter(function (x) { return x.g === t; })[0] : null; return c ? c.id : null; }
-function rcpGrid(sel, a, de) {
-  return '<div class="rcp-g">' + recips().map(function (c) { var on = c.id === sel; return '<button class="rcp-c' + (on ? ' on' : '') + '" data-a="' + a + '" data-v="' + esc(c.id) + '" aria-pressed="' + on + '">' + rcpIc(c.t) + '<span><b>' + esc(c.n) + '</b><small>' + fmil(c.g) + ' g</small></span></button>'; }).join('') +
-    '<button class="rcp-c rcp-n" data-a="rcpNuevo" data-de="' + de + '">' + ic('mas', 18, null, 2.4) + '<span><b>Nuevo</b></span></button></div>';
+/* yo-1.86 (Javier, 28 nov, 08:48, con el OK al diseño de las clientas: «esto también aplica a las usuarias… adaptado a ellas, que ellas crean recetas»):
+   el mismo patrón sencillo. Una cosa cada vez: el recipiente elegido en una línea con «Cambiar» (el de la otra vez, ya puesto); si no hay, la
+   pregunta «¿En qué la haces?» con tus recipientes, «Sin olla» y «Añadir otra olla o sartén» (qué es, nombre y lo que pesa vacía, ahí mismo). */
+function rcpUlt() { var u = S.perfil && S.perfil.rpUlt, L = recips(); return rcpDe(u) ? u : L.length === 1 ? L[0].id : null; }
+function rcpArt(t) { var a = rcpT(t)[2]; return a; }
+function rcpFila(c, on, a) { return '<button class="rpx-f' + (on ? ' on' : '') + '" data-a="' + a + '" data-v="' + esc(c.id) + '" aria-pressed="' + on + '">' + rcpIc(c.t) + '<span><b>' + esc(c.n) + '</b><small>' + fmil(c.g) + '\u00a0g ' + rcpVac(c) + '</small></span><i></i></button>'; }
+function rcpListaHtml(sel, sin, a, aOtra, sinTx) {      // las filas: tus recipientes, «Sin olla» y «Añadir otra» (la primera vez, «En una olla o sartén» arriba)
+  var L = recips(), sinB = '<button class="rpx-f' + (sin ? ' on' : '') + '" data-a="' + a + '" data-v="" aria-pressed="' + !!sin + '">' + ic('nutri', 22, null, 1.8) + '<span><b>Sin olla</b><small>' + sinTx + '</small></span><i></i></button>',
+    nu = '<button class="rpx-f rpx-fn" data-a="' + aOtra + '">' + ic('mas', 20, null, 2.4) + '<span><b>' + (L.length ? 'Añadir otra olla o sartén' : 'En una olla o sartén') + '</b>' + (L.length ? '' : '<small>la guardas con su peso y la próxima vez ya está</small>') + '</span></button>';
+  return '<div class="rpx-l">' + L.map(function (c) { return rcpFila(c, c.id === sel && !sin, a); }).join('') + (L.length ? sinB + nu : nu + sinB) + '</div>';
 }
+function rcpSelHtml(c, aCam) { return '<div class="rpx-sel">' + (c ? rcpIc(c.t) + '<span><b>' + esc(c.n) + '</b><small>' + fmil(c.g) + '\u00a0g ' + rcpVac(c) + ' · la app la resta</small></span>' : ic('nutri', 22, null, 1.8) + '<span><b>Sin olla</b><small>lo pesas tal cual</small></span>') + '<button class="link sm" data-a="' + aCam + '">Cambiar</button></div>'; }
+function rcpOtraHtml(F, pre, aT, aCan) {      // la nueva, ahí mismo: qué es, nombre y lo que pesa vacía (con la ayuda si aún tiene la comida dentro)
+  var T = rcpT(F.t), a = T[3] === 'a';
+  return '<div class="rpx-nf"><div class="rpx-nh"><b>Nueva olla o sartén</b><button class="link sm" data-a="' + aCan + '">Cancelar</button></div><div class="rcp-ts" role="radiogroup" aria-label="Qué es">' + RCP_T.map(function (x) { var on = x[0] === F.t; return '<button role="radio" aria-checked="' + on + '" class="' + (on ? 'on' : '') + '" data-a="' + aT + '" data-v="' + x[0] + '">' + rcpIc(x[0]) + '<span>' + x[1] + '</span></button>'; }).join('') + '</div>' +
+    '<label class="f">Ponle un nombre<input id="' + pre + '-n" data-in="rcpOtN" maxlength="30" value="' + esc(F.n || '') + '" placeholder="Ej.: ' + esc(T[5]) + '"></label>' +
+    '<label class="f">Lo que pesa ' + (a ? 'vacía' : 'vacío') + '<span class="rc-u"><input id="' + pre + '-g" data-in="rcpOtG" inputmode="numeric" value="' + esc(String(F.g || '')) + '" placeholder="Ej.: ' + T[4] + '"><i>g</i></span></label><small class="rpx-h">¿Aún tiene la comida dentro? Pésal' + (a ? 'a' : 'o') + ' cuando l' + (a ? 'a' : 'o') + ' vacíes.</small></div>'; }
+function rcpUd(R) { return recMl() ? '<div class="rc-ud"><span>Tu plato se mide en</span><div class="seg-p mini" role="tablist" aria-label="Unidad">' + [['g', 'Gramos'], ['ml', 'Mililitros']].map(function (u) { var on = (R.ud || 'g') === u[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="rcUd" data-v="' + u[0] + '">' + u[1] + '</button>'; }).join('') + '</div></div>' : ''; }
 function rcRecipHtml(R) {
-  var L = recips(), c = rcpDe(R.rp), ml = recMl() && R.ud === 'ml';
-  var h = '<section class="card rc-olla rcp"><div class="card-h"><b>Recipiente</b>' + (L.length ? '<button class="link sm" data-a="rcpLista">Editar</button>' : '') + '</div><span class="mut sm">Opcional · donde la cocinas o la guardas, para luego ' + (ml ? 'medir' : 'pesar') + ' tu plato</span>' +
-    (recMl() ? '<div class="rc-ud"><span>Tu plato se mide en</span><div class="seg-p mini" role="tablist" aria-label="Unidad">' + [['g', 'Gramos'], ['ml', 'Mililitros']].map(function (u) { var on = (R.ud || 'g') === u[0]; return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="rcUd" data-v="' + u[0] + '">' + u[1] + '</button>'; }).join('') + '</div></div>' : '');
-  h += L.length ? rcpGrid(R.rp, 'rcpSel', 'rec') : '<button class="btn-dash rcp-1" data-a="rcpNuevo" data-de="rec">' + ic('mas', 16, null, 2.4) + 'Guarda tu recipiente</button>';
-  h += '<label class="f">Cuando esté hecha: pesa ' + (c ? rcpT(c.t)[2] : 'el recipiente') + ' con la comida<span class="rc-u"><input data-in="rcLlena" inputmode="numeric" value="' + esc(R.llena) + '" placeholder="Peso total"><i>g</i></span></label>';
-  return h + '<div id="rc-ol">' + rcpRes(R) + '</div><button class="link sm izq rcp-ej" data-a="rcpEjemplos">Ver ejemplos de cómo pesarla</button></section>';
+  var L = recips(), c = R.otra ? null : rcpDe(R.rp), lista = R.cam || (!c && !R.otra && !R.sin);
+  var h = '<section class="card rc-olla rcp rpx"><div class="card-h"><b>Peso de la receta</b>' + (lista && L.length ? '<button class="link sm" data-a="rcpLista">Editar</button>' : '') + '</div><span class="mut sm">Opcional · para luego ' + (recUd(R) === 'ml' ? 'medir' : 'pesar') + ' tu plato</span>' + rcpUd(R);
+  if (lista) return h + '<small class="rpx-q">¿En qué la haces?</small>' + rcpListaHtml(R.rp, R.sin, 'rcpSel', 'rcpOtra', 'la pasas a un plato o un tupper') + (R.cam ? '<button class="link sm izq" data-a="rcpCamNo">Volver</button>' : '') +
+    (num(R.olla) && !R.cam ? '<div id="rc-ol">' + rcpRes(R) + '</div>' : '<div id="rc-ol"></div>') + (L.length ? '' : '<button class="link sm izq rcp-ej" data-a="rcpEjemplos">Ver ejemplos de cómo pesarla</button>') + '</section>';
+  h += R.otra ? rcpOtraHtml(R.otra, 'rp', 'rcpOtT', 'rcpCam') : rcpSelHtml(c, 'rcpCam');
+  var t = c ? c.t : R.otra ? R.otra.t : null;
+  h += '<label class="f">' + (t ? 'Cuando esté hecha, pon ' + rcpArt(t) + ' con la comida en la báscula' : 'Cuando esté hecha, lo que marca la báscula') + '<span class="rc-u"><input data-in="rcLlena" inputmode="numeric" value="' + esc(R.llena) + '" placeholder="Lo que marca"><i>g</i></span></label>';
+  return h + '<div id="rc-ol">' + rcpRes(R) + '</div></section>';
 }
 function rcpRes(R) {
-  var L = recips(), c = rcpDe(R.rp), ll = num(R.llena) || 0, ta = c ? c.g : num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), u = recUd(R), n;
-  if (!ll) {
-    if (num(R.olla) && !c) return '<p class="rc-res">Peso de la receta: ' + fmil(R.olla) + ' ' + u + '</p>';
-    if (c) return '<p class="mut sm">' + esc(c.n) + ' ' + rcpVac(c) + ' pesa ' + fmil(c.g) + ' g: la app lo resta sola.</p>';
-    return '<p class="mut sm">' + (L.length ? 'Elige en cuál la haces: la app ya sabe lo que pesa vacío.' : 'Pésalo vacío una vez (olla, sartén, molde, tupper…) y la app lo recuerda. La próxima vez solo lo pesas con la comida.') + '</p>';
-  }
-  if (!ta) return '<p class="rc-res av">Falta el peso del recipiente vacío</p><p class="mut sm">Elige uno guardado. Si se te olvidó pesarlo antes, pésalo cuando lo vacíes y guárdalo con «Nuevo».</p>';
-  if (ll <= ta) return '<p class="rc-res mal">Con la comida tiene que pesar más que vacío (' + fmil(ta) + ' g).</p>';
+  var c = R.otra ? null : rcpDe(R.rp), ll = num(R.llena) || 0, ta = c ? c.g : R.otra ? num(R.otra.g) || 0 : R.sin ? 0 : num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), u = recUd(R), n;
+  if (!ll) return num(R.olla) && !c && !R.otra ? '<p class="rc-res">Tu receta pesa ' + fmil(R.olla) + '\u00a0' + u + '</p>' : '';
+  var va = rcpT(c ? c.t : R.otra ? R.otra.t : 'olla')[3] === 'a' ? 'vacía' : 'vacío';
+  if (R.otra && !ta) return '<p class="rc-res av">Falta lo que pesa ' + va + '</p>';
+  if (ta && ll <= ta) return '<p class="rc-res mal">Con la comida tiene que pesar más que ' + va + ' (' + fmil(ta) + '\u00a0g).</p>';
   n = ll - ta;
-  return '<p class="rc-res">' + (u === 'ml' ? 'La receta: ' + fmil(n) + '\u00a0ml' : 'Peso de la receta: ' + fmil(n) + '\u00a0g') + (rac > 1 ? '<small>Cada ración (de\u00a0' + rac + '): ' + fmil(n / rac) + '\u00a0' + u + '</small>' : '') + '</p>' +
-    '<p class="mut sm">' + fmil(ll) + ' g con la comida − ' + fmil(ta) + ' g ' + (c ? 'de ' + esc(c.n).toLowerCase() : 'del recipiente') + '.' + (u === 'ml' ? ' En sopas, cremas y batidos, 1 g ≈ 1 ml.' : '') + '</p>';
+  return '<p class="rc-res">Tu receta pesa ' + fmil(n) + '\u00a0' + u + (rac > 1 ? '<small>Cada ración (de\u00a0' + rac + '): ' + fmil(n / rac) + '\u00a0' + u + '</small>' : '') + '</p>' +
+    (ta ? '<p class="mut sm">' + fmil(ll) + '\u00a0g − ' + fmil(ta) + '\u00a0g de ' + esc(c ? c.n : R.otra.n || rcpT(R.otra.t)[1]).toLowerCase() + '.' + (u === 'ml' ? ' En sopas, cremas y batidos, 1\u00a0g ≈ 1\u00a0ml.' : '') + '</p>' : u === 'ml' ? '<p class="mut sm">En sopas, cremas y batidos, 1\u00a0g ≈ 1\u00a0ml.</p>' : '');
 }
-A.rcpSel = function (el) { var R = S.x.rec, id = el.dataset.v; R.rp = R.rp === id ? null : id; var c = rcpDe(R.rp); R.tara = c ? String(c.g) : ''; pintar(); };
+function rcpFoco(id) { setTimeout(function () { var i = $(id); if (i) i.focus(); }, 60); }
+A.rcpSel = function (el) { var R = S.x.rec, id = el.dataset.v || null, c = rcpDe(id); R.cam0 = null; R.rp = c ? c.id : null; R.sin = !c; R.otra = null; R.cam = false; R.tara = c ? String(c.g) : ''; pintar(); rcpFoco('[data-in=rcLlena]'); };
+A.rcpOtra = function () { var R = S.x.rec; R.cam0 = null; R.otra = { t: 'olla', n: '', g: '' }; R.cam = false; pintar(); rcpFoco('#rp-n'); };
+A.rcpOtT = function (el) { var R = S.x.rec; if (R && R.otra) { R.otra.t = el.dataset.v; pintar(); } };
+A.rcpCam = function () { var R = S.x.rec; R.cam0 = { rp: R.rp, sin: R.sin, otra: R.otra }; if (R.otra) R.otra = null; R.cam = true; pintar(); };
+A.rcpCamNo = function () { var R = S.x.rec, o = R.cam0 || {}; R.rp = o.rp || null; R.sin = !!o.sin; R.otra = o.otra || null; R.cam = false; R.cam0 = null; pintar(); };
+IN.rcpOtN = function (t) { var F = S.x.ar && S.x.ar.otra && $('#hoja .rpx-nf') ? S.x.ar.otra : S.x.rec && S.x.rec.otra; if (F) F.n = t.value; };
+IN.rcpOtG = function (t) { var enH = !!$('#hoja .rpx-nf'), F = enH ? S.x.ar && S.x.ar.otra : S.x.rec && S.x.rec.otra; if (!F) return; F.g = t.value.replace(/\D/g, ''); if (enH) arPesaRes(); else rcTot(); };
+/* guarda la nueva (si tiene peso) y la deja elegida; devuelve el recipiente, null si no hay nueva, o false si el peso no vale */
+function rcpCrea(F) { if (!F) return null; var g = Math.round(num(F.g) || 0); if (!g) return null; if (g < 5 || g > 20000) return false;
+  if (!S.perfil) S.perfil = perfilNuevo(); var L = recips(), T = rcpT(F.t), n = String(F.n || '').trim().slice(0, 30);
+  if (!n) { var k = L.filter(function (x) { return x.t === F.t; }).length; n = (F.t === 'otro' ? 'Recipiente' : T[1]) + (k ? ' ' + (k + 1) : ''); }
+  var c = { id: 'rp' + rand(6), t: F.t, n: n, g: g }; L.push(c); return c; }
+function rcpUsado(id) { if (!S.perfil || !id || S.perfil.rpUlt === id) return false; S.perfil.rpUlt = id; return true; }
 A.rcpEjemplos = function () {
   hoja('<h2>Cómo pesar tu receta</h2><p class="mut sm">Pesa el recipiente vacío una vez y guárdalo. Cuando la receta esté hecha, pésalo con la comida: la diferencia es lo que pesa la receta.</p><div class="rcp-ejs">' + RCP_EJ.map(function (e) { return '<div class="rcp-e">' + rcpIc(e[0], 20) + '<span><b>' + e[1] + '</b><small>' + e[2] + ' ' + fmil(e[3]) + '\u00a0g · con la comida ' + fmil(e[4]) + '\u00a0g</small></span><em>' + fmil(e[4] - e[3]) + '\u00a0g</em></div>'; }).join('') + '</div>' +
     '<p class="mut sm">Luego, al apuntar, pesas solo lo que hay en tu plato y la app calcula tus calorías y macros.</p><button class="btn" data-a="cerrarHoja">Entendido</button>');
@@ -12208,7 +12249,7 @@ A.rcpGuardar = function () {
     c.t = E.t; c.n = n;
     if (c.g !== g) { c.g = g; S.biblio.forEach(function (b) { if (b.tipo === 'rec' && b.rp === c.id && +b.llena > g) { b.tara = g; b.olla = b.llena - g; guardaBiblio(b); } }); }
   } else { c = { id: 'rp' + rand(6), t: E.t, n: n, g: g }; L.push(c); }
-  guardaPerfil(); toast(E.id ? 'Recipiente cambiado' : n + ' guardado', 'ok');
+  guardaPerfil(); toast(E.id ? 'Recipiente cambiado' : n + (T[3] === 'a' ? ' guardada' : ' guardado'), 'ok');      // yo-1.86: «Sartén honda guardada»
   if (!E.id && S.x.rpDe === 'ar' && S.x.ar) S.x.ar.rp = c.id;
   if (!E.id && S.x.rpDe === 'rec' && S.x.rec) { S.x.rec.rp = c.id; S.x.rec.tara = String(c.g); }
   A.rcpVolver();
@@ -12226,21 +12267,39 @@ A.rcpLista = function () {
     '<button class="btn-dash" data-a="rcpNuevo" data-de="lista">' + ic('mas', 16, null, 2.4) + 'Nuevo recipiente</button><button class="btn sec" data-a="rcpListo">Listo</button>');
 };
 A.rcpListo = function () { cerrarHoja(); pintar(); };
-/* al apuntar una receta ya hecha: pesarla otra vez eligiendo el recipiente */
+/* al apuntar una receta ya hecha: pesarla otra vez. yo-1.86: como en la receta, el suyo en una línea con «Cambiar», o la lista */
 function arPesa() {
-  var X = S.x.ar, r = recDe(X.key); if (!r || !r.mio) return; var L = recips(), v = ($('#ao-l') || {}).value || X.ll || '';
-  if (X.rp === undefined) X.rp = rcpDeRec(r) || (L.length === 1 ? L[0].id : null);
-  var c = rcpDe(X.rp);
-  hoja('<h2>Pesa la receta hecha</h2><p class="mut sm">' + (L.length ? 'Elige dónde está la comida: la app resta lo que pesa vacío.' : 'Guarda primero el recipiente con su peso vacío.') + '</p>' + (L.length ? rcpGrid(X.rp, 'arRcp', 'ar') : '<button class="btn-dash rcp-1" data-a="rcpNuevo" data-de="ar">' + ic('mas', 16, null, 2.4) + 'Guarda tu recipiente</button>') +
-    (c ? '<label class="f">' + rcpT(c.t)[2].replace(/^./, function (x) { return x.toUpperCase(); }) + ' con la comida<span class="rc-u"><input id="ao-l" inputmode="numeric" value="' + esc(v) + '" placeholder="Peso total"><i>g</i></span></label><p class="mut sm">' + esc(c.n) + ' ' + rcpVac(c) + ' pesa ' + fmil(c.g) + ' g: la app lo resta sola.</p><button class="btn" data-a="arOllaSi">Guardar</button>' : '') +
-    '<button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  var X = S.x.ar, r = recDe(X.key); if (!r || !r.mio) return;
+  if (X.rp === undefined) { X.sin = !!r.sin; X.rp = r.sin ? null : rcpDeRec(r) || rcpUlt(); X.otra = null; X.cam = false; X.ll = ''; }
+  var c = X.otra ? null : rcpDe(X.rp), lista = X.cam || (!c && !X.otra && !X.sin), t = c ? c.t : X.otra ? X.otra.t : null;
+  var h = '<h2>Pesa la receta hecha</h2><div class="rpx rpx-ho">';
+  if (lista) return hoja(h + '<small class="rpx-q">¿Dónde está la comida?</small>' + rcpListaHtml(X.rp, X.sin, 'arRcp', 'arRcpOtra', 'la has pasado a un plato o un tupper') + '</div><button class="btn sec" data-a="' + (X.cam ? 'arRcpCamNo' : 'cerrarHoja') + '">' + (X.cam ? 'Volver' : 'Cancelar') + '</button>');
+  h += X.otra ? rcpOtraHtml(X.otra, 'ao', 'arRcpT', 'arRcpCam') : rcpSelHtml(c, 'arRcpCam');
+  h += '<label class="f">' + (t ? 'Pon ' + rcpArt(t) + ' con la comida en la báscula' : 'Lo que marca la báscula') + '<span class="rc-u"><input id="ao-l" data-in="arPesoIn" inputmode="numeric" value="' + esc(X.ll || '') + '" placeholder="Lo que marca"><i>g</i></span></label><div id="ao-res">' + arPesaResHtml() + '</div></div>';
+  hoja(h + '<button class="btn" data-a="arOllaSi">Guardar</button><button class="btn sec" data-a="cerrarHoja">Cancelar</button>');
+  rcpFoco(X.otra ? '#ao-n' : '#ao-l');
 }
-A.arRcp = function (el) { var X = S.x.ar; X.ll = ($('#ao-l') || {}).value || X.ll || ''; X.rp = X.rp === el.dataset.v ? null : el.dataset.v; arPesa(); };
+function arPesaResHtml() { var X = S.x.ar, c = X.otra ? null : rcpDe(X.rp), ll = num(X.ll) || 0, ta = c ? c.g : X.otra ? num(X.otra.g) || 0 : 0, va = rcpT(c ? c.t : X.otra ? X.otra.t : 'olla')[3] === 'a' ? 'vacía' : 'vacío';
+  if (!ll || (X.otra && !ta)) return ''; if (ta && ll <= ta) return '<p class="rc-res mal">Con la comida tiene que pesar más que ' + va + '.</p>';
+  return '<p class="rc-res">Tu receta pesa ' + fmil(ll - ta) + '\u00a0g</p>'; }
+function arPesaRes() { var e = $('#ao-res'); if (e) e.innerHTML = arPesaResHtml(); }
+IN.arPesoIn = function (t) { S.x.ar.ll = t.value.replace(/\D/g, ''); arPesaRes(); };
+A.arRcp = function (el) { var X = S.x.ar, c = rcpDe(el.dataset.v); X.rp = c ? c.id : null; X.sin = !c; X.otra = null; X.cam = false; X.cam0 = null; arPesa(); };
+A.arRcpOtra = function () { var X = S.x.ar; X.otra = { t: 'olla', n: '', g: '' }; X.cam = false; X.cam0 = null; arPesa(); };
+A.arRcpT = function (el) { var X = S.x.ar; if (X.otra) { X.otra.t = el.dataset.v; arPesa(); } };
+A.arRcpCam = function () { var X = S.x.ar; X.cam0 = { rp: X.rp, sin: X.sin, otra: X.otra }; X.otra = null; X.cam = true; arPesa(); };
+A.arRcpCamNo = function () { var X = S.x.ar, o = X.cam0 || {}; X.rp = o.rp || null; X.sin = !!o.sin; X.otra = o.otra || null; X.cam = false; X.cam0 = null; arPesa(); };
 function arPesaSi() {
-  var X = S.x.ar, r = recDe(X.key), b = r && S.biblio.filter(function (x) { return 'u:' + x.id === r.key; })[0], c = rcpDe(X.rp), ll = num(($('#ao-l') || {}).value) || 0; if (!b || !c) return;
-  if (!ll || ll <= c.g) return toast(ll ? 'Con la comida tiene que pesar más que vacío' : 'Apunta lo que pesa con la comida');
-  b.rp = c.id; b.tara = c.g; b.llena = ll; b.olla = ll - c.g; guardaBiblio(b); X.ll = '';
-  cerrarHoja(); toast('Peso de la receta: ' + fmil(b.olla) + ' g', 'ok'); pintar();
+  var X = S.x.ar, r = recDe(X.key), b = r && S.biblio.filter(function (x) { return 'u:' + x.id === r.key; })[0], ll = num(X.ll) || 0; if (!b) return;
+  var c = X.otra ? null : rcpDe(X.rp), nuevo = null;
+  if (X.otra) { var g0 = Math.round(num(X.otra.g) || 0); if (!g0) return toast('Pon lo que pesa vacía, o elige «Sin olla»'); if (g0 < 5 || g0 > 20000) return toast('Revisa lo que pesa vacía: entre 5 y 20.000 g'); }
+  else if (!c && !X.sin) return toast('Elige dónde está la comida');
+  var ta = c ? c.g : X.otra ? Math.round(num(X.otra.g)) : 0;
+  if (!ll || ll <= ta) return toast(ll ? 'Con la comida tiene que pesar más que vacía' : 'Apunta lo que marca la báscula');
+  if (X.otra) { nuevo = c = rcpCrea(X.otra); X.otra = null; }
+  if (c) { b.rp = c.id; b.tara = c.g; b.olla = ll - c.g; delete b.sin; } else { delete b.rp; b.tara = 0; b.olla = ll; b.sin = 1; }
+  b.llena = ll; guardaBiblio(b); if (rcpUsado(c && c.id) || nuevo) guardaPerfil(); X.ll = ''; X.rp = undefined;
+  cerrarHoja(); toast(nuevo ? nuevo.n + (rcpT(nuevo.t)[3] === 'a' ? ' guardada' : ' guardado') + ' · tu receta pesa ' + fmil(b.olla) + ' g' : 'Tu receta pesa ' + fmil(b.olla) + ' g', 'ok'); pintar();
 }
 /* la foto de la receta: recortada a 16:10 y reducida (800 × 500, JPEG); se guarda aparte y solo se pide al verla */
 var RFOTO = {}, RFPIDE = {};
@@ -12289,15 +12348,23 @@ A.rcQuitar = function (el) { S.x.rec.ing.splice(+el.dataset.i, 1); pintar(); };
 A.rcAnadir = function () { S.x.nb = { q: '', c: 0, para: 'rec' }; ir({ t: 'nbuscar' }); setTimeout(function () { var i = $('#nb-q'); if (i) i.focus(); }, 80); };
 A.rcGuardar = function () {
   var R = S.x.rec, e = $('#rc-err'), n = String(R.n || '').trim(), T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = Math.max(0, rcNeto(R)), ta = num(R.tara) || 0, ll = num(R.llena) || 0;
-  if (recipOk()) { var rc0 = R.rp && rcpDe(R.rp); if (rc0) ta = rc0.g; }
+  var nuevo = null, perf = false;
+  if (recipOk()) {      // yo-1.86: la nueva, ahí mismo; «Sin olla»; y la última que usaste
+    if (R.otra) { var g0 = Math.round(num(R.otra.g) || 0); if (g0 && (g0 < 5 || g0 > 20000)) { e.hidden = false; e.textContent = 'Revisa lo que pesa vacía: entre 5 y 20.000 g.'; return; }
+      if (!g0 && ll) { e.hidden = false; e.textContent = 'Pon lo que pesa vacía, o elige «Sin olla».'; return; } }
+    var rc0 = !R.otra && R.rp && rcpDe(R.rp); if (rc0) ta = rc0.g; else if (R.otra) ta = Math.round(num(R.otra.g) || 0); else if (R.sin) ta = 0;
+  }
   if (ll && ta && ll <= ta) { e.hidden = false; e.textContent = recipOk() ? 'Con la comida tiene que pesar más que vacío.' : 'La olla llena tiene que pesar más que vacía.'; return; }
   if (n.length < 2) { e.hidden = false; e.textContent = 'Ponle un nombre a la receta.'; return; }
   if (!R.ing.length || !T.k) { e.hidden = false; e.textContent = 'Añade al menos un ingrediente con sus gramos.'; return; }
   if (olla && olla < T.peso * 0.3) { e.hidden = false; e.textContent = 'El peso de la olla cocinada parece muy bajo para esos ingredientes. Revísalo o déjalo en blanco.'; return; }
-  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0, ud: recMl() && R.ud === 'ml' ? 'ml' : undefined, rp: recipOk() && R.rp && rcpDe(R.rp) ? R.rp : undefined,
+  if (recipOk() && R.otra) { nuevo = rcpCrea(R.otra); if (nuevo) { R.rp = nuevo.id; R.otra = null; R.sin = false; ta = nuevo.g; perf = true; } else R.otra = null; }
+  if (recipOk() && R.rp && rcpDe(R.rp) && !R.sin && ll) perf = rcpUsado(R.rp) || perf;
+  var b = { id: R.id, tipo: 'rec', n: n, ing: R.ing.map(function (i) { return { key: i.key, n: i.n, g: Math.round(i.g * 10) / 10, k: i.k, p: i.p, h: i.h, gr: i.gr }; }), pasos: String(R.pasos || '').trim().slice(0, 2000), rac: rac, olla: olla || 0, tara: ta || 0, llena: ll || 0, foto: R.foto ? 1 : 0, ud: recMl() && R.ud === 'ml' ? 'ml' : undefined, rp: recipOk() && !R.sin && R.rp && rcpDe(R.rp) ? R.rp : undefined, sin: recipOk() && R.sin && ll ? 1 : undefined,
     k: Math.round(T.k / rac), p: Math.round(T.p / rac * 10) / 10, h: Math.round(T.h / rac * 10) / 10, g: Math.round(T.g / rac * 10) / 10 };
   guardaBiblio(b);
   if (R.fotoN) { if (R.foto) RFOTO[b.id] = R.foto; else delete RFOTO[b.id]; rpc('yo_rec_foto_poner', { bid: b.id, foto: R.foto || null }).then(null, function () { toast('La receta se ha guardado, pero la foto no se ha podido subir'); }); }
+  if (perf) { guardaPerfil(); if (nuevo) toast(nuevo.n + (rcpT(nuevo.t)[3] === 'a' ? ' guardada' : ' guardado'), 'ok'); }
   if (!recipOk() && ta && (!S.perfil || +S.perfil.tara !== ta)) { if (!S.perfil) S.perfil = perfilNuevo(); S.perfil.tara = ta; guardaPerfil(); }
   toast('Receta guardada', 'ok'); S.pant = null; S.pila = []; S.x.nr = { q: '', t: '' }; ir({ t: 'nrecetas' });
 };
