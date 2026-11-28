@@ -6145,7 +6145,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.270';
+var APP_V = 'v53.4.271';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9096,11 +9096,13 @@ function comCardCl(){
 /* v53.4.181 (20 nov, 23:56, Chadín: «aplica ese sí»): modo oscuro «J» en la app de la clienta, como el panel de usuaria (tarjetas negras
    sobre gris oscuro). Como el móvil (lo normal), Claro u Oscuro: la luna (o el sol) arriba a la izquierda y Perfil → Ajustes → Apariencia.
    Se guarda en este móvil (cl_tema). El CSS, generado del claro con tools/oscuro_clienta/gen.py, entre las marcas «modo oscuro J». */
-function clTemaDe(){ try{ var v=localStorage.getItem('cl_tema'); return v==='claro'||v==='oscuro'?v:'auto'; }catch(e){ return 'auto'; } }
+/* v53.4.271 (Javier, 28 nov, 09:38: «el modo oscuro no me gusta como sale en ningún sitio, ni en la clienta ni usuaria; quita esa opción, que solo
+   se pueda el modo actual»): siempre claro, aunque el móvil esté en oscuro o lo hubiera elegido antes (se borra cl_tema). El CSS del oscuro se queda, sin usarse */
+function clTemaDe(){ try{ localStorage.removeItem('cl_tema'); }catch(e){} return 'claro'; }
 function clOscuro(){ return document.documentElement.getAttribute('data-tema')==='oscuro'; }
 function clPonTema(){
   if(BOOT.mode!=='clienta') return;
-  var v=clTemaDe(), o=v==='oscuro'||(v!=='claro'&&!!(window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches)), t=o?'oscuro':'claro';
+  var v=clTemaDe(), o=false, t='claro';
   if(document.documentElement.getAttribute('data-tema')===t) return;
   document.documentElement.setAttribute('data-tema',t);
   try{ var m=document.querySelector('meta[name=theme-color]'); if(m) m.setAttribute('content',o?'#1C1C1E':'#EDEDEA'); }catch(e){}
@@ -25404,7 +25406,7 @@ function pfAjL(){
   var dc=descCfg(), pe=PUSH.est, L=[
     ['desc','reloj','Aviso del descanso',dc.son?(dc.cta?'Pitidos y cuenta atrás 3, 2, 1':'Pitidos al terminar'):'Sin sonido',descClCard],
     ['push','campana','Avisos en este móvil',pe==='on'?'Activados':pe==='no'&&!pushIOS()?'Este navegador no los permite':'Desactivados',pushClCard],
-    ['tema',clOscuro()?'luna':'sol','Apariencia',{auto:'Como el móvil',claro:'Claro',oscuro:'Oscuro'}[clTemaDe()],temaClCard]];      // v53.4.181
+    ];      // v53.4.271: fuera «Apariencia» (sin modo oscuro)
   if(!hombreCl()) L.push(['ciclo','corazon','Tu ciclo',cicloOn()?'Lo ves en Hoy':'Apagado',cicloPfCard]);
   L.push(['fb','idea','Feedback','¿Qué mejorarías? Cuéntamelo',sugClCard]);
   L.push(['cuenta','candado','Tu cuenta y privacidad','Contraseña, acceso y política de privacidad',function(){ return miCuentaCard()||'<div class="card cuenta"><div class="card-t">'+ic('candado')+'Tu privacidad</div><button class="link" data-a="verPriv">Política de privacidad</button></div>'; }]);

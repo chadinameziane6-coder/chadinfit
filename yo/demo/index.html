@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#EFEFF1">
-<script>/* el modo claro/oscuro elegido se pone antes de pintar nada, para que no parpadee */try{var t_=localStorage.getItem('yo_tema');if(t_!=='claro'&&t_!=='oscuro')t_='';var o_=t_?t_==='oscuro':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.setAttribute('data-tema',o_?'oscuro':'claro');document.querySelector('meta[name=theme-color]').setAttribute('content',o_?'#1C1C1E':'#EDEDEA');}catch(e){}</script>
+<script>/* yo-1.87 (Javier, 28 nov: «el modo oscuro no me gusta como sale en ningún sitio… quita esa opción, que solo se pueda el modo actual»): siempre claro */document.documentElement.setAttribute('data-tema','claro');try{localStorage.removeItem('yo_tema');}catch(e){}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="MOOD ON">
@@ -3244,6 +3244,47 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
 .rpx>.link.izq{margin-top:8px}
 .rpx-ho{display:flex;flex-direction:column}.rpx-ho .rpx-q{margin-top:2px}
 .rpx-ho .f{margin-top:12px}
+/* yo-1.87: Series por músculo, por semanas (‹ Esta semana ›) */
+.p3-wk{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:10px 0 4px}
+.p3-wk b{flex:1;text-align:center;font-size:14px;font-weight:800}
+.p3-wk .redondo:disabled{opacity:.3}
+.sem-nv{flex-shrink:0}.sem-nv .nv-tabs{margin:0}
+/* yo-1.87: fotos de progreso, tres por fecha (frente, perfil, espalda) y modo oculto */
+.fo-cab{display:flex;align-items:center;justify-content:space-between;gap:10px}.fo-cab .cue-t{margin:0}
+.fo-oc{display:inline-flex;align-items:center;gap:5px;font-weight:700;color:var(--tx2)}
+.fo-c .fo-dia{margin-top:12px}
+.fo-g{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fo-g .fo-th{width:auto;min-width:0}
+.fo-g .fo-th img,.fo-g .fo-th>i{width:100%;height:auto;aspect-ratio:3/4;object-fit:cover;border-radius:12px;background:var(--suave);display:block}
+.fo-g .fo-th span{text-align:center}
+.fo-v>i{display:grid!important;place-items:center;border:1.5px dashed var(--borde2);background:transparent!important;color:var(--tx2)}
+.fo-v span{color:var(--tx3)}
+.fo-lock{display:flex;align-items:center;gap:12px;width:100%;margin-top:12px;padding:14px;border-radius:16px;border:0;background:var(--suave);text-align:left;font:inherit;color:var(--tx)}
+.fo-lk-i{width:40px;height:40px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none}
+.fo-lk-t{flex:1;min-width:0;display:flex;flex-direction:column}.fo-lk-t b{font-size:15px}.fo-lk-t small{font-size:12.5px;color:var(--tx2)}
+.fo-pr{display:block;margin-top:10px;font-size:12px;line-height:1.35}
+/* yo-1.87: anotar medidas por lado */
+.me-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:6px 0 12px}
+.me-c{display:flex;flex-direction:column;gap:4px;min-width:0;font-size:12.5px;font-weight:700;color:var(--tx2)}
+.me-c .rc-u{margin-top:0}.me-c input{width:100%;min-width:0;height:48px;border:1px solid var(--borde2);border-radius:14px;padding:0 34px 0 12px;font-size:16px;font-weight:600;color:var(--tx);background:var(--card);outline:0}.me-c input:focus{border-color:var(--tx)}
+.me-l{display:flex;flex-direction:column;gap:8px;margin:6px 0 12px}
+.me-r{display:grid;grid-template-columns:82px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:end}
+.me-r>b{font-size:14px;padding-bottom:14px}.me-l .me-c>span:first-child{font-size:11.5px}
+/* yo-1.87: el récord del post, con «+2 récords» que se abre; los comentarios en una hoja dentro de la Comunidad */
+.hv-rec{display:flex;align-items:center;gap:10px;margin:12px 0 0;padding:9px 12px;border-radius:14px;background:#FFF6DD;color:#7A5A00;font-weight:700}
+.hv-rec-i{width:28px;height:28px;border-radius:50%;background:#FFE7A3;display:grid;place-items:center;flex:none;color:#8A6400}
+.hv-rec-t{flex:1;min-width:0;display:flex;flex-direction:column}.hv-rec-t small{font-size:11px;font-weight:700;color:#9A7A20}.hv-rec-t b{font-size:13.5px;line-height:1.3;color:#3A2C00}
+.hv-rec-m{flex:none;border:0;background:#fff;border-radius:999px;padding:6px 10px;font:inherit;font-size:12.5px;font-weight:800;color:#3A2C00}
+.hv-recs{display:flex;flex-direction:column;gap:6px;margin:6px 0 0;padding:8px 12px 10px;border-radius:14px;background:#FFFBEF}
+.hv-recs span{display:flex;align-items:center;gap:8px;font-size:13.5px;font-weight:700;color:#3A2C00}.hv-recs .ic{color:#B8860B;flex:none}
+.cm-hj{display:flex;flex-direction:column;min-height:52vh}
+.cm-hh{display:flex;flex-direction:column;align-items:center;gap:2px;padding:2px 0 10px;border-bottom:1px solid var(--linea);margin:0 -18px;text-align:center}.cm-hh b{font-size:16px}.cm-hh small{font-size:12.5px;color:var(--tx2);padding:0 18px}
+.cm-hl{flex:1;display:flex;flex-direction:column;gap:14px;padding:14px 0}
+.cm-hv{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;padding:28px 0}
+.cm-hf{position:sticky;bottom:0;display:flex;gap:8px;align-items:center;padding:10px 0 4px;background:var(--card)}
+.cm-hf input{flex:1;min-width:0;height:46px;border:1px solid var(--borde2);border-radius:999px;padding:0 16px;font:inherit;font-size:15px;background:var(--card);color:var(--tx);outline:0}
+.cm-norma{display:block;text-align:center;font-size:11.5px;padding-top:2px}
+.rcp-est{margin:10px 0 2px;padding:10px 12px;border-radius:14px;background:var(--suave);font-size:13px;line-height:1.4;color:var(--tx2)}.rcp-est b{color:var(--tx)}
 
 </style>
 <style>#demo-b{position:fixed;left:50%;transform:translateX(-50%);top:calc(6px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:6px;background:#111;color:#fff;border-radius:14px;padding:4px 5px 4px 12px;font:700 11.5px "Plus Jakarta Sans",system-ui,sans-serif;letter-spacing:.02em;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}#demo-b button,#demo-b a{border:0;border-radius:10px;background:rgba(255,255,255,.18);color:#fff;font:700 11px "Plus Jakarta Sans",system-ui,sans-serif;padding:4px 9px;cursor:pointer;text-decoration:none}#demo-b span{margin-right:2px}#demo-b .demo-rev{background:#E0A100;color:#111}.pad,.pad-tab{padding-top:calc(50px + env(safe-area-inset-top))!important}.ses-cab{padding-top:calc(42px + env(safe-area-inset-top))!important}.toast{top:calc(44px + env(safe-area-inset-top))!important}.acc{padding-top:44px}</style></head>
@@ -3406,7 +3447,7 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
         else if(fn==='yo_rec_foto') r=(m.recfoto||{})[a.bid]||null;
         else if(fn==='yo_diario_resumen') r=Object.keys(m.diario||{}).sort().map(function(k){ return {f:k, t:m.diario[k].tot}; });
         else if(fn==='yo_alimentos') r=window.FAKE_AL_MO||[];
-        else if(fn==='yo_guardar_medida'){ m.medidas=m.medidas||{}; var o=Object.assign({}, m.medidas[a.f]||{}); Object.keys(a.d).forEach(function(k){ if(['peso','cintura','cadera','pecho','brazo','muslo'].indexOf(k)<0) throw new Error('Medida desconocida'); if(a.d[k]==null) delete o[k]; else o[k]=a.d[k]; }); if(Object.keys(o).length) m.medidas[a.f]=o; else delete m.medidas[a.f]; }
+        else if(fn==='yo_guardar_medida'){ m.medidas=m.medidas||{}; var o=Object.assign({}, m.medidas[a.f]||{}); Object.keys(a.d).forEach(function(k){ if(['peso','cintura','cadera','pecho','brazo','muslo','brazo_i','muslo_i','gemelo_d','gemelo_i','antebrazo_d','antebrazo_i'].indexOf(k)<0) throw new Error('Medida desconocida'); if(a.d[k]==null) delete o[k]; else o[k]=a.d[k]; }); if(Object.keys(o).length) m.medidas[a.f]=o; else delete m.medidas[a.f]; }      // yo-1.87: + cada lado (en el servidor, con supabase/indep/019_medidas_lados.sql)
         else if(fn==='yo_aceptar'){ if(a.salud!==true) return ok({data:null, error:{message:'Falta la declaración de salud'}}); m.acepta={v:a.v, f:new Date().toISOString()}; m.n_acepta=(m.n_acepta||0)+1; }
         else if(fn==='yo_borrar_cuenta'){ var s=ses(); delete x.d.users[s.user.email]; delete x.d.datos[s.user.id]; if(x.d.comu) comuBorra(x.d.comu, s.user.id, true); pon(x.d); return ok({data:null, error:null}); }
         else if(fn.indexOf('yo_comu_')===0){ var cr=comu(x.d, ses().user.id, fn, a||{}); if(cr&&cr.error) return ok({data:null, error:{message:cr.error}}); r=cr?cr.data:null; }
@@ -3505,7 +3546,7 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
   for (var i = ini; i < 0; i++) {
     var t = (i - ini) / (-ini), peso = p0 + (p1 - p0) * t + Math.sin(i / 2.3) * 0.25 + entre(-0.2, 0.2);
     if (rnd() < 0.78 || i === -1 || i === ini) MED[f(i)] = { peso: Math.round(peso * 10) / 10 };
-    if ((i - ini) % 14 === 0) MED[f(i)] = Object.assign(MED[f(i)] || {}, { cintura: Math.round((74 - 3.6 * t) * 10) / 10, cadera: Math.round((99 - 2 * t) * 10) / 10, pecho: Math.round((89.5 - 0.8 * t) * 10) / 10, brazo: Math.round((28.2 + 0.5 * t) * 10) / 10, muslo: Math.round((57.5 - 1.2 * t) * 10) / 10 });
+    if ((i - ini) % 14 === 0) MED[f(i)] = Object.assign(MED[f(i)] || {}, { cintura: Math.round((74 - 3.6 * t) * 10) / 10, cadera: Math.round((99 - 2 * t) * 10) / 10, pecho: Math.round((89.5 - 0.8 * t) * 10) / 10, brazo: Math.round((28.2 + 0.5 * t) * 10) / 10, muslo: Math.round((57.5 - 1.2 * t) * 10) / 10, brazo_i: Math.round((27.9 + 0.5 * t) * 10) / 10, muslo_i: Math.round((57.1 - 1.1 * t) * 10) / 10, gemelo_d: Math.round((35.4 - 0.2 * t) * 10) / 10, gemelo_i: Math.round((35.1 - 0.2 * t) * 10) / 10 });      // yo-1.87: y cada lado
   }
   function fotoDe(n, cin, txt) {
     try {
@@ -3519,8 +3560,8 @@ html[data-tema="oscuro"] .st.st-l2 .st-rir{background:#1C1C1E;border-color:#2C2C
     } catch (e) { return null; }
   }
   var FOT = {};
-  [[desde, 41], [Math.round(desde / 2), 37], [-2, 34]].forEach(function (q) { var tx = dia(q[0]).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });      // 21 nov: de frente y de perfil (el ángulo, en el nombre)
-    [['frente', q[1]], ['perfil', Math.round(q[1] * 0.55)]].forEach(function (a) { var u = fotoDe(q[0], a[1], tx + ' · ' + a[0]); if (u) FOT[UID + '/' + f(q[0]) + '_' + a[0] + '_' + id(8) + '.jpg'] = u; }); });
+  [[desde, 41], [Math.round(desde / 2), 37], [-2, 34]].forEach(function (q) { var tx = dia(q[0]).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' });      // 21 nov: de frente y de perfil (el ángulo, en el nombre); yo-1.87: y de espalda
+    [['frente', q[1]], ['perfil', Math.round(q[1] * 0.55)], ['espalda', q[1]]].forEach(function (a) { var u = fotoDe(q[0], a[1], tx + ' · ' + a[0]); if (u) FOT[UID + '/' + f(q[0]) + '_' + a[0] + '_' + id(8) + '.jpg'] = u; }); });
 
   /* ---------- comidas de las 3 últimas semanas (y el desayuno de hoy) ---------- */
   var AL = D.al;   // id: [nombre, kcal, p, h, g, unidad, gramos por unidad] por 100 g
@@ -4412,7 +4453,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.86';
+var YO_V = 'yo-1.87';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -4443,14 +4484,12 @@ function $(s, r) { return (r || document).querySelector(s); }
 function nuevoId() { return rand(10); }
 function fmtK(v) { return String(Math.round(v || 0)).replace(/\B(?=(\d{3})+(?!\d))/g, '.'); }   // 6.240 (con punto también en 4 cifras, como el diseño)
 
-/* ---------- modo claro / oscuro: «Como el móvil» (lo normal), «Claro» u «Oscuro»; se guarda en este navegador ---------- */
-function temaDe() { try { var v = localStorage.getItem('yo_tema'); return v === 'claro' || v === 'oscuro' ? v : 'auto'; } catch (e) { return 'auto'; } }
-function esOscuro() { var t = document.documentElement.getAttribute('data-tema'); return t ? t === 'oscuro' : !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches); }
-function colorBarra() { var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', esOscuro() ? '#1C1C1E' : '#EDEDEA'); }
-/* 20 nov (modo oscuro J): «Como el móvil» también pone data-tema (el que toca ahora), para que todo el CSS mire solo data-tema; lo elegido se guarda aparte (yo_tema) */
-function ponTema(v) { var d = document.documentElement, o = v === 'oscuro' || (v !== 'claro' && !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches)); d.setAttribute('data-tema', o ? 'oscuro' : 'claro'); colorBarra(); }
-function temaMovil() { if (temaDe() !== 'auto') return; ponTema('auto'); try { pintar(); } catch (e) { } }
-try { var mqO = matchMedia('(prefers-color-scheme: dark)'); if (mqO.addEventListener) mqO.addEventListener('change', temaMovil); else if (mqO.addListener) mqO.addListener(temaMovil); } catch (e) { }
+/* ---------- yo-1.87 (Javier, 28 nov, 09:38: «el modo oscuro no me gusta como sale en ningún sitio, ni en la clienta ni usuaria; quita esa opción, que
+   solo se pueda el modo actual»): siempre el modo claro, aunque el móvil esté en oscuro. El CSS del oscuro mira data-tema, que ya nunca es «oscuro» ---------- */
+function temaDe() { return 'claro'; }
+function esOscuro() { return false; }
+function colorBarra() { var m = document.querySelector('meta[name=theme-color]'); if (m) m.setAttribute('content', '#EDEDEA'); }
+function ponTema() { document.documentElement.setAttribute('data-tema', 'claro'); colorBarra(); }
 
 /* ---------- iconos (línea fina) ---------- */
 var IC = {
@@ -5478,12 +5517,14 @@ A.semCambiar = function (el) { A.planDias({ dataset: { v: '', d: el.dataset.v } 
 /* yo-1.85 (Javier, 28 nov, 08:48: «al buscar rutina para tu semana te salga igual que cuando buscas por fuerza, con las imágenes, niveles y todo»): las
    mismas fichas con foto, minutos y nivel que en Entrenar → Rutinas (con «Favoritas»); al tocar una, se pone ese día */
 A.semSuelta = function (el) { S.x.semD = el.dataset.d || S.x.semD; var f = S.x.semF || '', fav = f === '__fav', L = rsVisibles(fav ? '' : f); if (fav) L = L.filter(function (x) { return favOn(x.id); });
-  hoja('<h2>Rutina de MOOD ON para el ' + DIA_N[S.x.semD].toLowerCase() + '</h2><div class="chips scroll sem-ch">' + [['__fav', '♥ Favoritas']].concat(RS_CATS).map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="semSueltaF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>' +
+  var N = fav ? null : rsNivel(L, S.x.semNiv); if (N) L = N.G;      // yo-1.87: con sus niveles, como en Programas → Rutinas sueltas
+  hoja('<h2>Rutina de MOOD ON para el ' + DIA_N[S.x.semD].toLowerCase() + '</h2>' + (N ? '<div class="sem-nv">' + nivTabs(N.cur, N.C, N.tuN, 'semSueltaN', 'rutina') + '</div>' : '') + '<div class="chips scroll sem-ch">' + [['__fav', '♥ Favoritas']].concat(RS_CATS).map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="semSueltaF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>' +
     '<div class="prog-lst sem-rs"><small class="mut">' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + ' · toca una para ponerla el ' + DIA_N[S.x.semD].toLowerCase() + '</small>' + (fav && !L.length ? '<p class="mut sm fav-v">Aún no tienes rutinas en favoritas.</p>' : '') +
-    L.map(function (x) { var ya = rsGuardada(x); return progPh0('semSueltaSi', x.id, imgDe(x.id, x.n, 1), x.min + ' min', x.n, NIV_N[x.niv] + ' · ' + (x.lug === 'casa' ? 'Casa' + (x.mat ? ' · ' + esc(x.mat) : '') : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio') + (ya ? ' · ya en tus rutinas' : '')); }).join('') + '</div>' +
+    L.map(function (x) { var ya = rsGuardada(x); return progPh0('semSueltaSi', x.id, imgDe(x.id, x.n, 1), x.min + ' min', x.n, rsLug(x) + (ya ? ' · ya en tus rutinas' : '')); }).join('') + '</div>' +
     '<button class="btn sec" data-a="pdVolver">Volver</button>');
 };
 A.semSueltaF = function (el) { S.x.semF = el.dataset.v; A.semSuelta({ dataset: {} }); };
+A.semSueltaN = function (el) { S.x.semNiv = el.dataset.v; A.semSuelta({ dataset: {} }); };
 A.semSueltaSi = function (el) { var x = RSUELTAS.filter(function (y) { return y.id === el.dataset.v; })[0], d = S.x.semD; if (!x || !d) return;
   var r = rsGuarda(x), X = S.x.pd;
   if (X) { diaPon(X.sem, X.s2, d, r.id); X.add = ''; X.nota = ''; hoja('<div id="pd-box"></div>'); pdPinta(); pintar(); return; }      // yo-1.66: desde «Cambiar días», al borrador
@@ -6667,9 +6708,10 @@ function vProgramasL() {      // 17 nov (Javier: «quita principiante y avanzado
 }
 A.progF = function (el) { S.x.pf = el.dataset.v; pintar(); };
 A.progNiv = function (el) { S.x.pniv = el.dataset.v; pintar(); };
-function nivTabs(cur, C, tuN) { var NV = [['ini', 'Principiante', 1], ['int', 'Intermedio', 2], ['ava', 'Avanzado', 3]];      // yo-1.75: las pestañas de nivel, para todos los filtros (también Carrera)
+function nivTabs(cur, C, tuN, act, u) { var NV = [['ini', 'Principiante', 1], ['int', 'Intermedio', 2], ['ava', 'Avanzado', 3]];      // yo-1.75: las pestañas de nivel, para todos los filtros (también Carrera)
+  act = act || 'progNiv'; u = u || 'programa';      // yo-1.87: también para las rutinas sueltas
   return '<div class="nv-tabs" role="tablist" aria-label="Nivel">' + NV.map(function (n) { var on = n[0] === cur;
-    return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="progNiv" data-v="' + n[0] + '"' + (n[0] === tuN ? ' aria-label="' + n[1] + ', tu nivel, ' + C[n[0]] + ' programas"' : '') + '>' + (n[0] === tuN ? '<em class="nv-tu">Tu nivel</em>' : '') + '<span>' + nivBarras(n[2]) + n[1] + '</span><small>' + C[n[0]] + (C[n[0]] === 1 ? ' programa' : ' programas') + '</small></button>'; }).join('') + '</div>'; }
+    return '<button role="tab" aria-selected="' + on + '" class="' + (on ? 'on' : '') + '" data-a="' + act + '" data-v="' + n[0] + '"' + (n[0] === tuN ? ' aria-label="' + n[1] + ', tu nivel, ' + C[n[0]] + ' ' + u + 's"' : '') + '>' + (n[0] === tuN ? '<em class="nv-tu">Tu nivel</em>' : '') + '<span>' + nivBarras(n[2]) + n[1] + '</span><small>' + C[n[0]] + ' ' + u + (C[n[0]] === 1 ? '' : 's') + '</small></button>'; }).join('') + '</div>'; }
 function nivTuyo() { var q = (S.perfil && S.perfil.q) || {}; return { ini: 'ini', medio: 'int', avz: 'ava' }[q.niv] || 'ini'; }
 function nivBarras(n) { return '<svg class="nv-b" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true">' + [[1, 8, 5], [5.5, 5, 8], [10, 2, 11]].map(function (b, i) { return '<rect x="' + b[0] + '" y="' + b[1] + '" width="3" height="' + b[2] + '" rx="1"' + (i < n ? '' : ' opacity=".25"') + '/>'; }).join('') + '</svg>'; }
 A.verProg = function (el) { var id = el.dataset.v; antesDe(function () { verProgSi(id); }, 'prog'); };
@@ -7493,7 +7535,41 @@ var PROG_FIJOS = [
     nota: 'Cada día, todo el cuerpo, con algo de carga para tener fuerza en los rangos amplios. Empieza sin peso y añade poco cada 2 semanas si el movimiento sale limpio y sin dolor.',
     D: [{ n: 'Movilidad con carga · día A', p: 'completo', ej: [FJ('Movilidad de cuello', 1, '6'), FJ('CARs de hombro', 2, '4', { ld: 1 }), FJ('Rotación externa de hombro en posición 90/90', 2, '10', { ld: 1 }), FJ('Rotaciones Torácicas en Sentadilla Profunda', 2, '6', { ld: 1 }), FJ('Transiciones 90/90 con extensión de cadera', 2, '6', { ld: 1 }), FJ('Sentadilla Cossack', 3, '5', { ld: 1, nota: 'Sin peso o con una kettlebell ligera' }), FJ('Rodilla a la pared (tobillo)', 2, '10', { ld: 1, nota: 'Con una mancuerna encima de la rodilla' })] },
       { n: 'Movilidad con carga · día B', p: 'completo', ej: [FJ('Retracción de cuello (doble mentón)', 2, '8'), FJ('YTW', 2, '8'), FJ('Deslizamientos de pared del serrato', 2, '10'), FJ('Jefferson Curl', 2, '6', { nota: 'Muy ligero y lento' }), FJ('Sentadilla lateral profunda con kettlebell', 2, '6', { ld: 1 }), FJ('Rotación tibial sentada', 2, '10', { ld: 1 }), FJ('Inversión y eversión activa de tobillo con goma', 2, '12', { ld: 1 })] },
-      { n: 'Movilidad con carga · día C', p: 'completo', ej: [FJ('Dislocaciones de hombro con pica', 2, '10'), FJ('Extensión torácica en foam roller', 2, '8', { nota: 'O sobre una toalla enrollada' }), FJ('Pronación y supinación de antebrazo', 2, '12', { ld: 1 }), FJ('Elevación de pie en 90/90', 2, '8', { ld: 1 }), FJ('Desplazamientos laterales en sentadilla profunda', 2, '6', { ld: 1 }), FJ('Extensión de rodilla con banda', 2, '12', { ld: 1 }), FJ('Elevaciones de talones con rodillas flexionadas (sóleo)', 2, '12')] }] }
+      { n: 'Movilidad con carga · día C', p: 'completo', ej: [FJ('Dislocaciones de hombro con pica', 2, '10'), FJ('Extensión torácica en foam roller', 2, '8', { nota: 'O sobre una toalla enrollada' }), FJ('Pronación y supinación de antebrazo', 2, '12', { ld: 1 }), FJ('Elevación de pie en 90/90', 2, '8', { ld: 1 }), FJ('Desplazamientos laterales en sentadilla profunda', 2, '6', { ld: 1 }), FJ('Extensión de rodilla con banda', 2, '12', { ld: 1 }), FJ('Elevaciones de talones con rodillas flexionadas (sóleo)', 2, '12')] }] },
+  /* yo-1.87 (Javier, 28 nov, 09:38: «en programas de avanzados incluiría más, no puede haber ninguna sección sin nada; en avanzado no hay programa de
+     movilidad, ni resistencia, ni flexibilidad»): uno avanzado en cada sección que no lo tenía, y otro de glúteo */
+  { id: 'mv2', n: 'Movilidad y control · avanzado', c: 'movilidad avanzado', niv: 'ava', dias: 3, min: 30, sem: 8, rir: '', d: 30, mat: 'Kettlebell, pica y goma', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 2, t: 'Rango con control', x: 'Todo el recorrido, lento, con 2 s de pausa al final.', tec: 1 }, { d: 3, h: 6, t: 'Más carga', x: 'Un poco más de peso cada 2 semanas si sale limpio y sin dolor.' }, { d: 7, h: 8, t: 'Consolida', x: 'Mantén la carga y busca más rango y más control.' }],
+    nota: 'Fuerza en los extremos del recorrido: levantamiento turco, sentadilla overhead, Cossack y Jefferson curl con carga. Solo si ya dominas el de intermedio; si algo duele, vuelve a la versión sin peso.',
+    D: [{ n: 'Movilidad y control · día A', p: 'completo', ej: [FJ('CARs de hombro', 2, '5', { ld: 1 }), FJ('Levantamiento turco', 3, '3', { ld: 1, nota: 'Ligero y lento, mirando la kettlebell' }), FJ('Sentadilla Cossack', 3, '6', { ld: 1, nota: 'Con una kettlebell delante' }), FJ('Transiciones 90/90 con extensión de cadera', 3, '8', { ld: 1 }), FJ('Rotaciones Torácicas en Sentadilla Profunda', 2, '6', { ld: 1 }), FJ('Rodilla a la pared (tobillo)', 2, '12', { ld: 1, nota: 'Con una mancuerna encima de la rodilla' })] },
+      { n: 'Movilidad y control · día B', p: 'completo', ej: [FJ('Rotación interna de hombro en posición 90/90 con goma', 2, '12', { ld: 1 }), FJ('Sentadilla overhead', 3, '6', { nota: 'Con la pica o una barra vacía; baja solo hasta donde mantengas los brazos arriba' }), FJ('Jefferson Curl', 3, '6', { nota: 'Ligero y muy lento; solo sin molestias de espalda' }), FJ('Elevación de pie en 90/90', 3, '8', { ld: 1 }), FJ('Desplazamientos laterales en sentadilla profunda', 2, '8', { ld: 1 }), FJ('Rotación tibial sentada', 2, '12', { ld: 1 })] },
+      { n: 'Movilidad y control · día C', p: 'completo', ej: [FJ('Dislocaciones de hombro con pica', 2, '12'), FJ('Extensión torácica en foam roller', 2, '10', { nota: 'O sobre una toalla enrollada' }), FJ('Sentadilla lateral profunda con kettlebell', 3, '8', { ld: 1 }), FJ('Elephant Walk', 3, '10'), FJ('Peso muerto a una pierna', 3, '8', { ld: 1, nota: 'Ligero: rango y equilibrio, no peso' }), FJ('Inversión y eversión activa de tobillo con goma', 2, '15', { ld: 1 })] }] },
+  { id: 'fx2', n: 'Flexibilidad · avanzado', c: 'flexibilidad avanzado', niv: 'ava', dias: 4, min: 30, sem: 8, rir: '', d: 20, mat: 'Goma, banco y una kettlebell', comp: 1, sinCal: 1,
+    fases: [{ d: 1, h: 4, t: '60 segundos con PNF', x: 'Estira, aprieta 5 s contra la goma o el suelo, suelta y estira un poco más.' }, { d: 5, h: 8, t: 'Hasta 90 segundos', x: '10 segundos más cada semana en los estiramientos, hasta 90.', seg: 30 }],
+    nota: 'Para ganar rango de verdad (apertura, isquios, hombros): estiramientos largos de 60-90 s, PNF y fuerza en posiciones de estiramiento. Tensión de 6-8 sobre 10, nunca dolor. Mejor en días sin pierna pesada o después de entrenar.',
+    D: [{ n: 'Flexibilidad · piernas y apertura', p: 'completo', ej: [FJ('Estiramiento de isquios con banda', 3, '60', { seg: 1, ld: 1, nota: 'PNF: aprieta 5 s contra la goma, suelta y estira más' }), FJ('Couch stretch', 3, '60', { seg: 1, ld: 1 }), FJ('Apertura de piernas sentado', 3, '60', { seg: 1, nota: 'Con la espalda recta; inclínate desde la cadera' }), FJ('Estiramiento lateral de aductores sobre cajón mancuerna', 3, '45', { seg: 1, ld: 1 }), FJ('Straddle Leg Lifts', 3, '12'), FJ('Elephant Walk', 3, '12')] },
+      { n: 'Flexibilidad · hombros y espalda', p: 'completo', ej: [FJ('Estiramiento de pectoral en pared', 3, '60', { seg: 1, ld: 1 }), FJ('Estiramiento de dorsal ancho en banco', 3, '60', { seg: 1 }), FJ('Dislocaciones de hombro con pica', 3, '12'), FJ('Estiramiento de tríceps por encima de la cabeza', 2, '45', { seg: 1, ld: 1 }), FJ('Rotación interna de hombro en posición 90/90 con goma', 2, '12', { ld: 1 }), FJ('Estiramiento de antebrazo', 2, '45', { seg: 1 })] },
+      { n: 'Flexibilidad · cadera', p: 'completo', ej: [FJ('Estiramiento de paloma sobre banco con kettlebell', 3, '60', { seg: 1, ld: 1 }), FJ('Rana (aductores)', 3, '60', { seg: 1 }), FJ('Estiramiento de psoas en zancada', 3, '60', { seg: 1, ld: 1 }), FJ('Sentadilla lateral profunda con kettlebell', 3, '8', { ld: 1 }), FJ('Rana dinamica', 2, '12'), FJ('Estiramiento de piriforme en figura 4', 2, '60', { seg: 1, ld: 1 })] },
+      { n: 'Flexibilidad · cadena posterior', p: 'completo', ej: [FJ('Jefferson Curl', 3, '8', { nota: 'Ligero y muy lento; solo sin molestias de espalda' }), FJ('Good morning', 3, '10', { nota: 'Con barra vacía o una pica: rango, no peso' }), FJ('Estiramiento de sóleo en pared', 2, '60', { seg: 1, ld: 1 }), FJ('Estiramiento de cuádriceps en posición de héroe reclinada', 2, '60', { seg: 1, nota: 'Si te molesta la rodilla, el de cuádriceps de pie' }), FJ('Cobra', 2, '30', { seg: 1 }), FJ('Postura del niño con desplaz. lateral', 2, '45', { seg: 1, ld: 1 })] }] },
+  { id: 'fn2', n: 'Funcional · avanzado', c: 'hibrido resistencia avanzado', niv: 'ava', dias: 4, min: 60, sem: 8, rir: '1-2', d: 90, lug: 'gym', obj: 'recomp', tag: 'Funcional',
+    nota: 'Fuerza, potencia y motor en la misma semana. Los circuitos, a RPE 8; la fuerza, pesada pero sin llegar al fallo. Si un día vas muy cansada, quita una vuelta del circuito.',
+    D: [{ n: 'Tren inferior y potencia', p: 'pierna', ej: [FJ('Sentadilla frontal con barra', 4, '6', { rir: '2' }), FJ('Kettlebell swing', 4, '20', { rir: '' }), FJ('Sentadilla búlgara', 3, '10', { ld: 1 }), FJ('Peso muerto a una pierna', 3, '10', { ld: 1 }), FJ('Salto al cajón', 4, '5', { rir: '' }), FJ('Plancha Copenhague', 3, '30', { seg: 1, ld: 1, rir: '' })] },
+      { n: 'Tren superior y carga', p: 'torso', ej: [FJ('Push press con mancuernas', 4, '6'), FJ('Dominadas', 4, '6-10'), FJ('Press de suelo con kettlebell', 3, '10', { ld: 1 }), FJ('Remo gorila con kettlebells', 3, '12'), FJ('Farmer carry con kettlebells', 4, '60', { m: 1, rir: '' }), FJ('Levantamiento turco', 3, '3', { ld: 1 })] },
+      { n: 'Motor', p: 'cardio', ej: [FJ('Remo ergómetro', 1, '', { cardio: 25, nota: 'Ritmo cómodo (zona 2): puedes hablar' }), FJ('Assault bike', 1, '', { cardio: 10, nota: '10 × 20 s fuerte y 40 s suave' })] },
+      { n: 'Full body funcional', p: 'completo', ej: [BQ('Full body', 'circuito', { rondas: 5, tw: 45, tr: 15, trr: 60, nota: 'RPE 8.' }, [BE('Thruster con mancuernas', 45, 's'), BE('Burpee con salto al cajón', 45, 's'), BE('Kettlebell swing', 45, 's'), BE('Devil press', 45, 's'), BE('Cuerdas de batida', 45, 's'), BE('Wall ball', 45, 's')])] }] },
+  { id: 'hi2', n: 'HIIT + fuerza · avanzado', c: 'hibrido resistencia avanzado', niv: 'ava', dias: 4, min: 50, sem: 8, rir: '1-2', d: 90, lug: 'gym', obj: 'grasa', tag: 'HIIT',
+    nota: 'Cuatro días: dos de fuerza con un HIIT al final, uno de intervalos largos y un circuito. Los intervalos, muy fuertes (RPE 8-9) pero sin perder la técnica. Si rindes mucho menos en los últimos, para ahí.',
+    D: [{ n: 'Fuerza + HIIT corto', p: 'completo', ej: [FJ('Sentadilla frontal con barra', 4, '5', { rir: '2' }), FJ('Press de banca con mancuernas', 3, '8'), FJ('Dominadas', 3, '6-10'), BQ('HIIT', 'intervalos', { rondas: 12, tw: 20, tr: 25, nota: 'Calienta 5 min antes. RPE 8-9.' }, [BE('Assault bike', 20, 's')])] },
+      { n: 'Intervalos 5 × 3', p: 'cardio', ej: [BQ('5 × 3 min', 'intervalos', { rondas: 5, tw: 180, tr: 120, nota: '10 min suaves antes y 5 después. Cerca del 90 % de tu FC máx. También en bici o corriendo.' }, [BE('Remo ergómetro', 180, 's')])] },
+      { n: 'Fuerza + EMOM', p: 'completo', ej: [FJ('Peso muerto rumano con barra', 4, '8'), FJ('Push press con mancuernas', 3, '8'),
+        BQ('EMOM 16', 'emom', { min: 16, nota: 'Cada minuto, el siguiente; lo que sobre, descansas. 4 vueltas.' }, [BE('Burpees', 12), BE('Kettlebell swing', 15, '', '24/16'), BE('Wall ball', 15, '', '9/6'), BE('SkiErg', '15/12', 'cal')])] },
+      { n: 'Circuito HIIT', p: 'completo', ej: [BQ('Circuito HIIT', 'circuito', { rondas: 4, tw: 30, tr: 15, trr: 60, nota: 'RPE 8-9.' }, [BE('Thruster con mancuernas', 30, 's'), BE('Burpees', 30, 's'), BE('Mountain climbers', 30, 's'), BE('Sentadilla con salto', 30, 's'), BE('Cuerdas de batida', 30, 's'), BE('Kettlebell swing', 30, 's')])] }] },
+  { id: 'gl7', n: 'Glúteo · avanzado 4 días', c: 'gluteo hipertrofia avanzado', niv: 'ava', dias: 4, min: 65, sem: 8, rir: '0-2', d: 90, lug: 'gym', obj: 'musculo', tag: 'Gimnasio',
+    nota: 'Dos días de glúteo (uno pesado y otro de volumen), uno de pierna y uno de torso. RIR 1-2 en los pesados y 0-1 en los aislamientos.',
+    D: [{ n: 'Glúteo pesado', p: 'pierna', ej: [FJ('Hip thrust', 5, '5-8', { rir: '1-2' }), FJ('Peso muerto sumo con barra', 3, '6', { rir: '2' }), FJ('Sentadilla búlgara con barra', 3, '8', { ld: 1, rir: '1-2' }), FJ('Abducción en máquina', 3, '15-20', { rir: '0-1' }), FJ('Gemelos', 3, '10-15', { rir: '0-1' })] },
+      { n: 'Torso', p: 'torso', ej: [FJ('Jalón al pecho', 3, '8-12', { rir: '1-2' }), FJ('Press inclinado', 3, '8-12', { rir: '1-2' }), FJ('Remo en máquina', 3, '10-12', { rir: '1-2' }), FJ('Elevaciones laterales', 3, '12-20', { rir: '0-1' }), FJ('Face pull', 2, '15', { rir: '1' })] },
+      { n: 'Pierna y femoral', p: 'pierna', ej: [FJ('Hack squat', 3, '8-12', { rir: '1-2' }), FJ('Good morning', 3, '8-10', { rir: '2' }), FJ('Curl nórdico asistido con goma', 3, '5-8', { rir: '1-2' }), FJ('Curl femoral', 3, '10-12', { rir: '0-1' }), FJ('Crunch en polea', 3, '12', { rir: '1' })] },
+      { n: 'Glúteo volumen', p: 'pierna', ej: [FJ('Hip thrust unilateral', 3, '10-15', { ld: 1, rir: '1' }), FJ('Step-up subida en banco', 3, '10', { ld: 1, rir: '1-2' }), FJ('Patada de glúteo en polea', 3, '12-15', { ld: 1, rir: '0-1' }), FJ('Abducción en polea', 3, '15', { ld: 1, rir: '0-1' }), FJ('Sentadilla sumo mancuerna', 3, '12-15', { rir: '1' })] }] }
 ];
 PROG_FIJOS.forEach(function (p) { p.estado = p.estado || 'publicado'; p.sub = ({ ini: 'Principiante', int: 'Intermedio', ava: 'Avanzado' })[p.niv] + ' · ' + p.dias + ' días · ' + p.min + ' min · ' + (p.tag || (p.lug === 'gym' ? 'Gimnasio' : 'Casa · ' + p.mat)); p.fijo = 1; });
 var FJ_SUST = { casa0: 1, casa4: 1, fzi: 1, hip4: 1, ppl6: 1, glu4: 1, glcasa: 1 };      // + «Glúteo y pierna 4 días» y «Glúteo en casa» (los sustituyen los de glúteo)
@@ -7673,9 +7749,20 @@ var RSUELTAS = [
   SU('sm4', 'Movilidad de columna · 12 min', 'movilidad casa', 'ini', 12, { lug: 'casa', mat: 'Sin material', rir: '', d: 20, sinCal: 1 }, [FJ('Gato-camello', 2, '8'), FJ('Rotaciones Torácicas en Cuadrupedia', 2, '6', { ld: 1 }), FJ('Libro abierto', 2, '6', { ld: 1 }), FJ('Extensión torácica en foam roller', 2, '8', { nota: 'O sobre una toalla enrollada' }), FJ('Cobra', 2, '6'), FJ('Postura del niño con desplaz. lateral', 2, '5', { ld: 1 })]),
   SU('sm5', 'Movilidad de hombro y espalda alta · 12 min', 'movilidad casa', 'ini', 12, { lug: 'casa', mat: 'Una pica (o un palo de escoba) y una goma', rir: '', d: 20, sinCal: 1 }, [FJ('CARs de hombro', 2, '3', { ld: 1 }), FJ('Dislocaciones de hombro con pica', 2, '10'), FJ('Rotación externa de hombro en posición 90/90', 2, '10', { ld: 1 }), FJ('Deslizamientos de pared del serrato', 2, '8'), FJ('Ángeles en la pared', 2, '8'), FJ('Protracción y Retracción escapular', 2, '10'), FJ('YTW', 2, '6')]),
   SU('sm6', 'Movilidad de cuello, muñeca y codo · 8 min', 'movilidad casa', 'ini', 8, { lug: 'casa', mat: 'Sin material', rir: '', d: 15, sinCal: 1, nota: 'Ideal si pasas muchas horas sentada o con el móvil.' }, [FJ('Movilidad de cuello', 2, '6'), FJ('Retracción de cuello (doble mentón)', 2, '8'), FJ('Movilidad de muñecas', 2, '10'), FJ('Flexión y extensión de muñeca en cuadrupedia', 2, '10'), FJ('Pronación y supinación de antebrazo', 2, '12', { ld: 1 }), FJ('Círculos articulares de hombro', 2, '10')]),
-  SU('sm7', 'Movilidad antes de entrenar · 8 min', 'movilidad casa', 'ini', 8, { lug: 'casa', mat: 'Una pica', rir: '', d: 10, sinCal: 1, nota: 'Una vuelta de todo, sin estiramientos largos: prepara el cuerpo antes de la fuerza.' }, [FJ('Gato-camello', 1, '6'), FJ('Círculos de cadera en cuadrupedia', 1, '5', { ld: 1 }), FJ('Zancada caminando con rotación de tronco', 1, '5', { ld: 1 }), FJ('Rodilla a la pared (tobillo)', 1, '8', { ld: 1 }), FJ('Dislocaciones de hombro con pica', 1, '10'), FJ('Gusano (inchworm)', 1, '5')])
+  SU('sm7', 'Movilidad antes de entrenar · 8 min', 'movilidad casa', 'ini', 8, { lug: 'casa', mat: 'Una pica', rir: '', d: 10, sinCal: 1, nota: 'Una vuelta de todo, sin estiramientos largos: prepara el cuerpo antes de la fuerza.' }, [FJ('Gato-camello', 1, '6'), FJ('Círculos de cadera en cuadrupedia', 1, '5', { ld: 1 }), FJ('Zancada caminando con rotación de tronco', 1, '5', { ld: 1 }), FJ('Rodilla a la pared (tobillo)', 1, '8', { ld: 1 }), FJ('Dislocaciones de hombro con pica', 1, '10'), FJ('Gusano (inchworm)', 1, '5')]),
+  // ---- yo-1.87 (Javier, 28 nov, 09:38: «rutinas sueltas también filtraría por niveles… no puede haber ninguna sección sin nada»): las que faltaban
+  SU('sm8', 'Movilidad de cadera con carga · 15 min', 'movilidad', 'int', 15, { lug: 'casa', mat: 'Una kettlebell', rir: '', d: 30, sinCal: 1, nota: 'Empieza sin peso; añade la kettlebell cuando el movimiento salga limpio y sin dolor.' }, [FJ('Transiciones 90/90 con extensión de cadera', 3, '6', { ld: 1 }), FJ('Sentadilla Cossack', 3, '6', { ld: 1, nota: 'Con una kettlebell ligera delante' }), FJ('Sentadilla lateral profunda con kettlebell', 2, '6', { ld: 1 }), FJ('Elevación de pie en 90/90', 2, '8', { ld: 1 }), FJ('Desplazamientos laterales en sentadilla profunda', 2, '6', { ld: 1 })]),
+  SU('sm9', 'Movilidad de hombro con carga · 15 min', 'movilidad', 'int', 15, { lug: 'casa', mat: 'Goma, pica y una mancuerna ligera', rir: '', d: 30, sinCal: 1 }, [FJ('CARs de hombro', 2, '4', { ld: 1 }), FJ('Rotación externa de hombro en posición 90/90', 3, '10', { ld: 1, nota: 'Con una mancuerna muy ligera' }), FJ('Rotación interna de hombro en posición 90/90 con goma', 3, '10', { ld: 1 }), FJ('Dislocaciones de hombro con pica', 2, '12'), FJ('Rotaciones torácicas en posición 90/90', 2, '8', { ld: 1 }), FJ('YTW', 2, '8')]),
+  SU('sm10', 'Movilidad avanzada · cuerpo completo · 20 min', 'movilidad', 'ava', 20, { lug: 'casa', mat: 'Kettlebell y pica', rir: '', d: 30, sinCal: 1, nota: 'Fuerza en los extremos del recorrido. Lento y con poco peso; si algo duele, hazlo sin carga.' }, [FJ('Levantamiento turco', 3, '2', { ld: 1, nota: 'Ligero y lento, mirando la kettlebell' }), FJ('Sentadilla overhead', 3, '6', { nota: 'Con la pica' }), FJ('Jefferson Curl', 3, '6', { nota: 'Muy ligero; solo sin molestias de espalda' }), FJ('Sentadilla Cossack', 3, '8', { ld: 1 }), FJ('Rotaciones Torácicas en Sentadilla Profunda', 2, '6', { ld: 1 }), FJ('Elephant Walk', 2, '10')]),
+  SU('sf7', 'Flexibilidad avanzada · apertura y split · 25 min', 'flexibilidad', 'ava', 25, { lug: 'casa', mat: 'Goma, banco y una kettlebell', rir: '', d: 20, sinCal: 1, nota: 'Estiramientos largos con PNF: estira, aprieta 5 s contra la goma o el suelo, suelta y estira un poco más. Nunca dolor.' }, [FJ('Estiramiento de isquios con banda', 3, '60', { seg: 1, ld: 1 }), FJ('Couch stretch', 3, '60', { seg: 1, ld: 1 }), FJ('Apertura de piernas sentado', 3, '60', { seg: 1 }), FJ('Straddle Leg Lifts', 3, '12'), FJ('Estiramiento de paloma sobre banco con kettlebell', 2, '60', { seg: 1, ld: 1 }), FJ('Estiramiento lateral de aductores sobre cajón mancuerna', 2, '45', { seg: 1, ld: 1 })]),
+  SU('f7', 'Funcional avanzado · motor y fuerza', 'funcional', 'ava', 45, { rir: '1-2' }, [FJ('Sentadilla frontal con barra', 4, '5', { rir: '2' }), BQ('Motor y fuerza', 'rondas', { rondas: 5, nota: '90 s entre vueltas. RPE 8.' }, [BE('Thruster con mancuernas', 10, '', '', 'peso medio'), BE('Dominadas', 8), BE('Kettlebell swing', 20, '', '24/16'), BE('Burpee con salto al cajón', 8), BE('Farmer carry con kettlebells', 40, 'm', '32/24')])]),
+  SU('p11', 'Rutina hipertrofia avanzada · pierna completa', 'hipertrofia', 'ava', 70, { rir: '0-1' }, [FJ('Hack squat', 4, '6-10', { rir: '1' }), FJ('Peso muerto rumano', 4, '6-8', { rir: '1-2' }), FJ('Sentadilla búlgara', 3, '8-10', { ld: 1, rir: '0-1' }), FJ('Extensión de cuádriceps', 3, '12-15', { rir: '0' }), FJ('Curl femoral', 3, '10-12', { rir: '0-1' }), FJ('Gemelos', 4, '8-12', { rir: '0-1' })]),
+  SU('p12', 'Rutina hipertrofia avanzada · torso', 'hipertrofia', 'ava', 70, { rir: '0-1' }, [FJ('Press inclinado', 4, '6-10', { rir: '1' }), FJ('Dominadas lastradas', 4, '5-8', { rir: '1' }), FJ('Press plano con mancuernas', 3, '8-12', { rir: '1' }), FJ('Remo con apoyo', 3, '8-12', { rir: '1' }), FJ('Elevaciones laterales', 4, '12-20', { rir: '0' }), FJ('Curl bayesiano', 3, '10-12', { ld: 1, rir: '0' }), FJ('Extensión overhead', 3, '10-15', { rir: '0' })]),
+  SU('gx1', 'Glúteo avanzado · fuerza y bombeo', 'gluteo', 'ava', 60, { rir: '0-1' }, [FJ('Hip thrust', 4, '6-8', { rir: '1' }), FJ('Peso muerto sumo con barra', 3, '6', { rir: '2' }), FJ('Sentadilla búlgara', 3, '8-10', { ld: 1, rir: '0-1' }), FJ('Hip thrust unilateral', 3, '12', { ld: 1, rir: '0-1' }), FJ('Abducción en máquina', 3, '15-20', { rir: '0' }), FJ('Patada de glúteo en polea', 2, '12-15', { ld: 1, rir: '0' })]),
+  SU('s7', 'Rutina fuerza avanzada · sentadilla y peso muerto', 'fuerza', 'ava', 75, { rir: '1-2', d: 210, nota: 'Serie más pesada primero (top set) y luego las de bajada. Solo con buena técnica en los dos.' }, [FJ('Sentadilla', 5, '3', { top: 1, rb: '5', rir: '1', rirb: '2' }), FJ('Peso muerto', 3, '3', { top: 1, rb: '4', rir: '1-2', rirb: '2' }), FJ('Sentadilla frontal con barra', 3, '5'), FJ('Curl nórdico asistido con goma', 3, '5'), FJ('Rueda abdominal', 3, '10', { rir: '2' })]),
+  SU('s8', 'Rutina fuerza avanzada · empuje y tirón', 'fuerza', 'ava', 70, { rir: '1-2', d: 180 }, [FJ('Press banca', 5, '3', { top: 1, rb: '5', rir: '1', rirb: '2' }), FJ('Dominadas lastradas', 4, '4-6'), FJ('Press militar', 4, '5'), FJ('Remo', 4, '6'), FJ('Face pull', 3, '15', { rir: '1' })])
 ];
-var RS_P = { p4: 'torso', p5: 'tiron', p6: 'empuje', p9: 'torso', p10: 'torso', s2: 'empuje', s4: 'empuje', p7: 'pierna', s1: 'pierna', s3: 'pierna', h4: 'pierna' };      // el calentamiento, según lo que se trabaja
+var RS_P = { p4: 'torso', p5: 'tiron', p6: 'empuje', p9: 'torso', p10: 'torso', s2: 'empuje', s4: 'empuje', p7: 'pierna', s1: 'pierna', s3: 'pierna', h4: 'pierna', p11: 'pierna', p12: 'torso', s7: 'pierna', s8: 'torso', f7: 'completo' };      // el calentamiento, según lo que se trabaja
 RSUELTAS.forEach(function (x) { x.p = x.ej[0].runE ? 'carrera' : RS_P[x.id] || (/gluteo/.test(x.c) ? 'pierna' : 'completo'); });
 function rsVisibles(f) { var b = rpBorr(); return RSUELTAS.filter(function (x) { return (x.estado !== 'borrador' || b) && (!f || (f === 'carrera' ? x.p === 'carrera' : x.c.split(' ').indexOf(f) >= 0)); }); }      // 21 nov (Chadín: «le doy a Carrera y me sitúa en el principio de nuevo»: salían primero las de Híbrido): en Carrera, solo las de correr   // 18 nov: publicadas (una nueva con estado 'borrador' solo en las demos)
 function rsRutina(x) {      // la rutina (con su calentamiento), como un día de los programas del Word
@@ -7688,13 +7775,23 @@ function rsTxtEj(e) {
   var s = e.sets || [], u = uSuf(e.u), rr = s.map(function (z) { return z.r; });
   return (rr.every(function (r) { return r === rr[0]; }) ? s.length + ' × ' + rr[0] + u : rr.join('-') + u) + (e.uni ? ' por lado' : '');      // yo-1.70: «por lado»
 }
+/* yo-1.87 (Javier, 28 nov, 09:38: «rutinas sueltas también filtraría por niveles»): las mismas tres pestañas que en Programas (se abre en tu nivel);
+   en Favoritas, todas, por nivel. RS_LUG: lo de debajo del nombre en cada ficha */
+function rsLug(x) { return NIV_N[x.niv] + ' · ' + (x.lug === 'casa' ? 'Casa' + (x.mat ? ' · ' + esc(x.mat) : '') : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio'); }
+function rsNivel(L, nv) { var C = { ini: 0, int: 0, ava: 0 }; L.forEach(function (x) { C[x.niv] = (C[x.niv] || 0) + 1; }); var tuN = nivTuyo(), cur = nv || tuN; return { C: C, tuN: tuN, cur: cur, G: L.filter(function (x) { return x.niv === cur; }) }; }
 function vSueltas() {
   var f = S.x.rsf || '', fav = f === '__fav', L = rsVisibles(fav ? '' : f); if (fav) L = L.filter(function (x) { return favOn(x.id); });      // 21 nov: «Favoritas»
-  var h = '<div class="chips scroll">' + [['__fav', '♥ Favoritas']].concat(RS_CATS).map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="rsF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>';
-  return h + '<div class="prog-lst"><small class="mut">' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + (fav ? ' en favoritas' : ' · para un día suelto') + '</small>' + (fav && !L.length ? '<p class="mut sm fav-v">Toca ' + ic('corazon', 14) + ' en una rutina para tenerla aquí.</p>' : '') + (function () { return L.map(function (x) {      // 18 nov: con la foto de su tema, cada una la suya
-    return progPh('verSuelta', x.id, imgDe(x.id, x.n, 1), x.min + ' min', x.n, NIV_N[x.niv] + ' · ' + (x.lug === 'casa' ? 'Casa' + (x.mat ? ' · ' + esc(x.mat) : '') : x.p === 'carrera' ? 'Corriendo' : 'Gimnasio')); }).join(''); })() + '</div>';
+  var ch = '<div class="chips scroll">' + [['__fav', '♥ Favoritas']].concat(RS_CATS).map(function (c) { return '<button class="chip' + (f === c[0] ? ' on' : '') + '" data-a="rsF" data-v="' + c[0] + '">' + c[1] + '</button>'; }).join('') + '</div>';
+  var ph = function (x) { return progPh('verSuelta', x.id, imgDe(x.id, x.n, 1), x.min + ' min', x.n, rsLug(x)); };      // 18 nov: con la foto de su tema, cada una la suya
+  if (fav) { var hf = ch + '<div class="prog-lst"><small class="mut">' + L.length + (L.length === 1 ? ' rutina' : ' rutinas') + ' en favoritas</small>' + (!L.length ? '<p class="mut sm fav-v">Toca ' + ic('corazon', 14) + ' en una rutina para tenerla aquí.</p>' : '');
+    [['ini', 'Principiante'], ['int', 'Intermedio'], ['ava', 'Avanzado']].forEach(function (n) { var G = L.filter(function (x) { return x.niv === n[0]; }); if (G.length) hf += '<b class="prog-niv">' + n[1] + ' · ' + G.length + '</b>' + G.map(ph).join(''); });
+    return hf + '</div>'; }
+  var N = rsNivel(L, S.x.rsniv);
+  return nivTabs(N.cur, N.C, N.tuN, 'rsNiv', 'rutina') + ch + '<div class="prog-lst"><small class="mut">' + N.G.length + (N.G.length === 1 ? ' rutina' : ' rutinas') + ' de nivel ' + NIV_N[N.cur].toLowerCase() + ' · para un día suelto</small>' +
+    (!N.G.length ? '<p class="mut sm fav-v">No hay rutinas de este nivel con este filtro. Prueba con otro nivel o quita el filtro.</p>' : '') + N.G.map(ph).join('') + '</div>';
 }
 A.rsF = function (el) { S.x.rsf = el.dataset.v; pintar(); };
+A.rsNiv = function (el) { S.x.rsniv = el.dataset.v; pintar(); };
 A.progVista = function (el) { S.x.pvp = el.dataset.v; pintar(); };
 A.verSuelta = function (el) { ir({ t: 'suelta', id: el.dataset.v }); };
 VISTAS.suelta = function (p) {
@@ -9907,8 +10004,7 @@ function vPerfil() {
   if (ce === undefined && !C.cargando && !C.err && S.user) setTimeout(comuCarga, 0);
   h += '<b class="tit-sec">Comunidad</b><section class="card pf2-c">' + (ce === undefined && !C.err ? '<p class="mut sm pf2-cg">Cargando…</p>' : ce && ce.activo ? pfFila('cAjustes', 'Tu nombre y tu foto en Comunidad', esc(ce.nombre || '') + ' · personas bloqueadas, normas') + pfFila('cAvisos', 'Avisos', 'Me gusta, comentarios y seguidores nuevos') + pfFila('cDesactivar', 'Salir de Comunidad', 'Tus publicaciones dejan de verse')
     : pfFila('tab', 'Entrar en Comunidad', 'Comparte tus entrenos y tus recetas, si quieres', '', ' data-v="comu"')) + '</section>';
-  h += '<b class="tit-sec">Apariencia</b><section class="card pf2-c"><div class="seg3 tema" role="radiogroup" aria-label="Apariencia">' + [['auto', 'Como el móvil'], ['claro', 'Claro'], ['oscuro', 'Oscuro']].map(function (x) {
-    return '<button role="radio" aria-checked="' + (tm === x[0]) + '"' + (tm === x[0] ? ' class="on"' : '') + ' data-a="tema" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div><small class="mut pf2-tm">' + (tm === 'auto' ? 'Sigue el modo claro u oscuro de tu móvil.' : 'Solo en este móvil o navegador.') + '</small></section>';
+      // yo-1.87: fuera «Apariencia» (sin modo oscuro)
   h += '<b class="tit-sec">Privacidad y datos</b><section class="card pf2-c">' +
     '<a class="fila-b pf-f" href="../../condiciones.html" target="_blank" rel="noopener"><span class="col"><b>Condiciones de uso</b><small>Lo que aceptaste al crear tu cuenta</small></span>' + ic('sig', 16) + '</a>' +
     '<a class="fila-b pf-f" href="../../privacidad.html#yo" target="_blank" rel="noopener"><span class="col"><b>Política de privacidad</b><small>Qué guardamos y para qué</small></span>' + ic('sig', 16) + '</a>' +
@@ -9917,8 +10013,7 @@ function vPerfil() {
   return h;
 }
 VISTAS.perfil = function () { return vPerfil(); };      // por si algo antiguo la abre encima: es la misma
-A.temaRapido = function () { A.tema({ dataset: { v: esOscuro() ? 'claro' : 'oscuro' } }); };      // 17 nov 2026: el botón de Inicio (el sol o la luna)
-A.tema = function (el) { var v = el.dataset.v; try { if (v === 'auto') localStorage.removeItem('yo_tema'); else localStorage.setItem('yo_tema', v); } catch (e) { } ponTema(v); pintar(); };
+A.temaRapido = A.tema = function () { ponTema(); pintar(); };      // yo-1.87: sin modo oscuro (por si algo antiguo lo llama)
 var pfT; IN.pfNom = function (t) { S.perfil.nombre = t.value.trim(); clearTimeout(pfT); pfT = setTimeout(guardaPerfil, 900); };
 
 /* ---------- 22 nov, 11:38 (Chadín: «que puedas cambiar contraseña en panel usuario»): la actual (se comprueba entrando con ella) y la nueva dos veces.
@@ -10048,6 +10143,14 @@ A.pfFotoQuitar = function () { if (S.perfil.fotoCm) { delete S.perfil.fotoCm; av
 ;
 /* ---------- Progreso: peso (con la media semanal), medidas, fotos privadas, récords y volumen (tablero 24) ---------- */
 var MED_K = [['cintura', 'Cintura'], ['cadera', 'Cadera'], ['pecho', 'Pecho'], ['brazo', 'Brazo'], ['muslo', 'Muslo']];
+/* yo-1.87 (Javier, 28 nov, 09:38: «falta medidas por extremidad, muslo derecho e izquierdo etc.»): como las clientas (MED_COLS de la app), cada lado
+   aparte: brazo, muslo, gemelo y antebrazo, derecho e izquierdo. «brazo» y «muslo» de antes pasan a ser el derecho. Necesita que el servidor acepte las
+   claves nuevas (supabase/indep/019_medidas_lados.sql): hasta aplicarlo, MED_LADOS_ON = false y solo se ve en las demos con borradores */
+var MED_LADOS_ON = false;
+var MED_K2 = [['cintura', 'Cintura'], ['cadera', 'Cadera'], ['pecho', 'Pecho'], ['brazo', 'Brazo dcho.'], ['brazo_i', 'Brazo izq.'], ['muslo', 'Muslo dcho.'], ['muslo_i', 'Muslo izq.'],
+  ['gemelo_d', 'Gemelo dcho.'], ['gemelo_i', 'Gemelo izq.'], ['antebrazo_d', 'Antebrazo dcho.'], ['antebrazo_i', 'Antebrazo izq.']];
+function medLados() { return MED_LADOS_ON || (typeof rpBorr === 'function' && rpBorr()); }
+function medK() { return medLados() ? MED_K2 : medK(); }
 var FOTOS_B = 'yo-fotos';
 function medDe(f) { for (var i = 0; i < S.medidas.length; i++) if (S.medidas[i].fecha === f) return S.medidas[i]; return null; }
 function pesos() { return S.medidas.filter(function (m) { return num(m.peso); }); }
@@ -10151,10 +10254,10 @@ function ponMedida(f, d) {
 
 /* --- medidas y fotos --- */
 function progMed() {
-  var M = S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); }), u = M[M.length - 1];
-  var ult = {}; M.forEach(function (m) { MED_K.forEach(function (k) { if (num(m[k[0]])) ult[k[0]] = { v: num(m[k[0]]), f: m.fecha }; }); });
+  var M = S.medidas.filter(function (m) { return medK().some(function (k) { return num(m[k[0]]); }); }), u = M[M.length - 1];
+  var ult = {}; M.forEach(function (m) { medK().forEach(function (k) { if (num(m[k[0]])) ult[k[0]] = { v: num(m[k[0]]), f: m.fecha }; }); });
   var h = '<div class="dos"><section class="card"><span class="card-tt ico">' + ic('cinta', 18) + 'Medidas</span>';
-  if (u) { h += MED_K.filter(function (k) { return ult[k[0]]; }).map(function (k) { return '<div class="kv2"><span class="mut">' + k[1] + '</span><b>' + fN(ult[k[0]].v, 1) + ' cm</b></div>'; }).join('') + '<small class="mut">Última: ' + haceTxt(u.fecha) + '</small>'; }
+  if (u) { h += medK().filter(function (k) { return ult[k[0]]; }).map(function (k) { return '<div class="kv2"><span class="mut">' + k[1] + '</span><b>' + fN(ult[k[0]].v, 1) + ' cm</b></div>'; }).join('') + '<small class="mut">Última: ' + haceTxt(u.fecha) + '</small>'; }
   else h += '<small class="mut">Cintura, cadera, pecho, brazo y muslo. Con una cinta métrica, cada 2–4 semanas.</small>';
   h += '<button class="link izq" data-a="medAnotar">+ Anotar medidas</button></section>';
   var F = S.fotos;
@@ -10170,7 +10273,7 @@ function progMed() {
   h += '<label class="link izq">+ Subir foto<input type="file" accept="image/*" data-ch="fotoSubir" hidden></label></section></div>';
   if (M.length > 1) h += cardGrafMed(M, ult);
   if (M.length) {
-    var cols = MED_K.filter(function (k) { return ult[k[0]]; });
+    var cols = medK().filter(function (k) { return ult[k[0]]; });
     h += '<section class="card"><b class="card-tt">Tus medidas</b><div class="tabla-m" style="grid-template-columns:1.3fr repeat(' + cols.length + ',1fr)"><span class="mut">Día</span>' + cols.map(function (k) { return '<span class="mut">' + k[1] + '</span>'; }).join('') +
       M.slice().reverse().slice(0, cuantos('medN', 3)).map(function (m) { return '<button data-a="medAnotar" data-f="' + m.fecha + '">' + esc(fCorta(m.fecha)) + '</button>' + cols.map(function (k) { return '<span>' + (num(m[k[0]]) ? fN(num(m[k[0]]), 1) : '–') + '</span>'; }).join(''); }).join('') + '</div>' + botonMas('medN', 3, M.length) + '<small class="mut">En centímetros. Toca un día para cambiarlo.</small></section>';
   }
@@ -10180,32 +10283,32 @@ function progMed() {
 }
 /* la gráfica de medidas: eliges qué zonas ver (una sola, en cm; varias, cuánto ha cambiado cada una desde su primera medida) */
 function medSel(ult) {
-  var hay = MED_K.filter(function (k) { return ult[k[0]]; }).map(function (k) { return k[0]; });
+  var hay = medK().filter(function (k) { return ult[k[0]]; }).map(function (k) { return k[0]; });
   var s = (S.x.ms || []).filter(function (k) { return hay.indexOf(k) >= 0; });
   return s.length ? s : hay.slice(0, 2);
 }
 function cardGrafMed(M, ult) {
-  var sel = medSel(ult), uno = sel.length === 1, k1 = uno ? MED_K.filter(function (k) { return k[0] === sel[0]; })[0] : null;
+  var sel = medSel(ult), uno = sel.length === 1, k1 = uno ? medK().filter(function (k) { return k[0] === sel[0]; })[0] : null;
   var h = '<section class="card"><div class="card-h"><b class="card-tt">Cómo cambian tus medidas</b><small class="mut">' + (uno ? esc(k1[1]) + ' en cm' : 'cambio en cm') + '</small></div>';
-  h += '<div class="chips med-ch" role="group" aria-label="Qué medidas ver">' + MED_K.filter(function (k) { return ult[k[0]]; }).map(function (k) {
-    var on = sel.indexOf(k[0]) >= 0, n = MED_K.indexOf(k) + 1;
+  h += '<div class="chips med-ch" role="group" aria-label="Qué medidas ver">' + medK().filter(function (k) { return ult[k[0]]; }).map(function (k) {
+    var on = sel.indexOf(k[0]) >= 0, n = medK().indexOf(k) + 1;
     return '<button class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="medSel" data-k="' + k[0] + '"><i class="pt-m" style="background:var(--m' + n + ')"></i>' + k[1] + '</button>'; }).join('') + '</div>';
   h += grafMed(M, sel);
   h += '<small class="mut">' + (uno ? 'Toca otras zonas para verlas juntas.' : 'Cuánto ha subido o bajado cada zona desde tu primera medida. Toca una sola para ver sus centímetros.') + '</small></section>';
   return h;
 }
 A.medSel = function (el) {
-  var ult = {}; S.medidas.forEach(function (m) { MED_K.forEach(function (k) { if (num(m[k[0]])) ult[k[0]] = 1; }); });
+  var ult = {}; S.medidas.forEach(function (m) { medK().forEach(function (k) { if (num(m[k[0]])) ult[k[0]] = 1; }); });
   var s = medSel(ult).slice(), k = el.dataset.k, i = s.indexOf(k);
   if (i >= 0) { if (s.length > 1) s.splice(i, 1); } else s.push(k);
-  S.x.ms = MED_K.map(function (x) { return x[0]; }).filter(function (x) { return s.indexOf(x) >= 0; }); pintar();
+  S.x.ms = medK().map(function (x) { return x[0]; }).filter(function (x) { return s.indexOf(x) >= 0; }); pintar();
 };
 function cm1(v, signo) { var r = Math.round(v * 10) / 10; return (signo ? (r > 0 ? '+' : r < 0 ? '−' : '') : '') + fN(Math.abs(r), 1); }
 function grafMed(M, sel) {
   var rel = sel.length > 1;
-  var ser = MED_K.filter(function (k) { return sel.indexOf(k[0]) >= 0; }).map(function (k) {
+  var ser = medK().filter(function (k) { return sel.indexOf(k[0]) >= 0; }).map(function (k) {
     var P = M.filter(function (m) { return num(m[k[0]]); }).map(function (m) { return { f: m.fecha, a: num(m[k[0]]) }; }), b = P.length ? P[0].a : 0;
-    return { k: k, n: MED_K.indexOf(k) + 1, P: P.map(function (p) { return { f: p.f, a: p.a, v: rel ? p.a - b : p.a }; }) };
+    return { k: k, n: medK().indexOf(k) + 1, P: P.map(function (p) { return { f: p.f, a: p.a, v: rel ? p.a - b : p.a }; }) };
   }).filter(function (x) { return x.P.length; });
   if (!ser.length) return '';
   var W = 340, H = 170, pl = 34, pr = 78, pt = 12, pb = 22, F = [], V = rel ? [0] : [];
@@ -10232,15 +10335,20 @@ function grafMed(M, sel) {
 A.medAnotar = function (el) {
   var f = (el && el.dataset.f) || hoyStr(), m = medDe(f) || {};
   hoja('<h2>Anotar medidas</h2><form class="acc-f" data-f="med" novalidate><label class="f">Día<input type="date" id="me-f" value="' + f + '" max="' + hoyStr() + '" data-ch="medDia"></label>' +
-    '<div class="fila2">' + MED_K.map(function (k) { return '<label class="f">' + k[1] + ' (cm)<input id="me-' + k[0] + '" inputmode="decimal" autocomplete="off" value="' + (num(m[k[0]]) ? fN(num(m[k[0]]), 1) : '') + '"></label>'; }).join('') + '</div>' +
-    '<small class="mut">Mide siempre en el mismo sitio: la cintura a la altura del ombligo; la cadera, en la parte más ancha del glúteo; brazo y muslo, en la parte más ancha. Deja en blanco lo que no midas.</small>' +
+    (medLados() ? medCampos(m) : '<div class="fila2">' + medK().map(function (k) { return '<label class="f">' + k[1] + ' (cm)<input id="me-' + k[0] + '" inputmode="decimal" autocomplete="off" value="' + (num(m[k[0]]) ? fN(num(m[k[0]]), 1) : '') + '"></label>'; }).join('') + '</div>') +
+    '<small class="mut">Mide siempre en el mismo sitio: la cintura a la altura del ombligo; la cadera, en la parte más ancha del glúteo; brazo, muslo, gemelo y antebrazo, en la parte más ancha, cada lado por separado. Deja en blanco lo que no midas.</small>' +
     '<p class="msg err" id="me-err" hidden></p><button class="btn" type="submit">Guardar</button></form>');
 };
-CH.medDia = function (t) { var m = medDe(t.value) || {}; MED_K.forEach(function (k) { var i = $('#me-' + k[0]); if (i) i.value = num(m[k[0]]) ? fN(num(m[k[0]]), 1) : ''; }); };
+/* yo-1.87: tronco (cintura, cadera, pecho) en tres casillas y, debajo, cada extremidad en una fila con su lado derecho e izquierdo */
+function medCampos(m) { var inp = function (k, lab) { return '<label class="me-c"><span>' + lab + '</span><span class="rc-u"><input id="me-' + k + '" inputmode="decimal" autocomplete="off" value="' + (num(m[k]) ? fN(num(m[k]), 1) : '') + '" aria-label="' + lab + ' en cm"><i>cm</i></span></label>'; };
+  return '<b class="lab-f">Tronco</b><div class="me-3">' + inp('cintura', 'Cintura') + inp('cadera', 'Cadera') + inp('pecho', 'Pecho') + '</div>' +
+    '<b class="lab-f">Brazos y piernas</b><div class="me-l">' + [['brazo', 'brazo_i', 'Brazo'], ['muslo', 'muslo_i', 'Muslo'], ['gemelo_d', 'gemelo_i', 'Gemelo'], ['antebrazo_d', 'antebrazo_i', 'Antebrazo']].map(function (r) {
+      return '<div class="me-r"><b>' + r[2] + '</b>' + inp(r[0], 'Dcho.') + inp(r[1], 'Izq.') + '</div>'; }).join('') + '</div>'; }
+CH.medDia = function (t) { var m = medDe(t.value) || {}; medK().forEach(function (k) { var i = $('#me-' + k[0]); if (i) i.value = num(m[k[0]]) ? fN(num(m[k[0]]), 1) : ''; }); };
 F.med = function () {
   var f = $('#me-f').value, d = {}, mal = false, e = $('#me-err');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(f) || f > hoyStr()) { e.hidden = false; e.textContent = 'Elige un día (hoy o antes).'; return; }
-  MED_K.forEach(function (k) { var t = $('#me-' + k[0]).value.trim(), v = /^\d{1,3}([.,]\d)?$/.test(t) ? num(t) : null; if (!t) d[k[0]] = null; else if (v == null || v < 10 || v > 250) mal = true; else d[k[0]] = Math.round(v * 10) / 10; });
+  medK().forEach(function (k) { var t = $('#me-' + k[0]).value.trim(), v = /^\d{1,3}([.,]\d)?$/.test(t) ? num(t) : null; if (!t) d[k[0]] = null; else if (v == null || v < 10 || v > 250) mal = true; else d[k[0]] = Math.round(v * 10) / 10; });
   if (mal) { e.hidden = false; e.textContent = 'Revisa las medidas: en centímetros, por ejemplo 82 o 82,5.'; return; }
   ponMedida(f, d); cerrarHoja(); toast('Medidas guardadas', 'ok'); pintar();
 };
@@ -11140,17 +11248,26 @@ function p3SeriesG(a, b) {
   var G = {}; S.sesiones.forEach(function (s) { if (s.fecha < a || s.fecha > b) return; (s.ej || []).forEach(function (e) { if (!p3Fz(e)) return; var g = p3Grupo(e.n); if (!g) return; G[g] = (G[g] || 0) + p3Trab(e).length; }); });
   return Object.keys(G).filter(function (k) { return G[k]; }).map(function (k) { return [k, G[k]]; }).sort(function (x, y) { return y[1] - x[1]; });
 }
+/* yo-1.87 (Javier, 28 nov, 09:38: «las series por músculo, que se pueda filtrar otra semana… que salga la semana en curso pero que puedas filtrar
+   otra»): «Semana» con ‹ › para ir a las anteriores (S.x.p3gw: 0 = esta, −1 = la pasada…); la de ahora, hechas de previstas; las pasadas, las hechas */
+function p3SerHechas(a, b) { var L = []; S.sesiones.forEach(function (s) { if (s.fecha < a || s.fecha > b) return; (s.ej || []).forEach(function (e) { L.push(Object.assign({}, e, { sets: (e.sets || []).map(function (z) { return Object.assign({}, z, { ok: true }); }) })); }); });
+  return repartoDe(L).map(function (x) { return { g: x.g, n: x.h, h: x.h }; }).filter(function (x) { return x.n > 0; }); }
+function p3WkMin() { var f = S.sesiones.reduce(function (m, s) { return !m || s.fecha < m ? s.fecha : m; }, ''); if (!f) return 0; return -Math.round((aDate(lunesDe(hoyStr())) - aDate(lunesDe(f))) / 6048e5); }
+function p3WkTxt(o) { var a = sumar(lunesDe(hoyStr()), 7 * o), b = sumar(a, 6); return o === 0 ? 'Esta semana' : o === -1 ? 'La semana pasada' : aDate(a).getDate() + (aDate(a).getMonth() !== aDate(b).getMonth() ? ' ' + p3Mes(a) : '') + '–' + p3Dia(b); }
 function p3CardGru() {      // 25 nov (reorganización): la misma cuenta que en el entreno y en tus rutinas; esta semana, hechas de previstas
-  var pp = S.x.p3gp || 'sem', lun = lunesDe(hoyStr()), R;
-  if (pp === 'sem') R = repartoSemana();
-  else { var L = []; S.sesiones.forEach(function (s) { if (s.fecha < sumar(lun, -21) || s.fecha > sumar(lun, 6)) return; (s.ej || []).forEach(function (e) { L.push(Object.assign({}, e, { sets: (e.sets || []).map(function (z) { return Object.assign({}, z, { ok: true }); }) })); }); });
-    R = repartoDe(L).map(function (x) { return { g: x.g, n: x.h, h: x.h }; }).filter(function (x) { return x.n > 0; }); }
-  var hh = R.reduce(function (a, x) { return a + (x.h || 0); }, 0), nn = R.reduce(function (a, x) { return a + (x.n || 0); }, 0);      // yo-1.72: con su resumen arriba
-  return '<section class="card p3-c p3-gru rp-c"><div class="p4-gh"><span class="p4-gi">' + ic('barras', 18, null, 2.4) + '</span><span><b>Series por músculo</b><small>' + (!R.length ? 'Sin series de fuerza' : pp === 'sem' ? repN(hh) + ' de ' + repN(nn) + ' series hechas esta semana' : repN(nn) + ' series en las últimas 4 semanas') + '</small></span></div>' + p3Seg('p3GPer', pp, [['sem', 'Esta semana'], ['4s', 'Últimas 4 semanas']], 'ancho', 'Periodo') +
-    repartoHtml(R, pp === 'sem', pp === 'sem' ? 'Esta semana aún no hay series de fuerza.' : 'Sin series de fuerza en estas semanas.') + '</section>';
+  var pp = S.x.p3gp || 'sem', lun = lunesDe(hoyStr()), mn = p3WkMin(), o = Math.max(mn, Math.min(0, S.x.p3gw || 0)), R, a0 = sumar(lun, 7 * o);
+  if (pp === 'sem') R = o === 0 ? repartoSemana() : p3SerHechas(a0, sumar(a0, 6));
+  else R = p3SerHechas(sumar(lun, -21), sumar(lun, 6));
+  var vivo = pp === 'sem' && o === 0, hh = R.reduce(function (a, x) { return a + (x.h || 0); }, 0), nn = R.reduce(function (a, x) { return a + (x.n || 0); }, 0);      // yo-1.72: con su resumen arriba
+  var res = !R.length ? 'Sin series de fuerza' : vivo ? repN(hh) + ' de ' + repN(nn) + ' series hechas esta semana' : pp === 'sem' ? repN(nn) + ' series hechas' : repN(nn) + ' series en las últimas 4 semanas';
+  var nav = pp === 'sem' ? '<div class="p3-wk"><button class="redondo gris sm" data-a="p3GWk" data-d="-1" aria-label="Semana anterior"' + (o <= mn ? ' disabled' : '') + '>' + ic('atras', 16, null, 2.4) + '</button><b>' + esc(p3WkTxt(o)) + '</b>' +
+    '<button class="redondo gris sm" data-a="p3GWk" data-d="1" aria-label="Semana siguiente"' + (o >= 0 ? ' disabled' : '') + '>' + ic('sig', 16, null, 2.4) + '</button></div>' : '';
+  return '<section class="card p3-c p3-gru rp-c"><div class="p4-gh"><span class="p4-gi">' + ic('barras', 18, null, 2.4) + '</span><span><b>Series por músculo</b><small>' + res + '</small></span></div>' + p3Seg('p3GPer', pp, [['sem', 'Por semana'], ['4s', 'Últimas 4 semanas']], 'ancho', 'Periodo') + nav +
+    repartoHtml(R, vivo, pp === 'sem' ? (o === 0 ? 'Esta semana aún no hay series de fuerza.' : 'Esa semana no hiciste series de fuerza.') : 'Sin series de fuerza en estas semanas.') + '</section>';
 }
 A.p3Gru = function () { S.x.p3go = !S.x.p3go; pintar(); };
-A.p3GPer = function (el) { S.x.p3gp = el.dataset.v; pintar(); };
+A.p3GPer = function (el) { S.x.p3gp = el.dataset.v; if (el.dataset.v === 'sem') S.x.p3gw = 0; pintar(); };
+A.p3GWk = function (el) { S.x.p3gw = Math.max(p3WkMin(), Math.min(0, (S.x.p3gw || 0) + (+el.dataset.d))); pintar(); };
 /* 5 · carrera y cardio: solo si hay; sin mezclar minutos de cardio con kilos de fuerza */
 function p3RunHay() {
   var lun = lunesDe(hoyStr()), nr = 0, km = 0, cm = 0, alg = false; for (var i = 11; i >= 0; i--) { var o = runSem(sumar(lun, -7 * i)); if (o.nrun || o.cmin) alg = true; if (!i) { nr = o.nrun; km = o.km; cm = o.cmin; } }
@@ -11246,10 +11363,10 @@ function grafYo(L, uni, L2) {      // L: [{f, y}] (L2: la media, encima)
 function media7(L) { return L.map(function (p) { var a = sumar(p.f, -6), V = L.filter(function (q) { return q.f >= a && q.f <= p.f; }); return { f: p.f, y: V.reduce(function (s, q) { return s + q.y; }, 0) / V.length }; }); }
 function cuePeso() {
   var m = S.medidas.slice().sort(function (a, b) { return a.fecha < b.fecha ? -1 : 1; }), P = m.filter(function (x) { return num(x.peso); }).map(function (x) { return { f: x.fecha, y: num(x.peso) }; });
-  var hay = MED_K.filter(function (k) { return m.some(function (x) { return num(x[k[0]]); }); }), sel = hay.some(function (k) { return k[0] === S.x.mc; }) ? S.x.mc : '';
+  var hay = medK().filter(function (k) { return m.some(function (x) { return num(x[k[0]]); }); }), sel = hay.some(function (k) { return k[0] === S.x.mc; }) ? S.x.mc : '';
   var h = '<section class="card cue"><b class="cue-t">Peso corporal</b>';
   if (hay.length) h += '<div class="chips cue-ch" role="group" aria-label="Qué ver">' + [['', 'Peso']].concat(hay).map(function (k) { var on = sel === k[0]; return '<button class="chip' + (on ? ' on' : '') + '" aria-pressed="' + on + '" data-a="cueSel" data-v="' + k[0] + '">' + k[1] + '</button>'; }).join('') + '</div>';
-  if (sel) { var k1 = MED_K.filter(function (k) { return k[0] === sel; })[0], Lm = m.filter(function (x) { return num(x[sel]); }).map(function (x) { return { f: x.fecha, y: num(x[sel]) }; }), um = Lm[Lm.length - 1], dm = um.y - Lm[0].y;
+  if (sel) { var k1 = medK().filter(function (k) { return k[0] === sel; })[0], Lm = m.filter(function (x) { return num(x[sel]); }).map(function (x) { return { f: x.fecha, y: num(x[sel]) }; }), um = Lm[Lm.length - 1], dm = um.y - Lm[0].y;
     h += '<div class="cue-n"><b>' + fN(um.y, 1) + '</b> <small>cm · ' + esc(k1[1].toLowerCase()) + '</small></div><p class="cue-s">' + (Lm.length > 1 ? '<span class="' + (dm < 0 ? 'neg' : dm > 0 ? 'pos' : '') + '">' + (dm > 0 ? '+' : '') + fN(dm, 1) + ' cm</span> desde el ' + esc(fCorta(Lm[0].f)) + ' · último: ' + esc(fCorta(um.f)) : 'Primer registro · ' + esc(fCorta(um.f))) + '</p>' + (Lm.length > 1 ? grafYo(Lm, 'cm') : ''); }
   else if (P.length) { var u = P[P.length - 1], d = u.y - P[0].y, denso = P.length >= 7 && (aDate(u.f) - aDate(P[0].f)) / 86400000 / P.length <= 2.5, MM = denso ? media7(P) : null;
     if (MM) { var um7 = MM[MM.length - 1], h7 = MM.filter(function (q) { return q.f <= sumar(um7.f, -7); }).pop(), d7 = h7 ? um7.y - h7.y : null;
@@ -11258,33 +11375,50 @@ function cuePeso() {
     else h += '<div class="cue-n"><b>' + kg1(u.y) + '</b> <small>kg</small></div><p class="cue-s">' + (P.length > 1 ? '<span class="' + (d < 0 ? 'neg' : d > 0 ? 'pos' : '') + '">' + (d > 0 ? '+' : '') + kg1(d) + ' kg</span> desde el ' + esc(fCorta(P[0].f)) : 'Primer registro · ' + esc(fCorta(u.f))) + '</p>' + (P.length > 1 ? grafYo(P, 'kg') : ''); }
   else h += '<p class="mut sm">Aún no hay registros de peso. Si quieres seguirlo, apúntate por la mañana, en ayunas.</p>';
   /* la tabla: la primera medida, la última y la diferencia */
-  var cm = m.filter(function (x) { return MED_K.some(function (k) { return num(x[k[0]]); }); });
+  var cm = m.filter(function (x) { return medK().some(function (k) { return num(x[k[0]]); }); });
   if (cm.length) { var a = cm[0], z = cm[cm.length - 1], dos = cm.length > 1;
-    h += '<table class="cue-tb"><tr><th>Medidas (cm)</th><th>' + esc(fCorta(a.fecha)) + '</th>' + (dos ? '<th>' + esc(fCorta(z.fecha)) + '</th><th>Dif.</th>' : '') + '</tr>' + MED_K.map(function (k) {
+    h += '<table class="cue-tb"><tr><th>Medidas (cm)</th><th>' + esc(fCorta(a.fecha)) + '</th>' + (dos ? '<th>' + esc(fCorta(z.fecha)) + '</th><th>Dif.</th>' : '') + '</tr>' + medK().map(function (k) {
       var va = num(a[k[0]]), vb = num(z[k[0]]); if (!va && !vb) return ''; var df = va && vb ? vb - va : null;
       return '<tr><td>' + k[1] + '</td><td>' + (va ? fN(va, 1) : '–') + '</td>' + (dos ? '<td>' + (vb ? fN(vb, 1) : '–') + '</td><td class="' + (df < 0 ? 'neg' : df > 0 ? 'pos' : '') + '">' + (df == null ? '–' : (df > 0 ? '+' : '') + fN(df, 1)) + '</td>' : '') + '</tr>'; }).join('') + '</table>'; }
   return h + '<div class="fila2 cue-bt"><button class="btn sec" data-a="pesoAnotar">' + ic('mas', 16) + 'Peso</button><button class="btn sec" data-a="medAnotar">' + ic('cinta', 16) + 'Medidas</button></div>' +
     (m.length ? '<button class="link cue-ed" data-a="cueRegs">Ver y corregir tus registros</button>' : '') + '</section>';
 }
 A.cueSel = function (el) { S.x.mc = el.dataset.v; pintar(); };
-A.cueRegs = function () { hoja('<h2>Tus registros</h2><div class="lista"><button class="fila-b" data-a="p3Pesos"><b>Peso</b><small>' + pesos().length + ' registros</small></button><button class="fila-b" data-a="p3Meds"><b>Medidas</b><small>' + S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); }).length + ' registros</small></button></div>'); };
+A.cueRegs = function () { hoja('<h2>Tus registros</h2><div class="lista"><button class="fila-b" data-a="p3Pesos"><b>Peso</b><small>' + pesos().length + ' registros</small></button><button class="fila-b" data-a="p3Meds"><b>Medidas</b><small>' + S.medidas.filter(function (m) { return medK().some(function (k) { return num(m[k[0]]); }); }).length + ' registros</small></button></div>'); };
 /* ---------- las fotos, por fechas y con su ángulo (como en la app de clientas). El ángulo va en el nombre del archivo: «2026-11-21_frente_xxxx.jpg» ---------- */
 var FO_T = [['frente', 'Frente'], ['perfil', 'Perfil'], ['espalda', 'Espalda'], ['pose', 'Pose']];
 function foTn(t) { return (FO_T.filter(function (x) { return x[0] === t; })[0] || [0, 'Foto'])[1]; }
 function foOrd(a, b) { var o = function (x) { var i = FO_T.map(function (y) { return y[0]; }).indexOf(x.tipo); return i < 0 ? 9 : i; }; return o(a) - o(b) || (a.name < b.name ? -1 : 1); }
 function foFechas() { var u = {}; (S.fotos || []).forEach(function (x) { u[x.fecha] = 1; }); return Object.keys(u).sort().reverse(); }
 function foDe(f) { return (S.fotos || []).filter(function (x) { return x.fecha === f; }).sort(foOrd); }
+/* yo-1.87 (Javier, 28 nov, 09:38: «las imágenes de progreso las recolocaría mejor; si salen una debajo de otra saldrá muy larga la vista; normalmente
+   se suben tres, en cada perfil; ponlo, y que tengan la opción de poner modo oculto como las clientas»): cada fecha, una fila con sus tres huecos
+   (frente, perfil y espalda; la pose u otras, detrás); el hueco vacío sube la de ese ángulo ese día. Modo oculto (S.perfil.foOc): las fotos no se ven
+   hasta que tocas «Ver mis fotos», cada vez */
+var FO_3 = ['frente', 'perfil', 'espalda'];
+function foHuecos(f) { var L = foDe(f), H = FO_3.map(function (t) { return L.filter(function (y) { return y.tipo === t; })[0] || { tipo: t, vacio: 1 }; });
+  return H.concat(L.filter(function (y) { return FO_3.indexOf(y.tipo) < 0; })); }
+function foOc() { return !!(S.perfil && S.perfil.foOc); }
 function cueFotos() {
-  var F = S.fotos, h = '<section class="card cue"><b class="cue-t">Fotos de progreso<span class="cue-pr">' + ic('candado', 13) + 'Solo tú</span></b>';
+  var F = S.fotos, oc = foOc(), ver = !oc || S.x.foVer, h = '<section class="card cue fo-c"><div class="fo-cab"><b class="cue-t">Fotos de progreso</b>' + (F && F.length && ver ? '<button class="link sm fo-oc" data-a="foOcultar">' + ic('ojo', 15, null, 2) + 'Ocultar</button>' : '') + '</div>';
   if (F === null) return h + '<small class="mut">Cargando…</small></section>';
   if (F === false) return h + '<small class="mut">No se han podido cargar.</small><button class="link izq" data-a="fotosRe">Reintentar</button></section>';
-  var fe = foFechas(), ver = S.x.foTodo ? fe : fe.slice(0, 3);
-  if (!fe.length) h += '<p class="mut sm">Sube fotos de frente, perfil, espalda y una pose cada 2-4 semanas, con la misma luz y ropa parecida. Solo las ves tú.</p>';
-  h += ver.map(function (f) { return '<div class="fo-dia"><b class="fo-f">' + esc(aDate(f).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })) + '</b><div class="fo-row">' + foDe(f).map(function (x) {
-    return '<button class="fo-th" data-a="fotoVer" data-n="' + esc(x.name) + '">' + (x.url ? '<img src="' + esc(x.url) + '" alt="' + esc(foTn(x.tipo)) + '" loading="lazy">' : '') + '<span>' + esc(foTn(x.tipo)) + '</span></button>'; }).join('') + '</div></div>'; }).join('');
-  if (fe.length > 3) h += '<button class="link izq" data-a="foTodo">' + (S.x.foTodo ? 'Ver solo las últimas' : 'Ver todas las fechas (' + fe.length + ')') + '</button>';
-  return h + '<div class="fila2 cue-bt"><button class="btn" data-a="foSubir">' + ic('mas', 16, null) + 'Subir fotos</button>' + (fe.length > 1 ? '<button class="btn sec" data-a="fotoComparar">Comparar lado a lado</button>' : '') + '</div></section>';
+  var fe = foFechas();
+  if (fe.length && !ver) return h + '<button class="fo-lock" data-a="foVer"><span class="fo-lk-i">' + ic('ojo', 20, null, 2) + '</span><span class="fo-lk-t"><b>Ver mis fotos</b><small>Últimas: ' + esc(aDate(fe[0]).toLocaleDateString('es-ES', { day: 'numeric', month: 'long' })) + ' · solo las ves tú</small></span>' + ic('sig', 18, 'var(--tx3)', 2.2) + '</button>' +
+    '<div class="fila2 cue-bt"><button class="btn" data-a="foSubir">' + ic('mas', 16, null) + 'Subir fotos</button><button class="btn sec" data-a="foOcultarNo">Dejar de ocultarlas</button></div></section>';
+  var vf = S.x.foTodo ? fe : fe.slice(0, 2);
+  if (!fe.length) h += '<p class="mut sm">Sube tres fotos (frente, perfil y espalda) cada 2-4 semanas, con la misma luz y ropa parecida. Solo las ves tú.</p>';
+  h += vf.map(function (f) { return '<div class="fo-dia"><b class="fo-f">' + esc(aDate(f).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })) + '</b><div class="fo-g">' + foHuecos(f).map(function (x) {
+    if (x.vacio) return '<button class="fo-th fo-v" data-a="foSubirDe" data-f="' + f + '" aria-label="Subir la foto de ' + esc(foTn(x.tipo).toLowerCase()) + ' de ese día"><i>' + ic('mas', 20, null, 2.2) + '</i><span>' + esc(foTn(x.tipo)) + '</span></button>';
+    return '<button class="fo-th" data-a="fotoVer" data-n="' + esc(x.name) + '">' + (x.url ? '<img src="' + esc(x.url) + '" alt="' + esc(foTn(x.tipo)) + '" loading="lazy">' : '<i></i>') + '<span>' + esc(foTn(x.tipo)) + '</span></button>'; }).join('') + '</div></div>'; }).join('');
+  if (fe.length > 2) h += '<button class="link izq" data-a="foTodo">' + (S.x.foTodo ? 'Ver solo las últimas' : 'Ver todas las fechas (' + fe.length + ')') + '</button>';
+  return h + '<div class="fila2 cue-bt"><button class="btn" data-a="foSubir">' + ic('mas', 16, null) + 'Subir fotos</button>' + (fe.length > 1 ? '<button class="btn sec" data-a="fotoComparar">Comparar lado a lado</button>' : '') + '</div>' +
+    (fe.length && !oc ? '<small class="mut fo-pr">Solo las ves tú. Con «Ocultar», no se ven hasta que tocas «Ver mis fotos».</small>' : '') + '</section>';
 }
+A.foVer = function () { S.x.foVer = true; pintar(); };
+A.foOcultar = function () { if (!S.perfil) return; if (!S.perfil.foOc) { S.perfil.foOc = 1; guardaPerfil(); toast('Fotos ocultas: tócalas para verlas', 'ok'); } S.x.foVer = false; pintar(); };
+A.foOcultarNo = function () { if (!S.perfil) return; delete S.perfil.foOc; guardaPerfil(); S.x.foVer = false; pintar(); };
+A.foSubirDe = function (el) { S.x.fsF = el.dataset.f; S.x.fsOk = {}; A.foSubir(); };
 A.foTodo = function () { S.x.foTodo = !S.x.foTodo; pintar(); };
 /* subir: el día y, para cada ángulo, su foto */
 A.foSubir = function () { S.x.fsF = S.x.fsF || hoyStr(); S.x.fsOk = S.x.fsOk || {}; var f = S.x.fsF;
@@ -11329,13 +11463,13 @@ A.p3WSel = function (el) { var i = +el.dataset.i; S.x.w3 = S.x.w3 === i ? null :
 A.p3Pesos = function () { ir({ t: 'p3pesos' }); };
 VISTAS.p3pesos = function () { var P = pesos().slice().reverse(); return '<div class="pant pad p3">' + cab('Tu peso') + '<section class="card p3-c">' + P.map(function (x) { return '<button class="p3-fila" data-a="pesoAnotar" data-f="' + x.fecha + '"><span class="col"><b>' + kg1(num(x.peso)) + ' kg</b></span><em>' + esc(aDate(x.fecha).toLocaleDateString('es-ES', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' })) + '</em>' + ic('lapiz', 15) + '</button>'; }).join('') + '</section><button class="btn" data-a="pesoAnotar">' + ic('mas', 18, null) + 'Anotar peso</button></div>'; };
 function p3CardMed() {
-  var M = S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); });
+  var M = S.medidas.filter(function (m) { return medK().some(function (k) { return num(m[k[0]]); }); });
   if (!M.length) return '<section class="card p3-c"><b class="p3-tt">Medidas</b>' + p3Vacio('Sin registros', 'Cintura, cadera, pecho, brazo y muslo, con una cinta métrica, si quieres.') + '<button class="btn sec" data-a="medAnotar">' + ic('cinta', 18) + 'Anotar medidas</button></section>';
-  var hay = MED_K.filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); }), sel = hay.some(function (k) { return k[0] === S.x.m3; }) ? S.x.m3 : hay[0][0];
+  var hay = medK().filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); }), sel = hay.some(function (k) { return k[0] === S.x.m3; }) ? S.x.m3 : hay[0][0];
   var h = '<section class="card p3-c"><b class="p3-tt">Medidas</b><div class="p3-meds">' + hay.map(function (k) {
     var L = M.filter(function (m) { return num(m[k[0]]); }), u = L[L.length - 1], a = L[L.length - 2];
     return '<button class="p3-mf' + (k[0] === sel ? ' on' : '') + '" data-a="p3MSel" data-k="' + k[0] + '" aria-pressed="' + (k[0] === sel) + '"><span>' + k[1] + '</span><b>' + fN(num(u[k[0]]), 1) + ' cm</b><small>' + (a ? 'antes ' + fN(num(a[k[0]]), 1) + '<br>' + esc(p3Dia(a.fecha)) : esc(p3Dia(u.fecha))) + '</small></button>'; }).join('') + '</div>';
-  var Ls = M.filter(function (m) { return num(m[sel]); }), ks = MED_K.filter(function (k) { return k[0] === sel; })[0];
+  var Ls = M.filter(function (m) { return num(m[sel]); }), ks = medK().filter(function (k) { return k[0] === sel; })[0];
   if (Ls.length > 1) h += '<p class="p3-gtt">' + esc(ks[1]) + ', en cm</p>' + p3Linea(Ls.map(function (m) { return { v: num(m[sel]), l: p3Dia(m.fecha), ar: p3Dia(m.fecha) + ': ' + fN(num(m[sel]), 1) + ' cm' }; }), { act: 'medAnotarI', uni: 'cm', min: 4, ar: ks[1] + ' en centímetros' });
   return h + '<div class="p3-bts"><button class="btn-mini" data-a="medAnotar">' + ic('mas', 15, null, 2.4) + 'Anotar medidas</button><button class="link" data-a="p3Meds">Ver historial</button></div></section>';
 }
@@ -11343,7 +11477,7 @@ A.p3MSel = function (el) { S.x.m3 = el.dataset.k; pintar(); };
 A.medAnotarI = function () { };
 A.p3Meds = function () { ir({ t: 'p3meds' }); };
 VISTAS.p3meds = function () {
-  var M = S.medidas.filter(function (m) { return MED_K.some(function (k) { return num(m[k[0]]); }); }).slice().reverse(), cols = MED_K.filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); });
+  var M = S.medidas.filter(function (m) { return medK().some(function (k) { return num(m[k[0]]); }); }).slice().reverse(), cols = medK().filter(function (k) { return M.some(function (m) { return num(m[k[0]]); }); });
   return '<div class="pant pad p3">' + cab('Tus medidas') + '<section class="card p3-c"><div class="tabla-m" style="grid-template-columns:1.3fr repeat(' + cols.length + ',1fr)"><span class="mut">Día</span>' + cols.map(function (k) { return '<span class="mut">' + k[1] + '</span>'; }).join('') +
     M.map(function (m) { return '<button data-a="medAnotar" data-f="' + m.fecha + '">' + esc(fCorta(m.fecha)) + '</button>' + cols.map(function (k) { return '<span>' + (num(m[k[0]]) ? fN(num(m[k[0]]), 1) : '–') + '</span>'; }).join(''); }).join('') + '</div><small class="mut">En centímetros. Toca un día para cambiarlo.</small></section></div>';
 };
@@ -11788,12 +11922,14 @@ function nbFila(a, m, n) {      // n: las veces que sale (en esa comida, si va e
   var sub = m ? 'Sueles: ' + m.it.det + ' · ' + fmil(m.it.k) + ' kcal' : [a.sub, fmil(a.k) + ' kcal' + (fib ? ' · ' + fib : '') + ' / 100 g'].filter(Boolean).join(' · ');
   if (ya) sub = '✓ Añadido' + (ya > 1 ? ' ×' + ya : '') + ' · ' + sub;
   return '<div class="nb-f' + (m ? ' fr' : '') + (ya ? ' ya' : '') + '"><button class="fila-b fila-x" data-a="nbElegir" data-k="' + esc(a.key) + '"><span class="col"><b>' + esc(a.n) + (a.mio ? ' <span class="mio">MÍO</span>' : '') + '</b><small>' + esc(sub) + '</small></span>' +
-    (m ? '<span class="nb-n">' + (n || m.n) + ((n || m.n) === 1 ? ' vez' : ' veces') + '</span>' : '') + '</button>' +
+    '</button>' +      // yo-1.87 (Javier: «no me pongas las veces que la he elegido, es irrelevante»): sin «37 veces»
     (m ? '<button class="nb-mas" data-a="nbRapido" data-k="' + esc(a.key) + '" aria-label="' + esc('Añadir ' + m.it.det + ' de ' + a.n) + '">' + ic('mas', 16, null, 2.6) + '</button>' : '<button class="nb-mas sec" data-a="nbElegir" data-k="' + esc(a.key) + '" aria-label="Añadir ' + esc(a.n) + '">' + ic('mas', 16, null, 2.6) + '</button>') + '</div>';
 }
-var NB_V = [['frec', 'Lo que más tomas'], ['rec', 'Recientes'], ['mios', 'Mis alimentos']];
+/* yo-1.87 (Javier, 28 nov, 09:38: «simplemente pon como recientes los que más elijo»): dos pestañas. «Recientes»: lo que más eliges en esa comida
+   (y luego en las demás), con su cantidad de siempre; si aún no hay, los últimos que has apuntado */
+var NB_V = [['frec', 'Recientes'], ['mios', 'Mis alimentos']];
 function nbFilas() {
-  var B = S.x.nb || {}, rec = B.para === 'rec', v = B.v || 'frec', h = '';
+  var B = S.x.nb || {}, rec = B.para === 'rec', v = B.v === 'mios' ? 'mios' : 'frec', h = '';
   if (B.q) { var fq = frecMapa(), L = buscaAl(B.q, fq);
     h = L.length ? (fq[L[0].key] ? '<small class="mut">Primero, los que más tomas</small>' : '') + L.map(function (a) { return nbFila(a, fq[a.key]); }).join('') : '<p class="mut sm">' + (!NUT_OK || S.alMO === null ? 'Cargando los alimentos…' : 'No sale nada con «' + esc(B.q) + '». Prueba con otra palabra, escanea el código o créalo con «Alimento nuevo».') + '</p>';
     return '<div id="nb-l" class="card lista-b nb-l">' + h + offHtml(B) + '</div>'; }
@@ -11801,11 +11937,10 @@ function nbFilas() {
   if (v === 'frec') {
     var F = frecuentes(rec ? -1 : B.c), cn = rec ? '' : comidas()[B.c].toLowerCase(), A1 = rec ? [] : F.filter(function (m) { return m.nc > 0; }).sort(function (x, y) { return y.nc - x.nc || y.n - x.n; }).slice(0, 8), ya = {};
     A1.forEach(function (m) { ya[m.k] = 1; }); var A2 = F.filter(function (m) { return !ya[m.k]; }).sort(function (x, y) { return y.n - x.n; }).slice(0, A1.length ? 8 : 14);
-    if (!F.length) h = '<p class="mut sm">Cuando apuntes comidas, aquí saldrá lo que más tomas, con la cantidad de siempre para añadirlo de un toque.</p>';
+    if (!F.length) { var R0 = recientes(); h = R0.length ? R0.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Cuando apuntes comidas, aquí saldrá lo que más tomas, con la cantidad de siempre para añadirlo de un toque.</p>'; }
     if (A1.length) h += '<small class="nb-t">En ' + (B.c === 1 ? 'la ' : 'el ') + esc(cn) + ' sueles tomar</small>' + A1.map(function (m) { return nbFila(m.a, m, m.nc); }).join('');
     if (A2.length) h += '<small class="nb-t">' + (A1.length ? 'Otros que tomas a menudo' : 'Lo que más tomas') + '</small>' + A2.map(function (m) { return nbFila(m.a, m); }).join('');
-  } else if (v === 'rec') { var R = recientes(); h = R.length ? '<small class="nb-t">Los últimos que has apuntado</small>' + R.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Todavía no has apuntado nada.</p>'; }
-  else { var Mi = alimentos().filter(function (a) { return a.mio; }); h = Mi.length ? Mi.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Los alimentos que crees o escanees saldrán aquí.</p>'; }
+  } else { var Mi = alimentos().filter(function (a) { return a.mio; }); h = Mi.length ? Mi.map(function (a) { return nbFila(a); }).join('') : '<p class="mut sm">Los alimentos que crees o escanees saldrán aquí.</p>'; }
   return tabs + '<div id="nb-l" class="card lista-b nb-l">' + h + '</div>';
 }
 A.nbVer = function (el) { S.x.nb.v = el.dataset.v; pintar(); };
@@ -11862,6 +11997,17 @@ function crco(a) {
   if (!f) { var n = clave(a.n); CRCO_T.some(function (t) { if (t[0].test(n)) { f = t[1]; return true; } }); }
   return f ? { est: est, f: f } : null;
 }
+/* yo-1.87 (Javier, 28 nov, 09:38: «el pesaje de la olla es opción, pero si alguien no se quiere complicar la vida, puede ser en porciones, o que la
+   aplicación tenga un peso lo más aproximado posible en función de todos los ingredientes»): lo que pesará la receta cocinada, calculado con sus
+   ingredientes en crudo: arroz, pasta y legumbres ganan agua (CRCO_T), carne y pescado pierden, y verduras y caldos algo menos. Redondeado a 10 g */
+var REST_T = [[/\bagua\b|caldo|fumet/, 0.8], [/leche|bebida de|nata|tomate triturado|tomate frito|salsa/, 0.9], [/cebolla|pimiento|calabac|berenjena|champi|seta|espinaca|acelga|puerro|tomate|zanahoria|brocoli|coliflor|judia verde|calabaza|verdura|ajo\b/, 0.85]];
+function recEstG(ing) { var t = 0; (ing || []).forEach(function (i) { if (!i || Array.isArray(i)) return; var g = +i.g || 0; if (!(g > 0)) return;
+  var a = i.key ? alDe(i.key) : null, cc = a ? crco(a) : null, n = clave(i.n || (a && a.n) || ''), f = 1;
+  if (cc) f = cc.est === 'cr' ? cc.f : 1;
+  else if (!/cocid|bote|conserva|lata\b/.test(n) && CRCO_T.some(function (x) { if (x[0].test(n)) { f = x[1]; return true; } })) { }
+  else REST_T.some(function (x) { if (x[0].test(n)) { f = x[1]; return true; } });
+  t += g * f; }); return t > 0 ? Math.round(t / 10) * 10 : 0; }
+function recOlla(r) { if (r.olla > 0) return { g: +r.olla, est: false }; var e = r.mio ? recEstG(r.ing) : 0; return { g: e, est: e > 0 }; }      // la pesada; si no, la calculada
 /* «¿Cuánto?»: en gramos o, si tiene, en unidades (rebanada, unidad…) */
 function hojaCuanto(a, it, pre) {      // pre: un apunte anterior con la cantidad de siempre (18 nov: «lo que más tomas»)
   var B = S.x.nb || {}, rec = B.para === 'rec', uni = a.uni && a.gu, sr = it || pre, g = sr ? sr.g : uni ? a.gu : 100, cc = crco(a);
@@ -12057,13 +12203,13 @@ function apuntarReceta(key, it) {
 function recTot(r) { var rac = r.rac || 1; return { k: r.k * rac, p: r.p * rac, h: r.h * rac, g: r.g * rac }; }
 VISTAS.napuntar = function () {
   var X = S.x.ar, r = recDe(X.key); if (!r) return '';
-  var porPeso = r.olla > 0, T = recTot(r), q = arCuanto(r);
+  var O = recOlla(r), porPeso = O.g > 0, ap = O.est ? '≈ ' : '', T = recTot(r), q = arCuanto(r);      // yo-1.87: sin pesarla, con lo que calcula la app
   var fsrc = recFotoSrc(r);
   var h = '<div class="pant pad con-pie">' + cab(esc(r.n)) + (fsrc ? '<div class="rec-img"><img src="' + esc(fsrc) + '" alt="" onerror="this.parentNode.remove()"></div>' : '') +
-    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? (recUd(r) === 'ml' ? ' · ' + fmil(r.olla) + ' ml en total' : recipOk() ? ' · ' + fmil(r.olla) + ' g en total' : ' · olla de ' + fmil(r.olla) + ' g') : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
+    '<p class="mut">' + (r.rac || 1) + ((r.rac || 1) === 1 ? ' ración' : ' raciones') + (porPeso ? (recUd(r) === 'ml' ? ' · ' + ap + fmil(O.g) + ' ml en total' : recipOk() ? ' · ' + ap + fmil(O.g) + ' g en total' + (O.est ? ' (lo calcula la app)' : '') : ' · olla de ' + fmil(O.g) + ' g') : r.mio ? '' : '') + (r.min ? ' · ' + r.min + ' min' : '') + '</p>';
   h += '<section class="card"><b>¿Cuánto has comido?</b>' + (porPeso ? '<div class="seg2"><button class="' + (X.modo === 'r' ? 'on' : '') + '" data-a="arModo" data-v="r">Por raciones</button><button class="' + (X.modo === 'g' ? 'on' : '') + '" data-a="arModo" data-v="g">' + (recUd(r) === 'ml' ? 'Por cantidad' : 'Por peso') + '</button></div>' : '');
-  if (X.modo === 'g' && porPeso) h += (recUd(r) === 'ml' ? '<label class="f">Mililitros en tu plato<span class="rc-u"><input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 350"><i>ml</i></span></label><small class="mut">Con un vaso medidor, o en la báscula (1 g ≈ 1 ml) · de ' + fmil(r.olla) + ' ml en total</small>'
-    : '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · ' + (recipOk() ? 'de ' + fmil(r.olla) + ' g en total' : 'de una olla de ' + fmil(r.olla) + ' g') + '</small>') + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + (recipOk() ? '¿La has vuelto a hacer? Pésala otra vez' : '¿La has vuelto a cocinar? Pesa la olla llena') + '</button>' : '');
+  if (X.modo === 'g' && porPeso) h += (recUd(r) === 'ml' ? '<label class="f">Mililitros en tu plato<span class="rc-u"><input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 350"><i>ml</i></span></label><small class="mut">Con un vaso medidor, o en la báscula (1 g ≈ 1 ml) · de ' + ap + fmil(O.g) + ' ml en total</small>'
+    : '<label class="f">Gramos en tu plato<input id="ar-g" class="grande" inputmode="decimal" value="' + esc(X.g) + '" data-in="arG" placeholder="Ej.: 300"></label><small class="mut">Pon el plato en la báscula (sin el plato) · ' + (recipOk() ? 'de ' + ap + fmil(O.g) + ' g en total' + (O.est ? ', calculado con los ingredientes' : '') : 'de una olla de ' + fmil(O.g) + ' g') + '</small>') + (r.mio ? '<button class="link izq" data-a="arOlla">' + ic('olla', 15) + (O.est ? '¿Quieres afinarlo? Pésala' : recipOk() ? '¿La has vuelto a hacer? Pésala otra vez' : '¿La has vuelto a cocinar? Pesa la olla llena') + '</button>' : '');
   else h += '<div class="ar-st"><button class="redondo" data-a="arRMenos" aria-label="Media ración menos"' + (X.r <= 0.5 ? ' disabled' : '') + '>' + ic('menos', 18, null, 2.6) + '</button><span><b>' + racTxt(X.r) + '</b><small>' + (X.r === 1 ? 'ración' : 'raciones') + (r.rac > 1 ? ' de ' + r.rac : '') + '</small></span><button class="redondo" data-a="arRMas" aria-label="Media ración más"' + (X.r >= 40 ? ' disabled' : '') + '>' + ic('mas', 18, null, 2.6) + '</button></div>' +      // yo-1.82 (Javier: «una receta de 6 raciones solo te deja poner hasta 2»): de media en media
     '<div class="chips ar-ch">' + [0.5, 1, 2].concat(r.rac > 2 ? [r.rac] : []).map(function (v) { return '<button class="chip' + (X.r === v ? ' on' : '') + '" data-a="arR" data-v="' + v + '">' + (v === r.rac && v > 2 ? 'Toda (' + v + ')' : racTxt(v)) + '</button>'; }).join('') + '</div>';
   h += '</section><section class="card n-tot" id="ar-t">' + arTotHtml(q) + '</section>';
@@ -12076,7 +12222,7 @@ VISTAS.napuntar = function () {
 };
 function alNombre(id) { var a = NUT_OK ? AL_BASE.filter(function (x) { return x[0] === id; })[0] : null; return a ? a[1] + (a[2] ? ' (' + a[2] + ')' : '') : id; }
 /* cuánto de la receta: por raciones (× lo de una ración) o por peso (sobre la olla entera) */
-function arCuanto(r) { var X = S.x.ar, T = recTot(r); if (X.modo === 'g' && r.olla > 0) { var g = num(X.g) || 0, f = g / r.olla, u = recUd(r); return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: u === 'ml' ? 'Tu plato: ' + fmil(g) + ' ml de ' + fmil(r.olla) + ' ml' : 'Tu plato: ' + fmil(g) + ' g de ' + fmil(r.olla) + ' g' + (recipOk() ? '' : ' de olla'), ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
+function arCuanto(r) { var X = S.x.ar, T = recTot(r), O = recOlla(r); if (X.modo === 'g' && O.g > 0) { var g = num(X.g) || 0, f = g / O.g, u = recUd(r), ap = O.est ? '≈ ' : ''; return { k: T.k * f, p: T.p * f, h: T.h * f, g: T.g * f, txt: u === 'ml' ? 'Tu plato: ' + fmil(g) + ' ml de ' + ap + fmil(O.g) + ' ml' : 'Tu plato: ' + fmil(g) + ' g de ' + ap + fmil(O.g) + ' g' + (recipOk() ? '' : ' de olla'), ok: g > 0 }; } var q = X.r || 1; return { k: r.k * q, p: r.p * q, h: r.h * q, g: r.g * q, txt: (q === 1 ? '1 ración' : fN(q, 1).replace(/,0$/, '') + ' raciones'), ok: true }; }
 function arTotHtml(q) { return '<span class="n-big"><b>' + fmil(q.k) + '</b><span>kcal</span></span><div class="n-mac">' + [['Proteína', q.p], ['Hidratos', q.h], ['Grasas', q.g]].map(function (m) { return '<span>' + m[0] + ' <b>' + Math.round(m[1]) + ' g</b></span>'; }).join('') + '</div>'; }
 A.arOlla = function () {
   if (recipOk()) return arPesa();
@@ -12134,10 +12280,10 @@ VISTAS.nreceta = function () {
   h += '<p class="msg err" id="rc-err" hidden></p><div class="pie-fijo"><button class="btn" data-a="rcGuardar">Guardar receta</button>' + (R.nueva ? '' : '<button class="btn sec" data-a="rcBorrar">Borrar receta</button>') + '</div>';
   return h + '</div>';
 };
-function rcTotHtml() { var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = Math.max(0, rcNeto(R));
+function rcTotHtml() { var R = S.x.rec, T = recCalc(R), rac = Math.max(1, +R.rac || 1), olla = Math.max(0, rcNeto(R)), est = !olla && recipOk() ? recEstG(R.ing) : 0;
   return '<div class="fila-r"><span><b>Receta entera</b></span><span>' + fmil(T.k) + ' kcal · P ' + Math.round(T.p) + ' · H ' + Math.round(T.h) + ' · G ' + Math.round(T.g) + '</span></div>' +
     '<div class="fila-r"><span><b>' + (rac === 1 ? '1 ración' : 'Cada ración (1 de ' + rac + ')') + '</b></span><span>' + fmil(T.k / rac) + ' kcal · P ' + Math.round(T.p / rac) + ' · H ' + Math.round(T.h / rac) + ' · G ' + Math.round(T.g / rac) + '</span></div>' +
-    (olla ? '<div class="fila-r"><span><b>Cada 100 ' + (recUd(R) === 'ml' ? 'ml' : 'g cocinados') + '</b></span><span>' + fmil(T.k * 100 / olla) + ' kcal</span></div>' : ''); }
+    (olla || est ? '<div class="fila-r"><span><b>Cada 100 ' + (recUd(R) === 'ml' ? 'ml' : 'g cocinados') + '</b></span><span>' + (est ? '≈ ' : '') + fmil(T.k * 100 / (olla || est)) + ' kcal</span></div>' : ''); }
 function rcTot() { var e = $('#rc-t'); if (e) e.innerHTML = rcTotHtml(); var o = $('#rc-ol'); if (o) o.innerHTML = rcOllaHtml(); }
 /* la olla: vacía (la recuerda la app) y llena → el peso de la receta cocinada */
 function taraYo() { var t = S.perfil && +S.perfil.tara; return t > 0 ? String(t) : ''; }
@@ -12190,7 +12336,7 @@ function rcRecipHtml(R) {
   var L = recips(), c = R.otra ? null : rcpDe(R.rp), lista = R.cam || (!c && !R.otra && !R.sin);
   var h = '<section class="card rc-olla rcp rpx"><div class="card-h"><b>Peso de la receta</b>' + (lista && L.length ? '<button class="link sm" data-a="rcpLista">Editar</button>' : '') + '</div><span class="mut sm">Opcional · para luego ' + (recUd(R) === 'ml' ? 'medir' : 'pesar') + ' tu plato</span>' + rcpUd(R);
   if (lista) return h + '<small class="rpx-q">¿En qué la haces?</small>' + rcpListaHtml(R.rp, R.sin, 'rcpSel', 'rcpOtra', 'la pasas a un plato o un tupper') + (R.cam ? '<button class="link sm izq" data-a="rcpCamNo">Volver</button>' : '') +
-    (num(R.olla) && !R.cam ? '<div id="rc-ol">' + rcpRes(R) + '</div>' : '<div id="rc-ol"></div>') + (L.length ? '' : '<button class="link sm izq rcp-ej" data-a="rcpEjemplos">Ver ejemplos de cómo pesarla</button>') + '</section>';
+    '<div id="rc-ol">' + (R.cam ? '' : rcpRes(R)) + '</div>' + (L.length ? '' : '<button class="link sm izq rcp-ej" data-a="rcpEjemplos">Ver ejemplos de cómo pesarla</button>') + '</section>';
   h += R.otra ? rcpOtraHtml(R.otra, 'rp', 'rcpOtT', 'rcpCam') : rcpSelHtml(c, 'rcpCam');
   var t = c ? c.t : R.otra ? R.otra.t : null;
   h += '<label class="f">' + (t ? 'Cuando esté hecha, pon ' + rcpArt(t) + ' con la comida en la báscula' : 'Cuando esté hecha, lo que marca la báscula') + '<span class="rc-u"><input data-in="rcLlena" inputmode="numeric" value="' + esc(R.llena) + '" placeholder="Lo que marca"><i>g</i></span></label>';
@@ -12198,7 +12344,8 @@ function rcRecipHtml(R) {
 }
 function rcpRes(R) {
   var c = R.otra ? null : rcpDe(R.rp), ll = num(R.llena) || 0, ta = c ? c.g : R.otra ? num(R.otra.g) || 0 : R.sin ? 0 : num(R.tara) || 0, rac = Math.max(1, +R.rac || 1), u = recUd(R), n;
-  if (!ll) return num(R.olla) && !c && !R.otra ? '<p class="rc-res">Tu receta pesa ' + fmil(R.olla) + '\u00a0' + u + '</p>' : '';
+  if (!ll) { if (num(R.olla) && !c && !R.otra) return '<p class="rc-res">Tu receta pesa ' + fmil(R.olla) + '\u00a0' + u + '</p>';
+    var e = recEstG(R.ing); return e ? '<p class="rcp-est">Si no la pesas, la app calcula que pesará <b>≈\u00a0' + fmil(e) + '\u00a0g</b> con los ingredientes. Podrás apuntarla por raciones o por gramos.</p>' : ''; }
   var va = rcpT(c ? c.t : R.otra ? R.otra.t : 'olla')[3] === 'a' ? 'vacía' : 'vacío';
   if (R.otra && !ta) return '<p class="rc-res av">Falta lo que pesa ' + va + '</p>';
   if (ta && ll <= ta) return '<p class="rc-res mal">Con la comida tiene que pesar más que ' + va + ' (' + fmil(ta) + '\u00a0g).</p>';
@@ -13045,7 +13192,7 @@ function cardInsta(x, prev) {
   h += '<div class="hv-t"><small>' + (rec ? ic('olla', 13) + 'Receta' + (r.k != null ? ' · por ración' : '') : ic('pesa', 13) + 'Entreno') + '</small><b class="cm-t">' + esc(x.t) + '</b></div>';
   if (x.c || prev) h += '<p class="ig-c cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';
   h += '<div class="hv-st">' + statsPub(x).map(function (k) { return '<span><small>' + k[0] + '</small><b>' + esc(k[1]) + '</b></span>'; }).join('') + '</div>';
-  if (x.rec) h += '<p class="hv-rec">' + ic('trofeo', 14) + 'Récord: ' + esc(x.rec) + '</p>';
+  if (x.rec) h += recLinea(x, prev);
   if (prev && CPF) h += '<div class="cm-foto ig-f ok" style="aspect-ratio:' + CPF_W + '/' + CPF_H + '"><img id="cp-prev-img" alt=""></div>';
   else if (prev && x.fsrc) h += '<div class="cm-foto ig-f ok"><img src="' + esc(x.fsrc) + '" alt=""></div>';
   else if (x.foto && !prev) { var fs = (C.fotos || {})[x.id]; h += '<div class="cm-foto ig-f' + (rec ? ' rc' : '') + (fs ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fs ? '<img src="' + fs + '" alt="">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
@@ -13076,11 +13223,24 @@ function cardInsta(x, prev) {
   if (ab) h += menuPub(x);
   return h + '</article>';
 }
+/* yo-1.87 (Javier: «cuando alguien sube entreno y récord, pone más dos récords y pincha y no se ven»): «+2 récords» se abre y enseña todos
+   (van en rut.recs desde ahora; en las publicaciones de antes solo se guardó el primero) */
+function recPartes(t) { var m = /^(.*) \(y (\d+) más\)$/.exec(String(t || '')); return m ? { t: m[1], n: +m[2] } : { t: String(t || ''), n: 0 }; }
+function recLinea(x, prev) {
+  var C = CMU(), P = recPartes(x.rec), ab = !prev && !!(C.recAb || {})[x.id], V = (C.entVer || {})[x.id];
+  var h = '<div class="hv-rec"><span class="hv-rec-i">' + ic('trofeo', 14) + '</span><span class="hv-rec-t"><small>' + (P.n ? 'Récords' : 'Récord') + '</small><b>' + esc(P.t) + '</b></span>' +
+    (P.n ? '<button class="hv-rec-m"' + (prev ? ' tabindex="-1"' : ' data-a="cRecs" data-id="' + x.id + '"') + ' aria-expanded="' + ab + '">' + (ab ? 'Ver menos' : '+' + P.n + (P.n === 1 ? ' récord' : ' récords')) + '</button>' : '') + '</div>';
+  if (ab) h += '<div class="hv-recs">' + (V === undefined || V === 1 ? '<p class="mut sm">Cargando…</p>' : V && V.err ? '<p class="mut sm">' + esc(V.err) + '</p>' :
+    V.recs && V.recs.length ? V.recs.slice(1).map(function (r) { return '<span>' + ic('trofeo', 13) + esc(r) + '</span>'; }).join('') : '<p class="mut sm">Esta publicación es de antes y solo guardó el primero.</p>') + '</div>';
+  return h;
+}
+function entVerCarga(id) { var C = CMU(); C.entVer = C.entVer || {}; if (C.entVer[id] !== undefined && !(C.entVer[id] && C.entVer[id].err)) return; C.entVer[id] = 1;
+  rpc('yo_comu_ver', { pub: +id }).then(function (r) { var rt = (r && r.rut) || {}; C.entVer[id] = { ej: (rt.ej || []).filter(function (e) { return e && e.n; }), recs: (rt.recs || []).filter(Boolean) }; repintaComu(); },
+    function (e) { var m = cErr(e); C.entVer[id] = { err: /could not find|PGRST202/i.test(m) ? 'Todavía no se pueden ver aquí: tócale a «Guardar» para verlos en tu editor.' : m }; repintaComu(); }); }
+A.cRecs = function (el) { var C = CMU(), id = el.dataset.id; C.recAb = C.recAb || {}; C.recAb[id] = !C.recAb[id]; if (C.recAb[id]) entVerCarga(id); pintar(); };
 A.cEntMas = function (el) {
   var C = CMU(), id = el.dataset.id; C.entMas = C.entMas || {}; C.entVer = C.entVer || {}; C.entMas[id] = !C.entMas[id];
-  if (C.entMas[id] && (C.entVer[id] === undefined || (C.entVer[id] && C.entVer[id].err))) { C.entVer[id] = 1;
-    rpc('yo_comu_ver', { pub: +id }).then(function (r) { C.entVer[id] = { ej: ((r && r.rut && r.rut.ej) || []).filter(function (e) { return e && e.n; }) }; repintaComu(); },
-      function (e) { var m = cErr(e); C.entVer[id] = { err: /could not find|PGRST202/i.test(m) ? 'Todavía no se pueden ver los ejercicios aquí: tócale a «Guardar» para verlos en tu editor.' : m }; repintaComu(); }); }
+  if (C.entMas[id]) entVerCarga(id);
   pintar();
 };
 function cardPub(x, prev) {
@@ -13094,7 +13254,7 @@ function cardPub(x, prev) {
   if (x.c || prev) h += '<p class="cm-dice"' + (x.c ? '' : ' hidden') + '>' + esc(x.c || '') + '</p>';      // 17 nov (Javier): un comentario del entreno, «entreno increíble para glúteos»
   var K = [[(x.min || 0) + ' min', 'duración'], [String(x.nser || 0), 'series'], num(x.vol) ? [fmtK(x.vol) + ' kg', 'volumen'] : [String(x.nej || 0), 'ejercicios']];
   h += '<div class="cm-k">' + K.map(function (k) { return '<span><b>' + k[0] + '</b><small>' + k[1] + '</small></span>'; }).join('') + '</div>';
-  if (x.rec) h += '<span class="cm-rec">' + ic('trofeo', 15) + 'Récord: ' + esc(x.rec) + '</span>';
+  if (x.rec) h += recLinea(x, prev);      // yo-1.87: con «+2 récords» que se abre
   if (prev && CPF) h += '<div class="cm-foto"><img id="cp-prev-img" alt=""></div>';
   else if (x.foto) { var fsrc = (C.fotos || {})[x.id]; h += '<div class="cm-foto' + (fsrc ? ' ok' : '') + '" data-pf="' + x.id + '">' + (fsrc ? '<img src="' + fsrc + '" alt="Foto de ' + esc(x.nombre) + '">' : '') + '</div>'; setTimeout(cargaFotosComu, 0); }
   h += '<div class="cm-pie"><button class="cm-b' + (x.yo_like ? ' on' : '') + '"' + A_('cLike') + ' data-id="' + x.id + '" aria-pressed="' + !!x.yo_like + '" aria-label="Me gusta"' + (prev ? ' tabindex="-1"' : '') + '>' + ic('corazon', 19, null, 1.9) + '<span>' + (x.likes || 0) + '</span></button>' +
@@ -13357,13 +13517,31 @@ A.cCopiar = function (el) {
 };
 
 /* ---------- comentarios ---------- */
+/* yo-1.87 (Javier, 28 nov, 09:38: «que al poner un comentario no te abra otra pestaña; eso inspírate en Instagram, que esté dentro de la misma»):
+   los comentarios, en una hoja encima del post (sin salir de la Comunidad), con la caja para escribir abajo */
 A.cComs = function (el) {
-  var C = CMU(), id = +el.dataset.id; C.menu = null; C.coms = { id: id, L: null, txt: '' }; ir({ t: 'comuComs', id: id }); cargaComs();
+  var C = CMU(), id = +el.dataset.id; C.menu = null; C.coms = { id: id, L: null, txt: '', hoja: 1 }; comsHoja(); cargaComs();
 };
+function comsLista(K) {
+  if (K.err && !K.L) return errCard(K.err, 'cComsRe');
+  if (!K.L) return '<p class="mut sm cm-hv">Cargando…</p>';
+  if (!K.L.length) return '<div class="cm-hv"><b>Aún no hay comentarios</b><small class="mut">Sé la primera persona en comentar.</small></div>';
+  return K.L.map(function (c) {
+    return '<div class="cm-com"><button class="cm-av sm" data-a="cPersona" data-p="' + esc(c.pid) + '" aria-label="Ver a ' + esc(c.nombre) + '">' + avIn(c.pid, c.nombre) + '</button><span class="cm-ct"><span><b>' + esc(c.nombre) + '</b> <small class="mut">' + esc(cuandoTxt(c.creado)) + '</small></span><span class="cm-tx">' + esc(c.texto) + '</span></span>' +
+      (c.borrable ? '<button class="redondo gris sm" data-a="cBorrarCom" data-id="' + c.id + '" aria-label="Borrar el comentario">' + ic('papelera', 15) + '</button>' : '<button class="redondo gris sm" data-a="cDenCom" data-id="' + c.id + '" data-n="' + esc(c.nombre) + '" aria-label="Denunciar el comentario">' + ic('bandera', 15) + '</button>') + '</div>'; }).join('');
+}
+function comsHoja() {
+  var C = CMU(), K = C.coms; if (!K) return; var x = unaPub(K.id), n = K.L ? K.L.length : (x && x.coms) || 0;
+  hoja('<div class="cm-hj"><div class="cm-hh"><b>Comentarios' + (n ? ' · ' + n : '') + '</b>' + (x ? '<small>' + esc(x.t) + ' · ' + esc(x.nombre) + '</small>' : '') + '</div><div class="cm-hl">' + comsLista(K) + '</div>' +
+    '<form class="cm-escribe cm-hf" data-f="cComentar"><input name="t" maxlength="300" data-in="cTxt" value="' + esc(K.txt || '') + '" placeholder="Añade un comentario…" autocomplete="off" aria-label="Escribe un comentario"><button class="btn-neg" type="submit">Publicar</button></form>' +
+    '<small class="mut cm-norma">Con respeto. Lo que no cumpla las normas se puede denunciar.</small></div>');
+}
+function comsHojaAbierta() { return !!$('#hoja .cm-hj'); }
+function comsRepinta() { var K = CMU().coms; if (K && K.hoja && comsHojaAbierta()) comsHoja(); repintaComu(); }
 function cargaComs() {
   var C = CMU(), K = C.coms; if (!K) return; K.err = '';
-  rpc('yo_comu_coms', { pub: K.id }).then(function (r) { if (C.coms !== K) return; K.L = r || []; cadaPub(K.id, function (p) { p.coms = K.L.length; }); repintaComu(); },
-    function (e) { if (C.coms !== K) return; K.err = cErr(e); repintaComu(); });
+  rpc('yo_comu_coms', { pub: K.id }).then(function (r) { if (C.coms !== K) return; K.L = r || []; cadaPub(K.id, function (p) { p.coms = K.L.length; }); comsRepinta(); },
+    function (e) { if (C.coms !== K) return; K.err = cErr(e); comsRepinta(); });
 }
 A.cComsRe = function () { cargaComs(); };
 VISTAS.comuComs = function (p) {
@@ -13385,12 +13563,12 @@ IN.cTxt = function (t) { var K = CMU().coms; if (K) K.txt = t.value; };
 F.cComentar = function (f) {
   var C = CMU(), K = C.coms, i = f.elements.t, t = String(i.value || '').trim(), b = f.querySelector('button'); if (!K || !t || K.env) return;
   K.env = 1; b.disabled = true;
-  rpc('yo_comu_comentar', { pub: K.id, texto: t }).then(function (r) { K.env = 0; K.L = r || []; K.txt = ''; cadaPub(K.id, function (p) { p.coms = K.L.length; }); pintar(); },
+  rpc('yo_comu_comentar', { pub: K.id, texto: t }).then(function (r) { K.env = 0; K.L = r || []; K.txt = ''; cadaPub(K.id, function (p) { p.coms = K.L.length; }); pintar(); if (K.hoja && comsHojaAbierta()) { comsHoja(); var l = $('#hoja .cm-hl'); if (l) l.lastElementChild && l.lastElementChild.scrollIntoView({ block: 'nearest' }); } },
     function (e) { K.env = 0; b.disabled = false; toast(cErr(e)); });
 };
 A.cBorrarCom = function (el) {
   var C = CMU(), K = C.coms, id = +el.dataset.id; if (!K || el.disabled) return; el.disabled = true;
-  rpc('yo_comu_borrar_com', { com: id }).then(function () { K.L = (K.L || []).filter(function (c) { return c.id !== id; }); cadaPub(K.id, function (p) { p.coms = K.L.length; }); toast('Comentario borrado'); pintar(); },
+  rpc('yo_comu_borrar_com', { com: id }).then(function () { K.L = (K.L || []).filter(function (c) { return c.id !== id; }); cadaPub(K.id, function (p) { p.coms = K.L.length; }); toast('Comentario borrado'); pintar(); if (K.hoja && comsHojaAbierta()) comsHoja(); },
     function (e) { el.disabled = false; toast(cErr(e)); });
 };
 
@@ -13540,9 +13718,10 @@ A.cBorrarTodoSi = function (el) {
 
 /* ---------- publicar un entreno (desde el fin del entreno o desde el entreno en Progreso) ---------- */
 function pubDe(U) {
-  var R = U.recs || [], r = R[0], rec = r ? r.e + ' ' + (r.p ? fN(r.p) + ' kg × ' : '') + r.r + (R.length > 1 ? ' (y ' + (R.length - 1) + (R.length === 2 ? ' más)' : ' más)') : '') : '';
+  var R = U.recs || [], rt = function (r) { return r.e + ' ' + (r.p ? fN(r.p) + ' kg × ' : '') + r.r; }, r = R[0], rec = r ? rt(r) + (R.length > 1 ? ' (y ' + (R.length - 1) + (R.length === 2 ? ' más)' : ' más)') : '') : '';
   var ej = (U.ej || []).filter(function (e) { return e.tipo !== 'run' && e.tipo !== 'cardio' && (e.sets || []).length; }).slice(0, 30).map(function (e) { var s0 = e.sets[0] || {}; return { n: String(e.n).slice(0, 80), u: e.u || '', s: e.sets.length, r: String(s0.reps || '10').slice(0, 10) }; });
-  return { t: String(U.nombre || 'Entreno').slice(0, 60), min: U.min || 0, nser: U.nser || 0, vol: U.vol || 0, rec: rec.slice(0, 80), rut: { ej: ej } };
+  var rut = { ej: ej }; if (R.length > 1) rut.recs = R.slice(0, 12).map(function (x) { return rt(x).slice(0, 80); });      // yo-1.87: todos los récords, para verlos al tocar «+2 récords»
+  return { t: String(U.nombre || 'Entreno').slice(0, 60), min: U.min || 0, nser: U.nser || 0, vol: U.vol || 0, rec: rec.slice(0, 80), rut: rut };
 }
 A.finComu = function () {
   var C = CMU(), U = S.fin; if (!U) return;
