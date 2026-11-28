@@ -3091,7 +3091,6 @@ html[data-tema="oscuro"] .p3-gru .rp-b .pv,html[data-tema="oscuro"] .p3-gru .rp-
 .os-dif{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;margin-top:8px;padding-top:8px;border-top:1px solid rgba(13,13,16,.12)}
 .os-dif span{font-size:12.5px;font-weight:700;line-height:1.3;color:inherit}
 .os-dif button{flex:none;border:0;background:#0D0D10;color:#fff;font:inherit;font-size:12px;font-weight:800;border-radius:999px;padding:7px 12px}
-.o3 .os-dif.col,.os-dif.col{flex-direction:column;align-items:stretch;gap:8px}.os-dif.col button{padding:9px 12px}      /* yo-1.83: «Añade lastre», el botón debajo */
 html[data-tema="oscuro"] .os-e.sp:not(.pri0):not(.tec):not(.sua),html[data-tema="oscuro"] .os-dif button{background:#fff;color:#0D0D10}html[data-tema="oscuro"] .os-dif{border-color:rgba(255,255,255,.16)}
 @media (prefers-color-scheme:dark){html:not([data-tema="claro"]) .os-e.sp:not(.pri0):not(.tec):not(.sua),html:not([data-tema="claro"]) .os-dif button{background:#fff;color:#0D0D10}html:not([data-tema="claro"]) .os-dif{border-color:rgba(255,255,255,.16)}}
 /* yo-1.72: las fases de un programa (abdomen, core, flexibilidad, movilidad) en su tarjeta, en blanco y negro con la de ahora en azul hielo-lila */
@@ -4397,7 +4396,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.83';
+var YO_V = 'yo-1.84';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -7763,13 +7762,12 @@ function objSinPeso(e) {
 }
 /* la fase del programa en la que estás hoy (si la rutina de este entreno es de un programa con fases) */
 function progFaseHoy() { var r = S.ses && rutinaDe(S.ses.rid), X = r && r.plan ? progSem(r.plan) : null; return X && X.fase ? X.fase : null; }
-A.objLastre = function (el) { A.serMedSi({ dataset: { i: el.dataset.i, k: 'pc', v: '2' } }); };      // yo-1.83: la casilla de kilos pasa a ser el lastre
 A.objDif = function (el) { var i = +el.dataset.i, e = S.ses && S.ses.ej[i], D = e && DIF_EJ[clave(e.n)]; if (!D || !D.a) return; var ant = e.n;
   e.n = D.a; e.nota = ''; if (D.ld) e.uni = 1; (e.sets || []).forEach(function (z) { if (!z.ok) { z.reps = ''; z.kg = ''; } }); guardaEnCurso(); cerrarHoja(); pintar(); toast('Hoy, ' + D.a + ' en lugar de ' + ant, 'ok'); };
 function objSpHtml(O, i) {
   var h = (O.lst ? '<span class="os-ult">La última vez: ' + esc(listaY(O.lst.map(function (v) { return fN(v); }))) + O.u + '</span>' : O.fase ? '<span class="os-ult">' + esc(O.fase.t) + '</span>' : '') +
     '<span class="os-e sp ' + O.est + '">' + (O.est === 'sum' ? ic('mas', 12, null, 2.6) : '') + esc(objChip(O)) + '</span>';
-  if (O.est === 'las') h += '<div class="os-dif col"><span>Llegaste a ' + O.hi + ' en todas. Añade 1,25 kg de lastre y haz ' + O.rl + '.</span>' + (O.pc !== 2 ? '<button data-a="objLastre" data-i="' + i + '">Poner lastre</button>' : '') + '</div>';
+  if (O.est === 'las') h += '<div class="os-dif"><span>Llegaste a ' + O.hi + ' en todas: añade 1,25 kg de lastre y haz ' + O.rl + '</span></div>';      // yo-1.84 (Javier, 08:30: «tan grande no me gusta con ese botón negro, pon solo el texto»)
   if (O.est === 'dif') h += '<div class="os-dif"><span>' + (O.dif.a ? 'Prueba la versión difícil: ' + esc(O.dif.a.toLowerCase()) : 'Hazlo más difícil: ' + esc(O.dif.t)) + '</span>' + (O.dif.a ? '<button data-a="objDif" data-i="' + i + '">Cambiar</button>' : '') + '</div>';
   return h;
 }
@@ -7837,11 +7835,11 @@ A.objInfo = function (el) {
       : O.est === 'tec' ? 'Estás en la fase «' + esc(O.fase.t) + '» de tu programa.' : O.est === 'pri0' ? 'Aún no tienes ninguna vez apuntada de este ejercicio.' : 'Estás en tu semana suave.';
     var qq = O.est === 'sum' ? 'Cuando llegues a ' + O.hi + O.u + ' en todas las series, te propondremos subir de nivel.'
       : O.est === 'dif' ? (O.dif.a ? 'Prueba la versión difícil: ' + esc(O.dif.a.toLowerCase()) + '. Con «Cambiar» la tienes hoy en este entreno.' : 'Hazlo más difícil: ' + esc(O.dif.t) + '.')
-      : O.est === 'las' ? 'Toca añadir peso: 1,25 kg de lastre (un disco pequeño o una mancuerna en el cinturón, entre los pies o en una mochila) y ' + O.rl + ' repeticiones. Con el lastre, la app te irá subiendo de 1,25 en 1,25 kg, siempre primero las repeticiones.' + (O.pc !== 2 ? ' Con «Poner lastre», la casilla de kilos pasa a ser tu lastre.' : '')
+      : O.est === 'las' ? 'Toca añadir peso: 1,25 kg de lastre (un disco pequeño o una mancuerna en el cinturón, entre los pies o en una mochila) y ' + O.rl + ' repeticiones. Con el lastre, la app te irá subiendo de 1,25 en 1,25 kg, siempre primero las repeticiones.' + (O.pc !== 2 ? ' Para apuntarlo, toca «Peso» encima de las series y elige «Tu peso + lastre».' : '')
       : O.est === 'mas' ? 'Hoy, ' + esc(objSugTxt(O)) + ': ' + (O.u ? '5 segundos' : '2 repeticiones') + ' más, o hazlo más lento.'
       : O.est === 'tec' ? 'Haz lo que pone la rutina, lento y controlado. ' + esc(O.fase.x) : O.est === 'pri0' ? 'Haz lo que pone la rutina. Desde la próxima vez, te saldrá tu objetivo.' : 'Lo bajo del rango y sin apurar.';
     return hoja('<h2>Objetivo sugerido</h2>' + cab + caja + '<div class="osi-why">' + ic('info', 16, null, 2.2) + '<span>' + wy + '</span></div><p class="osi-p">' + qq + '</p>' +
-      (O.est === 'las' && O.pc !== 2 ? '<button class="btn" data-a="objLastre" data-i="' + i + '">Poner lastre</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>' : O.est === 'dif' && O.dif.a ? '<button class="btn" data-a="objDif" data-i="' + i + '">Cambiar a ' + esc(O.dif.a.toLowerCase()) + '</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>' : '<button class="btn" data-a="cerrarHoja">Entendido</button>'));
+      (O.est === 'dif' && O.dif.a ? '<button class="btn" data-a="objDif" data-i="' + i + '">Cambiar a ' + esc(O.dif.a.toLowerCase()) + '</button><button class="btn sec" data-a="cerrarHoja">Ahora no</button>' : '<button class="btn" data-a="cerrarHoja">Entendido</button>'));
   }
   if (O.est === 'rev') {
     var n = (e.sets || []).filter(function (s) { return s.t !== 'aprox'; }).length, d = +e.d || 90;
