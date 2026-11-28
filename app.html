@@ -5854,6 +5854,16 @@ body:after{content:"";position:fixed;left:0;right:0;top:0;height:var(--sat);z-in
 .plc-ven small{font:700 13px Plus Jakarta Sans,sans-serif;color:#9FE3BE}
 .plc-ven.warn{background:#FFF4DE;color:#5C3D00}.plc-ven.warn span{color:#8A6A2B}.plc-ven.warn b{color:#3D2800}.plc-ven.warn small{color:#B26B00}
 .plc-ven.bad{background:#FDECEC}.plc-ven.bad span{color:#9A3B3B}.plc-ven.bad b{color:#6B1414}.plc-ven.bad small{color:#C62828}
+/* 28 nov (PL29): las dos fechas del plan, una al lado de la otra; el vencimiento en naranja desde 5 días antes y en rojo si ya venció */
+.plc-2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:10px 0 4px}
+.plc-2>div{display:flex;flex-direction:column;justify-content:center;gap:2px;min-width:0;padding:12px 14px;border-radius:16px}
+.plc-2 span{font:600 12px Plus Jakarta Sans,sans-serif}.plc-2 b{font:800 17px/1.2 Plus Jakarta Sans,sans-serif;letter-spacing:-.01em;white-space:nowrap}.plc-2 small{font:700 12.5px Plus Jakarta Sans,sans-serif}
+.plc-2d{background:var(--card2)}.plc-2d span{color:var(--mu)}.plc-2d b{color:var(--tx)}
+.plc-2v{background:#0D0D10}.plc-2v span{color:#C9CCD8}.plc-2v b{color:#fff}.plc-2v small{color:#9FE3BE}
+.plc-2v.nar,.plc-ven.nar{background:#FFE7D4}.plc-2v.nar span,.plc-ven.nar span{color:#9A4A12}.plc-2v.nar b,.plc-ven.nar b{color:#4A1F02}.plc-2v.nar small,.plc-ven.nar small{color:#E8620C}
+.plc-2v.roj,.plc-ven.roj{background:#FDE2E2}.plc-2v.roj span,.plc-ven.roj span{color:#9A2B2B}.plc-2v.roj b,.plc-ven.roj b{color:#5E0F0F}.plc-2v.roj small,.plc-ven.roj small{color:#D62828}
+.plan-av.pl29.nar{border-color:rgba(232,98,12,.45);background:#FFF1E6}.plan-av.pl29.nar b{color:#B4490A}
+.plan-av.pl29.roj{border-color:rgba(214,40,40,.45);background:#FDECEC}.plan-av.pl29.roj b{color:#C62828}
 :where(html[data-tema=oscuro]) .plc-ven{background:#fff}:where(html[data-tema=oscuro]) .plc-ven span{color:#5E6070}:where(html[data-tema=oscuro]) .plc-ven b{color:#0D0D10}:where(html[data-tema=oscuro]) .plc-ven small{color:#1F8A50}
 :where(html[data-tema=oscuro]) .plc-ven.warn{background:#3D2E10}:where(html[data-tema=oscuro]) .plc-ven.warn b{color:#FFE2A8}:where(html[data-tema=oscuro]) .plc-ven.warn span,:where(html[data-tema=oscuro]) .plc-ven.warn small{color:#F2C46B}
 :where(html[data-tema=oscuro]) .plc-ven.bad{background:#3A1616}:where(html[data-tema=oscuro]) .plc-ven.bad b{color:#FFC9C9}:where(html[data-tema=oscuro]) .plc-ven.bad span,:where(html[data-tema=oscuro]) .plc-ven.bad small{color:#FF8A8A}
@@ -6145,7 +6155,7 @@ var DIAS = ['lun','mar','mie','jue','vie','sab','dom'];
 var DL = {lun:'L',mar:'M',mie:'X',jue:'J',vie:'V',sab:'S',dom:'D'};
 var DLARGO = {lun:'lunes',mar:'martes',mie:'miércoles',jue:'jueves',vie:'viernes',sab:'sábado',dom:'domingo'};
 var MAG = '#111111';
-var APP_V = 'v53.4.271';
+var APP_V = 'v53.4.272';
 /* v53.4.185 (21 nov 2026, Miguel por Javier: los mensajes del cliente salían vacíos en el chat del entrenador): el chat del botón «Chat»
    (#mchat) compartía la clase .mc con la tarjeta negra de macros y heredaba su letra blanca y su relleno: ahora color y padding propios. */
 /* v53.4.184 (21 nov 2026) · app de iPhone: nada debajo de la hora, el wifi y la batería (Javier: «para toda la app en general»).
@@ -9675,7 +9685,7 @@ function aBlanco(cv){
 function shEstado(U,t,recs,ri){ if(sh21()){ SHM=['negro','blanco','trans']; SHM_N.trans='Sin fondo'; } var m=CL.sh&&CL.sh.m||'negro'; if(SHM.indexOf(m)<0) m='negro';
   if(U&&U!==CL.ultEntreno){ CL.ultEntreno=U; CL.finCv={}; CL.finMotI=null; }
   recs=recs||(U?recsPorEj(U.prs).map(function(b){ return {e:b.e,p:b.p,r:b.r,f:U.fecha||hoyStr()}; }):[]);
-  CL.sh={U:U||null,t:t||(U?'sum':'rec'),recs:recs,ri:ri!=null?ri:(recs.length>1?'all':0),m:m,cv:{}}; }
+  CL.sh={U:U||null,t:t||(U?'sum':'rec'),recs:recs,ri:ri!=null?ri:(recs.length>1&&!pl29()?'all':0),m:m,cv:{}}; }      // 28 nov: primero uno solo; «Los N», al final
 function sh2Abrir(U,t,recs,ri){ shEstado(U,t,recs,ri); modal('<div class="sh2 sh2-m"><div class="mh-sh"><div><h2>'+(U?(U.primero?'Sube tu primer entreno':'Comparte tu entreno'):'Comparte tu récord')+'</h2></div><button class="mh-x" data-a="cerrarModal" aria-label="Cerrar">'+ic('x')+'</button></div><div id="sh2">'+shBloque()+'</div></div>'); shMontar(); }
 A.recSh=function(){ var R=z2UltRec(); if(!R) return; sh2Abrir(null,'rec',R.lista.map(function(x){ return {e:x.e,p:x.p,r:x.r,f:x.f}; })); };
 A.recShDr=function(el){ var i=+el.dataset.i, j=el.dataset.j, e=CL.dr&&CL.dr.ej[i], m=e&&marcasDraft(i)[j]; if(!m) return; sh2Abrir(null,'rec',[{e:e.n,p:num(m.p)||0,r:num(m.r)||0,f:hoyStr()}]); };
@@ -25239,6 +25249,10 @@ A.moOk=function(el){
 };
 
 /* ---------- su plan y sus pagos (Progreso), aviso a 7 y 3 días y renovar ---------- */
+/* 28 nov, 12:14 (Javier): «cuando le da a renovar, el mensaje sigue ahí»; «las fechas del plan, al lado»; «el vencimiento, a 5 o 3 días en naranja y vencido en rojo»;
+   «en compartir récords, primero uno solo, no todos». Aprobado a las 12:33 («lo de cuando vence el plan ok… y lo de compartir récord ok»). En las pruebas se apaga con window.PL29_DEMO=0 */
+var PL29_ON=true; function pl29(){ return window.PL29_DEMO!=null?!!window.PL29_DEMO:PL29_ON; }
+function plTono(d){ return d==null?'':d<0?' roj':d<=5?' nar':''; }      // vencido en rojo; desde 5 días antes, en naranja
 function planClDias(){ var p=CL.d&&CL.d.plan; if(!p||!p.hasta||p.estado==='baja') return null; return diff(hoyStr(),p.hasta); }
 function diasTxt(d){ return d<0?'Venció hace '+(-d)+' día'+(d===-1?'':'s'):d===0?'Vence hoy':d===1?'Vence mañana':'Quedan '+d+' días'; }
 function planClCard(){
@@ -25246,8 +25260,9 @@ function planClCard(){
   var d=planClDias();
   var h='<div class="card plan-cl"><div class="card-t"><i class="pf-ti pf-ti-plan">'+ic('euro')+'</i>Tu plan</div><h2>'+esc(p.nombre||'Tu plan')+'</h2>'+
     /* 22 nov, 20:19 (Chadín): «que en la app de la clienta no salga el botón de renovar plan, solo 5 días antes de vencer; resalta la fecha de vencimiento» */
-    (p.hasta?'<div class="plc-ven'+(d!=null&&d<0?' bad':d!=null&&d<=5?' warn':'')+'"><span>'+(d!=null&&d<0?'Venció el':'Vence el')+'</span><b>'+esc(fAnio(p.hasta))+'</b>'+(d!=null?'<small>'+diasTxt(d)+'</small>':'')+'</div>':'')+
-    (p.desde?'<div class="plc-f"><div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div></div>':'')+
+    (pl29()&&p.hasta&&p.desde?'<div class="plc-2"><div class="plc-2d"><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div><div class="plc-2v'+plTono(d)+'"><span>'+(d!=null&&d<0?'Venció el':'Vence el')+'</span><b>'+esc(fAnio(p.hasta))+'</b>'+(d!=null?'<small>'+diasTxt(d)+'</small>':'')+'</div></div>':
+    (p.hasta?'<div class="plc-ven'+(pl29()?plTono(d):d!=null&&d<0?' bad':d!=null&&d<=5?' warn':'')+'"><span>'+(d!=null&&d<0?'Venció el':'Vence el')+'</span><b>'+esc(fAnio(p.hasta))+'</b>'+(d!=null?'<small>'+diasTxt(d)+'</small>':'')+'</div>':'')+
+    (p.desde?'<div class="plc-f"><div><span>Empezaste</span><b>'+esc(fAnio(p.desde))+'</b></div></div>':''))+
     (p.estado!=='baja'&&(p.hasta||(p.planes||[]).length)&&(p.pedido||(d!=null&&d<=5))?'<button class="btn mt6" data-a="plRenovarCl">'+(p.pedido?ic('okc')+'Renovación pedida':'Renovar mi plan')+'</button>':'');
   if((p.pagos||[]).length) h+='<div class="lab">Tus pagos</div>'+p.pagos.map(function(x){ return '<div class="plc-p"><span><b>'+esc(fAnio(x.fecha))+'</b><small>'+esc(x.plan)+(x.desde&&x.hasta?' · del '+esc(fCorta(x.desde))+' al '+esc(fCorta(x.hasta)):'')+(x.metodo?' · '+esc(METODO_L[x.metodo]||x.metodo):'')+'</small></span>'+
     '<span class="plc-r"><b>'+eur(x.importe)+'</b>'+(x.id?'<button class="link plc-j" data-a="justCl" data-id="'+esc(x.id)+'">'+ic('descargar')+'Justificante</button>':'')+'</span></div>'; }).join('');      // v53.4.31
@@ -25272,9 +25287,11 @@ function planGracia(){ var p=CL.d&&CL.d.plan; return p&&p.acceso?diff(hoyStr(),p
 function planAvisoHoy(){
   var d=planClDias(); if(d==null||d>5) return '';      // 22 nov: el aviso con «Renovar», desde 5 días antes (antes, 7)
   var p=CL.d.plan, g=planGracia(), tit, sub;
+  if(pl29()&&p.pedido&&d>=0) return '';      // 28 nov: ya lo ha pedido; hasta que tu coach lo confirme, lo ve en Perfil («Renovación pedida»)
   if(d<0&&g!=null){ tit='Tu plan ha vencido'; sub=g>0?(g===1?'Te queda 1 día':'Te quedan '+g+' días')+' de cortesía: si no renuevas antes del '+fMedia(sumar(p.acceso,1)).toLowerCase()+', perderás el acceso a la app':'Hoy es tu último día de cortesía: renueva hoy para no perder el acceso'; }
   else { tit=d<0?'Tu plan ha vencido':d===0?'Tu plan vence hoy':d<=3?'Tu plan vence en '+d+' día'+(d===1?'':'s'):'Tu plan vence pronto'; sub=diasTxt(d)+' · '+fAnio(p.hasta)+(d>=0&&p.acceso?(p.cortesia===false?' · renuévalo antes para no perder el acceso':' · después tendrás 3 días de cortesía'):''); }
-  return '<div class="card plan-av'+(d<=3?' urg':'')+'"><div><b>'+esc(tit)+'</b><small>'+esc(sub)+(p.pedido?' · ya has pedido renovarlo':'')+'</small></div><button class="btn sm" data-a="plRenovarCl">'+(p.pedido?'Ver':'Renovar')+'</button></div>';
+  if(pl29()&&p.pedido) sub='Pediste renovarlo el '+fCorta(p.pedido)+' y tu coach aún no lo ha confirmado'+(g!=null?(g>0?' · te quedan '+g+' día'+(g===1?'':'s')+' de cortesía':' · hoy es tu último día de cortesía'):'');
+  return '<div class="card plan-av'+(pl29()?' pl29'+plTono(d):d<=3?' urg':'')+'"><div><b>'+esc(tit)+'</b><small>'+esc(sub)+(p.pedido&&!pl29()?' · ya has pedido renovarlo':'')+'</small></div><button class="btn sm" data-a="plRenovarCl">'+(p.pedido?'Ver':'Renovar')+'</button></div>';
 }
 function planAvisoPopup(){
   var d=planClDias(); if(d==null||d>3||CL.d.plan.pedido||document.querySelector('#modal.open')) return;
