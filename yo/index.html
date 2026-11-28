@@ -3903,7 +3903,7 @@ plnRunSes = function (i, t, P, cand, ctx) {
 /* MOOD ON · «Entreno por mi cuenta» (acceso 3, usuario independiente).
    App aparte: no comparte código de ejecución ni datos con el panel de entrenador ni con la app de clientes.
    Datos en Supabase, esquema indep, por las funciones yo_* (cada persona solo ve lo suyo). */
-var YO_V = 'yo-1.79';
+var YO_V = 'yo-1.80';
 /* 20 nov (Chadín: «me meto a la aplicación de usuario y no sale»): al abrirla y al volver a ella, mira si hay una versión nueva
    (version.json, sin caché) y, si la hay, se recarga con ella. Con un entreno a medias no se recarga (se pone al día al acabar o la próxima vez) */
 /* 24 nov: al abrir la app sí se pone al día aunque haya un entreno a medias (se recupera tal cual, con lo apuntado); con la app ya abierta, no se recarga en mitad del entreno */
@@ -6066,12 +6066,12 @@ function imgCatalogo() {
   if (IMG_A) return IMG_A; IMG_A = {};
   var it = [], up = {}, us = {};
   ['ini', 'int', 'ava'].forEach(function (n) {
-    PROG_FIJOS.forEach(function (p) { if (p.niv === n && p.estado !== 'borrador') it.push([p.id, p.n, '', p.lug]); });      // yo-1.78: los borradores, al final (no quitan su foto a lo publicado)
+    PROG_FIJOS.forEach(function (p) { if (p.niv === n && p.estado !== 'borrador' && !p.fotoUlt) it.push([p.id, p.n, '', p.lug]); });      // yo-1.78: los borradores (y los nuevos con fotoUlt), al final: no quitan su foto a lo de antes
     if (typeof RUN_PROG !== 'undefined') RUN_PROG.forEach(function (P) { if (P.niv === n) it.push([P.id, 'carrera ' + P.n, '', '']); });
     PROGRAMAS.forEach(function (p) { if (p.P.niv === n && !FJ_SUST[p.id]) it.push([p.id, p.n, '', p.P.lug]); });
   });
   PROGRAMAS.forEach(function (p) { if (FJ_SUST[p.id]) it.push([p.id, p.n, '', p.P.lug]); });      // los antiguos (solo salen si no hay los nuevos), al final
-  PROG_FIJOS.forEach(function (p) { if (p.estado === 'borrador') it.push([p.id, p.n, '', p.lug]); });
+  PROG_FIJOS.forEach(function (p) { if (p.estado === 'borrador' || p.fotoUlt) it.push([p.id, p.n, '', p.lug]); });
   it.forEach(function (x) { IMG_A[x[0]] = imgElige(imgTemas(x[1], x[2], x[3]), x[0], up); });
   RSUELTAS.forEach(function (x) { IMG_A['rs:' + x.id] = imgElige(imgTemas(x.n, x.lug === 'casa' ? x.mat : '', x.lug), x.id, us); });
   return IMG_A;
@@ -6919,36 +6919,37 @@ var PROG_FIJOS = [
       { n: 'Core atlético · día B', p: 'completo', ej: [FJ('Rueda abdominal', 3, '6-10'), FJ('Levantamiento turco', 2, '2-3', { ld: 1 }), FJ('Suitcase carry (acarreo a una mano)', 3, '30', { m: 1, ld: 1, rir: '' }), FJ('Hollow hold', 3, '20-30', { seg: 1, rir: '' })] }] },
   /* ---- yo-1.78 · 27 nov 2026 (Javier, 23:27: «añadiría más programas de abdomen para todos los niveles, tanto principiante, intermedio y avanzado»):
      dos más por nivel. Solo ejercicios de la biblioteca; misma forma que ab0-ab3 (fases, sig, complementos sin calentamiento).
-     En 'borrador' (solo en las demos) hasta el OK de Javier ---- */
-  { id: 'ab5', estado: 'borrador', n: 'Core en 10 minutos · principiante', c: 'abdomen casa principiante', niv: 'ini', dias: 3, min: 10, sem: 4, rir: '2-3', d: 30, mat: 'Sin material', comp: 1, sinCal: 1,
+     Publicados el 28 nov, 01:10 (Javier: «sí, todo ok»). fotoUlt: su foto se elige al final, así no cambian las de los demás programas;
+     hasta que lleguen 3 fotos más de core, tres comparten foto con otros de abdomen ---- */
+  { id: 'ab5', fotoUlt: 1, n: 'Core en 10 minutos · principiante', c: 'abdomen casa principiante', niv: 'ini', dias: 3, min: 10, sem: 4, rir: '2-3', d: 30, mat: 'Sin material', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 2, t: 'Aprende la técnica', x: 'Lento y controlado, con un esfuerzo suave (5-6 de 10).', tec: 1 }, { d: 3, h: 4, t: 'Suma repeticiones y segundos', x: 'Cada día, tu objetivo te pide 1 repetición o 5 segundos más que la última vez, hasta llegar arriba.' }], sig: 'ab0',
     nota: 'Diez minutos, tres días a la semana, para crear el hábito: al levantarte, después de caminar o detrás de tu entreno. Si notas escapes de orina, peso o dolor en la pelvis, baja la dificultad y consúltalo con un fisioterapeuta de suelo pélvico; en el posparto, empieza después de tu revisión.',
     D: [{ n: 'Core 10 · día A', p: 'completo', ej: [FJ('Dead bug', 2, '6', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Plancha frontal', 2, '20-30', { seg: 1, rir: '' }), FJ('Puente de glúteos', 2, '12')] },
       { n: 'Core 10 · día B', p: 'completo', ej: [FJ('Bird dog', 2, '6', { ld: 1, nota: 'Pausa de 2 s con brazo y pierna estirados' }), FJ('Plancha lateral', 2, '15-20', { seg: 1, ld: 1, rir: '', nota: 'Con las rodillas apoyadas si cuesta' }), FJ('Crunch', 2, '10-15')] },
       { n: 'Core 10 · día C', p: 'completo', ej: [FJ('Crunch inverso', 2, '8-12'), FJ('Plancha con toque de hombros', 2, '6', { ld: 1, nota: 'Pies separados: la cadera no se mueve' }), FJ('Superman', 2, '10')] }] },
-  { id: 'ab4', estado: 'borrador', n: 'Abdomen en el gimnasio · principiante', c: 'abdomen principiante', niv: 'ini', dias: 2, min: 20, sem: 6, rir: '2-3', d: 60, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
+  { id: 'ab4', fotoUlt: 1, n: 'Abdomen en el gimnasio · principiante', c: 'abdomen principiante', niv: 'ini', dias: 2, min: 20, sem: 6, rir: '2-3', d: 60, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 2, t: 'Aprende la técnica', x: 'Peso ligero y movimiento lento, con un esfuerzo de 5-6 de 10.', tec: 1 }, { d: 3, h: 4, t: 'Suma repeticiones', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 5, h: 6, t: 'Sube el peso', x: 'Cuando llegas arriba en todas las series, un poco más de peso en la polea o en la mancuerna.' }], sig: 'ab2',
     nota: 'Tus primeros pasos con poleas y mancuernas: aprendes a mover el tronco con control antes de cargar más. Puedes hacerlo detrás de tu entreno de fuerza. Trabajar el abdomen no quema la grasa de la tripa: eso depende de la alimentación y del gasto total.',
     D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch abdominal en polea', 3, '12-15', { nota: 'Poco peso: el movimiento sale del tronco, no de los brazos' }), FJ('Crunch inverso', 2, '8-12'), FJ('Pallof press', 2, '10', { ld: 1 }), FJ('Plancha frontal', 2, '20-30', { seg: 1, rir: '' })] },
       { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Elevación de piernas tumbada', 3, '8-12'), FJ('Flexión lateral con mancuerna', 2, '10-12', { ld: 1 }), FJ('Dead bug', 2, '6', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Suitcase carry (acarreo a una mano)', 2, '20', { m: 1, ld: 1, rir: '' })] }] },
-  { id: 'ab6', estado: 'borrador', n: 'Core para corredores · intermedio', c: 'abdomen casa carrera', niv: 'int', dias: 2, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
+  { id: 'ab6', fotoUlt: 1, n: 'Core para corredores · intermedio', c: 'abdomen casa carrera', niv: 'int', dias: 2, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 3, t: 'Suma repeticiones y segundos', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 4, h: 4, t: 'Semana suave', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Versión más difícil', x: 'Arriba en todas las series, te propone la versión difícil o 2-3 repeticiones más.' }], sig: 'ab3',
     nota: 'Un tronco estable y un glúteo fuerte te ayudan a correr con mejor postura y a aguantar al final de la carrera. Mejor los días sin series ni tirada larga, o detrás de un rodaje suave.',
     D: [{ n: 'Core corredores · día A', p: 'completo', ej: [FJ('Plancha lateral', 3, '30', { seg: 1, ld: 1, rir: '' }), FJ('Dead bug', 3, '8', { ld: 1, nota: 'Lento: 3 s en cada repetición' }), FJ('Puente de glúteos a una pierna', 3, '10', { ld: 1 }), FJ('Bird dog', 2, '8', { ld: 1 }), FJ('Mountain climbers', 2, '30', { seg: 1, rir: '' })] },
       { n: 'Core corredores · día B', p: 'completo', ej: [FJ('Plancha con toque de hombros', 3, '10', { ld: 1 }), FJ('Puente de glúteos con marcha (Glute Bridge March)', 3, '10', { ld: 1 }), FJ('Plancha frontal', 3, '40', { seg: 1, rir: '' }), FJ('Superman', 2, '12'), FJ('Gateo de oso', 2, '30', { seg: 1, rir: '' })] }] },
-  { id: 'ab7', estado: 'borrador', n: 'Abdomen con mancuernas · intermedio', c: 'abdomen casa', niv: 'int', dias: 3, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Mancuernas', comp: 1, sinCal: 1,
+  { id: 'ab7', fotoUlt: 1, n: 'Abdomen con mancuernas · intermedio', c: 'abdomen casa', niv: 'int', dias: 3, min: 20, sem: 8, rir: '1-2', d: 45, mat: 'Mancuernas', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 3, t: 'Suma repeticiones', x: 'Cada día, 1 repetición o 5 segundos más que la última vez, hasta llegar arriba del rango.' }, { d: 4, h: 4, t: 'Semana suave', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Sube el peso', x: 'Arriba en todas las series, la siguiente mancuerna y vuelta a lo bajo del rango.' }], sig: 'ab8',
     nota: 'Con un par de mancuernas el abdomen progresa como cualquier músculo: primero repeticiones y luego peso. La semana 4, la mitad de series. Trabajar el abdomen no quema la grasa de la tripa: eso depende de la alimentación y del gasto total.',
     D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch', 3, '12-15', { nota: 'Con una mancuerna en el pecho' }), FJ('Crunch inverso', 3, '10-15'), FJ('Flexión lateral con mancuerna', 2, '12', { ld: 1 }), FJ('Plancha frontal', 3, '40', { seg: 1, rir: '' })] },
       { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Dead bug', 3, '8', { ld: 1, nota: 'Con una mancuerna ligera en las manos' }), FJ('Elevación de piernas tumbada', 3, '10-15'), FJ('Suitcase carry (acarreo a una mano)', 3, '30', { m: 1, ld: 1, rir: '' }), FJ('Plancha lateral', 2, '30', { seg: 1, ld: 1, rir: '' })] },
       { n: 'Abdomen · día C', p: 'completo', ej: [FJ('Hollow hold', 3, '20-30', { seg: 1, rir: '' }), FJ('Crunch bicicleta', 3, '12', { ld: 1 }), FJ('Flexión lateral con mancuerna', 2, '12', { ld: 1 }), FJ('Superman', 2, '12')] }] },
-  { id: 'ab8', estado: 'borrador', n: 'Abdomen en el gimnasio · avanzado', c: 'abdomen hipertrofia avanzado', niv: 'ava', dias: 3, min: 25, sem: 8, rir: '1', d: 75, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
+  { id: 'ab8', fotoUlt: 1, n: 'Abdomen en el gimnasio · avanzado', c: 'abdomen hipertrofia avanzado', niv: 'ava', dias: 3, min: 25, sem: 8, rir: '1', d: 75, lug: 'gym', mat: 'Gimnasio', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 3, t: 'Doble progresión', x: 'Primero repeticiones; arriba en todas las series, más peso.' }, { d: 4, h: 4, t: 'Descarga', x: 'La mitad de series, para recuperar. Tus rutinas ya salen así.', desc: 1 }, { d: 5, h: 8, t: 'Más carga', x: 'Sube el peso en las poleas y en los acarreos; en la rueda, más recorrido.' }],
     nota: 'Para ganar músculo en el abdomen con carga: doble progresión (primero repeticiones, luego peso) y unas 15 series a la semana. Semana 4: descarga (la mitad de series). Trabajar el abdomen no quema la grasa de la tripa.',
     D: [{ n: 'Abdomen · día A', p: 'completo', ej: [FJ('Crunch abdominal en polea', 4, '8-12'), FJ('Elevación de piernas colgado', 3, '8-12'), FJ('Pallof press', 3, '12', { ld: 1 })] },
       { n: 'Abdomen · día B', p: 'completo', ej: [FJ('Rueda abdominal', 3, '8-12', { nota: 'De pie solo si ya la dominas desde rodillas' }), FJ('Leñador en polea', 3, '10-12', { ld: 1 }), FJ('Flexión lateral con mancuerna', 3, '10-12', { ld: 1 }), FJ('Hollow hold', 2, '30-40', { seg: 1, rir: '' })] },
       { n: 'Abdomen · día C', p: 'completo', ej: [FJ('Abdominal en GHD', 3, '10-12', { nota: 'Poco recorrido al principio; si te molesta la espalda, crunch en polea' }), FJ('Rodillas a los codos', 3, '10-12'), FJ('Suitcase carry (acarreo a una mano)', 3, '40', { m: 1, ld: 1, rir: '' })] }] },
-  { id: 'ab9', estado: 'borrador', n: 'Core en casa · avanzado', c: 'abdomen casa avanzado', niv: 'ava', dias: 3, min: 20, sem: 6, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
+  { id: 'ab9', fotoUlt: 1, n: 'Core en casa · avanzado', c: 'abdomen casa avanzado', niv: 'ava', dias: 3, min: 20, sem: 6, rir: '1-2', d: 45, mat: 'Sin material', comp: 1, sinCal: 1,
     fases: [{ d: 1, h: 2, t: 'Base', x: 'Técnica limpia en los ejercicios difíciles.' }, { d: 3, h: 4, t: 'Más tiempo', x: '5-10 segundos o 2 repeticiones más que la última vez.' }, { d: 5, h: 6, t: 'Más palanca', x: 'Hollow con los brazos por encima de la cabeza y Copenhague con la pierna más estirada.' }],
     nota: 'Sin material pero exigente: palancas largas, antirrotación y aductores. Baja la dificultad si se te arquea la zona lumbar.',
     D: [{ n: 'Core avanzado · día A', p: 'completo', ej: [FJ('V-up', 3, '10-15'), FJ('Plancha Copenhague', 3, '20-30', { seg: 1, ld: 1, rir: '' }), FJ('Elevación de piernas tumbada', 3, '12-15', { nota: 'Baja en 3 s sin despegar la zona lumbar' }), FJ('Gateo de oso', 3, '40', { seg: 1, rir: '' })] },
